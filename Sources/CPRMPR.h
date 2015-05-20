@@ -8,6 +8,6 @@
 
 #import <OsiriXAPI/PluginFilter.h>
 
-@interface OurPluginClass : PluginFilter
+@interface CPRMPR : PluginFilter
 
 @end

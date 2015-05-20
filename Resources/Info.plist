@@ -18,9 +18,15 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>MenuTitles</key>
+	<array>
+		<string>MPR</string>
+	</array>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2015 volz.io. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
-	<string>OurPluginClass</string>
+	<string>CPRMPR</string>
+	<key>pluginType</key>
+	<string>other</string>
 </dict>
 </plist>

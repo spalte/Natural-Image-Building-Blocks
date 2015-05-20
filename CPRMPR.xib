@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="CPRMPRController">
+            <connections>
+                <outlet property="bottomleftView" destination="yMd-LL-Gbp" id="bg1-zY-ij4"/>
+                <outlet property="leftrightSplit" destination="aBq-Gb-4R2" id="ZdK-yR-eyG"/>
+                <outlet property="rightView" destination="t1C-ae-ikp" id="fbY-7B-6gg"/>
+                <outlet property="topbottomSplit" destination="sD6-V0-zVr" id="3LR-Ka-Cyr"/>
+                <outlet property="topleftView" destination="Fox-6d-HeJ" id="Eif-YD-XZB"/>
+                <outlet property="window" destination="QvC-M9-y7g" id="tPa-gv-Nv2"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="MPR" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="196" y="240" width="1113" height="806"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <view key="contentView" id="EiT-Mj-1SZ">
+                <rect key="frame" x="0.0" y="2" width="1113" height="806"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <splitView dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aBq-Gb-4R2">
+                        <rect key="frame" x="0.0" y="0.0" width="1113" height="806"/>
+                        <subviews>
+                            <splitView fixedFrame="YES" dividerStyle="thin" id="sD6-V0-zVr">
+                                <rect key="frame" x="0.0" y="0.0" width="560" height="806"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <subviews>
+                                    <customView fixedFrame="YES" id="Fox-6d-HeJ" customClass="CPRMPRView">
+                                        <rect key="frame" x="0.0" y="0.0" width="560" height="393"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </customView>
+                                    <customView fixedFrame="YES" id="yMd-LL-Gbp" customClass="CPRMPRView">
+                                        <rect key="frame" x="0.0" y="394" width="560" height="412"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </customView>
+                                </subviews>
+                                <holdingPriorities>
+                                    <real value="250"/>
+                                    <real value="250"/>
+                                </holdingPriorities>
+                                <connections>
+                                    <outlet property="delegate" destination="-2" id="AXa-u4-hCP"/>
+                                </connections>
+                            </splitView>
+                            <customView fixedFrame="YES" id="t1C-ae-ikp" customClass="CPRMPRView">
+                                <rect key="frame" x="561" y="0.0" width="552" height="806"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                            </customView>
+                        </subviews>
+                        <holdingPriorities>
+                            <real value="250"/>
+                            <real value="250"/>
+                        </holdingPriorities>
+                        <connections>
+                            <outlet property="delegate" destination="-2" id="6wk-71-U1m"/>
+                        </connections>
+                    </splitView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="aBq-Gb-4R2" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="B6T-kQ-ZHj"/>
+                    <constraint firstAttribute="bottom" secondItem="aBq-Gb-4R2" secondAttribute="bottom" id="GG6-SG-vQO"/>
+                    <constraint firstAttribute="trailing" secondItem="aBq-Gb-4R2" secondAttribute="trailing" id="UZW-gB-BUx"/>
+                    <constraint firstItem="aBq-Gb-4R2" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="h4M-mA-XCB"/>
+                </constraints>
+            </view>
+            <point key="canvasLocation" x="364.5" y="438"/>
+        </window>
+    </objects>
+</document>
