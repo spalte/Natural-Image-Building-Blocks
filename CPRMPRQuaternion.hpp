@@ -59,14 +59,14 @@ namespace cprmpr {
 
 + (instancetype)quaternion;
 + (instancetype)quaternion:(const cprmpr::quaternion&)quaternion;
-+ (instancetype)quaternionWithValues:(CGFloat)x :(CGFloat)y :(CGFloat)z;
++ (instancetype)quaternion:(CGFloat)x :(CGFloat)y :(CGFloat)z;
 
 - (instancetype)initWithQuaternion:(const cprmpr::quaternion&)quaternion;
 - (instancetype)initWithValues:(CGFloat)x :(CGFloat)y :(CGFloat)z;
 - (instancetype)initWithValues:(CGFloat)w :(CGFloat)x :(CGFloat)y :(CGFloat)z;
 
-- (void)rotate:(CGFloat)rads axis:(const cprmpr::quaternion&)axis;
-- (N3Vector)rotated:(CGFloat)rads axis:(const cprmpr::quaternion&)axis;
+- (void)rotate:(CGFloat)rads axis:(N3Vector)axis;
+- (N3Vector)rotated:(CGFloat)rads axis:(N3Vector)axis;
 - (N3Vector)vector;
 
 @end

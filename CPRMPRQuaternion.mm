@@ -18,7 +18,7 @@
     return [[[self.class alloc] initWithQuaternion:quaternion] autorelease];
 }
 
-+ (instancetype)quaternionWithValues:(CGFloat)x :(CGFloat)y :(CGFloat)z {
++ (instancetype)quaternion:(CGFloat)x :(CGFloat)y :(CGFloat)z {
     return [[[self.class alloc] initWithValues:x:y:z] autorelease];
 }
 
@@ -42,11 +42,11 @@
     return [[self.class alloc] initWithQuaternion:_quaternion];
 }
 
-- (void)rotate:(CGFloat)rads axis:(const cprmpr::quaternion&)axis {
+- (void)rotate:(CGFloat)rads axis:(N3Vector)axis {
     _quaternion = _quaternion.rotate(axis, rads);
 }
 
-- (N3Vector)rotated:(CGFloat)rads axis:(const cprmpr::quaternion&)axis {
+- (N3Vector)rotated:(CGFloat)rads axis:(N3Vector)axis {
     return _quaternion.rotate(axis, rads).vector();
 }
 
