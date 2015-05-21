@@ -68,16 +68,16 @@
     
     self.menu = [[NSMenu alloc] init];
     
-    [self.menu addItemWithTitle:NSLocalizedString(@"Reset", nil) block:^{
-        [self resetNormals];
+    [self.menu addItemWithTitle:NSLocalizedString(@"Reset this view's rotation", nil) block:^{
+        if ([self.window.firstResponder isKindOfClass:CPRMPRView.class])
+            [(CPRMPRView*)self.window.firstResponder rotateToInitial];
     }];
-    [self.menu addItemWithTitle:NSLocalizedString(@"Rotate view to orthogonal", nil) block:^{
-        if ([self.window.firstResponder respondsToSelector:@selector(rotateToInitial)])
-            [self.window.firstResponder performSelector:@selector(rotateToInitial) withObject:nil];
-    }];
-    [self.menu addItemWithTitle:NSLocalizedString(@"Rotate all to orthogonal", nil) block:^{
+    [self.menu addItemWithTitle:NSLocalizedString(@"Reset all views' rotations", nil) block:^{
         for (CPRMPRView* view in @[ self.topleftView, self.bottomleftView, self.rightView ])
             [view rotateToInitial];
+    }];
+    [self.menu addItemWithTitle:NSLocalizedString(@"Reset all views' rotations and axes", nil) block:^{
+        [self resetNormals];
     }];
 
     [self.menu addItem:[NSMenuItem separatorItem]];
