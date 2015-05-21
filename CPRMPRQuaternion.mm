@@ -42,16 +42,20 @@
     return [[self.class alloc] initWithQuaternion:_quaternion];
 }
 
+- (const cprmpr::quaternion&)quaternion {
+    return _quaternion;
+}
+
+- (N3Vector)vector {
+    return _quaternion.vector();
+}
+
 - (void)rotate:(CGFloat)rads axis:(N3Vector)axis {
     _quaternion = _quaternion.rotate(axis, rads);
 }
 
 - (N3Vector)rotated:(CGFloat)rads axis:(N3Vector)axis {
     return _quaternion.rotate(axis, rads).vector();
-}
-
-- (N3Vector)vector {
-    return _quaternion.vector();
 }
 
 - (NSString*)description {

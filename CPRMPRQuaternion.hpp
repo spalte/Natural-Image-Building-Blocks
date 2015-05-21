@@ -65,8 +65,10 @@ namespace cprmpr {
 - (instancetype)initWithValues:(CGFloat)x :(CGFloat)y :(CGFloat)z;
 - (instancetype)initWithValues:(CGFloat)w :(CGFloat)x :(CGFloat)y :(CGFloat)z;
 
+- (const cprmpr::quaternion&)quaternion;
+- (N3Vector)vector;
+
 - (void)rotate:(CGFloat)rads axis:(N3Vector)axis;
 - (N3Vector)rotated:(CGFloat)rads axis:(N3Vector)axis;
-- (N3Vector)vector;
 
 @end

@@ -19,7 +19,7 @@
     
     CPRVolumeData* _data;
 //    N3AffineTransform _transform;
-    CPRMPRQuaternion *_x, *_y, *_z;
+//    CPRMPRQuaternion *_x, *_y, *_z;
     
     N3Vector _point;
     CGFloat _ww, _wl;
@@ -38,6 +38,6 @@
 
 - (instancetype)initWithData:(CPRVolumeData*)data;
 
-- (void)rotate:(CGFloat)rads axis:(N3Vector)axis;
+- (void)rotate:(CGFloat)rads axis:(N3Vector)axis excluding:(CPRMPRView*)view;
 
 @end
