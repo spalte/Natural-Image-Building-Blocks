@@ -11,4 +11,6 @@
 
 #include <Cocoa/Cocoa.h>
 
+#define ifd(D,C) D; if (C)
+
 #endif

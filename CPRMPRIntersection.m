@@ -21,6 +21,7 @@
 - (instancetype)initWithMPRView:(CPRMPRView*)mprView {
     if ((self = [super init])) {
         self.mprView = mprView;
+        self.thickness = 1;
     }
     
     return self;

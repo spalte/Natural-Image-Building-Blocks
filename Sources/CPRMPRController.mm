@@ -115,9 +115,9 @@
     CPRMPRQuaternion* x = [CPRMPRQuaternion quaternion:N3VectorApplyTransformToDirectionalVector(N3VectorMake(1,0,0), self.data.volumeTransform)];
     CPRMPRQuaternion* y = [CPRMPRQuaternion quaternion:N3VectorApplyTransformToDirectionalVector(N3VectorMake(0,1,0), self.data.volumeTransform)];
     CPRMPRQuaternion* z = [CPRMPRQuaternion quaternion:N3VectorApplyTransformToDirectionalVector(N3VectorMake(0,0,1), self.data.volumeTransform)];
-    [self.topleftView setNormal:x:y:z];
-    [self.rightView setNormal:y:x:z];
-    [self.bottomleftView setNormal:z:x:y];
+    [self.topleftView setNormal:[x.copy autorelease]:[y.copy autorelease]:[z.copy autorelease]];
+    [self.rightView setNormal:[y.copy autorelease]:[x.copy autorelease]:[z.copy autorelease]];
+    [self.bottomleftView setNormal:[z.copy autorelease]:[x.copy autorelease]:[y.copy autorelease]];
 }
 
 @end

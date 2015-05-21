@@ -18,15 +18,15 @@
     CGFloat _pixelSpacing;
     NSColor* _color;
     NSUInteger _blockGeneratorRequestUpdates;
-    NSPoint _mouseDownLocation;
-    N3Vector _mouseDownLocationT;
-//    NSArray* _storedVectors;
-//    CGFloat _rotation;
+    N3Vector _mouseDownLocation;
+    NSUInteger _mouseDownModifierFlags;
+    N3AffineTransform _mouseDownGeneratorRequestSliceToDicomTransform;
+    NSTrackingArea* _track;
 }
 
 @property N3Vector point;
 @property(retain) CPRMPRQuaternion *normal, *xdir, *ydir;
-@property CGFloat pixelSpacing;//, rotation;
+@property CGFloat pixelSpacing;
 
 @property(retain) NSColor* color;
 
