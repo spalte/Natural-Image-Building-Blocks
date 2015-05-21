@@ -7,17 +7,11 @@
 //
 
 #import "CPRMPRView.h"
-#import "CPRMPRIntersection.h"
 #import "CPRMPRController.h"
 #import "CPRMPRQuaternion.hpp"
+#import "CPRIntersection.h"
 #import <OsiriXAPI/CPRGeneratorRequest.h>
 #import <OsiriXAPI/NSImage+N2.h>
-
-@interface CPRMPRView (CPRMPR)
-
-- (CPRMPRIntersection*)intersectionForKey:(NSString*)key;
-
-@end
 
 static const N3Vector None = {CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN};
 
@@ -36,9 +30,11 @@ static const N3Vector None = {CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN};
 @synthesize point = _point, normal = _normal, xdir = _xdir, ydir = _ydir;
 @synthesize pixelSpacing = _pixelSpacing;//, rotation = _rotation;
 @synthesize color = _color;
+@synthesize menu = _menu;
 @synthesize mouseDownLocation = _mouseDownLocation, mouseDownModifierFlags = _mouseDownModifierFlags, mouseDownGeneratorRequestSliceToDicomTransform = _mouseDownGeneratorRequestSliceToDicomTransform;
 @synthesize blockGeneratorRequestUpdates = _blockGeneratorRequestUpdates;
 @synthesize track = _track;
+@synthesize flags = _flags;
 
 - (instancetype)initWithFrame:(NSRect)frameRect {
     if ((self = [super initWithFrame:frameRect])) {
@@ -63,7 +59,7 @@ static const N3Vector None = {CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN};
     [self addObserver:self forKeyPath:@"normal" options:0 context:CPRMPRView.class];
     [self addObserver:self forKeyPath:@"xdir" options:0 context:CPRMPRView.class];
     [self addObserver:self forKeyPath:@"ydir" options:0 context:CPRMPRView.class];
-    [self addObserver:self forKeyPath:@"pixelSpacing" options:0 context:CPRMPRView.class];
+    [self addObserver:self forKeyPath:@"pixelSpacing" options:0 context:CPRMPRView.class];    
 }
 
 - (void)dealloc {
@@ -74,6 +70,7 @@ static const N3Vector None = {CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN};
     [self removeObserver:self forKeyPath:@"point" context:CPRMPRView.class];
     [self removeObserver:self forKeyPath:@"frame" context:CPRMPRView.class];
     self.color = nil;
+    self.menu = nil;
     self.normal = self.xdir = self.ydir = nil;
     self.track = nil;
     [super dealloc];
@@ -88,31 +85,38 @@ static const N3Vector None = {CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN};
     }
     
     if ([keyPath isEqualToString:@"frame"]) {
+        NSRect o = [change[NSKeyValueChangeOldKey] rectValue], n = [change[NSKeyValueChangeNewKey] rectValue];
+
         if (self.track) [self removeTrackingArea:self.track];
         [self addTrackingArea:(self.track = [[[NSTrackingArea alloc] initWithRect:self.bounds options:NSTrackingMouseMoved+NSTrackingActiveInActiveApp+NSTrackingInVisibleRect owner:self userInfo:@{ @"CPRMPRViewTrackingArea": @YES }] autorelease])];
-//        NSRect o = [change[NSKeyValueChangeOldKey] rectValue], n = [change[NSKeyValueChangeNewKey] rectValue];
-//        CGFloat os = fmin(NSWidth(o), NSHeight(o)), ns = fmin(NSWidth(n), NSHeight(n));
-//        NSLog(@"mprview resize: %@ -> %@", NSStringFromRect(o), NSStringFromRect(n));
-//        self.pixelSpacing = self.pixelSpacing/ns*os;
+
+        [CATransaction begin];
+        [CATransaction setDisableActions:YES];
+        
+        self.pixelSpacing = self.pixelSpacing/fmin(NSWidth(n), NSHeight(n))*fmin(NSWidth(o), NSHeight(o));
+        
+        [CATransaction commit];
     }
 }
 
-- (void)setNormal:(CPRMPRQuaternion*)normal :(CPRMPRQuaternion*)xdir :(CPRMPRQuaternion*)ydir {
-//    if (N3VectorEqualToVector(self.mouseDownLocation, None)) {
-        [self lockGeneratorRequestUpdates];
-        self.xdir = xdir;
-        self.ydir = ydir;
-        self.normal = normal;
-        [self unlockGeneratorRequestUpdates];
-//    }
+- (void)setNormal:(CPRMPRQuaternion*)normal :(CPRMPRQuaternion*)xdir :(CPRMPRQuaternion*)ydir reference:(CPRMPRQuaternion*)reference {
+    [self lockGeneratorRequestUpdates];
+    self.xdir = xdir;
+    self.ydir = ydir;
+    self.normal = normal;
+    self.reference = reference;
+    [self unlockGeneratorRequestUpdates];
 }
 
 - (void)rotate:(CGFloat)rads axis:(N3Vector)axis {
     [self lockGeneratorRequestUpdates];
-    [self.normal rotate:rads axis:axis];
-    [self.xdir rotate:rads axis:axis];
-    [self.ydir rotate:rads axis:axis];
+    for (CPRMPRQuaternion* quaternion in @[ self.normal, self.xdir, self.ydir ])
+        [quaternion rotate:rads axis:axis];
     [self unlockGeneratorRequestUpdates];
+}
+
+- (void)rotateToInitial {
+    [self rotate:N3VectorAngleBetweenVectorsAroundVector(self.xdir.vector, self.reference.vector, self.normal.vector) axis:self.normal.vector];
 }
 
 - (void)updateGeneratorRequest {
@@ -141,6 +145,8 @@ static const N3Vector None = {CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN};
             [self updateGeneratorRequest];
 }
 
+#pragma mark Events
+
 - (BOOL)acceptsFirstResponder {
     return YES;
 }
@@ -164,13 +170,11 @@ static const N3Vector None = {CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN};
     CGFloat distance;
     NSString* ikey = [self intersectionClosestToPoint:location closestPoint:NULL distance:&distance];
     
-    BOOL flag = (ikey && distance < 4);//, cmd = ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSCommandKeyMask);
+    BOOL flag = (ikey && distance < 4);
+    self.mouseDownModifierFlags = event.modifierFlags;
     
-    if (flag) {
-//        if (!cmd)
-            [[NSCursor openHandCursor] set];
-//        else [[self.class blueOpenHandCursor] set];
-    }
+    if (flag)
+        [[self.class openHandCursor:event.modifierFlags] set];
     else [[NSCursor arrowCursor] set];
     
     [self enumerateIntersectionsWithBlock:^(NSString* key, CPRIntersection* intersection, BOOL* stop) {
@@ -184,7 +188,7 @@ static const N3Vector None = {CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN};
     CGFloat distance;
     NSString* ikey = [self intersectionClosestToPoint:location closestPoint:NULL distance:&distance];
     if (ikey && distance < 4) {
-        [[NSCursor closedHandCursor] set];
+        [[self.class closedHandCursor:event.modifierFlags] set];
         self.mouseDownLocation = N3VectorApplyTransform(N3VectorMake(location.x, location.y, 0), self.generatorRequest.sliceToDicomTransform);
         self.mouseDownModifierFlags = event.modifierFlags;
         self.mouseDownGeneratorRequestSliceToDicomTransform = self.generatorRequest.sliceToDicomTransform;
@@ -228,7 +232,7 @@ static const N3Vector None = {CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN};
 
 - (void)mouseUp:(NSEvent*)event {
     if (!N3VectorEqualToVector(self.mouseDownLocation, None)) {
-        [[NSCursor openHandCursor] set];
+        [[self.class openHandCursor:event.modifierFlags] set];
         self.mouseDownLocation = None;
         [self enumerateIntersectionsWithBlock:^(NSString* key, CPRIntersection* intersection, BOOL* stop) {
             intersection.maskAroundMouse = YES;
@@ -236,46 +240,81 @@ static const N3Vector None = {CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN};
     }
 }
 
-/*+ (NSCursor*)blueOpenHandCursor {
-    static NSCursor* cursor = nil;
-    if (!cursor) {
-        NSCursor* ohc = [NSCursor openHandCursor];
-        cursor = [[NSCursor alloc] initWithImage:[self.class image:ohc.image colorify:[NSColor blueColor]] hotSpot:ohc.hotSpot];
+- (void)rightMouseDown:(NSEvent*)event {
+    [NSMenu popUpContextMenu:self.menu withEvent:event forView:self];
+}
+
+#pragma mark Cursors
+
++ (NSCursor*)openHandCursor:(NSUInteger)flags {
+    static NSMutableDictionary* cache = [[NSMutableDictionary alloc] init];
+    return [self.class cursor:NSCursor.openHandCursor flags:flags cache:cache];
+}
+
++ (NSCursor*)closedHandCursor:(NSUInteger)flags {
+    static NSMutableDictionary* cache = [[NSMutableDictionary alloc] init];
+    return [self.class cursor:NSCursor.closedHandCursor flags:flags cache:cache];
+}
+
++ (NSCursor*)cursor:(NSCursor*)cursor flags:(NSUInteger)flags cache:(NSMutableDictionary*)cache {
+    NSValue* key = [NSNumber numberWithUnsignedInteger:flags];
+    
+    NSCursor* c = cache[key];
+    if (c)
+        return c;
+    
+    const CGFloat midPoint = 0.25;
+    
+    switch (flags&NSDeviceIndependentModifierFlagsMask) {
+        case NSCommandKeyMask: {
+            c = [self.class cursor:cursor
+             colorizeByMappingGray:midPoint
+                           toColor:[NSColor colorWithCalibratedWhite:midPoint alpha:1]
+                      blackMapping:NSColor.blackColor
+                      whiteMapping:[NSColor colorWithCalibratedRed:1 green:1 blue:0.75 alpha:1]]; // very light yellow
+        } break;
+    }
+    
+    if (c) {
+        cache[key] = c;
+        return c;
     }
     
     return cursor;
 }
 
-+ (NSImage*)image:(NSImage*)image colorify:(NSColor*)color {
-    NSBitmapImageRep* bitmap = [[image.representations filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSImageRep* rep, NSDictionary* bindings) {
++ (NSCursor*)cursor:(NSCursor*)cursor colorizeByMappingGray:(CGFloat)midPoint toColor:(NSColor*)midPointColor blackMapping:(NSColor*)shadowColor whiteMapping:(NSColor*)lightColor {
+    return [[NSCursor alloc] initWithImage:[self.class image:cursor.image
+                                       colorizeByMappingGray:midPoint
+                                                     toColor:midPointColor
+                                                blackMapping:shadowColor
+                                                whiteMapping:lightColor]
+                                   hotSpot:cursor.hotSpot];
+}
+
++ (NSImage*)image:(NSImage*)image colorizeByMappingGray:(CGFloat)midPoint toColor:(NSColor*)midPointColor blackMapping:(NSColor*)shadowColor whiteMapping:(NSColor*)lightColor {
+    NSImage* rimage = [[[NSImage alloc] initWithSize:image.size] autorelease];
+
+    NSArray* reps = [image.representations filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSImageRep* rep, NSDictionary* bindings) {
         return [rep isKindOfClass:NSBitmapImageRep.class];
-    }]] lastObject];
+    }]];
     
-    size_t pixelsWide = bitmap.pixelsWide, pixelsHigh = bitmap.pixelsHigh;
-    CGRect rect = CGRectMake(0, 0, pixelsWide, pixelsHigh);
-    
-    NSBitmapImageRep* nbitmap = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:<#(unsigned char **)#> pixelsWide:<#(NSInteger)#> pixelsHigh:<#(NSInteger)#> bitsPerSample:<#(NSInteger)#> samplesPerPixel:<#(NSInteger)#> hasAlpha:<#(BOOL)#> isPlanar:<#(BOOL)#> colorSpaceName:<#(NSString *)#> bitmapFormat:<#(NSBitmapFormat)#> bytesPerRow:<#(NSInteger)#> bitsPerPixel:<#(NSInteger)#>];
-    
+    for (NSBitmapImageRep* bitmap in reps) {
+        NSBitmapImageRep* rbitmap = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL pixelsWide:bitmap.pixelsWide pixelsHigh:bitmap.pixelsHigh bitsPerSample:8 samplesPerPixel:4 hasAlpha:YES isPlanar:NO colorSpaceName:NSCalibratedRGBColorSpace bytesPerRow:bitmap.pixelsWide*8*4 bitsPerPixel:32] autorelease];
+        
+        [NSGraphicsContext saveGraphicsState];
+        [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithBitmapImageRep:rbitmap]];
 
-    size_t bitmapBytesPerRow = (pixelsWide * 4);
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-
-    CGContextRef c = CGBitmapContextCreate(NULL, pixelsWide, pixelsHigh,
-                                           8, bitmapBytesPerRow,
-                                           colorSpace, kCGImageAlphaPremultipliedLast);
-    CGColorSpaceRelease(colorSpace);
+        [image drawInRect:NSMakeRect(0, 0, rbitmap.pixelsWide, rbitmap.pixelsHigh) fromRect:NSMakeRect(0, 0, image.size.width, image.size.height) operation:NSCompositeCopy fraction:1];
+        
+        [NSGraphicsContext restoreGraphicsState];
+        
+        [rbitmap colorizeByMappingGray:midPoint toColor:midPointColor blackMapping:shadowColor whiteMapping:lightColor];
+        
+        [rimage addRepresentation:rbitmap];
+    }
     
-    [image drawInRect:rect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
-    CGContextSetFillColorWithColor(c, [color CGColor]);
-    CGContextSetBlendMode(c, kCGBlendModeSourceAtop);
-    CGContextFillRect(c, rect);
-    CGImageRef ciImage =  CGBitmapContextCreateImage(c);
-    CGContextDrawImage(c, rect, ciImage);
-    NSImage* newImage = [[[NSImage alloc] initWithCGImage:ciImage size:image.size] autorelease];
-    CGContextRelease(c);
-    CGImageRelease(ciImage);
-    
-    return newImage;
-}*/
+    return rimage;
+}
 
 @end

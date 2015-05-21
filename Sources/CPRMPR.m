@@ -24,8 +24,9 @@
     CPRVolumeData* data = [[[CPRVolumeData alloc] initWithWithPixList:pixList volume:volume] autorelease];
     
     CPRMPRController* mpr = [[CPRMPRController alloc] initWithData:data];
-    mpr.wl = viewerController.curWL;
-    mpr.ww = viewerController.curWW;
+    mpr.windowLevel = viewerController.curWL;
+    mpr.windowWidth = viewerController.curWW;
+    mpr.displayScaleBars = mpr.displayOrientationLabels = YES;
     
     [mpr.window makeKeyAndOrderFront:self];
     

@@ -17,12 +17,15 @@
     CPRMPRView* _bottomleftView;
     CPRMPRView* _rightView;
     
-    CPRVolumeData* _data;
-//    N3AffineTransform _transform;
-//    CPRMPRQuaternion *_x, *_y, *_z;
-    
+    CPRVolumeData* _volumeData;
+    CGFloat _windowWidth, _windowLevel;
+    BOOL displayOrientationLabels, _displayScaleBars;
+    NSMenu* _menu;
+
     N3Vector _point;
-    CGFloat _ww, _wl;
+    CPRMPRQuaternion *_x, *_y, *_z;
+    
+    CPRMPRFlags _flags;
 }
 
 @property(assign) IBOutlet NSSplitView* leftrightSplit;
@@ -31,12 +34,17 @@
 @property(assign) IBOutlet CPRMPRView* bottomleftView;
 @property(assign) IBOutlet CPRMPRView* rightView;
 
-@property(retain) CPRVolumeData* data;
+@property(retain) CPRVolumeData* volumeData;
+@property CGFloat windowWidth, windowLevel;
+@property BOOL displayOrientationLabels, displayScaleBars;
+@property(retain) NSMenu* menu;
 
+@property(retain, readonly) CPRMPRQuaternion *x, *y, *z;
 @property N3Vector point;
-@property CGFloat ww, wl;
 
-- (instancetype)initWithData:(CPRVolumeData*)data;
+@property CPRMPRFlags flags;
+
+- (instancetype)initWithData:(CPRVolumeData*)volumeData;
 
 - (void)rotate:(CGFloat)rads axis:(N3Vector)axis excluding:(CPRMPRView*)view;
 
