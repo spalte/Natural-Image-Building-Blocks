@@ -27,7 +27,7 @@ typedef NS_ENUM(NSInteger, CPRMPRToolTag) {
     
     CPRVolumeData* _volumeData;
     CGFloat _windowWidth, _windowLevel;
-    BOOL displayOrientationLabels, _displayScaleBars;
+    BOOL _displayOrientationLabels, _displayScaleBars;
     NSMenu* _menu;
 
     N3Vector _point;

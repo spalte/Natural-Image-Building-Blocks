@@ -27,7 +27,7 @@ static const N3Vector None = {CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN};
 
 @implementation CPRMPRView
 
-@synthesize point = _point, normal = _normal, xdir = _xdir, ydir = _ydir;
+@synthesize point = _point, normal = _normal, xdir = _xdir, ydir = _ydir, reference = _reference;
 @synthesize pixelSpacing = _pixelSpacing;//, rotation = _rotation;
 @synthesize color = _color;
 @synthesize menu = _menu;
@@ -71,7 +71,7 @@ static const N3Vector None = {CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN};
     [self removeObserver:self forKeyPath:@"frame" context:CPRMPRView.class];
     self.color = nil;
     self.menu = nil;
-    self.normal = self.xdir = self.ydir = nil;
+    self.normal = self.xdir = self.ydir = self.reference = nil;
     self.track = nil;
     [super dealloc];
 }

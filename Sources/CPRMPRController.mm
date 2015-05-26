@@ -257,6 +257,7 @@ NSString* const CPRMPRToolsToolbarItemIdentifier = @"CPRMPRTools";
 
 @implementation CPRMPRTool
 
+@synthesize tag = _tag;
 @synthesize label = _label;
 @synthesize image = _image;
 //@synthesize block = _block;

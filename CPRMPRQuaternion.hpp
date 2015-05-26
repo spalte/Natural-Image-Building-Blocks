@@ -69,6 +69,5 @@ namespace cprmpr {
 - (N3Vector)vector;
 
 - (void)rotate:(CGFloat)rads axis:(N3Vector)axis;
-- (N3Vector)rotated:(CGFloat)rads axis:(N3Vector)axis;
 
 @end

@@ -54,10 +54,6 @@
     _quaternion = _quaternion.rotate(axis, rads);
 }
 
-- (N3Vector)rotated:(CGFloat)rads axis:(N3Vector)axis {
-    return _quaternion.rotate(axis, rads).vector();
-}
-
 - (NSString*)description {
     return [NSString stringWithFormat:@"(%f,%f,%f,%f)", _quaternion.x(), _quaternion.y(), _quaternion.z(), _quaternion.w()];
 }
