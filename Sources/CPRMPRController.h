@@ -6,9 +6,17 @@
 //  Copyright (c) 2015 volz.io. All rights reserved.
 //
 
-#import "CPRMPRView.h"
+#import <Cocoa/Cocoa.h>
+#import <OsiriXAPI/N3Geometry.h>
 
+@class CPRVolumeData;
+@class CPRMPRView;
 @class CPRMPRQuaternion;
+
+typedef NS_OPTIONS(NSUInteger, CPRMPRFlags) {
+    CPRMPRSupportsRotation      = 1<<0,
+    CPRMPRSupportsAxisRotation  = 1<<1,
+};
 
 typedef NS_ENUM(NSInteger, CPRMPRToolTag) {
     CPRMPRToolWLWW = 0,

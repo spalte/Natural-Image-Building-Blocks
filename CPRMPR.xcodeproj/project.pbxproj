@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		713341251B146EE50014CE09 /* CPRMPRController+Toolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 713341231B146EE50014CE09 /* CPRMPRController+Toolbar.m */; };
 		719CC50E1B0B1B6B00DC1ED5 /* CPRGeneratorRequestView.m in Sources */ = {isa = PBXBuildFile; fileRef = 719CC4F31B0B1B6A00DC1ED5 /* CPRGeneratorRequestView.m */; };
 		719CC50F1B0B1B6B00DC1ED5 /* CPRGeneratorRequestLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 719CC4F51B0B1B6A00DC1ED5 /* CPRGeneratorRequestLayer.m */; };
 		719CC5101B0B1B6B00DC1ED5 /* CPROrientationTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 719CC4F71B0B1B6A00DC1ED5 /* CPROrientationTextLayer.m */; };
@@ -20,8 +21,8 @@
 		719CC5181B0B1B6B00DC1ED5 /* NSBezierPath+N3Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 719CC5091B0B1B6A00DC1ED5 /* NSBezierPath+N3Additions.m */; };
 		719CC5191B0B1B6B00DC1ED5 /* CPRFloatImageRep.m in Sources */ = {isa = PBXBuildFile; fileRef = 719CC50B1B0B1B6A00DC1ED5 /* CPRFloatImageRep.m */; };
 		719CC51A1B0B1B6B00DC1ED5 /* CPRFloatImageLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 719CC50D1B0B1B6A00DC1ED5 /* CPRFloatImageLayer.m */; };
-		719CC51E1B0B1BBC00DC1ED5 /* CPRMPRController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 719CC51D1B0B1BBC00DC1ED5 /* CPRMPRController.mm */; };
-		719CC5261B0B1C2800DC1ED5 /* CPRMPRView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 719CC5251B0B1C2800DC1ED5 /* CPRMPRView.mm */; };
+		719CC51E1B0B1BBC00DC1ED5 /* CPRMPRController.m in Sources */ = {isa = PBXBuildFile; fileRef = 719CC51D1B0B1BBC00DC1ED5 /* CPRMPRController.m */; };
+		719CC5261B0B1C2800DC1ED5 /* CPRMPRView.m in Sources */ = {isa = PBXBuildFile; fileRef = 719CC5251B0B1C2800DC1ED5 /* CPRMPRView.m */; };
 		719CC5281B0B1C5300DC1ED5 /* CPRMPR.xib in Resources */ = {isa = PBXBuildFile; fileRef = 719CC5271B0B1C5300DC1ED5 /* CPRMPR.xib */; };
 		719CC52E1B0B21A900DC1ED5 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 719CC52D1B0B21A900DC1ED5 /* OpenGL.framework */; };
 		719CC52F1B0B21BA00DC1ED5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 719CC5291B0B216D00DC1ED5 /* Cocoa.framework */; };
@@ -34,6 +35,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		713341221B146EE50014CE09 /* CPRMPRController+Toolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CPRMPRController+Toolbar.h"; path = "Sources/CPRMPRController+Toolbar.h"; sourceTree = "<group>"; };
+		713341231B146EE50014CE09 /* CPRMPRController+Toolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CPRMPRController+Toolbar.m"; path = "Sources/CPRMPRController+Toolbar.m"; sourceTree = "<group>"; };
 		719CC4F21B0B1B6A00DC1ED5 /* CPRGeneratorRequestView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPRGeneratorRequestView.h; path = "../spalte-tavi/SymetisTavi/CPRGeneratorRequestView.h"; sourceTree = "<group>"; };
 		719CC4F31B0B1B6A00DC1ED5 /* CPRGeneratorRequestView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CPRGeneratorRequestView.m; path = "../spalte-tavi/SymetisTavi/CPRGeneratorRequestView.m"; sourceTree = "<group>"; };
 		719CC4F41B0B1B6A00DC1ED5 /* CPRGeneratorRequestLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPRGeneratorRequestLayer.h; path = "../spalte-tavi/SymetisTavi/CPRGeneratorRequestLayer.h"; sourceTree = "<group>"; };
@@ -63,16 +66,16 @@
 		719CC50C1B0B1B6A00DC1ED5 /* CPRFloatImageLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPRFloatImageLayer.h; path = "../spalte-tavi/SymetisTavi/CPRFloatImageLayer.h"; sourceTree = "<group>"; };
 		719CC50D1B0B1B6A00DC1ED5 /* CPRFloatImageLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CPRFloatImageLayer.m; path = "../spalte-tavi/SymetisTavi/CPRFloatImageLayer.m"; sourceTree = "<group>"; };
 		719CC51C1B0B1BBC00DC1ED5 /* CPRMPRController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPRMPRController.h; path = Sources/CPRMPRController.h; sourceTree = "<group>"; };
-		719CC51D1B0B1BBC00DC1ED5 /* CPRMPRController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CPRMPRController.mm; path = Sources/CPRMPRController.mm; sourceTree = "<group>"; };
+		719CC51D1B0B1BBC00DC1ED5 /* CPRMPRController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CPRMPRController.m; path = Sources/CPRMPRController.m; sourceTree = "<group>"; };
 		719CC5241B0B1C2800DC1ED5 /* CPRMPRView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPRMPRView.h; path = Sources/CPRMPRView.h; sourceTree = "<group>"; };
-		719CC5251B0B1C2800DC1ED5 /* CPRMPRView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CPRMPRView.mm; path = Sources/CPRMPRView.mm; sourceTree = "<group>"; };
+		719CC5251B0B1C2800DC1ED5 /* CPRMPRView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CPRMPRView.m; path = Sources/CPRMPRView.m; sourceTree = "<group>"; };
 		719CC5271B0B1C5300DC1ED5 /* CPRMPR.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CPRMPR.xib; sourceTree = "<group>"; };
 		719CC5291B0B216D00DC1ED5 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		719CC52D1B0B21A900DC1ED5 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		719CC5301B0B222100DC1ED5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = ../../../../System/Library/Frameworks/Foundation.framework; sourceTree = "<group>"; };
 		719CC5321B0B222900DC1ED5 /* OsiriXAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OsiriXAPI.framework; path = ../osirix/build/Development/OsiriXAPI.framework; sourceTree = "<group>"; };
 		719CC5341B0B226E00DC1ED5 /* CPRMPR.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CPRMPR.pch; path = Sources/CPRMPR.pch; sourceTree = "<group>"; };
-		719CC5381B0CC17000DC1ED5 /* CPRMPRQuaternion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CPRMPRQuaternion.hpp; sourceTree = "<group>"; };
+		719CC5381B0CC17000DC1ED5 /* CPRMPRQuaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPRMPRQuaternion.h; sourceTree = "<group>"; };
 		719CC5391B0CC17000DC1ED5 /* CPRMPRQuaternion.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CPRMPRQuaternion.mm; sourceTree = "<group>"; };
 		719CC53C1B0E039E00DC1ED5 /* CPRMPRMenuAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPRMPRMenuAdditions.h; sourceTree = "<group>"; };
 		719CC53D1B0E039E00DC1ED5 /* CPRMPRMenuAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CPRMPRMenuAdditions.m; sourceTree = "<group>"; };
@@ -161,10 +164,12 @@
 				719D02A91AC1D367002F76C1 /* CPRMPR.m */,
 				719CC5271B0B1C5300DC1ED5 /* CPRMPR.xib */,
 				719CC51C1B0B1BBC00DC1ED5 /* CPRMPRController.h */,
-				719CC51D1B0B1BBC00DC1ED5 /* CPRMPRController.mm */,
+				719CC51D1B0B1BBC00DC1ED5 /* CPRMPRController.m */,
+				713341221B146EE50014CE09 /* CPRMPRController+Toolbar.h */,
+				713341231B146EE50014CE09 /* CPRMPRController+Toolbar.m */,
 				719CC5241B0B1C2800DC1ED5 /* CPRMPRView.h */,
-				719CC5251B0B1C2800DC1ED5 /* CPRMPRView.mm */,
-				719CC5381B0CC17000DC1ED5 /* CPRMPRQuaternion.hpp */,
+				719CC5251B0B1C2800DC1ED5 /* CPRMPRView.m */,
+				719CC5381B0CC17000DC1ED5 /* CPRMPRQuaternion.h */,
 				719CC5391B0CC17000DC1ED5 /* CPRMPRQuaternion.mm */,
 				719CC53C1B0E039E00DC1ED5 /* CPRMPRMenuAdditions.h */,
 				719CC53D1B0E039E00DC1ED5 /* CPRMPRMenuAdditions.m */,
@@ -295,12 +300,13 @@
 				719CC50F1B0B1B6B00DC1ED5 /* CPRGeneratorRequestLayer.m in Sources */,
 				719D02AA1AC1D367002F76C1 /* CPRMPR.m in Sources */,
 				719CC5171B0B1B6B00DC1ED5 /* Additions.m in Sources */,
-				719CC5261B0B1C2800DC1ED5 /* CPRMPRView.mm in Sources */,
+				719CC5261B0B1C2800DC1ED5 /* CPRMPRView.m in Sources */,
 				719CC5161B0B1B6B00DC1ED5 /* CPRSprite.m in Sources */,
+				713341251B146EE50014CE09 /* CPRMPRController+Toolbar.m in Sources */,
 				719CC5101B0B1B6B00DC1ED5 /* CPROrientationTextLayer.m in Sources */,
 				719CC51A1B0B1B6B00DC1ED5 /* CPRFloatImageLayer.m in Sources */,
 				719CC5181B0B1B6B00DC1ED5 /* NSBezierPath+N3Additions.m in Sources */,
-				719CC51E1B0B1BBC00DC1ED5 /* CPRMPRController.mm in Sources */,
+				719CC51E1B0B1BBC00DC1ED5 /* CPRMPRController.m in Sources */,
 				719CC53A1B0CC17000DC1ED5 /* CPRMPRQuaternion.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

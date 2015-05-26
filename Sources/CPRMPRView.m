@@ -8,7 +8,7 @@
 
 #import "CPRMPRView.h"
 #import "CPRMPRController.h"
-#import "CPRMPRQuaternion.hpp"
+#import "CPRMPRQuaternion.h"
 #import "CPRIntersection.h"
 #import <OsiriXAPI/CPRGeneratorRequest.h>
 #import <OsiriXAPI/NSImage+N2.h>
@@ -247,12 +247,14 @@ static const N3Vector None = {CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN};
 #pragma mark Cursors
 
 + (NSCursor*)openHandCursor:(NSUInteger)flags {
-    static NSMutableDictionary* cache = [[NSMutableDictionary alloc] init];
+    static NSMutableDictionary* cache = nil;
+    if (!cache) cache = [[NSMutableDictionary alloc] init];
     return [self.class cursor:NSCursor.openHandCursor flags:flags cache:cache];
 }
 
 + (NSCursor*)closedHandCursor:(NSUInteger)flags {
-    static NSMutableDictionary* cache = [[NSMutableDictionary alloc] init];
+    static NSMutableDictionary* cache = nil;
+    if (!cache) cache = [[NSMutableDictionary alloc] init];
     return [self.class cursor:NSCursor.closedHandCursor flags:flags cache:cache];
 }
 

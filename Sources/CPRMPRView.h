@@ -8,14 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 #import "CPRGeneratorRequestView.h"
+#import "CPRMPRController.h"
 
 @class CPRObliqueSliceGeneratorRequest;
 @class CPRMPRQuaternion;
-
-typedef NS_OPTIONS(NSUInteger, CPRMPRFlags) {
-    CPRMPRSupportsRotation      = 1<<0,
-    CPRMPRSupportsAxisRotation  = 1<<1,
-};
 
 @interface CPRMPRView : CPRGeneratorRequestView {
     N3Vector _point;
