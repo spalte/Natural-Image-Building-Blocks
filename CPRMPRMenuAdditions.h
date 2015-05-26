@@ -8,17 +8,25 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface CPRMPRBlockMenuItem : NSMenuItem {
-    void (^_block)();
+@interface CPRMPRBlockMenuItem : NSMenuItem <NSCoding> {
+    void(^_block)();
 }
 
 + (instancetype)itemWithTitle:(NSString*)title block:(void(^)())block;
-- (instancetype)initWithTitle:(NSString*)title block:(void(^)())block;
+
+@end
+
+@interface CPRMPRSubmenuMenuItem : NSMenuItem <NSMenuDelegate, NSCoding> {
+    void(^_block)(NSMenu*);
+}
+
++ (instancetype)itemWithTitle:(NSString*)title block:(void(^)(NSMenu* menu))block;
 
 @end
 
 @interface NSMenu (CPRMPR)
 
-- (CPRMPRBlockMenuItem*)addItemWithTitle:(NSString*)title block:(void(^)())block;
+- (NSMenuItem*)addItemWithTitle:(NSString*)title block:(void(^)())block;
+- (NSMenuItem*)addItemWithTitle:(NSString*)title submenu:(NSMenu*)submenu;
 
 @end

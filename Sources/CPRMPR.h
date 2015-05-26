@@ -8,6 +8,13 @@
 
 #import <OsiriXAPI/PluginFilter.h>
 
-@interface CPRMPR : PluginFilter
+@interface CPRMPR : PluginFilter {
+    NSBundle* _bundle;
+}
+
+@property(retain,readonly) NSBundle* bundle;
+
++ (CPRMPR*)instance;
++ (NSBundle*)bundle;
 
 @end

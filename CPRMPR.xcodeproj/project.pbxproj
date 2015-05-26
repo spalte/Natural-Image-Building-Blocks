@@ -29,6 +29,7 @@
 		719CC5331B0B222900DC1ED5 /* OsiriXAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 719CC5321B0B222900DC1ED5 /* OsiriXAPI.framework */; };
 		719CC53A1B0CC17000DC1ED5 /* CPRMPRQuaternion.mm in Sources */ = {isa = PBXBuildFile; fileRef = 719CC5391B0CC17000DC1ED5 /* CPRMPRQuaternion.mm */; };
 		719CC53E1B0E039E00DC1ED5 /* CPRMPRMenuAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 719CC53D1B0E039E00DC1ED5 /* CPRMPRMenuAdditions.m */; };
+		719CC54A1B1449ED00DC1ED5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 719CC5491B1449ED00DC1ED5 /* Images.xcassets */; };
 		719D02AA1AC1D367002F76C1 /* CPRMPR.m in Sources */ = {isa = PBXBuildFile; fileRef = 719D02A91AC1D367002F76C1 /* CPRMPR.m */; };
 /* End PBXBuildFile section */
 
@@ -75,6 +76,7 @@
 		719CC5391B0CC17000DC1ED5 /* CPRMPRQuaternion.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CPRMPRQuaternion.mm; sourceTree = "<group>"; };
 		719CC53C1B0E039E00DC1ED5 /* CPRMPRMenuAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPRMPRMenuAdditions.h; sourceTree = "<group>"; };
 		719CC53D1B0E039E00DC1ED5 /* CPRMPRMenuAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CPRMPRMenuAdditions.m; sourceTree = "<group>"; };
+		719CC5491B1449ED00DC1ED5 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Resources/Images.xcassets; sourceTree = "<group>"; };
 		719D029E1AC1CB25002F76C1 /* CPRMPR.osirixplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CPRMPR.osirixplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		719D02A21AC1CB25002F76C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Resources/Info.plist; sourceTree = "<group>"; };
 		719D02A81AC1D367002F76C1 /* CPRMPR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPRMPR.h; path = Sources/CPRMPR.h; sourceTree = "<group>"; };
@@ -142,6 +144,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		719CC5461B1449B300DC1ED5 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				719CC5491B1449ED00DC1ED5 /* Images.xcassets */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		719D02951AC1CB25002F76C1 = {
 			isa = PBXGroup;
 			children = (
@@ -158,6 +168,7 @@
 				719CC5391B0CC17000DC1ED5 /* CPRMPRQuaternion.mm */,
 				719CC53C1B0E039E00DC1ED5 /* CPRMPRMenuAdditions.h */,
 				719CC53D1B0E039E00DC1ED5 /* CPRMPRMenuAdditions.m */,
+				719CC5461B1449B300DC1ED5 /* Resources */,
 				719CC51B1B0B1B7400DC1ED5 /* Joel */,
 				719CC52C1B0B218E00DC1ED5 /* Frameworks */,
 				719D029F1AC1CB25002F76C1 /* Products */,
@@ -230,6 +241,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				719CC54A1B1449ED00DC1ED5 /* Images.xcassets in Resources */,
 				719CC5281B0B1C5300DC1ED5 /* CPRMPR.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

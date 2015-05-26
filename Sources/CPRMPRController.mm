@@ -11,6 +11,25 @@
 #import "CPRIntersection.h"
 #import "CPRMPRQuaternion.hpp"
 #import "CPRMPRMenuAdditions.h"
+#import "CPRMPR.h"
+
+@interface CPRMPRTool : NSObject {
+    CPRMPRToolTag _tag;
+    NSString* _label;
+    NSImage* _image;
+//    void(^_block)();
+    NSMenu* _submenu;
+}
+
+@property CPRMPRToolTag tag;
+@property(retain) NSString* label;
+@property(retain) NSImage* image;
+//@property(copy) void(^block)();
+@property(retain) NSMenu* submenu;
+
++ (instancetype)toolWithTag:(CPRMPRToolTag)tag label:(NSString*)label image:(NSImage*)image /*block:(void(^)())block*/;
+
+@end
 
 @interface CPRMPRController ()
 
@@ -23,9 +42,9 @@
 
 @synthesize leftrightSplit = _leftrightSplit;
 @synthesize topbottomSplit = _topbottomSplit;
-@synthesize topleftView = _topleftView;
-@synthesize bottomleftView = _bottomleftView;
-@synthesize rightView = _rightView;
+@synthesize axialView = _axialView;
+@synthesize sagittalView = _sagittalView;
+@synthesize coronalView = _coronalView;
 
 @synthesize volumeData = _volumeData;
 @synthesize windowWidth = _windowWidth, windowLevel = _windowLevel;
@@ -37,24 +56,27 @@
 
 @synthesize flags = _flags;
 
+@synthesize currentToolTag = _currentToolTag;
+
 - (instancetype)initWithData:(CPRVolumeData*)volumeData {
     if ((self = [super initWithWindowNibName:@"CPRMPR" owner:self])) {
         self.volumeData = volumeData;
+        self.currentToolTag = CPRMPRToolWLWW;
     }
     
     return self;
 }
 
 - (void)awakeFromNib {
-    self.topleftView.color = [NSColor orangeColor];
-    self.bottomleftView.color = [NSColor purpleColor];
-    self.rightView.color = [NSColor blueColor];
+    self.axialView.color = [NSColor orangeColor];
+    self.sagittalView.color = [NSColor purpleColor];
+    self.coronalView.color = [NSColor blueColor];
     
-    [self view:self.topleftView addIntersections:@{ @"abscissa": self.bottomleftView, @"ordinate": self.rightView }];
-    [self view:self.bottomleftView addIntersections:@{ @"abscissa": self.rightView, @"ordinate": self.topleftView }];
-    [self view:self.rightView addIntersections:@{ @"abscissa": self.bottomleftView, @"ordinate": self.topleftView }];
+    [self view:self.axialView addIntersections:@{ @"abscissa": self.sagittalView, @"ordinate": self.coronalView }];
+    [self view:self.sagittalView addIntersections:@{ @"abscissa": self.coronalView, @"ordinate": self.axialView }];
+    [self view:self.coronalView addIntersections:@{ @"abscissa": self.sagittalView, @"ordinate": self.axialView }];
 
-    for (CPRMPRView* view in @[ self.topleftView, self.bottomleftView, self.rightView ]) {
+    for (CPRMPRView* view in @[ self.axialView, self.sagittalView, self.coronalView ]) {
         [view bind:@"volumeData" toObject:self withKeyPath:@"volumeData" options:nil];
         [view bind:@"point" toObject:self withKeyPath:@"point" options:nil];
         [view bind:@"menu" toObject:self withKeyPath:@"menu" options:nil];
@@ -73,10 +95,10 @@
             [(CPRMPRView*)self.window.firstResponder rotateToInitial];
     }];
     [self.menu addItemWithTitle:NSLocalizedString(@"Reset all views' rotations", nil) block:^{
-        for (CPRMPRView* view in @[ self.topleftView, self.bottomleftView, self.rightView ])
+        for (CPRMPRView* view in @[ self.axialView, self.sagittalView, self.coronalView ])
             [view rotateToInitial];
     }];
-    [self.menu addItemWithTitle:NSLocalizedString(@"Reset all views' rotations and axes", nil) block:^{
+    [self.menu addItemWithTitle:NSLocalizedString(@"Reset all views' axes and rotations", nil) block:^{
         [self resetNormals];
     }];
 
@@ -119,7 +141,7 @@
 
         [self resetNormals];
         
-        NSArray* views = @[ self.topleftView, self.bottomleftView, self.rightView ];
+        NSArray* views = @[ self.axialView, self.sagittalView, self.coronalView ];
         
         CGFloat pixelSpacing = 0, pixelSpacingSize = 0;
         for (CPRMPRView* view in views) {
@@ -138,7 +160,7 @@
 - (void)rotate:(CGFloat)rads axis:(N3Vector)axis excluding:(CPRMPRView*)eview {
     for (CPRMPRQuaternion* quaternion in @[ self.x, self.y, self.z ])
         [quaternion rotate:rads axis:axis];
-    for (CPRMPRView* view in @[ self.topleftView, self.bottomleftView, self.rightView ])
+    for (CPRMPRView* view in @[ self.axialView, self.sagittalView, self.coronalView ])
         if (view != eview)
             [view rotate:rads axis:axis];
 }
@@ -147,9 +169,115 @@
     CPRMPRQuaternion* x = self.x = [CPRMPRQuaternion quaternion:N3VectorApplyTransformToDirectionalVector(N3VectorMake(1,0,0), self.volumeData.volumeTransform)];
     CPRMPRQuaternion* y = self.y = [CPRMPRQuaternion quaternion:N3VectorApplyTransformToDirectionalVector(N3VectorMake(0,1,0), self.volumeData.volumeTransform)];
     CPRMPRQuaternion* z = self.z = [CPRMPRQuaternion quaternion:N3VectorApplyTransformToDirectionalVector(N3VectorMake(0,0,1), self.volumeData.volumeTransform)];
-    [self.topleftView setNormal:[x.copy autorelease]:[y.copy autorelease]:[z.copy autorelease] reference:y];
-    [self.bottomleftView setNormal:[z.copy autorelease]:[x.copy autorelease]:[y.copy autorelease] reference:x];
-    [self.rightView setNormal:[y.copy autorelease]:[x.copy autorelease]:[z.copy autorelease] reference:x];
+    [self.axialView setNormal:[x.copy autorelease]:[y.copy autorelease]:[z.copy autorelease] reference:y];
+    [self.sagittalView setNormal:[z.copy autorelease]:[x.copy autorelease]:[y.copy autorelease] reference:x];
+    [self.coronalView setNormal:[y.copy autorelease]:[x.copy autorelease]:[z.copy autorelease] reference:x];
+}
+
+#pragma mark Toolbar
+
+NSString* const CPRMPRToolsToolbarItemIdentifier = @"CPRMPRTools";
+
+- (NSArray*)tools {
+    static NSArray* tools = [@[
+                              [CPRMPRTool toolWithTag:CPRMPRToolWLWW label:NSLocalizedString(@"WL/WW", nil) image:[[[NSImage alloc] initWithContentsOfURL:[CPRMPR.bundle URLForImageResource:@"Tool-WLWW"]] autorelease]],
+                              [CPRMPRTool toolWithTag:CPRMPRToolMove label:NSLocalizedString(@"Move", nil) image:[[[NSImage alloc] initWithContentsOfURL:[CPRMPR.bundle URLForImageResource:@"Tool-Move" ]] autorelease]],
+                              [CPRMPRTool toolWithTag:CPRMPRToolZoom label:NSLocalizedString(@"Zoom", nil) image:[[[NSImage alloc] initWithContentsOfURL:[CPRMPR.bundle URLForImageResource:@"Tool-Zoom"]] autorelease]],
+                              [CPRMPRTool toolWithTag:CPRMPRToolRotate label:NSLocalizedString(@"Rotate", nil) image:[[[NSImage alloc] initWithContentsOfURL:[CPRMPR.bundle URLForImageResource:@"Tool-Rotate"]] autorelease]]
+                            ] retain];
+    return tools;
+}
+
+- (NSToolbarItem*)toolbar:(NSToolbar*)toolbar itemForItemIdentifier:(NSString*)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag {
+    if ([itemIdentifier isEqualToString:CPRMPRToolsToolbarItemIdentifier]) {
+        NSToolbarItem* item = [[[NSToolbarItem alloc] initWithItemIdentifier:CPRMPRToolsToolbarItemIdentifier] autorelease];
+        item.label = NSLocalizedString(@"Tools", nil);
+        
+        NSSegmentedControl* seg = [[[NSSegmentedControl alloc] initWithFrame:NSZeroRect] autorelease];
+        NSSegmentedCell* cell = [seg cell];
+        
+        NSMenu* menu = [[[NSMenu alloc] init] autorelease];
+        item.menuFormRepresentation = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Tools", nil) action:nil keyEquivalent:@""];
+        item.menuFormRepresentation.submenu = menu;
+        
+        NSArray* tools = [self tools];
+        seg.segmentCount = tools.count;
+//        seg.target = self;
+//        seg.action = @selector(toolsSegmentAction:);
+        [tools enumerateObjectsUsingBlock:^(CPRMPRTool* tool, NSUInteger i, BOOL* stop) {
+            [cell setTag:tool.tag forSegment:i];
+//            [seg setLabel:tool.label forSegment:i];
+            [seg setImage:tool.image forSegment:i];
+            NSMenuItem* mi = [[NSMenuItem alloc] initWithTitle:tool.label action:nil keyEquivalent:@""];
+            mi.tag = tool.tag;
+            mi.submenu = tool.submenu;
+            [menu addItem:mi];
+            
+//            if (!tool.submenu) {
+//                [menu addItemWithTitle:tool.label block:tool.block];
+//            } else {
+//                [seg setMenu:tool.submenu forSegment:i];
+//                [menu addItemWithTitle:tool.label submenu:tool.submenu];
+//            }
+        }];
+
+        [seg sizeToFit];
+        item.view = seg;
+
+        return item;
+    }
+    
+    return nil;
+}
+
+- (NSArray*)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar {
+    return @[ CPRMPRToolsToolbarItemIdentifier ];
+}
+
+- (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar {
+    return @[ CPRMPRToolsToolbarItemIdentifier ];
+}
+
+- (void)toolbarWillAddItem:(NSNotification*)notification {
+    NSToolbarItem* item = notification.userInfo[@"item"];
+    
+    if ([item.itemIdentifier isEqualToString:CPRMPRToolsToolbarItemIdentifier]) {
+        NSSegmentedControl* seg = (id)item.view;
+        NSSegmentedCell* cell = [seg cell];
+        [cell bind:@"selectedTag" toObject:self withKeyPath:@"currentToolTag" options:0];
+    }
+}
+
+//- (void)toolsSegmentAction:(NSSegmentedControl*)sender {
+//    CPRMPRTool* tool = self.tools[sender.selectedSegment];
+//    tool.block();
+//}
+
+@end
+
+@implementation CPRMPRTool
+
+@synthesize label = _label;
+@synthesize image = _image;
+//@synthesize block = _block;
+@synthesize submenu = _submenu;
+
++ (instancetype)toolWithTag:(CPRMPRToolTag)tag label:(NSString*)label image:(NSImage*)image /*block:(void(^)())block*/ {
+    CPRMPRTool* tool = [[[self.class alloc] init] autorelease];
+    tool.tag = tag;
+    tool.label = label;
+    tool.image = image;
+    image.size = NSMakeSize(16,16);
+//    tool.block = block;
+    return tool;
+}
+
+- (void)dealloc {
+    self.label = nil;
+    self.image = nil;
+//    self.block = nil;
+    self.submenu = nil;
+    [super dealloc];
 }
 
 @end

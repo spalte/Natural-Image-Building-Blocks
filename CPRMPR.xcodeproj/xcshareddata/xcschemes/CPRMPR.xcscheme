@@ -41,6 +41,7 @@
       allowLocationSimulation = "YES">
       <PathRunnable
          runnableDebuggingMode = "0"
+         BundleIdentifier = "com.rossetantoine.osirix"
          FilePath = "/Applications/OsiriX MD.app">
       </PathRunnable>
       <MacroExpansion>

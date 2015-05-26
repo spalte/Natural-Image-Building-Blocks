@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CPRMPRController">
             <connections>
-                <outlet property="bottomleftView" destination="yMd-LL-Gbp" id="bg1-zY-ij4"/>
+                <outlet property="axialView" destination="Fox-6d-HeJ" id="Eif-YD-XZB"/>
+                <outlet property="coronalView" destination="t1C-ae-ikp" id="fbY-7B-6gg"/>
                 <outlet property="leftrightSplit" destination="aBq-Gb-4R2" id="ZdK-yR-eyG"/>
-                <outlet property="rightView" destination="t1C-ae-ikp" id="fbY-7B-6gg"/>
+                <outlet property="sagittalView" destination="yMd-LL-Gbp" id="bg1-zY-ij4"/>
                 <outlet property="topbottomSplit" destination="sD6-V0-zVr" id="3LR-Ka-Cyr"/>
-                <outlet property="topleftView" destination="Fox-6d-HeJ" id="Eif-YD-XZB"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="tPa-gv-Nv2"/>
             </connections>
         </customObject>
@@ -70,6 +71,18 @@
                     <constraint firstItem="aBq-Gb-4R2" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="h4M-mA-XCB"/>
                 </constraints>
             </view>
+            <toolbar key="toolbar" implicitIdentifier="DEDDBAC3-B336-4481-9E89-DF9CA566060A" autosavesConfiguration="NO" displayMode="iconOnly" sizeMode="regular" id="XsA-Wd-FQa">
+                <allowedToolbarItems>
+                    <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="GhZ-02-wZ2"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="dlU-Wm-AQH"/>
+                </allowedToolbarItems>
+                <defaultToolbarItems>
+                    <toolbarItem reference="dlU-Wm-AQH"/>
+                </defaultToolbarItems>
+                <connections>
+                    <outlet property="delegate" destination="-2" id="g3z-r2-tnK"/>
+                </connections>
+            </toolbar>
             <point key="canvasLocation" x="364.5" y="438"/>
         </window>
     </objects>

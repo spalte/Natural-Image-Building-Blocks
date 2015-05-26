@@ -10,12 +10,20 @@
 
 @class CPRMPRQuaternion;
 
-@interface CPRMPRController : NSWindowController <NSSplitViewDelegate> {
+typedef NS_ENUM(NSInteger, CPRMPRToolTag) {
+    CPRMPRToolWLWW = 0,
+    CPRMPRToolMove,
+    CPRMPRToolZoom,
+    CPRMPRToolRotate,
+    CPRMPRToolROI,
+};
+
+@interface CPRMPRController : NSWindowController <NSSplitViewDelegate, NSToolbarDelegate> {
     NSSplitView* _leftrightSplit;
     NSSplitView* _topbottomSplit;
-    CPRMPRView* _topleftView;
-    CPRMPRView* _bottomleftView;
-    CPRMPRView* _rightView;
+    CPRMPRView* _axialView;
+    CPRMPRView* _sagittalView;
+    CPRMPRView* _coronalView;
     
     CPRVolumeData* _volumeData;
     CGFloat _windowWidth, _windowLevel;
@@ -26,13 +34,15 @@
     CPRMPRQuaternion *_x, *_y, *_z;
     
     CPRMPRFlags _flags;
+    
+    CPRMPRToolTag _currentToolTag;
 }
 
 @property(assign) IBOutlet NSSplitView* leftrightSplit;
 @property(assign) IBOutlet NSSplitView* topbottomSplit;
-@property(assign) IBOutlet CPRMPRView* topleftView;
-@property(assign) IBOutlet CPRMPRView* bottomleftView;
-@property(assign) IBOutlet CPRMPRView* rightView;
+@property(assign) IBOutlet CPRMPRView* axialView; // top-left
+@property(assign) IBOutlet CPRMPRView* sagittalView; // bottom-left
+@property(assign) IBOutlet CPRMPRView* coronalView; // right
 
 @property(retain) CPRVolumeData* volumeData;
 @property CGFloat windowWidth, windowLevel;
@@ -43,6 +53,8 @@
 @property N3Vector point;
 
 @property CPRMPRFlags flags;
+
+@property CPRMPRToolTag currentToolTag;
 
 - (instancetype)initWithData:(CPRVolumeData*)volumeData;
 

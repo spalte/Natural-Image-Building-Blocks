@@ -11,10 +11,35 @@
 #import <OsiriXAPI/CPRVolumeData.h>
 #import <OsiriXAPI/pluginSDKAdditions.h>
 
+@interface CPRMPR ()
+
+@property(retain,readwrite) NSBundle* bundle;
+
+@end
+
+static CPRMPR* instance = nil;
+
 @implementation CPRMPR
 
+@synthesize bundle = _bundle;
+
++ (CPRMPR*)instance {
+    return instance;
+}
+
++ (NSBundle*)bundle {
+    return self.instance.bundle;
+}
+
 - (void)initPlugin {
-    
+    instance = self;
+    self.bundle = [NSBundle bundleForClass:self.class];
+}
+
+- (void)dealloc {
+    self.bundle = nil;
+    instance = nil;
+    [super dealloc];
 }
 
 - (long)filterImage:(NSString*)menuName {
