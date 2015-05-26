@@ -9,6 +9,7 @@
 #import "CPRMPRController.h"
 #import <OsiriXAPI/CPRVolumeData.h>
 #import "CPRIntersection.h"
+#import "CPRMPRView.h"
 #import "CPRMPRQuaternion.h"
 #import "CPRMPRMenuAdditions.h"
 
