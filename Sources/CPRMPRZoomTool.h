@@ -8,6 +8,9 @@
 
 #import "CPRMPRTool.h"
 
-@interface CPRMPRZoomTool : CPRMPRTool
+@interface CPRMPRZoomTool : CPRMPRTool {
+    NSPoint _previousLocation;
+//    CGFloat _mouseDownPixelSpacing;
+}
 
 @end

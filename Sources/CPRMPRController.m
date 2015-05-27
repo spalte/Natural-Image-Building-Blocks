@@ -27,7 +27,7 @@
 @synthesize displayOrientationLabels = _displayOrientationLabels, displayScaleBars = _displayScaleBars;
 @synthesize menu = _menu;
 
-@synthesize point = _point;
+@synthesize point = _point, initialPoint = _initialPoint;
 @synthesize x = _x, y = _y, z = _z;
 
 @synthesize flags = _flags;
@@ -72,11 +72,11 @@
         if ([self.window.firstResponder isKindOfClass:CPRMPRView.class])
             [(CPRMPRView*)self.window.firstResponder rotateToInitial];
     }];
-    [self.menu addItemWithTitle:NSLocalizedString(@"Reset all views' rotations", nil) block:^{
+    [self.menu addItemWithTitle:NSLocalizedString(@"Reset all rotations", nil) block:^{
         for (CPRMPRView* view in @[ self.axialView, self.sagittalView, self.coronalView ])
             [view rotateToInitial];
     }];
-    [self.menu addItemWithTitle:NSLocalizedString(@"Reset all views' axes and rotations", nil) block:^{
+    [self.menu addItemWithTitle:NSLocalizedString(@"Reset all", nil) keyEquivalent:@"r" block:^{
         [self resetNormals];
     }];
 
@@ -121,7 +121,7 @@
         return [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     
     if (object == self && [keyPath isEqualToString:@"data"]) {
-        self.point = N3VectorApplyTransform(N3VectorMake(self.data.pixelsWide/2, self.data.pixelsHigh/2, self.data.pixelsDeep/2), N3AffineTransformInvert(self.data.volumeTransform));
+        self.initialPoint = self.point = N3VectorApplyTransform(N3VectorMake(self.data.pixelsWide/2, self.data.pixelsHigh/2, self.data.pixelsDeep/2), N3AffineTransformInvert(self.data.volumeTransform));
 
         [self resetNormals];
         
@@ -158,6 +158,7 @@
     [self.axialView setNormal:[x.copy autorelease]:[y.copy autorelease]:[z.copy autorelease] reference:y];
     [self.sagittalView setNormal:[z.copy autorelease]:[x.copy autorelease]:[y.copy autorelease] reference:x];
     [self.coronalView setNormal:[y.copy autorelease]:[x.copy autorelease]:[z.copy autorelease] reference:x];
+    self.point = self.initialPoint;
 }
 
 @end

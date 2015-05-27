@@ -31,7 +31,7 @@ typedef NS_OPTIONS(NSUInteger, CPRMPRFlags) {
     BOOL _displayOrientationLabels, _displayScaleBars;
     NSMenu* _menu;
 
-    N3Vector _point;
+    N3Vector _point, _initialPoint;
     CPRMPRQuaternion *_x, *_y, *_z;
     
     CPRMPRFlags _flags;
@@ -53,6 +53,7 @@ typedef NS_OPTIONS(NSUInteger, CPRMPRFlags) {
 
 @property(retain, readonly) CPRMPRQuaternion *x, *y, *z;
 @property N3Vector point;
+@property(readonly) N3Vector initialPoint;
 
 @property CPRMPRFlags flags;
 
@@ -62,5 +63,6 @@ typedef NS_OPTIONS(NSUInteger, CPRMPRFlags) {
 - (instancetype)initWithData:(CPRVolumeData*)data;
 
 - (void)rotate:(CGFloat)rads axis:(N3Vector)axis excluding:(CPRMPRView*)view;
+- (void)resetNormals;
 
 @end

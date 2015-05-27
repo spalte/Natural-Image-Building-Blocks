@@ -43,13 +43,18 @@
 
     CGFloat windowLevel = self.mouseDownWindowLevel + (location.y - self.mouseDownLocation.y) * factor;
     CGFloat windowWidth = self.mouseDownWindowWidth + (location.x - self.mouseDownLocation.x) * factor;
-    NSLog(@"WLWW: %f %f", windowLevel, windowWidth);
+//    NSLog(@"WLWW: %f %f", windowLevel, windowWidth);
     
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
     
-    [view.window.windowController setWindowLevel:windowLevel];
-    [view.window.windowController setWindowWidth:windowWidth];
+    if ([view.window.windowController respondsToSelector:@selector(setWindowLevel:)] && [view.window.windowController respondsToSelector:@selector(setWindowWidth:)]) {
+        [view.window.windowController setWindowLevel:windowLevel];
+        [view.window.windowController setWindowWidth:windowWidth];
+    } else {
+        [view setWindowLevel:windowLevel];
+        [view setWindowWidth:windowWidth];
+    }
     
     [CATransaction commit];
 

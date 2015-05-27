@@ -9,7 +9,7 @@
 #import <OsiriXAPI/N3Geometry.h>
 
 typedef NS_ENUM(NSInteger, CPRMPRToolTag) {
-    CPRMPRToolWLWW = 0,
+    CPRMPRToolWLWW = 1,
     CPRMPRToolMove,
     CPRMPRToolZoom,
     CPRMPRToolRotate,

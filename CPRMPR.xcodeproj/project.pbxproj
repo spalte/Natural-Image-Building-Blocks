@@ -13,7 +13,6 @@
 		713341301B147E360014CE09 /* CPRMPRMoveTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 7133412F1B147E360014CE09 /* CPRMPRMoveTool.m */; };
 		713341331B147E810014CE09 /* CPRMPRZoomTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 713341321B147E810014CE09 /* CPRMPRZoomTool.m */; };
 		713341361B147E910014CE09 /* CPRMPRRotateTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 713341351B147E910014CE09 /* CPRMPRRotateTool.m */; };
-		7133413A1B14DA760014CE09 /* CPRMPRView+Cursor.m in Sources */ = {isa = PBXBuildFile; fileRef = 713341391B14DA750014CE09 /* CPRMPRView+Cursor.m */; };
 		7133413D1B14E01C0014CE09 /* CPRMPRRotateAxisTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 7133413C1B14E01C0014CE09 /* CPRMPRRotateAxisTool.m */; };
 		713341401B15A4FA0014CE09 /* CPRMPRView+Events.m in Sources */ = {isa = PBXBuildFile; fileRef = 7133413F1B15A4FA0014CE09 /* CPRMPRView+Events.m */; };
 		713341441B15F3000014CE09 /* CPRMPRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 713341431B15F3000014CE09 /* CPRMPRAdditions.m */; };
@@ -57,8 +56,6 @@
 		713341341B147E910014CE09 /* CPRMPRRotateTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPRMPRRotateTool.h; path = Sources/CPRMPRRotateTool.h; sourceTree = "<group>"; };
 		713341351B147E910014CE09 /* CPRMPRRotateTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CPRMPRRotateTool.m; path = Sources/CPRMPRRotateTool.m; sourceTree = "<group>"; };
 		713341371B1483B90014CE09 /* CPRMPRController+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CPRMPRController+Private.h"; path = "Sources/CPRMPRController+Private.h"; sourceTree = "<group>"; };
-		713341381B14DA750014CE09 /* CPRMPRView+Cursor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CPRMPRView+Cursor.h"; path = "Sources/CPRMPRView+Cursor.h"; sourceTree = "<group>"; };
-		713341391B14DA750014CE09 /* CPRMPRView+Cursor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CPRMPRView+Cursor.m"; path = "Sources/CPRMPRView+Cursor.m"; sourceTree = "<group>"; };
 		7133413B1B14E01C0014CE09 /* CPRMPRRotateAxisTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPRMPRRotateAxisTool.h; path = Sources/CPRMPRRotateAxisTool.h; sourceTree = "<group>"; };
 		7133413C1B14E01C0014CE09 /* CPRMPRRotateAxisTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CPRMPRRotateAxisTool.m; path = Sources/CPRMPRRotateAxisTool.m; sourceTree = "<group>"; };
 		7133413E1B15A4FA0014CE09 /* CPRMPRView+Events.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CPRMPRView+Events.h"; path = "Sources/CPRMPRView+Events.h"; sourceTree = "<group>"; };
@@ -221,8 +218,6 @@
 				719CC5251B0B1C2800DC1ED5 /* CPRMPRView.m */,
 				7133413E1B15A4FA0014CE09 /* CPRMPRView+Events.h */,
 				7133413F1B15A4FA0014CE09 /* CPRMPRView+Events.m */,
-				713341381B14DA750014CE09 /* CPRMPRView+Cursor.h */,
-				713341391B14DA750014CE09 /* CPRMPRView+Cursor.m */,
 				713341271B147D9D0014CE09 /* Tools */,
 				719CC5381B0CC17000DC1ED5 /* CPRMPRQuaternion.h */,
 				719CC5391B0CC17000DC1ED5 /* CPRMPRQuaternion.mm */,
@@ -359,7 +354,6 @@
 				719CC50F1B0B1B6B00DC1ED5 /* CPRGeneratorRequestLayer.m in Sources */,
 				719D02AA1AC1D367002F76C1 /* CPRMPR.m in Sources */,
 				7133412A1B147DF50014CE09 /* CPRMPRWLWWTool.m in Sources */,
-				7133413A1B14DA760014CE09 /* CPRMPRView+Cursor.m in Sources */,
 				719CC5171B0B1B6B00DC1ED5 /* Additions.m in Sources */,
 				719CC5261B0B1C2800DC1ED5 /* CPRMPRView.m in Sources */,
 				713341301B147E360014CE09 /* CPRMPRMoveTool.m in Sources */,

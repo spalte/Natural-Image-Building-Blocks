@@ -12,7 +12,7 @@
     void(^_block)();
 }
 
-+ (instancetype)itemWithTitle:(NSString*)title block:(void(^)())block;
+//+ (instancetype)itemWithTitle:(NSString*)title block:(void(^)())block;
 
 @end
 
@@ -20,13 +20,14 @@
     void(^_block)(NSMenu*);
 }
 
-+ (instancetype)itemWithTitle:(NSString*)title block:(void(^)(NSMenu* menu))block;
+//+ (instancetype)itemWithTitle:(NSString*)title block:(void(^)(NSMenu* menu))block;
 
 @end
 
 @interface NSMenu (CPRMPR)
 
 - (NSMenuItem*)addItemWithTitle:(NSString*)title block:(void(^)())block;
+- (NSMenuItem*)addItemWithTitle:(NSString*)title keyEquivalent:(NSString*)keyEquivalent block:(void(^)())block;
 - (NSMenuItem*)addItemWithTitle:(NSString*)title submenu:(NSMenu*)submenu;
 
 @end

@@ -8,6 +8,7 @@
 
 #import "CPRMPRView+Private.h"
 #import "CPRMPRView+Events.h"
+#import "CPRMPRMoveTool.h"
 #import "CPRMPRRotateTool.h"
 #import "CPRMPRRotateAxisTool.h"
 #import "CPRIntersection.h"
@@ -94,7 +95,35 @@
 }
 
 - (void)keyDown:(NSEvent*)event {
-    [self tool:_cmd event:event or:nil];
+    [self tool:_cmd event:event or:^{
+        CPRMPRToolTag tool = 0;
+        
+        if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == 0)
+            switch ([event.characters.lowercaseString characterAtIndex:0]) {
+                case 'w': {
+                    tool = CPRMPRToolWLWW;
+                } break;
+                case 'm': {
+                    tool = CPRMPRToolMove;
+                } break;
+                case 'z': {
+                    tool = CPRMPRToolZoom;
+                } break;
+                case 'r': {
+                    tool = CPRMPRToolRotate;
+                } break;
+            }
+        else
+        if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSCommandKeyMask)
+            switch ([event.characters.lowercaseString characterAtIndex:0]) {
+                case 'r': {
+                    [self.window.windowController resetNormals];
+                } break;
+            }
+        
+        if (tool)
+            [self.window.windowController setCurrentToolTag:tool];
+    }];
 }
 
 - (void)keyUp:(NSEvent*)event {
@@ -111,11 +140,24 @@
     CGFloat distance;
     NSString* ikey = [self intersectionClosestToPoint:location closestPoint:NULL distance:&distance];
     
-    BOOL flag = (ikey && distance < 4);
+    BOOL rotate = (ikey && distance < 4);
+
+    __block BOOL move = rotate; // so,
+    if (move)
+        [self enumerateIntersectionsWithBlock:^(NSString* key, CPRIntersection* intersection, BOOL* stop) {
+            if ([key isEqualToString:ikey])
+                return;
+            if ([intersection distanceToPoint:location closestPoint:NULL] > 4) {
+                move = NO;
+                *stop = YES;
+            }
+        }];
     
     Class /*wtc = [[self.window.windowController tool] class],*/ tc = nil;
     
-    if (flag) {
+    if (move)
+        tc = CPRMPRMoveTool.class;
+    else if (rotate) {
         tc = CPRMPRRotateAxisTool.class;
         if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSCommandKeyMask)
             tc = CPRMPRRotateTool.class;
@@ -125,13 +167,13 @@
         self.tool = [[[tc alloc] init] autorelease];
     
     [self enumerateIntersectionsWithBlock:^(NSString* key, CPRIntersection* intersection, BOOL* stop) {
-        intersection.maskAroundMouse = !flag;
+        intersection.maskAroundMouse = !rotate;
     }];
     
     CPRMPRTool* tool = self.tool? self.tool : [self.window.windowController tool];
     
     NSCursor* cursor = tool? tool.hoverCursor : NSCursor.arrowCursor;
-    if (flag)
+    if (rotate)
         cursor = NSCursor.openHandCursor;
     
     if (NSCursor.currentCursor != cursor)
