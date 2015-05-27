@@ -77,7 +77,7 @@
             [view rotateToInitial];
     }];
     [self.menu addItemWithTitle:NSLocalizedString(@"Reset all", nil) keyEquivalent:@"r" block:^{
-        [self resetNormals];
+        [self reset];
     }];
 
     [self.menu addItem:[NSMenuItem separatorItem]];
@@ -121,21 +121,9 @@
         return [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     
     if (object == self && [keyPath isEqualToString:@"data"]) {
-        self.initialPoint = self.point = N3VectorApplyTransform(N3VectorMake(self.data.pixelsWide/2, self.data.pixelsHigh/2, self.data.pixelsDeep/2), N3AffineTransformInvert(self.data.volumeTransform));
+        self.initialPoint = N3VectorApplyTransform(N3VectorMake(self.data.pixelsWide/2, self.data.pixelsHigh/2, self.data.pixelsDeep/2), N3AffineTransformInvert(self.data.volumeTransform));
 
-        [self resetNormals];
-        
-        CGFloat pixelSpacing = 0, pixelSpacingSize = 0;
-        for (CPRMPRView* view in self.mprViews) {
-            CGFloat pss = fmin(NSWidth(view.frame), NSHeight(view.frame)), ps = pss/N3VectorDistance(N3VectorZero, N3VectorMake(self.data.pixelsWide, self.data.pixelsHigh, self.data.pixelsDeep));
-            if (!pixelSpacing || ps < pixelSpacing) {
-                pixelSpacing = ps;
-                pixelSpacingSize = pss;
-            }
-        }
-
-        for (CPRMPRView* view in self.mprViews)
-            view.pixelSpacing = pixelSpacing/pixelSpacingSize*fmin(NSWidth(view.frame), NSHeight(view.frame));
+        [self reset];
     }
     
     if (object == self && [keyPath isEqualToString:@"currentToolTag"]) {
@@ -151,14 +139,28 @@
             [view rotate:rads axis:axis];
 }
 
-- (void)resetNormals {
+- (void)reset {
     CPRMPRQuaternion* x = self.x = [CPRMPRQuaternion quaternion:N3VectorApplyTransformToDirectionalVector(N3VectorMake(1,0,0), self.data.volumeTransform)];
     CPRMPRQuaternion* y = self.y = [CPRMPRQuaternion quaternion:N3VectorApplyTransformToDirectionalVector(N3VectorMake(0,1,0), self.data.volumeTransform)];
     CPRMPRQuaternion* z = self.z = [CPRMPRQuaternion quaternion:N3VectorApplyTransformToDirectionalVector(N3VectorMake(0,0,1), self.data.volumeTransform)];
+    
     [self.axialView setNormal:[x.copy autorelease]:[y.copy autorelease]:[z.copy autorelease] reference:y];
     [self.sagittalView setNormal:[z.copy autorelease]:[x.copy autorelease]:[y.copy autorelease] reference:x];
     [self.coronalView setNormal:[y.copy autorelease]:[x.copy autorelease]:[z.copy autorelease] reference:x];
+    
     self.point = self.initialPoint;
+    
+    CGFloat pixelSpacing = 0, pixelSpacingSize = 0;
+    for (CPRMPRView* view in self.mprViews) {
+        CGFloat pss = fmin(NSWidth(view.frame), NSHeight(view.frame)), ps = pss/N3VectorDistance(N3VectorZero, N3VectorMake(self.data.pixelsWide, self.data.pixelsHigh, self.data.pixelsDeep));
+        if (!pixelSpacing || ps < pixelSpacing) {
+            pixelSpacing = ps;
+            pixelSpacingSize = pss;
+        }
+    }
+    
+    for (CPRMPRView* view in self.mprViews)
+        view.pixelSpacing = pixelSpacing/pixelSpacingSize*fmin(NSWidth(view.frame), NSHeight(view.frame));
 }
 
 @end

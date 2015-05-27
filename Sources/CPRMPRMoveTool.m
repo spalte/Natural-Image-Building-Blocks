@@ -41,7 +41,7 @@
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
     
-    [view.window.windowController setPoint:N3VectorSubtract([view.window.windowController point], delta)];
+    [self view:view move:delta];
     
     [CATransaction commit];
     
@@ -50,10 +50,22 @@
     return YES;
 }
 
+- (void)view:(CPRMPRView*)view move:(N3Vector)delta {
+    [view.window.windowController setPoint:N3VectorSubtract([view.window.windowController point], delta)];
+}
+
 - (BOOL)view:(CPRMPRView*)view mouseUp:(NSEvent*)event {
     [NSCursor unhide];
     
     return YES;
+}
+
+@end
+
+@implementation CPRMPRInvertMoveTool
+
+- (void)view:(CPRMPRView*)view move:(N3Vector)delta {
+    [view.window.windowController setPoint:N3VectorAdd([view.window.windowController point], delta)];
 }
 
 @end

@@ -13,3 +13,7 @@
 }
 
 @end
+
+@interface CPRMPRInvertMoveTool : CPRMPRMoveTool
+
+@end

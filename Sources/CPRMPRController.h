@@ -63,6 +63,6 @@ typedef NS_OPTIONS(NSUInteger, CPRMPRFlags) {
 - (instancetype)initWithData:(CPRVolumeData*)data;
 
 - (void)rotate:(CGFloat)rads axis:(N3Vector)axis excluding:(CPRMPRView*)view;
-- (void)resetNormals;
+- (void)reset;
 
 @end

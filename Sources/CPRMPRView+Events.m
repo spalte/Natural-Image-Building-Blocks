@@ -117,7 +117,7 @@
         if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSCommandKeyMask)
             switch ([event.characters.lowercaseString characterAtIndex:0]) {
                 case 'r': {
-                    [self.window.windowController resetNormals];
+                    [self.window.windowController reset];
                 } break;
             }
         
@@ -156,7 +156,7 @@
     Class /*wtc = [[self.window.windowController tool] class],*/ tc = nil;
     
     if (move)
-        tc = CPRMPRMoveTool.class;
+        tc = CPRMPRInvertMoveTool.class;
     else if (rotate) {
         tc = CPRMPRRotateAxisTool.class;
         if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSCommandKeyMask)
