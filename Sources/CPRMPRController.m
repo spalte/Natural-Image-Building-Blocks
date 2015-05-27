@@ -22,7 +22,7 @@
 @synthesize sagittalView = _sagittalView;
 @synthesize coronalView = _coronalView;
 
-@synthesize volumeData = _volumeData;
+@synthesize data = _data;
 @synthesize windowWidth = _windowWidth, windowLevel = _windowLevel;
 @synthesize displayOrientationLabels = _displayOrientationLabels, displayScaleBars = _displayScaleBars;
 @synthesize menu = _menu;
@@ -35,9 +35,9 @@
 @synthesize currentToolTag = _currentToolTag;
 @synthesize tool = _tool;
 
-- (instancetype)initWithData:(CPRVolumeData*)volumeData {
+- (instancetype)initWithData:(CPRVolumeData*)data {
     if ((self = [super initWithWindowNibName:@"CPRMPR" owner:self])) {
-        self.volumeData = volumeData;
+        self.data = data;
         self.currentToolTag = CPRMPRToolWLWW;
     }
     
@@ -54,16 +54,16 @@
     [self view:self.coronalView addIntersections:@{ @"abscissa": self.sagittalView, @"ordinate": self.axialView }];
 
     for (CPRMPRView* view in @[ self.axialView, self.sagittalView, self.coronalView ]) {
-        [view bind:@"volumeData" toObject:self withKeyPath:@"volumeData" options:nil];
-        [view bind:@"windowLevel" toObject:self withKeyPath:@"windowWidth" options:nil];
-        [view bind:@"windowWidth" toObject:self withKeyPath:@"windowLevel" options:nil];
+        [view bind:@"data" toObject:self withKeyPath:@"data" options:nil];
+        [view bind:@"windowLevel" toObject:self withKeyPath:@"windowLevel" options:nil];
+        [view bind:@"windowWidth" toObject:self withKeyPath:@"windowWidth" options:nil];
         [view bind:@"point" toObject:self withKeyPath:@"point" options:nil];
         [view bind:@"menu" toObject:self withKeyPath:@"menu" options:nil];
         [view bind:@"displayOrientationLabels" toObject:self withKeyPath:@"displayOrientationLabels" options:nil];
         [view bind:@"displayScaleBar" toObject:self withKeyPath:@"displayScaleBars" options:nil];
     }
     
-    [self addObserver:self forKeyPath:@"volumeData" options:NSKeyValueObservingOptionInitial context:CPRMPRController.class];
+    [self addObserver:self forKeyPath:@"data" options:NSKeyValueObservingOptionInitial context:CPRMPRController.class];
     [self addObserver:self forKeyPath:@"currentToolTag" options:NSKeyValueObservingOptionInitial context:CPRMPRController.class];
     
     self.menu = [[NSMenu alloc] init];
@@ -105,10 +105,10 @@
 
 - (void)dealloc {
     [self removeObserver:self forKeyPath:@"currentToolTag" context:CPRMPRController.class];
-    [self removeObserver:self forKeyPath:@"volumeData" context:CPRMPRController.class];
+    [self removeObserver:self forKeyPath:@"data" context:CPRMPRController.class];
     self.tool = nil;
     self.x = self.y = self.z = nil;
-    self.volumeData = nil;
+    self.data = nil;
     [super dealloc];
 }
 
@@ -120,14 +120,14 @@
     if (context != CPRMPRController.class)
         return [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     
-    if (object == self && [keyPath isEqualToString:@"volumeData"]) {
-        self.point = N3VectorApplyTransform(N3VectorMake(self.volumeData.pixelsWide/2, self.volumeData.pixelsHigh/2, self.volumeData.pixelsDeep/2), N3AffineTransformInvert(self.volumeData.volumeTransform));
+    if (object == self && [keyPath isEqualToString:@"data"]) {
+        self.point = N3VectorApplyTransform(N3VectorMake(self.data.pixelsWide/2, self.data.pixelsHigh/2, self.data.pixelsDeep/2), N3AffineTransformInvert(self.data.volumeTransform));
 
         [self resetNormals];
         
         CGFloat pixelSpacing = 0, pixelSpacingSize = 0;
         for (CPRMPRView* view in self.mprViews) {
-            CGFloat pss = fmin(NSWidth(view.frame), NSHeight(view.frame)), ps = pss/N3VectorDistance(N3VectorZero, N3VectorMake(self.volumeData.pixelsWide, self.volumeData.pixelsHigh, self.volumeData.pixelsDeep));
+            CGFloat pss = fmin(NSWidth(view.frame), NSHeight(view.frame)), ps = pss/N3VectorDistance(N3VectorZero, N3VectorMake(self.data.pixelsWide, self.data.pixelsHigh, self.data.pixelsDeep));
             if (!pixelSpacing || ps < pixelSpacing) {
                 pixelSpacing = ps;
                 pixelSpacingSize = pss;
@@ -152,9 +152,9 @@
 }
 
 - (void)resetNormals {
-    CPRMPRQuaternion* x = self.x = [CPRMPRQuaternion quaternion:N3VectorApplyTransformToDirectionalVector(N3VectorMake(1,0,0), self.volumeData.volumeTransform)];
-    CPRMPRQuaternion* y = self.y = [CPRMPRQuaternion quaternion:N3VectorApplyTransformToDirectionalVector(N3VectorMake(0,1,0), self.volumeData.volumeTransform)];
-    CPRMPRQuaternion* z = self.z = [CPRMPRQuaternion quaternion:N3VectorApplyTransformToDirectionalVector(N3VectorMake(0,0,1), self.volumeData.volumeTransform)];
+    CPRMPRQuaternion* x = self.x = [CPRMPRQuaternion quaternion:N3VectorApplyTransformToDirectionalVector(N3VectorMake(1,0,0), self.data.volumeTransform)];
+    CPRMPRQuaternion* y = self.y = [CPRMPRQuaternion quaternion:N3VectorApplyTransformToDirectionalVector(N3VectorMake(0,1,0), self.data.volumeTransform)];
+    CPRMPRQuaternion* z = self.z = [CPRMPRQuaternion quaternion:N3VectorApplyTransformToDirectionalVector(N3VectorMake(0,0,1), self.data.volumeTransform)];
     [self.axialView setNormal:[x.copy autorelease]:[y.copy autorelease]:[z.copy autorelease] reference:y];
     [self.sagittalView setNormal:[z.copy autorelease]:[x.copy autorelease]:[y.copy autorelease] reference:x];
     [self.coronalView setNormal:[y.copy autorelease]:[x.copy autorelease]:[z.copy autorelease] reference:x];

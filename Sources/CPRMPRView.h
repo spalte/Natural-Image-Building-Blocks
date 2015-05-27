@@ -15,7 +15,8 @@
 @class N;
 
 @interface CPRMPRView : CPRGeneratorRequestView {
-    CPRVolumeData* _volumeData;
+    CPRVolumeData* _data;
+    id _dataProperties;
     CGFloat _windowLevel, _windowWidth;
     N3Vector _point;
     CPRMPRQuaternion *_normal, *_xdir, *_ydir, *_reference;
@@ -29,7 +30,7 @@
     CPRMPRTool* _tool;
 }
 
-@property(retain) CPRVolumeData* volumeData;
+@property(retain) CPRVolumeData* data;
 @property CGFloat windowLevel, windowWidth;
 
 @property N3Vector point;

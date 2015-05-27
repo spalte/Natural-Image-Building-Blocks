@@ -7,7 +7,6 @@
 //
 
 #import "CPRMPRTool.h"
-#import "CPRIntersection.h"
 #import "CPRMPRView.h"
 #import <OsiriXAPI/CPRGeneratorRequest.h>
 #import "CPRMPRWLWWTool.h"
@@ -59,10 +58,6 @@
     
     self.mouseDownLocationVector = N3VectorApplyTransform(N3VectorMakeFromNSPoint(self.mouseDownLocation), view.generatorRequest.sliceToDicomTransform);
     self.mouseDownGeneratorRequestSliceToDicomTransform = view.generatorRequest.sliceToDicomTransform;
-    
-    [view enumerateIntersectionsWithBlock:^(NSString* key, CPRIntersection* intersection, BOOL* stop) {
-        intersection.maskAroundMouse = NO;
-    }];
     
     return YES;
 }

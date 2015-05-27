@@ -113,12 +113,12 @@
     
     BOOL flag = (ikey && distance < 4);
     
-    Class wtc = [[self.window.windowController tool] class], tc = nil;
+    Class /*wtc = [[self.window.windowController tool] class],*/ tc = nil;
     
     if (flag) {
-        if (wtc == CPRMPRRotateTool.class || (event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSCommandKeyMask)
-            tc = CPRMPRRotateAxisTool.class;
-        else tc = CPRMPRRotateTool.class;
+        tc = CPRMPRRotateAxisTool.class;
+        if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSCommandKeyMask)
+            tc = CPRMPRRotateTool.class;
     }
     
     if (self.tool.class != tc)

@@ -10,6 +10,7 @@
 
 @interface CPRMPRView ()
 
+@property(retain) id dataProperties;
 @property NSUInteger blockGeneratorRequestUpdates;
 @property(retain) NSTrackingArea* track;
 @property(retain) CPRMPRTool* tool;

@@ -26,7 +26,7 @@ typedef NS_OPTIONS(NSUInteger, CPRMPRFlags) {
     CPRMPRView* _sagittalView;
     CPRMPRView* _coronalView;
     
-    CPRVolumeData* _volumeData;
+    CPRVolumeData* _data;
     CGFloat _windowWidth, _windowLevel;
     BOOL _displayOrientationLabels, _displayScaleBars;
     NSMenu* _menu;
@@ -46,7 +46,7 @@ typedef NS_OPTIONS(NSUInteger, CPRMPRFlags) {
 @property(assign) IBOutlet CPRMPRView* sagittalView; // bottom-left
 @property(assign) IBOutlet CPRMPRView* coronalView; // right
 
-@property(retain) CPRVolumeData* volumeData;
+@property(retain) CPRVolumeData* data;
 @property CGFloat windowWidth, windowLevel;
 @property BOOL displayOrientationLabels, displayScaleBars;
 @property(retain) NSMenu* menu;
@@ -59,7 +59,7 @@ typedef NS_OPTIONS(NSUInteger, CPRMPRFlags) {
 @property CPRMPRToolTag currentToolTag;
 @property(retain, readonly) CPRMPRTool* tool;
 
-- (instancetype)initWithData:(CPRVolumeData*)volumeData;
+- (instancetype)initWithData:(CPRVolumeData*)data;
 
 - (void)rotate:(CGFloat)rads axis:(N3Vector)axis excluding:(CPRMPRView*)view;
 

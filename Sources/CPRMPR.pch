@@ -10,6 +10,7 @@
 #define MPR_MPR_pch
 
 #include <Cocoa/Cocoa.h>
+#include "CPRMPRAdditions.h"
 
 #define ifd(D,C) D; if (C)
 

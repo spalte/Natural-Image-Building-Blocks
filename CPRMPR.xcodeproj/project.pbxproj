@@ -16,6 +16,7 @@
 		7133413A1B14DA760014CE09 /* CPRMPRView+Cursor.m in Sources */ = {isa = PBXBuildFile; fileRef = 713341391B14DA750014CE09 /* CPRMPRView+Cursor.m */; };
 		7133413D1B14E01C0014CE09 /* CPRMPRRotateAxisTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 7133413C1B14E01C0014CE09 /* CPRMPRRotateAxisTool.m */; };
 		713341401B15A4FA0014CE09 /* CPRMPRView+Events.m in Sources */ = {isa = PBXBuildFile; fileRef = 7133413F1B15A4FA0014CE09 /* CPRMPRView+Events.m */; };
+		713341441B15F3000014CE09 /* CPRMPRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 713341431B15F3000014CE09 /* CPRMPRAdditions.m */; };
 		719CC50E1B0B1B6B00DC1ED5 /* CPRGeneratorRequestView.m in Sources */ = {isa = PBXBuildFile; fileRef = 719CC4F31B0B1B6A00DC1ED5 /* CPRGeneratorRequestView.m */; };
 		719CC50F1B0B1B6B00DC1ED5 /* CPRGeneratorRequestLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 719CC4F51B0B1B6A00DC1ED5 /* CPRGeneratorRequestLayer.m */; };
 		719CC5101B0B1B6B00DC1ED5 /* CPROrientationTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 719CC4F71B0B1B6A00DC1ED5 /* CPROrientationTextLayer.m */; };
@@ -63,6 +64,8 @@
 		7133413E1B15A4FA0014CE09 /* CPRMPRView+Events.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CPRMPRView+Events.h"; path = "Sources/CPRMPRView+Events.h"; sourceTree = "<group>"; };
 		7133413F1B15A4FA0014CE09 /* CPRMPRView+Events.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CPRMPRView+Events.m"; path = "Sources/CPRMPRView+Events.m"; sourceTree = "<group>"; };
 		713341411B15A8C90014CE09 /* CPRMPRView+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CPRMPRView+Private.h"; path = "Sources/CPRMPRView+Private.h"; sourceTree = "<group>"; };
+		713341421B15F3000014CE09 /* CPRMPRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPRMPRAdditions.h; path = Sources/CPRMPRAdditions.h; sourceTree = "<group>"; };
+		713341431B15F3000014CE09 /* CPRMPRAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CPRMPRAdditions.m; path = Sources/CPRMPRAdditions.m; sourceTree = "<group>"; };
 		719CC4F21B0B1B6A00DC1ED5 /* CPRGeneratorRequestView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPRGeneratorRequestView.h; path = "../spalte-tavi/SymetisTavi/CPRGeneratorRequestView.h"; sourceTree = "<group>"; };
 		719CC4F31B0B1B6A00DC1ED5 /* CPRGeneratorRequestView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CPRGeneratorRequestView.m; path = "../spalte-tavi/SymetisTavi/CPRGeneratorRequestView.m"; sourceTree = "<group>"; };
 		719CC4F41B0B1B6A00DC1ED5 /* CPRGeneratorRequestLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPRGeneratorRequestLayer.h; path = "../spalte-tavi/SymetisTavi/CPRGeneratorRequestLayer.h"; sourceTree = "<group>"; };
@@ -225,6 +228,8 @@
 				719CC5391B0CC17000DC1ED5 /* CPRMPRQuaternion.mm */,
 				719CC53C1B0E039E00DC1ED5 /* CPRMPRMenuAdditions.h */,
 				719CC53D1B0E039E00DC1ED5 /* CPRMPRMenuAdditions.m */,
+				713341421B15F3000014CE09 /* CPRMPRAdditions.h */,
+				713341431B15F3000014CE09 /* CPRMPRAdditions.m */,
 				719CC5461B1449B300DC1ED5 /* Resources */,
 				719CC51B1B0B1B7400DC1ED5 /* Joel */,
 				719CC52C1B0B218E00DC1ED5 /* Frameworks */,
@@ -368,6 +373,7 @@
 				719CC53A1B0CC17000DC1ED5 /* CPRMPRQuaternion.mm in Sources */,
 				713341361B147E910014CE09 /* CPRMPRRotateTool.m in Sources */,
 				713341331B147E810014CE09 /* CPRMPRZoomTool.m in Sources */,
+				713341441B15F3000014CE09 /* CPRMPRAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

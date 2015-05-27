@@ -8,7 +8,7 @@
 
 #import "CPRMPRWLWWTool.h"
 #import "CPRMPRView.h"
-#import <Quartz/Quartz.h>
+#import "CPRIntersection.h"
 
 @interface CPRMPRWLWWTool ()
 
@@ -27,6 +27,9 @@
     self.mouseDownWindowWidth = view.windowWidth;
     
     [NSCursor hide];
+    [view enumerateIntersectionsWithBlock:^(NSString* key, CPRIntersection* intersection, BOOL* stop) {
+        intersection.maskAroundMouse = NO;
+    }];
     
     return YES;
 }
@@ -38,13 +41,15 @@
     if (factor < 0.01) // *curDCM.slope in OsiriX
         factor = 0.01; // *curDCM.slope in OsiriX
 
+    CGFloat windowLevel = self.mouseDownWindowLevel + (location.y - self.mouseDownLocation.y) * factor;
+    CGFloat windowWidth = self.mouseDownWindowWidth + (location.x - self.mouseDownLocation.x) * factor;
+    NSLog(@"WLWW: %f %f", windowLevel, windowWidth);
+    
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
     
-    view.windowLevel = self.mouseDownWindowLevel + (location.y - self.mouseDownLocation.y) * factor;
-    view.windowWidth = self.mouseDownWindowWidth + (location.x - self.mouseDownLocation.x) * factor;
-
-    NSLog(@"WLWW: %f %f", view.windowLevel, view.windowWidth);
+    [view.window.windowController setWindowLevel:windowLevel];
+    [view.window.windowController setWindowWidth:windowWidth];
     
     [CATransaction commit];
 

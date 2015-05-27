@@ -16,7 +16,7 @@
 
 @implementation CPRMPRView
 
-@synthesize volumeData = _volumeData, windowLevel = _windowLevel, windowWidth = _windowWidth;
+@synthesize data = _data, dataProperties = _dataProperties, windowLevel = _windowLevel, windowWidth = _windowWidth;
 @synthesize point = _point, normal = _normal, xdir = _xdir, ydir = _ydir, reference = _reference;
 @synthesize pixelSpacing = _pixelSpacing;//, rotation = _rotation;
 @synthesize color = _color;
@@ -45,18 +45,19 @@
 
 - (void)initialize {
     [self addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:CPRMPRView.class];
-    [self addObserver:self forKeyPath:@"volumeData" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:CPRMPRView.class];
+    [self addObserver:self forKeyPath:@"data" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:CPRMPRView.class];
     [self addObserver:self forKeyPath:@"windowLevel" options:0 context:CPRMPRView.class];
     [self addObserver:self forKeyPath:@"windowWidth" options:0 context:CPRMPRView.class];
     [self addObserver:self forKeyPath:@"point" options:0 context:CPRMPRView.class];
     [self addObserver:self forKeyPath:@"normal" options:0 context:CPRMPRView.class];
     [self addObserver:self forKeyPath:@"xdir" options:0 context:CPRMPRView.class];
     [self addObserver:self forKeyPath:@"ydir" options:0 context:CPRMPRView.class];
-    [self addObserver:self forKeyPath:@"pixelSpacing" options:0 context:CPRMPRView.class];    
+    [self addObserver:self forKeyPath:@"pixelSpacing" options:0 context:CPRMPRView.class];
+//    [self bind:@"windowLevel" toObject:self withKeyPath:@"dataProperties.CPRWindowLevelProperty" options:0];
+//    [self bind:@"windowWidth" toObject:self withKeyPath:@"dataProperties.CPRWindowWidthProperty" options:0];
 }
 
 - (void)dealloc {
-    self.volumeData = nil;
     [self removeObserver:self forKeyPath:@"pixelSpacing" context:CPRMPRView.class];
     [self removeObserver:self forKeyPath:@"ydir" context:CPRMPRView.class];
     [self removeObserver:self forKeyPath:@"xdir" context:CPRMPRView.class];
@@ -64,8 +65,9 @@
     [self removeObserver:self forKeyPath:@"point" context:CPRMPRView.class];
     [self removeObserver:self forKeyPath:@"windowWidth" context:CPRMPRView.class];
     [self removeObserver:self forKeyPath:@"windowLevel" context:CPRMPRView.class];
-    [self removeObserver:self forKeyPath:@"volumeData" context:CPRMPRView.class];
+    [self removeObserver:self forKeyPath:@"data" context:CPRMPRView.class];
     [self removeObserver:self forKeyPath:@"frame" context:CPRMPRView.class];
+    self.data = nil;
     self.tool = nil;
     self.color = nil;
     self.menu = nil;
@@ -78,23 +80,22 @@
     if (context != CPRMPRView.class)
         return [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     
-    if ([keyPath isEqualToString:@"volumeData"]) {
-        CPRVolumeData *o = change[NSKeyValueChangeOldKey], *n = change[NSKeyValueChangeNewKey];
+    if ([keyPath isEqualToString:@"data"]) {
+        CPRVolumeData *o = [change[NSKeyValueChangeOldKey] if:CPRVolumeData.class], *n = [change[NSKeyValueChangeNewKey] if:CPRVolumeData.class];
         if (o) [self removeVolumeDataAtIndex:0];
         if (n) [self insertVolumeData:n atIndex:0];
-    }
-    
-    if ([keyPath isEqualToString:@"windowLevel"]) {
-        [self setProperties:@{ CPRWindowLevelProperty: @(self.windowLevel) } forVolumeDataAtIndex:0];
-    }
-    
-    if ([keyPath isEqualToString:@"windowWidth"]) {
-        [self setProperties:@{ CPRWindowWidthProperty: @(self.windowWidth) } forVolumeDataAtIndex:0];
+        self.dataProperties = (n? [self volumeDataPropertiesAtIndex:0] : nil);
+        self.dataProperties[CPRPreferredInterpolationMode] = @(CPRInterpolationModeCubic);
     }
     
     if ([keyPath isEqualToString:@"point"] || [keyPath isEqualToString:@"normal"] || [keyPath isEqualToString:@"xdir"] || [keyPath isEqualToString:@"ydir"] || [keyPath isEqualToString:@"pixelSpacing"]) {
         [self updateGeneratorRequest];
     }
+    
+    if ([keyPath isEqualToString:@"windowLevel"])
+        self.dataProperties[CPRWindowLevelProperty] = @(self.windowLevel);
+    if ([keyPath isEqualToString:@"windowWidth"])
+        self.dataProperties[CPRWindowWidthProperty] = @(self.windowWidth);
     
     if ([keyPath isEqualToString:@"frame"]) {
         NSRect o = [change[NSKeyValueChangeOldKey] rectValue], n = [change[NSKeyValueChangeNewKey] rectValue];
