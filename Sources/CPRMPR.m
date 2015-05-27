@@ -8,6 +8,7 @@
 
 #import "CPRMPR.h"
 #import "CPRMPRController.h"
+#import "Additions.h"
 #import <OsiriXAPI/CPRVolumeData.h>
 #import <OsiriXAPI/pluginSDKAdditions.h>
 
@@ -34,6 +35,7 @@ static CPRMPR* instance = nil;
 - (void)initPlugin {
     instance = self;
     self.bundle = [NSBundle bundleForClass:self.class];
+    taviSwizzles();
 }
 
 - (void)dealloc {

@@ -6,35 +6,26 @@
 //  Copyright (c) 2015 volz.io. All rights reserved.
 //
 
-#import "CPRMPRView.h"
+#import "CPRMPRView+Private.h"
 #import "CPRMPRController.h"
+#import "CPRMPRTool.h"
 #import "CPRMPRQuaternion.h"
-#import "CPRIntersection.h"
 #import <OsiriXAPI/CPRGeneratorRequest.h>
 #import <OsiriXAPI/NSImage+N2.h>
-
-static const N3Vector None = {CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN};
-
-@interface CPRMPRView ()
-
-@property NSUInteger blockGeneratorRequestUpdates;
-@property(retain) NSTrackingArea* track;
-@property N3Vector mouseDownLocation;
-@property NSUInteger mouseDownModifierFlags;
-@property N3AffineTransform mouseDownGeneratorRequestSliceToDicomTransform;
-
-@end
+#import <Quartz/Quartz.h>
 
 @implementation CPRMPRView
 
+@synthesize volumeData = _volumeData, windowLevel = _windowLevel, windowWidth = _windowWidth;
 @synthesize point = _point, normal = _normal, xdir = _xdir, ydir = _ydir, reference = _reference;
 @synthesize pixelSpacing = _pixelSpacing;//, rotation = _rotation;
 @synthesize color = _color;
 @synthesize menu = _menu;
-@synthesize mouseDownLocation = _mouseDownLocation, mouseDownModifierFlags = _mouseDownModifierFlags, mouseDownGeneratorRequestSliceToDicomTransform = _mouseDownGeneratorRequestSliceToDicomTransform;
+@synthesize eventModifierFlags = _eventModifierFlags;
 @synthesize blockGeneratorRequestUpdates = _blockGeneratorRequestUpdates;
 @synthesize track = _track;
 @synthesize flags = _flags;
+@synthesize tool = _tool;
 
 - (instancetype)initWithFrame:(NSRect)frameRect {
     if ((self = [super initWithFrame:frameRect])) {
@@ -53,8 +44,10 @@ static const N3Vector None = {CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN};
 }
 
 - (void)initialize {
-    self.mouseDownLocation = None;
     [self addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:CPRMPRView.class];
+    [self addObserver:self forKeyPath:@"volumeData" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:CPRMPRView.class];
+    [self addObserver:self forKeyPath:@"windowLevel" options:0 context:CPRMPRView.class];
+    [self addObserver:self forKeyPath:@"windowWidth" options:0 context:CPRMPRView.class];
     [self addObserver:self forKeyPath:@"point" options:0 context:CPRMPRView.class];
     [self addObserver:self forKeyPath:@"normal" options:0 context:CPRMPRView.class];
     [self addObserver:self forKeyPath:@"xdir" options:0 context:CPRMPRView.class];
@@ -63,12 +56,17 @@ static const N3Vector None = {CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN};
 }
 
 - (void)dealloc {
+    self.volumeData = nil;
     [self removeObserver:self forKeyPath:@"pixelSpacing" context:CPRMPRView.class];
     [self removeObserver:self forKeyPath:@"ydir" context:CPRMPRView.class];
     [self removeObserver:self forKeyPath:@"xdir" context:CPRMPRView.class];
     [self removeObserver:self forKeyPath:@"normal" context:CPRMPRView.class];
     [self removeObserver:self forKeyPath:@"point" context:CPRMPRView.class];
+    [self removeObserver:self forKeyPath:@"windowWidth" context:CPRMPRView.class];
+    [self removeObserver:self forKeyPath:@"windowLevel" context:CPRMPRView.class];
+    [self removeObserver:self forKeyPath:@"volumeData" context:CPRMPRView.class];
     [self removeObserver:self forKeyPath:@"frame" context:CPRMPRView.class];
+    self.tool = nil;
     self.color = nil;
     self.menu = nil;
     self.normal = self.xdir = self.ydir = self.reference = nil;
@@ -79,6 +77,20 @@ static const N3Vector None = {CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN};
 - (void)observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context {
     if (context != CPRMPRView.class)
         return [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    
+    if ([keyPath isEqualToString:@"volumeData"]) {
+        CPRVolumeData *o = change[NSKeyValueChangeOldKey], *n = change[NSKeyValueChangeNewKey];
+        if (o) [self removeVolumeDataAtIndex:0];
+        if (n) [self insertVolumeData:n atIndex:0];
+    }
+    
+    if ([keyPath isEqualToString:@"windowLevel"]) {
+        [self setProperties:@{ CPRWindowLevelProperty: @(self.windowLevel) } forVolumeDataAtIndex:0];
+    }
+    
+    if ([keyPath isEqualToString:@"windowWidth"]) {
+        [self setProperties:@{ CPRWindowWidthProperty: @(self.windowWidth) } forVolumeDataAtIndex:0];
+    }
     
     if ([keyPath isEqualToString:@"point"] || [keyPath isEqualToString:@"normal"] || [keyPath isEqualToString:@"xdir"] || [keyPath isEqualToString:@"ydir"] || [keyPath isEqualToString:@"pixelSpacing"]) {
         [self updateGeneratorRequest];
@@ -143,180 +155,6 @@ static const N3Vector None = {CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN};
     if (--self.blockGeneratorRequestUpdates == 0)
         if (update)
             [self updateGeneratorRequest];
-}
-
-#pragma mark Events
-
-- (BOOL)acceptsFirstResponder {
-    return YES;
-}
-
-- (void)mouseEntered:(NSEvent*)event {
-    [self.window makeFirstResponder:self];
-    [self.window makeKeyAndOrderFront:self];
-}
-
-- (void)flagsChanged:(NSEvent*)event {
-    if (N3VectorEqualToVector(self.mouseDownLocation, None)) {
-        [self hoverUpdate:event location:[self convertPoint:[self.window convertScreenToBase:[NSEvent mouseLocation]] fromView:nil]];
-    }
-}
-
-- (void)mouseMoved:(NSEvent*)event {
-    [self hoverUpdate:event location:[self convertPoint:event.locationInWindow fromView:nil]];
-}
-
-- (void)hoverUpdate:(NSEvent*)event location:(NSPoint)location {
-    CGFloat distance;
-    NSString* ikey = [self intersectionClosestToPoint:location closestPoint:NULL distance:&distance];
-    
-    BOOL flag = (ikey && distance < 4);
-    self.mouseDownModifierFlags = event.modifierFlags;
-    
-    if (flag)
-        [[self.class openHandCursor:event.modifierFlags] set];
-    else [[NSCursor arrowCursor] set];
-    
-    [self enumerateIntersectionsWithBlock:^(NSString* key, CPRIntersection* intersection, BOOL* stop) {
-        intersection.maskAroundMouse = !flag;
-    }];
-}
-
-- (void)mouseDown:(NSEvent*)event {
-    NSPoint location = [self convertPoint:event.locationInWindow fromView:nil];
-    
-    CGFloat distance;
-    NSString* ikey = [self intersectionClosestToPoint:location closestPoint:NULL distance:&distance];
-    if (ikey && distance < 4) {
-        [[self.class closedHandCursor:event.modifierFlags] set];
-        self.mouseDownLocation = N3VectorApplyTransform(N3VectorMake(location.x, location.y, 0), self.generatorRequest.sliceToDicomTransform);
-        self.mouseDownModifierFlags = event.modifierFlags;
-        self.mouseDownGeneratorRequestSliceToDicomTransform = self.generatorRequest.sliceToDicomTransform;
-        [self enumerateIntersectionsWithBlock:^(NSString* key, CPRIntersection* intersection, BOOL* stop) {
-            intersection.maskAroundMouse = NO;
-        }];
-    }
-}
-
-- (void)mouseDragged:(NSEvent*)event {
-    if (!N3VectorEqualToVector(self.mouseDownLocation, None)) {
-        N3Vector mouseDraggedLocation = N3VectorApplyTransform(N3VectorMakeFromNSPoint([self convertPoint:event.locationInWindow fromView:nil]), self.mouseDownGeneratorRequestSliceToDicomTransform);
-        N3Vector center = N3VectorApplyTransform(N3VectorMake(NSWidth(self.bounds)/2, NSHeight(self.bounds)/2, 0), self.mouseDownGeneratorRequestSliceToDicomTransform);
-        
-        N3Vector a = N3VectorSubtract(self.mouseDownLocation, center), b = N3VectorSubtract(mouseDraggedLocation, center);
-        CGFloat rads = N3VectorAngleBetweenVectorsAroundVector(a, b, self.normal.vector);
-        if (rads > M_PI)
-            rads -= M_PI*2;
-        
-        if (rads) {
-            [CATransaction begin];
-            [CATransaction setDisableActions:YES];
-
-            switch (self.mouseDownModifierFlags&NSDeviceIndependentModifierFlagsMask) {
-                case 0: {
-                    [self.window.windowController rotate:rads axis:self.normal.vector excluding:self];
-                } break;
-                case NSCommandKeyMask: {
-                    [self rotate:-rads axis:self.normal.vector];
-                } break;
-            }
-            
-            [CATransaction commit];
-        }
-        
-        self.mouseDownLocation = mouseDraggedLocation;
-    }
-    
-    [super mouseDragged:event];
-}
-
-- (void)mouseUp:(NSEvent*)event {
-    if (!N3VectorEqualToVector(self.mouseDownLocation, None)) {
-        [[self.class openHandCursor:event.modifierFlags] set];
-        self.mouseDownLocation = None;
-        [self enumerateIntersectionsWithBlock:^(NSString* key, CPRIntersection* intersection, BOOL* stop) {
-            intersection.maskAroundMouse = YES;
-        }];
-    }
-}
-
-- (void)rightMouseDown:(NSEvent*)event {
-    [NSMenu popUpContextMenu:self.menu withEvent:event forView:self];
-}
-
-#pragma mark Cursors
-
-+ (NSCursor*)openHandCursor:(NSUInteger)flags {
-    static NSMutableDictionary* cache = nil;
-    if (!cache) cache = [[NSMutableDictionary alloc] init];
-    return [self.class cursor:NSCursor.openHandCursor flags:flags cache:cache];
-}
-
-+ (NSCursor*)closedHandCursor:(NSUInteger)flags {
-    static NSMutableDictionary* cache = nil;
-    if (!cache) cache = [[NSMutableDictionary alloc] init];
-    return [self.class cursor:NSCursor.closedHandCursor flags:flags cache:cache];
-}
-
-+ (NSCursor*)cursor:(NSCursor*)cursor flags:(NSUInteger)flags cache:(NSMutableDictionary*)cache {
-    NSValue* key = [NSNumber numberWithUnsignedInteger:flags];
-    
-    NSCursor* c = cache[key];
-    if (c)
-        return c;
-    
-    const CGFloat midPoint = 0.25;
-    
-    switch (flags&NSDeviceIndependentModifierFlagsMask) {
-        case NSCommandKeyMask: {
-            c = [self.class cursor:cursor
-             colorizeByMappingGray:midPoint
-                           toColor:[NSColor colorWithCalibratedWhite:midPoint alpha:1]
-                      blackMapping:NSColor.blackColor
-                      whiteMapping:[NSColor colorWithCalibratedRed:1 green:1 blue:0.75 alpha:1]]; // very light yellow
-        } break;
-    }
-    
-    if (c) {
-        cache[key] = c;
-        return c;
-    }
-    
-    return cursor;
-}
-
-+ (NSCursor*)cursor:(NSCursor*)cursor colorizeByMappingGray:(CGFloat)midPoint toColor:(NSColor*)midPointColor blackMapping:(NSColor*)shadowColor whiteMapping:(NSColor*)lightColor {
-    return [[NSCursor alloc] initWithImage:[self.class image:cursor.image
-                                       colorizeByMappingGray:midPoint
-                                                     toColor:midPointColor
-                                                blackMapping:shadowColor
-                                                whiteMapping:lightColor]
-                                   hotSpot:cursor.hotSpot];
-}
-
-+ (NSImage*)image:(NSImage*)image colorizeByMappingGray:(CGFloat)midPoint toColor:(NSColor*)midPointColor blackMapping:(NSColor*)shadowColor whiteMapping:(NSColor*)lightColor {
-    NSImage* rimage = [[[NSImage alloc] initWithSize:image.size] autorelease];
-
-    NSArray* reps = [image.representations filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSImageRep* rep, NSDictionary* bindings) {
-        return [rep isKindOfClass:NSBitmapImageRep.class];
-    }]];
-    
-    for (NSBitmapImageRep* bitmap in reps) {
-        NSBitmapImageRep* rbitmap = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL pixelsWide:bitmap.pixelsWide pixelsHigh:bitmap.pixelsHigh bitsPerSample:8 samplesPerPixel:4 hasAlpha:YES isPlanar:NO colorSpaceName:NSCalibratedRGBColorSpace bytesPerRow:bitmap.pixelsWide*8*4 bitsPerPixel:32] autorelease];
-        
-        [NSGraphicsContext saveGraphicsState];
-        [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithBitmapImageRep:rbitmap]];
-
-        [image drawInRect:NSMakeRect(0, 0, rbitmap.pixelsWide, rbitmap.pixelsHigh) fromRect:NSMakeRect(0, 0, image.size.width, image.size.height) operation:NSCompositeCopy fraction:1];
-        
-        [NSGraphicsContext restoreGraphicsState];
-        
-        [rbitmap colorizeByMappingGray:midPoint toColor:midPointColor blackMapping:shadowColor whiteMapping:lightColor];
-        
-        [rimage addRepresentation:rbitmap];
-    }
-    
-    return rimage;
 }
 
 @end

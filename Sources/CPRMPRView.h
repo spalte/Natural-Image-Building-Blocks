@@ -12,20 +12,25 @@
 
 @class CPRObliqueSliceGeneratorRequest;
 @class CPRMPRQuaternion;
+@class N;
 
 @interface CPRMPRView : CPRGeneratorRequestView {
+    CPRVolumeData* _volumeData;
+    CGFloat _windowLevel, _windowWidth;
     N3Vector _point;
     CPRMPRQuaternion *_normal, *_xdir, *_ydir, *_reference;
     CGFloat _pixelSpacing;
     NSColor* _color;
     NSUInteger _blockGeneratorRequestUpdates;
-    N3Vector _mouseDownLocation;
-    NSUInteger _mouseDownModifierFlags;
-    N3AffineTransform _mouseDownGeneratorRequestSliceToDicomTransform;
+    NSUInteger _eventModifierFlags;
     NSTrackingArea* _track;
     CPRMPRFlags _flags;
     NSMenu* _menu;
+    CPRMPRTool* _tool;
 }
+
+@property(retain) CPRVolumeData* volumeData;
+@property CGFloat windowLevel, windowWidth;
 
 @property N3Vector point;
 @property(retain) CPRMPRQuaternion *normal, *xdir, *ydir, *reference;

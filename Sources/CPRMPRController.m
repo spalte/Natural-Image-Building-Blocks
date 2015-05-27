@@ -6,19 +6,13 @@
 //  Copyright (c) 2015 volz.io. All rights reserved.
 //
 
-#import "CPRMPRController.h"
+#import "CPRMPRController+Private.h"
+#import "CPRMPRController+Toolbar.h"
 #import <OsiriXAPI/CPRVolumeData.h>
 #import "CPRIntersection.h"
 #import "CPRMPRView.h"
 #import "CPRMPRQuaternion.h"
 #import "CPRMPRMenuAdditions.h"
-
-@interface CPRMPRController ()
-
-//@property N3AffineTransform transform;
-@property(retain, readwrite) CPRMPRQuaternion *x, *y, *z;
-
-@end
 
 @implementation CPRMPRController
 
@@ -39,6 +33,7 @@
 @synthesize flags = _flags;
 
 @synthesize currentToolTag = _currentToolTag;
+@synthesize tool = _tool;
 
 - (instancetype)initWithData:(CPRVolumeData*)volumeData {
     if ((self = [super initWithWindowNibName:@"CPRMPR" owner:self])) {
@@ -60,10 +55,10 @@
 
     for (CPRMPRView* view in @[ self.axialView, self.sagittalView, self.coronalView ]) {
         [view bind:@"volumeData" toObject:self withKeyPath:@"volumeData" options:nil];
+        [view bind:@"windowLevel" toObject:self withKeyPath:@"windowWidth" options:nil];
+        [view bind:@"windowWidth" toObject:self withKeyPath:@"windowLevel" options:nil];
         [view bind:@"point" toObject:self withKeyPath:@"point" options:nil];
         [view bind:@"menu" toObject:self withKeyPath:@"menu" options:nil];
-        [view bind:@"windowWidth" toObject:self withKeyPath:@"windowWidth" options:nil];
-        [view bind:@"windowLevel" toObject:self withKeyPath:@"windowLevel" options:nil];
         [view bind:@"displayOrientationLabels" toObject:self withKeyPath:@"displayOrientationLabels" options:nil];
         [view bind:@"displayScaleBar" toObject:self withKeyPath:@"displayScaleBars" options:nil];
     }
@@ -111,6 +106,7 @@
 - (void)dealloc {
     [self removeObserver:self forKeyPath:@"currentToolTag" context:CPRMPRController.class];
     [self removeObserver:self forKeyPath:@"volumeData" context:CPRMPRController.class];
+    self.tool = nil;
     self.x = self.y = self.z = nil;
     self.volumeData = nil;
     [super dealloc];
@@ -143,7 +139,7 @@
     }
     
     if (object == self && [keyPath isEqualToString:@"currentToolTag"]) {
-        
+        self.tool = [CPRMPRTool toolForTag:self.currentToolTag];
     }
 }
 

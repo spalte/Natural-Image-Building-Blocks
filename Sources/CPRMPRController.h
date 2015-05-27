@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import <OsiriXAPI/N3Geometry.h>
+#import "CPRMPRTool.h"
 
 @class CPRVolumeData;
 @class CPRMPRView;
@@ -16,14 +17,6 @@
 typedef NS_OPTIONS(NSUInteger, CPRMPRFlags) {
     CPRMPRSupportsRotation      = 1<<0,
     CPRMPRSupportsAxisRotation  = 1<<1,
-};
-
-typedef NS_ENUM(NSInteger, CPRMPRToolTag) {
-    CPRMPRToolWLWW = 0,
-    CPRMPRToolMove,
-    CPRMPRToolZoom,
-    CPRMPRToolRotate,
-    CPRMPRToolROI,
 };
 
 @interface CPRMPRController : NSWindowController <NSSplitViewDelegate, NSToolbarDelegate> {
@@ -44,6 +37,7 @@ typedef NS_ENUM(NSInteger, CPRMPRToolTag) {
     CPRMPRFlags _flags;
     
     CPRMPRToolTag _currentToolTag;
+    CPRMPRTool* _tool;
 }
 
 @property(assign) IBOutlet NSSplitView* leftrightSplit;
@@ -63,6 +57,7 @@ typedef NS_ENUM(NSInteger, CPRMPRToolTag) {
 @property CPRMPRFlags flags;
 
 @property CPRMPRToolTag currentToolTag;
+@property(retain, readonly) CPRMPRTool* tool;
 
 - (instancetype)initWithData:(CPRVolumeData*)volumeData;
 

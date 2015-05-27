@@ -7,35 +7,49 @@
 //
 
 #import "CPRMPRController+Toolbar.h"
+#import "CPRMPRController+Private.h"
 #import "CPRMPR.h"
+#import "CPRMPRWLWWTool.h"
+#import "CPRMPRMoveTool.h"
+#import "CPRMPRZoomTool.h"
+#import "CPRMPRRotateTool.h"
 
 @interface CPRMPRToolRecord : NSObject {
     CPRMPRToolTag _tag;
     NSString* _label;
     NSImage* _image;
+    Class _handler;
     NSMenu* _submenu;
 }
 
 @property CPRMPRToolTag tag;
 @property(retain) NSString* label;
 @property(retain) NSImage* image;
+@property Class handler;
 @property(retain) NSMenu* submenu;
 
-+ (instancetype)toolWithTag:(CPRMPRToolTag)tag label:(NSString*)label image:(NSImage*)image;
++ (instancetype)toolWithTag:(CPRMPRToolTag)tag label:(NSString*)label image:(NSImage*)image handler:(Class)handler;
 
 @end
 
 @implementation CPRMPRController (Toolbar)
 
-NSString* const CPRMPRToolsToolbarItemIdentifier = @"CPRMPRTools";
+static NSString* const CPRMPRToolsToolbarItemIdentifier = @"CPRMPRTools";
 
 - (NSArray*)tools {
     static NSArray* tools = nil;
-    if (!tools) tools = [@[ [CPRMPRToolRecord toolWithTag:CPRMPRToolWLWW label:NSLocalizedString(@"WL/WW", nil) image:[[[NSImage alloc] initWithContentsOfURL:[CPRMPR.bundle URLForImageResource:@"Tool-WLWW"]] autorelease]],
-                            [CPRMPRToolRecord toolWithTag:CPRMPRToolMove label:NSLocalizedString(@"Move", nil) image:[[[NSImage alloc] initWithContentsOfURL:[CPRMPR.bundle URLForImageResource:@"Tool-Move" ]] autorelease]],
-                            [CPRMPRToolRecord toolWithTag:CPRMPRToolZoom label:NSLocalizedString(@"Zoom", nil) image:[[[NSImage alloc] initWithContentsOfURL:[CPRMPR.bundle URLForImageResource:@"Tool-Zoom"]] autorelease]],
-                            [CPRMPRToolRecord toolWithTag:CPRMPRToolRotate label:NSLocalizedString(@"Rotate", nil) image:[[[NSImage alloc] initWithContentsOfURL:[CPRMPR.bundle URLForImageResource:@"Tool-Rotate"]] autorelease]] ] retain];
+    if (!tools) tools = [@[ [CPRMPRToolRecord toolWithTag:CPRMPRToolWLWW label:NSLocalizedString(@"WL/WW", nil) image:[[[NSImage alloc] initWithContentsOfURL:[CPRMPR.bundle URLForImageResource:@"Tool-WLWW"]] autorelease] handler:CPRMPRWLWWTool.class],
+                            [CPRMPRToolRecord toolWithTag:CPRMPRToolMove label:NSLocalizedString(@"Move", nil) image:[[[NSImage alloc] initWithContentsOfURL:[CPRMPR.bundle URLForImageResource:@"Tool-Move" ]] autorelease] handler:CPRMPRMoveTool.class],
+                            [CPRMPRToolRecord toolWithTag:CPRMPRToolZoom label:NSLocalizedString(@"Zoom", nil) image:[[[NSImage alloc] initWithContentsOfURL:[CPRMPR.bundle URLForImageResource:@"Tool-Zoom"]] autorelease] handler:CPRMPRZoomTool.class],
+                            [CPRMPRToolRecord toolWithTag:CPRMPRToolRotate label:NSLocalizedString(@"Rotate", nil) image:[[[NSImage alloc] initWithContentsOfURL:[CPRMPR.bundle URLForImageResource:@"Tool-Rotate"]] autorelease] handler:CPRMPRRotateTool.class] ] retain];
     return tools;
+}
+
+- (void)Toolbar_observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context {
+    if (object == self && [keyPath isEqualToString:@"currentToolTag"]) {
+        CPRMPRToolRecord* tool = [[self.tools filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"tag = %@", change[NSKeyValueChangeNewKey]]] lastObject];
+        self.tool = [[[tool.handler alloc] init] autorelease];
+    }
 }
 
 - (NSToolbarItem*)toolbar:(NSToolbar*)toolbar itemForItemIdentifier:(NSString*)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag {
@@ -89,6 +103,11 @@ NSString* const CPRMPRToolsToolbarItemIdentifier = @"CPRMPRTools";
     }
 }
 
+- (void)toolsSegmentAction:(NSSegmentedControl*)sender {
+    CPRMPRToolRecord* tool = self.tools[sender.selectedSegment];
+    self.tool = [[[tool.handler alloc] init] autorelease];
+}
+
 @end
 
 @implementation CPRMPRToolRecord
@@ -96,14 +115,15 @@ NSString* const CPRMPRToolsToolbarItemIdentifier = @"CPRMPRTools";
 @synthesize tag = _tag;
 @synthesize label = _label;
 @synthesize image = _image;
+@synthesize handler = _handler;
 @synthesize submenu = _submenu;
 
-+ (instancetype)toolWithTag:(CPRMPRToolTag)tag label:(NSString*)label image:(NSImage*)image {
++ (instancetype)toolWithTag:(CPRMPRToolTag)tag label:(NSString*)label image:(NSImage*)image handler:(Class)handler {
     CPRMPRToolRecord* tool = [[[self.class alloc] init] autorelease];
     tool.tag = tag;
     tool.label = label;
-    tool.image = image;
-    image.size = NSMakeSize(16,16);
+    tool.image = image; image.size = NSMakeSize(16,16);
+    tool.handler = handler;
     return tool;
 }
 
