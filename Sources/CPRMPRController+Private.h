@@ -12,6 +12,5 @@
 
 @property(retain, readwrite) CPRMPRQuaternion *x, *y, *z;
 @property(retain, readwrite) CPRMPRTool* tool;
-@property(readwrite) N3Vector initialPoint;
 
 @end

@@ -68,7 +68,6 @@ static NSString* const CPRMPRToolsToolbarItemIdentifier = @"CPRMPRTools";
         seg.segmentCount = tools.count;
         [tools enumerateObjectsUsingBlock:^(CPRMPRToolRecord* tool, NSUInteger i, BOOL* stop) {
             [cell setTag:tool.tag forSegment:i];
-//            [seg setLabel:tool.label forSegment:i];
             [seg setImage:tool.image forSegment:i];
             NSMenuItem* mi = [[NSMenuItem alloc] initWithTitle:tool.label action:nil keyEquivalent:@""];
             mi.tag = tool.tag;
@@ -101,11 +100,6 @@ static NSString* const CPRMPRToolsToolbarItemIdentifier = @"CPRMPRTools";
         NSSegmentedCell* cell = [seg cell];
         [cell bind:@"selectedTag" toObject:self withKeyPath:@"currentToolTag" options:0];
     }
-}
-
-- (void)toolsSegmentAction:(NSSegmentedControl*)sender {
-    CPRMPRToolRecord* tool = self.tools[sender.selectedSegment];
-    self.tool = [[[tool.handler alloc] init] autorelease];
 }
 
 @end
