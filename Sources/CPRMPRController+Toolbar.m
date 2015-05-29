@@ -49,6 +49,7 @@
 @implementation CPRMPRController (Toolbar)
 
 static NSString* const CPRMPRToolsToolbarItemIdentifier = @"CPRMPRTools";
+static NSString* const CPRMPRSlabWidthToolbarItemIdentifier = @"CPRMPRSlabWidth";
 
 - (NSArray*)tools {
     static NSArray* tools = nil;
@@ -59,16 +60,18 @@ static NSString* const CPRMPRToolsToolbarItemIdentifier = @"CPRMPRTools";
     return tools;
 }
 
-- (void)Toolbar_observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context {
-    if (object == self && [keyPath isEqualToString:@"ltoolTag"]) {
-        CPRMPRToolRecord* tool = [[self.tools filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"tag = %@", change[NSKeyValueChangeNewKey]]] lastObject];
-        self.ltool = [[[tool.handler alloc] init] autorelease];
-    }
+- (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar {
+    return @[ CPRMPRToolsToolbarItemIdentifier, CPRMPRSlabWidthToolbarItemIdentifier ];
 }
 
-- (NSToolbarItem*)toolbar:(NSToolbar*)toolbar itemForItemIdentifier:(NSString*)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag {
-    if ([itemIdentifier isEqualToString:CPRMPRToolsToolbarItemIdentifier]) {
-        NSToolbarItem* item = [[[NSToolbarItem alloc] initWithItemIdentifier:CPRMPRToolsToolbarItemIdentifier] autorelease];
+- (NSArray*)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar {
+    return @[ CPRMPRToolsToolbarItemIdentifier, CPRMPRSlabWidthToolbarItemIdentifier ];
+}
+
+- (NSToolbarItem*)toolbar:(NSToolbar*)toolbar itemForItemIdentifier:(NSString*)identifier willBeInsertedIntoToolbar:(BOOL)flag {
+    NSToolbarItem* item = [[[NSToolbarItem alloc] initWithItemIdentifier:identifier] autorelease];
+
+    if ([identifier isEqualToString:CPRMPRToolsToolbarItemIdentifier]) {
         item.label = NSLocalizedString(@"Mouse Tool", nil);
         
         CPRMPRSegmentedControl* seg = [[[CPRMPRSegmentedControl alloc] initWithFrame:NSZeroRect] autorelease];
@@ -91,19 +94,25 @@ static NSString* const CPRMPRToolsToolbarItemIdentifier = @"CPRMPRTools";
         
         [seg sizeToFit];
         item.view = seg;
-        
-        return item;
     }
     
-    return nil;
-}
-
-- (NSArray*)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar {
-    return @[ CPRMPRToolsToolbarItemIdentifier ];
-}
-
-- (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar {
-    return @[ CPRMPRToolsToolbarItemIdentifier ];
+    if ([identifier isEqualToString:CPRMPRSlabWidthToolbarItemIdentifier]) {
+        item.label = NSLocalizedString(@"Slab Width", nil);
+        
+        NSSlider* slider = [[[NSSlider alloc] initWithFrame:NSZeroRect] autorelease];
+        NSSliderCell* cell = slider.cell;
+        slider.minValue = 0; slider.maxValue = 1;
+        slider.numberOfTickMarks = 10;
+        slider.allowsTickMarkValuesOnly = NO;
+        slider.doubleValue = 0;
+        
+        cell.controlSize = NSSmallControlSize;
+        slider.frame = NSMakeRect(0, 0, 100, 20);
+        item.view = slider;
+    }
+    
+    item.autovalidates = NO;
+    return item;
 }
 
 - (void)toolbarWillAddItem:(NSNotification*)notification {
@@ -111,9 +120,13 @@ static NSString* const CPRMPRToolsToolbarItemIdentifier = @"CPRMPRTools";
     
     if ([item.itemIdentifier isEqualToString:CPRMPRToolsToolbarItemIdentifier]) {
         CPRMPRSegmentedControl* seg = (id)item.view;
-        CPRMPRSegmentedCell* cell = [seg cell];
-        [cell bind:@"selectedTag" toObject:self withKeyPath:@"ltoolTag" options:0];
-        [cell bind:@"rselectedTag" toObject:self withKeyPath:@"rtoolTag" options:0];
+        [seg.cell bind:@"selectedTag" toObject:self withKeyPath:@"ltoolTag" options:0];
+        [seg.cell bind:@"rselectedTag" toObject:self withKeyPath:@"rtoolTag" options:0];
+    }
+    
+    if ([item.itemIdentifier isEqualToString:CPRMPRSlabWidthToolbarItemIdentifier]) {
+        NSSlider* slider = (id)item.view;
+        [slider bind:@"value" toObject:self withKeyPath:@"slabWidth" options:0];
     }
 }
 

@@ -17,7 +17,7 @@
 
 @implementation CPRMPRView
 
-@synthesize data = _data, dataProperties = _dataProperties, windowLevel = _windowLevel, windowWidth = _windowWidth;
+@synthesize data = _data, dataProperties = _dataProperties, windowLevel = _windowLevel, windowWidth = _windowWidth, slabWidth = _slabWidth;
 @synthesize point = _point, normal = _normal, xdir = _xdir, ydir = _ydir, reference = _reference;
 @synthesize pixelSpacing = _pixelSpacing;//, rotation = _rotation;
 @synthesize color = _color;
@@ -49,6 +49,7 @@
     [self addObserver:self forKeyPath:@"data" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:CPRMPRView.class];
     [self addObserver:self forKeyPath:@"windowLevel" options:0 context:CPRMPRView.class];
     [self addObserver:self forKeyPath:@"windowWidth" options:0 context:CPRMPRView.class];
+    [self addObserver:self forKeyPath:@"slabWidth" options:0 context:CPRMPRView.class];
     [self addObserver:self forKeyPath:@"point" options:0 context:CPRMPRView.class];
     [self addObserver:self forKeyPath:@"normal" options:0 context:CPRMPRView.class];
     [self addObserver:self forKeyPath:@"xdir" options:0 context:CPRMPRView.class];
@@ -64,6 +65,7 @@
     [self removeObserver:self forKeyPath:@"xdir" context:CPRMPRView.class];
     [self removeObserver:self forKeyPath:@"normal" context:CPRMPRView.class];
     [self removeObserver:self forKeyPath:@"point" context:CPRMPRView.class];
+    [self removeObserver:self forKeyPath:@"slabWidth" context:CPRMPRView.class];
     [self removeObserver:self forKeyPath:@"windowWidth" context:CPRMPRView.class];
     [self removeObserver:self forKeyPath:@"windowLevel" context:CPRMPRView.class];
     [self removeObserver:self forKeyPath:@"data" context:CPRMPRView.class];
@@ -89,7 +91,7 @@
         self.dataProperties.preferredInterpolationMode = CPRInterpolationModeCubic;
     }
     
-    if ([keyPath isEqualToString:@"point"] || [keyPath isEqualToString:@"normal"] || [keyPath isEqualToString:@"xdir"] || [keyPath isEqualToString:@"ydir"] || [keyPath isEqualToString:@"pixelSpacing"]) {
+    if ([keyPath isEqualToString:@"point"] || [keyPath isEqualToString:@"normal"] || [keyPath isEqualToString:@"xdir"] || [keyPath isEqualToString:@"ydir"] || [keyPath isEqualToString:@"pixelSpacing"] || [keyPath isEqualToString:@"slabWidth"]) {
         [self updateGeneratorRequest];
     }
     
@@ -140,7 +142,21 @@
     if (!self.pixelSpacing)
         return;
     
+    N3Vector edges[] = {{0,0,0},{1,1,1},{1,0,0},{0,1,1},{0,1,0},{1,0,1},{1,1,0},{0,0,1}};
+    N3VectorApplyTransformToVectors(self.data.volumeTransform, edges, 8);
+    CGFloat maxdiameter = 0;
+    for (size_t i = 0; i < 4; ++i)
+        maxdiameter = fmax(maxdiameter, N3VectorDistance(edges[i*2], edges[i*2+1]));
+    
     CPRObliqueSliceGeneratorRequest* req = [[[CPRObliqueSliceGeneratorRequest alloc] initWithCenter:self.point pixelsWide:NSWidth(self.frame) pixelsHigh:NSHeight(self.frame) xBasis:N3VectorScalarMultiply(self.xdir.vector, self.pixelSpacing) yBasis:N3VectorScalarMultiply(self.ydir.vector, self.pixelSpacing)] autorelease];
+    if (self.slabWidth > 0) {
+        req.slabWidth = self.slabWidth*maxdiameter;
+        req.projectionMode = CPRProjectionModeMIP;
+    } else {
+        req.slabWidth = 0;
+        req.projectionMode = CPRProjectionModeNone;
+    }
+    
     if (![req isEqual:self.generatorRequest])
         self.generatorRequest = req;
 }

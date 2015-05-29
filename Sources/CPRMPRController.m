@@ -35,6 +35,8 @@
 @synthesize ltoolTag = _ltoolTag, rtoolTag = _rtoolTag;
 @synthesize ltool = _ltool, rtool = _rtool;
 
+@synthesize slabWidth = _slabWidth;
+
 - (instancetype)initWithData:(CPRVolumeData*)data {
     if ((self = [super initWithWindowNibName:@"CPRMPR" owner:self])) {
         self.data = data;
@@ -62,6 +64,7 @@
         [view bind:@"menu" toObject:self withKeyPath:@"menu" options:nil];
         [view bind:@"displayOrientationLabels" toObject:self withKeyPath:@"displayOrientationLabels" options:nil];
         [view bind:@"displayScaleBar" toObject:self withKeyPath:@"displayScaleBars" options:nil];
+        [view bind:@"slabWidth" toObject:self withKeyPath:@"slabWidth" options:nil];
     }
     
     [self addObserver:self forKeyPath:@"data" options:NSKeyValueObservingOptionInitial context:CPRMPRController.class];

@@ -67,8 +67,8 @@
     return YES;
 }
 
-- (NSCursor*)cursor {
-    return nil;
-}
+//- (NSCursor*)cursor {
+//    return nil;
+//}
 
 @end

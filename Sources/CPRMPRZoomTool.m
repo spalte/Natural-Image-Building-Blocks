@@ -42,9 +42,10 @@
     
     view.pixelSpacing = view.pixelSpacing+ldelta.y*view.pixelSpacing/100;
     
-    
-    N3Vector delta = N3VectorSubtract(N3VectorApplyTransform(N3VectorMakeFromNSPoint(self.mouseDownLocation), view.generatorRequest.sliceToDicomTransform), self.mouseDownLocationVector);
-    [view.window.windowController setPoint:N3VectorSubtract([view.window.windowController point], delta)];
+    if ((self.mouseDownEvent.modifierFlags&NSCommandKeyMask) == 0) {
+        N3Vector delta = N3VectorSubtract(N3VectorApplyTransform(N3VectorMakeFromNSPoint(self.mouseDownLocation), view.generatorRequest.sliceToDicomTransform), self.mouseDownLocationVector);
+        [view.window.windowController setPoint:N3VectorSubtract([view.window.windowController point], delta)];
+    }
     
     [CATransaction commit];
     
@@ -61,8 +62,8 @@
     return YES;
 }
 
-- (NSCursor*)cursor {
-    return nil;
-}
+//- (NSCursor*)cursor {
+//    return nil;
+//}
 
 @end

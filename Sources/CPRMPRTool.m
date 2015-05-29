@@ -123,7 +123,7 @@
 }
 
 - (NSTimeInterval)timeout {
-    return 0.2;
+    return 0.25;
 }
 
 - (void)timeout:(NSTimer*)timer {

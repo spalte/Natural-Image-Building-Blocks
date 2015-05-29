@@ -38,6 +38,8 @@ typedef NS_OPTIONS(NSUInteger, CPRMPRFlags) {
     
     CPRMPRToolTag _ltoolTag, _rtoolTag;
     CPRMPRTool *_ltool, *_rtool;
+    
+    CGFloat _slabWidth;
 }
 
 @property(assign) IBOutlet NSSplitView* leftrightSplit;
@@ -58,6 +60,8 @@ typedef NS_OPTIONS(NSUInteger, CPRMPRFlags) {
 
 @property CPRMPRToolTag ltoolTag, rtoolTag;
 @property(retain, readonly) CPRMPRTool *ltool, *rtool;
+
+@property CGFloat slabWidth;
 
 - (instancetype)initWithData:(CPRVolumeData*)data;
 

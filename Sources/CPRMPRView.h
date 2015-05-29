@@ -28,10 +28,12 @@
     CPRMPRFlags _flags;
     NSMenu* _menu;
     id <CPRMPRTool> _ltool, _rtool;
+    CGFloat _slabWidth;
 }
 
 @property(retain) CPRVolumeData* data;
 @property CGFloat windowLevel, windowWidth;
+@property CGFloat slabWidth;
 
 @property N3Vector point;
 @property(retain) CPRMPRQuaternion *normal, *xdir, *ydir, *reference;
