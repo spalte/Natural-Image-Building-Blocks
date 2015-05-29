@@ -10,6 +10,7 @@
 #import "CPRMPRController.h"
 #import "CPRMPRTool.h"
 #import "CPRMPRQuaternion.h"
+#import "CPRVolumeDataProperties.h"
 #import <OsiriXAPI/CPRGeneratorRequest.h>
 #import <OsiriXAPI/NSImage+N2.h>
 #import <Quartz/Quartz.h>
@@ -25,7 +26,7 @@
 @synthesize blockGeneratorRequestUpdates = _blockGeneratorRequestUpdates;
 @synthesize track = _track;
 @synthesize flags = _flags;
-@synthesize tool = _tool;
+@synthesize ltool = _ltool, rtool = _rtool;
 
 - (instancetype)initWithFrame:(NSRect)frameRect {
     if ((self = [super initWithFrame:frameRect])) {
@@ -53,8 +54,8 @@
     [self addObserver:self forKeyPath:@"xdir" options:0 context:CPRMPRView.class];
     [self addObserver:self forKeyPath:@"ydir" options:0 context:CPRMPRView.class];
     [self addObserver:self forKeyPath:@"pixelSpacing" options:0 context:CPRMPRView.class];
-//    [self bind:@"windowLevel" toObject:self withKeyPath:@"dataProperties.CPRWindowLevelProperty" options:0];
-//    [self bind:@"windowWidth" toObject:self withKeyPath:@"dataProperties.CPRWindowWidthProperty" options:0];
+//    [self bind:@"windowLevel" toObject:self withKeyPath:@"dataProperties.windowLevel" options:0];
+//    [self bind:@"windowWidth" toObject:self withKeyPath:@"dataProperties.windowWidth" options:0];
 }
 
 - (void)dealloc {
@@ -68,7 +69,7 @@
     [self removeObserver:self forKeyPath:@"data" context:CPRMPRView.class];
     [self removeObserver:self forKeyPath:@"frame" context:CPRMPRView.class];
     self.data = nil;
-    self.tool = nil;
+    self.ltool = self.rtool = nil;
     self.color = nil;
     self.menu = nil;
     self.normal = self.xdir = self.ydir = self.reference = nil;
@@ -85,7 +86,7 @@
         if (o) [self removeVolumeDataAtIndex:0];
         if (n) [self insertVolumeData:n atIndex:0];
         self.dataProperties = (n? [self volumeDataPropertiesAtIndex:0] : nil);
-        self.dataProperties[CPRPreferredInterpolationMode] = @(CPRInterpolationModeCubic);
+        self.dataProperties.preferredInterpolationMode = CPRInterpolationModeCubic;
     }
     
     if ([keyPath isEqualToString:@"point"] || [keyPath isEqualToString:@"normal"] || [keyPath isEqualToString:@"xdir"] || [keyPath isEqualToString:@"ydir"] || [keyPath isEqualToString:@"pixelSpacing"]) {
@@ -93,9 +94,9 @@
     }
     
     if ([keyPath isEqualToString:@"windowLevel"])
-        self.dataProperties[CPRWindowLevelProperty] = @(self.windowLevel);
+        self.dataProperties.windowLevel = self.windowLevel;
     if ([keyPath isEqualToString:@"windowWidth"])
-        self.dataProperties[CPRWindowWidthProperty] = @(self.windowWidth);
+        self.dataProperties.windowWidth = self.windowWidth;
     
     if ([keyPath isEqualToString:@"frame"]) {
         NSRect o = [change[NSKeyValueChangeOldKey] rectValue], n = [change[NSKeyValueChangeNewKey] rectValue];
@@ -106,7 +107,7 @@
         [CATransaction begin];
         [CATransaction setDisableActions:YES];
         
-        self.pixelSpacing = self.pixelSpacing/fmin(NSWidth(n), NSHeight(n))*fmin(NSWidth(o), NSHeight(o));
+        self.pixelSpacing = self.pixelSpacing / fmin(NSWidth(n), NSHeight(n)) * fmin(NSWidth(o), NSHeight(o));
         
         [CATransaction commit];
     }
@@ -156,6 +157,14 @@
     if (--self.blockGeneratorRequestUpdates == 0)
         if (update)
             [self updateGeneratorRequest];
+}
+
+- (CPRMPRTool*)ltool {
+    return (_ltool? _ltool : [self.window.windowController ltool]);
+}
+
+- (CPRMPRTool*)rtool {
+    return (_rtool? _rtool : [self.window.windowController rtool]);
 }
 
 @end

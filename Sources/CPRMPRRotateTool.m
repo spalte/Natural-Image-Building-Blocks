@@ -21,18 +21,19 @@
 
 @synthesize previousLocationVector = _previousLocationVector;
 
-- (BOOL)view:(CPRMPRView*)view mouseDown:(NSEvent*)event {
-    [super view:view mouseDown:event];
-    [NSCursor.closedHandCursor set];
-    self.previousLocationVector = self.mouseDownLocationVector;
-    return YES;
+- (BOOL)view:(CPRMPRView*)view mouseDown:(NSEvent*)event or:(void(^)())or {
+    return [super view:view mouseDown:event or:or confirm:^{
+        [NSCursor.closedHandCursor set];
+        self.previousLocationVector = self.mouseDownLocationVector;
+    }];
 }
 
 - (BOOL)view:(CPRMPRView*)view mouseDragged:(NSEvent*)event {
-    N3Vector locationVector = N3VectorApplyTransform(N3VectorMakeFromNSPoint([view convertPoint:event.locationInWindow fromView:nil]), self.mouseDownGeneratorRequestSliceToDicomTransform);
+    [super view:view mouseDragged:event];
+    
     N3Vector centerVector = N3VectorApplyTransform(N3VectorMake(NSWidth(view.bounds)/2, NSHeight(view.bounds)/2, 0), self.mouseDownGeneratorRequestSliceToDicomTransform);
     
-    CGFloat rads = N3VectorAngleBetweenVectorsAroundVector(N3VectorSubtract(self.previousLocationVector, centerVector), N3VectorSubtract(locationVector, centerVector), view.normal.vector);
+    CGFloat rads = N3VectorAngleBetweenVectorsAroundVector(N3VectorSubtract(self.previousLocationVector, centerVector), N3VectorSubtract(self.currentLocationVector, centerVector), view.normal.vector);
     if (rads > M_PI)
         rads -= M_PI*2;
     
@@ -40,21 +41,21 @@
         [CATransaction begin];
         [CATransaction setDisableActions:YES];
         
-        [self view:view mouseDraggedRadiants:rads];
+        [self view:view rotate:rads];
         
         [CATransaction commit];
     }
     
-    self.previousLocationVector = locationVector;
+    self.previousLocationVector = self.currentLocationVector;
     
     return YES;
 }
 
-- (void)view:(CPRMPRView*)view mouseDraggedRadiants:(CGFloat)rads {
+- (void)view:(CPRMPRView*)view rotate:(CGFloat)rads {
     [view rotate:-rads axis:view.normal.vector];
 }
 
-- (NSCursor*)hoverCursor {
+- (NSCursor*)cursor {
     return NSCursor.openHandCursor;
 }
 

@@ -20,23 +20,21 @@
 
 @synthesize previousLocationVector = _previousLocationVector;
 
-- (BOOL)view:(CPRMPRView*)view mouseDown:(NSEvent*)event {
-    [super view:view mouseDown:event];
-    
-    self.previousLocationVector = self.mouseDownLocationVector;
-    
-    [NSCursor hide];
-    [view enumerateIntersectionsWithBlock:^(NSString* key, CPRIntersection* intersection, BOOL* stop) {
-        intersection.maskAroundMouse = NO;
+- (BOOL)view:(CPRMPRView*)view mouseDown:(NSEvent*)event or:(void(^)())or {
+    return [super view:view mouseDown:event or:or confirm:^{
+        self.previousLocationVector = self.mouseDownLocationVector;
+        
+        [NSCursor hide];
+        [view enumerateIntersectionsWithBlock:^(NSString* key, CPRIntersection* intersection, BOOL* stop) {
+            intersection.maskAroundMouse = NO;
+        }];
     }];
-    
-    return YES;
 }
 
 - (BOOL)view:(CPRMPRView*)view mouseDragged:(NSEvent*)event {
-    N3Vector locationVector = N3VectorApplyTransform(N3VectorMakeFromNSPoint([view convertPoint:event.locationInWindow fromView:nil]), self.mouseDownGeneratorRequestSliceToDicomTransform);
+    [super view:view mouseDragged:event];
     
-    N3Vector delta = N3VectorSubtract(locationVector, self.previousLocationVector);
+    N3Vector delta = N3VectorSubtract(self.currentLocationVector, self.previousLocationVector);
     
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
@@ -45,7 +43,7 @@
     
     [CATransaction commit];
     
-    self.previousLocationVector = locationVector;
+    self.previousLocationVector = self.currentLocationVector;
     
     return YES;
 }
@@ -55,17 +53,23 @@
 }
 
 - (BOOL)view:(CPRMPRView*)view mouseUp:(NSEvent*)event {
-    [NSCursor unhide];
+    if (![super view:view mouseUp:event]) {
+        [NSCursor unhide];
+    }
     
     return YES;
 }
 
-@end
-
-@implementation CPRMPRInvertMoveTool
-
-- (void)view:(CPRMPRView*)view move:(N3Vector)delta {
-    [view.window.windowController setPoint:N3VectorAdd([view.window.windowController point], delta)];
+- (NSCursor*)cursor {
+    return nil;
 }
 
 @end
+
+//@implementation CPRMPRInvertMoveTool
+//
+//- (void)view:(CPRMPRView*)view move:(N3Vector)delta {
+//    [view.window.windowController setPoint:N3VectorAdd([view.window.windowController point], delta)];
+//}
+//
+//@end

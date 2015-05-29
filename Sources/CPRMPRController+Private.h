@@ -11,6 +11,6 @@
 @interface CPRMPRController ()
 
 @property(retain, readwrite) CPRMPRQuaternion *x, *y, *z;
-@property(retain, readwrite) CPRMPRTool* tool;
+@property(retain, readwrite) CPRMPRTool *ltool, *rtool;
 
 @end

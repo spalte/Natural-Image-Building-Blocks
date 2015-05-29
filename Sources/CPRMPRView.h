@@ -12,11 +12,11 @@
 
 @class CPRObliqueSliceGeneratorRequest;
 @class CPRMPRQuaternion;
-@class N;
+@class CPRVolumeDataProperties;
 
 @interface CPRMPRView : CPRGeneratorRequestView {
     CPRVolumeData* _data;
-    id _dataProperties;
+    CPRVolumeDataProperties* _dataProperties;
     CGFloat _windowLevel, _windowWidth;
     N3Vector _point;
     CPRMPRQuaternion *_normal, *_xdir, *_ydir, *_reference;
@@ -27,7 +27,7 @@
     NSTrackingArea* _track;
     CPRMPRFlags _flags;
     NSMenu* _menu;
-    CPRMPRTool* _tool;
+    id <CPRMPRTool> _ltool, _rtool;
 }
 
 @property(retain) CPRVolumeData* data;

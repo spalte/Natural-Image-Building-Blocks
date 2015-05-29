@@ -21,23 +21,21 @@
 
 @synthesize previousLocation = _previousLocation;
 
-- (BOOL)view:(CPRMPRView*)view mouseDown:(NSEvent*)event {
-    [super view:view mouseDown:event];
-    
-    self.previousLocation = self.mouseDownLocation;
-    
-    [NSCursor hide];
-    [view enumerateIntersectionsWithBlock:^(NSString* key, CPRIntersection* intersection, BOOL* stop) {
-        intersection.maskAroundMouse = NO;
+- (BOOL)view:(CPRMPRView*)view mouseDown:(NSEvent*)event or:(void(^)())or {
+    return [super view:view mouseDown:event or:or confirm:^{
+        self.previousLocation = self.mouseDownLocation;
+        
+        [NSCursor hide];
+        [view enumerateIntersectionsWithBlock:^(NSString* key, CPRIntersection* intersection, BOOL* stop) {
+            intersection.maskAroundMouse = NO;
+        }];
     }];
-    
-    return YES;
 }
 
 - (BOOL)view:(CPRMPRView*)view mouseDragged:(NSEvent*)event {
-    NSPoint location = [view convertPoint:event.locationInWindow fromView:nil];
+    [super view:view mouseDragged:event];
     
-    NSPoint ldelta = NSMakePoint(location.x-self.previousLocation.x, location.y-self.previousLocation.y);
+    NSPoint ldelta = NSMakePoint(self.currentLocation.x-self.previousLocation.x, self.currentLocation.y-self.previousLocation.y);
 
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
@@ -50,18 +48,21 @@
     
     [CATransaction commit];
     
-    self.previousLocation = location;
+    self.previousLocation = self.currentLocation;
     
     return YES;
 }
 
 - (BOOL)view:(CPRMPRView*)view mouseUp:(NSEvent*)event {
-    [NSCursor unhide];
+    if (![super view:view mouseUp:event]) {
+        [NSCursor unhide];
+    }
     
     return YES;
 }
 
-
-
+- (NSCursor*)cursor {
+    return nil;
+}
 
 @end

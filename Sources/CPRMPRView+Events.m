@@ -19,12 +19,27 @@
     return YES;
 }
 
-- (void)tool:(SEL)sel event:(NSEvent*)event or:(void(^)())block {
-    SEL vsel = NSSelectorFromString([@"view:" stringByAppendingString:NSStringFromSelector(sel)]);
-    CPRMPRTool* tool = self.tool? self.tool : [self.window.windowController tool];
-    if ([tool respondsToSelector:vsel])
-        if ([[tool performSelector:vsel withObject:self withObject:event] boolValue])
+- (void)ltool:(SEL)sel event:(NSEvent*)event or:(void(^)())block {
+    return [self tool:self.ltool sel:sel event:event or:block];
+}
+
+- (void)rtool:(SEL)sel event:(NSEvent*)event or:(void(^)())block {
+    return [self tool:self.rtool sel:sel event:event or:block];
+}
+
+- (void)tool:(CPRMPRTool*)tool sel:(SEL)sel event:(NSEvent*)event or:(void(^)())block {
+    NSString* ssel = NSStringFromSelector(sel);
+    if ([ssel hasPrefix:@"rightMouse"] || [ssel hasPrefix:@"otherMouse"])
+        ssel = [@"mouse" stringByAppendingString:[ssel substringFromIndex:NSMaxRange([ssel rangeOfString:@"Mouse"])]];
+    
+    SEL vsel = NSSelectorFromString([@"view:" stringByAppendingString:ssel]), orvsel = NSSelectorFromString([NSString stringWithFormat:@"view:%@or:", ssel]);
+    if ([tool respondsToSelector:orvsel]) {
+        if ([[tool performSelector:orvsel withObjects:self:event:block] boolValue])
             return;
+    } else if ([tool respondsToSelector:vsel])
+        if ([[tool performSelector:vsel withObjects:self:event] boolValue])
+            return;
+    
     if (block)
         block();
     else if ([CPRMPRView.superclass respondsToSelector:sel])
@@ -32,70 +47,68 @@
 }
 
 - (void)mouseDown:(NSEvent*)event {
-    [self tool:_cmd event:event or:nil];
+    [self ltool:_cmd event:event or:nil];
 }
 
 - (void)rightMouseDown:(NSEvent*)event {
-    [self tool:_cmd event:event or:^{
+    [self rtool:_cmd event:event or:^{
         [NSMenu popUpContextMenu:self.menu withEvent:event forView:self];
     }];
 }
 
 - (void)otherMouseDown:(NSEvent*)event {
-    [self tool:_cmd event:event or:nil];
+    [self ltool:_cmd event:event or:nil];
 }
 
 - (void)mouseUp:(NSEvent*)event {
-    [self tool:_cmd event:event or:^{
+    [self ltool:_cmd event:event or:^{
         [self hover:event location:[self convertPoint:event.locationInWindow fromView:nil]];
     }];
 }
 
 - (void)rightMouseUp:(NSEvent*)event {
-    [self tool:_cmd event:event or:nil];
+    [self rtool:_cmd event:event or:nil];
 }
 
 - (void)otherMouseUp:(NSEvent*)event {
-    [self tool:_cmd event:event or:nil];
+    [self ltool:_cmd event:event or:nil];
 }
 
 - (void)mouseMoved:(NSEvent*)event {
-    [self tool:_cmd event:event or:^{
+    [self ltool:_cmd event:event or:^{
         [self hover:event location:[self convertPoint:event.locationInWindow fromView:nil]];
     }];
 }
 
 - (void)mouseDragged:(NSEvent*)event {
-    [self tool:_cmd event:event or:nil];
+    [self ltool:_cmd event:event or:nil];
     [super mouseDragged:event];
 }
 
 - (void)scrollWheel:(NSEvent*)event {
-    [self tool:_cmd event:event or:nil];
+    [self ltool:_cmd event:event or:nil];
 }
 
 - (void)rightMouseDragged:(NSEvent*)event {
-    [self tool:_cmd event:event or:nil];
+    [self rtool:_cmd event:event or:nil];
 }
 
 - (void)otherMouseDragged:(NSEvent*)event {
-    [self tool:_cmd event:event or:nil];
+    [self ltool:_cmd event:event or:nil];
 }
 
 - (void)mouseEntered:(NSEvent*)event {
     [self.window makeFirstResponder:self];
     [self.window makeKeyAndOrderFront:self];
-    self.tool = [self.window.windowController tool];
-    [self tool:_cmd event:event or:nil];
+    [self ltool:_cmd event:event or:nil];
 }
 
 - (void)mouseExited:(NSEvent*)event {
-    [self tool:_cmd event:event or:nil];
-    self.tool = nil;
+    [self ltool:_cmd event:event or:nil];
 }
 
 - (void)keyDown:(NSEvent*)event {
-    [self tool:_cmd event:event or:^{
+    [self ltool:_cmd event:event or:^{
         CPRMPRToolTag tool = 0;
         
         if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == 0)
@@ -122,16 +135,16 @@
             }
         
         if (tool)
-            [self.window.windowController setCurrentToolTag:tool];
+            [self.window.windowController setLtoolTag:tool];
     }];
 }
 
 - (void)keyUp:(NSEvent*)event {
-    [self tool:_cmd event:event or:nil];
+    [self ltool:_cmd event:event or:nil];
 }
 
 - (void)flagsChanged:(NSEvent*)event {
-    [self tool:_cmd event:event or:^{
+    [self ltool:_cmd event:event or:^{
         [self hover:event location:[self convertPoint:[self.window convertScreenToBase:[NSEvent mouseLocation]] fromView:nil]];
     }];
 }
@@ -156,23 +169,22 @@
     Class /*wtc = [[self.window.windowController tool] class],*/ tc = nil;
     
     if (move)
-        tc = CPRMPRInvertMoveTool.class;
+        tc = CPRMPRMoveTool.class;
     else if (rotate) {
         tc = CPRMPRRotateAxisTool.class;
         if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSCommandKeyMask)
             tc = CPRMPRRotateTool.class;
     }
     
-    if (self.tool.class != tc)
-        self.tool = [[[tc alloc] init] autorelease];
+    if (self.ltool.class != tc)
+        self.ltool = [[[tc alloc] init] autorelease];
     
     [self enumerateIntersectionsWithBlock:^(NSString* key, CPRIntersection* intersection, BOOL* stop) {
         intersection.maskAroundMouse = !rotate;
     }];
     
-    CPRMPRTool* tool = self.tool? self.tool : [self.window.windowController tool];
-    
-    NSCursor* cursor = tool? tool.hoverCursor : NSCursor.arrowCursor;
+    CPRMPRTool* tool = [self ltool];
+    NSCursor* cursor = tool? tool.cursor : NSCursor.arrowCursor;
     if (rotate)
         cursor = NSCursor.openHandCursor;
     

@@ -40,6 +40,7 @@
 		719CC53E1B0E039E00DC1ED5 /* CPRMPRMenuAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 719CC53D1B0E039E00DC1ED5 /* CPRMPRMenuAdditions.m */; };
 		719CC54A1B1449ED00DC1ED5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 719CC5491B1449ED00DC1ED5 /* Images.xcassets */; };
 		719D02AA1AC1D367002F76C1 /* CPRMPR.m in Sources */ = {isa = PBXBuildFile; fileRef = 719D02A91AC1D367002F76C1 /* CPRMPR.m */; };
+		71B249271B173E0500F8E0AD /* CPRVolumeDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B249251B173E0500F8E0AD /* CPRVolumeDataProperties.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -110,6 +111,9 @@
 		719D02A21AC1CB25002F76C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Resources/Info.plist; sourceTree = "<group>"; };
 		719D02A81AC1D367002F76C1 /* CPRMPR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPRMPR.h; path = Sources/CPRMPR.h; sourceTree = "<group>"; };
 		719D02A91AC1D367002F76C1 /* CPRMPR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CPRMPR.m; path = Sources/CPRMPR.m; sourceTree = "<group>"; };
+		71B249241B173E0500F8E0AD /* CPRVolumeDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPRVolumeDataProperties.h; path = "../spalte-tavi/SymetisTavi/CPRVolumeDataProperties.h"; sourceTree = "<group>"; };
+		71B249251B173E0500F8E0AD /* CPRVolumeDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CPRVolumeDataProperties.m; path = "../spalte-tavi/SymetisTavi/CPRVolumeDataProperties.m"; sourceTree = "<group>"; };
+		71B249261B173E0500F8E0AD /* CPRVolumeDataPropertiesPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPRVolumeDataPropertiesPrivate.h; path = "../spalte-tavi/SymetisTavi/CPRVolumeDataPropertiesPrivate.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +153,9 @@
 		719CC51B1B0B1B7400DC1ED5 /* Joel */ = {
 			isa = PBXGroup;
 			children = (
+				71B249241B173E0500F8E0AD /* CPRVolumeDataProperties.h */,
+				71B249251B173E0500F8E0AD /* CPRVolumeDataProperties.m */,
+				71B249261B173E0500F8E0AD /* CPRVolumeDataPropertiesPrivate.h */,
 				719CC4F21B0B1B6A00DC1ED5 /* CPRGeneratorRequestView.h */,
 				719CC4F31B0B1B6A00DC1ED5 /* CPRGeneratorRequestView.m */,
 				719CC4F41B0B1B6A00DC1ED5 /* CPRGeneratorRequestLayer.h */,
@@ -361,6 +368,7 @@
 				713341251B146EE50014CE09 /* CPRMPRController+Toolbar.m in Sources */,
 				713341401B15A4FA0014CE09 /* CPRMPRView+Events.m in Sources */,
 				719CC5101B0B1B6B00DC1ED5 /* CPROrientationTextLayer.m in Sources */,
+				71B249271B173E0500F8E0AD /* CPRVolumeDataProperties.m in Sources */,
 				719CC51A1B0B1B6B00DC1ED5 /* CPRFloatImageLayer.m in Sources */,
 				719CC5181B0B1B6B00DC1ED5 /* NSBezierPath+N3Additions.m in Sources */,
 				719CC51E1B0B1BBC00DC1ED5 /* CPRMPRController.m in Sources */,

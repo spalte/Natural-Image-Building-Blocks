@@ -12,7 +12,7 @@
 
 @implementation CPRMPRRotateAxisTool
 
-- (void)view:(CPRMPRView*)view mouseDraggedRadiants:(CGFloat)rads {
+- (void)view:(CPRMPRView*)view rotate:(CGFloat)rads {
     [view.window.windowController rotate:rads axis:view.normal.vector excluding:view];
 }
 

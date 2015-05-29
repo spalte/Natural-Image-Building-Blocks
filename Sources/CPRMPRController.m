@@ -32,13 +32,14 @@
 
 @synthesize flags = _flags;
 
-@synthesize currentToolTag = _currentToolTag;
-@synthesize tool = _tool;
+@synthesize ltoolTag = _ltoolTag, rtoolTag = _rtoolTag;
+@synthesize ltool = _ltool, rtool = _rtool;
 
 - (instancetype)initWithData:(CPRVolumeData*)data {
     if ((self = [super initWithWindowNibName:@"CPRMPR" owner:self])) {
         self.data = data;
-        self.currentToolTag = CPRMPRToolWLWW;
+        self.ltoolTag = CPRMPRToolWLWW;
+        self.rtoolTag = CPRMPRToolZoom;
     }
     
     return self;
@@ -64,7 +65,8 @@
     }
     
     [self addObserver:self forKeyPath:@"data" options:NSKeyValueObservingOptionInitial context:CPRMPRController.class];
-    [self addObserver:self forKeyPath:@"currentToolTag" options:NSKeyValueObservingOptionInitial context:CPRMPRController.class];
+    [self addObserver:self forKeyPath:@"ltoolTag" options:NSKeyValueObservingOptionInitial context:CPRMPRController.class];
+    [self addObserver:self forKeyPath:@"rtoolTag" options:NSKeyValueObservingOptionInitial context:CPRMPRController.class];
     
     self.menu = [[NSMenu alloc] init];
     
@@ -104,9 +106,10 @@
 }
 
 - (void)dealloc {
-    [self removeObserver:self forKeyPath:@"currentToolTag" context:CPRMPRController.class];
+    [self removeObserver:self forKeyPath:@"rtoolTag" context:CPRMPRController.class];
+    [self removeObserver:self forKeyPath:@"ltoolTag" context:CPRMPRController.class];
     [self removeObserver:self forKeyPath:@"data" context:CPRMPRController.class];
-    self.tool = nil;
+    self.ltool = self.rtool = nil;
     self.x = self.y = self.z = nil;
     self.data = nil;
     [super dealloc];
@@ -124,8 +127,12 @@
         [self reset];
     }
     
-    if (object == self && [keyPath isEqualToString:@"currentToolTag"]) {
-        self.tool = [CPRMPRTool toolForTag:self.currentToolTag];
+    if (object == self && [keyPath isEqualToString:@"ltoolTag"]) {
+        self.ltool = [CPRMPRTool toolForTag:self.ltoolTag];
+    }
+    
+    if (object == self && [keyPath isEqualToString:@"rtoolTag"]) {
+        self.rtool = [CPRMPRTool toolForTag:self.rtoolTag];
     }
 }
 

@@ -20,29 +20,27 @@
 
 @synthesize mouseDownWindowLevel = _mouseDownWindowLevel, mouseDownWindowWidth = _mouseDownWindowWidth;
 
-- (BOOL)view:(CPRMPRView*)view mouseDown:(NSEvent*)event {
-    [super view:view mouseDown:event];
-    
-    self.mouseDownWindowLevel = view.windowLevel;
-    self.mouseDownWindowWidth = view.windowWidth;
-    
-    [NSCursor hide];
-    [view enumerateIntersectionsWithBlock:^(NSString* key, CPRIntersection* intersection, BOOL* stop) {
-        intersection.maskAroundMouse = NO;
+- (BOOL)view:(CPRMPRView*)view mouseDown:(NSEvent*)event or:(void(^)())or {
+    return [super view:view mouseDown:event or:or confirm:^{
+        self.mouseDownWindowLevel = view.windowLevel;
+        self.mouseDownWindowWidth = view.windowWidth;
+        
+        [NSCursor hide];
+        [view enumerateIntersectionsWithBlock:^(NSString* key, CPRIntersection* intersection, BOOL* stop) {
+            intersection.maskAroundMouse = NO;
+        }];
     }];
-    
-    return YES;
 }
 
 - (BOOL)view:(CPRMPRView*)view mouseDragged:(NSEvent*)event {
-    NSPoint location = [view convertPoint:event.locationInWindow fromView:nil];
+    [super view:view mouseDragged:event];
     
     CGFloat factor = self.mouseDownWindowWidth/80;
     if (factor < 0.01) // *curDCM.slope in OsiriX
         factor = 0.01; // *curDCM.slope in OsiriX
 
-    CGFloat windowLevel = self.mouseDownWindowLevel + (location.y - self.mouseDownLocation.y) * factor;
-    CGFloat windowWidth = self.mouseDownWindowWidth + (location.x - self.mouseDownLocation.x) * factor;
+    CGFloat windowLevel = self.mouseDownWindowLevel + (self.currentLocation.y - self.mouseDownLocation.y) * factor;
+    CGFloat windowWidth = self.mouseDownWindowWidth + (self.currentLocation.x - self.mouseDownLocation.x) * factor;
 //    NSLog(@"WLWW: %f %f", windowLevel, windowWidth);
     
     [CATransaction begin];
@@ -62,9 +60,15 @@
 }
 
 - (BOOL)view:(CPRMPRView*)view mouseUp:(NSEvent*)event {
-    [NSCursor unhide];
+    if (![super view:view mouseUp:event]) {
+        [NSCursor unhide];
+    }
     
     return YES;
+}
+
+- (NSCursor*)cursor {
+    return nil;
 }
 
 @end

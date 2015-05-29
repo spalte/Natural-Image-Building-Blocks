@@ -14,6 +14,6 @@
 
 @property(readonly) N3Vector previousLocationVector;
 
-- (void)view:(CPRMPRView*)view mouseDraggedRadiants:(CGFloat)rads;
+- (void)view:(CPRMPRView*)view rotate:(CGFloat)rads;
 
 @end

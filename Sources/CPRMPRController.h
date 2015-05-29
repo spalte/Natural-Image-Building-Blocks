@@ -36,8 +36,8 @@ typedef NS_OPTIONS(NSUInteger, CPRMPRFlags) {
     
     CPRMPRFlags _flags;
     
-    CPRMPRToolTag _currentToolTag;
-    CPRMPRTool* _tool;
+    CPRMPRToolTag _ltoolTag, _rtoolTag;
+    CPRMPRTool *_ltool, *_rtool;
 }
 
 @property(assign) IBOutlet NSSplitView* leftrightSplit;
@@ -56,8 +56,8 @@ typedef NS_OPTIONS(NSUInteger, CPRMPRFlags) {
 
 @property CPRMPRFlags flags;
 
-@property CPRMPRToolTag currentToolTag;
-@property(retain, readonly) CPRMPRTool* tool;
+@property CPRMPRToolTag ltoolTag, rtoolTag;
+@property(retain, readonly) CPRMPRTool *ltool, *rtool;
 
 - (instancetype)initWithData:(CPRVolumeData*)data;
 

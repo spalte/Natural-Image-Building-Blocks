@@ -14,6 +14,6 @@
 
 @end
 
-@interface CPRMPRInvertMoveTool : CPRMPRMoveTool
-
-@end
+//@interface CPRMPRInvertMoveTool : CPRMPRMoveTool
+//
+//@end

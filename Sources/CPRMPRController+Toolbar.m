@@ -32,6 +32,20 @@
 
 @end
 
+@interface CPRMPRSegmentedControl : NSSegmentedControl
+
+@end
+
+@interface CPRMPRSegmentedCell : NSSegmentedCell {
+    NSInteger _rselectedTag;
+    NSMutableArray* _segments;
+}
+
+@property NSInteger rselectedTag;
+@property(retain) NSMutableArray* segments;
+
+@end
+
 @implementation CPRMPRController (Toolbar)
 
 static NSString* const CPRMPRToolsToolbarItemIdentifier = @"CPRMPRTools";
@@ -46,9 +60,9 @@ static NSString* const CPRMPRToolsToolbarItemIdentifier = @"CPRMPRTools";
 }
 
 - (void)Toolbar_observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context {
-    if (object == self && [keyPath isEqualToString:@"currentToolTag"]) {
+    if (object == self && [keyPath isEqualToString:@"ltoolTag"]) {
         CPRMPRToolRecord* tool = [[self.tools filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"tag = %@", change[NSKeyValueChangeNewKey]]] lastObject];
-        self.tool = [[[tool.handler alloc] init] autorelease];
+        self.ltool = [[[tool.handler alloc] init] autorelease];
     }
 }
 
@@ -57,8 +71,8 @@ static NSString* const CPRMPRToolsToolbarItemIdentifier = @"CPRMPRTools";
         NSToolbarItem* item = [[[NSToolbarItem alloc] initWithItemIdentifier:CPRMPRToolsToolbarItemIdentifier] autorelease];
         item.label = NSLocalizedString(@"Mouse Tool", nil);
         
-        NSSegmentedControl* seg = [[[NSSegmentedControl alloc] initWithFrame:NSZeroRect] autorelease];
-        NSSegmentedCell* cell = [seg cell];
+        CPRMPRSegmentedControl* seg = [[[CPRMPRSegmentedControl alloc] initWithFrame:NSZeroRect] autorelease];
+        CPRMPRSegmentedCell* cell = [seg cell];
         
         NSMenu* menu = [[[NSMenu alloc] init] autorelease];
         item.menuFormRepresentation = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Mouse Tool", nil) action:nil keyEquivalent:@""];
@@ -96,9 +110,10 @@ static NSString* const CPRMPRToolsToolbarItemIdentifier = @"CPRMPRTools";
     NSToolbarItem* item = notification.userInfo[@"item"];
     
     if ([item.itemIdentifier isEqualToString:CPRMPRToolsToolbarItemIdentifier]) {
-        NSSegmentedControl* seg = (id)item.view;
-        NSSegmentedCell* cell = [seg cell];
-        [cell bind:@"selectedTag" toObject:self withKeyPath:@"currentToolTag" options:0];
+        CPRMPRSegmentedControl* seg = (id)item.view;
+        CPRMPRSegmentedCell* cell = [seg cell];
+        [cell bind:@"selectedTag" toObject:self withKeyPath:@"ltoolTag" options:0];
+        [cell bind:@"rselectedTag" toObject:self withKeyPath:@"rtoolTag" options:0];
     }
 }
 
@@ -130,3 +145,60 @@ static NSString* const CPRMPRToolsToolbarItemIdentifier = @"CPRMPRTools";
 
 @end
 
+//static NSString* const CPRMPRSegment = @"CPRMPRSegment";
+
+@implementation CPRMPRSegmentedControl
+
+- (instancetype)initWithFrame:(NSRect)frame {
+    if ((self = [super initWithFrame:frame])) {
+        self.cell = [[[CPRMPRSegmentedCell alloc] init] autorelease];
+    }
+    
+    return self;
+}
+
+- (CGFloat)totalWidth {
+    CGFloat t = 0;
+    for (NSInteger s = 0; s < self.segmentCount; ++s)
+        t += [self widthForSegment:s];
+    return t;
+}
+
+@end
+
+@implementation CPRMPRSegmentedCell
+
+@synthesize rselectedTag = _rselectedTag;
+@synthesize segments = _segments;
+
+- (void)dealloc {
+    self.segments = nil;
+    [super dealloc];
+}
+
+- (void)setSegmentCount:(NSInteger)count {
+    [super setSegmentCount:count];
+    if (!self.segments) self.segments = [NSMutableArray array];
+    if (self.segments.count > count) [self.segments removeObjectsInRange:NSMakeRange(count, self.segments.count-count)];
+    while (self.segments.count < count)
+        [self.segments addObject:[NSMutableDictionary dictionary]];
+}
+
+- (void)drawSegment:(NSInteger)s inFrame:(NSRect)frame withView:(CPRMPRSegmentedControl*)view {
+    [super drawSegment:s inFrame:frame withView:view];
+    if ([self tagForSegment:s] == self.rselectedTag) {
+        frame = NSInsetRect(frame, (NSWidth(view.frame)-view.totalWidth)/(view.segmentCount*2)-2, 0);
+        NSMutableParagraphStyle* ps = [[NSMutableParagraphStyle.defaultParagraphStyle mutableCopy] autorelease];
+        ps.alignment = NSRightTextAlignment;
+        NSString* r = NSLocalizedString(@"R", nil);
+        NSStringDrawingOptions options = NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading;
+        NSDictionary* attributes = @{ NSFontAttributeName: [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]],
+                                      NSForegroundColorAttributeName: ([self isSelectedForSegment:s]? NSColor.whiteColor : NSColor.blackColor),
+                                      NSParagraphStyleAttributeName: ps };
+//        NSRect rframe = NSZeroRect; rframe = [r boundingRectWithSize:frame.size options:options attributes:attributes];
+//        [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(frame.origin.x+rframe.origin.x, frame.origin.y+rframe.origin.y, rframe.size.width, rframe.size.height)];
+        [r drawWithRect:frame options:options attributes:attributes];
+    }
+}
+
+@end

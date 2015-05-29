@@ -21,18 +21,13 @@ typedef NS_ENUM(NSInteger, CPRMPRToolTag) {
 
 @protocol CPRMPRTool <NSObject>
 
+// notice that the view redirects rightMouse* and otherMouse* events to mouse*
 @optional
 - (BOOL)view:(CPRMPRView*)view mouseDown:(NSEvent*)event;
-- (BOOL)view:(CPRMPRView*)view rightMouseDown:(NSEvent*)event;
-- (BOOL)view:(CPRMPRView*)view otherMouseDown:(NSEvent*)event;
 - (BOOL)view:(CPRMPRView*)view mouseUp:(NSEvent*)event;
-- (BOOL)view:(CPRMPRView*)view rightMouseUp:(NSEvent*)event;
-- (BOOL)view:(CPRMPRView*)view otherMouseUp:(NSEvent*)event;
 - (BOOL)view:(CPRMPRView*)view mouseMoved:(NSEvent*)event;
 - (BOOL)view:(CPRMPRView*)view mouseDragged:(NSEvent*)event;
 - (BOOL)view:(CPRMPRView*)view scrollWheel:(NSEvent*)event;
-- (BOOL)view:(CPRMPRView*)view rightMouseDragged:(NSEvent*)event;
-- (BOOL)view:(CPRMPRView*)view otherMouseDragged:(NSEvent*)event;
 - (BOOL)view:(CPRMPRView*)view mouseEntered:(NSEvent*)event;
 - (BOOL)view:(CPRMPRView*)view mouseExited:(NSEvent*)event;
 - (BOOL)view:(CPRMPRView*)view keyDown:(NSEvent*)event;
@@ -42,19 +37,29 @@ typedef NS_ENUM(NSInteger, CPRMPRToolTag) {
 @end
 
 @interface CPRMPRTool : NSObject <CPRMPRTool> {
-    NSPoint _mouseDownLocation;
-    N3Vector _mouseDownLocationVector;
+    NSEvent* _mouseDownEvent;
+    void (^_timeoutBlock)(), (^_confirmBlock)();
+    NSTimer* _timeoutTimer;
+    NSPoint _mouseDownLocation, _currentLocation;
+    N3Vector _mouseDownLocationVector, _currentLocationVector;
     N3AffineTransform _mouseDownGeneratorRequestSliceToDicomTransform;
 }
 
-@property(readonly) NSPoint mouseDownLocation;
-@property(readonly) N3Vector mouseDownLocationVector;
+@property(readonly, retain) NSEvent* mouseDownEvent;
+@property(readonly, retain) NSTimer* timeoutTimer;
+
+@property(readonly) NSPoint mouseDownLocation, currentLocation;
+@property(readonly) N3Vector mouseDownLocationVector, currentLocationVector;
 @property(readonly) N3AffineTransform mouseDownGeneratorRequestSliceToDicomTransform;
 
 + (instancetype)toolForTag:(CPRMPRToolTag)tag;
 
-- (BOOL)view:(CPRMPRView*)view mouseDown:(NSEvent*)event NS_REQUIRES_SUPER;
+- (BOOL)view:(CPRMPRView*)view mouseDown:(NSEvent*)event UNAVAILABLE_ATTRIBUTE;
+- (BOOL)view:(CPRMPRView*)view mouseDown:(NSEvent*)event or:(void(^)())or confirm:(void(^)())confirm NS_REQUIRES_SUPER;
+- (BOOL)view:(CPRMPRView*)view mouseDragged:(NSEvent*)event NS_REQUIRES_SUPER;
+- (BOOL)view:(CPRMPRView*)view mouseUp:(NSEvent*)event NS_REQUIRES_SUPER;
 
-- (NSCursor*)hoverCursor;
+- (NSTimeInterval)timeout;
+- (NSCursor*)cursor;
 
 @end

@@ -10,10 +10,10 @@
 
 @interface CPRMPRView ()
 
-@property(retain) id dataProperties;
+@property(retain) CPRVolumeDataProperties* dataProperties;
 @property NSUInteger blockGeneratorRequestUpdates;
 @property(retain) NSTrackingArea* track;
-@property(retain) CPRMPRTool* tool;
+@property(retain, nonatomic) id <CPRMPRTool> ltool, rtool;
 @property NSUInteger eventModifierFlags;
 
 @end
