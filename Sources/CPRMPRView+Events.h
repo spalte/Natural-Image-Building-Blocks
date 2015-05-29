@@ -10,4 +10,6 @@
 
 @interface CPRMPRView (Events)
 
+- (void)hover:(NSEvent*)event location:(NSPoint)location;
+
 @end

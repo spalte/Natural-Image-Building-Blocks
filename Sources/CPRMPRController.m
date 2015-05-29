@@ -37,6 +37,8 @@
 
 @synthesize slabWidth = _slabWidth;
 
+@synthesize spacebarDown = _spacebarDown;
+
 - (instancetype)initWithData:(CPRVolumeData*)data {
     if ((self = [super initWithWindowNibName:@"CPRMPR" owner:self])) {
         self.data = data;

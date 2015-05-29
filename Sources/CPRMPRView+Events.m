@@ -12,6 +12,7 @@
 #import "CPRMPRRotateTool.h"
 #import "CPRMPRRotateAxisTool.h"
 #import "CPRIntersection.h"
+#import "CPRMPRController.h"
 
 @implementation CPRMPRView (Events)
 
@@ -23,6 +24,11 @@
     NSString* ssel = NSStringFromSelector(sel);
     if ([ssel hasPrefix:@"rightMouse"] || [ssel hasPrefix:@"otherMouse"])
         ssel = [@"mouse" stringByAppendingString:[ssel substringFromIndex:NSMaxRange([ssel rangeOfString:@"Mouse"])]];
+    
+    if ([ssel isEqualToString:@"mouseDown"])
+        self.mouseDown = YES;
+    else if ([ssel isEqualToString:@"mouseUp"])
+        self.mouseDown = NO;
     
     SEL vsel = NSSelectorFromString([@"view:" stringByAppendingString:ssel]), orvsel = NSSelectorFromString([NSString stringWithFormat:@"view:%@or:", ssel]);
     if ([tool respondsToSelector:orvsel]) {
@@ -142,13 +148,21 @@
 }
 
 - (void)hover:(NSEvent*)event location:(NSPoint)location {
+    if (self.mouseDown)
+        return;
+    
+    if (!event)
+        event = [NSApp currentEvent];
+    
     CGFloat distance;
     NSString* ikey = [self intersectionClosestToPoint:location closestPoint:NULL distance:&distance];
     
     BOOL rotate = (ikey && distance < 4);
 
-    __block BOOL move = rotate; // so,
-    if (move)
+    __block BOOL move = rotate;
+    if ([self.window.windowController spacebarIsDown])
+        move = YES;
+    else if (move)
         [self enumerateIntersectionsWithBlock:^(NSString* key, CPRIntersection* intersection, BOOL* stop) {
             if ([key isEqualToString:ikey])
                 return;
@@ -157,8 +171,10 @@
                 *stop = YES;
             }
         }];
+    else if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSCommandKeyMask)
+        rotate = YES;
     
-    Class /*wtc = [[self.window.windowController tool] class],*/ tc = nil;
+    Class tc = nil;
     
     if (move)
         tc = CPRMPRMoveTool.class;
@@ -177,7 +193,7 @@
     
     CPRMPRTool* tool = [self ltool];
     NSCursor* cursor = tool? tool.cursor : NSCursor.arrowCursor;
-    if (rotate)
+    if (rotate || move)
         cursor = NSCursor.openHandCursor;
     
     if (NSCursor.currentCursor != cursor)

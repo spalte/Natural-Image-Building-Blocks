@@ -7,6 +7,7 @@
 //
 
 #import "CPRMPRView+Private.h"
+#import "CPRMPRView+Events.h"
 #import "CPRMPRController.h"
 #import "CPRMPRTool.h"
 #import "CPRMPRQuaternion.h"
@@ -27,6 +28,7 @@
 @synthesize track = _track;
 @synthesize flags = _flags;
 @synthesize ltool = _ltool, rtool = _rtool;
+@synthesize mouseDown = _mouseDown;
 
 - (instancetype)initWithFrame:(NSRect)frameRect {
     if ((self = [super initWithFrame:frameRect])) {
@@ -57,9 +59,13 @@
     [self addObserver:self forKeyPath:@"pixelSpacing" options:0 context:CPRMPRView.class];
 //    [self bind:@"windowLevel" toObject:self withKeyPath:@"dataProperties.windowLevel" options:0];
 //    [self bind:@"windowWidth" toObject:self withKeyPath:@"dataProperties.windowWidth" options:0];
+    [self addObserver:self forKeyPath:@"window.windowController.spacebarDown" options:0 context:CPRMPRView.class];
+    [self addObserver:self forKeyPath:@"window.windowController.ltool" options:0 context:CPRMPRView.class];
 }
 
 - (void)dealloc {
+    [self removeObserver:self forKeyPath:@"window.windowController.ltool" context:CPRMPRView.class];
+    [self removeObserver:self forKeyPath:@"window.windowController.spacebarDown" context:CPRMPRView.class];
     [self removeObserver:self forKeyPath:@"pixelSpacing" context:CPRMPRView.class];
     [self removeObserver:self forKeyPath:@"ydir" context:CPRMPRView.class];
     [self removeObserver:self forKeyPath:@"xdir" context:CPRMPRView.class];
@@ -113,6 +119,10 @@
         
         [CATransaction commit];
     }
+    
+    if ([keyPath isEqualToString:@"window.windowController.spacebarDown"] || [keyPath isEqualToString:@"window.windowController.ltool"]) {
+        [self hover:nil location:[self convertPoint:[self.window convertScreenToBase:[NSEvent mouseLocation]] fromView:nil]];
+    }
 }
 
 - (void)setNormal:(CPRMPRQuaternion*)normal :(CPRMPRQuaternion*)xdir :(CPRMPRQuaternion*)ydir reference:(CPRMPRQuaternion*)reference {
@@ -143,6 +153,7 @@
         return;
     
     N3Vector edges[] = {{0,0,0},{1,1,1},{1,0,0},{0,1,1},{0,1,0},{1,0,1},{1,1,0},{0,0,1}};
+    N3VectorApplyTransformToVectors(N3AffineTransformMakeScale(self.data.pixelsWide, self.data.pixelsHigh, self.data.pixelsDeep), edges, 8);
     N3VectorApplyTransformToVectors(self.data.volumeTransform, edges, 8);
     CGFloat maxdiameter = 0;
     for (size_t i = 0; i < 4; ++i)

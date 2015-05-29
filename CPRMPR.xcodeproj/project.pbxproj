@@ -41,6 +41,7 @@
 		719CC54A1B1449ED00DC1ED5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 719CC5491B1449ED00DC1ED5 /* Images.xcassets */; };
 		719D02AA1AC1D367002F76C1 /* CPRMPR.m in Sources */ = {isa = PBXBuildFile; fileRef = 719D02A91AC1D367002F76C1 /* CPRMPR.m */; };
 		71B249271B173E0500F8E0AD /* CPRVolumeDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B249251B173E0500F8E0AD /* CPRVolumeDataProperties.m */; };
+		71B249301B18886F00F8E0AD /* CPRMPRWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B2492F1B18886F00F8E0AD /* CPRMPRWindow.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -114,6 +115,8 @@
 		71B249241B173E0500F8E0AD /* CPRVolumeDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPRVolumeDataProperties.h; path = "../spalte-tavi/SymetisTavi/CPRVolumeDataProperties.h"; sourceTree = "<group>"; };
 		71B249251B173E0500F8E0AD /* CPRVolumeDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CPRVolumeDataProperties.m; path = "../spalte-tavi/SymetisTavi/CPRVolumeDataProperties.m"; sourceTree = "<group>"; };
 		71B249261B173E0500F8E0AD /* CPRVolumeDataPropertiesPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPRVolumeDataPropertiesPrivate.h; path = "../spalte-tavi/SymetisTavi/CPRVolumeDataPropertiesPrivate.h"; sourceTree = "<group>"; };
+		71B2492E1B18886F00F8E0AD /* CPRMPRWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPRMPRWindow.h; path = Sources/CPRMPRWindow.h; sourceTree = "<group>"; };
+		71B2492F1B18886F00F8E0AD /* CPRMPRWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CPRMPRWindow.m; path = Sources/CPRMPRWindow.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,6 +218,8 @@
 				719D02A81AC1D367002F76C1 /* CPRMPR.h */,
 				719D02A91AC1D367002F76C1 /* CPRMPR.m */,
 				713341451B163E500014CE09 /* CPRMPR.xib */,
+				71B2492E1B18886F00F8E0AD /* CPRMPRWindow.h */,
+				71B2492F1B18886F00F8E0AD /* CPRMPRWindow.m */,
 				713341371B1483B90014CE09 /* CPRMPRController+Private.h */,
 				719CC51C1B0B1BBC00DC1ED5 /* CPRMPRController.h */,
 				719CC51D1B0B1BBC00DC1ED5 /* CPRMPRController.m */,
@@ -350,6 +355,7 @@
 			files = (
 				719CC50E1B0B1B6B00DC1ED5 /* CPRGeneratorRequestView.m in Sources */,
 				719CC5121B0B1B6B00DC1ED5 /* CPRObliqueSliceIntersectionLayer.m in Sources */,
+				71B249301B18886F00F8E0AD /* CPRMPRWindow.m in Sources */,
 				719CC5151B0B1B6B00DC1ED5 /* CPRIntersection.m in Sources */,
 				7133413D1B14E01C0014CE09 /* CPRMPRRotateAxisTool.m in Sources */,
 				7133412D1B147E0A0014CE09 /* CPRMPRTool.m in Sources */,

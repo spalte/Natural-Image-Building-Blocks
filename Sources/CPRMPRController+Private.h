@@ -13,4 +13,6 @@
 @property(retain, readwrite) CPRMPRQuaternion *x, *y, *z;
 @property(retain, readwrite) CPRMPRTool *ltool, *rtool;
 
+@property(readwrite,getter=spacebarIsDown) BOOL spacebarDown;
+
 @end

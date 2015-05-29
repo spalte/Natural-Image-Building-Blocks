@@ -10,6 +10,7 @@
 
 @interface CPRMPRWLWWTool : CPRMPRTool {
     CGFloat _mouseDownWindowLevel, _mouseDownWindowWidth;
+    NSPoint _previousLocation;
 }
 
 @end

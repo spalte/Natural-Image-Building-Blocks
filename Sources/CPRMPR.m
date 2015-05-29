@@ -45,10 +45,7 @@ static CPRMPR* instance = nil;
 }
 
 - (long)filterImage:(NSString*)menuName {
-    NSArray* pixList = [viewerController pixList:viewerController.curMovieIndex];
-    NSData* volume = [viewerController volumeData:viewerController.curMovieIndex];
-    [viewerController computeInterval];
-    CPRVolumeData* data = [[[CPRVolumeData alloc] initWithWithPixList:pixList volume:volume] autorelease];
+    CPRVolumeData* data = [viewerController CPRVolumeDataForMovieIndex:viewerController.curMovieIndex];
     
     CPRMPRController* mpr = [[CPRMPRController alloc] initWithData:data];
     mpr.windowLevel = viewerController.curWL;

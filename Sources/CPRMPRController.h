@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 volz.io. All rights reserved.
 //
 
+#pragma once
+
 #import <Cocoa/Cocoa.h>
 #import <OsiriXAPI/N3Geometry.h>
 #import "CPRMPRTool.h"
@@ -40,6 +42,8 @@ typedef NS_OPTIONS(NSUInteger, CPRMPRFlags) {
     CPRMPRTool *_ltool, *_rtool;
     
     CGFloat _slabWidth;
+    
+    BOOL _spacebarDown;
 }
 
 @property(assign) IBOutlet NSSplitView* leftrightSplit;
@@ -62,6 +66,8 @@ typedef NS_OPTIONS(NSUInteger, CPRMPRFlags) {
 @property(retain, readonly) CPRMPRTool *ltool, *rtool;
 
 @property CGFloat slabWidth;
+
+@property(readonly,getter=spacebarIsDown) BOOL spacebarDown;
 
 - (instancetype)initWithData:(CPRVolumeData*)data;
 

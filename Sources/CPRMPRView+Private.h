@@ -15,5 +15,6 @@
 @property(retain) NSTrackingArea* track;
 @property(retain, nonatomic) id <CPRMPRTool> ltool, rtool;
 @property NSUInteger eventModifierFlags;
+@property(getter=mouseIsDown) BOOL mouseDown;
 
 @end

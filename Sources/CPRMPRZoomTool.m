@@ -56,6 +56,7 @@
 
 - (BOOL)view:(CPRMPRView*)view mouseUp:(NSEvent*)event {
     if (![super view:view mouseUp:event]) {
+        [self moveCursorToMouseDownLocation];
         [NSCursor unhide];
     }
     

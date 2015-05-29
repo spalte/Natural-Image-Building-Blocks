@@ -37,6 +37,7 @@ typedef NS_ENUM(NSInteger, CPRMPRToolTag) {
 @end
 
 @interface CPRMPRTool : NSObject <CPRMPRTool> {
+    NSView* _mouseDownView;
     NSEvent* _mouseDownEvent;
     void (^_timeoutBlock)(), (^_confirmBlock)();
     NSTimer* _timeoutTimer;
@@ -61,5 +62,7 @@ typedef NS_ENUM(NSInteger, CPRMPRToolTag) {
 
 - (NSTimeInterval)timeout;
 - (NSCursor*)cursor;
+
+- (void)moveCursorToMouseDownLocation;
 
 @end

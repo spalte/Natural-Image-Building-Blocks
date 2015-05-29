@@ -17,6 +17,7 @@
 
 @interface CPRMPRTool ()
 
+@property NSView* mouseDownView;
 @property(retain, readwrite) NSEvent* mouseDownEvent;
 @property(copy) void (^timeoutBlock)(), (^confirmBlock)();
 @property(retain, readwrite) NSTimer* timeoutTimer;
@@ -28,7 +29,7 @@
 
 @implementation CPRMPRTool
 
-@synthesize mouseDownEvent = _mouseDownEvent;
+@synthesize mouseDownView = _mouseDownView, mouseDownEvent = _mouseDownEvent;
 @synthesize timeoutBlock = _timeoutBlock, confirmBlock = _confirmBlock;
 @synthesize timeoutTimer = _timeoutTimer;
 
@@ -65,6 +66,7 @@
     self.timeoutTimer = nil;
     self.timeoutBlock = self.confirmBlock = nil;
     self.mouseDownEvent = nil;
+    self.mouseDownView = nil;
     [super dealloc];
 }
 
@@ -74,12 +76,13 @@
 }
 
 - (BOOL)view:(CPRMPRView*)view mouseDown:(NSEvent*)event or:(void(^)())or confirm:(void(^)())confirm {
+    self.mouseDownView = view;
+    self.mouseDownEvent = event;
+
     self.mouseDownLocation = [view convertPoint:event.locationInWindow fromView:nil];
     self.mouseDownGeneratorRequestSliceToDicomTransform = view.generatorRequest.sliceToDicomTransform;
     self.mouseDownLocationVector = N3VectorApplyTransform(N3VectorMakeFromNSPoint(self.mouseDownLocation), self.mouseDownGeneratorRequestSliceToDicomTransform);
     
-    self.mouseDownEvent = event;
-
     if (or) {
         self.timeoutBlock = or;
         self.confirmBlock = confirm;
@@ -135,6 +138,20 @@
 
 - (NSCursor*)cursor {
     return NSCursor.arrowCursor;
+}
+
+- (void)moveCursorToMouseDownLocation {
+    NSPoint p = [self.mouseDownView.window convertBaseToScreen:self.mouseDownEvent.locationInWindow];
+    CGPoint cgp = CGPointMake(p.x, p.y);
+    uint32_t dc = 1;
+    CGDirectDisplayID dids[dc];
+    CGGetDisplaysWithPoint (cgp, 1, dids, &dc);
+    if (dc >= 1) {
+        CGRect db = CGDisplayBounds(dids[0]);
+        cgp.x -= db.origin.x; cgp.y -= db.origin.y;
+        cgp.y = db.size.height-cgp.y;
+        CGDisplayMoveCursorToPoint(dids[0], cgp);
+    }
 }
 
 @end

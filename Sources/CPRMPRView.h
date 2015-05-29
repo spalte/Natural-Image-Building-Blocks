@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 volz.io. All rights reserved.
 //
 
+#pragma once
+
 #import <Cocoa/Cocoa.h>
 #import "CPRGeneratorRequestView.h"
 #import "CPRMPRController.h"
@@ -29,6 +31,7 @@
     NSMenu* _menu;
     id <CPRMPRTool> _ltool, _rtool;
     CGFloat _slabWidth;
+    BOOL _mouseDown;
 }
 
 @property(retain) CPRVolumeData* data;

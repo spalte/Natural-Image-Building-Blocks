@@ -92,6 +92,7 @@ static NSString* const CPRMPRSlabWidthToolbarItemIdentifier = @"CPRMPRSlabWidth"
             [menu addItem:mi];
         }];
         
+        cell.controlSize = NSSmallControlSize;
         [seg sizeToFit];
         item.view = seg;
     }
@@ -144,7 +145,7 @@ static NSString* const CPRMPRSlabWidthToolbarItemIdentifier = @"CPRMPRSlabWidth"
     CPRMPRToolRecord* tool = [[[self.class alloc] init] autorelease];
     tool.tag = tag;
     tool.label = label;
-    tool.image = image; image.size = NSMakeSize(16,16);
+    tool.image = image; image.size = NSMakeSize(14,14);
     tool.handler = handler;
     return tool;
 }
@@ -197,16 +198,25 @@ static NSString* const CPRMPRSlabWidthToolbarItemIdentifier = @"CPRMPRSlabWidth"
         [self.segments addObject:[NSMutableDictionary dictionary]];
 }
 
+- (NSShadow*)shadowWithColor:(NSColor*)color {
+    NSShadow* shadow = [[[NSShadow alloc] init] autorelease];
+    shadow.shadowColor = color;
+    shadow.shadowOffset = NSMakeSize(0,0);
+    shadow.shadowBlurRadius = 2;
+    return shadow;
+}
+
 - (void)drawSegment:(NSInteger)s inFrame:(NSRect)frame withView:(CPRMPRSegmentedControl*)view {
     [super drawSegment:s inFrame:frame withView:view];
     if ([self tagForSegment:s] == self.rselectedTag) {
-        frame = NSInsetRect(frame, (NSWidth(view.frame)-view.totalWidth)/(view.segmentCount*2)-2, 0);
+        frame = NSInsetRect(frame, (NSWidth(view.frame)-view.totalWidth)/(view.segmentCount*2)-1, -2);
         NSMutableParagraphStyle* ps = [[NSMutableParagraphStyle.defaultParagraphStyle mutableCopy] autorelease];
         ps.alignment = NSRightTextAlignment;
         NSString* r = NSLocalizedString(@"R", nil);
         NSStringDrawingOptions options = NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading;
         NSDictionary* attributes = @{ NSFontAttributeName: [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]],
-                                      NSForegroundColorAttributeName: ([self isSelectedForSegment:s]? NSColor.whiteColor : NSColor.blackColor),
+                                      NSForegroundColorAttributeName: ([self isSelectedForSegment:s]? [NSColor colorWithCalibratedWhite:0.8 alpha:1] : [NSColor colorWithCalibratedWhite:0.2 alpha:1]),
+                                      NSShadowAttributeName: [self shadowWithColor:([self isSelectedForSegment:s]? NSColor.blackColor : NSColor.whiteColor)],
                                       NSParagraphStyleAttributeName: ps };
 //        NSRect rframe = NSZeroRect; rframe = [r boundingRectWithSize:frame.size options:options attributes:attributes];
 //        [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(frame.origin.x+rframe.origin.x, frame.origin.y+rframe.origin.y, rframe.size.width, rframe.size.height)];
