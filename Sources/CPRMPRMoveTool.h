@@ -8,9 +8,7 @@
 
 #import "CPRMPRTool.h"
 
-@interface CPRMPRMoveTool : CPRMPRTool {
-    N3Vector _previousLocationVector;
-}
+@interface CPRMPRMoveTool : CPRMPRDeltaTool
 
 @end
 

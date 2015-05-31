@@ -21,6 +21,8 @@ typedef NS_ENUM(NSInteger, CPRMPRToolTag) {
 
 @protocol CPRMPRTool <NSObject>
 
+- (NSArray*)cursors;
+
 // notice that the view redirects rightMouse* and otherMouse* events to mouse*
 @optional
 - (BOOL)view:(CPRMPRView*)view mouseDown:(NSEvent*)event;
@@ -41,16 +43,16 @@ typedef NS_ENUM(NSInteger, CPRMPRToolTag) {
     NSEvent* _mouseDownEvent;
     void (^_timeoutBlock)(), (^_confirmBlock)();
     NSTimer* _timeoutTimer;
-    NSPoint _mouseDownLocation, _currentLocation;
-    N3Vector _mouseDownLocationVector, _currentLocationVector;
+    NSPoint _mouseDownLocation, _currentLocation, _previousLocation;
+    N3Vector _mouseDownLocationVector, _currentLocationVector, _previousLocationVector;
     N3AffineTransform _mouseDownGeneratorRequestSliceToDicomTransform;
 }
 
 @property(readonly, retain) NSEvent* mouseDownEvent;
 @property(readonly, retain) NSTimer* timeoutTimer;
 
-@property(readonly) NSPoint mouseDownLocation, currentLocation;
-@property(readonly) N3Vector mouseDownLocationVector, currentLocationVector;
+@property(readonly) NSPoint mouseDownLocation, currentLocation, previousLocation;
+@property(readonly) N3Vector mouseDownLocationVector, currentLocationVector, previousLocationVector;
 @property(readonly) N3AffineTransform mouseDownGeneratorRequestSliceToDicomTransform;
 
 + (instancetype)toolForTag:(CPRMPRToolTag)tag;
@@ -61,8 +63,15 @@ typedef NS_ENUM(NSInteger, CPRMPRToolTag) {
 - (BOOL)view:(CPRMPRView*)view mouseUp:(NSEvent*)event NS_REQUIRES_SUPER;
 
 - (NSTimeInterval)timeout;
-- (NSCursor*)cursor;
 
-- (void)moveCursorToMouseDownLocation;
++ (void)setCursor:(NSCursor*)cursor;
+
+@end
+
+@interface CPRMPRDeltaTool : CPRMPRTool {
+//    NSPoint _ignoreDragLocation;
+}
+
+- (BOOL)view:(CPRMPRView*)view move:(NSPoint)delta vector:(N3Vector)deltaVector;
 
 @end

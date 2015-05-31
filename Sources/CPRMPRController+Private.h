@@ -10,6 +10,7 @@
 
 @interface CPRMPRController ()
 
+@property CGFloat initialWindowLevel, initialWindowWidth;
 @property(retain, readwrite) CPRMPRQuaternion *x, *y, *z;
 @property(retain, readwrite) CPRMPRTool *ltool, *rtool;
 

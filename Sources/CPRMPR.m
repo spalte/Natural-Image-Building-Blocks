@@ -47,9 +47,7 @@ static CPRMPR* instance = nil;
 - (long)filterImage:(NSString*)menuName {
     CPRVolumeData* data = [viewerController CPRVolumeDataForMovieIndex:viewerController.curMovieIndex];
     
-    CPRMPRController* mpr = [[CPRMPRController alloc] initWithData:data];
-    mpr.windowLevel = viewerController.curWL;
-    mpr.windowWidth = viewerController.curWW;
+    CPRMPRController* mpr = [[CPRMPRController alloc] initWithData:data window:viewerController.curWL:viewerController.curWW];
     mpr.displayScaleBars = mpr.displayOrientationLabels = YES;
     
     [mpr.window makeKeyAndOrderFront:self];

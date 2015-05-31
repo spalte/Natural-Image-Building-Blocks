@@ -8,8 +8,6 @@
 
 #import "CPRMPRTool.h"
 
-@interface CPRMPRZoomTool : CPRMPRTool {
-    NSPoint _previousLocation;
-}
+@interface CPRMPRZoomTool : CPRMPRDeltaTool
 
 @end

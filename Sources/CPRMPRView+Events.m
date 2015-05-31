@@ -191,13 +191,7 @@
         intersection.maskAroundMouse = !rotate;
     }];
     
-    CPRMPRTool* tool = [self ltool];
-    NSCursor* cursor = tool? tool.cursor : NSCursor.arrowCursor;
-    if (rotate || move)
-        cursor = NSCursor.openHandCursor;
-    
-    if (NSCursor.currentCursor != cursor)
-        [cursor set];
+    [CPRMPRTool setCursor:[[self ltool] cursors][0]];
 }
 
 @end

@@ -8,9 +8,8 @@
 
 #import "CPRMPRTool.h"
 
-@interface CPRMPRWLWWTool : CPRMPRTool {
+@interface CPRMPRWLWWTool : CPRMPRDeltaTool /*{
     CGFloat _mouseDownWindowLevel, _mouseDownWindowWidth;
-    NSPoint _previousLocation;
-}
+}*/
 
 @end

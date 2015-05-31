@@ -8,11 +8,7 @@
 
 #import "CPRMPRTool.h"
 
-@interface CPRMPRRotateTool : CPRMPRTool {
-    N3Vector _previousLocationVector;
-}
-
-@property(readonly) N3Vector previousLocationVector;
+@interface CPRMPRRotateTool : CPRMPRTool
 
 - (void)view:(CPRMPRView*)view rotate:(CGFloat)rads;
 

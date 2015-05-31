@@ -29,7 +29,7 @@ typedef NS_OPTIONS(NSUInteger, CPRMPRFlags) {
     CPRMPRView* _coronalView;
     
     CPRVolumeData* _data;
-    CGFloat _windowWidth, _windowLevel;
+    CGFloat _windowWidth, _windowLevel, _initialWindowLevel, _initialWindowWidth;
     BOOL _displayOrientationLabels, _displayScaleBars;
     NSMenu* _menu;
 
@@ -69,7 +69,7 @@ typedef NS_OPTIONS(NSUInteger, CPRMPRFlags) {
 
 @property(readonly,getter=spacebarIsDown) BOOL spacebarDown;
 
-- (instancetype)initWithData:(CPRVolumeData*)data;
+- (instancetype)initWithData:(CPRVolumeData*)data window:(CGFloat)wl :(CGFloat)ww;
 
 - (void)rotate:(CGFloat)rads axis:(N3Vector)axis excluding:(CPRMPRView*)view;
 - (void)reset;

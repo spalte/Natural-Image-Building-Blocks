@@ -23,7 +23,7 @@
 @synthesize coronalView = _coronalView;
 
 @synthesize data = _data;
-@synthesize windowWidth = _windowWidth, windowLevel = _windowLevel;
+@synthesize windowWidth = _windowWidth, windowLevel = _windowLevel, initialWindowLevel = _initialWindowLevel, initialWindowWidth = _initialWindowWidth;
 @synthesize displayOrientationLabels = _displayOrientationLabels, displayScaleBars = _displayScaleBars;
 @synthesize menu = _menu;
 
@@ -39,9 +39,11 @@
 
 @synthesize spacebarDown = _spacebarDown;
 
-- (instancetype)initWithData:(CPRVolumeData*)data {
+- (instancetype)initWithData:(CPRVolumeData*)data window:(CGFloat)wl :(CGFloat)ww {
     if ((self = [super initWithWindowNibName:@"CPRMPR" owner:self])) {
         self.data = data;
+        self.initialWindowLevel = self.windowLevel = wl;
+        self.initialWindowWidth = self.windowWidth = ww;
         self.ltoolTag = CPRMPRToolWLWW;
         self.rtoolTag = CPRMPRToolZoom;
     }
@@ -159,6 +161,9 @@
     [self.coronalView setNormal:[y.copy autorelease]:[x.copy autorelease]:[z.copy autorelease] reference:x];
     
     self.point = N3VectorApplyTransform(N3VectorMake(self.data.pixelsWide/2, self.data.pixelsHigh/2, self.data.pixelsDeep/2), N3AffineTransformInvert(self.data.volumeTransform));
+    
+    self.windowLevel = self.initialWindowLevel;
+    self.windowWidth = self.initialWindowWidth;
     
     CGFloat pixelSpacing = 0, pixelSpacingSize = 0;
     for (CPRMPRView* view in self.mprViews) {

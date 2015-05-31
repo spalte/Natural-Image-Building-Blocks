@@ -11,22 +11,7 @@
 #import "CPRMPRView.h"
 #import <Quartz/Quartz.h>
 
-@interface CPRMPRRotateTool ()
-
-@property(readwrite) N3Vector previousLocationVector;
-
-@end
-
 @implementation CPRMPRRotateTool
-
-@synthesize previousLocationVector = _previousLocationVector;
-
-- (BOOL)view:(CPRMPRView*)view mouseDown:(NSEvent*)event or:(void(^)())or {
-    return [super view:view mouseDown:event or:or confirm:^{
-        [NSCursor.closedHandCursor set];
-        self.previousLocationVector = self.mouseDownLocationVector;
-    }];
-}
 
 - (BOOL)view:(CPRMPRView*)view mouseDragged:(NSEvent*)event {
     [super view:view mouseDragged:event];
@@ -46,8 +31,6 @@
         [CATransaction commit];
     }
     
-    self.previousLocationVector = self.currentLocationVector;
-    
     return YES;
 }
 
@@ -55,8 +38,8 @@
     [view rotate:-rads axis:view.normal.vector];
 }
 
-- (NSCursor*)cursor {
-    return NSCursor.openHandCursor;
+- (NSArray*)cursors {
+    return @[ NSCursor.openHandCursor, NSCursor.closedHandCursor ];
 }
 
 @end

@@ -11,32 +11,9 @@
 #import "CPRIntersection.h"
 #import <OsiriXAPI/CPRGeneratorRequest.h>
 
-@interface CPRMPRZoomTool ()
-
-@property NSPoint previousLocation;
-
-@end
-
 @implementation CPRMPRZoomTool
 
-@synthesize previousLocation = _previousLocation;
-
-- (BOOL)view:(CPRMPRView*)view mouseDown:(NSEvent*)event or:(void(^)())or {
-    return [super view:view mouseDown:event or:or confirm:^{
-        self.previousLocation = self.mouseDownLocation;
-        
-        [NSCursor hide];
-        [view enumerateIntersectionsWithBlock:^(NSString* key, CPRIntersection* intersection, BOOL* stop) {
-            intersection.maskAroundMouse = NO;
-        }];
-    }];
-}
-
-- (BOOL)view:(CPRMPRView*)view mouseDragged:(NSEvent*)event {
-    [super view:view mouseDragged:event];
-    
-    NSPoint ldelta = NSMakePoint(self.currentLocation.x-self.previousLocation.x, self.currentLocation.y-self.previousLocation.y);
-
+- (BOOL)view:(CPRMPRView*)view move:(NSPoint)ldelta vector:(N3Vector)deltaVector {
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
     
@@ -49,22 +26,11 @@
     
     [CATransaction commit];
     
-    self.previousLocation = self.currentLocation;
-    
     return YES;
 }
 
-- (BOOL)view:(CPRMPRView*)view mouseUp:(NSEvent*)event {
-    if (![super view:view mouseUp:event]) {
-        [self moveCursorToMouseDownLocation];
-        [NSCursor unhide];
-    }
-    
-    return YES;
+- (NSArray*)cursors {
+    return @[ NSCursor.arrowCursor, NSNull.null ];
 }
-
-//- (NSCursor*)cursor {
-//    return nil;
-//}
 
 @end
