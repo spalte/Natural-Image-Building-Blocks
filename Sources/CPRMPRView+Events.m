@@ -63,6 +63,9 @@
 - (void)mouseUp:(NSEvent*)event {
     [self tool:self.ltool sel:_cmd event:event or:^{
         [self hover:event location:[self convertPoint:event.locationInWindow fromView:nil]];
+        CPRMPRView* view = [[self.window.contentView hitTest:event.locationInWindow] if:CPRMPRView.class];
+        if (view != self)
+            [view hover:event location:[view convertPoint:event.locationInWindow fromView:nil]];
     }];
 }
 
@@ -170,7 +173,7 @@
         [self enumerateIntersectionsWithBlock:^(NSString* key, CPRIntersection* intersection, BOOL* stop) {
             if ([key isEqualToString:ikey])
                 return;
-            if ([intersection distanceToPoint:location closestPoint:NULL] > 4) {
+            if ([intersection distanceToPoint:location closestPoint:NULL] > 6) {
                 cmove = move = NO;
                 *stop = YES;
             }
