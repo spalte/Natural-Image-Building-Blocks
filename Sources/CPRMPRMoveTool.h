@@ -8,10 +8,17 @@
 
 #import "CPRMPRTool.h"
 
+//typedef NS_ENUM(NSUInteger, CPRMPRMoveMode) {
+//    CPRMPRMoveAllMode = 1,
+//    CPRMPRMoveOthersMode,
+//};
+
 @interface CPRMPRMoveTool : CPRMPRDeltaTool
 
 @end
 
-//@interface CPRMPRInvertMoveTool : CPRMPRMoveTool
-//
-//@end
+@interface CPRMPRMoveOthersTool : CPRMPRMoveTool {
+    N3Vector _point;
+}
+
+@end

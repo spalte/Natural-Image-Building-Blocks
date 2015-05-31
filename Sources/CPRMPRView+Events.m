@@ -25,10 +25,12 @@
     if ([ssel hasPrefix:@"rightMouse"] || [ssel hasPrefix:@"otherMouse"])
         ssel = [@"mouse" stringByAppendingString:[ssel substringFromIndex:NSMaxRange([ssel rangeOfString:@"Mouse"])]];
     
-    if ([ssel isEqualToString:@"mouseDown"])
+    if ([ssel isEqualToString:@"mouseDown:"])
         self.mouseDown = YES;
-    else if ([ssel isEqualToString:@"mouseUp"])
+    else if ([ssel isEqualToString:@"mouseUp:"])
         self.mouseDown = NO;
+    
+//    NSLog(@"%@ %d", ssel, self.mouseDown);
     
     SEL vsel = NSSelectorFromString([@"view:" stringByAppendingString:ssel]), orvsel = NSSelectorFromString([NSString stringWithFormat:@"view:%@or:", ssel]);
     if ([tool respondsToSelector:orvsel]) {
@@ -102,7 +104,9 @@
 }
 
 - (void)mouseExited:(NSEvent*)event {
-    [self tool:self.ltool sel:_cmd event:event or:nil];
+    [self tool:self.ltool sel:_cmd event:event or:^{
+        [self hover:event location:[self convertPoint:event.locationInWindow fromView:nil]];
+    }];
 }
 
 - (void)keyDown:(NSEvent*)event {
@@ -159,15 +163,15 @@
     
     BOOL rotate = (ikey && distance < 4);
 
-    __block BOOL move = rotate;
+    __block BOOL move, cmove = move = rotate;
     if ([self.window.windowController spacebarIsDown])
         move = YES;
-    else if (move)
+    else if (cmove)
         [self enumerateIntersectionsWithBlock:^(NSString* key, CPRIntersection* intersection, BOOL* stop) {
             if ([key isEqualToString:ikey])
                 return;
             if ([intersection distanceToPoint:location closestPoint:NULL] > 4) {
-                move = NO;
+                cmove = move = NO;
                 *stop = YES;
             }
         }];
@@ -176,7 +180,9 @@
     
     Class tc = nil;
     
-    if (move)
+    if (cmove)
+        tc = CPRMPRMoveOthersTool.class;
+    else if (move)
         tc = CPRMPRMoveTool.class;
     else if (rotate) {
         tc = CPRMPRRotateAxisTool.class;
@@ -191,7 +197,7 @@
         intersection.maskAroundMouse = !rotate;
     }];
     
-    [CPRMPRTool setCursor:[[self ltool] cursors][0]];
+    [CPRMPRTool setCursor:(NSPointInRect(location, self.bounds)? [self.ltool cursors][0] : nil)];
 }
 
 @end

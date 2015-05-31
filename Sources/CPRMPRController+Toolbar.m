@@ -8,6 +8,7 @@
 
 #import "CPRMPRController+Toolbar.h"
 #import "CPRMPRController+Private.h"
+#import "CPRMPRWindow.h"
 #import "CPRMPR.h"
 #import "CPRMPRWLWWTool.h"
 #import "CPRMPRMoveTool.h"
@@ -178,6 +179,30 @@ static NSString* const CPRMPRSlabWidthToolbarItemIdentifier = @"CPRMPRSlabWidth"
     return t;
 }
 
+- (BOOL)interceptsToolbarRightMouseDownEvents {
+    return YES;
+}
+
+- (void)rightMouseDown:(NSEvent*)event {
+    NSPoint location = [self convertPoint:event.locationInWindow fromView:nil];
+    CGFloat extraWidth = (NSWidth(self.frame)-self.totalWidth)/self.segmentCount;
+    
+    NSInteger s = 0, px = 0, x;
+    for (x = 0; s < self.segmentCount; ++s) {
+        px = x; x += [self widthForSegment:s]+extraWidth;
+        if (location.x < x)
+            break;
+    }
+    
+    if (s >= self.segmentCount)
+        return;
+    
+    if ([self.cell trackMouse:event inRect:NSMakeRect(px, 0, x, NSHeight(self.bounds)) ofView:self untilMouseUp:YES]) {
+        [self.cell setRselectedTag:[self.cell tagForSegment:s]];
+        [self setNeedsDisplay:YES];
+    }
+}
+
 @end
 
 @implementation CPRMPRSegmentedCell
@@ -223,5 +248,6 @@ static NSString* const CPRMPRSlabWidthToolbarItemIdentifier = @"CPRMPRSlabWidth"
         [r drawWithRect:frame options:options attributes:attributes];
     }
 }
+
 
 @end

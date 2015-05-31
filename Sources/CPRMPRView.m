@@ -110,7 +110,7 @@
         NSRect o = [change[NSKeyValueChangeOldKey] rectValue], n = [change[NSKeyValueChangeNewKey] rectValue];
 
         if (self.track) [self removeTrackingArea:self.track];
-        [self addTrackingArea:(self.track = [[[NSTrackingArea alloc] initWithRect:self.bounds options:NSTrackingMouseMoved+NSTrackingActiveInActiveApp+NSTrackingInVisibleRect owner:self userInfo:@{ @"CPRMPRViewTrackingArea": @YES }] autorelease])];
+        [self addTrackingArea:(self.track = [[[NSTrackingArea alloc] initWithRect:self.bounds options:NSTrackingMouseEnteredAndExited|NSTrackingMouseMoved+NSTrackingActiveInActiveApp owner:self userInfo:@{ @"CPRMPRViewTrackingArea": @YES }] autorelease])];
 
         [CATransaction begin];
         [CATransaction setDisableActions:YES];

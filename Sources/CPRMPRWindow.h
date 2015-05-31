@@ -11,3 +11,9 @@
 @interface CPRMPRWindow : NSWindow
 
 @end
+
+@interface NSView (CPRMPRWindow)
+
+- (BOOL)interceptsToolbarRightMouseDownEvents;
+
+@end
