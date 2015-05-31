@@ -22,14 +22,18 @@
                 [self.windowController setSpacebarDown:flag];
         }
     
-    if (event.type == NSRightMouseDown) {
+    if (event.type == NSRightMouseDown || event.type == NSRightMouseDragged || event.type == NSRightMouseUp) {
         NSView* frameView = [self.contentView superview];
         NSView* view = [frameView hitTest:[frameView convertPoint:event.locationInWindow fromView:nil]];
         if ([view isKindOfClass:NSToolbarView.class])
             for (NSView* subview in view.subviews) {
                 NSView* view = [subview hitTest:[subview convertPoint:event.locationInWindow fromView:nil]];
-                if (view.interceptsToolbarRightMouseDownEvents)
-                    return [view rightMouseDown:event];
+                if (view.interceptsToolbarRightMouseEvents)
+                    switch (event.type) {
+                        case NSRightMouseDown: return [view rightMouseDown:event];
+                        case NSRightMouseDragged: return [view rightMouseDragged:event];
+                        case NSRightMouseUp: return [view rightMouseUp:event];
+                    }
             }
     }
     
@@ -40,7 +44,7 @@
 
 @implementation NSView (CPRMPRWindow)
 
-- (BOOL)interceptsToolbarRightMouseDownEvents {
+- (BOOL)interceptsToolbarRightMouseEvents {
     return NO;
 }
 

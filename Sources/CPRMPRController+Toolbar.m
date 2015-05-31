@@ -14,6 +14,7 @@
 #import "CPRMPRMoveTool.h"
 #import "CPRMPRZoomTool.h"
 #import "CPRMPRRotateTool.h"
+#import "CPRMPRMenuAdditions.h"
 
 @interface CPRMPRToolRecord : NSObject {
     CPRMPRToolTag _tag;
@@ -179,7 +180,7 @@ static NSString* const CPRMPRSlabWidthToolbarItemIdentifier = @"CPRMPRSlabWidth"
     return t;
 }
 
-- (BOOL)interceptsToolbarRightMouseDownEvents {
+- (BOOL)interceptsToolbarRightMouseEvents {
     return YES;
 }
 
@@ -197,10 +198,19 @@ static NSString* const CPRMPRSlabWidthToolbarItemIdentifier = @"CPRMPRSlabWidth"
     if (s >= self.segmentCount)
         return;
     
-    if ([self.cell trackMouse:event inRect:NSMakeRect(px, 0, x, NSHeight(self.bounds)) ofView:self untilMouseUp:YES]) {
-        [self.cell setRselectedTag:[self.cell tagForSegment:s]];
-        [self setNeedsDisplay:YES];
-    }
+    NSMenu* menu = [[[NSMenu alloc] init] autorelease];
+    [menu addItemWithTitle:[NSString stringWithFormat:NSLocalizedString(@"Set right button tool to %@", nil), [[self.window.windowController tools][s] label]] block:^{
+        [self.window.windowController setRtoolTag:[[self.window.windowController tools][s] tag]];
+    }];
+    
+    [NSMenu popUpContextMenu:menu withEvent:event forView:self withFont:[NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
+    
+//    if ([self.cell trackMouse:event inRect:NSMakeRect(px, 0, x, NSHeight(self.bounds)) ofView:self untilMouseUp:YES]) {
+//        [self.cell setRselectedTag:[self.cell tagForSegment:s]];
+//        [self setNeedsDisplay:YES];
+//    }
+    
+    NSLog(@"asd");
 }
 
 @end
