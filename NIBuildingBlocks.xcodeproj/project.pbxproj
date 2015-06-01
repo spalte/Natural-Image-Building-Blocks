@@ -68,6 +68,10 @@
 		4F151F741B1CCFDA00C8F767 /* NIBBBezierPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F6E1B1CCFDA00C8F767 /* NIBBBezierPath.m */; };
 		4F151F781B1CD35600C8F767 /* NIBBUnsignedInt16ImageRep.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F761B1CD35600C8F767 /* NIBBUnsignedInt16ImageRep.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F791B1CD35600C8F767 /* NIBBUnsignedInt16ImageRep.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F771B1CD35600C8F767 /* NIBBUnsignedInt16ImageRep.m */; };
+		4F151F901B1CFB2E00C8F767 /* NSBezierPath+NIBBAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F8E1B1CFB2E00C8F767 /* NSBezierPath+NIBBAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F151F911B1CFB2E00C8F767 /* NSBezierPath+NIBBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F8F1B1CFB2E00C8F767 /* NSBezierPath+NIBBAdditions.m */; };
+		4F151F941B1CFB3700C8F767 /* NIBBAnnularPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F921B1CFB3700C8F767 /* NIBBAnnularPath.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F151F951B1CFB3700C8F767 /* NIBBAnnularPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F931B1CFB3700C8F767 /* NIBBAnnularPath.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -134,6 +138,10 @@
 		4F151F6E1B1CCFDA00C8F767 /* NIBBBezierPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIBBBezierPath.m; sourceTree = "<group>"; };
 		4F151F761B1CD35600C8F767 /* NIBBUnsignedInt16ImageRep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIBBUnsignedInt16ImageRep.h; sourceTree = "<group>"; };
 		4F151F771B1CD35600C8F767 /* NIBBUnsignedInt16ImageRep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIBBUnsignedInt16ImageRep.m; sourceTree = "<group>"; };
+		4F151F8E1B1CFB2E00C8F767 /* NSBezierPath+NIBBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+NIBBAdditions.h"; sourceTree = "<group>"; };
+		4F151F8F1B1CFB2E00C8F767 /* NSBezierPath+NIBBAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+NIBBAdditions.m"; sourceTree = "<group>"; };
+		4F151F921B1CFB3700C8F767 /* NIBBAnnularPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIBBAnnularPath.h; sourceTree = "<group>"; };
+		4F151F931B1CFB3700C8F767 /* NIBBAnnularPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIBBAnnularPath.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -313,6 +321,10 @@
 		4F151F7B1B1CD3F800C8F767 /* Goodies */ = {
 			isa = PBXGroup;
 			children = (
+				4F151F8E1B1CFB2E00C8F767 /* NSBezierPath+NIBBAdditions.h */,
+				4F151F8F1B1CFB2E00C8F767 /* NSBezierPath+NIBBAdditions.m */,
+				4F151F921B1CFB3700C8F767 /* NIBBAnnularPath.h */,
+				4F151F931B1CFB3700C8F767 /* NIBBAnnularPath.m */,
 			);
 			name = Goodies;
 			sourceTree = "<group>";
@@ -352,6 +364,8 @@
 				4F151F4E1B1CCC0100C8F767 /* NIBBHorizontalFillOperation.h in Headers */,
 				4F151F111B1CCA1400C8F767 /* NIBBMouseBullseyeLayer.h in Headers */,
 				4F151F561B1CCC0100C8F767 /* NIBBStretchedOperation.h in Headers */,
+				4F151F941B1CFB3700C8F767 /* NIBBAnnularPath.h in Headers */,
+				4F151F901B1CFB2E00C8F767 /* NSBezierPath+NIBBAdditions.h in Headers */,
 				4F151F131B1CCA1400C8F767 /* NIBBIntersectionPrivate.h in Headers */,
 				4F151F071B1CCA1400C8F767 /* NIBBGeneratorRequestLayer.h in Headers */,
 			);
@@ -430,6 +444,7 @@
 				4F151F241B1CCA6200C8F767 /* NIBBIntersection.m in Sources */,
 				4F151F531B1CCC0100C8F767 /* NIBBProjectionOperation.m in Sources */,
 				4F151F791B1CD35600C8F767 /* NIBBUnsignedInt16ImageRep.m in Sources */,
+				4F151F951B1CFB3700C8F767 /* NIBBAnnularPath.m in Sources */,
 				4F151F701B1CCFDA00C8F767 /* NIBBBezierCore.m in Sources */,
 				4F151F081B1CCA1400C8F767 /* NIBBGeneratorRequestLayer.m in Sources */,
 				4F151F571B1CCC0100C8F767 /* NIBBStretchedOperation.m in Sources */,
@@ -447,6 +462,7 @@
 				4F151F4F1B1CCC0100C8F767 /* NIBBHorizontalFillOperation.m in Sources */,
 				4F151F371B1CCB6900C8F767 /* NIBBGeometry.m in Sources */,
 				4F151F671B1CCF1B00C8F767 /* OsiriXIntegration.m in Sources */,
+				4F151F911B1CFB2E00C8F767 /* NSBezierPath+NIBBAdditions.m in Sources */,
 				4F151F0E1B1CCA1400C8F767 /* NIBBObliqueSliceIntersectionLayer.m in Sources */,
 				4F151F2A1B1CCA8D00C8F767 /* NIBBFloatImageRep.m in Sources */,
 				4F151F411B1CCB8E00C8F767 /* NIBBGeneratorOperation.m in Sources */,

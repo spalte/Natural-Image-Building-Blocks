@@ -28,4 +28,6 @@ FOUNDATION_EXPORT const unsigned char NIBuildingBlocksVersionString[];
 //#import <NIBuildingBlocks/NIBBBezierCoreAdditions.h>
 //#import <NIBuildingBlocks/NIBBBezierPath.h>
 #import <NIBuildingBlocks/NIBBVolumeDataProperties.h>
+#import <NIBuildingBlocks/NSBezierPath+NIBBAdditions.h>
+#import <NIBuildingBlocks/NIBBAnnularPath.h>
 //#import <NIBuildingBlocks/OsiriXIntegration.h>
