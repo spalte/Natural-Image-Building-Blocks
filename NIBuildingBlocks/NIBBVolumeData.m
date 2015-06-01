@@ -44,8 +44,8 @@
 @synthesize volumeTransform = _volumeTransform;
 @synthesize floatData = _floatData;
 
-+ (NIBBAffineTransform)volumeDataForOrigin:(NIBBVector)origin directionX:(NIBBVector)directionX pixelSpacingX:(CGFloat)pixelSpacingX directionY:(NIBBVector)directionY pixelSpacingY:(CGFloat)pixelSpacingY
-                              directionZ:(NIBBVector)directionZ pixelSpacingZ:(CGFloat)pixelSpacingZ
++ (NIBBAffineTransform)volumeTransformForOrigin:(NIBBVector)origin directionX:(NIBBVector)directionX pixelSpacingX:(CGFloat)pixelSpacingX directionY:(NIBBVector)directionY pixelSpacingY:(CGFloat)pixelSpacingY
+                                     directionZ:(NIBBVector)directionZ pixelSpacingZ:(CGFloat)pixelSpacingZ
 {
     directionX = NIBBVectorNormalize(directionX);
     directionY = NIBBVectorNormalize(directionY);

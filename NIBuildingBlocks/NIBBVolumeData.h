@@ -64,8 +64,8 @@ typedef struct { // build one of these on the stack and then use -[NIBBVolumeDat
     NIBBVector (^_convertVolumeVectorFromDICOMVectorBlock)(NIBBVector);
 }
 
-+ (NIBBAffineTransform)volumeDataForOrigin:(NIBBVector)origin directionX:(NIBBVector)directionX pixelSpacingX:(CGFloat)pixelSpacingX directionY:(NIBBVector)directionY pixelSpacingY:(CGFloat)pixelSpacingY
-                                directionZ:(NIBBVector)directionZ pixelSpacingZ:(CGFloat)pixelSpacingZ;
++ (NIBBAffineTransform)volumeTransformForOrigin:(NIBBVector)origin directionX:(NIBBVector)directionX pixelSpacingX:(CGFloat)pixelSpacingX directionY:(NIBBVector)directionY pixelSpacingY:(CGFloat)pixelSpacingY
+                                     directionZ:(NIBBVector)directionZ pixelSpacingZ:(CGFloat)pixelSpacingZ;
 
 - (instancetype)initWithBytesNoCopy:(const float *)floatBytes pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
                     volumeTransform:(NIBBAffineTransform)volumeTransform outOfBoundsValue:(float)outOfBoundsValue freeWhenDone:(BOOL)freeWhenDone; // volumeTransform is the transform from Dicom (patient) space to pixel data
