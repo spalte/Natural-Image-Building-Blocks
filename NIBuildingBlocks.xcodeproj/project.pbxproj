@@ -8,21 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		4F151EE11B1CC8D000C8F767 /* NIBuildingBlocks.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151EE01B1CC8D000C8F767 /* NIBuildingBlocks.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4F151F071B1CCA1400C8F767 /* NIBBGeneratorRequestLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151EF81B1CCA1400C8F767 /* NIBBGeneratorRequestLayer.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F071B1CCA1400C8F767 /* NIBBGeneratorRequestLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151EF81B1CCA1400C8F767 /* NIBBGeneratorRequestLayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F081B1CCA1400C8F767 /* NIBBGeneratorRequestLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151EF91B1CCA1400C8F767 /* NIBBGeneratorRequestLayer.m */; };
-		4F151F091B1CCA1400C8F767 /* NIBBOrientationTextLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151EFA1B1CCA1400C8F767 /* NIBBOrientationTextLayer.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F091B1CCA1400C8F767 /* NIBBOrientationTextLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151EFA1B1CCA1400C8F767 /* NIBBOrientationTextLayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F0A1B1CCA1400C8F767 /* NIBBOrientationTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151EFB1B1CCA1400C8F767 /* NIBBOrientationTextLayer.m */; };
-		4F151F0B1B1CCA1400C8F767 /* NIBBAnnotationTextLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151EFC1B1CCA1400C8F767 /* NIBBAnnotationTextLayer.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F0B1B1CCA1400C8F767 /* NIBBAnnotationTextLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151EFC1B1CCA1400C8F767 /* NIBBAnnotationTextLayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F0C1B1CCA1400C8F767 /* NIBBAnnotationTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151EFD1B1CCA1400C8F767 /* NIBBAnnotationTextLayer.m */; };
-		4F151F0D1B1CCA1400C8F767 /* NIBBObliqueSliceIntersectionLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151EFE1B1CCA1400C8F767 /* NIBBObliqueSliceIntersectionLayer.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F0D1B1CCA1400C8F767 /* NIBBObliqueSliceIntersectionLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151EFE1B1CCA1400C8F767 /* NIBBObliqueSliceIntersectionLayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F0E1B1CCA1400C8F767 /* NIBBObliqueSliceIntersectionLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151EFF1B1CCA1400C8F767 /* NIBBObliqueSliceIntersectionLayer.m */; };
-		4F151F0F1B1CCA1400C8F767 /* NIBBScaleBarLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F001B1CCA1400C8F767 /* NIBBScaleBarLayer.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F0F1B1CCA1400C8F767 /* NIBBScaleBarLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F001B1CCA1400C8F767 /* NIBBScaleBarLayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F101B1CCA1400C8F767 /* NIBBScaleBarLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F011B1CCA1400C8F767 /* NIBBScaleBarLayer.m */; };
-		4F151F111B1CCA1400C8F767 /* NIBBMouseBullseyeLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F021B1CCA1400C8F767 /* NIBBMouseBullseyeLayer.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F111B1CCA1400C8F767 /* NIBBMouseBullseyeLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F021B1CCA1400C8F767 /* NIBBMouseBullseyeLayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F121B1CCA1400C8F767 /* NIBBMouseBullseyeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F031B1CCA1400C8F767 /* NIBBMouseBullseyeLayer.m */; };
-		4F151F131B1CCA1400C8F767 /* NIBBIntersectionPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F041B1CCA1400C8F767 /* NIBBIntersectionPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		4F151F141B1CCA1400C8F767 /* NIBBSpritePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F051B1CCA1400C8F767 /* NIBBSpritePrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		4F151F151B1CCA1400C8F767 /* NIBBVolumeDataPropertiesPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F061B1CCA1400C8F767 /* NIBBVolumeDataPropertiesPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F131B1CCA1400C8F767 /* NIBBIntersectionPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F041B1CCA1400C8F767 /* NIBBIntersectionPrivate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F151F141B1CCA1400C8F767 /* NIBBSpritePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F051B1CCA1400C8F767 /* NIBBSpritePrivate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F151F151B1CCA1400C8F767 /* NIBBVolumeDataPropertiesPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F061B1CCA1400C8F767 /* NIBBVolumeDataPropertiesPrivate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F181B1CCA2600C8F767 /* NIBBGeneratorRequestView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F161B1CCA2600C8F767 /* NIBBGeneratorRequestView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F191B1CCA2600C8F767 /* NIBBGeneratorRequestView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F171B1CCA2600C8F767 /* NIBBGeneratorRequestView.m */; };
 		4F151F211B1CCA6200C8F767 /* NIBBVolumeDataProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F1B1B1CCA6200C8F767 /* NIBBVolumeDataProperties.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -39,19 +39,19 @@
 		4F151F371B1CCB6900C8F767 /* NIBBGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F351B1CCB6900C8F767 /* NIBBGeometry.m */; };
 		4F151F3E1B1CCB8E00C8F767 /* NIBBGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F381B1CCB8E00C8F767 /* NIBBGenerator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F3F1B1CCB8E00C8F767 /* NIBBGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F391B1CCB8E00C8F767 /* NIBBGenerator.m */; };
-		4F151F401B1CCB8E00C8F767 /* NIBBGeneratorOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F3A1B1CCB8E00C8F767 /* NIBBGeneratorOperation.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F401B1CCB8E00C8F767 /* NIBBGeneratorOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F3A1B1CCB8E00C8F767 /* NIBBGeneratorOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F411B1CCB8E00C8F767 /* NIBBGeneratorOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F3B1B1CCB8E00C8F767 /* NIBBGeneratorOperation.m */; };
 		4F151F421B1CCB8E00C8F767 /* NIBBGeneratorRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F3C1B1CCB8E00C8F767 /* NIBBGeneratorRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F431B1CCB8E00C8F767 /* NIBBGeneratorRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F3D1B1CCB8E00C8F767 /* NIBBGeneratorRequest.m */; };
-		4F151F4E1B1CCC0100C8F767 /* NIBBHorizontalFillOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F441B1CCC0100C8F767 /* NIBBHorizontalFillOperation.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F4E1B1CCC0100C8F767 /* NIBBHorizontalFillOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F441B1CCC0100C8F767 /* NIBBHorizontalFillOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F4F1B1CCC0100C8F767 /* NIBBHorizontalFillOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F451B1CCC0100C8F767 /* NIBBHorizontalFillOperation.m */; };
-		4F151F501B1CCC0100C8F767 /* NIBBObliqueSliceOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F461B1CCC0100C8F767 /* NIBBObliqueSliceOperation.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F501B1CCC0100C8F767 /* NIBBObliqueSliceOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F461B1CCC0100C8F767 /* NIBBObliqueSliceOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F511B1CCC0100C8F767 /* NIBBObliqueSliceOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F471B1CCC0100C8F767 /* NIBBObliqueSliceOperation.m */; };
-		4F151F521B1CCC0100C8F767 /* NIBBProjectionOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F481B1CCC0100C8F767 /* NIBBProjectionOperation.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F521B1CCC0100C8F767 /* NIBBProjectionOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F481B1CCC0100C8F767 /* NIBBProjectionOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F531B1CCC0100C8F767 /* NIBBProjectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F491B1CCC0100C8F767 /* NIBBProjectionOperation.m */; };
-		4F151F541B1CCC0100C8F767 /* NIBBStraightenedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F4A1B1CCC0100C8F767 /* NIBBStraightenedOperation.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F541B1CCC0100C8F767 /* NIBBStraightenedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F4A1B1CCC0100C8F767 /* NIBBStraightenedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F551B1CCC0100C8F767 /* NIBBStraightenedOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F4B1B1CCC0100C8F767 /* NIBBStraightenedOperation.m */; };
-		4F151F561B1CCC0100C8F767 /* NIBBStretchedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F4C1B1CCC0100C8F767 /* NIBBStretchedOperation.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F561B1CCC0100C8F767 /* NIBBStretchedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F4C1B1CCC0100C8F767 /* NIBBStretchedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F571B1CCC0100C8F767 /* NIBBStretchedOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F4D1B1CCC0100C8F767 /* NIBBStretchedOperation.m */; };
 		4F151F5A1B1CCC6D00C8F767 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F151F591B1CCC6D00C8F767 /* OpenGL.framework */; };
 		4F151F5C1B1CCC7600C8F767 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F151F5B1B1CCC7600C8F767 /* QuartzCore.framework */; };
@@ -337,8 +337,9 @@
 				4F151F781B1CD35600C8F767 /* NIBBUnsignedInt16ImageRep.h in Headers */,
 				4F151F361B1CCB6900C8F767 /* NIBBGeometry.h in Headers */,
 				4F151F711B1CCFDA00C8F767 /* NIBBBezierCoreAdditions.h in Headers */,
-				4F151F0B1B1CCA1400C8F767 /* NIBBAnnotationTextLayer.h in Headers */,
 				4F151F731B1CCFDA00C8F767 /* NIBBBezierPath.h in Headers */,
+				4F151F211B1CCA6200C8F767 /* NIBBVolumeDataProperties.h in Headers */,
+				4F151F0B1B1CCA1400C8F767 /* NIBBAnnotationTextLayer.h in Headers */,
 				4F151F501B1CCC0100C8F767 /* NIBBObliqueSliceOperation.h in Headers */,
 				4F151F091B1CCA1400C8F767 /* NIBBOrientationTextLayer.h in Headers */,
 				4F151F521B1CCC0100C8F767 /* NIBBProjectionOperation.h in Headers */,
@@ -353,7 +354,6 @@
 				4F151F561B1CCC0100C8F767 /* NIBBStretchedOperation.h in Headers */,
 				4F151F131B1CCA1400C8F767 /* NIBBIntersectionPrivate.h in Headers */,
 				4F151F071B1CCA1400C8F767 /* NIBBGeneratorRequestLayer.h in Headers */,
-				4F151F211B1CCA6200C8F767 /* NIBBVolumeDataProperties.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
