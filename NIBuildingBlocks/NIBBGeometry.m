@@ -922,9 +922,9 @@ bool NIBBAffineTransformMakeWithDictionaryRepresentation(CFDictionaryRef dict, N
 
     for (i = 0; i < 16; i++) {
         numbers[i] = CFDictionaryGetValue(dict, keys[i]);
-        CFRelease(keys[j]);
+        CFRelease(keys[i]);
         if (numbers[i] == NULL || CFGetTypeID(numbers[i]) != CFNumberGetTypeID()) {
-            for (j = 0; j <= (numbers[i] == NULL ? i-1 : i); j++) {
+            for (j = i+1; j < 16; j++) {
                 CFRelease(keys[j]);
             }
             return false;
@@ -1161,9 +1161,9 @@ CFIndex findRealCubicRoots(CGFloat a, CGFloat b, CGFloat c, CGFloat d, CGFloat *
     }
 
 #if CGFLOAT_IS_DOUBLE
-    A = -1.0*copysign(pow(abs(R)+sqrt(R2-Q3), 1.0/3.0), R);
+    A = -1.0*copysign(pow(fabs(R)+sqrt(R2-Q3), 1.0/3.0), R);
 #else
-    A = -1.0*copysignf(powf(abs(R)+sqrtf(R2-Q3), 1.0/3.0), R);
+    A = -1.0*copysignf(powf(fabsf(R)+sqrtf(R2-Q3), 1.0/3.0), R);
 #endif
     if (A == 0) {
         B = 0;

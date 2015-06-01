@@ -22,15 +22,15 @@ NIBBBezierCoreRef NIBBBezierCoreCreateCurveWithNodes(NIBBVectorArray vectors, CF
 
 NIBBMutableBezierCoreRef NIBBBezierCoreCreateMutableCurveWithNodes(NIBBVectorArray vectors, CFIndex numVectors, NIBBBezierNodeStyle style)
 {
-	long long  i, j;
-	double xi, yi, zi;
-	long long nb;
-	double *px, *py, *pz;
+	NSInteger  i, j;
+	CGFloat xi, yi, zi;
+	NSInteger nb;
+	CGFloat *px, *py, *pz;
 	int ok;
     
-	double *a, b, *c, *cx, *cy, *cz, *d, *g, *h;
-	double bet, *gam;
-	double aax, bbx, ccx, ddx, aay, bby, ccy, ddy, aaz, bbz, ccz, ddz; // coef of spline
+	CGFloat *a, b, *c, *cx, *cy, *cz, *d, *g, *h;
+	CGFloat bet, *gam;
+	CGFloat aax, bbx, ccx, ddx, aay, bby, ccy, ddy, aaz, bbz, ccz, ddz; // coef of spline
     
     // get the new beziercore ready 
     NIBBMutableBezierCoreRef newBezierCore;
