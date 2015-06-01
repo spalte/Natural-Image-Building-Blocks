@@ -286,8 +286,8 @@ static NSOperationQueue *_straightenedOperationFillQueue = nil;
                 oustandingFillOperationCount = OSAtomicDecrement32Barrier(&_outstandingFillOperationCount);
                 if (oustandingFillOperationCount == 0) { // done with the fill operations, now do the projection
                     volumeTransform = NIBBAffineTransformMakeScale(1.0/_sampleSpacing, 1.0/_sampleSpacing, 1.0/[self _slabSampleDistance]);
-                    generatedVolume = [[NIBBVolumeData alloc] initWithFloatBytesNoCopy:_floatBytes pixelsWide:self.request.pixelsWide pixelsHigh:self.request.pixelsHigh pixelsDeep:[self _pixelsDeep]
-                                                                      volumeTransform:volumeTransform outOfBoundsValue:_volumeData.outOfBoundsValue freeWhenDone:YES];
+                    generatedVolume = [[NIBBVolumeData alloc] initWithBytesNoCopy:_floatBytes pixelsWide:self.request.pixelsWide pixelsHigh:self.request.pixelsHigh pixelsDeep:[self _pixelsDeep]
+                                                                  volumeTransform:volumeTransform outOfBoundsValue:_volumeData.outOfBoundsValue freeWhenDone:YES];
                     _floatBytes = NULL;
                     projectionOperation = [[NIBBProjectionOperation alloc] init];
 					[projectionOperation setQueuePriority:[self queuePriority]];

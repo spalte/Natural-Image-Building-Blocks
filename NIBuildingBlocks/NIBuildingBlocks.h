@@ -15,5 +15,17 @@ FOUNDATION_EXPORT double NIBuildingBlocksVersionNumber;
 FOUNDATION_EXPORT const unsigned char NIBuildingBlocksVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <NIBuildingBlocks/PublicHeader.h>
-
-
+#import <NIBuildingBlocks/NIBBGenerator.h>
+#import <NIBuildingBlocks/NIBBGeneratorRequestView.h>
+#import <NIBuildingBlocks/NIBBGeneratorRequest.h>
+#import <NIBuildingBlocks/NIBBBezierCore.h>
+#import <NIBuildingBlocks/NIBBVolumeData.h>
+#import <NIBuildingBlocks/NIBBSprite.h>
+#import <NIBuildingBlocks/NIBBIntersection.h>
+#import <NIBuildingBlocks/NIBBFloatImageRep.h>
+#import <NIBuildingBlocks/NIBBUnsignedInt16ImageRep.h>
+#import <NIBuildingBlocks/NIBBGeometry.h>
+#import <NIBuildingBlocks/NIBBBezierCoreAdditions.h>
+#import <NIBuildingBlocks/NIBBBezierPath.h>
+#import <NIBuildingBlocks/NIBBVolumeDataProperties.h>
+#import <NIBuildingBlocks/OsiriXIntegration.h>

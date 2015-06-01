@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface OsiriXIntegration : NSObject
+// call this function to add the methods below to OsiriX, returns 0 on success
+int NIBuildingBlocksInstallOsiriXCategories();
+
+// These methods will be added to OsiriX's ViewerController
+@interface NSObject (NIBuildingBlocksViewerControllerAdditions)
 
 @end

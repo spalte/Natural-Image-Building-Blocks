@@ -251,8 +251,8 @@ static NSOperationQueue *_obliqueSliceOperationFillQueue = nil;
                 oustandingFillOperationCount = OSAtomicDecrement32Barrier(&_oustandingFillOperationCount);
                 if (oustandingFillOperationCount == 0) { // done with the fill operations, now do the projection
                     volumeTransform = [self _generatedVolumeTransform];
-                    generatedVolume = [[NIBBVolumeData alloc] initWithFloatBytesNoCopy:_floatBytes pixelsWide:self.request.pixelsWide pixelsHigh:self.request.pixelsHigh pixelsDeep:[self _pixelsDeep]
-                                                                      volumeTransform:volumeTransform outOfBoundsValue:_volumeData.outOfBoundsValue freeWhenDone:YES];
+                    generatedVolume = [[NIBBVolumeData alloc] initWithBytesNoCopy:_floatBytes pixelsWide:self.request.pixelsWide pixelsHigh:self.request.pixelsHigh pixelsDeep:[self _pixelsDeep]
+                                                                  volumeTransform:volumeTransform outOfBoundsValue:_volumeData.outOfBoundsValue freeWhenDone:YES];
                     _floatBytes = NULL;
                     projectionOperation = [[NIBBProjectionOperation alloc] init];
 					[projectionOperation setQueuePriority:[self queuePriority]];

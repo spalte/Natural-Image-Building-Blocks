@@ -1,16 +1,16 @@
 /*=========================================================================
-  Program:   OsiriX
+ Program:   OsiriX
 
-  Copyright (c) OsiriX Team
-  All rights reserved.
-  Distributed under GNU - LGPL
-  
-  See http://www.osirix-viewer.com/copyright.html for details.
+ Copyright (c) OsiriX Team
+ All rights reserved.
+ Distributed under GNU - LGPL
 
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.
-=========================================================================*/
+ See http://www.osirix-viewer.com/copyright.html for details.
+
+ This software is distributed WITHOUT ANY WARRANTY; without even
+ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ PURPOSE.
+ =========================================================================*/
 
 #import <Cocoa/Cocoa.h>
 
@@ -19,8 +19,8 @@ enum _NIBBProjectionMode {
     NIBBProjectionModeMIP,
     NIBBProjectionModeMinIP,
     NIBBProjectionModeMean,
-	
-	NIBBProjectionModeNone = 0xFFFFFF,
+
+    NIBBProjectionModeNone = 0xFFFFFF,
 };
 typedef NSInteger NIBBProjectionMode;
 
@@ -31,7 +31,7 @@ typedef NSInteger NIBBProjectionMode;
 @interface NIBBProjectionOperation : NSOperation {
     NIBBVolumeData *_volumeData;
     NIBBVolumeData *_generatedVolume;
-    
+
     NIBBProjectionMode _projectionMode;
 }
 
