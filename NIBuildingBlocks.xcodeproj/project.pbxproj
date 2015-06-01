@@ -77,7 +77,7 @@
 /* Begin PBXFileReference section */
 		4F151EDB1B1CC8D000C8F767 /* NIBuildingBlocks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NIBuildingBlocks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F151EDF1B1CC8D000C8F767 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4F151EE01B1CC8D000C8F767 /* NIBuildingBlocks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NIBuildingBlocks.h; sourceTree = "<group>"; };
+		4F151EE01B1CC8D000C8F767 /* NIBuildingBlocks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NIBuildingBlocks.h; path = NIBuildingBlocks/NIBuildingBlocks.h; sourceTree = "<group>"; };
 		4F151EF81B1CCA1400C8F767 /* NIBBGeneratorRequestLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIBBGeneratorRequestLayer.h; sourceTree = "<group>"; };
 		4F151EF91B1CCA1400C8F767 /* NIBBGeneratorRequestLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIBBGeneratorRequestLayer.m; sourceTree = "<group>"; };
 		4F151EFA1B1CCA1400C8F767 /* NIBBOrientationTextLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIBBOrientationTextLayer.h; sourceTree = "<group>"; };
@@ -163,6 +163,7 @@
 		4F151ED11B1CC8D000C8F767 = {
 			isa = PBXGroup;
 			children = (
+				4F151EE01B1CC8D000C8F767 /* NIBuildingBlocks.h */,
 				4F151EDD1B1CC8D000C8F767 /* NIBuildingBlocks */,
 				4F151EDC1B1CC8D000C8F767 /* Products */,
 			);
@@ -187,7 +188,6 @@
 				4F151F1A1B1CCA3000C8F767 /* NIBBGeneratorRequestView */,
 				4F151F7B1B1CD3F800C8F767 /* Goodies */,
 				4F151F631B1CCEE100C8F767 /* OsiriX Integration */,
-				4F151EE01B1CC8D000C8F767 /* NIBuildingBlocks.h */,
 				4F151EDE1B1CC8D000C8F767 /* Supporting Files */,
 			);
 			path = NIBuildingBlocks;
