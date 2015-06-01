@@ -48,7 +48,9 @@ int NIBuildingBlocksInstallOsiriXCategories()
     }
 
     Method NIBBVolumeDataForMovieIndexMethod = class_getInstanceMethod([ViewerController_NIBB class], @selector(NIBBVolumeDataForMovieIndex:));
-    class_addMethod(ViewerControllerClass, @selector(NIBBVolumeDataForMovieIndex:), method_getImplementation(NIBBVolumeDataForMovieIndexMethod), method_getTypeEncoding(NIBBVolumeDataForMovieIndexMethod));
+    if (class_getInstanceMethod(ViewerControllerClass, @selector(NIBBVolumeDataForMovieIndex:)) == NULL) {
+        class_addMethod(ViewerControllerClass, @selector(NIBBVolumeDataForMovieIndex:), method_getImplementation(NIBBVolumeDataForMovieIndexMethod), method_getTypeEncoding(NIBBVolumeDataForMovieIndexMethod));
+    }
 
     return 0;
 }
