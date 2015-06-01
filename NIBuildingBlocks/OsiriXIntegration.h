@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+@class NIBBVolumeData;
+
 // call this function to add the methods below to OsiriX, returns 0 on success
 int NIBuildingBlocksInstallOsiriXCategories();
 
 // These methods will be added to OsiriX's ViewerController
 @interface NSObject (NIBuildingBlocksViewerControllerAdditions)
-
+- (NIBBVolumeData *)NIBBVolumeDataForMovieIndex:(NSUInteger)movieIndex;
 @end

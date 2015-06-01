@@ -22,12 +22,13 @@
 //  THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-
-#import "NIBBObliqueSliceIntersectionLayer.h"
+#import <QuartzCore/QuartzCore.h>
+#import <Cocoa/Cocoa.h>
 
 @class NIBBGeneratorRequest;
 @class NIBBGeneratorRequestView;
 @class NIBBObliqueSliceIntersectionLayer;
+@protocol NIBBSliceIntersectionLayer;
 
 // This class will manage the layer
 @interface NIBBIntersection : NSObject

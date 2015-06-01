@@ -13,16 +13,7 @@
  =========================================================================*/
 
 #import <Cocoa/Cocoa.h>
-
-enum _NIBBProjectionMode {
-    NIBBProjectionModeVR, // don't use this, it is not implemented
-    NIBBProjectionModeMIP,
-    NIBBProjectionModeMinIP,
-    NIBBProjectionModeMean,
-
-    NIBBProjectionModeNone = 0xFFFFFF,
-};
-typedef NSInteger NIBBProjectionMode;
+#import "NIBBGeneratorRequest.h"
 
 @class NIBBVolumeData;
 

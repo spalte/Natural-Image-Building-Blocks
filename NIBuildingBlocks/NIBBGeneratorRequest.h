@@ -15,7 +15,16 @@
 #import <Cocoa/Cocoa.h>
 #import "NIBBGeometry.h"
 #import "NIBBVolumeData.h"
-#import "NIBBProjectionOperation.h"
+
+typedef NS_ENUM(NSInteger, NIBBProjectionMode)
+{
+    NIBBProjectionModeVR, // don't use this, it is not implemented
+    NIBBProjectionModeMIP,
+    NIBBProjectionModeMinIP,
+    NIBBProjectionModeMean,
+
+    NIBBProjectionModeNone = 0xFFFFFF,
+};
 
 // a class to encapsulate all the different parameters required to generate a NIBB Image
 // still working on how to engineer this, it this version sticks, this will be broken up into two files
@@ -68,7 +77,7 @@
     NIBBBezierPath *_bezierPath;
     NIBBVector _initialNormal;
 
-    NIBBProjectionMode _projectionMode;
+    enum NIBBProjectionMode _projectionMode;
     //    BOOL _vertical; // it would be cool to implement this one day
 }
 

@@ -25,6 +25,7 @@
 #import "NIBBIntersectionPrivate.h"
 #import "NIBBGeneratorRequest.h"
 #import "NIBBGeometry.h"
+#import "NIBBObliqueSliceIntersectionLayer.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface NIBBIntersection ()
