@@ -27,7 +27,7 @@
 @synthesize blockGeneratorRequestUpdates = _blockGeneratorRequestUpdates;
 @synthesize track = _track;
 @synthesize flags = _flags;
-@synthesize ltool = _ltool, rtool = _rtool;
+@synthesize ltool = _ltool, rtool = _rtool, ltoolOnDoubleClick = _ltoolOnDoubleClick;
 @synthesize mouseDown = _mouseDown;
 
 - (instancetype)initWithFrame:(NSRect)frameRect {
@@ -47,6 +47,7 @@
 }
 
 - (void)initialize {
+//    self.latestMouseDownEvents = [NSMutableArray array];
     [self addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"data" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"windowLevel" options:0 context:NIMPRView.class];
@@ -78,10 +79,11 @@
     [self removeObserver:self forKeyPath:@"data" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"frame" context:NIMPRView.class];
     self.data = nil;
-    self.ltool = self.rtool = nil;
+    self.ltool = self.rtool = self.ltoolOnDoubleClick = nil;
     self.menu = nil;
     self.normal = self.xdir = self.ydir = self.reference = nil;
     self.track = nil;
+//    self.latestMouseDownEvents = nil;
     [super dealloc];
 }
 

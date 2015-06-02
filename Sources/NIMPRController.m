@@ -161,6 +161,10 @@
         [view rotateToInitial];
 }
 
+- (void)moveToInitial {
+    self.point = NIVectorApplyTransform(NIVectorMake(self.data.pixelsWide/2, self.data.pixelsHigh/2, self.data.pixelsDeep/2), NIAffineTransformInvert(self.data.volumeTransform));
+}
+
 - (void)reset {
     NIMPRQuaternion* x = self.x = [NIMPRQuaternion quaternion:NIVectorApplyTransformToDirectionalVector(NIVectorMake(1,0,0), self.data.volumeTransform)];
     NIMPRQuaternion* y = self.y = [NIMPRQuaternion quaternion:NIVectorApplyTransformToDirectionalVector(NIVectorMake(0,1,0), self.data.volumeTransform)];
@@ -170,7 +174,7 @@
     [self.sagittalView setNormal:[z.copy autorelease]:[x.copy autorelease]:[y.copy autorelease] reference:x];
     [self.coronalView setNormal:[y.copy autorelease]:[x.copy autorelease]:[z.copy autorelease] reference:x];
     
-    self.point = NIVectorApplyTransform(NIVectorMake(self.data.pixelsWide/2, self.data.pixelsHigh/2, self.data.pixelsDeep/2), NIAffineTransformInvert(self.data.volumeTransform));
+    [self moveToInitial];
     
     self.windowLevel = self.initialWindowLevel;
     self.windowWidth = self.initialWindowWidth;

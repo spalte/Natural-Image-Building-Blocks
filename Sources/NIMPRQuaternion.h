@@ -14,6 +14,10 @@
 + (instancetype)quaternion:(NIVector)vector;
 + (instancetype)quaternion:(CGFloat)x :(CGFloat)y :(CGFloat)z;
 
+#ifndef NIMPRQuaternion_Private
+- (instancetype)init UNAVAILABLE_ATTRIBUTE;
+#endif
+
 - (NIVector)vector;
 - (void)rotate:(CGFloat)rads axis:(NIVector)axis;
 

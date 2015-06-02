@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 volz.io. All rights reserved.
 //
 
+#define NIMPRQuaternion_Private
+
 #import "NIMPRQuaternion.h"
 
 namespace NIMPR {

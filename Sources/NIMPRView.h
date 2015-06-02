@@ -28,7 +28,8 @@
     NSTrackingArea* _track;
     NIMPRFlags _flags;
     NSMenu* _menu;
-    id <NIMPRTool> _ltool, _rtool;
+    id <NIMPRTool> _ltool, _rtool, _ltoolOnDoubleClick;
+//    NSMutableArray* _latestMouseDownEvents;
     CGFloat _slabWidth;
     BOOL _mouseDown;
 }

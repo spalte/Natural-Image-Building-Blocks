@@ -25,9 +25,12 @@
     if ([ssel hasPrefix:@"rightMouse"] || [ssel hasPrefix:@"otherMouse"])
         ssel = [@"mouse" stringByAppendingString:[ssel substringFromIndex:NSMaxRange([ssel rangeOfString:@"Mouse"])]];
     
-    if ([ssel isEqualToString:@"mouseDown:"])
+    if ([ssel isEqualToString:@"mouseDown:"]) {
         self.mouseDown = YES;
-    else if ([ssel isEqualToString:@"mouseUp:"])
+//        [self.latestMouseDownEvents insertObject:event atIndex:0];
+//        if (self.latestMouseDownEvents.count > 3)
+//            [self.latestMouseDownEvents removeObjectAtIndex:3];
+    } else if ([ssel isEqualToString:@"mouseUp:"])
         self.mouseDown = NO;
     
 //    NSLog(@"%@ %d", ssel, self.mouseDown);
@@ -66,13 +69,21 @@
         NIMPRView* view = [[self.window.contentView hitTest:event.locationInWindow] if:NIMPRView.class];
         if (view != self)
             [view hover:event location:[view convertPoint:event.locationInWindow fromView:nil]];
-        else
-            if (NSEqualPoints(self.ltool.mouseDownEvent.locationInWindow, event.locationInWindow)) {
-                if (event.clickCount == 2)
-                    [self rotateToInitial];
-                else if (event.clickCount == 3)
-                    [self.window.windowController rotateToInitial];
+        else {
+            if (event.clickCount == 2)
+                self.ltoolOnDoubleClick = self.ltool;
+            if (event.clickCount >= 2) {
+                if ([self.ltoolOnDoubleClick isKindOfClass:NIMPRRotateTool.class]) {
+                    if (event.clickCount == 2)
+                        [self rotateToInitial];
+                    else if (event.clickCount == 3)
+                        [self.window.windowController rotateToInitial];
+                } else if ([self.ltoolOnDoubleClick isKindOfClass:NIMPRMoveTool.class]) {
+                    if (event.clickCount == 2)
+                        [self.window.windowController moveToInitial];
+                }
             }
+        }
     }];
 }
 

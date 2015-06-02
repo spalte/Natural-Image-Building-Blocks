@@ -75,6 +75,7 @@ typedef NS_OPTIONS(NSUInteger, NIMPRFlags) {
 
 - (void)rotate:(CGFloat)rads axis:(NIVector)axis excluding:(NIMPRView*)view;
 - (void)rotateToInitial;
+- (void)moveToInitial;
 - (void)reset;
 
 @end
