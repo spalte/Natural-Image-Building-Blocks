@@ -159,6 +159,48 @@
     }
 }
 
+- (NIVector)origin
+{
+    NIAffineTransform inverseTransform = NIAffineTransformInvert(_volumeTransform);
+    return NIVectorMake(inverseTransform.m41, inverseTransform.m42, inverseTransform.m43);
+}
+
+- (NIVector)directionX
+{
+    NIAffineTransform inverseTransform;
+
+    if (self.rectilinear) {
+        return NIVectorXBasis;
+    } else {
+        inverseTransform = NIAffineTransformInvert(_volumeTransform);
+        return NIVectorNormalize(NIVectorMake(inverseTransform.m11, inverseTransform.m12, inverseTransform.m13));
+    }
+}
+
+- (NIVector)directionY
+{
+    NIAffineTransform inverseTransform;
+
+    if (self.rectilinear) {
+        return NIVectorYBasis;
+    } else {
+        inverseTransform = NIAffineTransformInvert(_volumeTransform);
+        return NIVectorNormalize(NIVectorMake(inverseTransform.m21, inverseTransform.m22, inverseTransform.m23));
+    }
+}
+
+- (NIVector)directionZ
+{
+    NIAffineTransform inverseTransform;
+
+    if (self.rectilinear) {
+        return NIVectorZBasis;
+    } else {
+        inverseTransform = NIAffineTransformInvert(_volumeTransform);
+        return NIVectorNormalize(NIVectorMake(inverseTransform.m31, inverseTransform.m32, inverseTransform.m33));
+    }
+}
+
 - (float *)floatBytes
 {
     return (float *)[_floatData bytes];
@@ -255,39 +297,35 @@
     return [sliceVolume autorelease];
 }
 
-- (BOOL)getFloat:(float *)floatPtr atPixelCoordinateX:(NSUInteger)x y:(NSUInteger)y z:(NSUInteger)z
+- (CGFloat)floatAtPixelCoordinateX:(NSUInteger)x y:(NSUInteger)y z:(NSUInteger)z
 {
     NIVolumeDataInlineBuffer inlineBuffer;
 
     [self aquireInlineBuffer:&inlineBuffer];
-    *floatPtr = NIVolumeDataGetFloatAtPixelCoordinate(&inlineBuffer, x, y, z);
-    return YES;
+    return NIVolumeDataGetFloatAtPixelCoordinate(&inlineBuffer, x, y, z);
 }
 
-- (BOOL)getLinearInterpolatedFloat:(float *)floatPtr atDicomVector:(NIVector)vector
+- (CGFloat)linearInterpolatedFloatAtDicomVector:(NIVector)vector
 {
     NIVolumeDataInlineBuffer inlineBuffer;
     [self aquireInlineBuffer:&inlineBuffer];
-    *floatPtr = NIVolumeDataLinearInterpolatedFloatAtDicomVector(&inlineBuffer, vector);
-    return YES;
+    return NIVolumeDataLinearInterpolatedFloatAtDicomVector(&inlineBuffer, vector);
 }
 
-- (BOOL)getNearestNeighborInterpolatedFloat:(float *)floatPtr atDicomVector:(NIVector)vector
+- (CGFloat)nearestNeighborInterpolatedFloatAtDicomVector:(NIVector)vector
 {
     NIVolumeDataInlineBuffer inlineBuffer;
 
     [self aquireInlineBuffer:&inlineBuffer];
-    *floatPtr = NIVolumeDataNearestNeighborInterpolatedFloatAtDicomVector(&inlineBuffer, vector);
-    return YES;
+    return NIVolumeDataNearestNeighborInterpolatedFloatAtDicomVector(&inlineBuffer, vector);
 }
 
-- (BOOL)getCubicInterpolatedFloat:(float *)floatPtr atDicomVector:(NIVector)vector
+- (CGFloat)cubicInterpolatedFloatAtDicomVector:(NIVector)vector
 {
     NIVolumeDataInlineBuffer inlineBuffer;
 
     [self aquireInlineBuffer:&inlineBuffer];
-    *floatPtr = NIVolumeDataCubicInterpolatedFloatAtDicomVector(&inlineBuffer, vector);
-    return YES;
+    return NIVolumeDataCubicInterpolatedFloatAtDicomVector(&inlineBuffer, vector);
 }
 
 

@@ -86,17 +86,22 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 @property (readonly) CGFloat pixelSpacingY;
 @property (readonly) CGFloat pixelSpacingZ;
 
+@property (readonly) NIVector origin;
+@property (readonly) NIVector directionX;
+@property (readonly) NIVector directionY;
+@property (readonly) NIVector directionZ;
+
 @property (readonly) float outOfBoundsValue;
 
 @property (readonly) NIAffineTransform volumeTransform; // volumeTransform is the transform from Dicom (patient) space to pixel data
 
-@property (nonatomic, readonly, getter = isCurved) BOOL curved; // if the volume is curved the volumeTransform will be bogus, but the following properties will still work
-@property (nonatomic, readonly, copy) NIVector (^convertVolumeVectorToDICOMVectorBlock)(NIVector);
-@property (nonatomic, readonly, copy) NIVector (^convertVolumeVectorFromDICOMVectorBlock)(NIVector);
+@property (readonly, getter = isCurved) BOOL curved; // if the volume is curved the volumeTransform will be bogus, but the following properties will still work
+@property (readonly, copy) NIVector (^convertVolumeVectorToDICOMVectorBlock)(NIVector);
+@property (readonly, copy) NIVector (^convertVolumeVectorFromDICOMVectorBlock)(NIVector);
 
 - (NIVector)convertVolumeVectorToDICOMVector:(NIVector)vector;
 - (NIVector)convertVolumeVectorFromDICOMVector:(NIVector)vector;
-@property (nonatomic, readonly, retain) NSData *floatData;
+@property (readonly, retain) NSData *floatData;
 
 // will copy fill length*sizeof(float) bytes, the coordinates better be within the volume!!!
 // a run a is a series of pixels in the x direction
@@ -114,10 +119,10 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 - (instancetype)volumeDataResampledWithVolumeTransform:(NIAffineTransform)transform pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
                                      interpolationMode:(NIInterpolationMode)interpolationsMode;
 
-- (BOOL)getFloat:(float *)floatPtr atPixelCoordinateX:(NSUInteger)x y:(NSUInteger)y z:(NSUInteger)z; // returns YES if the float was sucessfully gotten
-- (BOOL)getLinearInterpolatedFloat:(float *)floatPtr atDicomVector:(NIVector)vector; // these are slower, use the inline buffer if you care about speed
-- (BOOL)getNearestNeighborInterpolatedFloat:(float *)floatPtr atDicomVector:(NIVector)vector; // these are slower, use the inline buffer if you care about speed
-- (BOOL)getCubicInterpolatedFloat:(float *)floatPtr atDicomVector:(NIVector)vector; // these are slower, use the inline buffer if you care about speed
+- (CGFloat)floatAtPixelCoordinateX:(NSUInteger)x y:(NSUInteger)y z:(NSUInteger)z;
+- (CGFloat)linearInterpolatedFloatAtDicomVector:(NIVector)vector; // these are slower, use the inline buffer if you care about speed
+- (CGFloat)nearestNeighborInterpolatedFloatAtDicomVector:(NIVector)vector; // these are slower, use the inline buffer if you care about speed
+- (CGFloat)cubicInterpolatedFloatAtDicomVector:(NIVector)vector; // these are slower, use the inline buffer if you care about speed
 
 - (BOOL)aquireInlineBuffer:(NIVolumeDataInlineBuffer *)inlineBuffer; // always return YES
 

@@ -267,12 +267,10 @@
 {
     NSAssert(self == [self modelLayer], @"_updateCubic not called on the model layer");
 
-    if ([_volumeData respondsToSelector:@selector(getCubicInterpolatedFloat:atDicomVector:)]) { // make sure this version of OsiriX supports cubic interpolation
-        NIGeneratorRequest *cubicRequest = [[self.presentedGeneratorRequest copy] autorelease];
-        if (cubicRequest) {
-            cubicRequest.interpolationMode = NIInterpolationModeCubic;
-            [_cubicGenerator requestVolume:cubicRequest];
-        }
+    NIGeneratorRequest *cubicRequest = [[self.presentedGeneratorRequest copy] autorelease];
+    if (cubicRequest) {
+        cubicRequest.interpolationMode = NIInterpolationModeCubic;
+        [_cubicGenerator requestVolume:cubicRequest];
     }
 }
 
