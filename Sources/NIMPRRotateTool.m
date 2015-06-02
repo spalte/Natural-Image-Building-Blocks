@@ -43,3 +43,12 @@
 }
 
 @end
+
+@implementation NIMPRRotateAxisTool
+
+- (void)view:(NIMPRView*)view rotate:(CGFloat)rads {
+    [view.window.windowController rotate:rads axis:view.normal.vector excluding:view];
+}
+
+@end
+

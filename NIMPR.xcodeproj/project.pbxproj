@@ -13,7 +13,6 @@
 		713341301B147E360014CE09 /* NIMPRMoveTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 7133412F1B147E360014CE09 /* NIMPRMoveTool.m */; };
 		713341331B147E810014CE09 /* NIMPRZoomTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 713341321B147E810014CE09 /* NIMPRZoomTool.m */; };
 		713341361B147E910014CE09 /* NIMPRRotateTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 713341351B147E910014CE09 /* NIMPRRotateTool.m */; };
-		7133413D1B14E01C0014CE09 /* NIMPRRotateAxisTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 7133413C1B14E01C0014CE09 /* NIMPRRotateAxisTool.m */; };
 		713341401B15A4FA0014CE09 /* NIMPRView+Events.m in Sources */ = {isa = PBXBuildFile; fileRef = 7133413F1B15A4FA0014CE09 /* NIMPRView+Events.m */; };
 		713341441B15F3000014CE09 /* +NIMPR.m in Sources */ = {isa = PBXBuildFile; fileRef = 713341431B15F3000014CE09 /* +NIMPR.m */; };
 		713341461B163E500014CE09 /* NIMPR.xib in Resources */ = {isa = PBXBuildFile; fileRef = 713341451B163E500014CE09 /* NIMPR.xib */; };
@@ -63,8 +62,6 @@
 		713341341B147E910014CE09 /* NIMPRRotateTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIMPRRotateTool.h; path = Sources/NIMPRRotateTool.h; sourceTree = "<group>"; };
 		713341351B147E910014CE09 /* NIMPRRotateTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NIMPRRotateTool.m; path = Sources/NIMPRRotateTool.m; sourceTree = "<group>"; };
 		713341371B1483B90014CE09 /* NIMPRController+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NIMPRController+Private.h"; path = "Sources/NIMPRController+Private.h"; sourceTree = "<group>"; };
-		7133413B1B14E01C0014CE09 /* NIMPRRotateAxisTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIMPRRotateAxisTool.h; path = Sources/NIMPRRotateAxisTool.h; sourceTree = "<group>"; };
-		7133413C1B14E01C0014CE09 /* NIMPRRotateAxisTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NIMPRRotateAxisTool.m; path = Sources/NIMPRRotateAxisTool.m; sourceTree = "<group>"; };
 		7133413E1B15A4FA0014CE09 /* NIMPRView+Events.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NIMPRView+Events.h"; path = "Sources/NIMPRView+Events.h"; sourceTree = "<group>"; };
 		7133413F1B15A4FA0014CE09 /* NIMPRView+Events.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NIMPRView+Events.m"; path = "Sources/NIMPRView+Events.m"; sourceTree = "<group>"; };
 		713341411B15A8C90014CE09 /* NIMPRView+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NIMPRView+Private.h"; path = "Sources/NIMPRView+Private.h"; sourceTree = "<group>"; };
@@ -127,8 +124,6 @@
 				713341321B147E810014CE09 /* NIMPRZoomTool.m */,
 				713341341B147E910014CE09 /* NIMPRRotateTool.h */,
 				713341351B147E910014CE09 /* NIMPRRotateTool.m */,
-				7133413B1B14E01C0014CE09 /* NIMPRRotateAxisTool.h */,
-				7133413C1B14E01C0014CE09 /* NIMPRRotateAxisTool.m */,
 			);
 			name = Tools;
 			sourceTree = "<group>";
@@ -333,7 +328,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				71B249301B18886F00F8E0AD /* NIMPRWindow.m in Sources */,
-				7133413D1B14E01C0014CE09 /* NIMPRRotateAxisTool.m in Sources */,
 				7133412D1B147E0A0014CE09 /* NIMPRTool.m in Sources */,
 				719CC53E1B0E039E00DC1ED5 /* NSMenu+NIMPR.m in Sources */,
 				719D02AA1AC1D367002F76C1 /* NIMPRPlugin.m in Sources */,

@@ -13,3 +13,7 @@
 - (void)view:(NIMPRView*)view rotate:(CGFloat)rads;
 
 @end
+
+@interface NIMPRRotateAxisTool : NIMPRRotateTool
+
+@end

@@ -12,7 +12,6 @@
 #import "NIMPRMoveTool.h"
 #import "NIMPRZoomTool.h"
 #import "NIMPRRotateTool.h"
-#import "NIMPRRotateAxisTool.h"
 #import <NIBuildingBlocks/NIIntersection.h>
 #import <NIBuildingBlocks/NIGeneratorRequest.h>
 

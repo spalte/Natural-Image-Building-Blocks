@@ -10,22 +10,7 @@
 #import "NIMPRView.h"
 #import <NIBuildingBlocks/NIIntersection.h>
 
-/*@interface NIMPRWLWWTool ()
-
-@property CGFloat mouseDownWindowLevel, mouseDownWindowWidth;
-
-@end*/
-
 @implementation NIMPRWLWWTool
-
-//@synthesize mouseDownWindowLevel = _mouseDownWindowLevel, mouseDownWindowWidth = _mouseDownWindowWidth;
-
-//- (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event or:(void(^)())or {
-//    return [super view:view mouseDown:event or:or confirm:^{
-//        self.mouseDownWindowLevel = view.windowLevel;
-//        self.mouseDownWindowWidth = view.windowWidth;
-//    }];
-//}
 
 - (BOOL)view:(NIMPRView*)view move:(NSPoint)ldelta vector:(NIVector)deltaVector {
     [CATransaction begin];
@@ -34,7 +19,7 @@
     CGFloat step = fmax(view.windowWidth/100, 0.01);
     CGFloat windowLevel = view.windowLevel + ldelta.y*step;
     CGFloat windowWidth = fmax(view.windowWidth + ldelta.x*step, 0.01);
-    NSLog(@"WLWW %f %f", windowLevel, windowWidth);
+//    NSLog(@"WLWW %f %f", windowLevel, windowWidth);
     
     if ([view.window.windowController respondsToSelector:@selector(setWindowLevel:)] && [view.window.windowController respondsToSelector:@selector(setWindowWidth:)]) {
         [view.window.windowController setWindowLevel:windowLevel];

@@ -10,7 +10,6 @@
 #import "NIMPRView+Events.h"
 #import "NIMPRMoveTool.h"
 #import "NIMPRRotateTool.h"
-#import "NIMPRRotateAxisTool.h"
 #import "NIMPRZoomTool.h"
 #import <NIBuildingBlocks/NIIntersection.h>
 #import "NIMPRController.h"
