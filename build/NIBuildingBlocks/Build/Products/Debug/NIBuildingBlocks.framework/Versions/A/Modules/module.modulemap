@@ -1,0 +1,6 @@
+framework module NIBuildingBlocks {
+  umbrella header "NIBuildingBlocks.h"
+
+  export *
+  module * { export * }
+}

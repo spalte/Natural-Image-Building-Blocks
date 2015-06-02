@@ -1,5 +1,7 @@
-//  Created by Joël Spaltenstein on 6/1/15.
+//  Created by Joël Spaltenstein on 4/19/15.
 //  Copyright (c) 2015 Spaltenstein Natural Image
+//  Copyright (c) 2015 Michael Hilker and Andreas Holzamer
+//  Copyright (c) 2015 volz io
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -19,14 +21,16 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+#import <QuartzCore/QuartzCore.h>
 
-@class NIVolumeData;
+#import "NIGeometry.h"
+#import "NIAnnotationTextLayer.h"
 
-// call this function to add the methods below to OsiriX, returns 0 on success
-int NIBuildingBlocksInstallOsiriXCategories();
+@interface NIOrientationTextLayer : NIAnnotationTextLayer
+{
+    NIVector _orientationVector;
+}
 
-// These methods will be added to OsiriX's ViewerController
-@interface NSObject (NIBuildingBlocksViewerControllerAdditions)
-- (NIVolumeData *)NIVolumeDataForMovieIndex:(NSUInteger)movieIndex;
+@property (nonatomic, readwrite, assign) NIVector orientationVector;
+
 @end

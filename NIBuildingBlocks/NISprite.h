@@ -1,5 +1,7 @@
-//  Created by Joël Spaltenstein on 6/1/15.
+//  Created by Joël Spaltenstein on 4/26/15.
 //  Copyright (c) 2015 Spaltenstein Natural Image
+//  Copyright (c) 2015 Michael Hilker and Andreas Holzamer
+//  Copyright (c) 2015 volz io
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -19,14 +21,28 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+
 #import <Foundation/Foundation.h>
+#import <QuartzCore/QuartzCore.h>
+#import <Cocoa/Cocoa.h>
 
-@class NIVolumeData;
+extern NSString* const NIMouseBullsEyeSprite;
 
-// call this function to add the methods below to OsiriX, returns 0 on success
-int NIBuildingBlocksInstallOsiriXCategories();
+@class NIGeneratorRequestView;
 
-// These methods will be added to OsiriX's ViewerController
-@interface NSObject (NIBuildingBlocksViewerControllerAdditions)
-- (NIVolumeData *)NIVolumeDataForMovieIndex:(NSUInteger)movieIndex;
+@interface NISprite : NSObject
+{
+@private
+    NIGeneratorRequestView *_generatorRequestView; // not retained
+    CALayer *_layer;
+
+    BOOL _hidden;
+}
+
++ (instancetype)spriteWithName:(NSString *)spriteName;
+
+@property (nonatomic, readwrite, retain) NSColor *color;
+@property (nonatomic, readwrite, assign) NSPoint position;
+@property (nonatomic, readwrite, assign, getter=isHidden) BOOL hidden;
+
 @end

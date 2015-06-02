@@ -1,4 +1,4 @@
-//  Created by Joël Spaltenstein on 6/1/15.
+//  Copyright (c) 2015 OsiriX Foundation
 //  Copyright (c) 2015 Spaltenstein Natural Image
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,14 +19,24 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+#import <Cocoa/Cocoa.h>
+#import "NIGeneratorOperation.h"
+#import "NIGeneratorRequest.h"
 
-@class NIVolumeData;
+@interface NIObliqueSliceOperation : NIGeneratorOperation {
+    volatile int32_t _oustandingFillOperationCount __attribute__ ((aligned (4)));
 
-// call this function to add the methods below to OsiriX, returns 0 on success
-int NIBuildingBlocksInstallOsiriXCategories();
+    float *_floatBytes;
+    NSMutableSet *_fillOperations;
+    NSOperation *_projectionOperation;
 
-// These methods will be added to OsiriX's ViewerController
-@interface NSObject (NIBuildingBlocksViewerControllerAdditions)
-- (NIVolumeData *)NIVolumeDataForMovieIndex:(NSUInteger)movieIndex;
+    BOOL _operationExecuting;
+    BOOL _operationFinished;
+    BOOL _operationFailed;    
+}
+
+- (id)initWithRequest:(NIObliqueSliceGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData;
+
+@property (readonly) NIObliqueSliceGeneratorRequest *request;
+
 @end

@@ -1,4 +1,4 @@
-//  Created by Joël Spaltenstein on 6/1/15.
+//  Copyright (c) 2015 OsiriX Foundation
 //  Copyright (c) 2015 Spaltenstein Natural Image
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,14 +19,39 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+#import "NIGeneratorOperation.h"
 
-@class NIVolumeData;
 
-// call this function to add the methods below to OsiriX, returns 0 on success
-int NIBuildingBlocksInstallOsiriXCategories();
+@implementation NIGeneratorOperation
 
-// These methods will be added to OsiriX's ViewerController
-@interface NSObject (NIBuildingBlocksViewerControllerAdditions)
-- (NIVolumeData *)NIVolumeDataForMovieIndex:(NSUInteger)movieIndex;
+@synthesize request = _request;
+@synthesize volumeData = _volumeData;
+@synthesize generatedVolume = _generatedVolume;
+
+- (id)initWithRequest:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData;
+{
+    if ( (self = [super init]) ) {
+        _request = [request retain];
+        _volumeData = [volumeData retain];
+    }
+    return self;
+}
+
+- (void)dealloc
+{
+    [_volumeData release];
+    _volumeData = nil;
+    [_request release];
+    _request = nil;
+    [_generatedVolume release];
+    _generatedVolume = nil;
+    [super dealloc];
+}
+
+- (BOOL)didFail
+{
+    return NO;
+}
+
+
 @end

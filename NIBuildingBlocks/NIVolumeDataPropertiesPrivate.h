@@ -1,4 +1,5 @@
-//  Created by Joël Spaltenstein on 6/1/15.
+//  Created by Joël Spaltenstein on 5/27/15.
+//  Copyright (c) 2015 volz io
 //  Copyright (c) 2015 Spaltenstein Natural Image
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,14 +20,11 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+#import "NIVolumeDataProperties.h"
 
-@class NIVolumeData;
+@interface NIVolumeDataProperties (Private)
 
-// call this function to add the methods below to OsiriX, returns 0 on success
-int NIBuildingBlocksInstallOsiriXCategories();
+@property (nonatomic, readwrite, assign) NIGeneratorRequestLayer *generatorRequestLayer;
 
-// These methods will be added to OsiriX's ViewerController
-@interface NSObject (NIBuildingBlocksViewerControllerAdditions)
-- (NIVolumeData *)NIVolumeDataForMovieIndex:(NSUInteger)movieIndex;
 @end
+

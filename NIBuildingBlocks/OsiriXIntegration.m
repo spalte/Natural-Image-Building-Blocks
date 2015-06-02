@@ -20,13 +20,13 @@
 //  THE SOFTWARE.
 
 #import "OsiriXIntegration.h"
-#import "NIBBVolumeData.h"
+#import "NIVolumeData.h"
 
 #import <objc/runtime.h>
 
-@interface ViewerController_NIBB : NSObject
+@interface ViewerController_NI : NSObject
 
-- (NIBBVolumeData *)NIBBVolumeDataForMovieIndex:(NSUInteger)movieIndex;
+- (NIVolumeData *)NIVolumeDataForMovieIndex:(NSUInteger)movieIndex;
 
 // methods that are here to specify the signature, but that won't be implemented
 - (NSMutableArray*)pixList:(long)i;
@@ -34,7 +34,7 @@
 
 @end
 
-@interface DCMPix_NIBB : NSObject
+@interface DCMPix_NI : NSObject
 
 // methods that are here to specify the signature, but that won't be implemented
 - (double)sliceInterval;
@@ -60,9 +60,9 @@ int NIBuildingBlocksInstallOsiriXCategories()
         return -1;
     }
 
-    Method NIBBVolumeDataForMovieIndexMethod = class_getInstanceMethod([ViewerController_NIBB class], @selector(NIBBVolumeDataForMovieIndex:));
-    if (class_getInstanceMethod(ViewerControllerClass, @selector(NIBBVolumeDataForMovieIndex:)) == NULL) {
-        class_addMethod(ViewerControllerClass, @selector(NIBBVolumeDataForMovieIndex:), method_getImplementation(NIBBVolumeDataForMovieIndexMethod), method_getTypeEncoding(NIBBVolumeDataForMovieIndexMethod));
+    Method NIVolumeDataForMovieIndexMethod = class_getInstanceMethod([ViewerController_NI class], @selector(NIVolumeDataForMovieIndex:));
+    if (class_getInstanceMethod(ViewerControllerClass, @selector(NIVolumeDataForMovieIndex:)) == NULL) {
+        class_addMethod(ViewerControllerClass, @selector(NIVolumeDataForMovieIndex:), method_getImplementation(NIVolumeDataForMovieIndexMethod), method_getTypeEncoding(NIVolumeDataForMovieIndexMethod));
     }
 
     return 0;
@@ -71,16 +71,16 @@ int NIBuildingBlocksInstallOsiriXCategories()
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincomplete-implementation"
 
-@implementation ViewerController_NIBB
+@implementation ViewerController_NI
 
-- (NIBBVolumeData *)NIBBVolumeDataForMovieIndex:(NSUInteger)movieIndex
+- (NIVolumeData *)NIVolumeDataForMovieIndex:(NSUInteger)movieIndex
 {
     NSArray *pixListForMovieIndex = [self pixList:movieIndex];
     NSData *volume = [self volumeData:movieIndex];
 
-    DCMPix_NIBB *firstPix;
+    DCMPix_NI *firstPix;
     float sliceThickness;
-    NIBBAffineTransform pixToDicomTransform;
+    NIAffineTransform pixToDicomTransform;
     double spacingX;
     double spacingY;
     double spacingZ;
@@ -107,7 +107,7 @@ int NIBuildingBlocksInstallOsiriXCategories()
     // test to make sure that orientation is initialized, when the volume is curved or something, it doesn't make sense to talk about orientation, and
     // so the orientation is really bogus
     // the test we will do is to make sure that orientation is 3 non-degenerate vectors
-    NIBBAffineTransform transform = NIBBAffineTransformIdentity;
+    NIAffineTransform transform = NIAffineTransformIdentity;
     transform.m11 = orientation[0];
     transform.m12 = orientation[1];
     transform.m13 = orientation[2];
@@ -117,12 +117,12 @@ int NIBuildingBlocksInstallOsiriXCategories()
     transform.m31 = orientation[6];
     transform.m32 = orientation[7];
     transform.m33 = orientation[8];
-    if (NIBBAffineTransformDeterminant(transform) == 0.0) {
+    if (NIAffineTransformDeterminant(transform) == 0.0) {
         memset(orientation, 0, sizeof(double)*9);
         orientation[0] = orientation[4] = orientation[8] = 1;
     }
 
-    pixToDicomTransform = NIBBAffineTransformIdentity;
+    pixToDicomTransform = NIAffineTransformIdentity;
     pixToDicomTransform.m41 = firstPix.originX;
     pixToDicomTransform.m42 = firstPix.originY;
     pixToDicomTransform.m43 = firstPix.originZ;
@@ -136,8 +136,8 @@ int NIBuildingBlocksInstallOsiriXCategories()
     pixToDicomTransform.m32 = orientation[7]*spacingZ;
     pixToDicomTransform.m33 = orientation[8]*spacingZ;
 
-    return [[[NIBBVolumeData alloc] initWithData:volume pixelsWide:[firstPix pwidth] pixelsHigh:[firstPix pheight] pixelsDeep:[pixListForMovieIndex count]
-                                volumeTransform:NIBBAffineTransformInvert(pixToDicomTransform) outOfBoundsValue:-1000] autorelease];
+    return [[[NIVolumeData alloc] initWithData:volume pixelsWide:[firstPix pwidth] pixelsHigh:[firstPix pheight] pixelsDeep:[pixListForMovieIndex count]
+                                volumeTransform:NIAffineTransformInvert(pixToDicomTransform) outOfBoundsValue:-1000] autorelease];
 }
 
 @end

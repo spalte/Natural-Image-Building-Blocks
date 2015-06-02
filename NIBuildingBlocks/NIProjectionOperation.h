@@ -1,4 +1,4 @@
-//  Created by Joël Spaltenstein on 6/1/15.
+//  Copyright (c) 2015 OsiriX Foundation
 //  Copyright (c) 2015 Spaltenstein Natural Image
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,14 +19,23 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+#import <Cocoa/Cocoa.h>
+#import "NIGeneratorRequest.h"
 
 @class NIVolumeData;
 
-// call this function to add the methods below to OsiriX, returns 0 on success
-int NIBuildingBlocksInstallOsiriXCategories();
+// give this operation a volumeData at the start, when the operation is finished, if everything went well, generated volume will be the projection through the Z (depth) direction
 
-// These methods will be added to OsiriX's ViewerController
-@interface NSObject (NIBuildingBlocksViewerControllerAdditions)
-- (NIVolumeData *)NIVolumeDataForMovieIndex:(NSUInteger)movieIndex;
+@interface NIProjectionOperation : NSOperation {
+    NIVolumeData *_volumeData;
+    NIVolumeData *_generatedVolume;
+
+    NIProjectionMode _projectionMode;
+}
+
+@property (nonatomic, readwrite, retain) NIVolumeData *volumeData;
+@property (nonatomic, readonly, retain) NIVolumeData *generatedVolume;
+
+@property (nonatomic, readwrite, assign) NIProjectionMode projectionMode;
+
 @end

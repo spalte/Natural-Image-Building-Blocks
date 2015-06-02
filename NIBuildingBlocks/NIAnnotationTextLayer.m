@@ -1,5 +1,7 @@
-//  Created by Joël Spaltenstein on 6/1/15.
+//  Created by Joël Spaltenstein on 4/20/15.
 //  Copyright (c) 2015 Spaltenstein Natural Image
+//  Copyright (c) 2015 Michael Hilker and Andreas Holzamer
+//  Copyright (c) 2015 volz io
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -19,14 +21,46 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+#import "NIAnnotationTextLayer.h"
 
-@class NIVolumeData;
+#import <Cocoa/Cocoa.h>
 
-// call this function to add the methods below to OsiriX, returns 0 on success
-int NIBuildingBlocksInstallOsiriXCategories();
+@implementation NIAnnotationTextLayer
 
-// These methods will be added to OsiriX's ViewerController
-@interface NSObject (NIBuildingBlocksViewerControllerAdditions)
-- (NIVolumeData *)NIVolumeDataForMovieIndex:(NSUInteger)movieIndex;
+- (instancetype)init
+{
+    if ( (self = [super init])) {
+        self.shadowOffset = CGSizeMake(1, -1);
+        self.shadowOpacity = 1;
+        self.shadowRadius = 1;
+        self.shadowColor = [[NSColor blackColor] CGColor];
+    }
+
+    return self;
+}
+
+- (void)dealloc
+{
+    [super dealloc];
+}
+
+
+- (void)setAnnotationString:(NSString *)annotationString
+{
+    NSFont *font = [NSFont fontWithName:@"Helvetica" size:14];
+    NSAttributedString *whiteString = [[[NSAttributedString alloc] initWithString:annotationString attributes:@{NSFontAttributeName: font, NSForegroundColorAttributeName:[NSColor whiteColor]}] autorelease];
+
+    self.string = whiteString;
+}
+
+- (NSString *)annotationString
+{
+    if ([self.string respondsToSelector:@selector(string)]) {
+        return [(NSAttributedString *)self.string string];
+    } else {
+        return self.string;
+    }
+}
+
+
 @end

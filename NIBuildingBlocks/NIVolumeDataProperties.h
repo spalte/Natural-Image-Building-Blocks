@@ -1,5 +1,6 @@
-//  Created by Joël Spaltenstein on 6/1/15.
+//  Created by Joël Spaltenstein on 5/27/15.
 //  Copyright (c) 2015 Spaltenstein Natural Image
+//  Copyright (c) 2015 volz io
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -21,12 +22,19 @@
 
 #import <Foundation/Foundation.h>
 
-@class NIVolumeData;
+#import "NIVolumeData.h"
 
-// call this function to add the methods below to OsiriX, returns 0 on success
-int NIBuildingBlocksInstallOsiriXCategories();
+@class NIGeneratorRequestLayer;
 
-// These methods will be added to OsiriX's ViewerController
-@interface NSObject (NIBuildingBlocksViewerControllerAdditions)
-- (NIVolumeData *)NIVolumeDataForMovieIndex:(NSUInteger)movieIndex;
+@interface NIVolumeDataProperties : NSObject
+{
+    NIGeneratorRequestLayer *_generatorRequestLayer;
+}
+
+@property (nonatomic, readwrite, assign) CGFloat windowWidth; // animatable
+@property (nonatomic, readwrite, assign) CGFloat windowLevel; // animatable
+@property (nonatomic, readwrite, assign) BOOL invert;
+@property (nonatomic, readwrite, assign) NIInterpolationMode preferredInterpolationMode;
+@property (nonatomic, readwrite, retain) id CLUT; // NSColor or NSGradient
+
 @end
