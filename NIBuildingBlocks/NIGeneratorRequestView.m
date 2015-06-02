@@ -50,9 +50,30 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
 
 @end
 
+@interface NIGeneratorRequestViewOverlayDelegate : NSObject
+{
+    NIGeneratorRequestView *_view; // not retained
+}
+@property (nonatomic, readwrite, assign) NIGeneratorRequestView *view;
+- (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx;
+@end
+
+@implementation NIGeneratorRequestViewOverlayDelegate
+@synthesize view = _view;
+
+- (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
+{
+    [NSGraphicsContext saveGraphicsState];
+    [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:ctx flipped:NO]];
+    [_view drawOverlay];
+    [NSGraphicsContext restoreGraphicsState];
+}
+
+@end
+
 @interface NIGeneratorRequestViewLayoutManager : NSObject
 {
-    NIGeneratorRequestView *_view;
+    NIGeneratorRequestView *_view; // not retained
 }
 @property (nonatomic, readwrite, assign) NIGeneratorRequestView *view;
 - (void)layoutSublayersOfLayer:(CALayer *)layer;
@@ -159,11 +180,12 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
                                                                 owner:self.layer.layoutManager
                                                              userInfo:nil];
     [self addTrackingArea:_mousePositionTrackingArea];
-    
+
     [self setupRimLayer];
     [self setupOrientationLayers];
     [self setupScaleBarLayers];
     [self _updateLabelContraints];
+    [self setupOverlayLayer];
 }
 
 - (void)dealloc
@@ -180,6 +202,13 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     _rimLayer.delegate = nil;
     [_rimLayer release];
     _rimLayer = nil;
+
+    _overlayLayer.delegate = nil;
+    [_overlayLayer release];
+    _overlayLayer = nil;
+    _overlayLayerDelegate.view = nil;
+    [_overlayLayerDelegate release];
+    _overlayLayerDelegate = nil;
 
     for (NSString *intersectionKey in _intersections) {
         [(NIIntersection *)_intersections[intersectionKey] setGeneratorRequestView:nil];
@@ -260,6 +289,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     [_frameLayer addSublayer:_volumeDataComposingLayer];
 
 }
+
 - (void)setupRimLayer
 {
     _rimLayer = [[CALayer alloc] init];
@@ -272,6 +302,23 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     [_rimLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY]];
     [_rimLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight]];
     _rimThickness = 3;
+}
+
+- (void)setupOverlayLayer
+{
+    _overlayLayer = [[CALayer alloc] init];
+    _overlayLayerDelegate = [[NIGeneratorRequestViewOverlayDelegate alloc] init];
+    _overlayLayerDelegate.view = self;
+    _overlayLayer.contentsScale = self.layer.contentsScale;
+    _overlayLayer.delegate = _overlayLayerDelegate;
+    _overlayLayer.name = @"overlayLayer";
+    _overlayLayer.needsDisplayOnBoundsChange = YES;
+    _overlayLayer.zPosition = NIGeneratorRequestViewRimLayerZPosition - 1;
+    [_overlayLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX]];
+    [_overlayLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth]];
+    [_overlayLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY]];
+    [_overlayLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight]];
+    [_frameLayer addSublayer:_overlayLayer];
 }
 
 - (void)setupOrientationLayers
@@ -310,6 +357,17 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     _verticalScaleBar.orientation = NIScaleBarLayerVerticalOrientation;
     _verticalScaleBar.zPosition = NIGeneratorRequestViewRimLayerZPosition;
     _verticalScaleBar.name = @"verticalScaleBar";
+}
+
+
+- (void)setOverlayNeedsDisplay
+{
+    [_overlayLayer setNeedsDisplay];
+}
+
+- (void)drawOverlay
+{
+    
 }
 
 - (void)setDisplayRim:(BOOL)displayRim
@@ -690,6 +748,8 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
                 self.mousePosition = NIGeneratorRequestViewMouseOutside;
             }
         }
+
+        [_overlayLayer setNeedsDisplay];
 
         if ([self.presentedGeneratorRequest isKindOfClass:[NIObliqueSliceGeneratorRequest class]]) {
             NIObliqueSliceGeneratorRequest *obliqueRequest = (NIObliqueSliceGeneratorRequest *)self.generatorRequest;

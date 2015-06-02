@@ -46,6 +46,7 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
 @class NISprite;
 @class NIBezierPath;
 @class NIVolumeDataProperties;
+@class NIGeneratorRequestViewOverlayDelegate;
 
 @interface NIGeneratorRequestView : NSView
 {
@@ -64,6 +65,9 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
     NIVector _mousePosition;
 
     CALayer *_frameLayer;
+
+    NIGeneratorRequestViewOverlayDelegate *_overlayLayerDelegate;
+    CALayer *_overlayLayer;
 
     CALayer *_rimLayer;
     NSColor *_rimColor;
@@ -122,6 +126,9 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
 - (void)removeAllSprites;
 - (void)removeSpriteForKey:(NSString *)key;
 - (NSArray *)spriteKeys;
+
+- (void)setOverlayNeedsDisplay;
+- (void)drawOverlay; // to be implemented by subclasses that want to do some rendering over the displayed images
 
 //@property (nonatomic, readwrite, assign) BOOL displayWindowLevelWindowWidth;
 //@property (nonatomic, readwrite, assign) BOOL displayVolumePosition;

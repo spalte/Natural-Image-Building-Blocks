@@ -28,8 +28,6 @@
 
 @interface NIVolumeData ()
 
-- (BOOL)_testOrientationMatrix:(double[9])orientation; // returns YES if the orientation matrix's determinant is non-zero
-
 @property (nonatomic, readonly, assign) float* floatBytes;
 
 @end
@@ -555,26 +553,6 @@
     inlineBuffer->pixelsWideTimesPixelsHigh = _pixelsWide*_pixelsHigh;
     inlineBuffer->volumeTransform = _volumeTransform;
     return YES;
-}
-
-- (void)releaseInlineBuffer:(NIVolumeDataInlineBuffer *)inlineBuffer __deprecated {}
-
-- (BOOL)_testOrientationMatrix:(double[9])orientation // returns YES if the orientation matrix's determinant is non-zero
-{
-    NIAffineTransform transform;
-
-    transform = NIAffineTransformIdentity;
-    transform.m11 = orientation[0];
-    transform.m12 = orientation[1];
-    transform.m13 = orientation[2];
-    transform.m21 = orientation[3];
-    transform.m22 = orientation[4];
-    transform.m23 = orientation[5];
-    transform.m31 = orientation[6];
-    transform.m32 = orientation[7];
-    transform.m33 = orientation[8];
-
-    return NIAffineTransformDeterminant(transform) != 0.0;
 }
 
 - (NSString *)description
