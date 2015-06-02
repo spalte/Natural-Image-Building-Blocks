@@ -75,4 +75,6 @@ typedef NS_ENUM(NSInteger, NIMPRToolTag) {
 
 - (BOOL)view:(NIMPRView*)view move:(NSPoint)delta vector:(NIVector)deltaVector;
 
+- (BOOL)repositionsCursor;
+
 @end

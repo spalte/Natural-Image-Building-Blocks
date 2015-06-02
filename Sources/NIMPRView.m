@@ -27,7 +27,7 @@
 @synthesize blockGeneratorRequestUpdates = _blockGeneratorRequestUpdates;
 @synthesize track = _track;
 @synthesize flags = _flags;
-@synthesize ltool = _ltool, rtool = _rtool, ltoolOnDoubleClick = _ltoolOnDoubleClick;
+@synthesize ltool = _ltool, rtool = _rtool, ltcOnDoubleClick = _ltcOnDoubleClick;
 @synthesize mouseDown = _mouseDown;
 
 - (instancetype)initWithFrame:(NSRect)frameRect {
@@ -79,7 +79,7 @@
     [self removeObserver:self forKeyPath:@"data" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"frame" context:NIMPRView.class];
     self.data = nil;
-    self.ltool = self.rtool = self.ltoolOnDoubleClick = nil;
+    self.ltool = self.rtool = nil;
     self.menu = nil;
     self.normal = self.xdir = self.ydir = self.reference = nil;
     self.track = nil;
@@ -154,7 +154,7 @@
     if (!self.pixelSpacing)
         return;
     
-    NIVector edges[] = {{0,0,0},{1,1,1},{1,0,0},{0,1,1},{0,1,0},{1,0,1},{1,1,0},{0,0,1}};
+    NIVector edges[] = {{0,0,0},{1,1,1},{1,0,0},{0,1,1},{0,1,0},{1,0,1},{1,1,0},{0,0,1}}; // these 8 points define the 4 volume diagonals (1-2, 3-4, 5-6, 7-8)
     NIVectorApplyTransformToVectors(NIAffineTransformMakeScale(self.data.pixelsWide, self.data.pixelsHigh, self.data.pixelsDeep), edges, 8);
     NIVectorApplyTransformToVectors(self.data.volumeTransform, edges, 8);
     CGFloat maxdiameter = 0;

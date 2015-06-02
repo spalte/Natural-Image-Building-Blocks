@@ -23,6 +23,10 @@
     return YES;
 }
 
+- (BOOL)repositionsCursor {
+    return NO;
+}
+
 - (NSArray*)cursors {
     return @[ NSCursor.openHandCursor, NSNull.null ];
 }

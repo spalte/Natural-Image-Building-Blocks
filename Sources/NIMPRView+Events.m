@@ -13,6 +13,7 @@
 #import "NIMPRZoomTool.h"
 #import <NIBuildingBlocks/NIIntersection.h>
 #import "NIMPRController.h"
+#import <objc/runtime.h>
 
 @implementation NIMPRView (Events)
 
@@ -71,14 +72,14 @@
             [view hover:event location:[view convertPoint:event.locationInWindow fromView:nil]];
         else {
             if (event.clickCount == 2)
-                self.ltoolOnDoubleClick = self.ltool;
+                self.ltcOnDoubleClick = [self toolForLocation:[view convertPoint:event.locationInWindow fromView:nil] event:nil];
             if (event.clickCount >= 2) {
-                if ([self.ltoolOnDoubleClick isKindOfClass:NIMPRRotateTool.class]) {
+                if (self.ltcOnDoubleClick == NIMPRRotateAxisTool.class) {
                     if (event.clickCount == 2)
                         [self rotateToInitial];
                     else if (event.clickCount == 3)
                         [self.window.windowController rotateToInitial];
-                } else if ([self.ltoolOnDoubleClick isKindOfClass:NIMPRMoveTool.class]) {
+                } else if (self.ltcOnDoubleClick == NIMPRMoveOthersTool.class) {
                     if (event.clickCount == 2)
                         [self.window.windowController moveToInitial];
                 }
@@ -179,11 +180,32 @@
     if (!event)
         event = [NSApp currentEvent];
     
+    Class ltc = [self toolForLocation:location event:event];
+    
+    if (self.ltool.class != ltc)
+        self.ltool = [[[ltc alloc] init] autorelease];
+    
+    [self enumerateIntersectionsWithBlock:^(NSString* key, NIIntersection* intersection, BOOL* stop) {
+        intersection.maskAroundMouse = !ltc;
+    }];
+    
+    [NIMPRTool setCursor:(NSPointInRect(location, self.bounds)? [self.ltool cursors][0] : nil)];
+    
+    Class rtc = nil;
+    
+    if (ltc == NIMPRMoveOthersTool.class)
+        rtc = NIMPRCenterZoomTool.class;
+    
+    if (self.rtool.class != rtc)
+        self.rtool = [[[rtc alloc] init] autorelease];
+}
+
+- (Class)toolForLocation:(NSPoint)location event:(NSEvent*)event {
     CGFloat distance;
     NSString* ikey = [self intersectionClosestToPoint:location closestPoint:NULL distance:&distance];
     
     BOOL rotate = (ikey && distance < 4);
-
+    
     __block BOOL move, cmove = move = rotate;
     if ([self.window.windowController spacebarIsDown])
         move = YES;
@@ -211,22 +233,7 @@
             ltc = NIMPRRotateTool.class;
     }
     
-    if (self.ltool.class != ltc)
-        self.ltool = [[[ltc alloc] init] autorelease];
-    
-    [self enumerateIntersectionsWithBlock:^(NSString* key, NIIntersection* intersection, BOOL* stop) {
-        intersection.maskAroundMouse = !rotate;
-    }];
-    
-    [NIMPRTool setCursor:(NSPointInRect(location, self.bounds)? [self.ltool cursors][0] : nil)];
-    
-    Class rtc = nil;
-    
-    if (cmove)
-        rtc = NIMPRCenterZoomTool.class;
-    
-    if (self.rtool.class != rtc)
-        self.rtool = [[[rtc alloc] init] autorelease];
+    return ltc;
 }
 
 @end

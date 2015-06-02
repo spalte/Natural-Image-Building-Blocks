@@ -231,12 +231,17 @@ static BOOL NIMPRToolHidingCursor = NO;
 
 - (BOOL)view:(NIMPRView*)view mouseUp:(NSEvent*)event {
     [super view:view mouseUp:event];
-    [self moveCursorToMouseDownLocation];
+    if (self.repositionsCursor)
+        [self moveCursorToMouseDownLocation];
     return NO;
 }
 
 - (BOOL)view:(NIMPRView*)view move:(NSPoint)delta vector:(NIVector)deltaVector {
     return NO;
+}
+
+- (BOOL)repositionsCursor {
+    return YES;
 }
 
 //- (void)moveCursorToCenter {
