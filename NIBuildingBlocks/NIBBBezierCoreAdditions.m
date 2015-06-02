@@ -1684,7 +1684,7 @@ NIBBMutableBezierCoreRef NIBBBezierCoreCreateMutableCopyByClipping(NIBBBezierCor
     NIBBBezierCoreRef flattenedBezierCore;
 	NIBBBezierCoreIteratorRef bezierCoreIterator;
     NIBBMutableBezierCoreRef newBezierCore;
-	NIBBBezierCoreSegmentType segmentType;
+	NIBBBezierCoreSegmentType segmentType = NIBBMoveToBezierCoreSegmentType;
     CGFloat distanceTraveled = 0;
     CGFloat segmentLength = 0;
     CGFloat startPosition;
