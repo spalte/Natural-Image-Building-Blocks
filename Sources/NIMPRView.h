@@ -29,7 +29,7 @@
     NIMPRFlags _flags;
     NSMenu* _menu;
     id <NIMPRTool> _ltool, _rtool;
-    Class _ltcOnDoubleClick;
+    Class _ltcAtSecondClick;
 //    NSMutableArray* _latestMouseDownEvents;
     CGFloat _slabWidth;
     BOOL _mouseDown;

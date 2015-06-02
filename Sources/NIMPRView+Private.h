@@ -14,7 +14,7 @@
 @property NSUInteger blockGeneratorRequestUpdates;
 @property(retain) NSTrackingArea* track;
 @property(retain, nonatomic) id <NIMPRTool> ltool, rtool;
-@property(assign) Class ltcOnDoubleClick;
+@property(assign) Class ltcAtSecondClick;
 @property NSUInteger eventModifierFlags;
 @property(getter=mouseIsDown) BOOL mouseDown;
 //@property(retain) NSMutableArray* latestMouseDownEvents;

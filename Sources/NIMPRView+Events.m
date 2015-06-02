@@ -72,14 +72,14 @@
             [view hover:event location:[view convertPoint:event.locationInWindow fromView:nil]];
         else {
             if (event.clickCount == 2)
-                self.ltcOnDoubleClick = [self toolForLocation:[view convertPoint:event.locationInWindow fromView:nil] event:nil];
+                self.ltcAtSecondClick = [self toolForLocation:[view convertPoint:event.locationInWindow fromView:nil] event:nil];
             if (event.clickCount >= 2) {
-                if (self.ltcOnDoubleClick == NIMPRRotateAxisTool.class) {
+                if (self.ltcAtSecondClick == NIMPRRotateAxisTool.class) {
                     if (event.clickCount == 2)
                         [self rotateToInitial];
                     else if (event.clickCount == 3)
                         [self.window.windowController rotateToInitial];
-                } else if (self.ltcOnDoubleClick == NIMPRMoveOthersTool.class) {
+                } else if (self.ltcAtSecondClick == NIMPRMoveOthersTool.class) {
                     if (event.clickCount == 2)
                         [self.window.windowController moveToInitial];
                 }

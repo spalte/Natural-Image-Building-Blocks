@@ -27,7 +27,7 @@
 @synthesize blockGeneratorRequestUpdates = _blockGeneratorRequestUpdates;
 @synthesize track = _track;
 @synthesize flags = _flags;
-@synthesize ltool = _ltool, rtool = _rtool, ltcOnDoubleClick = _ltcOnDoubleClick;
+@synthesize ltool = _ltool, rtool = _rtool, ltcAtSecondClick = _ltcAtSecondClick;
 @synthesize mouseDown = _mouseDown;
 
 - (instancetype)initWithFrame:(NSRect)frameRect {
