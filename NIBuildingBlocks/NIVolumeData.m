@@ -374,6 +374,12 @@
     request.pixelsHigh = pixelsHigh;
     request.slabWidth = NIVectorLength(zBasis) * ((CGFloat)pixelsDeep - 1);
 
+    if (pixelsDeep % 2) {
+        request.slabWidth = NIVectorLength(zBasis) * ((CGFloat)pixelsDeep - 1);
+    } else {
+        request.slabWidth = NIVectorLength(zBasis) * (CGFloat)pixelsDeep;
+    }
+
     request.interpolationMode = interpolationsMode;
 
     NIVolumeData *newVolumeData = [NIGenerator synchronousRequestVolume:request volumeData:self];
@@ -559,6 +565,121 @@
 }
 
 @end
+
+//@implementation NIVolumeData (DCMPixAndVolume)
+//
+//- (id)initWithWithPixList:(NSArray *)pixList volume:(NSData *)volume
+//{
+//    DCMPix *firstPix;
+//    float sliceThickness;
+//    NIAffineTransform pixToDicomTransform;
+//    double spacingX;
+//    double spacingY;
+//    double spacingZ;
+//    double orientation[9];
+//
+//    firstPix = [pixList objectAtIndex:0];
+//
+//    sliceThickness = [firstPix sliceInterval];
+//    if(sliceThickness == 0)
+//    {
+//        NSLog(@"slice interval = slice thickness!");
+//        sliceThickness = [firstPix sliceThickness];
+//    }
+//
+//    memset(orientation, 0, sizeof(double) * 9);
+//    [firstPix orientationDouble:orientation];
+//    spacingX = firstPix.pixelSpacingX;
+//    spacingY = firstPix.pixelSpacingY;
+//    if(sliceThickness == 0) { // if the slice thickness is still 0, make it the same as the average of the spacingX and spacingY
+//        sliceThickness = (spacingX + spacingY)/2.0;
+//    }
+//    spacingZ = sliceThickness;
+//
+//    // test to make sure that orientation is initialized, when the volume is curved or something, it doesn't make sense to talk about orientation, and
+//    // so the orientation is really bogus
+//    // the test we will do is to make sure that orientation is 3 non-degenerate vectors
+//    if ([self _testOrientationMatrix:orientation] == NO) {
+//        memset(orientation, 0, sizeof(double)*9);
+//        orientation[0] = orientation[4] = orientation[8] = 1;
+//    }
+//
+//    // This is not really the pixToDicom because for the NIVolumeData uses Center rule whereas DCMPix uses Top-Left rule.
+//    pixToDicomTransform = NIAffineTransformIdentity;
+//    pixToDicomTransform.m41 = firstPix.originX;
+//    pixToDicomTransform.m42 = firstPix.originY;
+//    pixToDicomTransform.m43 = firstPix.originZ;
+//    pixToDicomTransform.m11 = orientation[0]*spacingX;
+//    pixToDicomTransform.m12 = orientation[1]*spacingX;
+//    pixToDicomTransform.m13 = orientation[2]*spacingX;
+//    pixToDicomTransform.m21 = orientation[3]*spacingY;
+//    pixToDicomTransform.m22 = orientation[4]*spacingY;
+//    pixToDicomTransform.m23 = orientation[5]*spacingY;
+//    pixToDicomTransform.m31 = orientation[6]*spacingZ;
+//    pixToDicomTransform.m32 = orientation[7]*spacingZ;
+//    pixToDicomTransform.m33 = orientation[8]*spacingZ;
+//
+//    self = [self initWithData:volume pixelsWide:[firstPix pwidth] pixelsHigh:[firstPix pheight] pixelsDeep:[pixList count]
+//              volumeTransform:NIAffineTransformInvert(pixToDicomTransform) outOfBoundsValue:-1000];
+//    return self;
+//}
+//
+//- (void)getOrientation:(float[6])orientation
+//{
+//    double doubleOrientation[6];
+//    NSInteger i;
+//
+//    [self getOrientationDouble:doubleOrientation];
+//
+//    for (i = 0; i < 6; i++) {
+//        orientation[i] = doubleOrientation[i];
+//    }
+//}
+//
+//- (void)getOrientationDouble:(double[6])orientation
+//{
+//    NIAffineTransform pixelToDicomTransform;
+//    NIVector xBasis;
+//    NIVector yBasis;
+//
+//    pixelToDicomTransform = NIAffineTransformInvert(_volumeTransform);
+//
+//    xBasis = NIVectorNormalize(NIVectorMake(pixelToDicomTransform.m11, pixelToDicomTransform.m12, pixelToDicomTransform.m13));
+//    yBasis = NIVectorNormalize(NIVectorMake(pixelToDicomTransform.m21, pixelToDicomTransform.m22, pixelToDicomTransform.m23));
+//
+//    orientation[0] = xBasis.x; orientation[1] = xBasis.y; orientation[2] = xBasis.z;
+//    orientation[3] = yBasis.x; orientation[4] = yBasis.y; orientation[5] = yBasis.z;
+//}
+//
+//- (float)originX
+//{
+//    NIAffineTransform pixelToDicomTransform;
+//
+//    pixelToDicomTransform = NIAffineTransformInvert(_volumeTransform);
+//
+//    return pixelToDicomTransform.m41;
+//}
+//
+//- (float)originY
+//{
+//    NIAffineTransform pixelToDicomTransform;
+//
+//    pixelToDicomTransform = NIAffineTransformInvert(_volumeTransform);
+//
+//    return pixelToDicomTransform.m42;
+//}
+//
+//- (float)originZ
+//{
+//    NIAffineTransform pixelToDicomTransform;
+//
+//    pixelToDicomTransform = NIAffineTransformInvert(_volumeTransform);
+//    
+//    return pixelToDicomTransform.m43;
+//}
+//
+//
+//@end
 
 
 

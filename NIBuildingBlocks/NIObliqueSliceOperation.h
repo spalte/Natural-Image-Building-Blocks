@@ -32,7 +32,7 @@
 
     BOOL _operationExecuting;
     BOOL _operationFinished;
-    BOOL _operationFailed;    
+    BOOL _operationFailed;
 }
 
 - (id)initWithRequest:(NIObliqueSliceGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData;

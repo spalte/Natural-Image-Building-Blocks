@@ -284,11 +284,13 @@
     if ([key isEqualToString:@"origin"] ||
         [key isEqualToString:@"directionX"] ||
         [key isEqualToString:@"directionY"] ||
+        [key isEqualToString:@"directionZ"] ||
         [key isEqualToString:@"pixelSpacingX"] ||
-        [key isEqualToString:@"pixelSpacingY"]) {
+        [key isEqualToString:@"pixelSpacingY"] ||
+        [key isEqualToString:@"slabSampleDistance"]) {
         return [keyPaths setByAddingObjectsFromSet:[NSSet setWithObject:@"sliceToDicomTransform"]];
     } else if ([key isEqualToString:@"sliceToDicomTransform"]) {
-        return [keyPaths setByAddingObjectsFromSet:[NSSet setWithObjects:@"origin", @"directionX", @"directionY", @"pixelSpacingX", @"pixelSpacingY", nil]];
+        return [keyPaths setByAddingObjectsFromSet:[NSSet setWithObjects:@"origin", @"directionX", @"directionY", @"directionZ", @"pixelSpacingX", @"pixelSpacingY", @"slabSampleDistance", nil]];
     } else {
         return keyPaths;
     }
@@ -302,6 +304,7 @@
     copy.origin = _origin;
     copy.directionX = _directionX;
     copy.directionY = _directionY;
+    copy.directionZ = _directionZ;
     copy.pixelSpacingX = _pixelSpacingX;
     copy.pixelSpacingY = _pixelSpacingY;
     copy.projectionMode = _projectionMode;
@@ -346,6 +349,7 @@
             NIVectorEqualToVector(_origin, obliqueSliceGeneratorRequest.origin) &&
             NIVectorEqualToVector(_directionX, obliqueSliceGeneratorRequest.directionX) &&
             NIVectorEqualToVector(_directionY, obliqueSliceGeneratorRequest.directionY) &&
+            NIVectorEqualToVector(_directionZ, obliqueSliceGeneratorRequest.directionZ) &&
             _pixelSpacingX == obliqueSliceGeneratorRequest.pixelSpacingX &&
             _pixelSpacingY == obliqueSliceGeneratorRequest.pixelSpacingY &&
             _projectionMode == obliqueSliceGeneratorRequest.projectionMode) {
@@ -534,14 +538,38 @@
 
 - (NIAffineTransform)sliceToDicomTransform
 {
-// FIXME: the sliceToDicomTransform does not return the right value in Z
     NIAffineTransform sliceToDicomTransform;
-    CGFloat pixelSpacingZ;
-    NIVector crossVector;
+
+
+    CGFloat slabSampleDistance = 0;
+    if (_slabSampleDistance != 0.0) {
+        slabSampleDistance = _slabSampleDistance;
+    } else {
+        if (self.slabWidth != 0) {
+            NSLog(@"NIObliqueSliceGeneratorRequest with non-zero slab width is trying to build a sliceToDicomTransform when the slabSampleDistance is 0");
+        }
+        slabSampleDistance = 1; //
+    }
+
+#if CGFLOAT_IS_DOUBLE
+    NSInteger pixelsDeep = MAX(round(self.slabWidth / slabSampleDistance), 0) + 1;
+#else
+    NSInteger pixelsDeep = MAX(roundf(self.slabWidth / slabSampleDistance), 0) + 1;
+#endif
+
+    NIVector zDirection = NIVectorZero;
+    NIVector leftDirection = NIVectorScalarMultiply(NIVectorNormalize(_directionX), _pixelSpacingX);
+    NIVector downDirection = NIVectorScalarMultiply(NIVectorNormalize(_directionY), _pixelSpacingY);
+
+    if (NIVectorEqualToVector(_directionZ, NIVectorZero)) {
+        zDirection = NIVectorScalarMultiply(NIVectorNormalize(NIVectorCrossProduct(leftDirection, downDirection)), slabSampleDistance);
+    } else {
+        zDirection = NIVectorScalarMultiply(NIVectorNormalize(_directionZ), slabSampleDistance);
+    }
+
+    NIVector origin = NIVectorAdd(_origin, NIVectorScalarMultiply(NIVectorInvert(zDirection), (CGFloat)(pixelsDeep - 1)/2.0));
 
     sliceToDicomTransform = NIAffineTransformIdentity;
-    crossVector = NIVectorNormalize(NIVectorCrossProduct(_directionX, _directionY));
-    pixelSpacingZ = 1.0; // totally bogus, but there is no right value, and this should give something that is reasonable
 
     sliceToDicomTransform.m11 = _directionX.x * _pixelSpacingX;
     sliceToDicomTransform.m12 = _directionX.y * _pixelSpacingX;
@@ -551,17 +579,16 @@
     sliceToDicomTransform.m22 = _directionY.y * _pixelSpacingY;
     sliceToDicomTransform.m23 = _directionY.z * _pixelSpacingY;
 
-    sliceToDicomTransform.m31 = crossVector.x * pixelSpacingZ;
-    sliceToDicomTransform.m32 = crossVector.y * pixelSpacingZ;
-    sliceToDicomTransform.m33 = crossVector.z * pixelSpacingZ;
+    sliceToDicomTransform.m31 = zDirection.x;
+    sliceToDicomTransform.m32 = zDirection.y;
+    sliceToDicomTransform.m33 = zDirection.z;
 
-    sliceToDicomTransform.m41 = _origin.x;
-    sliceToDicomTransform.m42 = _origin.y;
-    sliceToDicomTransform.m43 = _origin.z;
+    sliceToDicomTransform.m41 = origin.x;
+    sliceToDicomTransform.m42 = origin.y;
+    sliceToDicomTransform.m43 = origin.z;
 
     return sliceToDicomTransform;
 }
-
 
 @end
 
