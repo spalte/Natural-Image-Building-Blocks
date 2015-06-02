@@ -25,7 +25,7 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2015 volz.io. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
-	<string>CPRMPR</string>
+	<string>NIMPRPlugin</string>
 	<key>pluginType</key>
 	<string>other</string>
 </dict>
