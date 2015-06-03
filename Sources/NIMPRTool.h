@@ -59,7 +59,7 @@ typedef NS_ENUM(NSInteger, NIMPRToolTag) {
 + (instancetype)toolForTag:(NIMPRToolTag)tag;
 
 - (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event UNAVAILABLE_ATTRIBUTE;
-- (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event or:(void(^)())or confirm:(void(^)())confirm NS_REQUIRES_SUPER;
+- (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())or confirm:(void(^)())confirm NS_REQUIRES_SUPER;
 - (BOOL)view:(NIMPRView*)view mouseDragged:(NSEvent*)event NS_REQUIRES_SUPER;
 - (BOOL)view:(NIMPRView*)view mouseUp:(NSEvent*)event NS_REQUIRES_SUPER;
 

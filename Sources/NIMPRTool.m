@@ -77,11 +77,11 @@ static BOOL NIMPRToolHidingCursor = NO;
     return NO;
 }
 
-- (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event or:(void(^)())or {
-    return [self view:view mouseDown:event or:or confirm:nil];
+- (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())or {
+    return [self view:view mouseDown:event otherwise:or confirm:nil];
 }
 
-- (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event or:(void(^)())or confirm:(void(^)())confirm {
+- (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())or confirm:(void(^)())confirm {
     self.mouseDownView = view;
     self.mouseDownEvent = event;
 
@@ -213,8 +213,8 @@ static BOOL NIMPRToolHidingCursor = NO;
 
 //@synthesize ignoreDragLocation = _ignoreDragLocation;
 
-- (BOOL)view:(NIMPRView *)view mouseDown:(NSEvent *)event or:(void (^)())or confirm:(void (^)())confirm {
-    return [super view:view mouseDown:event or:or confirm:^{
+- (BOOL)view:(NIMPRView *)view mouseDown:(NSEvent *)event otherwise:(void (^)())or confirm:(void (^)())confirm {
+    return [super view:view mouseDown:event otherwise:or confirm:^{
         [view enumerateIntersectionsWithBlock:^(NSString* key, NIIntersection* intersection, BOOL* stop) {
             intersection.maskAroundMouse = NO;
         }];
