@@ -34,17 +34,27 @@
 
 @end
 
+@class NIMPRSegmentedCell;
+
 @interface NIMPRSegmentedControl : NSSegmentedControl
+
+- (NIMPRSegmentedCell*)cell;
 
 @end
 
 @interface NIMPRSegmentedCell : NSSegmentedCell {
     NSInteger _rselectedTag;
     NSMutableArray* _segments;
+    NSRect _rightMouseFrame;
+    BOOL _rightMouseInside;
 }
 
 @property NSInteger rselectedTag;
 @property(retain) NSMutableArray* segments;
+@property NSRect rightMouseFrame;
+@property BOOL rightMouseInside;
+
+- (NSRect)boundsForSegment:(NSInteger)s inView:(NIMPRSegmentedControl*)view;
 
 @end
 
@@ -168,16 +178,29 @@ static NSString* const NIMPRSlabWidthToolbarItemIdentifier = @"NIMPRSlabWidth";
 - (instancetype)initWithFrame:(NSRect)frame {
     if ((self = [super initWithFrame:frame])) {
         self.cell = [[[NIMPRSegmentedCell alloc] init] autorelease];
+        [self addObserver:self forKeyPath:@"cell.rightMouseInside" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRSegmentedControl.class];
     }
     
     return self;
 }
 
-- (CGFloat)totalWidth {
-    CGFloat t = 0;
-    for (NSInteger s = 0; s < self.segmentCount; ++s)
-        t += [self widthForSegment:s];
-    return t;
+- (void)dealloc {
+    [self removeObserver:self forKeyPath:@"cell.rightMouseInside" context:NIMPRSegmentedControl.class];
+    [super dealloc];
+}
+
+- (void)observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context {
+    if (context != NIMPRSegmentedControl.class)
+        return [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    
+    if ([keyPath isEqualToString:@"cell.rightMouseInside"])
+        if ([[change[NSKeyValueChangeNewKey] if:NSNumber.class] boolValue] != [[change[NSKeyValueChangeOldKey] if:NSNumber.class] boolValue]) {
+            [self setNeedsDisplay];
+        }
+}
+
+- (NIMPRSegmentedCell*)cell {
+    return [super cell];
 }
 
 - (BOOL)interceptsToolbarRightMouseEvents {
@@ -186,32 +209,35 @@ static NSString* const NIMPRSlabWidthToolbarItemIdentifier = @"NIMPRSlabWidth";
 
 - (void)rightMouseDown:(NSEvent*)event {
     NSPoint location = [self convertPoint:event.locationInWindow fromView:nil];
-    CGFloat extraWidth = (NSWidth(self.frame)-self.totalWidth)/self.segmentCount;
     
-    NSInteger s = 0, px = 0, x;
-    for (x = 0; s < self.segmentCount; ++s) {
-        px = x; x += [self widthForSegment:s]+extraWidth;
-        if (location.x < x)
+    NSInteger s; NSRect sframe;
+    for (s = 0; s < self.segmentCount; ++s) {
+        sframe = [self.cell boundsForSegment:s inView:self];
+        if (location.x <= NSMaxX(sframe))
             break;
     }
     
-    if (s >= self.segmentCount)
-        return;
+//    self.cell.rightMouseFrame = NSMakeRect(px+0, 0, x-px-1, NSHeight(self.bounds)-2);
+    self.cell.rightMouseFrame = sframe;
     
-    // TODO: this popup menu bit sucks...
+    do {
+        self.cell.rightMouseInside = NSPointInRect(event.locationInWindow, [self convertRect:self.cell.rightMouseFrame toView:nil]);
+        if (event.type == NSRightMouseUp) {
+            if (self.cell.rightMouseInside)
+                self.cell.rselectedTag = [self.cell tagForSegment:s];
+            break;
+        }
+    } while ((event = [self.window nextEventMatchingMask:NSRightMouseDraggedMask|NSRightMouseUpMask]));
     
-    NSMenu* menu = [[[NSMenu alloc] init] autorelease];
-    [menu addItemWithTitle:[NSString stringWithFormat:NSLocalizedString(@"Set right button tool to %@", nil), [[self.window.windowController tools][s] label]] block:^{
-        [self.window.windowController setRtoolTag:[[self.window.windowController tools][s] tag]];
-    }];
-    
-    [NSMenu popUpContextMenu:menu withEvent:event forView:self withFont:[NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
-    
-//    if ([self.cell trackMouse:event inRect:NSMakeRect(px, 0, x, NSHeight(self.bounds)) ofView:self untilMouseUp:YES]) {
-//        [self.cell setRselectedTag:[self.cell tagForSegment:s]];
-//        [self setNeedsDisplay:YES];
-//    }
+    self.cell.rightMouseInside = NO;
+    self.cell.rightMouseFrame = NSZeroRect;
 }
+
+@end
+
+@interface NSSegmentedCell (Hidden)
+
+- (NSRect)_rectForSegment:(NSInteger)s inFrame:(NSRect)frame;
 
 @end
 
@@ -219,6 +245,7 @@ static NSString* const NIMPRSlabWidthToolbarItemIdentifier = @"NIMPRSlabWidth";
 
 @synthesize rselectedTag = _rselectedTag;
 @synthesize segments = _segments;
+@synthesize rightMouseFrame = _rightMouseFrame, rightMouseInside = _rightMouseInside;
 
 - (void)dealloc {
     self.segments = nil;
@@ -241,23 +268,46 @@ static NSString* const NIMPRSlabWidthToolbarItemIdentifier = @"NIMPRSlabWidth";
     return shadow;
 }
 
-- (void)drawSegment:(NSInteger)s inFrame:(NSRect)frame withView:(NIMPRSegmentedControl*)view {
-    [super drawSegment:s inFrame:frame withView:view];
-    if ([self tagForSegment:s] == self.rselectedTag) {
-        frame = NSInsetRect(frame, (NSWidth(view.frame)-view.totalWidth)/(view.segmentCount*2)-1, -2);
-        NSMutableParagraphStyle* ps = [[NSMutableParagraphStyle.defaultParagraphStyle mutableCopy] autorelease];
-        ps.alignment = NSRightTextAlignment;
-        NSString* r = NSLocalizedString(@"R", nil);
-        NSStringDrawingOptions options = NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading;
-        NSDictionary* attributes = @{ NSFontAttributeName: [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]],
-                                      NSForegroundColorAttributeName: ([self isSelectedForSegment:s]? [NSColor colorWithCalibratedWhite:0.8 alpha:1] : [NSColor colorWithCalibratedWhite:0.2 alpha:1]),
-                                      NSShadowAttributeName: [self shadowWithColor:([self isSelectedForSegment:s]? NSColor.blackColor : NSColor.whiteColor)],
-                                      NSParagraphStyleAttributeName: ps };
-//        NSRect rframe = NSZeroRect; rframe = [r boundingRectWithSize:frame.size options:options attributes:attributes];
-//        [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(frame.origin.x+rframe.origin.x, frame.origin.y+rframe.origin.y, rframe.size.width, rframe.size.height)];
-        [r drawWithRect:frame options:options attributes:attributes];
+- (void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NIMPRSegmentedControl*)view {
+    [super drawInteriorWithFrame:cellFrame inView:view];
+    if (self.rightMouseInside) {
+        [NSGraphicsContext saveGraphicsState];
+        [[[NSColor blackColor] colorWithAlphaComponent:0.1] set];
+        [NSBezierPath fillRect:self.rightMouseFrame];
+        [NSGraphicsContext restoreGraphicsState];
     }
 }
 
+- (void)drawSegment:(NSInteger)s inFrame:(NSRect)frame withView:(NIMPRSegmentedControl*)view {
+    [super drawSegment:s inFrame:frame withView:view];
+    if ([self tagForSegment:s] == self.rselectedTag) {
+        [NSGraphicsContext saveGraphicsState];
+        frame = NSInsetRect([self boundsForSegment:s inView:view], 2, -1); // NSInsetRect(frame, (NSWidth(view.frame)-view.totalWidth)/(view.segmentCount*2)-1, -2);
+        CGFloat size = [NSFont systemFontSizeForControlSize:NSMiniControlSize];
+        
+        NSMutableParagraphStyle* ps = [[NSMutableParagraphStyle.defaultParagraphStyle mutableCopy] autorelease];
+        ps.alignment = NSRightTextAlignment;
+        NSString* r = NSLocalizedString(@"R", nil);
+        NSStringDrawingOptions options = NSStringDrawingUsesLineFragmentOrigin/*|NSStringDrawingUsesFontLeading*/;
+        NSDictionary* attributes = @{ NSFontAttributeName: [NSFont systemFontOfSize:size],
+                                      NSForegroundColorAttributeName: ([self isSelectedForSegment:s]? [NSColor colorWithCalibratedWhite:0.8 alpha:1] : [NSColor colorWithCalibratedWhite:0.2 alpha:1]),
+                                      NSShadowAttributeName: [self shadowWithColor:([self isSelectedForSegment:s]? NSColor.blackColor : NSColor.whiteColor)],
+                                      NSParagraphStyleAttributeName: ps };
+        
+        NSRect rframe = [r boundingRectWithSize:frame.size options:options attributes:attributes];
+        [[([self isSelectedForSegment:s]? NSColor.darkGrayColor : NSColor.lightGrayColor) colorWithAlphaComponent:0.5] set];
+        [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(NSMaxX(frame)-rframe.size.width-1, frame.origin.y+2, rframe.size.width+2, rframe.size.height-3)] fill];
+        
+        [r drawWithRect:frame options:options attributes:attributes];
+        
+        [NSGraphicsContext restoreGraphicsState];
+    }
+}
+
+- (NSRect)boundsForSegment:(NSInteger)s inView:(NIMPRSegmentedControl*)view {
+    return [self _rectForSegment:s inFrame:view.bounds];
+//    CGFloat cellwidth = view.frame.size.width/view.segmentCount;
+//    return NSMakeRect(cellwidth*s, 0, cellwidth, view.frame.size.height);
+}
 
 @end

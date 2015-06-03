@@ -43,8 +43,8 @@
 
 @synthesize point = _point;
 
-- (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())or confirm:(void(^)())confirm {
-    return [super view:view mouseDown:event otherwise:or confirm:^{
+- (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())otherwise confirm:(void(^)())confirm {
+    return [super view:view mouseDown:event otherwise:otherwise confirm:^{
         self.point = view.point;
         if (confirm)
             confirm();

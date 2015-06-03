@@ -36,7 +36,7 @@
     
 //    NSLog(@"%@ %d", ssel, self.mouseDown);
     
-    SEL vsel = NSSelectorFromString([@"view:" stringByAppendingString:ssel]), orvsel = NSSelectorFromString([NSString stringWithFormat:@"view:%@or:", ssel]);
+    SEL vsel = NSSelectorFromString([@"view:" stringByAppendingString:ssel]), orvsel = NSSelectorFromString([NSString stringWithFormat:@"view:%@otherwise:", ssel]);
     if ([tool respondsToSelector:orvsel]) {
         if ([[tool performSelector:orvsel withObjects:self:event:block] boolValue])
             return;

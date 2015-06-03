@@ -73,15 +73,15 @@ static BOOL NIMPRToolHidingCursor = NO;
 }
 
 - (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event {
-    [NSException raise:NSGenericException format:@"NIMPRTool view:mouseDown: is forbidden, overload view:mouseDown:or: in %@ instead", self.className];
+    [NSException raise:NSGenericException format:@"NIMPRTool view:mouseDown: is forbidden, overload view:mouseDown:otherwise: in %@ instead", self.className];
     return NO;
 }
 
-- (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())or {
-    return [self view:view mouseDown:event otherwise:or confirm:nil];
+- (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())otherwise {
+    return [self view:view mouseDown:event otherwise:otherwise confirm:nil];
 }
 
-- (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())or confirm:(void(^)())confirm {
+- (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())otherwise confirm:(void(^)())confirm {
     self.mouseDownView = view;
     self.mouseDownEvent = event;
 
@@ -92,8 +92,8 @@ static BOOL NIMPRToolHidingCursor = NO;
     self.previousLocation = self.currentLocation = self.mouseDownLocation;
     self.previousLocationVector = self.currentLocationVector = self.mouseDownLocationVector;
 
-    if (or) {
-        self.timeoutBlock = or;
+    if (otherwise) {
+        self.timeoutBlock = otherwise;
         self.confirmBlock = confirm;
         self.timeoutTimer = [NSTimer scheduledTimerWithTimeInterval:self.timeout target:self selector:@selector(timeout:) userInfo:NIMPRTool.class repeats:NO];
     } else if (confirm)
