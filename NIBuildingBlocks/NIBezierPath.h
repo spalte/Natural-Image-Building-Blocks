@@ -72,7 +72,6 @@ typedef NSInteger NIBezierPathElement;
 - (CGFloat)length;
 - (CGFloat)lengthThroughElementAtIndex:(NSInteger)element; // the length of the curve up to and including the element at index
 - (NIBezierCoreRef)NIBezierCore;
-- (NSBezierPath *)NSBezierPath;;
 - (NSDictionary *)dictionaryRepresentation;
 - (NIVector)vectorAtStart;
 - (NIVector)vectorAtEnd;
@@ -95,6 +94,7 @@ typedef NSInteger NIBezierPathElement;
 - (CGFloat)relativePositionClosestToLine:(NILine)line;
 - (CGFloat)relativePositionClosestToLine:(NILine)line closestVector:(NIVectorPointer)vectorPointer;
 - (NIBezierPath *)bezierPathByCollapsingZ;
+- (NSBezierPath *)NSBezierPath; // collapses Z
 - (NIBezierPath *)bezierPathByReversing;
 
 - (NSArray*)intersectionsWithPlane:(NIPlane)plane; // returns NSValues containing NIVectors of the intersections.
