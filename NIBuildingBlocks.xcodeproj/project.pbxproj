@@ -221,6 +221,8 @@
 		4F151EF71B1CC9EC00C8F767 /* NIGeneratorViewPrivate */ = {
 			isa = PBXGroup;
 			children = (
+				4F4409B41B21A0F6006AC3B6 /* NIWindowingView.h */,
+				4F4409B51B21A0F6006AC3B6 /* NIWindowingView.m */,
 				4F151EF81B1CCA1400C8F767 /* NIGeneratorRequestLayer.h */,
 				4F151EF91B1CCA1400C8F767 /* NIGeneratorRequestLayer.m */,
 				4F151EFA1B1CCA1400C8F767 /* NIOrientationTextLayer.h */,
@@ -254,8 +256,6 @@
 				4F0727DF1B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.h */,
 				4F0727E01B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.m */,
 				4F1E60971B20D54F0053A79F /* NIWindowLevelWindowWidthToolbarItem.xib */,
-				4F4409B41B21A0F6006AC3B6 /* NIWindowingView.h */,
-				4F4409B51B21A0F6006AC3B6 /* NIWindowingView.m */,
 				4F151EF71B1CC9EC00C8F767 /* NIGeneratorViewPrivate */,
 			);
 			name = NIGeneratorRequestView;
