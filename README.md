@@ -1,6 +1,28 @@
 Copyright (c) 2015 by Spaltenstein Natural Image.
-This work is licensed under a Creative Commons Attribution 4.0 International License.
+Copyright (c) 2015 OsiriX Foundation
+Copyright (c) 2015 Michael Hilker and Andreas Holzamer
+Copyright (c) 2015 volz io
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+Documentation is Copyright (c) 2015 by Spaltenstein Natural Image and licensed under a Creative Commons Attribution 4.0 International License.
+
+#Natural Image Building Blocks#
 The Natural Image Building Blocks are meant to be a set of classes developers can use to implement medical imaging interfaces in MacOS. They are distributed as an MIT licensed Framework that can be included in either stand-alone applications or in OsriX plugins. This document describes the classes of the public API of the Framework. An effort will be made to ensure that future versions of the Framework will maintain source-code and binary compatibility for the objects described below. All other classes are considered private and may change drastically from version to version. Objects that are not included in the NIBuildingBlocks.h header are particularly prone to change between versions.
 
 **NIVolumeData**
