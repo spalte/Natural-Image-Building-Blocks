@@ -64,6 +64,7 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
     NIVector (^_convertVolumeVectorFromDICOMVectorBlock)(NIVector);
 }
 
+// This is a utility function to help build an NIAffineTransform that places a volume in space
 + (NIAffineTransform)volumeTransformForOrigin:(NIVector)origin directionX:(NIVector)directionX pixelSpacingX:(CGFloat)pixelSpacingX directionY:(NIVector)directionY pixelSpacingY:(CGFloat)pixelSpacingY
                                      directionZ:(NIVector)directionZ pixelSpacingZ:(CGFloat)pixelSpacingZ;
 
