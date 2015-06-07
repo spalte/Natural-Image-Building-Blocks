@@ -24,7 +24,8 @@
 @class NIVolumeData;
 
 // call this function to add the methods below to OsiriX, returns 0 on success
-int NIBuildingBlocksInstallOsiriXCategories();
+// NIBuildingBlocksInstallOsiriXCategories is now called automatically when the framework loads
+//int NIBuildingBlocksInstallOsiriXCategories();
 
 // These methods will be added to OsiriX's ViewerController
 @interface NSObject (NIBuildingBlocksViewerControllerAdditions)

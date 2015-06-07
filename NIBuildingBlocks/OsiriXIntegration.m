@@ -24,6 +24,8 @@
 
 #import <objc/runtime.h>
 
+int NIBuildingBlocksInstallOsiriXCategories();
+
 @interface ViewerController_NI : NSObject
 
 - (NIVolumeData *)NIVolumeDataForMovieIndex:(NSUInteger)movieIndex;
@@ -72,6 +74,11 @@ int NIBuildingBlocksInstallOsiriXCategories()
 #pragma clang diagnostic ignored "-Wincomplete-implementation"
 
 @implementation ViewerController_NI
+
++ (void)load
+{
+    NIBuildingBlocksInstallOsiriXCategories();
+}
 
 - (NIVolumeData *)NIVolumeDataForMovieIndex:(NSUInteger)movieIndex
 {
