@@ -86,6 +86,7 @@
 		4F0727E01B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIWindowLevelWindowWidthToolbarItem.m; sourceTree = "<group>"; };
 		4F094E711B2455C20009297A /* ContrastTemplate@2x.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "ContrastTemplate@2x.tiff"; sourceTree = "<group>"; };
 		4F094E731B24578D0009297A /* ContrastTemplate.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = ContrastTemplate.tiff; sourceTree = "<group>"; };
+		4F094E751B245EC00009297A /* README.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = README.rtf; sourceTree = "<group>"; };
 		4F151EDB1B1CC8D000C8F767 /* NIBuildingBlocks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NIBuildingBlocks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F151EDF1B1CC8D000C8F767 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F151EE01B1CC8D000C8F767 /* NIBuildingBlocks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NIBuildingBlocks.h; path = NIBuildingBlocks/NIBuildingBlocks.h; sourceTree = "<group>"; };
@@ -177,6 +178,7 @@
 		4F151ED11B1CC8D000C8F767 = {
 			isa = PBXGroup;
 			children = (
+				4F094E751B245EC00009297A /* README.rtf */,
 				4F151EE01B1CC8D000C8F767 /* NIBuildingBlocks.h */,
 				4F151EDD1B1CC8D000C8F767 /* NIBuildingBlocks */,
 				4F151EDC1B1CC8D000C8F767 /* Products */,
