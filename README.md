@@ -1,4 +1,4 @@
-Copyright (c) 2015 by Spaltenstein Natural Image.  
+Copyright (c) 2015 Spaltenstein Natural Image.  
 Copyright (c) 2015 OsiriX Foundation  
 Copyright (c) 2015 Michael Hilker and Andreas Holzamer  
 Copyright (c) 2015 volz io  
