@@ -82,8 +82,6 @@
 - (IBAction)_WLWWButtonPressed:(id)sender
 {
     [self.popover showRelativeToRect:[self.view bounds] ofView:self.view preferredEdge:NSMaxXEdge];
-
-    NSLog(@"pressed the button");
 }
 
 - (instancetype)initWithItemIdentifier:(NSString *)itemIdentifier
