@@ -525,6 +525,7 @@
 
 - (void)setSliceToDicomTransform:(NIAffineTransform)sliceToDicomTransform
 {
+// FIXME: this is WRONG for origin.z
     _directionX = NIVectorMake(sliceToDicomTransform.m11, sliceToDicomTransform.m12, sliceToDicomTransform.m13);
     _pixelSpacingX = NIVectorLength(_directionX);
     _directionX = NIVectorNormalize(_directionX);
