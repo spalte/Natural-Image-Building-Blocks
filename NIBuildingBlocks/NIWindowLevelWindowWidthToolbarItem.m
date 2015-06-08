@@ -65,11 +65,16 @@
         [_windowingView removeObserver:self forKeyPath:@"windowLevel"];
         [_windowingView removeObserver:self forKeyPath:@"windowWidth"];
     }
-    [_windowingView release];
-    _windowingView = nil;
 
     [_volumeDataProperties release];
     _volumeDataProperties = nil;
+
+    [_windowingView release];
+    _windowingView = nil;
+
+    for (NIGeneratorRequestView *oldView in _generatorRequestViews) {
+        [oldView removeObserver:self forKeyPath:@"volumeDataProperties"];
+    }
 
     [_generatorRequestViews release];
     _generatorRequestViews = nil;
