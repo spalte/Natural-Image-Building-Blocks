@@ -34,6 +34,7 @@
 #import "NISpritePrivate.h"
 #import "NIVolumeDataProperties.h"
 #import "NIVolumeDataPropertiesPrivate.h"
+#import "NITextLabelGroupLayer.h"
 
 #import "NIVolumeData.h"
 #import "NIGenerator.h"
@@ -160,6 +161,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
 - (void)initializeNIGeneratorRequestView
 {
     [self setWantsLayer:YES];
+    [self setLayerContentsRedrawPolicy:NSViewLayerContentsRedrawOnSetNeedsDisplay];
     
     [self setupFrameLayer];
     NIGeneratorRequestViewLayoutManager *layoutManager = [[[NIGeneratorRequestViewLayoutManager alloc] init] autorelease];
@@ -182,6 +184,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     [self addTrackingArea:_mousePositionTrackingArea];
 
     [self setupRimLayer];
+    [self setupTextLabelLayers];
     [self setupOrientationLayers];
     [self setupScaleBarLayers];
     [self _updateLabelContraints];
@@ -209,6 +212,11 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     _overlayLayerDelegate.view = nil;
     [_overlayLayerDelegate release];
     _overlayLayerDelegate = nil;
+
+    NSInteger i = 0;
+    for (i = 0; i < NITextLabelLocationCount; i++) {
+        [_textLabelLayers[i] setLabelLocation:(NITextLabelLocation)i];
+    }
 
     for (NSString *intersectionKey in _intersections) {
         [(NIIntersection *)_intersections[intersectionKey] setGeneratorRequestView:nil];
@@ -344,6 +352,57 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     _rightOrientationTextLayer.name = @"rightOrientationTextLayer";
 }
 
+- (void)setupTextLabelLayers
+{
+    _textLabelLayers = [@[[NITextLabelGroupLayer layer], [NITextLabelGroupLayer layer], [NITextLabelGroupLayer layer],
+                          [NITextLabelGroupLayer layer], [NITextLabelGroupLayer layer], [NITextLabelGroupLayer layer]] retain];
+
+    NSInteger i = 0;
+    for (i = 0; i < NITextLabelLocationCount; i++) {
+        NITextLabelGroupLayer *textLayer = _textLabelLayers[i];
+        textLayer.labelLocation = (NITextLabelLocation)i;
+
+        if (textLayer.labelLocation == NITextLabelLocationTopLeftEdgeSite || textLayer.labelLocation == NITextLabelLocationBottomLeftEdgeSite) {
+            [textLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX]];
+        } else if (textLayer.labelLocation == NITextLabelLocationTopEdgeSite || textLayer.labelLocation == NITextLabelLocationBottomEdgeSite) {
+            [textLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX]];
+        } else if (textLayer.labelLocation == NITextLabelLocationTopRightEdgeSite || textLayer.labelLocation == NITextLabelLocationBottomRightEdgeSite) {
+            [textLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX]];
+        }
+
+        if (textLayer.labelLocation == NITextLabelLocationTopLeftEdgeSite || textLayer.labelLocation == NITextLabelLocationTopEdgeSite || textLayer.labelLocation == NITextLabelLocationTopRightEdgeSite) {
+            [textLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY]];
+        } else if (textLayer.labelLocation == NITextLabelLocationBottomLeftEdgeSite || textLayer.labelLocation == NITextLabelLocationBottomEdgeSite || textLayer.labelLocation == NITextLabelLocationBottomRightEdgeSite) {
+            [textLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY]];
+        }
+
+        switch ((NITextLabelLocation)i) {
+            case NITextLabelLocationTopLeftEdgeSite:
+                textLayer.name = @"TopLeftLabelGroup";
+                break;
+            case NITextLabelLocationBottomLeftEdgeSite:
+                textLayer.name = @"BottomLeftLabelGroup";
+                break;
+            case NITextLabelLocationTopEdgeSite:
+                textLayer.name = @"TopLabelGroup";
+                break;
+            case NITextLabelLocationBottomEdgeSite:
+                textLayer.name = @"BottomLabelGroup";
+                break;
+            case NITextLabelLocationTopRightEdgeSite:
+                textLayer.name = @"TopRightLabelGroup";
+                break;
+            case NITextLabelLocationBottomRightEdgeSite:
+                textLayer.name = @"BottomRightLabelGroup";
+                break;
+        }
+
+        textLayer.zPosition = NIGeneratorRequestViewRimLayerZPosition + 1;
+        textLayer.contentsScale = self.layer.contentsScale;
+        [_frameLayer addSublayer:textLayer];
+    }
+}
+
 - (void)setupScaleBarLayers
 {
     _horizontalScaleBar = [[NIScaleBarLayer alloc] init];
@@ -368,6 +427,11 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
 - (void)drawOverlay
 {
     
+}
+
+- (NSMutableArray *)textLabelsForLocation:(NITextLabelLocation)labelLocation
+{
+    return [_textLabelLayers[labelLocation] mutableArrayValueForKey:@"textLabels"];
 }
 
 - (void)setDisplayRim:(BOOL)displayRim
@@ -882,7 +946,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     constraints = [NSMutableArray array];
     if (_bottomOrientationTextLayer.superlayer) {
         [constraints addObject:[CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX]];
-        [constraints addObject:[CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY offset:5]];
+        [constraints addObject:[CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"BottomLabelGroup" attribute:kCAConstraintMaxY offset:5]];
         prevLayerName = @"bottomOrientationTextLayer";
     }
     _bottomOrientationTextLayer.constraints = constraints;
@@ -892,7 +956,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
         if (prevLayerName) {
             [constraints addObject:[CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:prevLayerName attribute:kCAConstraintMaxY offset:3]];
         } else {
-            [constraints addObject:[CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY offset:8]];
+            [constraints addObject:[CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"BottomLabelGroup" attribute:kCAConstraintMaxY offset:8]];
         }
     }
     _horizontalScaleBar.constraints = constraints;
@@ -909,7 +973,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     constraints = [NSMutableArray array];
     if (_topOrientationTextLayer.superlayer) {
         [constraints addObject:[CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX]];
-        [constraints addObject:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY offset:-5]];
+        [constraints addObject:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"TopLabelGroup" attribute:kCAConstraintMinY offset:-5]];
     }
     _topOrientationTextLayer.constraints = constraints;
 }

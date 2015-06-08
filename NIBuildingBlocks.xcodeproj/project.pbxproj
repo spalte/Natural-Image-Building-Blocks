@@ -78,6 +78,8 @@
 		4F1E60981B20D54F0053A79F /* NIWindowLevelWindowWidthToolbarItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F1E60971B20D54F0053A79F /* NIWindowLevelWindowWidthToolbarItem.xib */; };
 		4F4409B61B21A0F6006AC3B6 /* NIWindowingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4409B41B21A0F6006AC3B6 /* NIWindowingView.h */; };
 		4F4409B71B21A0F6006AC3B6 /* NIWindowingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4409B51B21A0F6006AC3B6 /* NIWindowingView.m */; };
+		4FF07D901B24C30D00380630 /* NITextLabelGroupLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF07D8E1B24C30D00380630 /* NITextLabelGroupLayer.h */; };
+		4FF07D911B24C30D00380630 /* NITextLabelGroupLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D8F1B24C30D00380630 /* NITextLabelGroupLayer.m */; };
 		719473721B1DA0F1009363AE /* NIOrientationTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 719473711B1DA0F1009363AE /* NIOrientationTextLayer.m */; };
 /* End PBXBuildFile section */
 
@@ -155,6 +157,8 @@
 		4F1E60971B20D54F0053A79F /* NIWindowLevelWindowWidthToolbarItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NIWindowLevelWindowWidthToolbarItem.xib; sourceTree = "<group>"; };
 		4F4409B41B21A0F6006AC3B6 /* NIWindowingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIWindowingView.h; sourceTree = "<group>"; };
 		4F4409B51B21A0F6006AC3B6 /* NIWindowingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIWindowingView.m; sourceTree = "<group>"; };
+		4FF07D8E1B24C30D00380630 /* NITextLabelGroupLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITextLabelGroupLayer.h; sourceTree = "<group>"; };
+		4FF07D8F1B24C30D00380630 /* NITextLabelGroupLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITextLabelGroupLayer.m; sourceTree = "<group>"; };
 		719473711B1DA0F1009363AE /* NIOrientationTextLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIOrientationTextLayer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -225,6 +229,8 @@
 				4F4409B51B21A0F6006AC3B6 /* NIWindowingView.m */,
 				4F151EF81B1CCA1400C8F767 /* NIGeneratorRequestLayer.h */,
 				4F151EF91B1CCA1400C8F767 /* NIGeneratorRequestLayer.m */,
+				4FF07D8E1B24C30D00380630 /* NITextLabelGroupLayer.h */,
+				4FF07D8F1B24C30D00380630 /* NITextLabelGroupLayer.m */,
 				4F151EFA1B1CCA1400C8F767 /* NIOrientationTextLayer.h */,
 				719473711B1DA0F1009363AE /* NIOrientationTextLayer.m */,
 				4F151EFC1B1CCA1400C8F767 /* NIAnnotationTextLayer.h */,
@@ -387,6 +393,7 @@
 				4F151F501B1CCC0100C8F767 /* NIObliqueSliceOperation.h in Headers */,
 				4F151F521B1CCC0100C8F767 /* NIProjectionOperation.h in Headers */,
 				4F151F541B1CCC0100C8F767 /* NIStraightenedOperation.h in Headers */,
+				4FF07D901B24C30D00380630 /* NITextLabelGroupLayer.h in Headers */,
 				4F151F401B1CCB8E00C8F767 /* NIGeneratorOperation.h in Headers */,
 				4F151F4E1B1CCC0100C8F767 /* NIHorizontalFillOperation.h in Headers */,
 				4F151F561B1CCC0100C8F767 /* NIStretchedOperation.h in Headers */,
@@ -493,6 +500,7 @@
 				4F151F911B1CFB2E00C8F767 /* NSBezierPath+NI.m in Sources */,
 				4F151F0E1B1CCA1400C8F767 /* NIObliqueSliceIntersectionLayer.m in Sources */,
 				4F151F2A1B1CCA8D00C8F767 /* NIFloatImageRep.m in Sources */,
+				4FF07D911B24C30D00380630 /* NITextLabelGroupLayer.m in Sources */,
 				4F151F411B1CCB8E00C8F767 /* NIGeneratorOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
