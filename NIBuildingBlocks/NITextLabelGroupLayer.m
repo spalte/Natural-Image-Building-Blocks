@@ -63,15 +63,48 @@
     textLayer.name = [self uniqueLabelName];
     textLayer.contentsScale = self.contentsScale;
 
+    if (index < [self.sublayers count]) {
+        textLayer.constraints = [self.sublayers[index] constraints];
+    } else if (index == 0) {
+        if (self.labelLocation == NITextLabelLocationTopLeftEdgeSite || self.labelLocation == NITextLabelLocationTopEdgeSite || self.labelLocation == NITextLabelLocationTopRightEdgeSite) {
+            [textLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY offset:-5]];
+        } else if (self.labelLocation == NITextLabelLocationBottomLeftEdgeSite || self.labelLocation == NITextLabelLocationBottomEdgeSite || self.labelLocation == NITextLabelLocationBottomRightEdgeSite) {
+            [textLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY]];
+        }
+    } else {
+        if (self.labelLocation == NITextLabelLocationTopLeftEdgeSite || self.labelLocation == NITextLabelLocationBottomLeftEdgeSite) {
+            [textLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX offset:7]];
+        } else if (self.labelLocation == NITextLabelLocationTopEdgeSite || self.labelLocation == NITextLabelLocationBottomEdgeSite) {
+            [textLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX]];
+        } else if (self.labelLocation == NITextLabelLocationTopRightEdgeSite || self.labelLocation == NITextLabelLocationBottomRightEdgeSite) {
+            [textLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX offset:-7]];
+        }
+
+        [textLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:[self.sublayers[index - 1] name] attribute:kCAConstraintMinY]];
+    }
+
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
     [_textLabels insertObject:textLabel atIndex:index];
     [self insertSublayer:textLayer atIndex:(unsigned int)index];
+
+    [self layoutIfNeeded];
+    [CATransaction commit];
+
     [self resetSizeAndConstraints];
 }
 
 - (void)removeObjectFromTextLabelsAtIndex:(NSUInteger)index
 {
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+
     [_textLabels removeObjectAtIndex:index];
     [(CALayer *)self.sublayers[index] removeFromSuperlayer];
+
+    [CATransaction commit];
+
+    [self resetSizeAndConstraints];
 }
 
 - (void)replaceObjectInTextLabelsAtIndex:(NSUInteger)index withObject:(NSString *)object
@@ -104,7 +137,6 @@
         } else if (self.labelLocation == NITextLabelLocationBottomLeftEdgeSite || self.labelLocation == NITextLabelLocationBottomEdgeSite || self.labelLocation == NITextLabelLocationBottomRightEdgeSite) {
             [(CALayer*)self.sublayers[0] addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY]];
         }
-
     }
 
     for (i = 1; i < [[self sublayers] count]; i++) {
@@ -116,12 +148,14 @@
 
     }
 
-    [self layoutIfNeeded];
+
     CGSize size = CGSizeZero;
     for (i = 0; i < [[self sublayers] count]; i++) {
         CALayer *textLayer = self.sublayers[i];
 
-        size.height += textLayer.bounds.size.height;
+//        size.height += textLayer.bounds.size.height;
+        // it would be better to now hardcode this, but getting the height is a pain
+        size.height += 17;
         size.width = MAX(size.width, textLayer.bounds.size.width + 7);
     }
 
@@ -132,6 +166,8 @@
     CGRect bounds = self.bounds;
     bounds.size = size;
     self.bounds = bounds;
+    
+    [self.superlayer layoutIfNeeded];
 }
 
 
