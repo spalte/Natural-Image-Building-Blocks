@@ -547,15 +547,16 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     [self willChangeValueForKey:@"volumeDataProperties"];
     if ([[_volumeDataComposingLayer sublayers] count] && index == 0) {
         [[_volumeDataComposingLayer sublayers][0] removeObserver:self forKeyPath:@"presentedGeneratorRequest"];
-
-        if ([[_volumeDataComposingLayer sublayers] count]) {
-            [[_volumeDataComposingLayer sublayers][0] addObserver:self forKeyPath:@"presentedGeneratorRequest" options:(NSKeyValueObservingOptionNew) context:_volumeDataComposingLayer];
-        }
     }
 
     [[_volumeDataComposingLayer sublayers][index] removeFromSuperlayer];
     [_volumeDataProperties[index] setGeneratorRequestLayer:nil];
     [_volumeDataProperties removeObjectAtIndex:index];
+
+    if ([[_volumeDataComposingLayer sublayers] count] && index == 0) {
+        [[_volumeDataComposingLayer sublayers][0] addObserver:self forKeyPath:@"presentedGeneratorRequest" options:(NSKeyValueObservingOptionNew) context:_volumeDataComposingLayer];
+    }
+
     [self didChangeValueForKey:@"volumeDataProperties"];
 }
 
