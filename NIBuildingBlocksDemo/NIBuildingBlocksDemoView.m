@@ -30,7 +30,7 @@
     xBasis = NIVectorInvert(xBasis);
 
     NIObliqueSliceGeneratorRequest *newGeneratorRequest = [[[NIObliqueSliceGeneratorRequest alloc] initWithCenter:oldGeneratorRequest.center
-                                                                                                       pixelsWide:100 pixelsHigh:100 xBasis:xBasis yBasis:yBasis] autorelease];
+                                                                                                       pixelsWide:200 pixelsHigh:200 xBasis:xBasis yBasis:yBasis] autorelease];
 
     [CATransaction begin];
     [CATransaction setAnimationDuration:.8];

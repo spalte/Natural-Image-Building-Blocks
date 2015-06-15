@@ -24,11 +24,11 @@
 - (void)windowDidLoad {
     [super windowDidLoad];
 
-    _leftView.rimColor = [[NSColor blueColor] colorWithAlphaComponent:0.5];
+    _leftView.rimColor = [[NSColor greenColor] colorWithAlphaComponent:0.8];
     _leftView.displayRim = YES;
     _leftView.displayScaleBar = YES;
     _leftView.displayOrientationLabels = YES;
-    _rightView.rimColor = [[NSColor redColor] colorWithAlphaComponent:0.5];
+    _rightView.rimColor = [[NSColor redColor] colorWithAlphaComponent:0.8];
     _rightView.displayRim = YES;
     _rightView.displayScaleBar = YES;
     _rightView.displayOrientationLabels = YES;
@@ -41,7 +41,7 @@
     [_leftView addIntersection:_leftIntersection forKey:@"leftIntersection"];
 
     _rightIntersection = [[NIIntersection alloc] init];
-    _rightIntersection.color = [[NSColor blueColor] colorWithAlphaComponent:0.8];
+    _rightIntersection.color = [[NSColor greenColor] colorWithAlphaComponent:0.8];
     _rightIntersection.thickness = 2;
     _rightIntersection.maskAroundMouse = YES;
     [_rightIntersection bind:@"intersectingObject" toObject:_leftView withKeyPath:@"presentedGeneratorRequest" options:nil];
@@ -87,14 +87,16 @@
 {
     if (_volumeData) {
         [_leftView addVolumeData:_volumeData];
-        [_rightView addVolumeData:_volumeData];
+
+        NIVolumeDataProperties *properties = [_rightView addVolumeData:_volumeData];
+        properties.CLUT = [[[NSGradient alloc] initWithStartingColor:[NSColor blueColor] endingColor:[NSColor redColor]] autorelease];
 
         NIAffineTransform inverseVolumeTransform = NIAffineTransformInvert(_volumeData.volumeTransform);
         NIVector center = NIVectorApplyTransform(NIVectorMake(_volumeData.pixelsWide / 2.0, _volumeData.pixelsHigh / 2.0, _volumeData.pixelsDeep / 2.0), inverseVolumeTransform);
-        NIObliqueSliceGeneratorRequest *leftRequest = [[[NIObliqueSliceGeneratorRequest alloc] initWithCenter:center pixelsWide:100 pixelsHigh:100
+        NIObliqueSliceGeneratorRequest *leftRequest = [[[NIObliqueSliceGeneratorRequest alloc] initWithCenter:center pixelsWide:200 pixelsHigh:200
                                                                                                        xBasis:_volumeData.directionX yBasis:NIVectorInvert(_volumeData.directionY)] autorelease];
 
-        NIObliqueSliceGeneratorRequest *rightRequest = [[[NIObliqueSliceGeneratorRequest alloc] initWithCenter:center pixelsWide:100 pixelsHigh:100
+        NIObliqueSliceGeneratorRequest *rightRequest = [[[NIObliqueSliceGeneratorRequest alloc] initWithCenter:center pixelsWide:200 pixelsHigh:200
                                                                                                        xBasis:_volumeData.directionX yBasis:_volumeData.directionZ] autorelease];
 
         [CATransaction begin];
