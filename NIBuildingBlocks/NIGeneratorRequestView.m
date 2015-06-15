@@ -553,7 +553,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
         }
     }
 
-    [[_volumeDataComposingLayer sublayers][index] removeFromSuperview];
+    [[_volumeDataComposingLayer sublayers][index] removeFromSuperlayer];
     [_volumeDataProperties[index] setGeneratorRequestLayer:nil];
     [_volumeDataProperties removeObjectAtIndex:index];
     [self didChangeValueForKey:@"volumeDataProperties"];
