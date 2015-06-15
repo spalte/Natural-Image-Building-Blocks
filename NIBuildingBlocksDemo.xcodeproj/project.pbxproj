@@ -287,6 +287,7 @@
 				);
 				INFOPLIST_FILE = NIBuildingBlocksDemo/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				OTHER_LDFLAGS = (
 					"-undefined",
 					dynamic_lookup,
@@ -307,6 +308,7 @@
 				);
 				INFOPLIST_FILE = NIBuildingBlocksDemo/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				OTHER_LDFLAGS = (
 					"-undefined",
 					dynamic_lookup,
