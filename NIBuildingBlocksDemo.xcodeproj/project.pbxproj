@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4F486D2D1B2F7D38000402EF /* NIBuildingBlocksDemoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F486D2C1B2F7D38000402EF /* NIBuildingBlocksDemoView.m */; };
+		4F486D321B2F9481000402EF /* NIBuildingBlocks.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4FF07DBE1B2F691B00380630 /* NIBuildingBlocks.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4FF07DA61B2EE14A00380630 /* OsiriXAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FF07DA51B2EE14A00380630 /* OsiriXAPI.framework */; };
 		4FF07DA91B2F539900380630 /* NIBuildingBlocksDemoPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07DA81B2F539900380630 /* NIBuildingBlocksDemoPlugin.m */; };
 		4FF07DAC1B2F544900380630 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FF07DAA1B2F542500380630 /* Cocoa.framework */; };
@@ -25,6 +26,19 @@
 			remoteInfo = NIBuildingBlocks;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4F486D311B2F9474000402EF /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4F486D321B2F9481000402EF /* NIBuildingBlocks.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4F486D2B1B2F7D38000402EF /* NIBuildingBlocksDemoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIBuildingBlocksDemoView.h; sourceTree = "<group>"; };
@@ -115,6 +129,7 @@
 				4FF07D971B2EDFA200380630 /* Sources */,
 				4FF07D981B2EDFA200380630 /* Frameworks */,
 				4FF07D991B2EDFA200380630 /* Resources */,
+				4F486D311B2F9474000402EF /* CopyFiles */,
 			);
 			buildRules = (
 			);
