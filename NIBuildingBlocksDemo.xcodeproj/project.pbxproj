@@ -1,0 +1,299 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4FF07DA61B2EE14A00380630 /* OsiriXAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FF07DA51B2EE14A00380630 /* OsiriXAPI.framework */; };
+		4FF07DA91B2F539900380630 /* NIBuildingBlocksDemoPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07DA81B2F539900380630 /* NIBuildingBlocksDemoPlugin.m */; };
+		4FF07DAC1B2F544900380630 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FF07DAA1B2F542500380630 /* Cocoa.framework */; };
+		4FF07DB71B2F55E800380630 /* NIBuildingBlocksDemoWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07DB51B2F55E800380630 /* NIBuildingBlocksDemoWindowController.m */; };
+		4FF07DB81B2F55E800380630 /* NIBuildingBlocksDemoWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF07DB61B2F55E800380630 /* NIBuildingBlocksDemoWindowController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		4FF07D9B1B2EDFA200380630 /* NIBuildingBlocksDemo.osirixplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NIBuildingBlocksDemo.osirixplugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FF07D9F1B2EDFA200380630 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4FF07DA51B2EE14A00380630 /* OsiriXAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OsiriXAPI.framework; sourceTree = "<group>"; };
+		4FF07DA71B2F539900380630 /* NIBuildingBlocksDemoPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIBuildingBlocksDemoPlugin.h; sourceTree = "<group>"; };
+		4FF07DA81B2F539900380630 /* NIBuildingBlocksDemoPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIBuildingBlocksDemoPlugin.m; sourceTree = "<group>"; };
+		4FF07DAA1B2F542500380630 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		4FF07DB41B2F55E800380630 /* NIBuildingBlocksDemoWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIBuildingBlocksDemoWindowController.h; sourceTree = "<group>"; };
+		4FF07DB51B2F55E800380630 /* NIBuildingBlocksDemoWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIBuildingBlocksDemoWindowController.m; sourceTree = "<group>"; };
+		4FF07DB61B2F55E800380630 /* NIBuildingBlocksDemoWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NIBuildingBlocksDemoWindowController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4FF07D981B2EDFA200380630 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FF07DAC1B2F544900380630 /* Cocoa.framework in Frameworks */,
+				4FF07DA61B2EE14A00380630 /* OsiriXAPI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4FF07D921B2EDFA200380630 = {
+			isa = PBXGroup;
+			children = (
+				4FF07D9D1B2EDFA200380630 /* NIBuildingBlocksDemo */,
+				4FF07D9C1B2EDFA200380630 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4FF07D9C1B2EDFA200380630 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4FF07D9B1B2EDFA200380630 /* NIBuildingBlocksDemo.osirixplugin */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4FF07D9D1B2EDFA200380630 /* NIBuildingBlocksDemo */ = {
+			isa = PBXGroup;
+			children = (
+				4FF07DA71B2F539900380630 /* NIBuildingBlocksDemoPlugin.h */,
+				4FF07DA81B2F539900380630 /* NIBuildingBlocksDemoPlugin.m */,
+				4FF07DB41B2F55E800380630 /* NIBuildingBlocksDemoWindowController.h */,
+				4FF07DB51B2F55E800380630 /* NIBuildingBlocksDemoWindowController.m */,
+				4FF07DB61B2F55E800380630 /* NIBuildingBlocksDemoWindowController.xib */,
+				4FF07D9E1B2EDFA200380630 /* Supporting Files */,
+			);
+			path = NIBuildingBlocksDemo;
+			sourceTree = "<group>";
+		};
+		4FF07D9E1B2EDFA200380630 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4FF07DAA1B2F542500380630 /* Cocoa.framework */,
+				4FF07D9F1B2EDFA200380630 /* Info.plist */,
+				4FF07DA51B2EE14A00380630 /* OsiriXAPI.framework */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4FF07D9A1B2EDFA200380630 /* NIBuildingBlocksDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4FF07DA21B2EDFA200380630 /* Build configuration list for PBXNativeTarget "NIBuildingBlocksDemo" */;
+			buildPhases = (
+				4FF07D971B2EDFA200380630 /* Sources */,
+				4FF07D981B2EDFA200380630 /* Frameworks */,
+				4FF07D991B2EDFA200380630 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NIBuildingBlocksDemo;
+			productName = NIBuildingBlocksDemo;
+			productReference = 4FF07D9B1B2EDFA200380630 /* NIBuildingBlocksDemo.osirixplugin */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4FF07D931B2EDFA200380630 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0630;
+				ORGANIZATIONNAME = "Spaltenstein Natural Image";
+				TargetAttributes = {
+					4FF07D9A1B2EDFA200380630 = {
+						CreatedOnToolsVersion = 6.3.2;
+					};
+				};
+			};
+			buildConfigurationList = 4FF07D961B2EDFA200380630 /* Build configuration list for PBXProject "NIBuildingBlocksDemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 4FF07D921B2EDFA200380630;
+			productRefGroup = 4FF07D9C1B2EDFA200380630 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4FF07D9A1B2EDFA200380630 /* NIBuildingBlocksDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4FF07D991B2EDFA200380630 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FF07DB81B2F55E800380630 /* NIBuildingBlocksDemoWindowController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4FF07D971B2EDFA200380630 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FF07DA91B2F539900380630 /* NIBuildingBlocksDemoPlugin.m in Sources */,
+				4FF07DB71B2F55E800380630 /* NIBuildingBlocksDemoWindowController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4FF07DA01B2EDFA200380630 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = macosx10.9;
+			};
+			name = Debug;
+		};
+		4FF07DA11B2EDFA200380630 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = macosx10.9;
+			};
+			name = Release;
+		};
+		4FF07DA31B2EDFA200380630 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/NIBuildingBlocksDemo",
+				);
+				INFOPLIST_FILE = NIBuildingBlocksDemo/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					dynamic_lookup,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = osirixplugin;
+			};
+			name = Debug;
+		};
+		4FF07DA41B2EDFA200380630 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/NIBuildingBlocksDemo",
+				);
+				INFOPLIST_FILE = NIBuildingBlocksDemo/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					dynamic_lookup,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = osirixplugin;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4FF07D961B2EDFA200380630 /* Build configuration list for PBXProject "NIBuildingBlocksDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4FF07DA01B2EDFA200380630 /* Debug */,
+				4FF07DA11B2EDFA200380630 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4FF07DA21B2EDFA200380630 /* Build configuration list for PBXNativeTarget "NIBuildingBlocksDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4FF07DA31B2EDFA200380630 /* Debug */,
+				4FF07DA41B2EDFA200380630 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4FF07D931B2EDFA200380630 /* Project object */;
+}

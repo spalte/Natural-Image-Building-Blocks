@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="NIBuildingBlocksDemoWindowController">
+            <connections>
+                <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="F0z-JX-Cv5">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES" unifiedTitleAndToolbar="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="196" y="240" width="834" height="483"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
+            <view key="contentView" id="se5-gp-TjO">
+                <rect key="frame" x="0.0" y="0.0" width="834" height="483"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="fHB-qv-qow">
+                        <rect key="frame" x="0.0" y="0.0" width="500" height="483"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="500" id="bMn-8G-geB"/>
+                        </constraints>
+                    </customView>
+                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="W2D-15-j4Z">
+                        <rect key="frame" x="500" y="0.0" width="334" height="483"/>
+                    </customView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="W2D-15-j4Z" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" id="30w-59-y2S"/>
+                    <constraint firstItem="W2D-15-j4Z" firstAttribute="leading" secondItem="fHB-qv-qow" secondAttribute="trailing" id="4HN-Zc-s6r"/>
+                    <constraint firstItem="fHB-qv-qow" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" id="EmI-g1-2ca"/>
+                    <constraint firstAttribute="bottom" secondItem="fHB-qv-qow" secondAttribute="bottom" id="Sui-KV-i7i"/>
+                    <constraint firstItem="fHB-qv-qow" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" id="UYt-6W-NFS"/>
+                    <constraint firstAttribute="trailing" secondItem="W2D-15-j4Z" secondAttribute="trailing" id="dvR-1S-cgk"/>
+                    <constraint firstAttribute="bottom" secondItem="W2D-15-j4Z" secondAttribute="bottom" id="pOW-Dd-yxH"/>
+                </constraints>
+            </view>
+            <toolbar key="toolbar" implicitIdentifier="AA7F374F-D498-4A8D-893A-EDFE03C62772" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="3af-IG-RHi">
+                <allowedToolbarItems/>
+                <defaultToolbarItems/>
+                <connections>
+                    <outlet property="delegate" destination="-2" id="BMY-5s-wmY"/>
+                </connections>
+            </toolbar>
+            <connections>
+                <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>
+            </connections>
+            <point key="canvasLocation" x="333" y="319.5"/>
+        </window>
+    </objects>
+</document>
