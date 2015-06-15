@@ -95,9 +95,10 @@
         NIVector center = NIVectorApplyTransform(NIVectorMake(_volumeData.pixelsWide / 2.0, _volumeData.pixelsHigh / 2.0, _volumeData.pixelsDeep / 2.0), inverseVolumeTransform);
         NIObliqueSliceGeneratorRequest *leftRequest = [[[NIObliqueSliceGeneratorRequest alloc] initWithCenter:center pixelsWide:200 pixelsHigh:200
                                                                                                        xBasis:_volumeData.directionX yBasis:NIVectorInvert(_volumeData.directionY)] autorelease];
-
+        leftRequest.interpolationMode = NIInterpolationModeCubic;
         NIObliqueSliceGeneratorRequest *rightRequest = [[[NIObliqueSliceGeneratorRequest alloc] initWithCenter:center pixelsWide:200 pixelsHigh:200
                                                                                                        xBasis:_volumeData.directionX yBasis:_volumeData.directionZ] autorelease];
+        rightRequest.interpolationMode = NIInterpolationModeCubic;
 
         [CATransaction begin];
         [CATransaction setDisableActions:YES];

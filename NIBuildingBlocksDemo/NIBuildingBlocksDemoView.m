@@ -31,6 +31,7 @@
 
     NIObliqueSliceGeneratorRequest *newGeneratorRequest = [[[NIObliqueSliceGeneratorRequest alloc] initWithCenter:oldGeneratorRequest.center
                                                                                                        pixelsWide:200 pixelsHigh:200 xBasis:xBasis yBasis:yBasis] autorelease];
+    newGeneratorRequest.interpolationMode = NIInterpolationModeCubic;
 
     [CATransaction begin];
     [CATransaction setAnimationDuration:.8];
