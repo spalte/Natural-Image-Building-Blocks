@@ -14,8 +14,28 @@
 
 - (void)drawOverlay
 {
-    [[NSColor yellowColor] set];
-    [@"Click Me" drawAtPoint:NSMakePoint(20,20) withAttributes:nil];
+    NSFont *font = [NSFont fontWithName:@"Helvetica" size:24];
+    [@"Click Me" drawWithRect:NSMakeRect(200, 200, 100, 100) options:0
+                   attributes:@{NSFontAttributeName: font, NSForegroundColorAttributeName:[NSColor yellowColor]}];
+}
+
+- (void)mouseUp:(NSEvent *)theEvent
+{
+    [super mouseUp:theEvent];
+
+    NIObliqueSliceGeneratorRequest *oldGeneratorRequest = (NIObliqueSliceGeneratorRequest *)self.generatorRequest;
+
+    NIVector xBasis = NIVectorScalarMultiply(oldGeneratorRequest.directionX, oldGeneratorRequest.pixelSpacingX);
+    NIVector yBasis = NIVectorScalarMultiply(oldGeneratorRequest.directionY, oldGeneratorRequest.pixelSpacingY);
+    xBasis = NIVectorInvert(xBasis);
+
+    NIObliqueSliceGeneratorRequest *newGeneratorRequest = [[[NIObliqueSliceGeneratorRequest alloc] initWithCenter:oldGeneratorRequest.center
+                                                                                                       pixelsWide:100 pixelsHigh:100 xBasis:xBasis yBasis:yBasis] autorelease];
+
+    [CATransaction begin];
+    [CATransaction setAnimationDuration:.8];
+    self.generatorRequest = newGeneratorRequest;
+    [CATransaction commit];
 }
 
 @end

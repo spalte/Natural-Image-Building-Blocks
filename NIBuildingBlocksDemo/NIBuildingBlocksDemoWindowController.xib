@@ -17,10 +17,10 @@
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="F0z-JX-Cv5">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES" unifiedTitleAndToolbar="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="834" height="483"/>
+            <rect key="contentRect" x="196" y="240" width="979" height="483"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
             <view key="contentView" id="se5-gp-TjO">
-                <rect key="frame" x="0.0" y="0.0" width="834" height="483"/>
+                <rect key="frame" x="0.0" y="0.0" width="979" height="483"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="fHB-qv-qow" customClass="NIBuildingBlocksDemoView">
@@ -30,7 +30,7 @@
                         </constraints>
                     </customView>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="W2D-15-j4Z" customClass="NIGeneratorRequestView">
-                        <rect key="frame" x="500" y="0.0" width="334" height="483"/>
+                        <rect key="frame" x="500" y="0.0" width="479" height="483"/>
                     </customView>
                 </subviews>
                 <constraints>
@@ -53,7 +53,7 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>
             </connections>
-            <point key="canvasLocation" x="333" y="319.5"/>
+            <point key="canvasLocation" x="405.5" y="319.5"/>
         </window>
     </objects>
 </document>

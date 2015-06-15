@@ -90,12 +90,11 @@
         [_rightView addVolumeData:_volumeData];
 
         NIAffineTransform inverseVolumeTransform = NIAffineTransformInvert(_volumeData.volumeTransform);
-        NIVector leftCenter = NIVectorApplyTransform(NIVectorMake(_volumeData.pixelsWide / 2.0, _volumeData.pixelsHigh / 2.0, 0), inverseVolumeTransform);
-        NIObliqueSliceGeneratorRequest *leftRequest = [[[NIObliqueSliceGeneratorRequest alloc] initWithCenter:leftCenter pixelsWide:100 pixelsHigh:100
-                                                                                                       xBasis:_volumeData.directionX yBasis:_volumeData.directionY] autorelease];
+        NIVector center = NIVectorApplyTransform(NIVectorMake(_volumeData.pixelsWide / 2.0, _volumeData.pixelsHigh / 2.0, _volumeData.pixelsDeep / 2.0), inverseVolumeTransform);
+        NIObliqueSliceGeneratorRequest *leftRequest = [[[NIObliqueSliceGeneratorRequest alloc] initWithCenter:center pixelsWide:100 pixelsHigh:100
+                                                                                                       xBasis:_volumeData.directionX yBasis:NIVectorInvert(_volumeData.directionY)] autorelease];
 
-        NIVector rightCenter = NIVectorApplyTransform(NIVectorMake(_volumeData.pixelsWide / 2.0, _volumeData.pixelsHigh / 2.0, _volumeData.pixelsDeep / 2.0), inverseVolumeTransform);
-        NIObliqueSliceGeneratorRequest *rightRequest = [[[NIObliqueSliceGeneratorRequest alloc] initWithCenter:rightCenter pixelsWide:100 pixelsHigh:100
+        NIObliqueSliceGeneratorRequest *rightRequest = [[[NIObliqueSliceGeneratorRequest alloc] initWithCenter:center pixelsWide:100 pixelsHigh:100
                                                                                                        xBasis:_volumeData.directionX yBasis:_volumeData.directionZ] autorelease];
 
         [CATransaction begin];
