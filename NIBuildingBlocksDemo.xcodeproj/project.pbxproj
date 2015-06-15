@@ -12,7 +12,19 @@
 		4FF07DAC1B2F544900380630 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FF07DAA1B2F542500380630 /* Cocoa.framework */; };
 		4FF07DB71B2F55E800380630 /* NIBuildingBlocksDemoWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07DB51B2F55E800380630 /* NIBuildingBlocksDemoWindowController.m */; };
 		4FF07DB81B2F55E800380630 /* NIBuildingBlocksDemoWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF07DB61B2F55E800380630 /* NIBuildingBlocksDemoWindowController.xib */; };
+		4FF07DBF1B2F693900380630 /* NIBuildingBlocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FF07DBE1B2F691B00380630 /* NIBuildingBlocks.framework */; };
+		4FF07DC21B2F6E6900380630 /* NIBuildingBlocksDemoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07DC11B2F6E6900380630 /* NIBuildingBlocksDemoView.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4FF07DBD1B2F691B00380630 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4FF07DB91B2F691A00380630 /* NIBuildingBlocks.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F151EDB1B1CC8D000C8F767;
+			remoteInfo = NIBuildingBlocks;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		4FF07D9B1B2EDFA200380630 /* NIBuildingBlocksDemo.osirixplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NIBuildingBlocksDemo.osirixplugin; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -24,6 +36,9 @@
 		4FF07DB41B2F55E800380630 /* NIBuildingBlocksDemoWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIBuildingBlocksDemoWindowController.h; sourceTree = "<group>"; };
 		4FF07DB51B2F55E800380630 /* NIBuildingBlocksDemoWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIBuildingBlocksDemoWindowController.m; sourceTree = "<group>"; };
 		4FF07DB61B2F55E800380630 /* NIBuildingBlocksDemoWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NIBuildingBlocksDemoWindowController.xib; sourceTree = "<group>"; };
+		4FF07DB91B2F691A00380630 /* NIBuildingBlocks.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = NIBuildingBlocks.xcodeproj; path = NIBuildingBlocks/NIBuildingBlocks.xcodeproj; sourceTree = "<group>"; };
+		4FF07DC01B2F6E6900380630 /* NIBuildingBlocksDemoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIBuildingBlocksDemoView.h; path = ../../NIBuildingBlocksDemo_old/NIBuildingBlocksDemo/NIBuildingBlocksDemoView.h; sourceTree = "<group>"; };
+		4FF07DC11B2F6E6900380630 /* NIBuildingBlocksDemoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NIBuildingBlocksDemoView.m; path = ../../NIBuildingBlocksDemo_old/NIBuildingBlocksDemo/NIBuildingBlocksDemoView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FF07DBF1B2F693900380630 /* NIBuildingBlocks.framework in Frameworks */,
 				4FF07DAC1B2F544900380630 /* Cocoa.framework in Frameworks */,
 				4FF07DA61B2EE14A00380630 /* OsiriXAPI.framework in Frameworks */,
 			);
@@ -42,6 +58,7 @@
 		4FF07D921B2EDFA200380630 = {
 			isa = PBXGroup;
 			children = (
+				4FF07DB91B2F691A00380630 /* NIBuildingBlocks.xcodeproj */,
 				4FF07D9D1B2EDFA200380630 /* NIBuildingBlocksDemo */,
 				4FF07D9C1B2EDFA200380630 /* Products */,
 			);
@@ -63,6 +80,8 @@
 				4FF07DB41B2F55E800380630 /* NIBuildingBlocksDemoWindowController.h */,
 				4FF07DB51B2F55E800380630 /* NIBuildingBlocksDemoWindowController.m */,
 				4FF07DB61B2F55E800380630 /* NIBuildingBlocksDemoWindowController.xib */,
+				4FF07DC01B2F6E6900380630 /* NIBuildingBlocksDemoView.h */,
+				4FF07DC11B2F6E6900380630 /* NIBuildingBlocksDemoView.m */,
 				4FF07D9E1B2EDFA200380630 /* Supporting Files */,
 			);
 			path = NIBuildingBlocksDemo;
@@ -76,6 +95,14 @@
 				4FF07DA51B2EE14A00380630 /* OsiriXAPI.framework */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4FF07DBA1B2F691A00380630 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4FF07DBE1B2F691B00380630 /* NIBuildingBlocks.framework */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -122,12 +149,28 @@
 			mainGroup = 4FF07D921B2EDFA200380630;
 			productRefGroup = 4FF07D9C1B2EDFA200380630 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 4FF07DBA1B2F691A00380630 /* Products */;
+					ProjectRef = 4FF07DB91B2F691A00380630 /* NIBuildingBlocks.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				4FF07D9A1B2EDFA200380630 /* NIBuildingBlocksDemo */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		4FF07DBE1B2F691B00380630 /* NIBuildingBlocks.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = NIBuildingBlocks.framework;
+			remoteRef = 4FF07DBD1B2F691B00380630 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		4FF07D991B2EDFA200380630 /* Resources */ = {
@@ -146,6 +189,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4FF07DA91B2F539900380630 /* NIBuildingBlocksDemoPlugin.m in Sources */,
+				4FF07DC21B2F6E6900380630 /* NIBuildingBlocksDemoView.m in Sources */,
 				4FF07DB71B2F55E800380630 /* NIBuildingBlocksDemoWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -292,6 +336,7 @@
 				4FF07DA41B2EDFA200380630 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

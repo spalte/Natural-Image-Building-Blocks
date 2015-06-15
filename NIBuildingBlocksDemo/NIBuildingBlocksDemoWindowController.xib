@@ -7,6 +7,8 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NIBuildingBlocksDemoWindowController">
             <connections>
+                <outlet property="leftView" destination="fHB-qv-qow" id="Yvg-AB-mR0"/>
+                <outlet property="rightView" destination="W2D-15-j4Z" id="UbH-Kq-In8"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -21,13 +23,13 @@
                 <rect key="frame" x="0.0" y="0.0" width="834" height="483"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="fHB-qv-qow">
+                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="fHB-qv-qow" customClass="NIBuildingBlocksDemoView">
                         <rect key="frame" x="0.0" y="0.0" width="500" height="483"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="500" id="bMn-8G-geB"/>
                         </constraints>
                     </customView>
-                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="W2D-15-j4Z">
+                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="W2D-15-j4Z" customClass="NIGeneratorRequestView">
                         <rect key="frame" x="500" y="0.0" width="334" height="483"/>
                     </customView>
                 </subviews>

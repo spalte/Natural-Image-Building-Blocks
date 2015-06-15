@@ -9,6 +9,8 @@
 #import "NIBuildingBlocksDemoPlugin.h"
 #import "NIBuildingBlocksDemoWindowController.h"
 
+#import <NIBuildingBlocks/NIBuildingBlocks.h>
+
 @implementation NIBuildingBlocksDemoPlugin
 
 - (long)filterImage:(NSString*)menuName
@@ -17,6 +19,7 @@
         _buildingBlocksDemoWindowController = [[NIBuildingBlocksDemoWindowController alloc] initWithWindowNibName:@"NIBuildingBlocksDemoWindowController"];
     }
 
+    _buildingBlocksDemoWindowController.volumeData = [viewerController NIVolumeDataForMovieIndex:0];
     [_buildingBlocksDemoWindowController.window makeKeyAndOrderFront:self];
 
     return 0;
