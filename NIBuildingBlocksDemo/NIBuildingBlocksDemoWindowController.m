@@ -72,12 +72,15 @@
         [_volumeData release];
         _volumeData = [volumeData retain];
 
+        [CATransaction begin];
+        [CATransaction setDisableActions:YES];
         if (_leftView.volumeDataCount) {
             [_leftView removeVolumeDataAtIndex:0];
         }
         if (_rightView.volumeDataCount) {
             [_rightView removeVolumeDataAtIndex:0];
         }
+        [CATransaction commit];
 
         [self updateVolumes];
     }
@@ -86,6 +89,9 @@
 - (void)updateVolumes
 {
     if (_volumeData) {
+        [CATransaction begin];
+        [CATransaction setDisableActions:YES];
+
         [_leftView addVolumeData:_volumeData];
 
         NIVolumeDataProperties *properties = [_rightView addVolumeData:_volumeData];
@@ -100,8 +106,6 @@
                                                                                                        xBasis:_volumeData.directionX yBasis:_volumeData.directionZ] autorelease];
         rightRequest.interpolationMode = NIInterpolationModeCubic;
 
-        [CATransaction begin];
-        [CATransaction setDisableActions:YES];
         _leftView.generatorRequest = leftRequest;
         _rightView.generatorRequest = rightRequest;
         [CATransaction commit];
