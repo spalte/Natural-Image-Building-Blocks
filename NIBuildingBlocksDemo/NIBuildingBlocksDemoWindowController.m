@@ -98,7 +98,7 @@
         properties.CLUT = [[[NSGradient alloc] initWithStartingColor:[NSColor blueColor] endingColor:[NSColor redColor]] autorelease];
 
         NIAffineTransform inverseVolumeTransform = NIAffineTransformInvert(_volumeData.volumeTransform);
-        NIVector center = NIVectorApplyTransform(NIVectorMake(_volumeData.pixelsWide / 2.0, _volumeData.pixelsHigh / 2.0, _volumeData.pixelsDeep / 2.0), inverseVolumeTransform);
+        NIVector center = NIVectorApplyTransform(NIVectorMake(round(_volumeData.pixelsWide / 2.0), round(_volumeData.pixelsHigh / 2.0), round(_volumeData.pixelsDeep / 2.0)), inverseVolumeTransform);
         NIObliqueSliceGeneratorRequest *leftRequest = [[[NIObliqueSliceGeneratorRequest alloc] initWithCenter:center pixelsWide:200 pixelsHigh:200
                                                                                                        xBasis:_volumeData.directionX yBasis:NIVectorInvert(_volumeData.directionY)] autorelease];
         leftRequest.interpolationMode = NIInterpolationModeCubic;
