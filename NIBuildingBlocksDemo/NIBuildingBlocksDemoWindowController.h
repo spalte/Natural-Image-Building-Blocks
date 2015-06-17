@@ -19,9 +19,6 @@
 
     NIBuildingBlocksDemoView *_leftView;
     NIGeneratorRequestView *_rightView;
-
-    NIIntersection *_leftIntersection;
-    NIIntersection *_rightIntersection;
 }
 
 @property (nonatomic, readwrite, assign) IBOutlet NIBuildingBlocksDemoView *leftView;

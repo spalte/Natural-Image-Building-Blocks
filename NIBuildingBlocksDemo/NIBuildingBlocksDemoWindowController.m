@@ -33,19 +33,19 @@
     _rightView.displayScaleBar = YES;
     _rightView.displayOrientationLabels = YES;
 
-    _leftIntersection = [[NIIntersection alloc] init];
-    _leftIntersection.color = [[NSColor redColor] colorWithAlphaComponent:0.8];
-    _leftIntersection.thickness = 2;
-    _leftIntersection.maskAroundMouse = YES;
-    [_leftIntersection bind:@"intersectingObject" toObject:_rightView withKeyPath:@"presentedGeneratorRequest" options:nil];
-    [_leftView addIntersection:_leftIntersection forKey:@"leftIntersection"];
+    NIIntersection *leftIntersection = [[[NIIntersection alloc] init] autorelease];
+    leftIntersection.color = [[NSColor redColor] colorWithAlphaComponent:0.8];
+    leftIntersection.thickness = 2;
+    leftIntersection.maskAroundMouse = YES;
+    [leftIntersection bind:@"intersectingObject" toObject:_rightView withKeyPath:@"presentedGeneratorRequest" options:nil];
+    [_leftView addIntersection:leftIntersection forKey:@"intersection"];
 
-    _rightIntersection = [[NIIntersection alloc] init];
-    _rightIntersection.color = [[NSColor greenColor] colorWithAlphaComponent:0.8];
-    _rightIntersection.thickness = 2;
-    _rightIntersection.maskAroundMouse = YES;
-    [_rightIntersection bind:@"intersectingObject" toObject:_leftView withKeyPath:@"presentedGeneratorRequest" options:nil];
-    [_rightView addIntersection:_rightIntersection forKey:@"rightIntersection"];
+    NIIntersection *rightIntersection = [[[NIIntersection alloc] init] autorelease];
+    rightIntersection.color = [[NSColor greenColor] colorWithAlphaComponent:0.8];
+    rightIntersection.thickness = 2;
+    rightIntersection.maskAroundMouse = YES;
+    [rightIntersection bind:@"intersectingObject" toObject:_leftView withKeyPath:@"presentedGeneratorRequest" options:nil];
+    [_rightView addIntersection:rightIntersection forKey:@"intersection"];
 
     [self updateVolumes];
 }
@@ -55,13 +55,8 @@
     [_volumeData release];
     _volumeData = nil;
 
-    [_leftIntersection unbind:@"intersectingObject"];
-    [_leftIntersection release];
-    _leftIntersection = nil;
-
-    [_rightIntersection unbind:@"intersectingObject"];
-    [_rightIntersection release];
-    _rightIntersection = nil;
+    [[_leftView intersectionForKey:@"intersection"] unbind:@"intersectingObject"];
+    [[_rightView intersectionForKey:@"intersection"] unbind:@"intersectingObject"];
 
     [super dealloc];
 }
