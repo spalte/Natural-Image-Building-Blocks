@@ -23,6 +23,18 @@
 
 #import <NIGeneratorRequestView.h>
 
+typedef NS_ENUM(NSInteger, NITextLabelLocation) {
+    NITextLabelLocationUnknownSite = -1,
+    NITextLabelLocationTopLeftEdgeSite = 0,
+    NITextLabelLocationTopRightEdgeSite,
+    NITextLabelLocationBottomLeftEdgeSite,
+    NITextLabelLocationBottomRightEdgeSite,
+    NITextLabelLocationTopEdgeSite,
+    NITextLabelLocationBottomEdgeSite,
+};
+
+static const NSInteger NITextLabelLocationCount = 6;
+
 @interface NITextLabelGroupLayer : CALayer
 {
     NSMutableArray *_textLabels;
@@ -30,7 +42,7 @@
     NITextLabelLocation _labelLocation;
 }
 
-@property (nonatomic, readonly, retain) NSArray *textLabels;
+@property (nonatomic, readonly, copy) NSArray *textLabels;
 @property (nonatomic, readwrite, retain) NSDictionary* magicLabelValues;
 @property (nonatomic, readwrite, assign) NITextLabelLocation labelLocation;
 

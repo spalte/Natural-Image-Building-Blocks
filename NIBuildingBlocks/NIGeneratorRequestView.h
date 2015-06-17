@@ -27,17 +27,6 @@
 #import "NIGenerator.h"
 #import "NIGeometry.h"
 
-typedef NS_ENUM(NSInteger, NITextLabelLocation) {
-    NITextLabelLocationTopLeftEdgeSite,
-    NITextLabelLocationTopRightEdgeSite,
-    NITextLabelLocationBottomLeftEdgeSite,
-    NITextLabelLocationBottomRightEdgeSite,
-    NITextLabelLocationTopEdgeSite,
-    NITextLabelLocationBottomEdgeSite
-};
-
-static const NSInteger NITextLabelLocationCount = 6;
-
 static const NIVector NIGeneratorRequestViewMouseOutside = {-CGFLOAT_MAX, -CGFLOAT_MAX, -CGFLOAT_MAX};
 
 static const CGFloat NIGeneratorRequestViewRequestLayerZPosition = 1;
@@ -133,9 +122,14 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
 - (void)enumerateIntersectionsWithBlock:(void (^)(NSString *key, NIIntersection *intersection, BOOL *stop))block;
 - (NSString *)intersectionClosestToPoint:(NSPoint)point closestPoint:(NSPointPointer)rclosestPoint distance:(CGFloat *)rdistance;
 
-// text labels
-// add strings to the returned array add text label
-- (NSMutableArray *)textLabelsForLocation:(NITextLabelLocation)labelLocation;
+// Text Labels are arrays of strings that will be displayed in the corners of the view
+// use ie -[ mutableArrayForKey:@"topLeftLabels"] to get an array into which you can insert strings and get correct animations
+@property (nonatomic, readwrite, copy) NSArray *topLeftLabels;
+@property (nonatomic, readwrite, copy) NSArray *topRightLabels;
+@property (nonatomic, readwrite, copy) NSArray *bottomLeftLabels;
+@property (nonatomic, readwrite, copy) NSArray *bottomRightLabels;
+@property (nonatomic, readwrite, copy) NSArray *topLabels;
+@property (nonatomic, readwrite, copy) NSArray *bottomLabels;
 
 //sprites
 - (void)addSprite:(NISprite *)sprite forKey:(NSString *)key;

@@ -148,6 +148,7 @@
 
     }
 
+    [self layoutIfNeeded];
 
     CGSize size = CGSizeZero;
     for (i = 0; i < [[self sublayers] count]; i++) {

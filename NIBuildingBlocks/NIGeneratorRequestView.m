@@ -46,6 +46,11 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
 @property (nonatomic, readwrite, copy) NIGeneratorRequest *presentedGeneratorRequest;
 @property (nonatomic, readwrite, assign) NIVector mousePosition;
 
+// not sure if these should be public or not
+- (NSMutableArray *)mutableTextLabelsForLocation:(NITextLabelLocation)labelLocation;
++ (NSString *)keyForTextLabelLocation:(NITextLabelLocation)labelLocation;
++ (NITextLabelLocation)textLabelLocationForKey:(NSString *)key;
+
 - (NIAffineTransform)_sliceToDicomTransform;
 - (void)_updateLabelContraints;
 
@@ -395,6 +400,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
             case NITextLabelLocationBottomRightEdgeSite:
                 textLayer.name = @"BottomRightLabelGroup";
                 break;
+            default:;
         }
 
         textLayer.zPosition = NIGeneratorRequestViewRimLayerZPosition + 1;
@@ -429,10 +435,165 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     
 }
 
-- (NSMutableArray *)textLabelsForLocation:(NITextLabelLocation)labelLocation
++ (NSString *)keyForTextLabelLocation:(NITextLabelLocation)labelLocation
+{
+    switch (labelLocation) {
+        case NITextLabelLocationTopLeftEdgeSite:
+            return @"topLeftLabels";
+            break;
+        case NITextLabelLocationTopRightEdgeSite:
+            return @"topRightLabels";
+            break;
+        case NITextLabelLocationBottomLeftEdgeSite:
+            return @"bottomLeftLabels";
+            break;
+        case NITextLabelLocationBottomRightEdgeSite:
+            return @"bottomRightLabels";
+            break;
+        case NITextLabelLocationTopEdgeSite:
+            return @"topLabels";
+            break;
+        case NITextLabelLocationBottomEdgeSite:
+            return @"bottomLabels";
+            break;
+
+        default:
+            NSAssert(NO, @"Unknown Text Label Location");
+            return nil;
+    }
+}
+
++ (NITextLabelLocation)textLabelLocationForKey:(NSString *)key
+{
+    if ([key isEqualToString:@"topLeftLabels"]) {
+        return NITextLabelLocationTopLeftEdgeSite;
+    } else if ([key isEqualToString:@"topRightLabels"]) {
+        return NITextLabelLocationTopRightEdgeSite;
+    } else if ([key isEqualToString:@"bottomLeftLabels"]) {
+        return NITextLabelLocationBottomLeftEdgeSite;
+    } else if ([key isEqualToString:@"bottomRightLabels"]) {
+        return NITextLabelLocationBottomRightEdgeSite;
+    } else if ([key isEqualToString:@"topLabels"]) {
+        return NITextLabelLocationTopEdgeSite;
+    } else if ([key isEqualToString:@"bottomLabels"]) {
+        return NITextLabelLocationBottomEdgeSite;
+    } else {
+        return NITextLabelLocationUnknownSite;
+    }
+}
+
+- (NSMutableArray *)mutableTextLabelsForLocation:(NITextLabelLocation)labelLocation
 {
     return [_textLabelLayers[labelLocation] mutableArrayValueForKey:@"textLabels"];
 }
+
+- (NSMutableArray *)mutableArrayValueForKey:(NSString *)key
+{
+    NITextLabelLocation labelLocation = [[self class] textLabelLocationForKey:key];
+
+    if (labelLocation != NITextLabelLocationUnknownSite) {
+        return [self mutableTextLabelsForLocation:labelLocation];
+    } else {
+        return [super mutableArrayValueForKey:key];
+    }
+}
+
+- (NSArray *)topLeftLabels
+{
+    return [(NITextLabelGroupLayer *)_textLabelLayers[NITextLabelLocationTopLeftEdgeSite] textLabels];
+}
+
+- (void)setTopLeftLabels:(NSArray *)labels
+{
+    [[self mutableTextLabelsForLocation:NITextLabelLocationTopLeftEdgeSite] setArray:labels];
+}
+
+- (NSArray *)topRightLabels
+{
+    return [(NITextLabelGroupLayer *)_textLabelLayers[NITextLabelLocationTopRightEdgeSite] textLabels];
+}
+
+- (void)setTopRightLabels:(NSArray *)labels
+{
+    [[self mutableTextLabelsForLocation:NITextLabelLocationTopRightEdgeSite] setArray:labels];
+}
+
+- (NSArray *)bottomLeftLabels
+{
+    return [(NITextLabelGroupLayer *)_textLabelLayers[NITextLabelLocationBottomLeftEdgeSite] textLabels];
+}
+
+- (void)setBottomLeftLabels:(NSArray *)labels
+{
+    [[self mutableTextLabelsForLocation:NITextLabelLocationBottomLeftEdgeSite] setArray:labels];
+}
+
+- (NSArray *)bottomRightLabels
+{
+    return [(NITextLabelGroupLayer *)_textLabelLayers[NITextLabelLocationBottomRightEdgeSite] textLabels];
+}
+
+- (void)setBottomRightLabels:(NSArray *)labels
+{
+    [[self mutableTextLabelsForLocation:NITextLabelLocationBottomRightEdgeSite] setArray:labels];
+}
+
+- (NSArray *)topLabels
+{
+    return [(NITextLabelGroupLayer *)_textLabelLayers[NITextLabelLocationTopEdgeSite] textLabels];
+}
+
+- (void)setTopLabels:(NSArray *)labels
+{
+    [[self mutableTextLabelsForLocation:NITextLabelLocationTopEdgeSite] setArray:labels];
+}
+
+- (NSArray *)bottomLabels
+{
+    return [(NITextLabelGroupLayer *)_textLabelLayers[NITextLabelLocationBottomEdgeSite] textLabels];
+}
+
+- (void)setBottomLabels:(NSArray *)labels
+{
+    [[self mutableTextLabelsForLocation:NITextLabelLocationBottomEdgeSite] setArray:labels];
+}
+
+// These might be useful to have one day
+//- (NSUInteger)countOfTopLeftLabels {
+//    return [[(NITextLabelGroupLayer *)_textLabelLayers[NITextLabelLocationTopLeftEdgeSite] textLabels] count];
+//}
+//
+//- (id)objectInTopLeftLabelsAtIndex:(NSUInteger)index {
+//    return [[(NITextLabelGroupLayer *)_textLabelLayers[NITextLabelLocationTopLeftEdgeSite] textLabels] objectAtIndex:index];
+//}
+//
+//- (NSArray *)topLeftLabelsAtIndexes:(NSIndexSet *)indexes {
+//    return [[(NITextLabelGroupLayer *)_textLabelLayers[NITextLabelLocationTopLeftEdgeSite] textLabels] objectsAtIndexes:indexes];
+//}
+//
+//- (void)insertObject:(NSString *)label inTopLeftLabelsAtIndex:(NSUInteger)index {
+//    [[self mutableTextLabelsForLocation:NITextLabelLocationTopLeftEdgeSite] insertObject:label atIndex:index];
+//}
+//
+//- (void)insertTopLeftLabels:(NSArray *)labelsArray atIndexes:(NSIndexSet *)indexes {
+//    [[self mutableTextLabelsForLocation:NITextLabelLocationTopLeftEdgeSite] insertObjects:labelsArray atIndexes:indexes];
+//}
+//
+//- (void)removeObjectFromTopLeftLabelsAtIndex:(NSUInteger)index {
+//    [[self mutableTextLabelsForLocation:NITextLabelLocationTopLeftEdgeSite] removeObjectAtIndex:index];
+//}
+//
+//- (void)removeTopLeftLabelsAtIndexes:(NSIndexSet *)indexes {
+//    [[self mutableTextLabelsForLocation:NITextLabelLocationTopLeftEdgeSite] removeObjectsAtIndexes:indexes];
+//}
+//
+//- (void)replaceObjectInTopLeftLabelsAtIndex:(NSUInteger)index withObject:(id)anObject {
+//    [[self mutableTextLabelsForLocation:NITextLabelLocationTopLeftEdgeSite] replaceObjectAtIndex:index withObject:anObject];
+//}
+//
+//- (void)replaceTopLeftLabelsAtIndexes:(NSIndexSet *)indexes withTopLeftLabels:(NSArray *)labelsArray {
+//    [[self mutableTextLabelsForLocation:NITextLabelLocationTopLeftEdgeSite] replaceObjectsAtIndexes:indexes withObjects:labelsArray];
+//}
 
 - (void)setDisplayRim:(BOOL)displayRim
 {
