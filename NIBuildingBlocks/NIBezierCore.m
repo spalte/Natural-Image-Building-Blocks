@@ -317,6 +317,7 @@ CFDictionaryRef NIBezierCoreCreateDictionaryRepresentation(NIBezierCoreRef bezie
 									 (id)control2Dict, @"control2", (id)endpointDict, @"endpoint", nil];
 				break;
 			default:
+                segmentDictionary = NULL;
 				assert(0);
 				break;
 		}
