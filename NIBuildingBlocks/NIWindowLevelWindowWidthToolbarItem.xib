@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NIWindowLevelWindowWidthToolbarItem">
@@ -37,18 +37,19 @@
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="3Sw-3Y-n5T" customClass="NIWindowingView">
                                 <rect key="frame" x="2" y="3" width="196" height="196"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iA3-6c-jCs">
-                                        <rect key="frame" x="26" y="20" width="145" height="17"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Drag to adjust WL/WW" id="NGD-zC-buW">
+                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rlB-xb-fW2">
+                                        <rect key="frame" x="28" y="26" width="140" height="34"/>
+                                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="center" title="Drag on this pad to adjust WL/WW" id="5MP-uz-scl">
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlShadowColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="centerX" secondItem="iA3-6c-jCs" secondAttribute="centerX" constant="-0.5" id="4uf-pI-E9d"/>
-                                    <constraint firstAttribute="bottom" secondItem="iA3-6c-jCs" secondAttribute="bottom" constant="20" id="bVw-5Y-1FK"/>
+                                    <constraint firstAttribute="trailing" secondItem="rlB-xb-fW2" secondAttribute="trailing" constant="30" id="1Oe-uP-lTO"/>
+                                    <constraint firstItem="rlB-xb-fW2" firstAttribute="top" secondItem="3Sw-3Y-n5T" secondAttribute="bottom" constant="-60" id="oeo-zR-VnF"/>
+                                    <constraint firstItem="rlB-xb-fW2" firstAttribute="leading" secondItem="3Sw-3Y-n5T" secondAttribute="leading" constant="30" id="tiQ-ws-atz"/>
                                 </constraints>
                             </customView>
                         </subviews>
@@ -69,7 +70,7 @@
                 <constraint firstItem="OwY-pl-UUY" firstAttribute="top" secondItem="KYh-eh-8C7" secondAttribute="top" constant="12" id="Jzd-RF-fqb"/>
                 <constraint firstItem="OwY-pl-UUY" firstAttribute="leading" secondItem="KYh-eh-8C7" secondAttribute="leading" constant="12" id="LU1-bQ-eCU"/>
             </constraints>
-            <point key="canvasLocation" x="326" y="218"/>
+            <point key="canvasLocation" x="368" y="254"/>
         </customView>
         <userDefaultsController representsSharedInstance="YES" id="sS4-fL-TLE"/>
     </objects>
