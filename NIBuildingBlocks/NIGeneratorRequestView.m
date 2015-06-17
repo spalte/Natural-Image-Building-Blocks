@@ -75,6 +75,15 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     [NSGraphicsContext restoreGraphicsState];
 }
 
+- (id<CAAction>)actionForLayer:(CALayer *)layer forKey:(NSString *)key
+{
+    if ([key isEqualToString:@"contents"]) {
+        return (id<CAAction>)[NSNull null];
+    } else {
+        return nil;
+    }
+}
+
 @end
 
 @interface NIGeneratorRequestViewLayoutManager : NSObject
