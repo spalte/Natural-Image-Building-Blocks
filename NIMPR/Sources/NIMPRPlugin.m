@@ -21,7 +21,6 @@ static NIMPRPlugin* instance = nil;
 
 - (void)initPlugin {
     instance = self;
-    NIBuildingBlocksInstallOsiriXCategories();
 }
 
 - (void)dealloc {

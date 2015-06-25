@@ -49,50 +49,50 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		713341221B146EE50014CE09 /* NIMPRController+Toolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NIMPRController+Toolbar.h"; path = "Sources/NIMPRController+Toolbar.h"; sourceTree = "<group>"; };
-		713341231B146EE50014CE09 /* NIMPRController+Toolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NIMPRController+Toolbar.m"; path = "Sources/NIMPRController+Toolbar.m"; sourceTree = "<group>"; };
-		713341281B147DF50014CE09 /* NIMPRWLWWTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIMPRWLWWTool.h; path = Sources/NIMPRWLWWTool.h; sourceTree = "<group>"; };
-		713341291B147DF50014CE09 /* NIMPRWLWWTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NIMPRWLWWTool.m; path = Sources/NIMPRWLWWTool.m; sourceTree = "<group>"; };
-		7133412B1B147E0A0014CE09 /* NIMPRTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIMPRTool.h; path = Sources/NIMPRTool.h; sourceTree = "<group>"; };
-		7133412C1B147E0A0014CE09 /* NIMPRTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NIMPRTool.m; path = Sources/NIMPRTool.m; sourceTree = "<group>"; };
-		7133412E1B147E360014CE09 /* NIMPRMoveTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIMPRMoveTool.h; path = Sources/NIMPRMoveTool.h; sourceTree = "<group>"; };
-		7133412F1B147E360014CE09 /* NIMPRMoveTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NIMPRMoveTool.m; path = Sources/NIMPRMoveTool.m; sourceTree = "<group>"; };
-		713341311B147E810014CE09 /* NIMPRZoomTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIMPRZoomTool.h; path = Sources/NIMPRZoomTool.h; sourceTree = "<group>"; };
-		713341321B147E810014CE09 /* NIMPRZoomTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NIMPRZoomTool.m; path = Sources/NIMPRZoomTool.m; sourceTree = "<group>"; };
-		713341341B147E910014CE09 /* NIMPRRotateTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIMPRRotateTool.h; path = Sources/NIMPRRotateTool.h; sourceTree = "<group>"; };
-		713341351B147E910014CE09 /* NIMPRRotateTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NIMPRRotateTool.m; path = Sources/NIMPRRotateTool.m; sourceTree = "<group>"; };
-		713341371B1483B90014CE09 /* NIMPRController+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NIMPRController+Private.h"; path = "Sources/NIMPRController+Private.h"; sourceTree = "<group>"; };
-		7133413E1B15A4FA0014CE09 /* NIMPRView+Events.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NIMPRView+Events.h"; path = "Sources/NIMPRView+Events.h"; sourceTree = "<group>"; };
-		7133413F1B15A4FA0014CE09 /* NIMPRView+Events.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NIMPRView+Events.m"; path = "Sources/NIMPRView+Events.m"; sourceTree = "<group>"; };
-		713341411B15A8C90014CE09 /* NIMPRView+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NIMPRView+Private.h"; path = "Sources/NIMPRView+Private.h"; sourceTree = "<group>"; };
-		713341421B15F3000014CE09 /* +NIMPR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "+NIMPR.h"; path = "Sources/+NIMPR.h"; sourceTree = "<group>"; };
-		713341431B15F3000014CE09 /* +NIMPR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "+NIMPR.m"; path = "Sources/+NIMPR.m"; sourceTree = "<group>"; };
-		713341451B163E500014CE09 /* NIMPR.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NIMPR.xib; path = Resources/NIMPR.xib; sourceTree = "<group>"; };
-		7194735F1B1D9802009363AE /* NIMPR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIMPR.h; path = Sources/NIMPR.h; sourceTree = "<group>"; };
-		719473601B1D9802009363AE /* NIMPR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NIMPR.m; path = Sources/NIMPR.m; sourceTree = "<group>"; };
-		719473621B1D9883009363AE /* NIMPR+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NIMPR+Private.h"; path = "Sources/NIMPR+Private.h"; sourceTree = "<group>"; };
+		713341221B146EE50014CE09 /* NIMPRController+Toolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NIMPRController+Toolbar.h"; sourceTree = "<group>"; };
+		713341231B146EE50014CE09 /* NIMPRController+Toolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NIMPRController+Toolbar.m"; sourceTree = "<group>"; };
+		713341281B147DF50014CE09 /* NIMPRWLWWTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRWLWWTool.h; sourceTree = "<group>"; };
+		713341291B147DF50014CE09 /* NIMPRWLWWTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRWLWWTool.m; sourceTree = "<group>"; };
+		7133412B1B147E0A0014CE09 /* NIMPRTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRTool.h; sourceTree = "<group>"; };
+		7133412C1B147E0A0014CE09 /* NIMPRTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRTool.m; sourceTree = "<group>"; };
+		7133412E1B147E360014CE09 /* NIMPRMoveTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRMoveTool.h; sourceTree = "<group>"; };
+		7133412F1B147E360014CE09 /* NIMPRMoveTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRMoveTool.m; sourceTree = "<group>"; };
+		713341311B147E810014CE09 /* NIMPRZoomTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRZoomTool.h; sourceTree = "<group>"; };
+		713341321B147E810014CE09 /* NIMPRZoomTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRZoomTool.m; sourceTree = "<group>"; };
+		713341341B147E910014CE09 /* NIMPRRotateTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRRotateTool.h; sourceTree = "<group>"; };
+		713341351B147E910014CE09 /* NIMPRRotateTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRRotateTool.m; sourceTree = "<group>"; };
+		713341371B1483B90014CE09 /* NIMPRController+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NIMPRController+Private.h"; sourceTree = "<group>"; };
+		7133413E1B15A4FA0014CE09 /* NIMPRView+Events.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NIMPRView+Events.h"; sourceTree = "<group>"; };
+		7133413F1B15A4FA0014CE09 /* NIMPRView+Events.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NIMPRView+Events.m"; sourceTree = "<group>"; };
+		713341411B15A8C90014CE09 /* NIMPRView+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NIMPRView+Private.h"; sourceTree = "<group>"; };
+		713341421B15F3000014CE09 /* +NIMPR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "+NIMPR.h"; sourceTree = "<group>"; };
+		713341431B15F3000014CE09 /* +NIMPR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "+NIMPR.m"; sourceTree = "<group>"; };
+		713341451B163E500014CE09 /* NIMPR.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NIMPR.xib; path = ../Resources/NIMPR.xib; sourceTree = "<group>"; };
+		7194735F1B1D9802009363AE /* NIMPR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPR.h; sourceTree = "<group>"; };
+		719473601B1D9802009363AE /* NIMPR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPR.m; sourceTree = "<group>"; };
+		719473621B1D9883009363AE /* NIMPR+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NIMPR+Private.h"; sourceTree = "<group>"; };
 		719473691B1D9C68009363AE /* NIBuildingBlocks.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NIBuildingBlocks.framework; path = "../spalte-nibb/build/NIBuildingBlocks/Build/Products/Debug/NIBuildingBlocks.framework"; sourceTree = "<group>"; };
 		7194736B1B1D9CA5009363AE /* NIBuildingBlocks.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = NIBuildingBlocks.xcodeproj; path = "../spalte-nibb/NIBuildingBlocks.xcodeproj"; sourceTree = "<group>"; };
-		719CC51C1B0B1BBC00DC1ED5 /* NIMPRController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIMPRController.h; path = Sources/NIMPRController.h; sourceTree = "<group>"; };
-		719CC51D1B0B1BBC00DC1ED5 /* NIMPRController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NIMPRController.m; path = Sources/NIMPRController.m; sourceTree = "<group>"; };
-		719CC5241B0B1C2800DC1ED5 /* NIMPRView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIMPRView.h; path = Sources/NIMPRView.h; sourceTree = "<group>"; };
-		719CC5251B0B1C2800DC1ED5 /* NIMPRView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NIMPRView.m; path = Sources/NIMPRView.m; sourceTree = "<group>"; };
+		719CC51C1B0B1BBC00DC1ED5 /* NIMPRController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRController.h; sourceTree = "<group>"; };
+		719CC51D1B0B1BBC00DC1ED5 /* NIMPRController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRController.m; sourceTree = "<group>"; };
+		719CC5241B0B1C2800DC1ED5 /* NIMPRView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRView.h; sourceTree = "<group>"; };
+		719CC5251B0B1C2800DC1ED5 /* NIMPRView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRView.m; sourceTree = "<group>"; };
 		719CC5291B0B216D00DC1ED5 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		719CC52D1B0B21A900DC1ED5 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		719CC5301B0B222100DC1ED5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = ../../../../System/Library/Frameworks/Foundation.framework; sourceTree = "<group>"; };
 		719CC5321B0B222900DC1ED5 /* OsiriXAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OsiriXAPI.framework; path = ../osirix/build/Development/OsiriXAPI.framework; sourceTree = "<group>"; };
-		719CC5341B0B226E00DC1ED5 /* NIMPR.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NIMPR.pch; path = Sources/NIMPR.pch; sourceTree = "<group>"; };
-		719CC5381B0CC17000DC1ED5 /* NIMPRQuaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIMPRQuaternion.h; path = Sources/NIMPRQuaternion.h; sourceTree = "<group>"; };
-		719CC5391B0CC17000DC1ED5 /* NIMPRQuaternion.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = NIMPRQuaternion.mm; path = Sources/NIMPRQuaternion.mm; sourceTree = "<group>"; };
-		719CC53C1B0E039E00DC1ED5 /* NSMenu+NIMPR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSMenu+NIMPR.h"; path = "Sources/NSMenu+NIMPR.h"; sourceTree = "<group>"; };
-		719CC53D1B0E039E00DC1ED5 /* NSMenu+NIMPR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSMenu+NIMPR.m"; path = "Sources/NSMenu+NIMPR.m"; sourceTree = "<group>"; };
-		719CC5491B1449ED00DC1ED5 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Resources/Images.xcassets; sourceTree = "<group>"; };
+		719CC5341B0B226E00DC1ED5 /* NIMPR.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NIMPR.pch; path = NIMPR/Sources/NIMPR.pch; sourceTree = "<group>"; };
+		719CC5381B0CC17000DC1ED5 /* NIMPRQuaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRQuaternion.h; sourceTree = "<group>"; };
+		719CC5391B0CC17000DC1ED5 /* NIMPRQuaternion.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NIMPRQuaternion.mm; sourceTree = "<group>"; };
+		719CC53C1B0E039E00DC1ED5 /* NSMenu+NIMPR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMenu+NIMPR.h"; sourceTree = "<group>"; };
+		719CC53D1B0E039E00DC1ED5 /* NSMenu+NIMPR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMenu+NIMPR.m"; sourceTree = "<group>"; };
+		719CC5491B1449ED00DC1ED5 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		719D029E1AC1CB25002F76C1 /* NIMPR.osirixplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NIMPR.osirixplugin; sourceTree = BUILT_PRODUCTS_DIR; };
-		719D02A21AC1CB25002F76C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Resources/Info.plist; sourceTree = "<group>"; };
-		719D02A81AC1D367002F76C1 /* NIMPRPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIMPRPlugin.h; path = Sources/NIMPRPlugin.h; sourceTree = "<group>"; };
-		719D02A91AC1D367002F76C1 /* NIMPRPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NIMPRPlugin.m; path = Sources/NIMPRPlugin.m; sourceTree = "<group>"; };
-		71B2492E1B18886F00F8E0AD /* NIMPRWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIMPRWindow.h; path = Sources/NIMPRWindow.h; sourceTree = "<group>"; };
-		71B2492F1B18886F00F8E0AD /* NIMPRWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NIMPRWindow.m; path = Sources/NIMPRWindow.m; sourceTree = "<group>"; };
+		719D02A21AC1CB25002F76C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = NIMPR/Resources/Info.plist; sourceTree = "<group>"; };
+		719D02A81AC1D367002F76C1 /* NIMPRPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRPlugin.h; sourceTree = "<group>"; };
+		719D02A91AC1D367002F76C1 /* NIMPRPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRPlugin.m; sourceTree = "<group>"; };
+		71B2492E1B18886F00F8E0AD /* NIMPRWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRWindow.h; sourceTree = "<group>"; };
+		71B2492F1B18886F00F8E0AD /* NIMPRWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRWindow.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +111,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		711575451B3C62BD00AC2B90 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				719473621B1D9883009363AE /* NIMPR+Private.h */,
+				7194735F1B1D9802009363AE /* NIMPR.h */,
+				719473601B1D9802009363AE /* NIMPR.m */,
+				719D02A81AC1D367002F76C1 /* NIMPRPlugin.h */,
+				719D02A91AC1D367002F76C1 /* NIMPRPlugin.m */,
+				713341451B163E500014CE09 /* NIMPR.xib */,
+				71B2492E1B18886F00F8E0AD /* NIMPRWindow.h */,
+				71B2492F1B18886F00F8E0AD /* NIMPRWindow.m */,
+				713341371B1483B90014CE09 /* NIMPRController+Private.h */,
+				719CC51C1B0B1BBC00DC1ED5 /* NIMPRController.h */,
+				719CC51D1B0B1BBC00DC1ED5 /* NIMPRController.m */,
+				713341221B146EE50014CE09 /* NIMPRController+Toolbar.h */,
+				713341231B146EE50014CE09 /* NIMPRController+Toolbar.m */,
+				713341411B15A8C90014CE09 /* NIMPRView+Private.h */,
+				719CC5241B0B1C2800DC1ED5 /* NIMPRView.h */,
+				719CC5251B0B1C2800DC1ED5 /* NIMPRView.m */,
+				7133413E1B15A4FA0014CE09 /* NIMPRView+Events.h */,
+				7133413F1B15A4FA0014CE09 /* NIMPRView+Events.m */,
+				713341271B147D9D0014CE09 /* Tools */,
+				719CC5381B0CC17000DC1ED5 /* NIMPRQuaternion.h */,
+				719CC5391B0CC17000DC1ED5 /* NIMPRQuaternion.mm */,
+				719CC53C1B0E039E00DC1ED5 /* NSMenu+NIMPR.h */,
+				719CC53D1B0E039E00DC1ED5 /* NSMenu+NIMPR.m */,
+				713341421B15F3000014CE09 /* +NIMPR.h */,
+				713341431B15F3000014CE09 /* +NIMPR.m */,
+			);
+			name = Sources;
+			path = NIMPR/Sources;
+			sourceTree = "<group>";
+		};
 		713341271B147D9D0014CE09 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
@@ -162,6 +195,7 @@
 				719CC5491B1449ED00DC1ED5 /* Images.xcassets */,
 			);
 			name = Resources;
+			path = NIMPR/Resources;
 			sourceTree = "<group>";
 		};
 		719D02951AC1CB25002F76C1 = {
@@ -169,31 +203,7 @@
 			children = (
 				719CC5341B0B226E00DC1ED5 /* NIMPR.pch */,
 				719D02A21AC1CB25002F76C1 /* Info.plist */,
-				719473621B1D9883009363AE /* NIMPR+Private.h */,
-				7194735F1B1D9802009363AE /* NIMPR.h */,
-				719473601B1D9802009363AE /* NIMPR.m */,
-				719D02A81AC1D367002F76C1 /* NIMPRPlugin.h */,
-				719D02A91AC1D367002F76C1 /* NIMPRPlugin.m */,
-				713341451B163E500014CE09 /* NIMPR.xib */,
-				71B2492E1B18886F00F8E0AD /* NIMPRWindow.h */,
-				71B2492F1B18886F00F8E0AD /* NIMPRWindow.m */,
-				713341371B1483B90014CE09 /* NIMPRController+Private.h */,
-				719CC51C1B0B1BBC00DC1ED5 /* NIMPRController.h */,
-				719CC51D1B0B1BBC00DC1ED5 /* NIMPRController.m */,
-				713341221B146EE50014CE09 /* NIMPRController+Toolbar.h */,
-				713341231B146EE50014CE09 /* NIMPRController+Toolbar.m */,
-				713341411B15A8C90014CE09 /* NIMPRView+Private.h */,
-				719CC5241B0B1C2800DC1ED5 /* NIMPRView.h */,
-				719CC5251B0B1C2800DC1ED5 /* NIMPRView.m */,
-				7133413E1B15A4FA0014CE09 /* NIMPRView+Events.h */,
-				7133413F1B15A4FA0014CE09 /* NIMPRView+Events.m */,
-				713341271B147D9D0014CE09 /* Tools */,
-				719CC5381B0CC17000DC1ED5 /* NIMPRQuaternion.h */,
-				719CC5391B0CC17000DC1ED5 /* NIMPRQuaternion.mm */,
-				719CC53C1B0E039E00DC1ED5 /* NSMenu+NIMPR.h */,
-				719CC53D1B0E039E00DC1ED5 /* NSMenu+NIMPR.m */,
-				713341421B15F3000014CE09 /* +NIMPR.h */,
-				713341431B15F3000014CE09 /* +NIMPR.m */,
+				711575451B3C62BD00AC2B90 /* Sources */,
 				719CC5461B1449B300DC1ED5 /* Resources */,
 				719473791B1DA401009363AE /* Dependencies */,
 				719CC52C1B0B218E00DC1ED5 /* Frameworks */,
@@ -212,9 +222,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		719D029D1AC1CB25002F76C1 /* NIMPR */ = {
+		719D029D1AC1CB25002F76C1 /* NIMPR.temp_caseinsensitive_rename */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 719D02A51AC1CB25002F76C1 /* Build configuration list for PBXNativeTarget "NIMPR" */;
+			buildConfigurationList = 719D02A51AC1CB25002F76C1 /* Build configuration list for PBXNativeTarget "NIMPR.temp_caseinsensitive_rename" */;
 			buildPhases = (
 				719D029A1AC1CB25002F76C1 /* Sources */,
 				719D029B1AC1CB25002F76C1 /* Frameworks */,
@@ -227,7 +237,7 @@
 			dependencies = (
 				719473771B1DA3DD009363AE /* PBXTargetDependency */,
 			);
-			name = NIMPR;
+			name = NIMPR.temp_caseinsensitive_rename;
 			productName = DicomSendXMLRPC;
 			productReference = 719D029E1AC1CB25002F76C1 /* NIMPR.osirixplugin */;
 			productType = "com.apple.product-type.bundle";
@@ -264,7 +274,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				719D029D1AC1CB25002F76C1 /* NIMPR */,
+				719D029D1AC1CB25002F76C1 /* NIMPR.temp_caseinsensitive_rename */,
 			);
 		};
 /* End PBXProject section */
@@ -440,8 +450,8 @@
 					"../spalte-nibb/build/NIBuildingBlocks/Build/Products/Debug",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Sources/NIMPR.pch;
-				INFOPLIST_FILE = Resources/Info.plist;
+				GCC_PREFIX_HEADER = NIMPR/Sources/NIMPR.pch;
+				INFOPLIST_FILE = NIMPR/Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				OTHER_LDFLAGS = (
 					"-weak_framework",
@@ -464,8 +474,8 @@
 					"../spalte-nibb/build/NIBuildingBlocks/Build/Products/Debug",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Sources/NIMPR.pch;
-				INFOPLIST_FILE = Resources/Info.plist;
+				GCC_PREFIX_HEADER = NIMPR/Sources/NIMPR.pch;
+				INFOPLIST_FILE = NIMPR/Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				OTHER_LDFLAGS = (
 					"-weak_framework",
@@ -491,7 +501,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		719D02A51AC1CB25002F76C1 /* Build configuration list for PBXNativeTarget "NIMPR" */ = {
+		719D02A51AC1CB25002F76C1 /* Build configuration list for PBXNativeTarget "NIMPR.temp_caseinsensitive_rename" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				719D02A61AC1CB25002F76C1 /* Debug */,

@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "719D029D1AC1CB25002F76C1"
-               BuildableName = "NIMPR.osirixplugin"
-               BlueprintName = "NIMPR"
+               BuildableName = "NIMPR.temp_caseinsensitive_rename.osirixplugin"
+               BlueprintName = "NIMPR.temp_caseinsensitive_rename"
                ReferencedContainer = "container:NIMPR.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -57,8 +57,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "719D029D1AC1CB25002F76C1"
-            BuildableName = "NIMPR.osirixplugin"
-            BlueprintName = "NIMPR"
+            BuildableName = "NIMPR.temp_caseinsensitive_rename.osirixplugin"
+            BlueprintName = "NIMPR.temp_caseinsensitive_rename"
             ReferencedContainer = "container:NIMPR.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
