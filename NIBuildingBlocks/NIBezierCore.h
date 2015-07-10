@@ -66,7 +66,7 @@ NIBezierCoreRef NIBezierCoreCreateWithDictionaryRepresentation(CFDictionaryRef d
 NIMutableBezierCoreRef NIBezierCoreCreateMutableWithDictionaryRepresentation(CFDictionaryRef dict);
 
 void NIBezierCoreAddSegment(NIMutableBezierCoreRef bezierCore, NIBezierCoreSegmentType segmentType, NIVector control1, NIVector control2, NIVector endpoint);
-void NIBezierCoreSetVectorsForSegementAtIndex(NIMutableBezierCoreRef bezierCore, CFIndex index, NIVector control1, NIVector control2, NIVector endpoint);
+void NIBezierCoreSetVectorsForSegmentAtIndex(NIMutableBezierCoreRef bezierCore, CFIndex index, NIVector control1, NIVector control2, NIVector endpoint);
 void NIBezierCoreFlatten(NIMutableBezierCoreRef bezierCore, CGFloat flatness);
 void NIBezierCoreSubdivide(NIMutableBezierCoreRef bezierCore, CGFloat maxSegementLength);
 void NIBezierCoreApplyTransform(NIMutableBezierCoreRef bezierCore, NIAffineTransform transform);

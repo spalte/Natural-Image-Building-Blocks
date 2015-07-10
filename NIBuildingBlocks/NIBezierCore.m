@@ -422,7 +422,7 @@ void NIBezierCoreAddSegment(NIMutableBezierCoreRef bezierCore, NIBezierCoreSegme
     bezierCore->elementCount++;
 }
 
-void NIBezierCoreSetVectorsForSegementAtIndex(NIMutableBezierCoreRef bezierCore, CFIndex index, NIVector control1, NIVector control2, NIVector endpoint)
+void NIBezierCoreSetVectorsForSegmentAtIndex(NIMutableBezierCoreRef bezierCore, CFIndex index, NIVector control1, NIVector control2, NIVector endpoint)
 {
 	NIBezierCoreRandomAccessorRef bezierCoreRandomAccessor;
 	
