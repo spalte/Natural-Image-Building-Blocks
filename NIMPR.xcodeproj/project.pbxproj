@@ -11,11 +11,12 @@
 		712F626B1B4D5FC4004AC1AE /* NIAnnotatedGeneratorRequestView.m in Sources */ = {isa = PBXBuildFile; fileRef = 712F626A1B4D5FC4004AC1AE /* NIAnnotatedGeneratorRequestView.m */; };
 		712F62731B4D6DC0004AC1AE /* NIAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 712F62721B4D6DC0004AC1AE /* NIAnnotation.m */; };
 		712F62761B4D7172004AC1AE /* NIPointAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 712F62751B4D7172004AC1AE /* NIPointAnnotation.m */; };
-		712F62791B4EBDB9004AC1AE /* NIOvalAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 712F62781B4EBDB9004AC1AE /* NIOvalAnnotation.m */; };
+		712F62791B4EBDB9004AC1AE /* NIEllipseAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 712F62781B4EBDB9004AC1AE /* NIEllipseAnnotation.m */; };
 		712F627C1B4ED30E004AC1AE /* NIBezierPathAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 712F627B1B4ED30E004AC1AE /* NIBezierPathAnnotation.m */; };
 		712F627F1B4FDB79004AC1AE /* NILineAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 712F627E1B4FDB79004AC1AE /* NILineAnnotation.m */; };
 		712F62821B4FDFFD004AC1AE /* NIMPRAnnotateTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 712F62811B4FDFFD004AC1AE /* NIMPRAnnotateTool.m */; };
 		712F62851B50076E004AC1AE /* NIMPRAnnotateLineTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 712F62841B50076E004AC1AE /* NIMPRAnnotateLineTool.m */; };
+		712F62881B5040F8004AC1AE /* NIMPRAnnotateEllipseTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 712F62871B5040F8004AC1AE /* NIMPRAnnotateEllipseTool.m */; };
 		713341251B146EE50014CE09 /* NIMPRController+Toolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 713341231B146EE50014CE09 /* NIMPRController+Toolbar.m */; };
 		7133412A1B147DF50014CE09 /* NIMPRWLWWTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 713341291B147DF50014CE09 /* NIMPRWLWWTool.m */; };
 		7133412D1B147E0A0014CE09 /* NIMPRTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 7133412C1B147E0A0014CE09 /* NIMPRTool.m */; };
@@ -59,8 +60,8 @@
 		712F62721B4D6DC0004AC1AE /* NIAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIAnnotation.m; sourceTree = "<group>"; };
 		712F62741B4D7172004AC1AE /* NIPointAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPointAnnotation.h; sourceTree = "<group>"; };
 		712F62751B4D7172004AC1AE /* NIPointAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPointAnnotation.m; sourceTree = "<group>"; };
-		712F62771B4EBDB9004AC1AE /* NIOvalAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIOvalAnnotation.h; sourceTree = "<group>"; };
-		712F62781B4EBDB9004AC1AE /* NIOvalAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIOvalAnnotation.m; sourceTree = "<group>"; };
+		712F62771B4EBDB9004AC1AE /* NIEllipseAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIEllipseAnnotation.h; sourceTree = "<group>"; };
+		712F62781B4EBDB9004AC1AE /* NIEllipseAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIEllipseAnnotation.m; sourceTree = "<group>"; };
 		712F627A1B4ED30E004AC1AE /* NIBezierPathAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIBezierPathAnnotation.h; sourceTree = "<group>"; };
 		712F627B1B4ED30E004AC1AE /* NIBezierPathAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIBezierPathAnnotation.m; sourceTree = "<group>"; };
 		712F627D1B4FDB79004AC1AE /* NILineAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NILineAnnotation.h; sourceTree = "<group>"; };
@@ -69,6 +70,8 @@
 		712F62811B4FDFFD004AC1AE /* NIMPRAnnotateTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRAnnotateTool.m; sourceTree = "<group>"; };
 		712F62831B50076E004AC1AE /* NIMPRAnnotateLineTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRAnnotateLineTool.h; sourceTree = "<group>"; };
 		712F62841B50076E004AC1AE /* NIMPRAnnotateLineTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRAnnotateLineTool.m; sourceTree = "<group>"; };
+		712F62861B5040F8004AC1AE /* NIMPRAnnotateEllipseTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRAnnotateEllipseTool.h; sourceTree = "<group>"; };
+		712F62871B5040F8004AC1AE /* NIMPRAnnotateEllipseTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRAnnotateEllipseTool.m; sourceTree = "<group>"; };
 		713341221B146EE50014CE09 /* NIMPRController+Toolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NIMPRController+Toolbar.h"; sourceTree = "<group>"; };
 		713341231B146EE50014CE09 /* NIMPRController+Toolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NIMPRController+Toolbar.m"; sourceTree = "<group>"; };
 		713341281B147DF50014CE09 /* NIMPRWLWWTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRWLWWTool.h; sourceTree = "<group>"; };
@@ -178,8 +181,8 @@
 				712F627B1B4ED30E004AC1AE /* NIBezierPathAnnotation.m */,
 				712F627D1B4FDB79004AC1AE /* NILineAnnotation.h */,
 				712F627E1B4FDB79004AC1AE /* NILineAnnotation.m */,
-				712F62771B4EBDB9004AC1AE /* NIOvalAnnotation.h */,
-				712F62781B4EBDB9004AC1AE /* NIOvalAnnotation.m */,
+				712F62771B4EBDB9004AC1AE /* NIEllipseAnnotation.h */,
+				712F62781B4EBDB9004AC1AE /* NIEllipseAnnotation.m */,
 			);
 			name = Annotations;
 			sourceTree = "<group>";
@@ -203,6 +206,8 @@
 				712F62661B4D56D8004AC1AE /* NIMPRAnnotatePointTool.m */,
 				712F62831B50076E004AC1AE /* NIMPRAnnotateLineTool.h */,
 				712F62841B50076E004AC1AE /* NIMPRAnnotateLineTool.m */,
+				712F62861B5040F8004AC1AE /* NIMPRAnnotateEllipseTool.h */,
+				712F62871B5040F8004AC1AE /* NIMPRAnnotateEllipseTool.m */,
 			);
 			name = Tools;
 			sourceTree = "<group>";
@@ -403,7 +408,8 @@
 				712F62761B4D7172004AC1AE /* NIPointAnnotation.m in Sources */,
 				712F627F1B4FDB79004AC1AE /* NILineAnnotation.m in Sources */,
 				712F626B1B4D5FC4004AC1AE /* NIAnnotatedGeneratorRequestView.m in Sources */,
-				712F62791B4EBDB9004AC1AE /* NIOvalAnnotation.m in Sources */,
+				712F62791B4EBDB9004AC1AE /* NIEllipseAnnotation.m in Sources */,
+				712F62881B5040F8004AC1AE /* NIMPRAnnotateEllipseTool.m in Sources */,
 				713341331B147E810014CE09 /* NIMPRZoomTool.m in Sources */,
 				713341441B15F3000014CE09 /* +NIMPR.m in Sources */,
 			);

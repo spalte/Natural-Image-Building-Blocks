@@ -1,14 +1,14 @@
 //
-//  NIOvalAnnotation.m
+//  NIEllipseAnnotation.m
 //  NIMPR
 //
 //  Created by Alessandro Volz on 7/9/15.
 //  Copyright (c) 2015 volz.io. All rights reserved.
 //
 
-#import "NIOvalAnnotation.h"
+#import "NIEllipseAnnotation.h"
 
-@implementation NIOvalAnnotation
+@implementation NIEllipseAnnotation
 
 @synthesize bounds = _bounds;
 

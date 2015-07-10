@@ -33,7 +33,7 @@
     CALayer* layer = self.annotationsLayer = [[[CALayer alloc] init] autorelease];
     layer.delegate = self;
     layer.needsDisplayOnBoundsChange = YES;
-    layer.zPosition = NIGeneratorRequestViewRequestLayerZPosition + 1;
+    layer.zPosition = NIGeneratorRequestViewSpriteZPosition;
     layer.contentsScale = self.frameLayer.contentsScale;
     [layer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX]];
     [layer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth]];

@@ -25,17 +25,65 @@
     
     NIBezierPath* path = [self.NIBezierPath bezierPathByApplyingTransform:dicomToSliceTransform];
     
-    [[[NSColor greenColor] colorWithAlphaComponent:0.2] setStroke];
+    [[[NSColor greenColor] colorWithAlphaComponent:.2] setStroke];
     [path.NSBezierPath stroke];
     
-    // TODO: The next line is 100% wrong! I misinterpreted the bezierPathByClippingFromRelativePosition:toRelativePosition: for bezierPathByClippingZValuesBetween:and: ... so how can we do that?
-    NIBezierPath* clips = [path bezierPathByClippingFromRelativePosition:req.slabWidth/2 toRelativePosition:-req.slabWidth/2];
-
-    [[[NSColor greenColor] colorWithAlphaComponent:0.8] setStroke];
-    [clips.NSBezierPath stroke];
+    // clip and draw the part in the current slab
+    
+    [[[NSColor greenColor] colorWithAlphaComponent:1] set];
+    
+    CGFloat sl = CGFloatMax(req.slabWidth/2, view.maximumDistanceToPlane);
+    
+    NIMutableBezierPath* mpath = [[path mutableCopy] autorelease];
+    [mpath addEndpointsAtIntersectionsWithPlane:NIPlaneMake(NIVectorMake(0,0,sl),NIVectorMake(0,0,1))];
+    [mpath addEndpointsAtIntersectionsWithPlane:NIPlaneMake(NIVectorMake(0,0,-sl),NIVectorMake(0,0,1))];
+    
+    NIMutableBezierPath* cpath = [NIMutableBezierPath bezierPath];
+    NIVector ip, bp; BOOL ipset = NO, bpin = NO;
+    NIVector c1, c2, ep;
+    NSInteger elementCount = mpath.elementCount;
+    for (NSInteger i = 0; i < elementCount; ++i)
+        switch ([mpath elementAtIndex:i control1:&c1 control2:&c2 endpoint:&ep]) {
+            case NIMoveToBezierPathElement: {
+                bp = ep; bpin = NO;
+                if (!ipset) ip = ep;
+            } break;
+            case NILineToBezierPathElement: {
+                CGFloat mpz = (bp.z+ep.z)/2;
+                if (mpz <= sl && mpz >= -sl) {
+                    if (!bpin)
+                        [cpath moveToVector:bp];
+                    [cpath lineToVector:ep];
+                    bpin = YES;
+                } else
+                    bpin = NO;
+                bp = ep;
+            } break;
+            case NICurveToBezierPathElement: {
+                CGFloat mpz = (bp.z+ep.z)/2;
+                if (mpz <= sl && mpz >= -sl) {
+                    if (!bpin)
+                        [cpath moveToVector:bp];
+                    [cpath curveToVector:ep controlVector1:c1 controlVector2:c2];
+                    bpin = YES;
+                } else
+                    bpin = NO;
+                bp = ep;
+            } break;
+            case NICloseBezierPathElement: {
+                [cpath close];
+            } break;
+        }
+    
+    [cpath.NSBezierPath stroke];
     
     // points
     
+    const CGFloat radius = 0.5;
+    for (NSValue* pv in [path intersectionsWithPlane:NIPlaneMake(NIVectorZero,NIVectorMake(0,0,1))]) { // TODO: only drive these where the corresponding bezier line segment has distance(bp,ep) < 1 to avoid drawing twice (especially for when we'll have opacity)
+        NIVector p = pv.NIVectorValue;
+        [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(p.x-radius, p.y-radius, radius*2, radius*2)] fill];
+    }
 }
 
 @end
@@ -57,9 +105,8 @@
     NIAffineTransform transform = self.sliceToDicomTransform;
     
     NSBezierPath* nsp = self.NSBezierPath;
-    NSInteger elementCount = nsp.elementCount;
     NSPoint points[3];
-    
+    NSInteger elementCount = nsp.elementCount;
     for (NSInteger i = 0; i < elementCount; ++i)
         switch ([nsp elementAtIndex:i associatedPoints:points]) {
             case NSMoveToBezierPathElement: {

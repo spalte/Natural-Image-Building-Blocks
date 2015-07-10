@@ -16,6 +16,7 @@
 #import "NIMPRRotateTool.h"
 #import "NIMPRAnnotatePointTool.h"
 #import "NIMPRAnnotateLineTool.h"
+#import "NIMPRAnnotateEllipseTool.h"
 #import "NSMenu+NIMPR.h"
 
 @interface NIMPRToolRecord : NSObject {
@@ -72,7 +73,8 @@ static NSString* const NIMPRSlabWidthToolbarItemIdentifier = @"NIMPRSlabWidth";
                             [NIMPRToolRecord toolWithTag:NIMPRToolZoom label:NSLocalizedString(@"Zoom", nil) image:[NIMPR image:@"Tool-Zoom"] handler:NIMPRZoomTool.class],
                             [NIMPRToolRecord toolWithTag:NIMPRToolRotate label:NSLocalizedString(@"Rotate", nil) image:[NIMPR image:@"Tool-Rotate"] handler:NIMPRRotateTool.class],
                             [NIMPRToolRecord toolWithTag:NIMPRToolAnnotatePoint label:NSLocalizedString(@"Point", nil) image:[NIMPR image:@"Tool-Annotate-Point"] handler:NIMPRAnnotatePointTool.class],
-                            [NIMPRToolRecord toolWithTag:NIMPRToolAnnotateLine label:NSLocalizedString(@"Line", nil) image:[NIMPR image:@"Tool-Annotate-Line"] handler:NIMPRAnnotateLineTool.class] ] retain];
+                            [NIMPRToolRecord toolWithTag:NIMPRToolAnnotateLine label:NSLocalizedString(@"Line", nil) image:[NIMPR image:@"Tool-Annotate-Line"] handler:NIMPRAnnotateLineTool.class],
+                            [NIMPRToolRecord toolWithTag:NIMPRToolAnnotateEllipse label:NSLocalizedString(@"Ellipse", nil) image:[NIMPR image:@"Tool-Annotate-Ellipse"] handler:NIMPRAnnotateEllipseTool.class] ] retain];
     return tools;
 }
 

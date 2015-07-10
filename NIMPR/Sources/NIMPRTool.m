@@ -14,6 +14,7 @@
 #import "NIMPRRotateTool.h"
 #import "NIMPRAnnotatePointTool.h"
 #import "NIMPRAnnotateLineTool.h"
+#import "NIMPRAnnotateEllipseTool.h"
 #import <NIBuildingBlocks/NIIntersection.h>
 #import <NIBuildingBlocks/NIGeneratorRequest.h>
 
@@ -65,6 +66,9 @@ static BOOL NIMPRToolHidingCursor = NO;
         } break;
         case NIMPRToolAnnotateLine: {
             tc = NIMPRAnnotateLineTool.class;
+        } break;
+        case NIMPRToolAnnotateEllipse: {
+            tc = NIMPRAnnotateEllipseTool.class;
         } break;
     }
     

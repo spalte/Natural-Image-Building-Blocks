@@ -16,6 +16,7 @@ typedef NS_ENUM(NSInteger, NIMPRToolTag) {
     NIMPRToolRotateAxis,
     NIMPRToolAnnotatePoint,
     NIMPRToolAnnotateLine,
+    NIMPRToolAnnotateEllipse,
 };
 
 @class NIMPRView;

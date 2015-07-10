@@ -1,5 +1,5 @@
 //
-//  NIOvalAnnotation.h
+//  NIEllipseAnnotation.h
 //  NIMPR
 //
 //  Created by Alessandro Volz on 7/9/15.
@@ -8,7 +8,7 @@
 
 #import "NIBezierPathAnnotation.h"
 
-@interface NIOvalAnnotation : NINSBezierPathAnnotation {
+@interface NIEllipseAnnotation : NINSBezierPathAnnotation {
     NSRect _bounds;
 }
 

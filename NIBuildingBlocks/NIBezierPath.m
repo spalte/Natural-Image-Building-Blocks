@@ -752,7 +752,7 @@
     NIBezierCoreAppendBezierCore(_bezierCore, [bezierPath NIBezierCore], connectPaths);
 }
 
-- (void)addEndpointsAtIntersectionsWithPlane:(NIPlane)plane // will  flatten the path if it is not already flattened
+- (void)addEndpointsAtIntersectionsWithPlane:(NIPlane)plane // will flatten the path if it is not already flattened
 {
     NIMutableBezierCoreRef newBezierCore;
     
