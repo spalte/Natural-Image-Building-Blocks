@@ -47,6 +47,7 @@
         self.ltoolTag = NIMPRToolWLWW;
         self.rtoolTag = NIMPRToolZoom;
         self.displayRims = YES;
+        _annotations = [[NSMutableSet alloc] init];
     }
     
     return self;
@@ -71,11 +72,13 @@
         [view bind:@"displayScaleBar" toObject:self withKeyPath:@"displayScaleBars" options:nil];
         [view bind:@"displayRim" toObject:self withKeyPath:@"displayRims" options:nil];
         [view bind:@"slabWidth" toObject:self withKeyPath:@"slabWidth" options:nil];
+        [view addObserver:self forKeyPath:@"annotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
     }
     
     [self addObserver:self forKeyPath:@"data" options:NSKeyValueObservingOptionInitial context:NIMPRController.class];
     [self addObserver:self forKeyPath:@"ltoolTag" options:NSKeyValueObservingOptionInitial context:NIMPRController.class];
     [self addObserver:self forKeyPath:@"rtoolTag" options:NSKeyValueObservingOptionInitial context:NIMPRController.class];
+    [self addObserver:self forKeyPath:@"annotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
     
     self.menu = [[NSMenu alloc] init];
     
@@ -118,12 +121,14 @@
 }
 
 - (void)dealloc {
+    [self removeObserver:self forKeyPath:@"annotations" context:NIMPRController.class];
     [self removeObserver:self forKeyPath:@"rtoolTag" context:NIMPRController.class];
     [self removeObserver:self forKeyPath:@"ltoolTag" context:NIMPRController.class];
     [self removeObserver:self forKeyPath:@"data" context:NIMPRController.class];
     self.ltool = self.rtool = nil;
     self.x = self.y = self.z = nil;
     self.data = nil;
+    [_annotations release];
     [super dealloc];
 }
 
@@ -145,6 +150,16 @@
     
     if (object == self && [keyPath isEqualToString:@"rtoolTag"]) {
         self.rtool = [NIMPRTool toolForTag:self.rtoolTag];
+    }
+    
+    if ([keyPath isEqualToString:@"annotations"]) {
+        for (id collector in [self.mprViews arrayByAddingObject:self]) {
+            NSMutableSet* set = [collector publicAnnotations];
+            for (NIAnnotation* a in change[NSKeyValueChangeOldKey])
+                [set removeObject:a];
+            for (NIAnnotation* a in change[NSKeyValueChangeNewKey])
+                [set addObject:a];
+        }
     }
 }
 
@@ -190,6 +205,18 @@
     
     for (NIMPRView* view in self.mprViews)
         view.pixelSpacing = pixelSpacing/pixelSpacingSize*fmin(NSWidth(view.frame), NSHeight(view.frame));
+}
+
+- (NSMutableSet*)publicAnnotations {
+    return [self mutableSetValueForKey:@"annotations"];
+}
+
+- (void)addAnnotationsObject:(id)object {
+    [_annotations addObject:object];
+}
+
+- (void)removeAnnotationsObject:(id)object {
+    [_annotations removeObject:object];
 }
 
 @end

@@ -20,8 +20,7 @@
 
 @synthesize data = _data, dataProperties = _dataProperties, windowLevel = _windowLevel, windowWidth = _windowWidth, slabWidth = _slabWidth;
 @synthesize point = _point, normal = _normal, xdir = _xdir, ydir = _ydir, reference = _reference;
-@synthesize pixelSpacing = _pixelSpacing;//, rotation = _rotation;
-//@synthesize color = _color;
+@synthesize pixelSpacing = _pixelSpacing;
 @synthesize menu = _menu;
 @synthesize eventModifierFlags = _eventModifierFlags;
 @synthesize blockGeneratorRequestUpdates = _blockGeneratorRequestUpdates;
@@ -30,24 +29,12 @@
 @synthesize ltool = _ltool, rtool = _rtool, ltcAtSecondClick = _ltcAtSecondClick;
 @synthesize mouseDown = _mouseDown;
 
-- (instancetype)initWithFrame:(NSRect)frameRect {
-    if ((self = [super initWithFrame:frameRect])) {
-        [self initialize];
-    }
-    
-    return self;
-}
+- (void)initialize:(Class)class {
+    [super initialize:class];
 
-- (instancetype)initWithCoder:(NSCoder*)aDecoder {
-    if ((self = [super initWithCoder:aDecoder])) {
-        [self initialize];
-    }
+    if (class != NIGeneratorRequestView.class)
+        return;
     
-    return self;
-}
-
-- (void)initialize {
-//    self.latestMouseDownEvents = [NSMutableArray array];
     [self addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"data" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"windowLevel" options:0 context:NIMPRView.class];
@@ -62,6 +49,7 @@
 //    [self bind:@"windowWidth" toObject:self withKeyPath:@"dataProperties.windowWidth" options:0];
     [self addObserver:self forKeyPath:@"window.windowController.spacebarDown" options:0 context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"window.windowController.ltool" options:0 context:NIMPRView.class];
+
     self.rimThickness = 1;
 }
 
@@ -83,7 +71,6 @@
     self.menu = nil;
     self.normal = self.xdir = self.ydir = self.reference = nil;
     self.track = nil;
-//    self.latestMouseDownEvents = nil;
     [super dealloc];
 }
 

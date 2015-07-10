@@ -117,3 +117,11 @@
 
 @end
 
+extern CGFloat NIMPR_CGFloatMax(CGFloat lha, CGFloat rha) {
+    return lha > rha ? lha : rha;
+}
+
+extern CGFloat NIMPR_CGFloatMin(CGFloat lha, CGFloat rha) {
+    return lha < rha ? lha : rha;
+}
+

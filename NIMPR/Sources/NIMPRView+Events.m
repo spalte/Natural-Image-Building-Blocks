@@ -28,14 +28,9 @@
     
     if ([ssel isEqualToString:@"mouseDown:"]) {
         self.mouseDown = YES;
-//        [self.latestMouseDownEvents insertObject:event atIndex:0];
-//        if (self.latestMouseDownEvents.count > 3)
-//            [self.latestMouseDownEvents removeObjectAtIndex:3];
     } else if ([ssel isEqualToString:@"mouseUp:"])
         self.mouseDown = NO;
-    
-//    NSLog(@"%@ %d", ssel, self.mouseDown);
-    
+
     SEL vsel = NSSelectorFromString([@"view:" stringByAppendingString:ssel]), orvsel = NSSelectorFromString([NSString stringWithFormat:@"view:%@otherwise:", ssel]);
     if ([tool respondsToSelector:orvsel]) {
         if ([[tool performSelector:orvsel withObjects:self:event:block] boolValue])
@@ -201,6 +196,9 @@
 }
 
 - (Class)toolForLocation:(NSPoint)location event:(NSEvent*)event {
+    if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSCommandKeyMask)
+        return nil;
+    
     CGFloat distance;
     NSString* ikey = [self intersectionClosestToPoint:location closestPoint:NULL distance:&distance];
     
@@ -218,7 +216,7 @@
                 *stop = YES;
             }
         }];
-    else if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSCommandKeyMask)
+    else if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSAlternateKeyMask)
         rotate = YES;
     
     Class ltc = nil;
@@ -229,7 +227,7 @@
         ltc = NIMPRMoveTool.class;
     else if (rotate) {
         ltc = NIMPRRotateAxisTool.class;
-        if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSCommandKeyMask)
+        if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSAlternateKeyMask)
             ltc = NIMPRRotateTool.class;
     }
     

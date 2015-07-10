@@ -12,6 +12,8 @@
 #import "NIMPRMoveTool.h"
 #import "NIMPRZoomTool.h"
 #import "NIMPRRotateTool.h"
+#import "NIMPRAnnotatePointTool.h"
+#import "NIMPRAnnotateLineTool.h"
 #import <NIBuildingBlocks/NIIntersection.h>
 #import <NIBuildingBlocks/NIGeneratorRequest.h>
 
@@ -57,6 +59,12 @@ static BOOL NIMPRToolHidingCursor = NO;
         } break;
         case NIMPRToolRotateAxis: {
             tc = NIMPRRotateAxisTool.class;
+        } break;
+        case NIMPRToolAnnotatePoint: {
+            tc = NIMPRAnnotatePointTool.class;
+        } break;
+        case NIMPRToolAnnotateLine: {
+            tc = NIMPRAnnotateLineTool.class;
         } break;
     }
     
@@ -203,18 +211,22 @@ static BOOL NIMPRToolHidingCursor = NO;
 
 @end
 
-//@interface NIMPRDeltaTool ()
-//
-////@property NSPoint ignoreDragLocation;
-//
-//@end
+@interface NIMPRDeltaTool ()
+
+//@property NSPoint ignoreDragLocation;
+@property BOOL mouseDownConfirmed;
+
+@end
 
 @implementation NIMPRDeltaTool
 
 //@synthesize ignoreDragLocation = _ignoreDragLocation;
+@synthesize mouseDownConfirmed = _mouseDownConfirmed;
 
 - (BOOL)view:(NIMPRView *)view mouseDown:(NSEvent *)event otherwise:(void (^)())or confirm:(void (^)())confirm {
+    self.mouseDownConfirmed = NO;
     return [super view:view mouseDown:event otherwise:or confirm:^{
+        self.mouseDownConfirmed = YES;
         [view enumerateIntersectionsWithBlock:^(NSString* key, NIIntersection* intersection, BOOL* stop) {
             intersection.maskAroundMouse = NO;
         }];
@@ -231,7 +243,7 @@ static BOOL NIMPRToolHidingCursor = NO;
 
 - (BOOL)view:(NIMPRView*)view mouseUp:(NSEvent*)event {
     [super view:view mouseUp:event];
-    if (self.repositionsCursor)
+    if (self.mouseDownConfirmed && self.repositionsCursor)
         [self moveCursorToMouseDownLocation];
     return NO;
 }

@@ -30,3 +30,18 @@
 - (NSPoint)convertPointFromScreen:(NSPoint)point;
 
 @end
+
+
+#define CGFloatMax NIMPR_CGFloatMax
+extern CGFloat NIMPR_CGFloatMax(CGFloat lha, CGFloat rha);
+#define CGFloatMin NIMPR_CGFloatMin
+extern CGFloat NIMPR_CGFloatMin(CGFloat lha, CGFloat rha);
+
+// from https://gist.github.com/Kentzo/1985919
+#ifndef CGFLOAT_EPSILON
+#if CGFLOAT_IS_DOUBLE
+#define CGFLOAT_EPSILON DBL_EPSILON
+#else
+#define CGFLOAT_EPSILON FLT_EPSILON
+#endif
+#endif

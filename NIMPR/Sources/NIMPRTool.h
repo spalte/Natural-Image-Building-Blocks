@@ -14,7 +14,8 @@ typedef NS_ENUM(NSInteger, NIMPRToolTag) {
     NIMPRToolZoom,
     NIMPRToolRotate,
     NIMPRToolRotateAxis,
-//    NIMPRToolROI,
+    NIMPRToolAnnotatePoint,
+    NIMPRToolAnnotateLine,
 };
 
 @class NIMPRView;
@@ -71,6 +72,7 @@ typedef NS_ENUM(NSInteger, NIMPRToolTag) {
 
 @interface NIMPRDeltaTool : NIMPRTool {
 //    NSPoint _ignoreDragLocation;
+    BOOL _mouseDownConfirmed;
 }
 
 - (BOOL)view:(NIMPRView*)view move:(NSPoint)delta vector:(NIVector)deltaVector;

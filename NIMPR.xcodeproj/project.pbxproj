@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		712F62671B4D56D8004AC1AE /* NIMPRAnnotatePointTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 712F62661B4D56D8004AC1AE /* NIMPRAnnotatePointTool.m */; };
+		712F626B1B4D5FC4004AC1AE /* NIAnnotatedGeneratorRequestView.m in Sources */ = {isa = PBXBuildFile; fileRef = 712F626A1B4D5FC4004AC1AE /* NIAnnotatedGeneratorRequestView.m */; };
+		712F62731B4D6DC0004AC1AE /* NIAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 712F62721B4D6DC0004AC1AE /* NIAnnotation.m */; };
+		712F62761B4D7172004AC1AE /* NIPointAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 712F62751B4D7172004AC1AE /* NIPointAnnotation.m */; };
+		712F62791B4EBDB9004AC1AE /* NIOvalAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 712F62781B4EBDB9004AC1AE /* NIOvalAnnotation.m */; };
+		712F627C1B4ED30E004AC1AE /* NIBezierPathAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 712F627B1B4ED30E004AC1AE /* NIBezierPathAnnotation.m */; };
+		712F627F1B4FDB79004AC1AE /* NILineAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 712F627E1B4FDB79004AC1AE /* NILineAnnotation.m */; };
+		712F62821B4FDFFD004AC1AE /* NIMPRAnnotateTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 712F62811B4FDFFD004AC1AE /* NIMPRAnnotateTool.m */; };
+		712F62851B50076E004AC1AE /* NIMPRAnnotateLineTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 712F62841B50076E004AC1AE /* NIMPRAnnotateLineTool.m */; };
 		713341251B146EE50014CE09 /* NIMPRController+Toolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 713341231B146EE50014CE09 /* NIMPRController+Toolbar.m */; };
 		7133412A1B147DF50014CE09 /* NIMPRWLWWTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 713341291B147DF50014CE09 /* NIMPRWLWWTool.m */; };
 		7133412D1B147E0A0014CE09 /* NIMPRTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 7133412C1B147E0A0014CE09 /* NIMPRTool.m */; };
@@ -31,7 +40,35 @@
 		71B249301B18886F00F8E0AD /* NIMPRWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B2492F1B18886F00F8E0AD /* NIMPRWindow.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		7136DDE11B44388800D866E8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7194736B1B1D9CA5009363AE /* NIBuildingBlocks.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F151EDB1B1CC8D000C8F767;
+			remoteInfo = NIBuildingBlocks;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		712F62651B4D56D8004AC1AE /* NIMPRAnnotatePointTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRAnnotatePointTool.h; sourceTree = "<group>"; };
+		712F62661B4D56D8004AC1AE /* NIMPRAnnotatePointTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRAnnotatePointTool.m; sourceTree = "<group>"; };
+		712F62691B4D5FC4004AC1AE /* NIAnnotatedGeneratorRequestView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIAnnotatedGeneratorRequestView.h; sourceTree = "<group>"; };
+		712F626A1B4D5FC4004AC1AE /* NIAnnotatedGeneratorRequestView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIAnnotatedGeneratorRequestView.m; sourceTree = "<group>"; };
+		712F62711B4D6DC0004AC1AE /* NIAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIAnnotation.h; sourceTree = "<group>"; };
+		712F62721B4D6DC0004AC1AE /* NIAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIAnnotation.m; sourceTree = "<group>"; };
+		712F62741B4D7172004AC1AE /* NIPointAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPointAnnotation.h; sourceTree = "<group>"; };
+		712F62751B4D7172004AC1AE /* NIPointAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPointAnnotation.m; sourceTree = "<group>"; };
+		712F62771B4EBDB9004AC1AE /* NIOvalAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIOvalAnnotation.h; sourceTree = "<group>"; };
+		712F62781B4EBDB9004AC1AE /* NIOvalAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIOvalAnnotation.m; sourceTree = "<group>"; };
+		712F627A1B4ED30E004AC1AE /* NIBezierPathAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIBezierPathAnnotation.h; sourceTree = "<group>"; };
+		712F627B1B4ED30E004AC1AE /* NIBezierPathAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIBezierPathAnnotation.m; sourceTree = "<group>"; };
+		712F627D1B4FDB79004AC1AE /* NILineAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NILineAnnotation.h; sourceTree = "<group>"; };
+		712F627E1B4FDB79004AC1AE /* NILineAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NILineAnnotation.m; sourceTree = "<group>"; };
+		712F62801B4FDFFD004AC1AE /* NIMPRAnnotateTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRAnnotateTool.h; sourceTree = "<group>"; };
+		712F62811B4FDFFD004AC1AE /* NIMPRAnnotateTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRAnnotateTool.m; sourceTree = "<group>"; };
+		712F62831B50076E004AC1AE /* NIMPRAnnotateLineTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRAnnotateLineTool.h; sourceTree = "<group>"; };
+		712F62841B50076E004AC1AE /* NIMPRAnnotateLineTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRAnnotateLineTool.m; sourceTree = "<group>"; };
 		713341221B146EE50014CE09 /* NIMPRController+Toolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NIMPRController+Toolbar.h"; sourceTree = "<group>"; };
 		713341231B146EE50014CE09 /* NIMPRController+Toolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NIMPRController+Toolbar.m"; sourceTree = "<group>"; };
 		713341281B147DF50014CE09 /* NIMPRWLWWTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRWLWWTool.h; sourceTree = "<group>"; };
@@ -115,6 +152,7 @@
 				719CC5251B0B1C2800DC1ED5 /* NIMPRView.m */,
 				7133413E1B15A4FA0014CE09 /* NIMPRView+Events.h */,
 				7133413F1B15A4FA0014CE09 /* NIMPRView+Events.m */,
+				712F626C1B4D5FC8004AC1AE /* Annotations */,
 				713341271B147D9D0014CE09 /* Tools */,
 				719CC5381B0CC17000DC1ED5 /* NIMPRQuaternion.h */,
 				719CC5391B0CC17000DC1ED5 /* NIMPRQuaternion.mm */,
@@ -125,6 +163,25 @@
 			);
 			name = Sources;
 			path = NIMPR/Sources;
+			sourceTree = "<group>";
+		};
+		712F626C1B4D5FC8004AC1AE /* Annotations */ = {
+			isa = PBXGroup;
+			children = (
+				712F62691B4D5FC4004AC1AE /* NIAnnotatedGeneratorRequestView.h */,
+				712F626A1B4D5FC4004AC1AE /* NIAnnotatedGeneratorRequestView.m */,
+				712F62711B4D6DC0004AC1AE /* NIAnnotation.h */,
+				712F62721B4D6DC0004AC1AE /* NIAnnotation.m */,
+				712F62741B4D7172004AC1AE /* NIPointAnnotation.h */,
+				712F62751B4D7172004AC1AE /* NIPointAnnotation.m */,
+				712F627A1B4ED30E004AC1AE /* NIBezierPathAnnotation.h */,
+				712F627B1B4ED30E004AC1AE /* NIBezierPathAnnotation.m */,
+				712F627D1B4FDB79004AC1AE /* NILineAnnotation.h */,
+				712F627E1B4FDB79004AC1AE /* NILineAnnotation.m */,
+				712F62771B4EBDB9004AC1AE /* NIOvalAnnotation.h */,
+				712F62781B4EBDB9004AC1AE /* NIOvalAnnotation.m */,
+			);
+			name = Annotations;
 			sourceTree = "<group>";
 		};
 		713341271B147D9D0014CE09 /* Tools */ = {
@@ -140,8 +197,22 @@
 				713341321B147E810014CE09 /* NIMPRZoomTool.m */,
 				713341341B147E910014CE09 /* NIMPRRotateTool.h */,
 				713341351B147E910014CE09 /* NIMPRRotateTool.m */,
+				712F62801B4FDFFD004AC1AE /* NIMPRAnnotateTool.h */,
+				712F62811B4FDFFD004AC1AE /* NIMPRAnnotateTool.m */,
+				712F62651B4D56D8004AC1AE /* NIMPRAnnotatePointTool.h */,
+				712F62661B4D56D8004AC1AE /* NIMPRAnnotatePointTool.m */,
+				712F62831B50076E004AC1AE /* NIMPRAnnotateLineTool.h */,
+				712F62841B50076E004AC1AE /* NIMPRAnnotateLineTool.m */,
 			);
 			name = Tools;
+			sourceTree = "<group>";
+		};
+		7136DDDE1B44388600D866E8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7136DDE21B44388800D866E8 /* NIBuildingBlocks.framework */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		719473791B1DA401009363AE /* Dependencies */ = {
@@ -197,9 +268,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		719D029D1AC1CB25002F76C1 /* NIMPR.temp_caseinsensitive_rename */ = {
+		719D029D1AC1CB25002F76C1 /* NIMPR */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 719D02A51AC1CB25002F76C1 /* Build configuration list for PBXNativeTarget "NIMPR.temp_caseinsensitive_rename" */;
+			buildConfigurationList = 719D02A51AC1CB25002F76C1 /* Build configuration list for PBXNativeTarget "NIMPR" */;
 			buildPhases = (
 				719D029A1AC1CB25002F76C1 /* Sources */,
 				719D029B1AC1CB25002F76C1 /* Frameworks */,
@@ -211,7 +282,7 @@
 			);
 			dependencies = (
 			);
-			name = NIMPR.temp_caseinsensitive_rename;
+			name = NIMPR;
 			productName = DicomSendXMLRPC;
 			productReference = 719D029E1AC1CB25002F76C1 /* NIMPR.osirixplugin */;
 			productType = "com.apple.product-type.bundle";
@@ -222,7 +293,7 @@
 		719D02961AC1CB25002F76C1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0630;
+				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = volz.io;
 				TargetAttributes = {
 					719D029D1AC1CB25002F76C1 = {
@@ -240,12 +311,28 @@
 			mainGroup = 719D02951AC1CB25002F76C1;
 			productRefGroup = 719D029F1AC1CB25002F76C1 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 7136DDDE1B44388600D866E8 /* Products */;
+					ProjectRef = 7194736B1B1D9CA5009363AE /* NIBuildingBlocks.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
-				719D029D1AC1CB25002F76C1 /* NIMPR.temp_caseinsensitive_rename */,
+				719D029D1AC1CB25002F76C1 /* NIMPR */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		7136DDE21B44388800D866E8 /* NIBuildingBlocks.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = NIBuildingBlocks.framework;
+			remoteRef = 7136DDE11B44388800D866E8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		719D029C1AC1CB25002F76C1 /* Resources */ = {
@@ -301,13 +388,22 @@
 				719D02AA1AC1D367002F76C1 /* NIMPRPlugin.m in Sources */,
 				7133412A1B147DF50014CE09 /* NIMPRWLWWTool.m in Sources */,
 				719473611B1D9802009363AE /* NIMPR.m in Sources */,
+				712F627C1B4ED30E004AC1AE /* NIBezierPathAnnotation.m in Sources */,
 				719CC5261B0B1C2800DC1ED5 /* NIMPRView.m in Sources */,
+				712F62851B50076E004AC1AE /* NIMPRAnnotateLineTool.m in Sources */,
 				713341301B147E360014CE09 /* NIMPRMoveTool.m in Sources */,
 				713341251B146EE50014CE09 /* NIMPRController+Toolbar.m in Sources */,
 				713341401B15A4FA0014CE09 /* NIMPRView+Events.m in Sources */,
 				719CC51E1B0B1BBC00DC1ED5 /* NIMPRController.m in Sources */,
+				712F62731B4D6DC0004AC1AE /* NIAnnotation.m in Sources */,
+				712F62671B4D56D8004AC1AE /* NIMPRAnnotatePointTool.m in Sources */,
+				712F62821B4FDFFD004AC1AE /* NIMPRAnnotateTool.m in Sources */,
 				719CC53A1B0CC17000DC1ED5 /* NIMPRQuaternion.mm in Sources */,
 				713341361B147E910014CE09 /* NIMPRRotateTool.m in Sources */,
+				712F62761B4D7172004AC1AE /* NIPointAnnotation.m in Sources */,
+				712F627F1B4FDB79004AC1AE /* NILineAnnotation.m in Sources */,
+				712F626B1B4D5FC4004AC1AE /* NIAnnotatedGeneratorRequestView.m in Sources */,
+				712F62791B4EBDB9004AC1AE /* NIOvalAnnotation.m in Sources */,
 				713341331B147E810014CE09 /* NIMPRZoomTool.m in Sources */,
 				713341441B15F3000014CE09 /* +NIMPR.m in Sources */,
 			);
@@ -451,7 +547,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		719D02A51AC1CB25002F76C1 /* Build configuration list for PBXNativeTarget "NIMPR.temp_caseinsensitive_rename" */ = {
+		719D02A51AC1CB25002F76C1 /* Build configuration list for PBXNativeTarget "NIMPR" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				719D02A61AC1CB25002F76C1 /* Debug */,

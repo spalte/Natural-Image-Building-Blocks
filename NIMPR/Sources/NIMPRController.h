@@ -28,6 +28,8 @@ typedef NS_OPTIONS(NSUInteger, NIMPRFlags) {
     NIMPRView* _sagittalView;
     NIMPRView* _coronalView;
     
+    NSMutableSet* _annotations;
+    
     NIVolumeData* _data;
     CGFloat _windowWidth, _windowLevel, _initialWindowLevel, _initialWindowWidth;
     BOOL _displayOrientationLabels, _displayScaleBars, _displayRims;
@@ -72,6 +74,8 @@ typedef NS_OPTIONS(NSUInteger, NIMPRFlags) {
 - (instancetype)initWithData:(NIVolumeData*)data window:(CGFloat)wl :(CGFloat)ww;
 
 - (NSArray*)mprViews;
+
+- (NSMutableSet*)publicAnnotations;
 
 - (void)rotate:(CGFloat)rads axis:(NIVector)axis excluding:(NIMPRView*)view;
 - (void)rotateToInitial;
