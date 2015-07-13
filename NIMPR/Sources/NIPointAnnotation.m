@@ -38,12 +38,15 @@
         return;
     
     NSPoint p = [view convertPointFromDICOMVector:self.vector];
-
+    
     CGFloat minRadius = 0.5, maxRadius = 2, radius = maxRadius-(maxRadius-minRadius)/maximumDistanceToPlane*(distanceToPlane-maximumDistanceToPlane);
     NSRect ovalRect = NSMakeRect(p.x - radius, p.y - radius, radius*2, radius*2);
-    [[NSColor redColor] setFill];
+    
+    NSColor* color = self.color;
+    
+    [color setFill];
     [[NSBezierPath bezierPathWithOvalInRect:ovalRect] fill];
-    [[[NSColor blackColor] colorWithAlphaComponent:.6] set];
+    [[[NSColor blackColor] colorWithAlphaComponent:color.alphaComponent*.6] setStroke];
     [[NSBezierPath bezierPathWithOvalInRect:ovalRect] stroke];
     
 //    NSFont* font = [NSFont fontWithName:@"Helvetica" size:24];

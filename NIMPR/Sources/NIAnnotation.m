@@ -19,6 +19,7 @@ NSString* const NIAnnotationChangeNotificationChangesKey = @"changes";
 
 @implementation NIAnnotation
 
+@synthesize color = _color;
 @synthesize changes = _changes;
 
 - (instancetype)init {
@@ -76,6 +77,27 @@ NSString* const NIAnnotationChangeNotificationChangesKey = @"changes";
 
 - (void)drawInView:(NIAnnotatedGeneratorRequestView*)view {
     // this abstract class won't render
+}
+
+static NSColor* NIAnnotationDefaultColor = nil;
+
++ (NSColor*)defaultColor {
+    if (NIAnnotationDefaultColor == nil)
+        return [NSColor greenColor];
+    return NIAnnotationDefaultColor;
+}
+
++ (void)setDefaultColor:(NSColor*)color {
+    if (color != NIAnnotationDefaultColor) {
+        [NIAnnotationDefaultColor release];
+        NIAnnotationDefaultColor = [color retain];
+    }
+}
+
+- (NSColor*)color {
+    if (_color)
+        return _color;
+    return [self.class defaultColor];
 }
 
 @end
