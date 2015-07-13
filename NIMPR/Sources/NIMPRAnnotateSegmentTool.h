@@ -8,10 +8,10 @@
 
 #import "NIMPRAnnotateTool.h"
 
-@class NILineAnnotation;
+@class NISegmentAnnotation;
 
-@interface NIMPRAnnotateLineTool : NIMPRAnnotateTool
+@interface NIMPRAnnotateSegmentTool : NIMPRAnnotateTool
 
-@property(retain) NILineAnnotation* annotation;
+@property(retain) NISegmentAnnotation* annotation;
 
 @end

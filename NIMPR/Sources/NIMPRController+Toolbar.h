@@ -10,4 +10,6 @@
 
 @interface NIMPRController (Toolbar)
 
+- (id)toolClassForTag:(NIMPRToolTag)tag;
+
 @end

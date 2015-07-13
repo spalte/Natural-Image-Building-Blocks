@@ -15,7 +15,8 @@ typedef NS_ENUM(NSInteger, NIMPRToolTag) {
     NIMPRToolRotate,
     NIMPRToolRotateAxis,
     NIMPRToolAnnotatePoint,
-    NIMPRToolAnnotateLine,
+    NIMPRToolAnnotateSegment,
+    NIMPRToolAnnotateRectangle,
     NIMPRToolAnnotateEllipse,
 };
 
@@ -57,8 +58,6 @@ typedef NS_ENUM(NSInteger, NIMPRToolTag) {
 @property(readonly) NSPoint mouseDownLocation, currentLocation, previousLocation;
 @property(readonly) NIVector mouseDownLocationVector, currentLocationVector, previousLocationVector;
 @property(readonly) NIAffineTransform mouseDownGeneratorRequestSliceToDicomTransform;
-
-+ (instancetype)toolForTag:(NIMPRToolTag)tag;
 
 - (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event UNAVAILABLE_ATTRIBUTE;
 - (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())otherwise confirm:(void(^)())confirm NS_REQUIRES_SUPER;

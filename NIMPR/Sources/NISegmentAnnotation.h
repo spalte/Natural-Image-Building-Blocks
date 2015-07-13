@@ -8,12 +8,12 @@
 
 #import "NIBezierPathAnnotation.h"
 
-@interface NILineAnnotation : NINSBezierPathAnnotation {
+@interface NISegmentAnnotation : NINSBezierPathAnnotation {
     NSPoint _p, _q;
 }
 
 @property NSPoint p, q;
 
-+ (instancetype)annotationWithPoints:(NSPoint)p :(NSPoint)q transform:(NIAffineTransform)sliceToDicomTransform;
+- (instancetype)initWithPoints:(NSPoint)p :(NSPoint)q transform:(NIAffineTransform)sliceToDicomTransform;
 
 @end

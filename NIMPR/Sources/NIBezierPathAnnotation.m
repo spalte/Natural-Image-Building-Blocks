@@ -23,6 +23,8 @@
     NIObliqueSliceGeneratorRequest* req = (id)view.presentedGeneratorRequest;
     NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(req.sliceToDicomTransform);
     
+    NSBezierPath* test = [NSBezierPath bezierPathWithRect:NSMakeRect(0, 5, 10, 20)];
+    
     NSColor* color = self.color;
     
     NIBezierPath* path = [self.NIBezierPath bezierPathByApplyingTransform:dicomToSliceTransform];
@@ -41,7 +43,7 @@
     [mpath addEndpointsAtIntersectionsWithPlane:NIPlaneMake(NIVectorMake(0,0,-sl),NIVectorMake(0,0,1))];
     
     NIMutableBezierPath* cpath = [NIMutableBezierPath bezierPath];
-    NSMutableArray* cpathp = [NSMutableArray array];
+//    NSMutableArray* cpathp = [NSMutableArray array];
     NIVector ip, bp; BOOL ipset = NO, bpin = NO;
     NIVector c1, c2, ep;
     NSInteger elementCount = mpath.elementCount;
@@ -50,6 +52,7 @@
             case NIMoveToBezierPathElement: {
                 bp = ep; bpin = NO;
                 if (!ipset) ip = ep;
+                ipset = YES;
             } break;
             case NILineToBezierPathElement: {
                 CGFloat mpz = (bp.z+ep.z)/2;
@@ -57,7 +60,7 @@
                     if (!bpin)
                         [cpath moveToVector:bp];
                     [cpath lineToVector:ep];
-                    [cpathp addObject:@[ [NSValue valueWithNIVector:bp], [NSValue valueWithNIVector:ep] ]];
+//                    [cpathp addObject:@[ [NSValue valueWithNIVector:bp], [NSValue valueWithNIVector:ep] ]];
                     bpin = YES;
                 } else
                     bpin = NO;
@@ -69,14 +72,24 @@
                     if (!bpin)
                         [cpath moveToVector:bp];
                     [cpath curveToVector:ep controlVector1:c1 controlVector2:c2];
-                    [cpathp addObject:@[ [NSValue valueWithNIVector:bp], [NSValue valueWithNIVector:ep] ]];
+//                    [cpathp addObject:@[ [NSValue valueWithNIVector:bp], [NSValue valueWithNIVector:ep] ]];
                     bpin = YES;
                 } else
                     bpin = NO;
                 bp = ep;
             } break;
             case NICloseBezierPathElement: {
-                [cpath close];
+                if (ipset) {
+                    CGFloat mpz = (bp.z+ip.z)/2;
+                    if (mpz <= sl && mpz >= -sl) {
+                        if (!bpin)
+                            [cpath moveToVector:bp];
+                        [cpath close];
+                        bpin = YES;
+                    } else
+                        bpin = NO;
+                    bp = ip;
+                }
             } break;
         }
     

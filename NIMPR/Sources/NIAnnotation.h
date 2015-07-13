@@ -18,6 +18,11 @@ extern NSString* const NIAnnotationChangeNotification; // to observe an annotati
 
 @property(retain, nonatomic) NSColor* color;
 
++ (id)pointWithVector:(NIVector)vector;
++ (id)segmentWithPoints:(NSPoint)p :(NSPoint)q transform:(NIAffineTransform)sliceToDicomTransform;
++ (id)rectangleWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform;
++ (id)ellipseWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform;
+
 + (NSColor*)defaultColor;
 + (void)setDefaultColor:(NSColor*)color;
 

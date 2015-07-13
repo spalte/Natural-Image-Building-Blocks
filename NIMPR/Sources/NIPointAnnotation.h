@@ -15,7 +15,6 @@
 
 @property NIVector vector;
 
-+ (instancetype)annotationWithVector:(NIVector)vector;
 - (instancetype)initWithVector:(NIVector)vector;
 
 @end

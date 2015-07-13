@@ -15,7 +15,8 @@
 #import "NIMPRZoomTool.h"
 #import "NIMPRRotateTool.h"
 #import "NIMPRAnnotatePointTool.h"
-#import "NIMPRAnnotateLineTool.h"
+#import "NIMPRAnnotateSegmentTool.h"
+#import "NIMPRAnnotateRectangleTool.h"
 #import "NIMPRAnnotateEllipseTool.h"
 #import "NSMenu+NIMPR.h"
 
@@ -73,9 +74,16 @@ static NSString* const NIMPRSlabWidthToolbarItemIdentifier = @"NIMPRSlabWidth";
                             [NIMPRToolRecord toolWithTag:NIMPRToolZoom label:NSLocalizedString(@"Zoom", nil) image:[NIMPR image:@"Tool-Zoom"] handler:NIMPRZoomTool.class],
                             [NIMPRToolRecord toolWithTag:NIMPRToolRotate label:NSLocalizedString(@"Rotate", nil) image:[NIMPR image:@"Tool-Rotate"] handler:NIMPRRotateTool.class],
                             [NIMPRToolRecord toolWithTag:NIMPRToolAnnotatePoint label:NSLocalizedString(@"Point", nil) image:[NIMPR image:@"Tool-Annotate-Point"] handler:NIMPRAnnotatePointTool.class],
-                            [NIMPRToolRecord toolWithTag:NIMPRToolAnnotateLine label:NSLocalizedString(@"Line", nil) image:[NIMPR image:@"Tool-Annotate-Line"] handler:NIMPRAnnotateLineTool.class],
+                            [NIMPRToolRecord toolWithTag:NIMPRToolAnnotateSegment label:NSLocalizedString(@"Segment", nil) image:[NIMPR image:@"Tool-Annotate-Segment"] handler:NIMPRAnnotateSegmentTool.class],
+                            [NIMPRToolRecord toolWithTag:NIMPRToolAnnotateRectangle label:NSLocalizedString(@"Rectangle", nil) image:[NIMPR image:@"Tool-Annotate-Rectangle"] handler:NIMPRAnnotateRectangleTool.class],
                             [NIMPRToolRecord toolWithTag:NIMPRToolAnnotateEllipse label:NSLocalizedString(@"Ellipse", nil) image:[NIMPR image:@"Tool-Annotate-Ellipse"] handler:NIMPRAnnotateEllipseTool.class] ] retain];
     return tools;
+}
+
+- (Class)toolClassForTag:(NIMPRToolTag)tag {
+    return [[[self.tools filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NIMPRToolRecord* tool, NSDictionary* bindings) {
+        return (tool.tag == tag);
+    }]] lastObject] handler];
 }
 
 - (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar {

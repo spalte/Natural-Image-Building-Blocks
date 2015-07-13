@@ -14,8 +14,8 @@
 @synthesize vector = _vector;
 //@dynamic x, y, z;
 
-+ (instancetype)annotationWithVector:(NIVector)vector {
-    return [[[self.class alloc] initWithVector:vector] autorelease];
++ (NSSet*)keyPathsForValuesAffectingAnnotation {
+    return [[super keyPathsForValuesAffectingAnnotation] setByAddingObject:@"vector"];
 }
 
 - (instancetype)initWithVector:(NIVector)vector {
@@ -24,10 +24,6 @@
     }
     
     return self;
-}
-
-+ (NSSet*)keyPathsForValuesAffectingAnnotation {
-    return [[super keyPathsForValuesAffectingAnnotation] setByAddingObject:@"vector"];
 }
 
 - (void)drawInView:(NIAnnotatedGeneratorRequestView*)view {

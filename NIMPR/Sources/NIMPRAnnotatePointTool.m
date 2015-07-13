@@ -8,7 +8,6 @@
 
 #import "NIMPRAnnotatePointTool.h"
 #import "NIPointAnnotation.h"
-#import "NIMPRView.h"
 
 @implementation NIMPRAnnotatePointTool
 
@@ -16,11 +15,11 @@
 
 - (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())otherwise {
     return [super view:view mouseDown:event otherwise:otherwise confirm:^{
-        [view.publicAnnotations addObject:(self.annotation = [NIPointAnnotation annotationWithVector:self.mouseDownLocationVector])];
+        [view.publicAnnotations addObject:(self.annotation = [NIAnnotation pointWithVector:self.mouseDownLocationVector])];
     }];
 }
 
-- (BOOL)view:(NIMPRView *)view mouseDragged:(NSEvent *)event {
+- (BOOL)view:(NIMPRView*)view mouseDragged:(NSEvent *)event {
     [super view:view mouseDragged:event];
     self.annotation.vector = self.currentLocationVector;
     return YES;

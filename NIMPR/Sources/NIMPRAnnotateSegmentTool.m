@@ -6,18 +6,17 @@
 //  Copyright (c) 2015 volz.io. All rights reserved.
 //
 
-#import "NIMPRAnnotateLineTool.h"
-#import "NILineAnnotation.h"
-#import "NIMPRView.h"
+#import "NIMPRAnnotateSegmentTool.h"
+#import "NISegmentAnnotation.h"
 
-@implementation NIMPRAnnotateLineTool
+@implementation NIMPRAnnotateSegmentTool
 
 @dynamic annotation;
 
 - (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())otherwise {
     return [super view:view mouseDown:event otherwise:otherwise confirm:^{
         NIObliqueSliceGeneratorRequest* req = (id)view.presentedGeneratorRequest;
-        [view.publicAnnotations addObject:(self.annotation = [NILineAnnotation annotationWithPoints:self.mouseDownLocation :self.mouseDownLocation transform:req.sliceToDicomTransform])];
+        [view.publicAnnotations addObject:(self.annotation = [NIAnnotation segmentWithPoints:self.mouseDownLocation :self.mouseDownLocation transform:req.sliceToDicomTransform])];
     }];
 }
 

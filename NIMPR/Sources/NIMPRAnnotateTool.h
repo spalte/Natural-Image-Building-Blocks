@@ -7,6 +7,7 @@
 //
 
 #import "NIMPRTool.h"
+#import "NIMPRView.h"
 
 @interface NIMPRAnnotateTool : NIMPRTool {
     id _annotation;

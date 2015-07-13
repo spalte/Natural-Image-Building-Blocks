@@ -145,11 +145,11 @@
     }
     
     if (object == self && [keyPath isEqualToString:@"ltoolTag"]) {
-        self.ltool = [NIMPRTool toolForTag:self.ltoolTag];
+        self.ltool = [[[[self toolClassForTag:self.ltoolTag] alloc] init] autorelease];
     }
     
     if (object == self && [keyPath isEqualToString:@"rtoolTag"]) {
-        self.rtool = [NIMPRTool toolForTag:self.rtoolTag];
+        self.rtool = [[[[self toolClassForTag:self.rtoolTag] alloc] init] autorelease];
     }
     
     if ([keyPath isEqualToString:@"annotations"]) {

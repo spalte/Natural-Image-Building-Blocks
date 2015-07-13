@@ -6,14 +6,14 @@
 //  Copyright (c) 2015 volz.io. All rights reserved.
 //
 
-#import "NILineAnnotation.h"
+#import "NISegmentAnnotation.h"
 
-@implementation NILineAnnotation
+@implementation NISegmentAnnotation
 
 @synthesize p = _p, q = _q;
 
-+ (instancetype)annotationWithPoints:(NSPoint)p :(NSPoint)q transform:(NIAffineTransform)sliceToDicomTransform {
-    return [[[self.class alloc] initWithPoints:p:q transform:sliceToDicomTransform] autorelease];
++ (NSSet*)keyPathsForValuesAffectingNSBezierPath {
+    return [NSSet setWithObjects: @"p", @"q", nil];
 }
 
 - (instancetype)initWithPoints:(NSPoint)p :(NSPoint)q transform:(NIAffineTransform)sliceToDicomTransform {
@@ -32,10 +32,6 @@
     [path lineToPoint:self.q];
     
     return path;
-}
-
-+ (NSSet*)keyPathsForValuesAffectingNSBezierPath {
-    return [NSSet setWithObjects: @"p", @"q", nil];
 }
 
 @end

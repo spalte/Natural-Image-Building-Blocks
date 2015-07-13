@@ -7,6 +7,9 @@
 //
 
 #import "NIAnnotation.h"
+#import "NIPointAnnotation.h"
+#import "NISegmentAnnotation.h"
+#import "NIEllipseAnnotation.h"
 
 NSString* const NIAnnotationChangeNotification = @"NIAnnotationChange";
 NSString* const NIAnnotationChangeNotificationChangesKey = @"changes";
@@ -98,6 +101,24 @@ static NSColor* NIAnnotationDefaultColor = nil;
     if (_color)
         return _color;
     return [self.class defaultColor];
+}
+
+
+
++ (id)pointWithVector:(NIVector)vector {
+    return [[[NIPointAnnotation alloc] initWithVector:vector] autorelease];
+}
+
++ (id)segmentWithPoints:(NSPoint)p :(NSPoint)q transform:(NIAffineTransform)sliceToDicomTransform {
+    return [[[NISegmentAnnotation alloc] initWithPoints:p:q transform:sliceToDicomTransform] autorelease];
+}
+
++ (id)rectangleWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform {
+    return [[[NIRectangleAnnotation alloc] initWithBounds:bounds transform:sliceToDicomTransform] autorelease];
+}
+
++ (id)ellipseWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform {
+    return [[[NIEllipseAnnotation alloc] initWithBounds:bounds transform:sliceToDicomTransform] autorelease];
 }
 
 @end

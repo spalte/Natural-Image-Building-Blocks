@@ -13,7 +13,8 @@
 #import "NIMPRZoomTool.h"
 #import "NIMPRRotateTool.h"
 #import "NIMPRAnnotatePointTool.h"
-#import "NIMPRAnnotateLineTool.h"
+#import "NIMPRAnnotateSegmentTool.h"
+#import "NIMPRAnnotateRectangleTool.h"
 #import "NIMPRAnnotateEllipseTool.h"
 #import <NIBuildingBlocks/NIIntersection.h>
 #import <NIBuildingBlocks/NIGeneratorRequest.h>
@@ -41,39 +42,6 @@ static BOOL NIMPRToolHidingCursor = NO;
 @synthesize mouseDownLocation = _mouseDownLocation, currentLocation = _currentLocation, previousLocation = _previousLocation;
 @synthesize mouseDownLocationVector = _mouseDownLocationVector, currentLocationVector = _currentLocationVector, previousLocationVector = _previousLocationVector;
 @synthesize mouseDownGeneratorRequestSliceToDicomTransform = _mouseDownGeneratorRequestSliceToDicomTransform;
-
-+ (instancetype)toolForTag:(NIMPRToolTag)tag {
-    Class tc = nil;
-    
-    switch (tag) {
-        case NIMPRToolWLWW: {
-            tc = NIMPRWLWWTool.class;
-        } break;
-        case NIMPRToolMove: {
-            tc = NIMPRMoveTool.class;
-        } break;
-        case NIMPRToolZoom: {
-            tc = NIMPRZoomTool.class;
-        } break;
-        case NIMPRToolRotate: {
-            tc = NIMPRRotateTool.class;
-        } break;
-        case NIMPRToolRotateAxis: {
-            tc = NIMPRRotateAxisTool.class;
-        } break;
-        case NIMPRToolAnnotatePoint: {
-            tc = NIMPRAnnotatePointTool.class;
-        } break;
-        case NIMPRToolAnnotateLine: {
-            tc = NIMPRAnnotateLineTool.class;
-        } break;
-        case NIMPRToolAnnotateEllipse: {
-            tc = NIMPRAnnotateEllipseTool.class;
-        } break;
-    }
-    
-    return [[[tc alloc] init] autorelease];
-}
 
 - (void)dealloc {
     [self.timeoutTimer invalidate];
