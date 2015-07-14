@@ -32,7 +32,7 @@ typedef NS_OPTIONS(NSUInteger, NIMPRFlags) {
     
     NIVolumeData* _data;
     CGFloat _windowWidth, _windowLevel, _initialWindowLevel, _initialWindowWidth;
-    BOOL _displayOrientationLabels, _displayScaleBars, _displayRims;
+    BOOL _displayOverlays, _displayOrientationLabels, _displayScaleBars, _displayRims;
     NSMenu* _menu;
 
     NIVector _point;
@@ -56,7 +56,7 @@ typedef NS_OPTIONS(NSUInteger, NIMPRFlags) {
 
 @property(retain) NIVolumeData* data;
 @property CGFloat windowWidth, windowLevel;
-@property BOOL displayOrientationLabels, displayScaleBars, displayRims;
+@property BOOL displayOverlays, displayOrientationLabels, displayScaleBars, displayRims;
 @property(retain) NSMenu* menu;
 
 @property(retain, readonly) NIMPRQuaternion *x, *y, *z;

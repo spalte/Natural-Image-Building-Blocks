@@ -169,6 +169,9 @@
 }
 
 - (void)hover:(NSEvent*)event location:(NSPoint)location {
+    if (self.displayOverlays != ((event.modifierFlags&NSCommandKeyMask) == 0))
+        [self.window.windowController setDisplayOverlays:!self.displayOverlays];
+    
     if (self.mouseDown)
         return;
     

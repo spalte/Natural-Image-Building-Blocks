@@ -49,6 +49,7 @@
         self.ltoolTag = NIMPRToolWLWW;
         self.rtoolTag = NIMPRToolZoom;
         self.displayRims = YES;
+        self.displayOverlays = YES;
         _annotations = [[NSMutableSet alloc] init];
     }
     
@@ -74,6 +75,7 @@
         [view bind:@"displayScaleBar" toObject:self withKeyPath:@"displayScaleBars" options:nil];
         [view bind:@"displayRim" toObject:self withKeyPath:@"displayRims" options:nil];
         [view bind:@"slabWidth" toObject:self withKeyPath:@"slabWidth" options:nil];
+        [view bind:@"displayOverlays" toObject:self withKeyPath:@"displayOverlays" options:nil];
         [view addObserver:self forKeyPath:@"annotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
     }
     
@@ -239,10 +241,12 @@
         NSImage* image = [[[NSImage alloc] initWithContentsOfURL:op.URL] autorelease];
         
         NSPoint center = [view convertPointFromDICOMVector:self.point];
-        NSRect bounds = NSMakeRect(center.x-image.size.width/2, center.y-image.size.height/2, image.size.width, image.size.height);
+//        NSRect bounds = NSMakeRect(center.x-image.size.width/2, center.y-image.size.height/2, image.size.width, image.size.height);
         
         NIObliqueSliceGeneratorRequest* req = [view.presentedGeneratorRequest if:NIObliqueSliceGeneratorRequest.class];
-        NIImageAnnotation* ia = [[NIImageAnnotation alloc] initWithBounds:bounds image:image transform:req.sliceToDicomTransform];
+        NIAffineTransform planeToDicomTransform = NIAffineTransformTranslate(req.sliceToDicomTransform, center.x-image.size.width/2, center.y-image.size.height/2, 0);
+        
+        NIImageAnnotation* ia = [[NIImageAnnotation alloc] initWithImage:image transform:planeToDicomTransform];
         
         [self.publicAnnotations addObject:ia];
     }];

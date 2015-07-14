@@ -11,8 +11,8 @@
 @interface NIBezierPathAnnotation : NIAnnotation
 
 - (NIBezierPath*)NIBezierPath;
-
-- (BOOL)fill;
+- (NIBezierPath*)NIBezierPathForSlabView:(NIAnnotatedGeneratorRequestView*)view external:(NIBezierPath**)repath;
+- (NIBezierPath*)NIBezierPathForSlabView:(NIAnnotatedGeneratorRequestView*)view external:(NIBezierPath**)repath complete:(BOOL)complete;
 
 @end
 

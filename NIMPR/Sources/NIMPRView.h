@@ -30,7 +30,7 @@
     id <NIMPRTool> _ltool, _rtool;
     Class _ltcAtSecondClick;
     CGFloat _slabWidth;
-    BOOL _mouseDown;
+    BOOL _mouseDown, _displayOverlays;
 }
 
 @property(retain) NIVolumeData* data;
@@ -42,6 +42,8 @@
 @property CGFloat pixelSpacing;
 
 @property(retain) NSMenu* menu;
+
+@property BOOL displayOverlays;
 
 @property NIMPRFlags flags;
 

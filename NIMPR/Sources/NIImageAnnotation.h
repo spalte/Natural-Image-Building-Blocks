@@ -14,6 +14,6 @@
 
 @property(retain) NSImage* image;
 
-- (instancetype)initWithBounds:(NSRect)bounds image:(NSImage*)image transform:(NIAffineTransform)sliceToDicomTransform;
+- (instancetype)initWithImage:(NSImage*)image transform:(NIAffineTransform)sliceToDicomTransform;
 
 @end

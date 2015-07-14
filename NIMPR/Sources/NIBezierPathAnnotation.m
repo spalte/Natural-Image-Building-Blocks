@@ -19,83 +19,108 @@
     return [[super keyPathsForValuesAffectingAnnotation] setByAddingObject:@"NIBezierPath"];
 }
 
-- (void)drawInView:(NIAnnotatedGeneratorRequestView*)view {
-    NIObliqueSliceGeneratorRequest* req = (id)view.presentedGeneratorRequest;
-    NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(req.sliceToDicomTransform);
-    
-    NSColor* color = self.color;
-    
-    NIBezierPath* path = [self.NIBezierPath bezierPathByApplyingTransform:dicomToSliceTransform];
-    
-    [[color colorWithAlphaComponent:color.alphaComponent*.2] set];
-    if (self.fill)
-        [path.NSBezierPath fill];
-    else [path.NSBezierPath stroke];
-    
-    // clip and draw the part in the current slab
-    
-    [color set];
-    
-    CGFloat sl = CGFloatMax(req.slabWidth/2, view.maximumDistanceToPlane);
-    
++ (NIBezierPath*)bezierPath:(NIBezierPath*)path minmax:(CGFloat)mm external:(NIBezierPath**)repath complete:(BOOL)complete {
     NIMutableBezierPath* mpath = [[path mutableCopy] autorelease];
-    [mpath addEndpointsAtIntersectionsWithPlane:NIPlaneMake(NIVectorMake(0,0,sl),NIVectorMake(0,0,1))];
-    [mpath addEndpointsAtIntersectionsWithPlane:NIPlaneMake(NIVectorMake(0,0,-sl),NIVectorMake(0,0,1))];
+    [mpath addEndpointsAtIntersectionsWithPlane:NIPlaneMake(NIVectorMake(0, 0, mm), NIVectorMake(0, 0, 1))];
+    [mpath addEndpointsAtIntersectionsWithPlane:NIPlaneMake(NIVectorMake(0, 0, -mm), NIVectorMake(0, 0, 1))];
+
+    NIMutableBezierPath* rpath = [NIMutableBezierPath bezierPath];
     
-    NIMutableBezierPath* cpath = [NIMutableBezierPath bezierPath];
-//    NSMutableArray* cpathp = [NSMutableArray array];
-    NIVector ip, bp; BOOL ipset = NO, bpin = NO;
+    NIMutableBezierPath* epath = repath? [NIMutableBezierPath bezierPath] : nil;
+    if (repath) *repath = epath;
+    
+    NIVector rip, rbp; BOOL ripset = NO, rbpin = NO;
     NIVector c1, c2, ep;
     NSInteger elementCount = mpath.elementCount;
     for (NSInteger i = 0; i < elementCount; ++i)
         switch ([mpath elementAtIndex:i control1:&c1 control2:&c2 endpoint:&ep]) {
             case NIMoveToBezierPathElement: {
-                bp = ep; bpin = NO;
-                if (!ipset) ip = ep;
-                ipset = YES;
+                rbp = ep; rbpin = NO;
             } break;
             case NILineToBezierPathElement: {
-                CGFloat mpz = (bp.z+ep.z)/2;
-                if (mpz <= sl && mpz >= -sl) {
-                    if (!bpin)
-                        [cpath moveToVector:bp];
-                    [cpath lineToVector:ep];
-//                    [cpathp addObject:@[ [NSValue valueWithNIVector:bp], [NSValue valueWithNIVector:ep] ]];
-                    bpin = YES;
+                CGFloat mpz = (rbp.z+ep.z)/2;
+                if (mpz <= mm && mpz >= -mm) {
+                    if (!rbpin) {
+                        if (!ripset) {
+                            rip = rbp; ripset = YES; }
+                        if (!complete || !rpath.elementCount)
+                            [rpath moveToVector:rbp];
+                        else [rpath lineToVector:rbp]; }
+                    [rpath lineToVector:ep];
+                    rbpin = YES;
                 } else
-                    bpin = NO;
-                bp = ep;
+                    rbpin = NO;
+                rbp = ep;
             } break;
             case NICurveToBezierPathElement: {
-                CGFloat mpz = (bp.z+ep.z)/2;
-                if (mpz <= sl && mpz >= -sl) {
-                    if (!bpin)
-                        [cpath moveToVector:bp];
-                    [cpath curveToVector:ep controlVector1:c1 controlVector2:c2];
-//                    [cpathp addObject:@[ [NSValue valueWithNIVector:bp], [NSValue valueWithNIVector:ep] ]];
-                    bpin = YES;
+                CGFloat mpz = (rbp.z+ep.z)/2;
+                if (mpz <= mm && mpz >= -mm) {
+                    if (!rbpin) {
+                        if (!ripset) {
+                            rip = rbp; ripset = YES; }
+                        if (!complete || !rpath.elementCount)
+                            [rpath moveToVector:rbp];
+                        else [rpath lineToVector:rbp]; }
+                    [rpath curveToVector:ep controlVector1:c1 controlVector2:c2];
+                    rbpin = YES;
                 } else
-                    bpin = NO;
-                bp = ep;
+                    rbpin = NO;
+                rbp = ep;
             } break;
             case NICloseBezierPathElement: {
-                if (ipset) {
-                    CGFloat mpz = (bp.z+ip.z)/2;
-                    if (mpz <= sl && mpz >= -sl) {
-                        if (!bpin)
-                            [cpath moveToVector:bp];
-                        [cpath close];
-                        bpin = YES;
+                if (ripset) {
+                    CGFloat mpz = (rbp.z+rip.z)/2;
+                    if (mpz <= mm && mpz >= -mm) {
+                        if (!rbpin) {
+                            if (!complete || !rpath.elementCount)
+                                [rpath moveToVector:rbp];
+                            else [rpath lineToVector:rbp]; }
+                        if (complete) {
+                            [rpath lineToVector:rip];
+                            rbp = rip;
+                        } else
+                            [rpath close];
+                        rbpin = YES;
                     } else
-                        bpin = NO;
-                    bp = ip;
+                        rbpin = NO;
+                    rbp = rip;
                 }
             } break;
         }
     
-    if (self.fill)
-        [cpath.NSBezierPath fill];
-    else [cpath.NSBezierPath stroke];
+    return rpath;
+}
+
+- (NIBezierPath*)NIBezierPathForSlabView:(NIAnnotatedGeneratorRequestView*)view external:(NIBezierPath**)repath {
+    return [self NIBezierPathForSlabView:view external:repath complete:NO];
+}
+
+- (NIBezierPath*)NIBezierPathForSlabView:(NIAnnotatedGeneratorRequestView*)view external:(NIBezierPath**)repath complete:(BOOL)complete {
+    NIObliqueSliceGeneratorRequest* req = (id)view.presentedGeneratorRequest;
+    NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(req.sliceToDicomTransform);
+    
+    NIBezierPath* path = [self.NIBezierPath bezierPathByApplyingTransform:dicomToSliceTransform];
+    
+    return [self.class bezierPath:path minmax:CGFloatMax(req.slabWidth/2, view.maximumDistanceToPlane) external:repath complete:complete];
+}
+
+- (void)drawInView:(NIAnnotatedGeneratorRequestView*)view {
+    NIObliqueSliceGeneratorRequest* req = (id)view.presentedGeneratorRequest;
+    NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(req.sliceToDicomTransform);
+    
+    NIBezierPath* path = [self.NIBezierPath bezierPathByApplyingTransform:dicomToSliceTransform];
+    
+    NSColor* color = self.color;
+    [[color colorWithAlphaComponent:color.alphaComponent*.2] set];
+    [path.NSBezierPath stroke];
+    
+    // clip and draw the part in the current slab
+    
+    NIBezierPath *epath, *cpath = [self NIBezierPathForSlabView:view external:&epath];
+    
+    [self.color set];
+    [cpath.NSBezierPath stroke];
+    // TODO: draw epath with alpha, stop drawing full path
     
     // points
     
@@ -104,10 +129,6 @@
         NIVector p = pv.NIVectorValue;
         [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(p.x-radius, p.y-radius, radius*2, radius*2)] fill];
     }
-}
-
-- (BOOL)fill {
-    return NO;
 }
 
 @end

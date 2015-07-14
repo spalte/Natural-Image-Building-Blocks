@@ -28,6 +28,7 @@
 @synthesize flags = _flags;
 @synthesize ltool = _ltool, rtool = _rtool, ltcAtSecondClick = _ltcAtSecondClick;
 @synthesize mouseDown = _mouseDown;
+@synthesize displayOverlays = _displayOverlays;
 
 - (void)initialize:(Class)class {
     [super initialize:class];
@@ -45,6 +46,7 @@
     [self addObserver:self forKeyPath:@"xdir" options:0 context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"ydir" options:0 context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"pixelSpacing" options:0 context:NIMPRView.class];
+    [self addObserver:self forKeyPath:@"displayOverlays" options:0 context:NIMPRView.class];
 //    [self bind:@"windowLevel" toObject:self withKeyPath:@"dataProperties.windowLevel" options:0];
 //    [self bind:@"windowWidth" toObject:self withKeyPath:@"dataProperties.windowWidth" options:0];
     [self addObserver:self forKeyPath:@"window.windowController.spacebarDown" options:0 context:NIMPRView.class];
@@ -56,6 +58,7 @@
 - (void)dealloc {
     [self removeObserver:self forKeyPath:@"window.windowController.ltool" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"window.windowController.spacebarDown" context:NIMPRView.class];
+    [self removeObserver:self forKeyPath:@"displayOverlays" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"pixelSpacing" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"ydir" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"xdir" context:NIMPRView.class];
@@ -84,6 +87,10 @@
         if (n) [self insertVolumeData:n atIndex:0];
         self.dataProperties = (n? [self volumeDataPropertiesAtIndex:0] : nil);
         self.dataProperties.preferredInterpolationMode = NIInterpolationModeCubic;
+    }
+    
+    if ([keyPath isEqualToString:@"displayOverlays"]) {
+        [self updateGeneratorRequest];
     }
     
     if ([keyPath isEqualToString:@"point"] || [keyPath isEqualToString:@"normal"] || [keyPath isEqualToString:@"xdir"] || [keyPath isEqualToString:@"ydir"] || [keyPath isEqualToString:@"pixelSpacing"] || [keyPath isEqualToString:@"slabWidth"]) {
@@ -181,6 +188,16 @@
 
 - (NIMPRTool*)rtool {
     return (_rtool? _rtool : [self.window.windowController rtool]);
+}
+
++ (NSSet*)keyPathsForValuesAffectingRimColor {
+    return [NSSet setWithObject:@"displayOverlays"];
+}
+
+- (NSColor*)rimColor {
+    if (self.displayOverlays)
+        return [super rimColor];
+    return [NSColor clearColor];
 }
 
 @end
