@@ -12,6 +12,8 @@
 
 - (NIBezierPath*)NIBezierPath;
 
+- (BOOL)fill;
+
 @end
 
 @interface NINSBezierPathAnnotation : NIBezierPathAnnotation {

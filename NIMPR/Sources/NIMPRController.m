@@ -14,6 +14,8 @@
 #import "NIMPRQuaternion.h"
 #import "NSMenu+NIMPR.h"
 
+#import "NIImageAnnotation.h"
+
 @implementation NIMPRController
 
 @synthesize leftrightSplit = _leftrightSplit;
@@ -217,6 +219,33 @@
 
 - (void)removeAnnotationsObject:(id)object {
     [_annotations removeObject:object];
+}
+
+- (IBAction)test:(id)sender {
+    NSOpenPanel* op = [NSOpenPanel openPanel];
+    op.canChooseFiles = op.resolvesAliases = YES;
+    op.canChooseDirectories = op.allowsMultipleSelection = NO;
+    op.allowedFileTypes = [NSImage imageTypes];
+    op.directoryURL = [NSURL fileURLWithPath:@"~"];
+    
+    [op beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+        if (returnCode == NSModalResponseAbort)
+            return;
+        
+        NIMPRView* view = [[self.window firstResponder] if:NIMPRView.class];
+        if (!view)
+            view = self.coronalView;
+        
+        NSImage* image = [[[NSImage alloc] initWithContentsOfURL:op.URL] autorelease];
+        
+        NSPoint center = [view convertPointFromDICOMVector:self.point];
+        NSRect bounds = NSMakeRect(center.x-image.size.width/2, center.y-image.size.height/2, image.size.width, image.size.height);
+        
+        NIObliqueSliceGeneratorRequest* req = [view.presentedGeneratorRequest if:NIObliqueSliceGeneratorRequest.class];
+        NIImageAnnotation* ia = [[NIImageAnnotation alloc] initWithBounds:bounds image:image transform:req.sliceToDicomTransform];
+        
+        [self.publicAnnotations addObject:ia];
+    }];
 }
 
 @end

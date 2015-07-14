@@ -23,14 +23,14 @@
     NIObliqueSliceGeneratorRequest* req = (id)view.presentedGeneratorRequest;
     NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(req.sliceToDicomTransform);
     
-    NSBezierPath* test = [NSBezierPath bezierPathWithRect:NSMakeRect(0, 5, 10, 20)];
-    
     NSColor* color = self.color;
     
     NIBezierPath* path = [self.NIBezierPath bezierPathByApplyingTransform:dicomToSliceTransform];
     
-    [[color colorWithAlphaComponent:color.alphaComponent*.2] setStroke];
-    [path.NSBezierPath stroke];
+    [[color colorWithAlphaComponent:color.alphaComponent*.2] set];
+    if (self.fill)
+        [path.NSBezierPath fill];
+    else [path.NSBezierPath stroke];
     
     // clip and draw the part in the current slab
     
@@ -93,7 +93,9 @@
             } break;
         }
     
-    [cpath.NSBezierPath stroke];
+    if (self.fill)
+        [cpath.NSBezierPath fill];
+    else [cpath.NSBezierPath stroke];
     
     // points
     
@@ -102,6 +104,10 @@
         NIVector p = pv.NIVectorValue;
         [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(p.x-radius, p.y-radius, radius*2, radius*2)] fill];
     }
+}
+
+- (BOOL)fill {
+    return NO;
 }
 
 @end

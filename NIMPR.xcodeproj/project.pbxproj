@@ -29,6 +29,7 @@
 		714D19C51B53A81100EBA644 /* NIMaskAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 714D19C41B53A81100EBA644 /* NIMaskAnnotation.m */; };
 		714D19C91B53C42100EBA644 /* NIRectangleAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 714D19C81B53C42100EBA644 /* NIRectangleAnnotation.m */; };
 		714D19CC1B53C8A700EBA644 /* NIMPRAnnotateRectangleTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 714D19CB1B53C8A700EBA644 /* NIMPRAnnotateRectangleTool.m */; };
+		714D19CF1B54010400EBA644 /* NIImageAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 714D19CE1B54010400EBA644 /* NIImageAnnotation.m */; };
 		719473611B1D9802009363AE /* NIMPR.m in Sources */ = {isa = PBXBuildFile; fileRef = 719473601B1D9802009363AE /* NIMPR.m */; };
 		7194736A1B1D9C68009363AE /* NIBuildingBlocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 719473691B1D9C68009363AE /* NIBuildingBlocks.framework */; };
 		719CC51E1B0B1BBC00DC1ED5 /* NIMPRController.m in Sources */ = {isa = PBXBuildFile; fileRef = 719CC51D1B0B1BBC00DC1ED5 /* NIMPRController.m */; };
@@ -100,6 +101,8 @@
 		714D19C81B53C42100EBA644 /* NIRectangleAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIRectangleAnnotation.m; sourceTree = "<group>"; };
 		714D19CA1B53C8A700EBA644 /* NIMPRAnnotateRectangleTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRAnnotateRectangleTool.h; sourceTree = "<group>"; };
 		714D19CB1B53C8A700EBA644 /* NIMPRAnnotateRectangleTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRAnnotateRectangleTool.m; sourceTree = "<group>"; };
+		714D19CD1B54010400EBA644 /* NIImageAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIImageAnnotation.h; sourceTree = "<group>"; };
+		714D19CE1B54010400EBA644 /* NIImageAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIImageAnnotation.m; sourceTree = "<group>"; };
 		7194735F1B1D9802009363AE /* NIMPR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPR.h; sourceTree = "<group>"; };
 		719473601B1D9802009363AE /* NIMPR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPR.m; sourceTree = "<group>"; };
 		719473621B1D9883009363AE /* NIMPR+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NIMPR+Private.h"; sourceTree = "<group>"; };
@@ -188,6 +191,8 @@
 				712F62751B4D7172004AC1AE /* NIPointAnnotation.m */,
 				714D19C31B53A81100EBA644 /* NIMaskAnnotation.h */,
 				714D19C41B53A81100EBA644 /* NIMaskAnnotation.m */,
+				714D19CD1B54010400EBA644 /* NIImageAnnotation.h */,
+				714D19CE1B54010400EBA644 /* NIImageAnnotation.m */,
 				712F627A1B4ED30E004AC1AE /* NIBezierPathAnnotation.h */,
 				712F627B1B4ED30E004AC1AE /* NIBezierPathAnnotation.m */,
 				712F627D1B4FDB79004AC1AE /* NISegmentAnnotation.h */,
@@ -405,6 +410,7 @@
 				71B249301B18886F00F8E0AD /* NIMPRWindow.m in Sources */,
 				7133412D1B147E0A0014CE09 /* NIMPRTool.m in Sources */,
 				714D19CC1B53C8A700EBA644 /* NIMPRAnnotateRectangleTool.m in Sources */,
+				714D19CF1B54010400EBA644 /* NIImageAnnotation.m in Sources */,
 				719CC53E1B0E039E00DC1ED5 /* NSMenu+NIMPR.m in Sources */,
 				719D02AA1AC1D367002F76C1 /* NIMPRPlugin.m in Sources */,
 				7133412A1B147DF50014CE09 /* NIMPRWLWWTool.m in Sources */,
