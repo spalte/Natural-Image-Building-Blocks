@@ -17,10 +17,10 @@
 @end
 
 @interface NINSBezierPathAnnotation : NIBezierPathAnnotation {
-    NIAffineTransform _sliceToDicomTransform;
+    NIAffineTransform _planeToDicomTransform;
 }
 
-@property NIAffineTransform sliceToDicomTransform;
+@property NIAffineTransform planeToDicomTransform;
 
 - (instancetype)initWithTransform:(NIAffineTransform)sliceToDicomTransform;
 

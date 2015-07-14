@@ -114,11 +114,11 @@
 
 @implementation NINSBezierPathAnnotation
 
-@synthesize sliceToDicomTransform = _sliceToDicomTransform;
+@synthesize planeToDicomTransform = _planeToDicomTransform;
 
 - (instancetype)initWithTransform:(NIAffineTransform)sliceToDicomTransform {
     if ((self = [super init])) {
-        self.sliceToDicomTransform = sliceToDicomTransform;
+        self.planeToDicomTransform = sliceToDicomTransform;
     }
     
     return self;
@@ -126,7 +126,7 @@
 
 - (NIBezierPath*)NIBezierPath {
     NIMutableBezierPath* p = [NIMutableBezierPath bezierPath];
-    NIAffineTransform transform = self.sliceToDicomTransform;
+    NIAffineTransform transform = self.planeToDicomTransform;
     
     NSBezierPath* nsp = self.NSBezierPath;
     NSPoint points[3];
