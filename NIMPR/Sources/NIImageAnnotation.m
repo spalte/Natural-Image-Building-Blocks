@@ -45,10 +45,9 @@ typedef struct {
     NIObliqueSliceGeneratorRequest* req = (id)view.presentedGeneratorRequest;
     NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(req.sliceToDicomTransform);
     
-    NIBezierPath *epath, *ipath = [self NIBezierPathForSlabView:view external:&epath complete:YES];
+    NIBezierPath *ipath = [self NIBezierPathForSlabView:view complete:YES];
     NIAffineTransform dicomToPlaneTransform = NIAffineTransformInvert(self.planeToDicomTransform);
     NIBezierPath* pipath = [[ipath bezierPathByApplyingTransform:req.sliceToDicomTransform] bezierPathByApplyingTransform:dicomToPlaneTransform];
-//    NIBezierPath* pepath = [[epath bezierPathByApplyingTransform:req.sliceToDicomTransform] bezierPathByApplyingTransform:dicomToPlaneTransform];
     
 //    [self.color set];
 //    [path.NSBezierPath stroke];
@@ -61,15 +60,17 @@ typedef struct {
     nsat.transformStruct = nsatts;
     [nsat concat];
     
-    [pipath.NSBezierPath setClip];
-    [self.image drawInRect:self.bounds fromRect:NSZeroRect operation:NSCompositeCopy fraction:1];
-    
-    NSBezierPath* clip = [NSBezierPath bezierPath];
-    clip.windingRule = NSEvenOddWindingRule;
-    [clip appendBezierPath:self.NSBezierPath];
-    [clip appendBezierPath:pipath.NSBezierPath];
-    
-    [clip setClip];
+    if (pipath.elementCount) {
+        [pipath.NSBezierPath setClip];
+        [self.image drawInRect:self.bounds fromRect:NSZeroRect operation:NSCompositeCopy fraction:1];
+    }
+
+    if (pipath.elementCount) {
+        NSBezierPath* clip = [NSBezierPath bezierPath];
+        clip.windingRule = NSEvenOddWindingRule;
+        [clip appendBezierPath:self.NSBezierPath];
+        [clip appendBezierPath:pipath.NSBezierPath];
+        [clip setClip]; }
     [self.image drawInRect:self.bounds fromRect:NSZeroRect operation:NSCompositeCopy fraction:0.2];
     
     [NSGraphicsContext restoreGraphicsState];

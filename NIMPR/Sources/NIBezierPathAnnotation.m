@@ -19,71 +19,57 @@
     return [[super keyPathsForValuesAffectingAnnotation] setByAddingObject:@"NIBezierPath"];
 }
 
-+ (NIBezierPath*)bezierPath:(NIBezierPath*)path minmax:(CGFloat)mm external:(NIBezierPath**)repath complete:(BOOL)complete {
++ (NIBezierPath*)bezierPath:(NIBezierPath*)path minmax:(CGFloat)mm complete:(BOOL)complete {
     NIMutableBezierPath* mpath = [[path mutableCopy] autorelease];
     [mpath addEndpointsAtIntersectionsWithPlane:NIPlaneMake(NIVectorMake(0, 0, mm), NIVectorMake(0, 0, 1))];
     [mpath addEndpointsAtIntersectionsWithPlane:NIPlaneMake(NIVectorMake(0, 0, -mm), NIVectorMake(0, 0, 1))];
 
     NIMutableBezierPath* rpath = [NIMutableBezierPath bezierPath];
     
-    NIMutableBezierPath* epath = repath? [NIMutableBezierPath bezierPath] : nil;
-    if (repath) *repath = epath;
-    
-    NIVector rip, rbp; BOOL ripset = NO, rbpin = NO;
+    NIVector ip, bp; BOOL ipset = NO, bpin = NO;
     NIVector c1, c2, ep;
     NSInteger elementCount = mpath.elementCount;
+    NIBezierPathElement e;
     for (NSInteger i = 0; i < elementCount; ++i)
-        switch ([mpath elementAtIndex:i control1:&c1 control2:&c2 endpoint:&ep]) {
+        switch (e = [mpath elementAtIndex:i control1:&c1 control2:&c2 endpoint:&ep]) {
             case NIMoveToBezierPathElement: {
-                rbp = ep; rbpin = NO;
+                bp = ep; bpin = NO;
             } break;
-            case NILineToBezierPathElement: {
-                CGFloat mpz = (rbp.z+ep.z)/2;
-                if (mpz <= mm && mpz >= -mm) {
-                    if (!rbpin) {
-                        if (!ripset) {
-                            rip = rbp; ripset = YES; }
-                        if (!complete || !rpath.elementCount)
-                            [rpath moveToVector:rbp];
-                        else [rpath lineToVector:rbp]; }
-                    [rpath lineToVector:ep];
-                    rbpin = YES;
-                } else
-                    rbpin = NO;
-                rbp = ep;
-            } break;
+            case NILineToBezierPathElement:
             case NICurveToBezierPathElement: {
-                CGFloat mpz = (rbp.z+ep.z)/2;
+                CGFloat mpz = (bp.z+ep.z)/2;
                 if (mpz <= mm && mpz >= -mm) {
-                    if (!rbpin) {
-                        if (!ripset) {
-                            rip = rbp; ripset = YES; }
+                    if (!bpin) {
+                        if (!ipset) {
+                            ip = bp; ipset = YES; }
                         if (!complete || !rpath.elementCount)
-                            [rpath moveToVector:rbp];
-                        else [rpath lineToVector:rbp]; }
-                    [rpath curveToVector:ep controlVector1:c1 controlVector2:c2];
-                    rbpin = YES;
+                            [rpath moveToVector:bp];
+                        else [rpath lineToVector:bp]; }
+                    if (e == NILineToBezierPathElement)
+                        [rpath lineToVector:ep];
+                    else [rpath curveToVector:ep controlVector1:c1 controlVector2:c2];
+                    bpin = YES;
                 } else
-                    rbpin = NO;
-                rbp = ep;
+                    bpin = NO;
+                bp = ep;
             } break;
             case NICloseBezierPathElement: {
-                if (ripset) {
-                    CGFloat mpz = (rbp.z+rip.z)/2;
+                if (ipset) {
+                    CGFloat mpz = (bp.z+ip.z)/2;
                     if (mpz <= mm && mpz >= -mm) {
-                        if (!rbpin) {
+                        if (!bpin) {
                             if (!complete || !rpath.elementCount)
-                                [rpath moveToVector:rbp];
-                            else [rpath lineToVector:rbp]; }
+                                [rpath moveToVector:bp];
+                            else [rpath lineToVector:bp]; }
                         if (complete) {
-                            [rpath lineToVector:rip];
-                            rbp = rip;
+                            [rpath lineToVector:ip];
+                            bp = ip;
                         } else
                             [rpath close];
-                        rbpin = YES;
+                        bpin = YES;
                     } else
-                        rbpin = NO;
-                    rbp = rip;
+                        bpin = NO;
+                    bp = ip;
                 }
             } break;
         }
@@ -91,17 +77,17 @@
     return rpath;
 }
 
-- (NIBezierPath*)NIBezierPathForSlabView:(NIAnnotatedGeneratorRequestView*)view external:(NIBezierPath**)repath {
-    return [self NIBezierPathForSlabView:view external:repath complete:NO];
+- (NIBezierPath*)NIBezierPathForSlabView:(NIAnnotatedGeneratorRequestView*)view {
+    return [self NIBezierPathForSlabView:view complete:NO];
 }
 
-- (NIBezierPath*)NIBezierPathForSlabView:(NIAnnotatedGeneratorRequestView*)view external:(NIBezierPath**)repath complete:(BOOL)complete {
+- (NIBezierPath*)NIBezierPathForSlabView:(NIAnnotatedGeneratorRequestView*)view complete:(BOOL)complete {
     NIObliqueSliceGeneratorRequest* req = (id)view.presentedGeneratorRequest;
     NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(req.sliceToDicomTransform);
     
     NIBezierPath* path = [self.NIBezierPath bezierPathByApplyingTransform:dicomToSliceTransform];
     
-    return [self.class bezierPath:path minmax:CGFloatMax(req.slabWidth/2, view.maximumDistanceToPlane) external:repath complete:complete];
+    return [self.class bezierPath:path minmax:CGFloatMax(req.slabWidth/2, view.maximumDistanceToPlane) complete:complete];
 }
 
 - (void)drawInView:(NIAnnotatedGeneratorRequestView*)view {
@@ -116,11 +102,11 @@
     
     // clip and draw the part in the current slab
     
-    NIBezierPath *epath, *cpath = [self NIBezierPathForSlabView:view external:&epath];
+    NIBezierPath *cpath = [self NIBezierPathForSlabView:view];
     
     [self.color set];
     [cpath.NSBezierPath stroke];
-    // TODO: draw epath with alpha, stop drawing full path
+    // TODO: draw ext path with alpha, stop drawing full path
     
     // points
     

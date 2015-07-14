@@ -229,6 +229,7 @@
     op.canChooseDirectories = op.allowsMultipleSelection = NO;
     op.allowedFileTypes = [NSImage imageTypes];
     op.directoryURL = [NSURL fileURLWithPath:@"~"];
+    op.message = NSLocalizedString(@"Select an image to insert.", nil);
     
     [op beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
         if (returnCode == NSModalResponseAbort)
@@ -241,7 +242,6 @@
         NSImage* image = [[[NSImage alloc] initWithContentsOfURL:op.URL] autorelease];
         
         NSPoint center = [view convertPointFromDICOMVector:self.point];
-//        NSRect bounds = NSMakeRect(center.x-image.size.width/2, center.y-image.size.height/2, image.size.width, image.size.height);
         
         NIObliqueSliceGeneratorRequest* req = [view.presentedGeneratorRequest if:NIObliqueSliceGeneratorRequest.class];
         NIAffineTransform planeToDicomTransform = NIAffineTransformTranslate(req.sliceToDicomTransform, center.x-image.size.width/2, center.y-image.size.height/2, 0);

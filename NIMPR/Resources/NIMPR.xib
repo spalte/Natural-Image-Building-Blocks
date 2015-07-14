@@ -74,7 +74,7 @@
                 <allowedToolbarItems>
                     <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="GhZ-02-wZ2"/>
                     <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="dlU-Wm-AQH"/>
-                    <toolbarItem implicitItemIdentifier="1461AAA1-B3EB-4F9E-9390-548FAA635DCF" explicitItemIdentifier="Test" label="Test" paletteLabel="Test" tag="-1" image="NSCaution" id="6bI-Vc-lKA">
+                    <toolbarItem implicitItemIdentifier="1461AAA1-B3EB-4F9E-9390-548FAA635DCF" explicitItemIdentifier="Test" label="Image" paletteLabel="Image" tag="-1" image="NSRevealFreestandingTemplate" id="6bI-Vc-lKA">
                         <connections>
                             <action selector="test:" target="-2" id="Bfb-tz-boV"/>
                         </connections>
@@ -91,6 +91,6 @@
         </window>
     </objects>
     <resources>
-        <image name="NSCaution" width="16" height="16"/>
+        <image name="NSRevealFreestandingTemplate" width="14" height="14"/>
     </resources>
 </document>
