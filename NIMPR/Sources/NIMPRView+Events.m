@@ -48,6 +48,7 @@
 }
 
 - (void)mouseDown:(NSEvent*)event {
+    [self.publicGlowingAnnotations removeAllObjects];
     [self tool:self.ltool sel:_cmd event:event otherwise:nil];
 }
 
@@ -69,7 +70,7 @@
             [view hover:event location:[view convertPoint:event.locationInWindow fromView:nil]];
         else {
             if (event.clickCount == 2)
-                self.ltcAtSecondClick = [self toolForLocation:[view convertPoint:event.locationInWindow fromView:nil] event:nil];
+                self.ltcAtSecondClick = [self toolForLocation:[view convertPoint:event.locationInWindow fromView:nil] event:nil annotation:NULL];
             if (event.clickCount >= 2) {
                 if (self.ltcAtSecondClick == NIMPRRotateAxisTool.class) {
                     if (event.clickCount == 2)
@@ -175,15 +176,15 @@
     if ([self.window.windowController displayOverlays] != displayOverlays)
         [self.window.windowController setDisplayOverlays:displayOverlays];
     
+    if (self.mouseDown)
+        return;
+
     if (!event)
         event = [NSApp currentEvent];
 
     NIAnnotation* annotation = nil;
     Class ltc = [self toolForLocation:location event:event annotation:&annotation];
 
-    if (self.mouseDown)
-        annotation = nil;
-    
     if (annotation && [self.publicGlowingAnnotations containsObject:annotation])
         [self.publicGlowingAnnotations intersectSet:[NSSet setWithObject:annotation]];
     else {
@@ -191,9 +192,6 @@
         if (annotation)
             [self.publicGlowingAnnotations addObject:annotation];
     }
-    
-    if (self.mouseDown)
-        return;
     
     if (self.ltool.class != ltc)
         self.ltool = [[[ltc alloc] init] autorelease];
