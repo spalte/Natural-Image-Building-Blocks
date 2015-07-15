@@ -13,9 +13,6 @@
 
 @property (readwrite, retain) CALayer* annotationsLayer;
 
-//- (void)addAnnotationsObject:(NIAnnotation*)object;
-//- (void)removeAnnotationsObject:(NIAnnotation*)object;
-//
 @end
 
 @implementation NIAnnotatedGeneratorRequestView
@@ -33,7 +30,7 @@
     CALayer* layer = self.annotationsLayer = [[[CALayer alloc] init] autorelease];
     layer.delegate = self;
     layer.needsDisplayOnBoundsChange = YES;
-    layer.zPosition = NIGeneratorRequestViewSpriteZPosition;
+    layer.zPosition = NIGeneratorRequestViewSpriteZPosition-1;
     layer.contentsScale = self.frameLayer.contentsScale;
     [layer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX]];
     [layer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth]];
@@ -108,24 +105,14 @@
     [_annotations removeObject:object];
 }
 
+- (NIAnnotation*)annotationClosestToPoint:(NSPoint)location closestPoint:(NSPoint*)closestPoint distance:(CGFloat*)distance {
+    NSMutableArray* annotations = [NSMutableArray array];
+    
+    
+    return nil;
+}
 
-//- (void)addAnnotation:(NIAnnotation*)annotation {
-//    [self addAnnotationsObject:annotation];
-//}
-//
-//- (void)removeAnnotation:(NIAnnotation*)annotation {
-//    [self removeAnnotationsObject:annotation];
-//}
-//
-//- (void)addAnnotationsObject:(NIAnnotation*)object {
-//    [self.annotations addObject:object];
-//    [self.annotationsLayer setNeedsDisplay];
-//}
-//
-//- (void)removeAnnotationsObject:(NIAnnotation*)object {
-//    [self.annotations removeObject:object];
-//    [self.annotationsLayer setNeedsDisplay];
-//}
+
 
 @end
 

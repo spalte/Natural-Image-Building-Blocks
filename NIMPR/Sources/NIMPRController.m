@@ -41,6 +41,8 @@
 
 @synthesize spacebarDown = _spacebarDown;
 
+@synthesize displayOverlays = _displayOverlays;
+
 - (instancetype)initWithData:(NIVolumeData*)data window:(CGFloat)wl :(CGFloat)ww {
     if ((self = [super initWithWindowNibName:@"NIMPR" owner:self])) {
         self.data = data;

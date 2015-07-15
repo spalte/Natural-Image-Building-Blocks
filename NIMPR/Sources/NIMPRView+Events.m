@@ -13,6 +13,7 @@
 #import "NIMPRZoomTool.h"
 #import <NIBuildingBlocks/NIIntersection.h>
 #import "NIMPRController.h"
+#import "NIMPRAnnotationSelectionTool.h"
 #import <objc/runtime.h>
 
 @implementation NIMPRView (Events)
@@ -169,8 +170,9 @@
 }
 
 - (void)hover:(NSEvent*)event location:(NSPoint)location {
-    if (self.displayOverlays != ((event.modifierFlags&NSCommandKeyMask) == 0))
-        [self.window.windowController setDisplayOverlays:!self.displayOverlays];
+    BOOL displayOverlays = ((event.modifierFlags&NSCommandKeyMask) == 0) || ((event.modifierFlags&NSShiftKeyMask) == NSShiftKeyMask);
+    if ([self.window.windowController displayOverlays] != displayOverlays)
+        [self.window.windowController setDisplayOverlays:displayOverlays];
     
     if (self.mouseDown)
         return;
@@ -205,7 +207,7 @@
     CGFloat distance;
     NSString* ikey = [self intersectionClosestToPoint:location closestPoint:NULL distance:&distance];
     
-    BOOL rotate = (ikey && distance < 4);
+    BOOL rotate = (ikey && distance <= 4);
     
     __block BOOL move, cmove = move = rotate;
     if ([self.window.windowController spacebarIsDown])
@@ -233,6 +235,17 @@
         if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSAlternateKeyMask)
             ltc = NIMPRRotateTool.class;
     }
+    
+    if (ltc)
+        return ltc;
+    
+    NIAnnotation* annotation = [self annotationClosestToPoint:location closestPoint:NULL distance:&distance];
+    
+    if (annotation && distance <= 4)
+        annotation = nil;
+    
+    if (annotation)
+        ltc = NIMPRAnnotationSelectionTool.class;
     
     return ltc;
 }

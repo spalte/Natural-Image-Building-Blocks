@@ -17,7 +17,23 @@
 }
 
 - (id)performSelector:(SEL)sel withObjects:(id)obj1 :(id)obj2 {
-    return [self performSelector:sel withObject:obj1 withObject:obj2];
+    NSMethodSignature* signature = [self methodSignatureForSelector:sel];
+    NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:signature];
+    invocation.selector = sel;
+    if (obj1) [invocation setArgument:&obj1 atIndex:2];
+    if (obj2) [invocation setArgument:&obj2 atIndex:3];
+    
+    [invocation invokeWithTarget:self];
+    
+    id rv = nil;
+    NSUInteger rs = [signature methodReturnLength];
+    if (rs > 0) {
+        NSMutableData* rb = [NSMutableData dataWithLength:rs];
+        [invocation getReturnValue:rb.mutableBytes];
+        rv = [NSObject valueWithBytes:rb.bytes objCType:signature.methodReturnType];
+    }
+    
+    return rv;
 }
 
 - (id)performSelector:(SEL)sel withObjects:(id)obj1 :(id)obj2 :(id)obj3 {

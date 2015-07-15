@@ -19,10 +19,9 @@
 
 - (NSMutableSet*)publicAnnotations;
 
-//- (void)addAnnotation:(NIAnnotation*)object;
-//- (void)removeAnnotation:(NIAnnotation*)object;
-
 - (CGFloat)maximumDistanceToPlane;
+
+- (NIAnnotation*)annotationClosestToPoint:(NSPoint)location closestPoint:(NSPoint*)closestPoint distance:(CGFloat*)distance;
 
 @end
 
