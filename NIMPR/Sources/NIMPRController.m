@@ -53,6 +53,7 @@
         self.displayRims = YES;
         self.displayOverlays = YES;
         _annotations = [[NSMutableSet alloc] init];
+        _glowingAnnotations = [[NSMutableSet alloc] init];
     }
     
     return self;
@@ -79,12 +80,14 @@
         [view bind:@"slabWidth" toObject:self withKeyPath:@"slabWidth" options:nil];
         [view bind:@"displayOverlays" toObject:self withKeyPath:@"displayOverlays" options:nil];
         [view addObserver:self forKeyPath:@"annotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
+        [view addObserver:self forKeyPath:@"glowingAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
     }
     
     [self addObserver:self forKeyPath:@"data" options:NSKeyValueObservingOptionInitial context:NIMPRController.class];
     [self addObserver:self forKeyPath:@"ltoolTag" options:NSKeyValueObservingOptionInitial context:NIMPRController.class];
     [self addObserver:self forKeyPath:@"rtoolTag" options:NSKeyValueObservingOptionInitial context:NIMPRController.class];
     [self addObserver:self forKeyPath:@"annotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
+    [self addObserver:self forKeyPath:@"glowingAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
     
     self.menu = [[NSMenu alloc] init];
     
@@ -127,6 +130,7 @@
 }
 
 - (void)dealloc {
+    [self removeObserver:self forKeyPath:@"glowingAnnotations" context:NIMPRController.class];
     [self removeObserver:self forKeyPath:@"annotations" context:NIMPRController.class];
     [self removeObserver:self forKeyPath:@"rtoolTag" context:NIMPRController.class];
     [self removeObserver:self forKeyPath:@"ltoolTag" context:NIMPRController.class];
@@ -134,6 +138,7 @@
     self.ltool = self.rtool = nil;
     self.x = self.y = self.z = nil;
     self.data = nil;
+    [_glowingAnnotations release];
     [_annotations release];
     [super dealloc];
 }
@@ -167,6 +172,16 @@
                 [set addObject:a];
         }
     }
+    
+    if ([keyPath isEqualToString:@"glowingAnnotations"]) {
+        for (id collector in [self.mprViews arrayByAddingObject:self]) {
+            NSMutableSet* set = [collector publicGlowingAnnotations];
+            for (NIAnnotation* a in change[NSKeyValueChangeOldKey])
+                [set removeObject:a];
+            for (NIAnnotation* a in change[NSKeyValueChangeNewKey])
+                [set addObject:a];
+        }
+    }
 }
 
 - (void)rotate:(CGFloat)rads axis:(NIVector)axis excluding:(NIMPRView*)eview {
@@ -187,9 +202,9 @@
 }
 
 - (void)reset {
-    NIMPRQuaternion* x = self.x = [NIMPRQuaternion quaternion:NIVectorApplyTransformToDirectionalVector(NIVectorMake(1,0,0), self.data.volumeTransform)];
-    NIMPRQuaternion* y = self.y = [NIMPRQuaternion quaternion:NIVectorApplyTransformToDirectionalVector(NIVectorMake(0,1,0), self.data.volumeTransform)];
-    NIMPRQuaternion* z = self.z = [NIMPRQuaternion quaternion:NIVectorApplyTransformToDirectionalVector(NIVectorMake(0,0,1), self.data.volumeTransform)];
+    NIMPRQuaternion* x = self.x = [NIMPRQuaternion quaternion:NIVectorApplyTransformToDirectionalVector(NIVectorXBasis, self.data.volumeTransform)];
+    NIMPRQuaternion* y = self.y = [NIMPRQuaternion quaternion:NIVectorApplyTransformToDirectionalVector(NIVectorYBasis, self.data.volumeTransform)];
+    NIMPRQuaternion* z = self.z = [NIMPRQuaternion quaternion:NIVectorApplyTransformToDirectionalVector(NIVectorZBasis, self.data.volumeTransform)];
     
     [self.axialView setNormal:[x.copy autorelease]:[y.copy autorelease]:[z.copy autorelease] reference:y];
     [self.sagittalView setNormal:[z.copy autorelease]:[x.copy autorelease]:[y.copy autorelease] reference:x];
@@ -223,6 +238,18 @@
 
 - (void)removeAnnotationsObject:(id)object {
     [_annotations removeObject:object];
+}
+
+- (NSMutableSet*)publicGlowingAnnotations {
+    return [self mutableSetValueForKey:@"glowingAnnotations"];
+}
+
+- (void)addGlowingAnnotationsObject:(id)object {
+    [_glowingAnnotations addObject:object];
+}
+
+- (void)removeGlowingAnnotationsObject:(id)object {
+    [_glowingAnnotations removeObject:object];
 }
 
 - (IBAction)test:(id)sender {

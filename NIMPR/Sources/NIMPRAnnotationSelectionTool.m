@@ -11,7 +11,7 @@
 @implementation NIMPRAnnotationSelectionTool
 
 - (NSArray*)cursors {
-    return @[ NSCursor.crosshairCursor, NSCursor.crosshairCursor ];
+    return @[ NSCursor.pointingHandCursor, NSCursor.pointingHandCursor ];
 }
 
 @end

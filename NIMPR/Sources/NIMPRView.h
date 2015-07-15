@@ -54,8 +54,8 @@
 
 @end
 
-@interface NIMPRView (super)
-
-@property (nonatomic, readwrite, retain) NIObliqueSliceGeneratorRequest* generatorRequest;
-   
-@end
+//@interface NIMPRView (super)
+//
+//@property (nonatomic, readwrite, retain) NIObliqueSliceGeneratorRequest* generatorRequest;
+//   
+//@end

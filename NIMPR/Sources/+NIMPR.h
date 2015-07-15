@@ -31,7 +31,6 @@
 
 @end
 
-
 #define CGFloatMax NIMPR_CGFloatMax
 extern CGFloat NIMPR_CGFloatMax(CGFloat lha, CGFloat rha);
 #define CGFloatMin NIMPR_CGFloatMin
@@ -44,4 +43,12 @@ extern CGFloat NIMPR_CGFloatMin(CGFloat lha, CGFloat rha);
 #else
 #define CGFLOAT_EPSILON FLT_EPSILON
 #endif
+#endif
+
+#if CGFLOAT_IS_DOUBLE
+#define valueWithCGFloat numberWithDouble
+#define CGFloatValue doubleValue
+#else
+#define valueWithCGFloat numberWithFloat
+#define CGFloatValue floatValue
 #endif

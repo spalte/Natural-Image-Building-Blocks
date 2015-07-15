@@ -29,7 +29,9 @@ extern NSString* const NIAnnotationChangeNotification; // to observe an annotati
 @property(readonly) BOOL annotation; // the value of this property is always YES, but you can observe it in order to observe changes in the annotation's properties
 + (NSSet*)keyPathsForValuesAffectingAnnotation;
 
-- (void)drawInView:(NIAnnotatedGeneratorRequestView*)view;
+- (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view; // return the annotation border
+
+- (CGFloat)distanceToPoint:(NSPoint)point sliceToDicomTransform:(NIAffineTransform)sliceToDicomTransform closestPoint:(NSPoint*)rpoint; // point is on slice
 
 //- (NSArray*)handles;
 

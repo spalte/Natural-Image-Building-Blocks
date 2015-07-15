@@ -26,62 +26,34 @@
     return self;
 }
 
-- (void)drawInView:(NIAnnotatedGeneratorRequestView*)view {
+- (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view {
     NIObliqueSliceGeneratorRequest* req = (id)view.presentedGeneratorRequest;
 
     CGFloat distanceToPlane = CGFloatMax(NIVectorDistanceToPlane(self.vector, req.plane) - req.slabWidth/2, 0), maximumDistanceToPlane = view.maximumDistanceToPlane;
-    if (distanceToPlane > maximumDistanceToPlane)
-        return;
     
     NSPoint p = [view convertPointFromDICOMVector:self.vector];
     
-    CGFloat minRadius = 0.5, maxRadius = 2, radius = maxRadius-(maxRadius-minRadius)/maximumDistanceToPlane*(distanceToPlane-maximumDistanceToPlane);
+    CGFloat minRadius = 0.5, maxRadius = 2, radius = CGFloatMax(minRadius, maxRadius-(maxRadius-minRadius)/maximumDistanceToPlane*(distanceToPlane-maximumDistanceToPlane));
     NSRect ovalRect = NSMakeRect(p.x - radius, p.y - radius, radius*2, radius*2);
     
     NSColor* color = self.color;
+    if (distanceToPlane > maximumDistanceToPlane)
+        color = [color colorWithAlphaComponent:color.alphaComponent*.2];
+    
+    NSBezierPath* path = [NSBezierPath bezierPathWithOvalInRect:ovalRect];
     
     [color setFill];
-    [[NSBezierPath bezierPathWithOvalInRect:ovalRect] fill];
+    [path fill];
     [[[NSColor blackColor] colorWithAlphaComponent:color.alphaComponent*.6] setStroke];
-    [[NSBezierPath bezierPathWithOvalInRect:ovalRect] stroke];
+    [path stroke];
     
-//    NSFont* font = [NSFont fontWithName:@"Helvetica" size:24];
-//    [@"Click Me" drawWithRect:NSMakeRect(p.x, p.y, 100, 100) options:0
-//                   attributes:@{NSFontAttributeName: font, NSForegroundColorAttributeName: [NSColor yellowColor]}];
-
-    
+    return path;
 }
 
-//static NSString* const NIPointAnnotationCoordinates = @"coordinates";
-//
-//- (CGFloat)x {
-//    return _coordinates.x;
-//}
-//
-//- (void)setX:(CGFloat)x {
-//    [self willChangeValueForKey:NIPointAnnotationCoordinates];
-//    _coordinates.x = x;
-//    [self didChangeValueForKey:NIPointAnnotationCoordinates];
-//}
-//
-//- (CGFloat)y {
-//    return _coordinates.y;
-//}
-//
-//- (void)setY:(CGFloat)y {
-//    [self willChangeValueForKey:NIPointAnnotationCoordinates];
-//    _coordinates.y = y;
-//    [self didChangeValueForKey:NIPointAnnotationCoordinates];
-//}
-//
-//- (CGFloat)z {
-//    return _coordinates.z;
-//}
-//
-//- (void)setZ:(CGFloat)z {
-//    [self willChangeValueForKey:NIPointAnnotationCoordinates];
-//    _coordinates.z = z;
-//    [self didChangeValueForKey:NIPointAnnotationCoordinates];
-//}
+- (CGFloat)distanceToPoint:(NSPoint)point sliceToDicomTransform:(NIAffineTransform)sliceToDicomTransform closestPoint:(NSPoint*)closestPoint {
+    NSPoint vpoint = NSPointFromNIVector(NIVectorApplyTransform(self.vector, NIAffineTransformInvert(sliceToDicomTransform)));
+    if (closestPoint) *closestPoint = vpoint;
+    return NIVectorDistance(NIVectorMakeFromNSPoint(point), NIVectorMakeFromNSPoint(vpoint));
+}
 
 @end

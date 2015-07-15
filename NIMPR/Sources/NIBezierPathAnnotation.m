@@ -90,15 +90,19 @@
     return [self.class bezierPath:path minmax:CGFloatMax(req.slabWidth/2, view.maximumDistanceToPlane) complete:complete];
 }
 
-- (void)drawInView:(NIAnnotatedGeneratorRequestView*)view {
+- (BOOL)isSolid {
+    return NO;
+}
+
+- (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view {
     NIObliqueSliceGeneratorRequest* req = (id)view.presentedGeneratorRequest;
     NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(req.sliceToDicomTransform);
     
-    NIBezierPath* path = [self.NIBezierPath bezierPathByApplyingTransform:dicomToSliceTransform];
+    NIBezierPath* slicePath = [self.NIBezierPath bezierPathByApplyingTransform:dicomToSliceTransform];
     
     NSColor* color = self.color;
     [[color colorWithAlphaComponent:color.alphaComponent*.2] set];
-    [path.NSBezierPath stroke];
+    [slicePath.NSBezierPath stroke];
     
     // clip and draw the part in the current slab
     
@@ -111,10 +115,27 @@
     // points
     
     const CGFloat radius = 0.5;
-    for (NSValue* pv in [path intersectionsWithPlane:NIPlaneMake(NIVectorZero,NIVectorMake(0,0,1))]) { // TODO: maybe only draw these where the corresponding bezier line segment has distance(bp,ep) < 1 to avoid drawing twice (especially for when we'll have opacity)
+    for (NSValue* pv in [slicePath intersectionsWithPlane:NIPlaneMake(NIVectorZero,NIVectorZBasis)]) { // TODO: maybe only draw these where the corresponding bezier line segment has distance(bp,ep) < 1 to avoid drawing twice (especially for when we'll have opacity)
         NIVector p = pv.NIVectorValue;
         [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(p.x-radius, p.y-radius, radius*2, radius*2)] fill];
     }
+    
+    return [slicePath NSBezierPath];
+}
+
+- (CGFloat)distanceToPoint:(NSPoint)point sliceToDicomTransform:(NIAffineTransform)sliceToDicomTransform closestPoint:(NSPoint*)closestPoint {
+    NIBezierPath* slicePath = [self.NIBezierPath bezierPathByApplyingTransform:NIAffineTransformInvert(sliceToDicomTransform)];
+    
+    if (self.isSolid && [slicePath.NSBezierPath containsPoint:point]) {
+        if (closestPoint) *closestPoint = point;
+        return 0;
+    }
+    
+    NIVector closestVector = NIVectorZero;
+    [slicePath relativePositionClosestToLine:NILineMake(NIVectorMakeFromNSPoint(point), NIVectorZBasis) closestVector:&closestVector];
+    
+    if (closestPoint) *closestPoint = NSPointFromNIVector(closestVector);
+    return NIVectorDistance(NIVectorMakeFromNSPoint(point), NIVectorMake(closestVector.x, closestVector.y, 0));
 }
 
 @end

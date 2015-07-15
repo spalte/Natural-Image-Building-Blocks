@@ -78,8 +78,14 @@ NSString* const NIAnnotationChangeNotificationChangesKey = @"changes";
     return [NSSet set];
 }
 
-- (void)drawInView:(NIAnnotatedGeneratorRequestView*)view {
-    // this abstract class won't render
+- (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view {
+    NSLog(@"Warning: -[%@ drawInView:] is missing", self.className);
+    return nil;
+}
+
+- (CGFloat)distanceToPoint:(NSPoint)point sliceToDicomTransform:(NIAffineTransform)sliceToDicomTransform closestPoint:(NSPoint*)rpoint {
+    NSLog(@"Warning: -[%@ distanceToPoint:sliceToDicomTransform:closestPoint:] is missing", self.className);
+    return CGFLOAT_MAX;
 }
 
 static NSColor* NIAnnotationDefaultColor = nil;

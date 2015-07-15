@@ -41,7 +41,11 @@ typedef struct {
     assert(NO); // TODO: implement me
 }
 
-- (void)drawInView:(NIAnnotatedGeneratorRequestView*)view {
+- (BOOL)isSolid {
+    return YES;
+}
+
+- (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view {
     NIObliqueSliceGeneratorRequest* req = (id)view.presentedGeneratorRequest;
     NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(req.sliceToDicomTransform);
     
@@ -75,11 +79,18 @@ typedef struct {
     
     [NSGraphicsContext restoreGraphicsState];
     
-//    [self.color set];
-//    [ipath.NSBezierPath stroke];
-//    [[self.color colorWithAlphaComponent:self.color.alphaComponent*.2] set];
-//    [ipath.NSBezierPath fill];
+    return [[self.NIBezierPath bezierPathByApplyingTransform:dicomToSliceTransform] NSBezierPath];
 }
+
+- (CGFloat)distanceToPoint:(NSPoint)point sliceToDicomTransform:(NIAffineTransform)sliceToDicomTransform closestPoint:(NSPoint*)closestPoint {
+    CGFloat distance = [super distanceToPoint:point sliceToDicomTransform:sliceToDicomTransform closestPoint:closestPoint];
+    if (distance == 0) {
+        // TODO: check image! pixels and... uh... vectors!
+    }
+    
+    return distance;
+}
+
 
 
 

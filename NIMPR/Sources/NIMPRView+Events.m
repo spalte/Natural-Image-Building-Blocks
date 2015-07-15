@@ -14,6 +14,7 @@
 #import <NIBuildingBlocks/NIIntersection.h>
 #import "NIMPRController.h"
 #import "NIMPRAnnotationSelectionTool.h"
+#import "NIImageAnnotation.h"
 #import <objc/runtime.h>
 
 @implementation NIMPRView (Events)
@@ -174,13 +175,25 @@
     if ([self.window.windowController displayOverlays] != displayOverlays)
         [self.window.windowController setDisplayOverlays:displayOverlays];
     
-    if (self.mouseDown)
-        return;
-    
     if (!event)
         event = [NSApp currentEvent];
+
+    NIAnnotation* annotation = nil;
+    Class ltc = [self toolForLocation:location event:event annotation:&annotation];
+
+    if (self.mouseDown)
+        annotation = nil;
     
-    Class ltc = [self toolForLocation:location event:event];
+    if (annotation && [self.publicGlowingAnnotations containsObject:annotation])
+        [self.publicGlowingAnnotations intersectSet:[NSSet setWithObject:annotation]];
+    else {
+        [self.publicGlowingAnnotations removeAllObjects];
+        if (annotation)
+            [self.publicGlowingAnnotations addObject:annotation];
+    }
+    
+    if (self.mouseDown)
+        return;
     
     if (self.ltool.class != ltc)
         self.ltool = [[[ltc alloc] init] autorelease];
@@ -200,7 +213,9 @@
         self.rtool = [[[rtc alloc] init] autorelease];
 }
 
-- (Class)toolForLocation:(NSPoint)location event:(NSEvent*)event {
+- (Class)toolForLocation:(NSPoint)location event:(NSEvent*)event annotation:(NIAnnotation**)rannotation {
+    if (event.type == NSMouseExited)
+        return nil;
     if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSCommandKeyMask)
         return nil;
     
@@ -236,18 +251,39 @@
             ltc = NIMPRRotateTool.class;
     }
     
-    if (ltc)
-        return ltc;
-    
-    NIAnnotation* annotation = [self annotationClosestToPoint:location closestPoint:NULL distance:&distance];
-    
-    if (annotation && distance <= 4)
-        annotation = nil;
-    
-    if (annotation)
-        ltc = NIMPRAnnotationSelectionTool.class;
+    if (!ltc) {
+        NIAnnotation* annotation = [self annotationForLocation:location];
+        if (annotation)
+            ltc = NIMPRAnnotationSelectionTool.class;
+        if (rannotation)
+            *rannotation = annotation;
+    }
     
     return ltc;
+}
+
+- (NIAnnotation*)annotationForLocation:(NSPoint)location {
+    NIAnnotation* annotation = nil;
+    
+    if (NSPointInRect(location, self.bounds))
+        for (size_t i = 0; i < 2; ++i) { // first try by filtering out image annotations, then with them
+            CGFloat distance;
+            
+            if (!i)
+                annotation = [self annotationClosestToPoint:location closestPoint:NULL distance:&distance filter:^BOOL(NIAnnotation* annotation) {
+                    return ![annotation isKindOfClass:NIImageAnnotation.class];
+                }];
+            else
+                annotation = [self annotationClosestToPoint:location closestPoint:NULL distance:&distance];
+            
+            if (annotation && distance > 4)
+                annotation = nil;
+            
+            if (annotation)
+                break;
+        }
+    
+    return annotation;
 }
 
 @end
