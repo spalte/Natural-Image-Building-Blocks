@@ -28,8 +28,10 @@
 
 @end
 
-@interface NIAnnotatedGeneratorRequestView (super)
+@interface NIAnnotatedGeneratorRequestView (Super)
 
-@property (nonatomic, readwrite, retain) NIObliqueSliceGeneratorRequest* generatorRequest; // NIAnnotations currently only support NIAffineTransform-based requests
+// NIAnnotations currently only support NIAffineTransform-based requests
+@property (nonatomic, readwrite, retain) NIObliqueSliceGeneratorRequest* generatorRequest;
+@property (nonatomic, readonly, copy) NIObliqueSliceGeneratorRequest* presentedGeneratorRequest;
 
 @end

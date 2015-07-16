@@ -8,6 +8,6 @@
 
 #import "NIMPRTool.h"
 
-@interface NIMPRAnnotationSelectionTool : NIMPRTool
+@interface NIMPRAnnotationInteractionTool : NIMPRTool
 
 @end

@@ -13,7 +13,7 @@
 #import "NIMPRZoomTool.h"
 #import <NIBuildingBlocks/NIIntersection.h>
 #import "NIMPRController.h"
-#import "NIMPRAnnotationSelectionTool.h"
+#import "NIMPRAnnotationInteractionTool.h"
 #import "NIImageAnnotation.h"
 #import <objc/runtime.h>
 
@@ -252,7 +252,7 @@
     if (!ltc) {
         NIAnnotation* annotation = [self annotationForLocation:location];
         if (annotation)
-            ltc = NIMPRAnnotationSelectionTool.class;
+            ltc = NIMPRAnnotationInteractionTool.class;
         if (rannotation)
             *rannotation = annotation;
     }
@@ -274,7 +274,7 @@
             else
                 annotation = [self annotationClosestToPoint:location closestPoint:NULL distance:&distance];
             
-            if (annotation && distance > 4)
+            if (annotation && distance > NIAnnotationDistant)
                 annotation = nil;
             
             if (annotation)

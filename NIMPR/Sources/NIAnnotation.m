@@ -13,6 +13,7 @@
 
 NSString* const NIAnnotationChangeNotification = @"NIAnnotationChange";
 NSString* const NIAnnotationChangeNotificationChangesKey = @"changes";
+CGFloat const NIAnnotationDistant = 4;
 
 @interface NIAnnotation ()
 
@@ -83,8 +84,8 @@ NSString* const NIAnnotationChangeNotificationChangesKey = @"changes";
     return nil;
 }
 
-- (CGFloat)distanceToPoint:(NSPoint)point sliceToDicomTransform:(NIAffineTransform)sliceToDicomTransform closestPoint:(NSPoint*)rpoint {
-    NSLog(@"Warning: -[%@ distanceToPoint:sliceToDicomTransform:closestPoint:] is missing", self.className);
+- (CGFloat)distanceToPoint:(NSPoint)point view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint {
+    NSLog(@"Warning: -[%@ distanceToPoint:view:closestPoint:] is missing", self.className);
     return CGFLOAT_MAX;
 }
 

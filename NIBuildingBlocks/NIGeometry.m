@@ -98,6 +98,12 @@ NIVector NIVectorScalarMultiply(NIVector vector, CGFloat scalar)
     return newVector;
 }
 
+NIVector NIVectorZeroZ(NIVector vector)
+{
+    vector.z = 0;
+    return vector;
+}
+
 NIVector NIVectorANormalVector(NIVector vector) // returns a vector that is normal to the given vector
 {
     NIVector normal1;

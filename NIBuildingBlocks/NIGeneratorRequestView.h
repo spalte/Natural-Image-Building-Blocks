@@ -87,7 +87,7 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
 }
 
 @property (nonatomic, readwrite, retain) NIGeneratorRequest *generatorRequest; // this is the generator request that will be drawn.  Animatable
-@property (nonatomic, readonly, copy) NIGeneratorRequest *presentedGeneratorRequest; // this is the generator request that is currently draw. Continuously updates during animations
+@property (nonatomic, readonly, copy) NIGeneratorRequest *presentedGeneratorRequest; // this is the generator request that is currently drawn. Continuously updates during animations
 @property (nonatomic, readonly, assign) NIVector mousePosition; // the current mouse location, the mouseLocation is equal to NIGeneratorRequestViewMouseOutside if it is outside the view
 
 - (void)initialize:(Class)class NS_REQUIRES_SUPER;

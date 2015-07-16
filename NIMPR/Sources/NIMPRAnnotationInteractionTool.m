@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 volz.io. All rights reserved.
 //
 
-#import "NIMPRAnnotationSelectionTool.h"
+#import "NIMPRAnnotationInteractionTool.h"
 
-@implementation NIMPRAnnotationSelectionTool
+@implementation NIMPRAnnotationInteractionTool
 
 - (NSArray*)cursors {
     return @[ NSCursor.pointingHandCursor, NSCursor.pointingHandCursor ];

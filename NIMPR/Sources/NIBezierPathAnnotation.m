@@ -82,7 +82,7 @@
 }
 
 - (NIBezierPath*)NIBezierPathForSlabView:(NIAnnotatedGeneratorRequestView*)view complete:(BOOL)complete {
-    NIObliqueSliceGeneratorRequest* req = (id)view.presentedGeneratorRequest;
+    NIObliqueSliceGeneratorRequest* req = view.presentedGeneratorRequest;
     NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(req.sliceToDicomTransform);
     
     NIBezierPath* path = [self.NIBezierPath bezierPathByApplyingTransform:dicomToSliceTransform];
@@ -95,7 +95,7 @@
 }
 
 - (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view {
-    NIObliqueSliceGeneratorRequest* req = (id)view.presentedGeneratorRequest;
+    NIObliqueSliceGeneratorRequest* req = view.presentedGeneratorRequest;
     NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(req.sliceToDicomTransform);
     
     NIBezierPath* slicePath = [self.NIBezierPath bezierPathByApplyingTransform:dicomToSliceTransform];
@@ -123,19 +123,19 @@
     return [slicePath NSBezierPath];
 }
 
-- (CGFloat)distanceToPoint:(NSPoint)point sliceToDicomTransform:(NIAffineTransform)sliceToDicomTransform closestPoint:(NSPoint*)closestPoint {
-    NIBezierPath* slicePath = [self.NIBezierPath bezierPathByApplyingTransform:NIAffineTransformInvert(sliceToDicomTransform)];
+- (CGFloat)distanceToPoint:(NSPoint)point view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint {
+    NIBezierPath* slicePath = [self.NIBezierPath bezierPathByApplyingTransform:NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)];
     
     if (self.isSolid && [slicePath.NSBezierPath containsPoint:point]) {
-        if (closestPoint) *closestPoint = point;
+        if (rpoint) *rpoint = point;
         return 0;
     }
     
     NIVector closestVector = NIVectorZero;
     [slicePath relativePositionClosestToLine:NILineMake(NIVectorMakeFromNSPoint(point), NIVectorZBasis) closestVector:&closestVector];
     
-    if (closestPoint) *closestPoint = NSPointFromNIVector(closestVector);
-    return NIVectorDistance(NIVectorMakeFromNSPoint(point), NIVectorMake(closestVector.x, closestVector.y, 0));
+    if (rpoint) *rpoint = NSPointFromNIVector(closestVector);
+    return NIVectorDistance(NIVectorMakeFromNSPoint(point), NIVectorZeroZ(closestVector));
 }
 
 @end

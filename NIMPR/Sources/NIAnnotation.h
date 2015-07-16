@@ -10,6 +10,8 @@
 
 extern NSString* const NIAnnotationChangeNotification; // to observe an annotation's changes you can either observe these notifications or observe the annotation's changed property
 
+extern CGFloat const NIAnnotationDistant;
+
 @interface NIAnnotation : NSObject {
     NSColor* _color;
 //    NSDictionary* _userInfo;
@@ -31,7 +33,7 @@ extern NSString* const NIAnnotationChangeNotification; // to observe an annotati
 
 - (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view; // return the annotation border
 
-- (CGFloat)distanceToPoint:(NSPoint)point sliceToDicomTransform:(NIAffineTransform)sliceToDicomTransform closestPoint:(NSPoint*)rpoint; // point is on slice
+- (CGFloat)distanceToPoint:(NSPoint)point view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint; // point is on slice
 
 //- (NSArray*)handles;
 

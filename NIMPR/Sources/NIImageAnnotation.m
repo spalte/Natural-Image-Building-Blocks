@@ -46,7 +46,7 @@ typedef struct {
 }
 
 - (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view {
-    NIObliqueSliceGeneratorRequest* req = (id)view.presentedGeneratorRequest;
+    NIObliqueSliceGeneratorRequest* req = view.presentedGeneratorRequest;
     NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(req.sliceToDicomTransform);
     
     NIBezierPath *ipath = [self NIBezierPathForSlabView:view complete:YES];
@@ -62,7 +62,7 @@ typedef struct {
     NSAffineTransformStruct nsatts = {cgat.a, cgat.b, cgat.c, cgat.d, cgat.tx, cgat.ty};
     NSAffineTransform* nsat = [NSAffineTransform transform];
     nsat.transformStruct = nsatts;
-    [nsat concat];
+    [nsat set];
     
     if (pipath.elementCount) {
         [pipath.NSBezierPath setClip];
@@ -82,11 +82,31 @@ typedef struct {
     return [[self.NIBezierPath bezierPathByApplyingTransform:dicomToSliceTransform] NSBezierPath];
 }
 
-- (CGFloat)distanceToPoint:(NSPoint)point sliceToDicomTransform:(NIAffineTransform)sliceToDicomTransform closestPoint:(NSPoint*)closestPoint {
-    CGFloat distance = [super distanceToPoint:point sliceToDicomTransform:sliceToDicomTransform closestPoint:closestPoint];
-    if (distance == 0) {
-        // TODO: check image! pixels and... uh... vectors!
-    }
+- (CGFloat)distanceToPoint:(NSPoint)point view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)closestPoint {
+    CGFloat distance = [super distanceToPoint:point view:view closestPoint:closestPoint];
+    
+    if (distance > NIAnnotationDistant)
+        return distance;
+    
+    distance = NIAnnotationDistant+1;
+    
+    NIAffineTransform sliceToPlaneTransform = NIAffineTransformConcat(view.presentedGeneratorRequest.sliceToDicomTransform, NIAffineTransformInvert(self.planeToDicomTransform));
+    
+    NIVector vector = NIVectorApplyTransform(NIVectorMakeFromNSPoint(point), sliceToPlaneTransform), v2 = NIVectorApplyTransform(NIVectorMake(point.x+NIAnnotationDistant, point.y, 0), sliceToPlaneTransform);
+    
+    [NSGraphicsContext saveGraphicsState];
+    NSPrintOperation* op = [NSPrintOperation printOperationWithView:view];
+    NSGraphicsContext* context = [op createContext];
+    [NSGraphicsContext setCurrentContext:context];
+    
+    CGFloat rmax = NIVectorDistance(NIVectorZeroZ(vector), NIVectorZeroZ(v2));
+    for (size_t r = 0; r <= (size_t)rmax; ++r)
+        if ([self.image hitTestRect:NSMakeRect(vector.x-r, vector.y-r, r*2+1, r*2+1) withImageDestinationRect:self.bounds context:nil hints:nil flipped:NO]) {
+            distance = 1.*r/rmax*NIAnnotationDistant;
+            break;
+        }
+    
+    [NSGraphicsContext restoreGraphicsState];
     
     return distance;
 }

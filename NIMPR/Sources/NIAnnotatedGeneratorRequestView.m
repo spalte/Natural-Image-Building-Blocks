@@ -141,12 +141,10 @@
 - (NIAnnotation*)annotationClosestToPoint:(NSPoint)location closestPoint:(NSPoint*)closestPoint distance:(CGFloat*)distance filter:(BOOL (^)(NIAnnotation* annotation))filter {
     NSMutableArray* adps = [NSMutableArray array]; // @[ annotation, distance ]
     
-    NIAffineTransform sliceToDicomTransform = self.generatorRequest.sliceToDicomTransform;
-    
     for (NIAnnotation* annotation in self.publicAnnotations)
         if (!filter || filter(annotation)) {
             NSPoint closestPoint;
-            CGFloat distance = [annotation distanceToPoint:location sliceToDicomTransform:sliceToDicomTransform closestPoint:&closestPoint];
+            CGFloat distance = [annotation distanceToPoint:location view:self closestPoint:&closestPoint];
             [adps addObject:@[ annotation, [NSNumber valueWithCGFloat:distance], [NSValue valueWithPoint:closestPoint] ]];
         }
     
@@ -167,8 +165,6 @@
     
     return nil;
 }
-
-
 
 @end
 

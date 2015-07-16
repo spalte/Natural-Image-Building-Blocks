@@ -27,7 +27,7 @@
 }
 
 - (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view {
-    NIObliqueSliceGeneratorRequest* req = (id)view.presentedGeneratorRequest;
+    NIObliqueSliceGeneratorRequest* req = view.presentedGeneratorRequest;
 
     CGFloat distanceToPlane = CGFloatMax(NIVectorDistanceToPlane(self.vector, req.plane) - req.slabWidth/2, 0), maximumDistanceToPlane = view.maximumDistanceToPlane;
     
@@ -50,8 +50,8 @@
     return path;
 }
 
-- (CGFloat)distanceToPoint:(NSPoint)point sliceToDicomTransform:(NIAffineTransform)sliceToDicomTransform closestPoint:(NSPoint*)closestPoint {
-    NSPoint vpoint = NSPointFromNIVector(NIVectorApplyTransform(self.vector, NIAffineTransformInvert(sliceToDicomTransform)));
+- (CGFloat)distanceToPoint:(NSPoint)point view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)closestPoint {
+    NSPoint vpoint = NSPointFromNIVector(NIVectorApplyTransform(self.vector, NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)));
     if (closestPoint) *closestPoint = vpoint;
     return NIVectorDistance(NIVectorMakeFromNSPoint(point), NIVectorMakeFromNSPoint(vpoint));
 }
