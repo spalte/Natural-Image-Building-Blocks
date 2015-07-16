@@ -34,4 +34,10 @@
     return path;
 }
 
+- (NSSet*)handles {
+    return [NSSet setWithObjects:
+            [NIAnnotationHandle handleWithVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(self.p), self.planeToDicomTransform)],
+            [NIAnnotationHandle handleWithVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(self.q), self.planeToDicomTransform)], nil];
+}
+
 @end

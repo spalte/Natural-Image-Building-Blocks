@@ -383,6 +383,32 @@ NIMutableBezierCoreRef NIBezierCoreCreateMutableWithDictionaryRepresentation(CFD
 	return mutableBezierCore;
 }
 
+NIMutableBezierCoreRef NIBezierCoreCreateMutableWithNSBezierPath(NSBezierPath* path) {
+    NIMutableBezierCoreRef mutableBezierCore = NIBezierCoreCreateMutable();
+
+    NSPoint ps[3];
+    NSInteger elementCount = path.elementCount;
+    for (NSInteger i = 0; i < elementCount; ++i)
+        switch ([path elementAtIndex:i associatedPoints:ps]) {
+            case NSMoveToBezierPathElement: {
+                NIBezierCoreAddSegment(mutableBezierCore, NIMoveToBezierCoreSegmentType, NIVectorZero, NIVectorZero, NIVectorMakeFromNSPoint(ps[0]));
+            } break;
+            case NSLineToBezierPathElement: {
+                NIBezierCoreAddSegment(mutableBezierCore, NILineToBezierCoreSegmentType, NIVectorZero, NIVectorZero, NIVectorMakeFromNSPoint(ps[0]));
+            } break;
+            case NSCurveToBezierPathElement: {
+                NIBezierCoreAddSegment(mutableBezierCore, NICurveToBezierCoreSegmentType, NIVectorMakeFromNSPoint(ps[0]), NIVectorMakeFromNSPoint(ps[1]), NIVectorMakeFromNSPoint(ps[2]));
+            } break;
+            case NSClosePathBezierPathElement: {
+                NIBezierCoreAddSegment(mutableBezierCore, NICloseBezierCoreSegmentType, NIVectorZero, NIVectorZero, NIVectorMakeFromNSPoint(ps[0]));
+            } break;
+        }
+    
+    NIBezierCoreCheckDebug(mutableBezierCore);
+    
+    return mutableBezierCore;
+}
+
 
 void NIBezierCoreAddSegment(NIMutableBezierCoreRef bezierCore, NIBezierCoreSegmentType segmentType, NIVector control1, NIVector control2, NIVector endpoint)
 {

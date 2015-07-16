@@ -28,4 +28,13 @@
     return [NSBezierPath bezierPathWithRect:self.bounds];
 }
 
+- (NSSet*)handles {
+    NSRect b = self.bounds;
+    return [NSSet setWithObjects:
+            [NIAnnotationHandle handleWithVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(b.origin), self.planeToDicomTransform)],
+            [NIAnnotationHandle handleWithVector:NIVectorApplyTransform(NIVectorMake(b.origin.x+b.size.width, b.origin.y, 0), self.planeToDicomTransform)],
+            [NIAnnotationHandle handleWithVector:NIVectorApplyTransform(NIVectorMake(b.origin.x+b.size.width, b.origin.y+b.size.height, 0), self.planeToDicomTransform)],
+            [NIAnnotationHandle handleWithVector:NIVectorApplyTransform(NIVectorMake(b.origin.x, b.origin.y+b.size.height, 0), self.planeToDicomTransform)], nil];
+}
+
 @end

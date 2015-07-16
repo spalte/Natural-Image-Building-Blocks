@@ -14,6 +14,7 @@ typedef NS_ENUM(NSInteger, NIMPRToolTag) {
     NIMPRToolZoom,
     NIMPRToolRotate,
     NIMPRToolRotateAxis,
+    NIMPRToolInteract,
     NIMPRToolAnnotatePoint,
     NIMPRToolAnnotateSegment,
     NIMPRToolAnnotateRectangle,
@@ -57,12 +58,15 @@ typedef NS_ENUM(NSInteger, NIMPRToolTag) {
 
 @property(readonly) NSPoint mouseDownLocation, currentLocation, previousLocation;
 @property(readonly) NIVector mouseDownLocationVector, currentLocationVector, previousLocationVector;
+@property(readonly, retain) NSView* mouseDownView;
 @property(readonly) NIAffineTransform mouseDownGeneratorRequestSliceToDicomTransform;
 
 - (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event UNAVAILABLE_ATTRIBUTE;
 - (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())otherwise confirm:(void(^)())confirm NS_REQUIRES_SUPER;
 - (BOOL)view:(NIMPRView*)view mouseDragged:(NSEvent*)event NS_REQUIRES_SUPER;
 - (BOOL)view:(NIMPRView*)view mouseUp:(NSEvent*)event NS_REQUIRES_SUPER;
+
+- (void)drawInView:(NIMPRView*)view; // will only be called when current l or r tool
 
 - (NSTimeInterval)timeout;
 

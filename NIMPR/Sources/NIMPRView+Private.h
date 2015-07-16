@@ -17,6 +17,6 @@
 @property(assign) Class ltcAtSecondClick;
 @property NSUInteger eventModifierFlags;
 @property(getter=mouseIsDown) BOOL mouseDown;
-//@property(retain) NSMutableArray* latestMouseDownEvents;
+@property (readwrite, retain) CALayer* toolsLayer;
 
 @end

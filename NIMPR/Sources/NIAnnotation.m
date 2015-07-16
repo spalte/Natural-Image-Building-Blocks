@@ -91,9 +91,14 @@ CGFloat const NIAnnotationDistant = 4;
     [path stroke];
 }
 
-- (CGFloat)distanceToPoint:(NSPoint)point view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint {
-    NSLog(@"Warning: -[%@ distanceToPoint:view:closestPoint:] is missing", self.className);
+- (CGFloat)distanceToSlicePoint:(NSPoint)point view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint {
+    NSLog(@"Warning: -[%@ distanceToSlicePoint:view:closestPoint:] is missing", self.className);
     return CGFLOAT_MAX;
+}
+
+- (BOOL)intersectsSliceRect:(NSRect)rect view:(NIAnnotatedGeneratorRequestView*)view {
+    NSLog(@"Warning: -[%@ intersectsSliceRect:view:] is missing", self.className);
+    return NO;
 }
 
 static NSColor* NIAnnotationDefaultColor = nil;
@@ -117,7 +122,9 @@ static NSColor* NIAnnotationDefaultColor = nil;
     return [self.class defaultColor];
 }
 
-
+- (NSSet*)handles {
+    return [NSSet set];
+}
 
 + (id)pointWithVector:(NIVector)vector {
     return [[[NIPointAnnotation alloc] initWithVector:vector] autorelease];
@@ -133,6 +140,24 @@ static NSColor* NIAnnotationDefaultColor = nil;
 
 + (id)ellipseWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform {
     return [[[NIEllipseAnnotation alloc] initWithBounds:bounds transform:sliceToDicomTransform] autorelease];
+}
+
+@end
+
+@implementation NIAnnotationHandle
+
+@synthesize vector = _vector;
+
++ (instancetype)handleWithVector:(NIVector)vector {
+    return [[[self.class alloc] initWithVector:vector] autorelease];
+}
+
+- (instancetype)initWithVector:(NIVector)vector {
+    if ((self = [super init])) {
+        self.vector = vector;
+    }
+    
+    return self;
 }
 
 @end

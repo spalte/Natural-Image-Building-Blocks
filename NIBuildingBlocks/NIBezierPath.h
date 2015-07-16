@@ -48,12 +48,14 @@ typedef NSInteger NIBezierPathElement;
 
 - (id)init;
 - (id)initWithBezierPath:(NIBezierPath *)bezierPath;
+- (id)initWithNSBezierPath:(NSBezierPath *)bezierPath;
 - (id)initWithDictionaryRepresentation:(NSDictionary *)dict;
 - (id)initWithNIBezierCore:(NIBezierCoreRef)bezierCore;
 - (id)initWithNodeArray:(NSArray *)nodes style:(NIBezierNodeStyle)style; // array of NIVectors in NSValues;
 
 + (id)bezierPath;
 + (id)bezierPathWithBezierPath:(NIBezierPath *)bezierPath;
++ (id)bezierPathWithNSBezierPath:(NSBezierPath *)bezierPath;
 + (id)bezierPathNIBezierCore:(NIBezierCoreRef)bezierCore;
 + (id)bezierPathCircleWithCenter:(NIVector)center radius:(CGFloat)radius normal:(NIVector)normal;
 

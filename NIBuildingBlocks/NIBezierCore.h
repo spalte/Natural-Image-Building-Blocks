@@ -23,6 +23,7 @@
 #define _NIBEZIERCORE_H_
 
 #include <ApplicationServices/ApplicationServices.h>
+#include <AppKit/NSBezierPath.h>
 
 #include "NIGeometry.h"
 
@@ -64,6 +65,7 @@ NIMutableBezierCoreRef NIBezierCoreCreateMutableCopy(NIBezierCoreRef bezierCore)
 CFDictionaryRef NIBezierCoreCreateDictionaryRepresentation(NIBezierCoreRef bezierCore);
 NIBezierCoreRef NIBezierCoreCreateWithDictionaryRepresentation(CFDictionaryRef dict);
 NIMutableBezierCoreRef NIBezierCoreCreateMutableWithDictionaryRepresentation(CFDictionaryRef dict);
+NIMutableBezierCoreRef NIBezierCoreCreateMutableWithNSBezierPath(NSBezierPath* path);
 
 void NIBezierCoreAddSegment(NIMutableBezierCoreRef bezierCore, NIBezierCoreSegmentType segmentType, NIVector control1, NIVector control2, NIVector endpoint);
 void NIBezierCoreSetVectorsForSegmentAtIndex(NIMutableBezierCoreRef bezierCore, CFIndex index, NIVector control1, NIVector control2, NIVector endpoint);

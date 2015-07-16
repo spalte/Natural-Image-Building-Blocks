@@ -31,6 +31,7 @@
     Class _ltcAtSecondClick;
     CGFloat _slabWidth;
     BOOL _mouseDown, _displayOverlays;
+    CALayer* _toolsLayer;
 }
 
 @property(retain) NIVolumeData* data;
@@ -46,6 +47,8 @@
 @property BOOL displayOverlays;
 
 @property NIMPRFlags flags;
+
+@property (readonly, retain) CALayer* toolsLayer;
 
 - (void)setNormal:(NIMPRQuaternion*)normal :(NIMPRQuaternion*)xdir :(NIMPRQuaternion*)ydir reference:(NIMPRQuaternion*)reference;
 

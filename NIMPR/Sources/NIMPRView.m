@@ -29,12 +29,24 @@
 @synthesize ltool = _ltool, rtool = _rtool, ltcAtSecondClick = _ltcAtSecondClick;
 @synthesize mouseDown = _mouseDown;
 @synthesize displayOverlays = _displayOverlays;
+@synthesize toolsLayer = _toolsLayer;
 
 - (void)initialize:(Class)class {
     [super initialize:class];
 
     if (class != NIGeneratorRequestView.class)
         return;
+    
+    CALayer* layer = self.toolsLayer = [[[CALayer alloc] init] autorelease];
+    layer.delegate = self;
+    layer.needsDisplayOnBoundsChange = YES;
+    layer.zPosition = NIGeneratorRequestViewRimLayerZPosition+1;
+    layer.contentsScale = self.frameLayer.contentsScale;
+    [layer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX]];
+    [layer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth]];
+    [layer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY]];
+    [layer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight]];
+    [self.frameLayer addSublayer:layer];
     
     [self addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"data" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:NIMPRView.class];
@@ -188,6 +200,20 @@
 
 - (NIMPRTool*)rtool {
     return (_rtool? _rtool : [self.window.windowController rtool]);
+}
+
+- (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx {
+    if (layer == self.toolsLayer) {
+        [NSGraphicsContext saveGraphicsState];
+        [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:ctx flipped:NO]];
+        
+        for (NIMPRTool* tool in @[ self.rtool, self.ltool ])
+            [tool drawInView:self];
+        
+        [NSGraphicsContext restoreGraphicsState];
+    }
+    
+    [super drawLayer:layer inContext:ctx];
 }
 
 + (NSSet*)keyPathsForValuesAffectingRimColor {

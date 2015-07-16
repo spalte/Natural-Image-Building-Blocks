@@ -23,7 +23,7 @@ static BOOL NIMPRToolHidingCursor = NO;
 
 @interface NIMPRTool ()
 
-@property NSView* mouseDownView;
+@property(readwrite, retain) NSView* mouseDownView;
 @property(retain, readwrite) NSEvent* mouseDownEvent;
 @property(copy) void (^timeoutBlock)(), (^confirmBlock)();
 @property(retain, readwrite) NSTimer* timeoutTimer;
@@ -114,7 +114,12 @@ static BOOL NIMPRToolHidingCursor = NO;
         self.confirmBlock = self.timeoutBlock = nil;
     }
     
+    self.mouseDownView = nil;
+    
     return r;
+}
+
+- (void)drawInView:(NIMPRView*)view {
 }
 
 - (NSTimeInterval)timeout {

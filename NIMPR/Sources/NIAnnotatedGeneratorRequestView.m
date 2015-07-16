@@ -103,6 +103,8 @@
         
         [NSGraphicsContext restoreGraphicsState];
     }
+    
+    [super drawLayer:layer inContext:ctx];
 }
 
 - (NSMutableSet*)publicAnnotations {
@@ -129,17 +131,17 @@
     [_glowingAnnotations removeObject:object];
 }
 
-- (NIAnnotation*)annotationClosestToPoint:(NSPoint)location closestPoint:(NSPoint*)closestPoint distance:(CGFloat*)distance {
-    return [self annotationClosestToPoint:location closestPoint:closestPoint distance:distance filter:nil];
+- (NIAnnotation*)annotationClosestToSlicePoint:(NSPoint)location closestPoint:(NSPoint*)closestPoint distance:(CGFloat*)distance {
+    return [self annotationClosestToSlicePoint:location closestPoint:closestPoint distance:distance filter:nil];
 }
 
-- (NIAnnotation*)annotationClosestToPoint:(NSPoint)location closestPoint:(NSPoint*)closestPoint distance:(CGFloat*)distance filter:(BOOL (^)(NIAnnotation* annotation))filter {
+- (NIAnnotation*)annotationClosestToSlicePoint:(NSPoint)location closestPoint:(NSPoint*)closestPoint distance:(CGFloat*)distance filter:(BOOL (^)(NIAnnotation* annotation))filter {
     NSMutableArray* adps = [NSMutableArray array]; // @[ annotation, distance ]
     
     for (NIAnnotation* annotation in self.publicAnnotations)
         if (!filter || filter(annotation)) {
             NSPoint closestPoint;
-            CGFloat distance = [annotation distanceToPoint:location view:self closestPoint:&closestPoint];
+            CGFloat distance = [annotation distanceToSlicePoint:location view:self closestPoint:&closestPoint];
             [adps addObject:@[ annotation, [NSNumber valueWithCGFloat:distance], [NSValue valueWithPoint:closestPoint] ]];
         }
     
@@ -159,6 +161,16 @@
     }
     
     return nil;
+}
+
+- (NSSet*)annotationsIntersectingWithSliceRect:(NSRect)sliceRect {
+    NSMutableSet* rset = [NSMutableSet set];
+    
+    for (NIAnnotation* annotation in self.publicAnnotations)
+        if ([annotation intersectsSliceRect:sliceRect view:self])
+            [rset addObject:annotation];
+    
+    return rset;
 }
 
 @end

@@ -34,8 +34,19 @@ extern CGFloat const NIAnnotationDistant;
 - (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view; // return the border path
 - (void)glowInView:(NIAnnotatedGeneratorRequestView*)view path:(NSBezierPath*)path;
 
-- (CGFloat)distanceToPoint:(NSPoint)point view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint; // point is on slice
+- (CGFloat)distanceToSlicePoint:(NSPoint)point view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint; // point is on slice
+- (BOOL)intersectsSliceRect:(NSRect)rect view:(NIAnnotatedGeneratorRequestView*)view;
 
-//- (NSArray*)handles;
+- (NSSet*)handles;
+
+@end
+
+@interface NIAnnotationHandle : NSObject {
+    NIVector _vector;
+}
+
+@property NIVector vector;
+
++ (instancetype)handleWithVector:(NIVector)vector;
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "NIBezierPathAnnotation.h"
+#import "NSBezierPath+NIMPR.h"
 
 @implementation NIBezierPathAnnotation
 
@@ -123,7 +124,7 @@
     return [slicePath NSBezierPath];
 }
 
-- (CGFloat)distanceToPoint:(NSPoint)point view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint {
+- (CGFloat)distanceToSlicePoint:(NSPoint)point view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint {
     NIBezierPath* slicePath = [self.NIBezierPath bezierPathByApplyingTransform:NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)];
     
     if (self.isSolid && [slicePath.NSBezierPath containsPoint:point]) {
@@ -136,6 +137,11 @@
     
     if (rpoint) *rpoint = NSPointFromNIVector(closestVector);
     return NIVectorDistance(NIVectorMakeFromNSPoint(point), NIVectorZeroZ(closestVector));
+}
+
+- (BOOL)intersectsSliceRect:(NSRect)rect view:(NIAnnotatedGeneratorRequestView*)view {
+    NIBezierPath* slicePath = [self.NIBezierPath bezierPathByApplyingTransform:NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)];
+    return [slicePath.NSBezierPath intersectsRect:rect];
 }
 
 @end
@@ -153,29 +159,7 @@
 }
 
 - (NIBezierPath*)NIBezierPath {
-    NIMutableBezierPath* p = [NIMutableBezierPath bezierPath];
-    NIAffineTransform transform = self.planeToDicomTransform;
-    
-    NSBezierPath* nsp = self.NSBezierPath;
-    NSPoint points[3];
-    NSInteger elementCount = nsp.elementCount;
-    for (NSInteger i = 0; i < elementCount; ++i)
-        switch ([nsp elementAtIndex:i associatedPoints:points]) {
-            case NSMoveToBezierPathElement: {
-                [p moveToVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(points[0]), transform)];
-            } break;
-            case NSLineToBezierPathElement: {
-                [p lineToVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(points[0]), transform)];
-            } break;
-            case NSCurveToBezierPathElement: {
-                [p curveToVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(points[2]), transform) controlVector1:NIVectorApplyTransform(NIVectorMakeFromNSPoint(points[0]), transform) controlVector2:NIVectorApplyTransform(NIVectorMakeFromNSPoint(points[1]), transform)];
-            } break;
-            case NSClosePathBezierPathElement: {
-                [p close];
-            } break;
-        }
-    
-    return p;
+    return [[NIBezierPath bezierPathWithNSBezierPath:self.NSBezierPath] bezierPathByApplyingTransform:self.planeToDicomTransform];
 }
 
 + (NSSet*)keyPathsForValuesAffectingNIBezierPath {

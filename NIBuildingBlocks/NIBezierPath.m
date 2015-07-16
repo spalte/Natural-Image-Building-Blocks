@@ -81,6 +81,14 @@
     return self;
 }
 
+- (id)initWithNSBezierPath:(NSBezierPath *)bezierPath
+{
+    if ( (self = [super init]) ) {
+        _bezierCore = NIBezierCoreCreateMutableWithNSBezierPath(bezierPath);
+    }
+    return self;
+}
+
 - (id)initWithDictionaryRepresentation:(NSDictionary *)dict
 {
 	if ( (self = [super init]) ) {
@@ -171,6 +179,11 @@
 + (id)bezierPathWithBezierPath:(NIBezierPath *)bezierPath
 {
     return [[[[self class] alloc] initWithBezierPath:bezierPath] autorelease];
+}
+
++ (id)bezierPathWithNSBezierPath:(NSBezierPath *)bezierPath
+{
+    return [[[[self class] alloc] initWithNSBezierPath:bezierPath] autorelease];
 }
 
 + (id)bezierPathNIBezierCore:(NIBezierCoreRef)bezierCore

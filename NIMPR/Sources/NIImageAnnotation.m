@@ -78,8 +78,6 @@ typedef struct {
 }
 
 - (void)glowInView:(NIAnnotatedGeneratorRequestView*)view path:(NSBezierPath*)path {
-//    [super glowInView:view path:path];
-    
     NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform);
 
     [NSGraphicsContext saveGraphicsState];
@@ -100,8 +98,8 @@ typedef struct {
     [NSGraphicsContext restoreGraphicsState];
 }
 
-- (CGFloat)distanceToPoint:(NSPoint)point view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)closestPoint {
-    CGFloat distance = [super distanceToPoint:point view:view closestPoint:closestPoint];
+- (CGFloat)distanceToSlicePoint:(NSPoint)point view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)closestPoint {
+    CGFloat distance = [super distanceToSlicePoint:point view:view closestPoint:closestPoint];
     
     if (distance > NIAnnotationDistant)
         return distance;
@@ -127,6 +125,17 @@ typedef struct {
     [NSGraphicsContext restoreGraphicsState];
     
     return distance;
+}
+
+- (BOOL)intersectsSliceRect:(NSRect)rect view:(NIAnnotatedGeneratorRequestView*)view {
+    if (![super intersectsSliceRect:rect view:view])
+        return NO;
+    
+    NIAffineTransform sliceToPlaneTransform = NIAffineTransformConcat(view.presentedGeneratorRequest.sliceToDicomTransform, NIAffineTransformInvert(self.planeToDicomTransform));
+    
+    
+    
+    return NO;
 }
 
 

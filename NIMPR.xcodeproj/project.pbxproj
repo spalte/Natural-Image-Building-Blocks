@@ -31,6 +31,7 @@
 		714D19CC1B53C8A700EBA644 /* NIMPRAnnotateRectangleTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 714D19CB1B53C8A700EBA644 /* NIMPRAnnotateRectangleTool.m */; };
 		714D19CF1B54010400EBA644 /* NIImageAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 714D19CE1B54010400EBA644 /* NIImageAnnotation.m */; };
 		714D19D31B564FD300EBA644 /* NIMPRAnnotationInteractionTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 714D19D21B564FD300EBA644 /* NIMPRAnnotationInteractionTool.m */; };
+		714D19DA1B57F5AC00EBA644 /* NSBezierPath+NIMPR.m in Sources */ = {isa = PBXBuildFile; fileRef = 714D19D91B57F5AC00EBA644 /* NSBezierPath+NIMPR.m */; };
 		719473611B1D9802009363AE /* NIMPR.m in Sources */ = {isa = PBXBuildFile; fileRef = 719473601B1D9802009363AE /* NIMPR.m */; };
 		7194736A1B1D9C68009363AE /* NIBuildingBlocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 719473691B1D9C68009363AE /* NIBuildingBlocks.framework */; };
 		719CC51E1B0B1BBC00DC1ED5 /* NIMPRController.m in Sources */ = {isa = PBXBuildFile; fileRef = 719CC51D1B0B1BBC00DC1ED5 /* NIMPRController.m */; };
@@ -106,6 +107,8 @@
 		714D19CE1B54010400EBA644 /* NIImageAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIImageAnnotation.m; sourceTree = "<group>"; };
 		714D19D11B564FD300EBA644 /* NIMPRAnnotationInteractionTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRAnnotationInteractionTool.h; sourceTree = "<group>"; };
 		714D19D21B564FD300EBA644 /* NIMPRAnnotationInteractionTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRAnnotationInteractionTool.m; sourceTree = "<group>"; };
+		714D19D81B57F5AB00EBA644 /* NSBezierPath+NIMPR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+NIMPR.h"; sourceTree = "<group>"; };
+		714D19D91B57F5AC00EBA644 /* NSBezierPath+NIMPR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+NIMPR.m"; sourceTree = "<group>"; };
 		7194735F1B1D9802009363AE /* NIMPR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPR.h; sourceTree = "<group>"; };
 		719473601B1D9802009363AE /* NIMPR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPR.m; sourceTree = "<group>"; };
 		719473621B1D9883009363AE /* NIMPR+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NIMPR+Private.h"; sourceTree = "<group>"; };
@@ -172,12 +175,7 @@
 				7133413F1B15A4FA0014CE09 /* NIMPRView+Events.m */,
 				712F626C1B4D5FC8004AC1AE /* Annotations */,
 				713341271B147D9D0014CE09 /* Tools */,
-				719CC5381B0CC17000DC1ED5 /* NIMPRQuaternion.h */,
-				719CC5391B0CC17000DC1ED5 /* NIMPRQuaternion.mm */,
-				719CC53C1B0E039E00DC1ED5 /* NSMenu+NIMPR.h */,
-				719CC53D1B0E039E00DC1ED5 /* NSMenu+NIMPR.m */,
-				713341421B15F3000014CE09 /* +NIMPR.h */,
-				713341431B15F3000014CE09 /* +NIMPR.m */,
+				714D19D41B57F46100EBA644 /* Extras */,
 			);
 			name = Sources;
 			path = NIMPR/Sources;
@@ -192,14 +190,14 @@
 				712F62721B4D6DC0004AC1AE /* NIAnnotation.m */,
 				712F62741B4D7172004AC1AE /* NIPointAnnotation.h */,
 				712F62751B4D7172004AC1AE /* NIPointAnnotation.m */,
+				712F627D1B4FDB79004AC1AE /* NISegmentAnnotation.h */,
+				712F627E1B4FDB79004AC1AE /* NISegmentAnnotation.m */,
 				714D19C31B53A81100EBA644 /* NIMaskAnnotation.h */,
 				714D19C41B53A81100EBA644 /* NIMaskAnnotation.m */,
 				714D19CD1B54010400EBA644 /* NIImageAnnotation.h */,
 				714D19CE1B54010400EBA644 /* NIImageAnnotation.m */,
 				712F627A1B4ED30E004AC1AE /* NIBezierPathAnnotation.h */,
 				712F627B1B4ED30E004AC1AE /* NIBezierPathAnnotation.m */,
-				712F627D1B4FDB79004AC1AE /* NISegmentAnnotation.h */,
-				712F627E1B4FDB79004AC1AE /* NISegmentAnnotation.m */,
 				714D19C71B53C42100EBA644 /* NIRectangleAnnotation.h */,
 				714D19C81B53C42100EBA644 /* NIRectangleAnnotation.m */,
 				712F62771B4EBDB9004AC1AE /* NIEllipseAnnotation.h */,
@@ -243,6 +241,21 @@
 				7136DDE21B44388800D866E8 /* NIBuildingBlocks.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		714D19D41B57F46100EBA644 /* Extras */ = {
+			isa = PBXGroup;
+			children = (
+				719CC5381B0CC17000DC1ED5 /* NIMPRQuaternion.h */,
+				719CC5391B0CC17000DC1ED5 /* NIMPRQuaternion.mm */,
+				719CC53C1B0E039E00DC1ED5 /* NSMenu+NIMPR.h */,
+				719CC53D1B0E039E00DC1ED5 /* NSMenu+NIMPR.m */,
+				713341421B15F3000014CE09 /* +NIMPR.h */,
+				713341431B15F3000014CE09 /* +NIMPR.m */,
+				714D19D81B57F5AB00EBA644 /* NSBezierPath+NIMPR.h */,
+				714D19D91B57F5AC00EBA644 /* NSBezierPath+NIMPR.m */,
+			);
+			name = Extras;
 			sourceTree = "<group>";
 		};
 		719473791B1DA401009363AE /* Dependencies */ = {
@@ -415,6 +428,7 @@
 				71B249301B18886F00F8E0AD /* NIMPRWindow.m in Sources */,
 				7133412D1B147E0A0014CE09 /* NIMPRTool.m in Sources */,
 				714D19CC1B53C8A700EBA644 /* NIMPRAnnotateRectangleTool.m in Sources */,
+				714D19DA1B57F5AC00EBA644 /* NSBezierPath+NIMPR.m in Sources */,
 				714D19CF1B54010400EBA644 /* NIImageAnnotation.m in Sources */,
 				719CC53E1B0E039E00DC1ED5 /* NSMenu+NIMPR.m in Sources */,
 				719D02AA1AC1D367002F76C1 /* NIMPRPlugin.m in Sources */,

@@ -250,7 +250,26 @@
     }
     
     if (!ltc) {
-        NIAnnotation* annotation = [self annotationForLocation:location];
+        NIAnnotation* annotation = nil;
+        
+        if (NSPointInRect(location, self.bounds))
+            for (size_t i = 0; i < 2; ++i) { // first try by filtering out image annotations, then with them
+                CGFloat distance;
+                
+                if (!i)
+                    annotation = [self annotationClosestToSlicePoint:location closestPoint:NULL distance:&distance filter:^BOOL(NIAnnotation* annotation) {
+                        return ![annotation isKindOfClass:NIImageAnnotation.class];
+                    }];
+                else
+                    annotation = [self annotationClosestToSlicePoint:location closestPoint:NULL distance:&distance];
+                
+                if (annotation && distance > NIAnnotationDistant)
+                    annotation = nil;
+                
+                if (annotation)
+                    break;
+            }
+        
         if (annotation)
             ltc = NIMPRAnnotationInteractionTool.class;
         if (rannotation)
@@ -258,30 +277,6 @@
     }
     
     return ltc;
-}
-
-- (NIAnnotation*)annotationForLocation:(NSPoint)location {
-    NIAnnotation* annotation = nil;
-    
-    if (NSPointInRect(location, self.bounds))
-        for (size_t i = 0; i < 2; ++i) { // first try by filtering out image annotations, then with them
-            CGFloat distance;
-            
-            if (!i)
-                annotation = [self annotationClosestToPoint:location closestPoint:NULL distance:&distance filter:^BOOL(NIAnnotation* annotation) {
-                    return ![annotation isKindOfClass:NIImageAnnotation.class];
-                }];
-            else
-                annotation = [self annotationClosestToPoint:location closestPoint:NULL distance:&distance];
-            
-            if (annotation && distance > NIAnnotationDistant)
-                annotation = nil;
-            
-            if (annotation)
-                break;
-        }
-    
-    return annotation;
 }
 
 @end
