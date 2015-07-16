@@ -31,7 +31,8 @@ extern CGFloat const NIAnnotationDistant;
 @property(readonly) BOOL annotation; // the value of this property is always YES, but you can observe it in order to observe changes in the annotation's properties
 + (NSSet*)keyPathsForValuesAffectingAnnotation;
 
-- (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view; // return the annotation border
+- (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view; // return the border path
+- (void)glowInView:(NIAnnotatedGeneratorRequestView*)view path:(NSBezierPath*)path;
 
 - (CGFloat)distanceToPoint:(NSPoint)point view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint; // point is on slice
 

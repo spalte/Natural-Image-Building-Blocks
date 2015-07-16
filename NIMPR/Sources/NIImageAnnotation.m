@@ -46,15 +46,10 @@ typedef struct {
 }
 
 - (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view {
-    NIObliqueSliceGeneratorRequest* req = view.presentedGeneratorRequest;
-    NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(req.sliceToDicomTransform);
+    NIAffineTransform sliceToDicomTransform = view.presentedGeneratorRequest.sliceToDicomTransform, dicomToSliceTransform = NIAffineTransformInvert(sliceToDicomTransform);
     
-    NIBezierPath *ipath = [self NIBezierPathForSlabView:view complete:YES];
-    NIAffineTransform dicomToPlaneTransform = NIAffineTransformInvert(self.planeToDicomTransform);
-    NIBezierPath* pipath = [[ipath bezierPathByApplyingTransform:req.sliceToDicomTransform] bezierPathByApplyingTransform:dicomToPlaneTransform];
-    
-//    [self.color set];
-//    [path.NSBezierPath stroke];
+    NIBezierPath* ipath = [self NIBezierPathForSlabView:view complete:YES];
+    NIBezierPath* pipath = [[ipath bezierPathByApplyingTransform:sliceToDicomTransform] bezierPathByApplyingTransform:NIAffineTransformInvert(self.planeToDicomTransform)];
     
     [NSGraphicsContext saveGraphicsState];
     
@@ -66,7 +61,7 @@ typedef struct {
     
     if (pipath.elementCount) {
         [pipath.NSBezierPath setClip];
-        [self.image drawInRect:self.bounds fromRect:NSZeroRect operation:NSCompositeCopy fraction:1];
+        [self.image drawInRect:self.bounds fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1];
     }
 
     if (pipath.elementCount) {
@@ -75,11 +70,34 @@ typedef struct {
         [clip appendBezierPath:self.NSBezierPath];
         [clip appendBezierPath:pipath.NSBezierPath];
         [clip setClip]; }
-    [self.image drawInRect:self.bounds fromRect:NSZeroRect operation:NSCompositeCopy fraction:0.2];
+    [self.image drawInRect:self.bounds fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:0.2];
     
     [NSGraphicsContext restoreGraphicsState];
     
     return [[self.NIBezierPath bezierPathByApplyingTransform:dicomToSliceTransform] NSBezierPath];
+}
+
+- (void)glowInView:(NIAnnotatedGeneratorRequestView*)view path:(NSBezierPath*)path {
+//    [super glowInView:view path:path];
+    
+    NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform);
+
+    [NSGraphicsContext saveGraphicsState];
+    NSGraphicsContext* context = [NSGraphicsContext currentContext];
+    
+    CGAffineTransform cgat = CATransform3DGetAffineTransform(NIAffineTransformConcat(self.planeToDicomTransform, dicomToSliceTransform));
+    NSAffineTransformStruct nsatts = {cgat.a, cgat.b, cgat.c, cgat.d, cgat.tx, cgat.ty};
+    NSAffineTransform* nsat = [NSAffineTransform transform];
+    nsat.transformStruct = nsatts;
+    [nsat set];
+    
+    NSRect bounds = self.bounds; CGImageRef image = [self.image CGImageForProposedRect:&bounds context:context hints:nil];
+    CGContextClipToMask(context.CGContext, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height), image);
+    
+    [[self.color colorWithAlphaComponent:self.color.alphaComponent/3] set];
+    CGContextFillRect(context.CGContext, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height));
+
+    [NSGraphicsContext restoreGraphicsState];
 }
 
 - (CGFloat)distanceToPoint:(NSPoint)point view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)closestPoint {

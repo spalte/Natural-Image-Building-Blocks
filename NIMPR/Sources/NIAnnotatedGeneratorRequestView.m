@@ -98,13 +98,8 @@
                 [abs addObject:@[ annotation, border ]];
         }
         
-        for (NSArray* ab in abs) {
-            NSColor* color = [ab[0] color];
-            [[color colorWithAlphaComponent:color.alphaComponent*.5] set];
-            NSBezierPath* path = [[ab[1] copy] autorelease];
-            path.lineWidth = path.lineWidth+2;
-            [path stroke];
-        }
+        for (NSArray* ab in abs)
+            [ab[0] glowInView:self path:ab[1]];
         
         [NSGraphicsContext restoreGraphicsState];
     }

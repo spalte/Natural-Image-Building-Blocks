@@ -84,6 +84,13 @@ CGFloat const NIAnnotationDistant = 4;
     return nil;
 }
 
+- (void)glowInView:(NIAnnotatedGeneratorRequestView*)view path:(NSBezierPath*)path {
+    path = [[path copy] autorelease];
+    path.lineWidth = path.lineWidth+1;
+    [[self.color colorWithAlphaComponent:self.color.alphaComponent/3] set];
+    [path stroke];
+}
+
 - (CGFloat)distanceToPoint:(NSPoint)point view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint {
     NSLog(@"Warning: -[%@ distanceToPoint:view:closestPoint:] is missing", self.className);
     return CGFLOAT_MAX;
