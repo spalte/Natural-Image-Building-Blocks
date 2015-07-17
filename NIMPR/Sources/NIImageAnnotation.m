@@ -80,13 +80,14 @@ typedef struct {
 - (void)glowInView:(NIAnnotatedGeneratorRequestView*)view path:(NSBezierPath*)path {
     NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform);
 
-    [NSGraphicsContext saveGraphicsState];
-    NSGraphicsContext* context = [NSGraphicsContext currentContext];
-    
     CGAffineTransform cgat = CATransform3DGetAffineTransform(NIAffineTransformConcat(self.planeToDicomTransform, dicomToSliceTransform));
     NSAffineTransformStruct nsatts = {cgat.a, cgat.b, cgat.c, cgat.d, cgat.tx, cgat.ty};
     NSAffineTransform* nsat = [NSAffineTransform transform];
     nsat.transformStruct = nsatts;
+
+    [NSGraphicsContext saveGraphicsState];
+    NSGraphicsContext* context = [NSGraphicsContext currentContext];
+    
     [nsat set];
     
     NSRect bounds = self.bounds; CGImageRef image = [self.image CGImageForProposedRect:&bounds context:context hints:nil];
@@ -98,47 +99,80 @@ typedef struct {
     [NSGraphicsContext restoreGraphicsState];
 }
 
-- (CGFloat)distanceToSlicePoint:(NSPoint)point view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)closestPoint {
-    CGFloat distance = [super distanceToSlicePoint:point view:view closestPoint:closestPoint];
++ (NSAffineTransform*)NSAffineTransform:(NIAffineTransform)ni {
+    CGAffineTransform cg = CATransform3DGetAffineTransform(ni);
+    NSAffineTransformStruct transformStruct = {cg.a, cg.b, cg.c, cg.d, cg.tx, cg.ty};
+    NSAffineTransform* transform = [NSAffineTransform transform];
+    transform.transformStruct = transformStruct;
+    return transform;
+}
+
+- (CGFloat)distanceToSlicePoint:(NSPoint)slicePoint view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)closestPoint {
+    CGFloat distance = [super distanceToSlicePoint:slicePoint view:view closestPoint:closestPoint];
     
     if (distance > NIAnnotationDistant)
         return distance;
     
     distance = NIAnnotationDistant+1;
     
-    NIAffineTransform sliceToPlaneTransform = NIAffineTransformConcat(view.presentedGeneratorRequest.sliceToDicomTransform, NIAffineTransformInvert(self.planeToDicomTransform));
-    
-    NIVector vector = NIVectorApplyTransform(NIVectorMakeFromNSPoint(point), sliceToPlaneTransform), v2 = NIVectorApplyTransform(NIVectorMake(point.x+NIAnnotationDistant, point.y, 0), sliceToPlaneTransform);
-    
-    [NSGraphicsContext saveGraphicsState];
-    NSPrintOperation* op = [NSPrintOperation printOperationWithView:view];
-    NSGraphicsContext* context = [op createContext];
-    [NSGraphicsContext setCurrentContext:context];
-    
-    CGFloat rmax = NIVectorDistance(NIVectorZeroZ(vector), NIVectorZeroZ(v2));
-    for (size_t r = 0; r <= (size_t)rmax; ++r)
-        if ([self.image hitTestRect:NSMakeRect(vector.x-r, vector.y-r, r*2+1, r*2+1) withImageDestinationRect:self.bounds context:nil hints:nil flipped:NO]) {
-            distance = 1.*r/rmax*NIAnnotationDistant;
-            break;
+    @autoreleasepool {
+        NIAffineTransform planeToSliceTransform = NIAffineTransformConcat(self.planeToDicomTransform, NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform));
+        NSAffineTransform* planeToSlice = [self.class NSAffineTransform:planeToSliceTransform];
+        NSAffineTransform* identity = [NSAffineTransform transform];
+        
+        NSImage* image = [[[NSImage alloc] initWithSize:view.bounds.size] autorelease];
+        NSRect imageRect = NSMakeRect(0, 0, image.size.width, image.size.height);
+
+        for (size_t r = 0; r <= (size_t)NIAnnotationDistant; ++r) {
+            NSRect hitRect = NSMakeRect(slicePoint.x-r, slicePoint.y-r, r*2+1, r*2+1);
+            
+            [image lockFocus];
+            
+            [identity set];
+            
+            // clip to oval centered at point, with the current identity transform
+            [[NSBezierPath bezierPathWithOvalInRect:hitRect] setClip];
+            
+            // draw the image, using the planeToSlice transform
+            [planeToSlice set];
+            [self.image drawInRect:self.bounds fromRect:NSZeroRect operation:NSCompositeCopy fraction:1];
+            
+            [image unlockFocus];
+            
+            if ([image hitTestRect:hitRect withImageDestinationRect:imageRect context:nil hints:nil flipped:NO]) {
+                distance = r;
+                break;
+            }
         }
-    
-    [NSGraphicsContext restoreGraphicsState];
+    }
     
     return distance;
 }
 
-- (BOOL)intersectsSliceRect:(NSRect)rect view:(NIAnnotatedGeneratorRequestView*)view {
-    if (![super intersectsSliceRect:rect view:view])
+- (BOOL)intersectsSliceRect:(NSRect)hitRect view:(NIAnnotatedGeneratorRequestView*)view {
+    if (![super intersectsSliceRect:hitRect view:view])
         return NO;
     
-    NIAffineTransform sliceToPlaneTransform = NIAffineTransformConcat(view.presentedGeneratorRequest.sliceToDicomTransform, NIAffineTransformInvert(self.planeToDicomTransform));
-    
-    
-    
+    @autoreleasepool {
+        NIAffineTransform planeToSliceTransform = NIAffineTransformConcat(self.planeToDicomTransform, NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform));
+        NSAffineTransform* planeToSlice = [self.class NSAffineTransform:planeToSliceTransform];
+        
+        NSImage* image = [[[NSImage alloc] initWithSize:view.bounds.size] autorelease];
+        NSRect imageRect = NSMakeRect(0, 0, image.size.width, image.size.height);
+        
+        [image lockFocus];
+        
+        [[NSBezierPath bezierPathWithRect:hitRect] setClip];
+        
+        [planeToSlice set];
+        [self.image drawInRect:self.bounds fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1];
+        
+        [image unlockFocus];
+        
+        return [image hitTestRect:hitRect withImageDestinationRect:imageRect context:nil hints:nil flipped:NO];
+    }
+
     return NO;
 }
-
-
-
 
 @end
