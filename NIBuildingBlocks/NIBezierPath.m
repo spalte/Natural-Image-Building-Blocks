@@ -463,6 +463,16 @@
     return NIBezierCoreIsPlanar(_bezierCore, NULL);
 }
 
+- (BOOL)isClosed
+{
+    NSInteger elementCount = [self elementCount];
+    if (elementCount && [self elementAtIndex:elementCount - 1] == NICloseBezierPathElement) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
 - (NIPlane)leastSquaresPlane
 {
 	return NIBezierCoreLeastSquaresPlane(_bezierCore);

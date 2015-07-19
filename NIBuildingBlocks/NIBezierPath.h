@@ -81,6 +81,7 @@ typedef NSInteger NIBezierPathElement;
 - (NIVector)tangentAtEnd;
 - (NIVector)normalAtEndWithInitialNormal:(NIVector)initialNormal;
 - (BOOL)isPlanar;
+- (BOOL)isClosed; // if the last segment is a close
 - (NIPlane)leastSquaresPlane;
 - (NIPlane)topBoundingPlaneForNormal:(NIVector)normal;
 - (NIPlane)bottomBoundingPlaneForNormal:(NIVector)normal;
