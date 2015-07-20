@@ -11,13 +11,16 @@
 
 @interface NIAnnotatedGeneratorRequestView ()
 
-@property (readwrite, retain) CALayer* annotationsLayer;
+@property(readwrite, retain) CALayer* annotationsLayer;
+@property(retain) NSMutableDictionary* annotationsCaches;
 
 @end
 
 @implementation NIAnnotatedGeneratorRequestView
 
 @synthesize annotationsLayer = _annotationsLayer;
+@synthesize annotationsBaseAlpha = _annotationsBaseAlpha;
+@synthesize annotationsCaches = _annotationsCaches;
 
 - (void)initialize:(Class)class {
     [super initialize:class];
@@ -27,6 +30,9 @@
     
     _annotations = [[NSMutableSet alloc] init];
     _glowingAnnotations = [[NSMutableSet alloc] init];
+    _annotationsCaches = [[NSMutableDictionary alloc] init];
+    
+    _annotationsBaseAlpha = .2;
     
     CALayer* layer = self.annotationsLayer = [[[CALayer alloc] init] autorelease];
     layer.delegate = self;
@@ -54,6 +60,7 @@
 
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotification object:self];
 
+    self.annotationsCaches = nil;
     self.annotationsLayer = nil;
     [_annotations release];
     
@@ -65,18 +72,30 @@
         return [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     
     if ([keyPath isEqualToString:@"annotations"]) {
-        for (NIAnnotation* a in change[NSKeyValueChangeOldKey])
+        for (NIAnnotation* a in change[NSKeyValueChangeOldKey]) {
             [a removeObserver:self forKeyPath:@"annotation" context:context];
-        for (NIAnnotation* a in change[NSKeyValueChangeNewKey])
+            [self.annotationsCaches removeObjectForKey:[NSValue valueWithPointer:a]];
+        }
+        for (NIAnnotation* a in change[NSKeyValueChangeNewKey]) {
             [a addObserver:self forKeyPath:@"annotation" options:NSKeyValueObservingOptionInitial context:context];
+            self.annotationsCaches[[NSValue valueWithPointer:a]] = [NSMutableDictionary dictionary];
+        }
     }
     
-    if ([keyPath isEqualToString:@"annotation"] || [keyPath isEqualToString:@"glowingAnnotations"]) {
+    if ([keyPath isEqualToString:@"annotation"]) {
+        [self.annotationsCaches[[NSValue valueWithPointer:object]] removeObjectForKey:NIAnnotationDrawCache];
+        [self.annotationsLayer setNeedsDisplay];
+    }
+    
+    if ([keyPath isEqualToString:@"glowingAnnotations"]) {
         [self.annotationsLayer setNeedsDisplay];
     }
 }
 
 - (void)didUpdatePresentedGeneratorRequestNotification:(NSNotification*)notification {
+    [self.annotationsCaches enumerateKeysAndObjectsUsingBlock:^(NSString* key, NSMutableDictionary* cache, BOOL* stop) {
+        [cache removeObjectForKey:NIAnnotationDrawCache];
+    }];
     [self.annotationsLayer setNeedsDisplay];
 }
 
@@ -92,14 +111,15 @@
         
         NSMutableArray* abs = [NSMutableArray array]; // @[ annotation, border ]
         
-        for (NIAnnotation* annotation in self.publicAnnotations) {
-            NSBezierPath* border = [annotation drawInView:self];
-            if ([self.publicGlowingAnnotations containsObject:annotation])
-                [abs addObject:@[ annotation, border ]];
+        for (NIAnnotation* a in self.publicAnnotations) {
+            NSMutableDictionary* cache = self.annotationsCaches[[NSValue valueWithPointer:a]];
+            NSBezierPath* border = [a drawInView:self cache:cache layer:layer context:ctx];
+            if ([self.publicGlowingAnnotations containsObject:a])
+                [abs addObject:@[ a, cache, [NSNull either:border] ]];
         }
         
         for (NSArray* ab in abs)
-            [ab[0] glowInView:self path:ab[1]];
+            [ab[0] glowInView:self cache:ab[1] layer:layer context:ctx path:[ab[2] if:NSBezierPath.class]];
         
         [NSGraphicsContext restoreGraphicsState];
     }
@@ -135,14 +155,14 @@
     return [self annotationClosestToSlicePoint:location closestPoint:closestPoint distance:distance filter:nil];
 }
 
-- (NIAnnotation*)annotationClosestToSlicePoint:(NSPoint)location closestPoint:(NSPoint*)closestPoint distance:(CGFloat*)distance filter:(BOOL (^)(NIAnnotation* annotation))filter {
+- (NIAnnotation*)annotationClosestToSlicePoint:(NSPoint)location closestPoint:(NSPoint*)closestPoint distance:(CGFloat*)distance filter:(BOOL (^)(NIAnnotation*))filter {
     NSMutableArray* adps = [NSMutableArray array]; // @[ annotation, distance ]
     
-    for (NIAnnotation* annotation in self.publicAnnotations)
-        if (!filter || filter(annotation)) {
+    for (NIAnnotation* a in self.publicAnnotations)
+        if (!filter || filter(a)) {
             NSPoint closestPoint;
-            CGFloat distance = [annotation distanceToSlicePoint:location view:self closestPoint:&closestPoint];
-            [adps addObject:@[ annotation, [NSNumber valueWithCGFloat:distance], [NSValue valueWithPoint:closestPoint] ]];
+            CGFloat distance = [a distanceToSlicePoint:location cache:self.annotationsCaches[[NSValue valueWithPointer:a]] view:self closestPoint:&closestPoint];
+            [adps addObject:@[ a, [NSNumber valueWithCGFloat:distance], [NSValue valueWithPoint:closestPoint] ]];
         }
     
     [adps sortUsingComparator:^NSComparisonResult(NSArray* ad1, NSArray* ad2) {
@@ -166,9 +186,9 @@
 - (NSSet*)annotationsIntersectingWithSliceRect:(NSRect)sliceRect {
     NSMutableSet* rset = [NSMutableSet set];
     
-    for (NIAnnotation* annotation in self.publicAnnotations)
-        if ([annotation intersectsSliceRect:sliceRect view:self])
-            [rset addObject:annotation];
+    for (NIAnnotation* a in self.publicAnnotations)
+        if ([a intersectsSliceRect:sliceRect cache:self.annotationsCaches[[NSValue valueWithPointer:a]] view:self])
+            [rset addObject:a];
     
     return rset;
 }

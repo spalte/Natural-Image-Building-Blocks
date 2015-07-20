@@ -95,14 +95,14 @@
     return NO;
 }
 
-- (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view {
+- (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx {
     NIObliqueSliceGeneratorRequest* req = view.presentedGeneratorRequest;
     NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(req.sliceToDicomTransform);
     
     NIBezierPath* slicePath = [self.NIBezierPath bezierPathByApplyingTransform:dicomToSliceTransform];
     
     NSColor* color = self.color;
-    [[color colorWithAlphaComponent:color.alphaComponent*.2] set];
+    [[color colorWithAlphaComponent:color.alphaComponent*view.annotationsBaseAlpha] set];
     [slicePath.NSBezierPath stroke];
     
     // clip and draw the part in the current slab
@@ -124,7 +124,7 @@
     return [slicePath NSBezierPath];
 }
 
-- (CGFloat)distanceToSlicePoint:(NSPoint)point view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint {
+- (CGFloat)distanceToSlicePoint:(NSPoint)point cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint {
     NIBezierPath* slicePath = [self.NIBezierPath bezierPathByApplyingTransform:NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)];
     
     if (self.isSolid && [slicePath.NSBezierPath containsPoint:point]) {
@@ -139,7 +139,7 @@
     return NIVectorDistance(NIVectorMakeFromNSPoint(point), NIVectorZeroZ(closestVector));
 }
 
-- (BOOL)intersectsSliceRect:(NSRect)rect view:(NIAnnotatedGeneratorRequestView*)view {
+- (BOOL)intersectsSliceRect:(NSRect)rect cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view {
     NIBezierPath* slicePath = [self.NIBezierPath bezierPathByApplyingTransform:NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)];
     return [slicePath.NSBezierPath intersectsRect:rect];
 }

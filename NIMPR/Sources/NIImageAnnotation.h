@@ -10,9 +10,11 @@
 
 @interface NIImageAnnotation : NIRectangleAnnotation {
     NSImage* _image;
+    BOOL _colorify;
 }
 
 @property(retain) NSImage* image;
+@property BOOL colorify;
 
 - (instancetype)initWithImage:(NSImage*)image transform:(NIAffineTransform)sliceToDicomTransform;
 

@@ -13,6 +13,7 @@
 
 NSString* const NIAnnotationChangeNotification = @"NIAnnotationChange";
 NSString* const NIAnnotationChangeNotificationChangesKey = @"changes";
+NSString* const NIAnnotationDrawCache = @"NIAnnotationDrawCache";
 CGFloat const NIAnnotationDistant = 4;
 
 @interface NIAnnotation ()
@@ -79,24 +80,24 @@ CGFloat const NIAnnotationDistant = 4;
     return [NSSet set];
 }
 
-- (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view {
-    NSLog(@"Warning: -[%@ drawInView:] is missing", self.className);
+- (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx {
+    NSLog(@"Warning: -[%@ drawInView:cache:layer:context:] is missing", self.className);
     return nil;
 }
 
-- (void)glowInView:(NIAnnotatedGeneratorRequestView*)view path:(NSBezierPath*)path {
+- (void)glowInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx path:(NSBezierPath*)path {
     path = [[path copy] autorelease];
     path.lineWidth = path.lineWidth+1;
     [[self.color colorWithAlphaComponent:self.color.alphaComponent/3] set];
     [path stroke];
 }
 
-- (CGFloat)distanceToSlicePoint:(NSPoint)point view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint {
+- (CGFloat)distanceToSlicePoint:(NSPoint)point cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint {
     NSLog(@"Warning: -[%@ distanceToSlicePoint:view:closestPoint:] is missing", self.className);
     return CGFLOAT_MAX;
 }
 
-- (BOOL)intersectsSliceRect:(NSRect)rect view:(NIAnnotatedGeneratorRequestView*)view {
+- (BOOL)intersectsSliceRect:(NSRect)rect cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view {
     NSLog(@"Warning: -[%@ intersectsSliceRect:view:] is missing", self.className);
     return NO;
 }

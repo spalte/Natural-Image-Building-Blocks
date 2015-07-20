@@ -10,6 +10,8 @@
 
 extern NSString* const NIAnnotationChangeNotification; // to observe an annotation's changes you can either observe these notifications or observe the annotation's changed property
 
+extern NSString* const NIAnnotationDrawCache;
+
 extern CGFloat const NIAnnotationDistant;
 
 @interface NIAnnotation : NSObject {
@@ -31,11 +33,11 @@ extern CGFloat const NIAnnotationDistant;
 @property(readonly) BOOL annotation; // the value of this property is always YES, but you can observe it in order to observe changes in the annotation's properties
 + (NSSet*)keyPathsForValuesAffectingAnnotation;
 
-- (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view; // return the border path
-- (void)glowInView:(NIAnnotatedGeneratorRequestView*)view path:(NSBezierPath*)path;
+- (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx; // return the border path
+- (void)glowInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx path:(NSBezierPath*)path;
 
-- (CGFloat)distanceToSlicePoint:(NSPoint)point view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint; // point is on slice
-- (BOOL)intersectsSliceRect:(NSRect)rect view:(NIAnnotatedGeneratorRequestView*)view;
+- (CGFloat)distanceToSlicePoint:(NSPoint)point cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint; // point is on slice
+- (BOOL)intersectsSliceRect:(NSRect)rect cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view;
 
 - (NSSet*)handles;
 

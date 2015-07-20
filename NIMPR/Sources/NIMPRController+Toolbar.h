@@ -8,6 +8,10 @@
 
 #import "NIMPRController.h"
 
+extern NSString* const NIMPRControllerToolbarItemIdentifierTools;
+extern NSString* const NIMPRControllerToolbarItemIdentifierAnnotationTools;
+extern NSString* const NIMPRControllerToolbarItemIdentifierSlabWidth;
+
 @interface NIMPRController (Toolbar)
 
 - (id)toolClassForTag:(NIMPRToolTag)tag;

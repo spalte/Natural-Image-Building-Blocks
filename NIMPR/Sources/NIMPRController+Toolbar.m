@@ -65,17 +65,27 @@
 
 @implementation NIMPRController (Toolbar)
 
-static NSString* const NIMPRToolsToolbarItemIdentifier = @"NIMPRTools";
-static NSString* const NIMPRSlabWidthToolbarItemIdentifier = @"NIMPRSlabWidth";
+NSString* const NIMPRControllerToolbarItemIdentifierTools = @"NIMPRTools";
+NSString* const NIMPRControllerToolbarItemIdentifierAnnotationTools = @"NIMPRAnnotationTools";
+NSString* const NIMPRControllerToolbarItemIdentifierSlabWidth = @"NIMPRSlabWidth";
 
 - (NSArray*)tools {
+    return [self.navigationTools arrayByAddingObjectsFromArray:self.annotationTools];
+}
+
+- (NSArray*)navigationTools {
     static NSArray* tools = nil;
     if (!tools) tools = [@[ [NIMPRToolRecord toolWithTag:NIMPRToolWLWW label:NSLocalizedString(@"WL/WW", nil) image:[NIMPR image:@"Tool-WLWW"] handler:NIMPRWLWWTool.class],
                             [NIMPRToolRecord toolWithTag:NIMPRToolMove label:NSLocalizedString(@"Move", nil) image:[NIMPR image:@"Tool-Move"] handler:NIMPRMoveTool.class],
                             [NIMPRToolRecord toolWithTag:NIMPRToolZoom label:NSLocalizedString(@"Zoom", nil) image:[NIMPR image:@"Tool-Zoom"] handler:NIMPRZoomTool.class],
                             [NIMPRToolRecord toolWithTag:NIMPRToolRotate label:NSLocalizedString(@"Rotate", nil) image:[NIMPR image:@"Tool-Rotate"] handler:NIMPRRotateTool.class],
-                            [NIMPRToolRecord toolWithTag:NIMPRToolInteract label:NSLocalizedString(@"Interact", nil) image:[NSCursor.pointingHandCursor image] handler:NIMPRAnnotationInteractionTool.class],
-                            [NIMPRToolRecord toolWithTag:NIMPRToolAnnotatePoint label:NSLocalizedString(@"Point", nil) image:[NIMPR image:@"Tool-Annotate-Point"] handler:NIMPRAnnotatePointTool.class],
+                            [NIMPRToolRecord toolWithTag:NIMPRToolInteract label:NSLocalizedString(@"Interact", nil) image:[NSCursor.pointingHandCursor image] handler:NIMPRAnnotationInteractionTool.class] ] retain];
+    return tools;
+}
+
+- (NSArray*)annotationTools {
+    static NSArray* tools = nil;
+    if (!tools) tools = [@[ [NIMPRToolRecord toolWithTag:NIMPRToolAnnotatePoint label:NSLocalizedString(@"Point", nil) image:[NIMPR image:@"Tool-Annotate-Point"] handler:NIMPRAnnotatePointTool.class],
                             [NIMPRToolRecord toolWithTag:NIMPRToolAnnotateSegment label:NSLocalizedString(@"Segment", nil) image:[NIMPR image:@"Tool-Annotate-Segment"] handler:NIMPRAnnotateSegmentTool.class],
                             [NIMPRToolRecord toolWithTag:NIMPRToolAnnotateRectangle label:NSLocalizedString(@"Rectangle", nil) image:[NIMPR image:@"Tool-Annotate-Rectangle"] handler:NIMPRAnnotateRectangleTool.class],
                             [NIMPRToolRecord toolWithTag:NIMPRToolAnnotateEllipse label:NSLocalizedString(@"Ellipse", nil) image:[NIMPR image:@"Tool-Annotate-Ellipse"] handler:NIMPRAnnotateEllipseTool.class] ] retain];
@@ -89,29 +99,32 @@ static NSString* const NIMPRSlabWidthToolbarItemIdentifier = @"NIMPRSlabWidth";
 }
 
 - (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar {
-    return @[ NIMPRToolsToolbarItemIdentifier, NIMPRSlabWidthToolbarItemIdentifier ];
+    return @[ NIMPRControllerToolbarItemIdentifierTools, NIMPRControllerToolbarItemIdentifierSlabWidth ];
 }
 
 - (NSArray*)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar {
-    return @[ NIMPRToolsToolbarItemIdentifier, NIMPRSlabWidthToolbarItemIdentifier ];
+    return @[ NIMPRControllerToolbarItemIdentifierTools, NIMPRControllerToolbarItemIdentifierAnnotationTools, NSToolbarSpaceItemIdentifier, NIMPRControllerToolbarItemIdentifierSlabWidth, @"Test" ];
 }
 
 - (NSToolbarItem*)toolbar:(NSToolbar*)toolbar itemForItemIdentifier:(NSString*)identifier willBeInsertedIntoToolbar:(BOOL)flag {
     NSToolbarItem* item = [[[NSToolbarItem alloc] initWithItemIdentifier:identifier] autorelease];
-
-    if ([identifier isEqualToString:NIMPRToolsToolbarItemIdentifier]) {
-        item.label = NSLocalizedString(@"Mouse Tool", nil);
+    
+    NSDictionary* tas = @{ NIMPRControllerToolbarItemIdentifierTools: @[ NSLocalizedString(@"Navigation", nil), self.navigationTools ],
+                           NIMPRControllerToolbarItemIdentifierAnnotationTools: @[ NSLocalizedString(@"Annotations", nil), self.annotationTools ] };
+    
+    NSArray* ta = [tas objectForKey:identifier];
+    if (ta) {
+        item.label = ta[0];
         
         NIMPRSegmentedControl* seg = [[[NIMPRSegmentedControl alloc] initWithFrame:NSZeroRect] autorelease];
         NIMPRSegmentedCell* cell = [seg cell];
         
         NSMenu* menu = [[[NSMenu alloc] init] autorelease];
-        item.menuFormRepresentation = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Mouse Tool", nil) action:nil keyEquivalent:@""];
+        item.menuFormRepresentation = [[NSMenuItem alloc] initWithTitle:ta[0] action:nil keyEquivalent:@""];
         item.menuFormRepresentation.submenu = menu;
         
-        NSArray* tools = [self tools];
-        seg.segmentCount = tools.count;
-        [tools enumerateObjectsUsingBlock:^(NIMPRToolRecord* tool, NSUInteger i, BOOL* stop) {
+        seg.segmentCount = [ta[1] count];
+        [ta[1] enumerateObjectsUsingBlock:^(NIMPRToolRecord* tool, NSUInteger i, BOOL* stop) {
             [cell setTag:tool.tag forSegment:i];
             [seg setImage:tool.image forSegment:i];
             NSMenuItem* mi = [[NSMenuItem alloc] initWithTitle:tool.label action:nil keyEquivalent:@""];
@@ -125,7 +138,7 @@ static NSString* const NIMPRSlabWidthToolbarItemIdentifier = @"NIMPRSlabWidth";
         item.view = seg;
     }
     
-    if ([identifier isEqualToString:NIMPRSlabWidthToolbarItemIdentifier]) {
+    if ([identifier isEqualToString:NIMPRControllerToolbarItemIdentifierSlabWidth]) {
         item.label = NSLocalizedString(@"Slab Width", nil);
         
         NSSlider* slider = [[[NSSlider alloc] initWithFrame:NSZeroRect] autorelease];
@@ -147,13 +160,13 @@ static NSString* const NIMPRSlabWidthToolbarItemIdentifier = @"NIMPRSlabWidth";
 - (void)toolbarWillAddItem:(NSNotification*)notification {
     NSToolbarItem* item = notification.userInfo[@"item"];
     
-    if ([item.itemIdentifier isEqualToString:NIMPRToolsToolbarItemIdentifier]) {
+    if ([item.itemIdentifier isEqualToString:NIMPRControllerToolbarItemIdentifierTools] || [item.itemIdentifier isEqualToString:NIMPRControllerToolbarItemIdentifierAnnotationTools]) {
         NIMPRSegmentedControl* seg = (id)item.view;
         [seg.cell bind:@"selectedTag" toObject:self withKeyPath:@"ltoolTag" options:0];
         [seg.cell bind:@"rselectedTag" toObject:self withKeyPath:@"rtoolTag" options:0];
     }
     
-    if ([item.itemIdentifier isEqualToString:NIMPRSlabWidthToolbarItemIdentifier]) {
+    if ([item.itemIdentifier isEqualToString:NIMPRControllerToolbarItemIdentifierSlabWidth]) {
         NSSlider* slider = (id)item.view;
         [slider bind:@"value" toObject:self withKeyPath:@"slabWidth" options:0];
     }

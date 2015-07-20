@@ -26,7 +26,7 @@
     return self;
 }
 
-- (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view {
+- (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx {
     NIObliqueSliceGeneratorRequest* req = view.presentedGeneratorRequest;
 
     CGFloat distanceToPlane = CGFloatMax(NIVectorDistanceToPlane(self.vector, req.plane) - req.slabWidth/2, 0), maximumDistanceToPlane = view.maximumDistanceToPlane;
@@ -38,7 +38,7 @@
     
     NSColor* color = self.color;
     if (distanceToPlane > maximumDistanceToPlane)
-        color = [color colorWithAlphaComponent:color.alphaComponent*.2];
+        color = [color colorWithAlphaComponent:color.alphaComponent*view.annotationsBaseAlpha];
     
     NSBezierPath* path = [NSBezierPath bezierPathWithOvalInRect:ovalRect];
     
@@ -50,13 +50,13 @@
     return path;
 }
 
-- (CGFloat)distanceToSlicePoint:(NSPoint)point view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)closestPoint {
+- (CGFloat)distanceToSlicePoint:(NSPoint)point cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)closestPoint {
     NSPoint vpoint = NSPointFromNIVector(NIVectorApplyTransform(self.vector, NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)));
     if (closestPoint) *closestPoint = vpoint;
     return NIVectorDistance(NIVectorMakeFromNSPoint(point), NIVectorMakeFromNSPoint(vpoint));
 }
 
-- (BOOL)intersectsSliceRect:(NSRect)rect view:(NIAnnotatedGeneratorRequestView*)view {
+- (BOOL)intersectsSliceRect:(NSRect)rect cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view {
     NSPoint point = NSPointFromNIVector(NIVectorApplyTransform(self.vector, NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)));
     return NSPointInRect(point, rect);
 }

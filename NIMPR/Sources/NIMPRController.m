@@ -276,6 +276,7 @@
         NIAffineTransform planeToDicomTransform = NIAffineTransformTranslate(req.sliceToDicomTransform, center.x-image.size.width/2, center.y-image.size.height/2, 0);
         
         NIImageAnnotation* ia = [[NIImageAnnotation alloc] initWithImage:image transform:planeToDicomTransform];
+        ia.colorify = YES;
         
         [self.publicAnnotations addObject:ia];
     }];

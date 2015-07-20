@@ -14,9 +14,12 @@
     CALayer* _annotationsLayer;
     NSMutableSet* _annotations;
     NSMutableSet* _glowingAnnotations;
+    CGFloat _annotationsBaseAlpha;
+    NSMutableDictionary* _annotationsCaches;
 }
 
-@property (readonly, retain) CALayer* annotationsLayer;
+@property(readonly, retain) CALayer* annotationsLayer;
+@property CGFloat annotationsBaseAlpha;
 
 - (NSMutableSet*)publicAnnotations;
 - (NSMutableSet*)publicGlowingAnnotations;

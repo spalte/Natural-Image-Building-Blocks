@@ -16,6 +16,12 @@
 
 @end
 
+@interface NSNull (NIMPR)
+
++ (id)either:(id)obj;
+
+@end
+
 //@interface NSDictionary (NIMPRAdditions)
 //
 //@end
@@ -28,6 +34,12 @@
 
 - (NSPoint)convertPointToScreen:(NSPoint)point;
 - (NSPoint)convertPointFromScreen:(NSPoint)point;
+
+@end
+
+@interface NSException(NIMPR)
+
+- (void)log;
 
 @end
 
