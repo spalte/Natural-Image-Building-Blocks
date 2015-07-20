@@ -7,6 +7,7 @@
 //
 
 #import "NIImageAnnotation.h"
+#import <Quartz/Quartz.h>
 
 typedef struct {
     CGFloat x, y, z, u, v;
@@ -52,11 +53,11 @@ static NSString* const NIImageAnnotationImage = @"NIImageAnnotationImage";
     NSMutableDictionary* cached = cache[NIAnnotationDrawCache];
     if (!cached) cached = cache[NIAnnotationDrawCache] = [NSMutableDictionary dictionary];
     
-    NSImage* image = cached[NIImageAnnotationImage];
-    if (!image) {
-        image = cached[NIImageAnnotationImage] = [[[NSImage alloc] initWithSize:view.bounds.size] autorelease];
+    NSImage* cimage = cached[NIImageAnnotationImage];
+    if (!cimage) {
+        cimage = cached[NIImageAnnotationImage] = [[[NSImage alloc] initWithSize:view.bounds.size] autorelease];
 
-        [image lockFocus];
+        [cimage lockFocus];
         @try {
             NSGraphicsContext* context = [NSGraphicsContext currentContext];
             CGContextRef ctx = [context CGContext];
@@ -71,15 +72,17 @@ static NSString* const NIImageAnnotationImage = @"NIImageAnnotationImage";
             NSAffineTransform* nsat = [NSAffineTransform transform];
             nsat.transformStruct = nsatts;
             [nsat set];
-            
+
+            NSImageRep* irep = [[self.image.representations.lastObject copy] autorelease];
+
             if (pipath.elementCount) {
                 [pipath.NSBezierPath setClip];
                 
-                if (!self.colorify)
-                    [self.image drawInRect:self.bounds fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:self.color.alphaComponent];
-                else {
-                    NSRect bounds = self.bounds; CGImageRef image = [self.image CGImageForProposedRect:&bounds context:context hints:nil];
-                    CGContextClipToMask(ctx, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height), image);
+                if (!self.colorify) {
+                    [irep drawAtPoint:NSZeroPoint];
+                } else {
+                    NSRect bounds = self.bounds; CGImageRef cgi = [irep CGImageForProposedRect:&bounds context:context hints:nil];
+                    CGContextClipToMask(ctx, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height), cgi);
                     [self.color set];
                     CGContextFillRect(ctx, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height));
                 }
@@ -91,25 +94,25 @@ static NSString* const NIImageAnnotationImage = @"NIImageAnnotationImage";
                 [clip setClip];
             }
             
-            if (!self.colorify)
-                [self.image drawInRect:self.bounds fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:self.color.alphaComponent*view.annotationsBaseAlpha];
-            else {
+            if (!self.colorify) {
+                [irep drawAtPoint:NSZeroPoint];
+            } else {
+                NSRect bounds = self.bounds; CGImageRef cgi = [irep CGImageForProposedRect:&bounds context:context hints:nil];
+                CGContextClipToMask(ctx, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height), cgi);
                 [[self.color colorWithAlphaComponent:self.color.alphaComponent*view.annotationsBaseAlpha] set];
-                NSRect bounds = self.bounds; CGImageRef image = [self.image CGImageForProposedRect:&bounds context:context hints:nil];
-                CGContextClipToMask(ctx, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height), image);
                 CGContextFillRect(ctx, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height));
             }
         } @catch (NSException* e) {
             [e log];
         } @finally {
-            [image unlockFocus];
+            [cimage unlockFocus];
         }
     }
     
     [NSGraphicsContext saveGraphicsState];
     [[NSAffineTransform transform] set];
     
-    [image drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1];
+    [cimage drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1];
 
     [NSGraphicsContext restoreGraphicsState];
 
