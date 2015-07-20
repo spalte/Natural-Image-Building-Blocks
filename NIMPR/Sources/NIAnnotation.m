@@ -86,10 +86,16 @@ CGFloat const NIAnnotationDistant = 4;
 }
 
 - (void)glowInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx path:(NSBezierPath*)path {
+    [NSGraphicsContext saveGraphicsState];
+    NSGraphicsContext* context = [NSGraphicsContext currentContext];
+    
     path = [[path copy] autorelease];
     path.lineWidth = path.lineWidth+1;
-    [[self.color colorWithAlphaComponent:self.color.alphaComponent/3] set];
+    [[NSColor highlightColor] set];
+    [context setCompositingOperation:NSCompositeHighlight];
     [path stroke];
+    
+    [NSGraphicsContext restoreGraphicsState];
 }
 
 - (CGFloat)distanceToSlicePoint:(NSPoint)point cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint {
