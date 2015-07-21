@@ -11,7 +11,6 @@
 @interface NIImageAnnotation : NIRectangleAnnotation {
     NSImage* _image;
     BOOL _colorify;
-    NSAffineTransform* _ptransform;
 }
 
 @property(retain) NSImage* image;
