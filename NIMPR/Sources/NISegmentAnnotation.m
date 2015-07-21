@@ -34,10 +34,17 @@
     return path;
 }
 
-- (NSSet*)handles {
+- (NSSet*)handlesInView:(NIAnnotatedGeneratorRequestView*)view {
+    NIAffineTransform planeToSliceTransform = NIAffineTransformConcat(self.planeToDicomTransform, NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform));
     return [NSSet setWithObjects:
-            [NIAnnotationHandle handleWithVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(self.p), self.planeToDicomTransform)],
-            [NIAnnotationHandle handleWithVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(self.q), self.planeToDicomTransform)], nil];
+            [NIHandlerPlaneAnnotationHandle handleAtSliceVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(self.p), planeToSliceTransform) annotation:self
+                                                        handler:^(NIAnnotatedGeneratorRequestView* view, NIVector d) {
+                                                            self.p = NSMakePoint(self.p.x+d.x, self.p.y+d.y);
+                                                        }],
+            [NIHandlerPlaneAnnotationHandle handleAtSliceVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(self.q), planeToSliceTransform) annotation:self
+                                                        handler:^(NIAnnotatedGeneratorRequestView* view, NIVector d) {
+                                                            self.q = NSMakePoint(self.q.x+d.x, self.q.y+d.y);
+                                                        }], nil];
 }
 
 @end

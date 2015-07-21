@@ -7,6 +7,7 @@
 //
 
 #import "NIRectangleAnnotation.h"
+#import "NIAnnotationHandle.h"
 
 @implementation NIRectangleAnnotation
 
@@ -28,13 +29,42 @@
     return [NSBezierPath bezierPathWithRect:self.bounds];
 }
 
-- (NSSet*)handles {
+- (NSSet*)handlesInView:(NIAnnotatedGeneratorRequestView*)view {
+    NIAffineTransform planeToSliceTransform = NIAffineTransformConcat(self.planeToDicomTransform, NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform));
     NSRect b = self.bounds;
     return [NSSet setWithObjects:
-            [NIAnnotationHandle handleWithVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(b.origin), self.planeToDicomTransform)],
-            [NIAnnotationHandle handleWithVector:NIVectorApplyTransform(NIVectorMake(b.origin.x+b.size.width, b.origin.y, 0), self.planeToDicomTransform)],
-            [NIAnnotationHandle handleWithVector:NIVectorApplyTransform(NIVectorMake(b.origin.x+b.size.width, b.origin.y+b.size.height, 0), self.planeToDicomTransform)],
-            [NIAnnotationHandle handleWithVector:NIVectorApplyTransform(NIVectorMake(b.origin.x, b.origin.y+b.size.height, 0), self.planeToDicomTransform)], nil];
+            [NIHandlerPlaneAnnotationHandle handleAtSliceVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(b.origin), planeToSliceTransform) annotation:self
+                                                        handler:^(NIAnnotatedGeneratorRequestView* view, NIVector pd) {
+                                                            NSRect b = self.bounds;
+                                                            b.origin.x += pd.x;
+                                                            b.size.width -= pd.x;
+                                                            b.origin.y += pd.y;
+                                                            b.size.height -= pd.y;
+                                                            self.bounds = b;
+                                                        }],
+            [NIHandlerPlaneAnnotationHandle handleAtSliceVector:NIVectorApplyTransform(NIVectorMake(b.origin.x+b.size.width, b.origin.y, 0), planeToSliceTransform) annotation:self
+                                                        handler:^(NIAnnotatedGeneratorRequestView* view, NIVector pd) {
+                                                            NSRect b = self.bounds;
+                                                            b.size.width += pd.x;
+                                                            b.origin.y += pd.y;
+                                                            b.size.height -= pd.y;
+                                                            self.bounds = b;
+                                                        }],
+            [NIHandlerPlaneAnnotationHandle handleAtSliceVector:NIVectorApplyTransform(NIVectorMake(b.origin.x+b.size.width, b.origin.y+b.size.height, 0), planeToSliceTransform) annotation:self
+                                                        handler:^(NIAnnotatedGeneratorRequestView* view, NIVector pd) {
+                                                            NSRect b = self.bounds;
+                                                            b.size.width += pd.x;
+                                                            b.size.height += pd.y;
+                                                            self.bounds = b;
+                                                        }],
+            [NIHandlerPlaneAnnotationHandle handleAtSliceVector:NIVectorApplyTransform(NIVectorMake(b.origin.x, b.origin.y+b.size.height, 0), planeToSliceTransform) annotation:self
+                                                        handler:^(NIAnnotatedGeneratorRequestView* view, NIVector pd) {
+                                                            NSRect b = self.bounds;
+                                                            b.origin.x += pd.x;
+                                                            b.size.width -= pd.x;
+                                                            b.size.height += pd.y;
+                                                            self.bounds = b;
+                                                        }], nil];
 }
 
 @end

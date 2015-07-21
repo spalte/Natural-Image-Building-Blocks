@@ -180,18 +180,31 @@
 
 @implementation NSMutableSet (NIMPR)
 
-- (void)set:(NSSet*)set {
+- (void)set:(id)set {
+    if (!set)
+        set = [NSSet set];
+    if ([set isKindOfClass:NSArray.class])
+        set = [NSSet setWithArray:set];
+    if (![set isKindOfClass:NSSet.class])
+        set = [NSSet setWithObject:set];
     [self intersectSet:set];
     [self unionSet:set];
 }
 
 @end
 
-extern CGFloat NIMPR_CGFloatMax(CGFloat lha, CGFloat rha) {
+CGFloat NIMPR_CGFloatMax(CGFloat lha, CGFloat rha) {
     return lha > rha ? lha : rha;
 }
 
-extern CGFloat NIMPR_CGFloatMin(CGFloat lha, CGFloat rha) {
+CGFloat NIMPR_CGFloatMin(CGFloat lha, CGFloat rha) {
     return lha < rha ? lha : rha;
 }
 
+CGFloat NIMPR_CGFloatAbs(CGFloat f) {
+    return f >= 0 ? f : -f;
+}
+
+CGFloat NIMPR_CGFloatSign(CGFloat f) {
+    return f >= 0 ? 1 : -1;
+}

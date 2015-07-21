@@ -9,6 +9,7 @@
 #import <NIBuildingBlocks/NIBuildingBlocks.h>
 
 @class NIAnnotation;
+@class NIAnnotationHandle;
 
 @interface NIAnnotatedGeneratorRequestView : NIGeneratorRequestView {
     CALayer* _annotationsLayer;
@@ -35,6 +36,8 @@
 - (NIAnnotation*)annotationClosestToSlicePoint:(NSPoint)location closestPoint:(NSPoint*)closestPoint distance:(CGFloat*)distance filter:(BOOL (^)(NIAnnotation* annotation))filter;
 
 - (NSSet*)annotationsIntersectingWithSliceRect:(NSRect)sliceRect;
+
+- (NIAnnotationHandle*)handleForSlicePoint:(NSPoint)location;
 
 @end
 

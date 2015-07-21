@@ -19,10 +19,6 @@
 
 @synthesize mode = _mode;
 
-- (void)dealloc {
-    [super dealloc];
-}
-
 - (BOOL)view:(NIMPRView *)view mouseMoved:(NSEvent *)event {
     [self view:view flagsChanged:event];
     return NO;
@@ -88,6 +84,8 @@
 
 - (BOOL)view:(NIMPRView*)view mouseUp:(NSEvent*)event {
     if (self.mode == NIMPRAnnotationSelectionInteractionToolMode) {
+        [view.toolsLayer setNeedsDisplay];
+    
         if (self.mouseDownEvent.modifierFlags&NSShiftKeyMask) {
             if (self.mouseDownEvent.modifierFlags&NSAlternateKeyMask)
                 [view.mutableSelectedAnnotations minusSet:view.highlightedAnnotations];
@@ -95,11 +93,8 @@
         } else [view.mutableSelectedAnnotations set:view.highlightedAnnotations];
     }
 
-    [super view:view mouseUp:event];
-
     [self view:view flagsChanged:event];
-    
-    [view.toolsLayer setNeedsDisplay];
+    [super view:view mouseUp:event];
     
     return NO;
 }

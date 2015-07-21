@@ -45,7 +45,7 @@
 
 @interface NSMutableSet (NIMPR)
 
-- (void)set:(NSSet*)set;
+- (void)set:(id)set; // an object or a NSSet of objects
 
 @end
 
@@ -53,6 +53,10 @@
 extern CGFloat NIMPR_CGFloatMax(CGFloat lha, CGFloat rha);
 #define CGFloatMin NIMPR_CGFloatMin
 extern CGFloat NIMPR_CGFloatMin(CGFloat lha, CGFloat rha);
+#define CGFloatAbs NIMPR_CGFloatAbs
+extern CGFloat NIMPR_CGFloatAbs(CGFloat f);
+#define CGFloatSign NIMPR_CGFloatSign
+extern CGFloat NIMPR_CGFloatSign(CGFloat f);
 
 // from https://gist.github.com/Kentzo/1985919
 #ifndef CGFLOAT_EPSILON

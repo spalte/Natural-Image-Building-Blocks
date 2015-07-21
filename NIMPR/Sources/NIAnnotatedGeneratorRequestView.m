@@ -8,6 +8,7 @@
 
 #import "NIAnnotatedGeneratorRequestView.h"
 #import "NIAnnotation.h"
+#import "NIAnnotationHandle.h"
 
 @interface NIAnnotatedGeneratorRequestView ()
 
@@ -114,6 +115,11 @@
     return CGFloatMax((req.pixelSpacingX+req.pixelSpacingY+req.pixelSpacingZ)/3, CGFLOAT_EPSILON);
 }
 
++ (NSBezierPath*)NSBezierPathForHandle:(NIAnnotationHandle*)handle {
+    NSPoint p = handle.slicePoint;
+    return [NSBezierPath bezierPathWithRect:NSMakeRect(p.x-NIAnnotationHandleSize/2, p.y-NIAnnotationHandleSize/2, NIAnnotationHandleSize, NIAnnotationHandleSize)];
+}
+
 - (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx {
     if (layer == self.annotationsLayer) {
         [NSGraphicsContext saveGraphicsState];
@@ -131,16 +137,12 @@
                 [glowing_acbs addObject:@[ a, cache, [NSNull either:border] ]];
         }
         
-        NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(self.presentedGeneratorRequest.sliceToDicomTransform);
-        
         [NSColor.selectedTextBackgroundColor set];
         for (NSArray* acb in selected_acbs)
             [acb[0] highlightWithColor:NSColor.selectedTextBackgroundColor inView:self cache:acb[1] layer:layer context:ctx path:[acb[2] if:NSBezierPath.class]];
         for (NSArray* acb in selected_acbs)
-            for (NIAnnotationHandle* handle in [acb[0] handles]) {
-                NSPoint point = NSPointFromNIVector(NIVectorApplyTransform(handle.vector, dicomToSliceTransform));
-                [[NSBezierPath bezierPathWithRect:NSMakeRect(point.x-NIAnnotationHandleSize/2, point.y-NIAnnotationHandleSize/2, NIAnnotationHandleSize, NIAnnotationHandleSize)] fill];
-            }
+            for (NIAnnotationHandle* handle in [acb[0] handlesInView:self])
+                [[self.class NSBezierPathForHandle:handle] fill];
         
         NSColor* color = [NSColor highlightColor];
         for (NSArray* acb in glowing_acbs)
@@ -228,6 +230,14 @@
             [rset addObject:a];
     
     return rset;
+}
+
+- (NIAnnotationHandle*)handleForSlicePoint:(NSPoint)location {
+    for (NIAnnotation* a in self.selectedAnnotations)
+        for (NIAnnotationHandle* h in [a handlesInView:self])
+            if ([[self.class NSBezierPathForHandle:h] containsPoint:location])
+                return h;
+    return nil;
 }
 
 @end

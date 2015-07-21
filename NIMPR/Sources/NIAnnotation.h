@@ -41,18 +41,12 @@ extern CGFloat const NIAnnotationDistant;
 - (CGFloat)distanceToSlicePoint:(NSPoint)point cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint; // point is on slice
 - (BOOL)intersectsSliceRect:(NSRect)rect cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view;
 
-- (NSSet*)handles;
+- (NSSet*)handlesInView:(NIAnnotatedGeneratorRequestView*)view;
 
 @end
 
-extern const CGFloat NIAnnotationHandleSize;
+@protocol NIPlaneAnnotation <NSObject>
 
-@interface NIAnnotationHandle : NSObject {
-    NIVector _vector;
-}
-
-@property NIVector vector;
-
-+ (instancetype)handleWithVector:(NIVector)vector;
+- (NIAffineTransform)planeToDicomTransform;
 
 @end

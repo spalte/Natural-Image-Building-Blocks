@@ -22,9 +22,16 @@
 
 - (BOOL)view:(NIMPRView *)view mouseDragged:(NSEvent *)event {
     [super view:view mouseDragged:event];
+    
     NSRect bounds = self.annotation.bounds;
     bounds.size = NSMakeSize(self.currentLocation.x-self.mouseDownLocation.x, self.currentLocation.y-self.mouseDownLocation.y);
+    if (self.mouseDownEvent.modifierFlags&NSShiftKeyMask) {
+        CGFloat m = CGFloatMax(CGFloatAbs(bounds.size.width), CGFloatAbs(bounds.size.height));
+        bounds.size = NSMakeSize(m*CGFloatSign(bounds.size.width), m*CGFloatSign(bounds.size.height));
+    }
+    
     self.annotation.bounds = bounds;
+    
     return YES;
 }
 

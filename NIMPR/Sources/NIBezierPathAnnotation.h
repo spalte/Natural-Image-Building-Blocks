@@ -7,6 +7,7 @@
 //
 
 #import "NIAnnotation.h"
+#import "NIAnnotationHandle.h"
 
 @interface NIBezierPathAnnotation : NIAnnotation
 
@@ -18,7 +19,7 @@
 
 @end
 
-@interface NINSBezierPathAnnotation : NIBezierPathAnnotation {
+@interface NINSBezierPathAnnotation : NIBezierPathAnnotation <NIPlaneAnnotation> {
     NIAffineTransform _planeToDicomTransform;
 }
 

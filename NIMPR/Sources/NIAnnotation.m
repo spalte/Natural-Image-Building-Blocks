@@ -133,7 +133,7 @@ static NSColor* NIAnnotationDefaultColor = nil;
     return [self.class defaultColor];
 }
 
-- (NSSet*)handles {
+- (NSSet*)handlesInView:(NIAnnotatedGeneratorRequestView*)view {
     return [NSSet set];
 }
 
@@ -155,23 +155,4 @@ static NSColor* NIAnnotationDefaultColor = nil;
 
 @end
 
-const CGFloat NIAnnotationHandleSize = 4;
-
-@implementation NIAnnotationHandle
-
-@synthesize vector = _vector;
-
-+ (instancetype)handleWithVector:(NIVector)vector {
-    return [[[self.class alloc] initWithVector:vector] autorelease];
-}
-
-- (instancetype)initWithVector:(NIVector)vector {
-    if ((self = [super init])) {
-        self.vector = vector;
-    }
-    
-    return self;
-}
-
-@end
 

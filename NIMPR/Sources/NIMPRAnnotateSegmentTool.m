@@ -22,7 +22,9 @@
 
 - (BOOL)view:(NIMPRView *)view mouseDragged:(NSEvent *)event {
     [super view:view mouseDragged:event];
+    
     self.annotation.q = self.currentLocation;
+    
     return YES;
 }
 

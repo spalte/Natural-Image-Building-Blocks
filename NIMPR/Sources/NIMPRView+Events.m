@@ -14,6 +14,7 @@
 #import <NIBuildingBlocks/NIIntersection.h>
 #import "NIMPRController.h"
 #import "NIMPRAnnotationInteractionTool.h"
+#import "NIMPRAnnotationHandleInteractionTool.h"
 #import <objc/runtime.h>
 
 @implementation NIMPRView (Events)
@@ -69,7 +70,7 @@
             [view hover:event location:[view convertPoint:event.locationInWindow fromView:nil]];
         else {
             if (event.clickCount == 2)
-                self.ltcAtSecondClick = [self toolForLocation:[view convertPoint:event.locationInWindow fromView:nil] event:nil/* annotation:NULL*/];
+                self.ltcAtSecondClick = [self toolForLocation:[view convertPoint:event.locationInWindow fromView:nil] event:nil];
             if (event.clickCount >= 2) {
                 if (self.ltcAtSecondClick == NIMPRRotateAxisTool.class) {
                     if (event.clickCount == 2)
@@ -167,6 +168,12 @@
                 case 'r': {
                     [self.window.windowController reset];
                 } break;
+                case 'a': {
+                    [self.mutableSelectedAnnotations set:self.annotations];
+                } break;
+                case 0x7f: {
+                    [self.mutableAnnotations removeAllObjects];
+                } break;
             }
         
         if (tool)
@@ -195,16 +202,7 @@
     if (!event)
         event = [NSApp currentEvent];
 
-//    NIAnnotation* annotation = nil;
-    Class ltc = [self toolForLocation:location event:event/* annotation:&annotation*/];
-
-//    if (annotation && [self.mutableHighlightedAnnotations containsObject:annotation])
-//        [self.mutableHighlightedAnnotations intersectSet:[NSSet setWithObject:annotation]];
-//    else {
-//        [self.mutableHighlightedAnnotations removeAllObjects];
-//        if (annotation)
-//            [self.mutableHighlightedAnnotations addObject:annotation];
-//    }
+    Class ltc = [self toolForLocation:location event:event];
     
     if (self.ltool.class != ltc) {
         self.ltool = [[[ltc alloc] init] autorelease];
@@ -227,11 +225,15 @@
         self.rtool = [[[rtc alloc] init] autorelease];
 }
 
-- (Class)toolForLocation:(NSPoint)location event:(NSEvent*)event /*annotation:(NIAnnotation**)rannotation*/ {
+- (Class)toolForLocation:(NSPoint)location event:(NSEvent*)event {
     if (event.type == NSMouseExited)
         return nil;
     if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSCommandKeyMask)
         return nil;
+    
+    NIAnnotationHandle* h = [self handleForSlicePoint:location];
+    if (h)
+        return NIMPRAnnotationHandleInteractionTool.class;
     
     CGFloat distance;
     NSString* ikey = [self intersectionClosestToPoint:location closestPoint:NULL distance:&distance];
@@ -269,8 +271,6 @@
         NIAnnotation* annotation = [self annotationAtLocation:location];
         if (annotation)
             ltc = NIMPRAnnotationInteractionTool.class;
-//        if (rannotation)
-//            *rannotation = annotation;
     }
     
     return ltc;

@@ -25,18 +25,21 @@ typedef struct {
 - (instancetype)initWithImage:(NSImage*)image transform:(NIAffineTransform)sliceToDicomTransform {
     if ((self = [super initWithTransform:sliceToDicomTransform])) {
         self.image = image;
+        _ptransform = [[NSAffineTransform alloc] init];
     }
     
     return self;
 }
 
 - (void)dealloc {
+    [_ptransform release];
     [_image release]; _image = nil;
     [super dealloc];
 }
 
 - (NSRect)bounds {
-    return NSMakeRect(0, 0, self.image.size.width, self.image.size.height);
+    NSRect r = {[_ptransform transformPoint:NSZeroPoint], [_ptransform transformSize:self.image.size]};
+    return r;
 }
 
 - (void)setBounds:(NSRect)bounds {
@@ -195,9 +198,9 @@ static NSString* const NIImageAnnotationProjectedMask = @"NIImageAnnotationProje
 }
 
 - (BOOL)intersectsSliceRect:(NSRect)hitRect cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view {
-    if (![super intersectsSliceRect:hitRect cache:cache view:view])
-        return NO;
-    
+//    if (![super intersectsSliceRect:hitRect cache:cache view:view])
+//        return NO;
+//    
     NSMutableDictionary* cached = cache[NIAnnotationDrawCache];
     NSImage* image = cached[NIImageAnnotationProjectedRender];
     

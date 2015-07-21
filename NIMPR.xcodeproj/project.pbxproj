@@ -45,6 +45,8 @@
 		719CC54A1B1449ED00DC1ED5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 719CC5491B1449ED00DC1ED5 /* Images.xcassets */; };
 		719D02AA1AC1D367002F76C1 /* NIMPRPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 719D02A91AC1D367002F76C1 /* NIMPRPlugin.m */; };
 		71B249301B18886F00F8E0AD /* NIMPRWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B2492F1B18886F00F8E0AD /* NIMPRWindow.m */; };
+		71FD92321B5E750C0041E95F /* NIMPRAnnotationHandleInteractionTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 71FD92311B5E750C0041E95F /* NIMPRAnnotationHandleInteractionTool.m */; };
+		71FD92361B5E7FC90041E95F /* NIAnnotationHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 71FD92351B5E7FC90041E95F /* NIAnnotationHandle.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -134,6 +136,10 @@
 		719D02A91AC1D367002F76C1 /* NIMPRPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRPlugin.m; sourceTree = "<group>"; };
 		71B2492E1B18886F00F8E0AD /* NIMPRWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRWindow.h; sourceTree = "<group>"; };
 		71B2492F1B18886F00F8E0AD /* NIMPRWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRWindow.m; sourceTree = "<group>"; };
+		71FD92301B5E750C0041E95F /* NIMPRAnnotationHandleInteractionTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRAnnotationHandleInteractionTool.h; sourceTree = "<group>"; };
+		71FD92311B5E750C0041E95F /* NIMPRAnnotationHandleInteractionTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRAnnotationHandleInteractionTool.m; sourceTree = "<group>"; };
+		71FD92341B5E7FC90041E95F /* NIAnnotationHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIAnnotationHandle.h; sourceTree = "<group>"; };
+		71FD92351B5E7FC90041E95F /* NIAnnotationHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIAnnotationHandle.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,6 +194,8 @@
 				712F626A1B4D5FC4004AC1AE /* NIAnnotatedGeneratorRequestView.m */,
 				712F62711B4D6DC0004AC1AE /* NIAnnotation.h */,
 				712F62721B4D6DC0004AC1AE /* NIAnnotation.m */,
+				71FD92341B5E7FC90041E95F /* NIAnnotationHandle.h */,
+				71FD92351B5E7FC90041E95F /* NIAnnotationHandle.m */,
 				712F62741B4D7172004AC1AE /* NIPointAnnotation.h */,
 				712F62751B4D7172004AC1AE /* NIPointAnnotation.m */,
 				712F627D1B4FDB79004AC1AE /* NISegmentAnnotation.h */,
@@ -223,6 +231,8 @@
 				712F62811B4FDFFD004AC1AE /* NIMPRAnnotateTool.m */,
 				714D19D11B564FD300EBA644 /* NIMPRAnnotationInteractionTool.h */,
 				714D19D21B564FD300EBA644 /* NIMPRAnnotationInteractionTool.m */,
+				71FD92301B5E750C0041E95F /* NIMPRAnnotationHandleInteractionTool.h */,
+				71FD92311B5E750C0041E95F /* NIMPRAnnotationHandleInteractionTool.m */,
 				712F62651B4D56D8004AC1AE /* NIMPRAnnotatePointTool.h */,
 				712F62661B4D56D8004AC1AE /* NIMPRAnnotatePointTool.m */,
 				712F62831B50076E004AC1AE /* NIMPRAnnotateSegmentTool.h */,
@@ -431,12 +441,14 @@
 				714D19DA1B57F5AC00EBA644 /* NSBezierPath+NIMPR.m in Sources */,
 				714D19CF1B54010400EBA644 /* NIImageAnnotation.m in Sources */,
 				719CC53E1B0E039E00DC1ED5 /* NSMenu+NIMPR.m in Sources */,
+				71FD92361B5E7FC90041E95F /* NIAnnotationHandle.m in Sources */,
 				719D02AA1AC1D367002F76C1 /* NIMPRPlugin.m in Sources */,
 				7133412A1B147DF50014CE09 /* NIMPRWLWWTool.m in Sources */,
 				719473611B1D9802009363AE /* NIMPR.m in Sources */,
 				714D19C91B53C42100EBA644 /* NIRectangleAnnotation.m in Sources */,
 				712F627C1B4ED30E004AC1AE /* NIBezierPathAnnotation.m in Sources */,
 				719CC5261B0B1C2800DC1ED5 /* NIMPRView.m in Sources */,
+				71FD92321B5E750C0041E95F /* NIMPRAnnotationHandleInteractionTool.m in Sources */,
 				712F62851B50076E004AC1AE /* NIMPRAnnotateSegmentTool.m in Sources */,
 				713341301B147E360014CE09 /* NIMPRMoveTool.m in Sources */,
 				713341251B146EE50014CE09 /* NIMPRController+Toolbar.m in Sources */,

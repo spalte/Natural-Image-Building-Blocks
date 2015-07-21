@@ -7,7 +7,8 @@
 //
 
 #import "NIPointAnnotation.h"
-#import <NIBuildingBlocks/NIGeneratorRequest.h>
+#import "NIAnnotationHandle.h"
+//#import <NIBuildingBlocks/NIGeneratorRequest.h>
 
 @implementation NIPointAnnotation
 
@@ -65,9 +66,12 @@
     return NSPointInRect(point, rect);
 }
 
-- (NSSet*)handles {
+- (NSSet*)handlesInView:(NIAnnotatedGeneratorRequestView*)view {
     return [NSSet setWithObjects:
-            [NIAnnotationHandle handleWithVector:self.vector], nil];
+            [NIHandlerAnnotationHandle handleAtSlicePoint:NSPointFromNIVector(NIVectorApplyTransform(self.vector, NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)))
+                                                  handler:^(NIAnnotatedGeneratorRequestView* view, NIVector deltaDicomVector) {
+                                                      self.vector = NIVectorAdd(self.vector, deltaDicomVector);
+                                                  }], nil];
 }
 
 @end

@@ -116,7 +116,7 @@
     // points
     
     const CGFloat radius = 0.5;
-    for (NSValue* pv in [slicePath intersectionsWithPlane:NIPlaneMake(NIVectorZero,NIVectorZBasis)]) { // TODO: maybe only draw these where the corresponding bezier line segment has distance(bp,ep) < 1 to avoid drawing twice (especially for when we'll have opacity)
+    for (NSValue* pv in [slicePath intersectionsWithPlane:NIPlaneZZero]) { // TODO: maybe only draw these where the corresponding bezier line segment has distance(bp,ep) < 1 to avoid drawing twice (especially for when we'll have opacity)
         NIVector p = pv.NIVectorValue;
         [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(p.x-radius, p.y-radius, radius*2, radius*2)] fill];
     }
