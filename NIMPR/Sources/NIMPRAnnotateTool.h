@@ -16,3 +16,7 @@
 @property(retain) id annotation;
 
 @end
+
+@interface NIMPRValidatedAnnotateTool : NIMPRAnnotateTool
+
+@end

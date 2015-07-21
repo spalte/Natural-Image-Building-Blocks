@@ -26,6 +26,10 @@
     return self;
 }
 
+- (void)translate:(NIVector)translation {
+    self.vector = NIVectorAdd(self.vector, translation);
+}
+
 - (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx {
     NIObliqueSliceGeneratorRequest* req = view.presentedGeneratorRequest;
 

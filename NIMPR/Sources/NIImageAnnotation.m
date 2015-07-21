@@ -140,7 +140,7 @@ static NSString* const NIImageAnnotationProjectedMask = @"NIImageAnnotationProje
     return nil;
 }
 
-- (void)glowInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx path:(NSBezierPath*)path {
+- (void)highlightWithColor:(NSColor*)color inView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx path:(NSBezierPath*)path {
     NSMutableDictionary* cached = cache[NIAnnotationDrawCache];
     NSImage* cmask = cached[NIImageAnnotationProjectedMask];
 
@@ -153,8 +153,8 @@ static NSString* const NIImageAnnotationProjectedMask = @"NIImageAnnotationProje
         CGContextClipToMask(context.CGContext, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height), [cmask CGImageForProposedRect:&bounds context:context hints:nil]);
     }
     
-    [[NSColor highlightColor] set];
-    [context setCompositingOperation:NSCompositeHighlight];
+    [color set];
+    [context setCompositingOperation:NSCompositeSourceOver]; // NSCompositeHighlight
     CGContextFillRect(context.CGContext, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height));
 
     [NSGraphicsContext restoreGraphicsState];

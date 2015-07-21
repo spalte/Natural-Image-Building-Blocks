@@ -38,7 +38,7 @@
     [view rotate:-rads axis:view.normal.vector];
 }
 
-- (NSArray*)cursors {
+- (NSArray*)cursorsForView:(NIMPRView*)view {
     return @[ NSCursor.openHandCursor, NSCursor.closedHandCursor ];
 }
 

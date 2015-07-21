@@ -37,9 +37,15 @@
 
 @end
 
-@interface NSException(NIMPR)
+@interface NSException (NIMPR)
 
 - (void)log;
+
+@end
+
+@interface NSMutableSet (NIMPR)
+
+- (void)set:(NSSet*)set;
 
 @end
 

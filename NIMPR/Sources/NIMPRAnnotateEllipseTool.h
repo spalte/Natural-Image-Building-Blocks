@@ -10,7 +10,7 @@
 
 @class NIEllipseAnnotation;
 
-@interface NIMPRAnnotateEllipseTool : NIMPRAnnotateTool
+@interface NIMPRAnnotateEllipseTool : NIMPRValidatedAnnotateTool
 
 @property(retain) NIEllipseAnnotation* annotation;
 

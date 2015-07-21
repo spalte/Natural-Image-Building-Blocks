@@ -29,7 +29,8 @@ typedef NS_OPTIONS(NSUInteger, NIMPRFlags) {
     NIMPRView* _coronalView;
     
     NSMutableSet* _annotations;
-    NSMutableSet* _glowingAnnotations;
+    NSMutableSet* _highlightedAnnotations;
+    NSMutableSet* _selectedAnnotations;
     
     NIVolumeData* _data;
     CGFloat _windowWidth, _windowLevel, _initialWindowLevel, _initialWindowWidth;
@@ -76,8 +77,12 @@ typedef NS_OPTIONS(NSUInteger, NIMPRFlags) {
 
 - (NSArray*)mprViews;
 
-- (NSMutableSet*)publicAnnotations;
-- (NSMutableSet*)publicGlowingAnnotations;
+@property(readonly, copy) NSSet* annotations;
+- (NSMutableSet*)mutableAnnotations;
+@property(readonly, copy) NSSet* highlightedAnnotations;
+- (NSMutableSet*)mutableHighlightedAnnotations;
+@property(readonly, copy) NSSet* selectedAnnotations;
+- (NSMutableSet*)mutableSelectedAnnotations;
 
 - (void)rotate:(CGFloat)rads axis:(NIVector)axis excluding:(NIMPRView*)view;
 - (void)rotateToInitial;

@@ -7,7 +7,17 @@
 //
 
 #import "NIMPRTool.h"
+#import "NIAnnotation.h"
 
-@interface NIMPRAnnotationInteractionTool : NIMPRTool
+typedef enum : NSUInteger {
+    NIMPRAnnotationSelectionInteractionToolMode,
+    NIMPRAnnotationMoveInteractionToolMode,
+} NIMPRAnnotationInteractionToolMode;
+
+@interface NIMPRAnnotationInteractionTool : NIMPRTool {
+    NIMPRAnnotationInteractionToolMode _mode;
+}
+
+@property NIMPRAnnotationInteractionToolMode mode;
 
 @end

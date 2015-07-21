@@ -146,7 +146,7 @@
 
 @implementation NSException (NIMPR)
 
--(NSString*)stackTrace {
+- (NSString*)stackTrace {
     NSMutableString* stackTrace = [NSMutableString string];
     
     @try {
@@ -174,6 +174,15 @@
 
 - (void)log {
     NSLog(@"%@", [self stackTrace]);
+}
+
+@end
+
+@implementation NSMutableSet (NIMPR)
+
+- (void)set:(NSSet*)set {
+    [self intersectSet:set];
+    [self unionSet:set];
 }
 
 @end

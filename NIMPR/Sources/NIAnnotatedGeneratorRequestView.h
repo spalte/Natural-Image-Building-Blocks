@@ -13,7 +13,8 @@
 @interface NIAnnotatedGeneratorRequestView : NIGeneratorRequestView {
     CALayer* _annotationsLayer;
     NSMutableSet* _annotations;
-    NSMutableSet* _glowingAnnotations;
+    NSMutableSet* _highlightedAnnotations;
+    NSMutableSet* _selectedAnnotations;
     CGFloat _annotationsBaseAlpha;
     NSMutableDictionary* _annotationsCaches;
 }
@@ -21,8 +22,12 @@
 @property(readonly, retain) CALayer* annotationsLayer;
 @property CGFloat annotationsBaseAlpha;
 
-- (NSMutableSet*)publicAnnotations;
-- (NSMutableSet*)publicGlowingAnnotations;
+@property(readonly, copy) NSSet* annotations;
+- (NSMutableSet*)mutableAnnotations;
+@property(readonly, copy) NSSet* highlightedAnnotations;
+- (NSMutableSet*)mutableHighlightedAnnotations;
+@property(readonly, copy) NSSet* selectedAnnotations;
+- (NSMutableSet*)mutableSelectedAnnotations;
 
 - (CGFloat)maximumDistanceToPlane;
 

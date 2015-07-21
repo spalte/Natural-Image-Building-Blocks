@@ -80,19 +80,23 @@ CGFloat const NIAnnotationDistant = 4;
     return [NSSet set];
 }
 
+- (void)translate:(NIVector)translation {
+    NSLog(@"Warning: -[%@ translate:] is missing", self.className);
+}
+
 - (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx {
     NSLog(@"Warning: -[%@ drawInView:cache:layer:context:] is missing", self.className);
     return nil;
 }
 
-- (void)glowInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx path:(NSBezierPath*)path {
+- (void)highlightWithColor:(NSColor*)color inView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx path:(NSBezierPath*)path {
     [NSGraphicsContext saveGraphicsState];
     NSGraphicsContext* context = [NSGraphicsContext currentContext];
     
-    path = [[path copy] autorelease];
-    path.lineWidth = path.lineWidth+1;
-    [[NSColor highlightColor] set];
-    [context setCompositingOperation:NSCompositeHighlight];
+//    path = [[path copy] autorelease];
+//    path.lineWidth = path.lineWidth+1;
+    [color set];
+    [context setCompositingOperation:NSCompositeSourceOver]; // NSCompositeHighlight
     [path stroke];
     
     [NSGraphicsContext restoreGraphicsState];
@@ -150,6 +154,8 @@ static NSColor* NIAnnotationDefaultColor = nil;
 }
 
 @end
+
+const CGFloat NIAnnotationHandleSize = 4;
 
 @implementation NIAnnotationHandle
 

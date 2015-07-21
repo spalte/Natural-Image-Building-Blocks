@@ -43,6 +43,10 @@
 
 @synthesize displayOverlays = _displayOverlays;
 
+@synthesize annotations = _annotations;
+@synthesize highlightedAnnotations = _highlightedAnnotations;
+@synthesize selectedAnnotations = _selectedAnnotations;
+
 - (instancetype)initWithData:(NIVolumeData*)data window:(CGFloat)wl :(CGFloat)ww {
     if ((self = [super initWithWindowNibName:@"NIMPR" owner:self])) {
         self.data = data;
@@ -53,7 +57,8 @@
         self.displayRims = YES;
         self.displayOverlays = YES;
         _annotations = [[NSMutableSet alloc] init];
-        _glowingAnnotations = [[NSMutableSet alloc] init];
+        _highlightedAnnotations = [[NSMutableSet alloc] init];
+        _selectedAnnotations = [[NSMutableSet alloc] init];
     }
     
     return self;
@@ -80,14 +85,16 @@
         [view bind:@"slabWidth" toObject:self withKeyPath:@"slabWidth" options:nil];
         [view bind:@"displayOverlays" toObject:self withKeyPath:@"displayOverlays" options:nil];
         [view addObserver:self forKeyPath:@"annotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
-        [view addObserver:self forKeyPath:@"glowingAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
+        [view addObserver:self forKeyPath:@"highlightedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
+        [view addObserver:self forKeyPath:@"selectedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
     }
     
     [self addObserver:self forKeyPath:@"data" options:NSKeyValueObservingOptionInitial context:NIMPRController.class];
     [self addObserver:self forKeyPath:@"ltoolTag" options:NSKeyValueObservingOptionInitial context:NIMPRController.class];
     [self addObserver:self forKeyPath:@"rtoolTag" options:NSKeyValueObservingOptionInitial context:NIMPRController.class];
     [self addObserver:self forKeyPath:@"annotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
-    [self addObserver:self forKeyPath:@"glowingAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
+    [self addObserver:self forKeyPath:@"highlightedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
+    [self addObserver:self forKeyPath:@"selectedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
     
     self.menu = [[NSMenu alloc] init];
     
@@ -130,7 +137,8 @@
 }
 
 - (void)dealloc {
-    [self removeObserver:self forKeyPath:@"glowingAnnotations" context:NIMPRController.class];
+    [self removeObserver:self forKeyPath:@"selectedAnnotations" context:NIMPRController.class];
+    [self removeObserver:self forKeyPath:@"highlightedAnnotations" context:NIMPRController.class];
     [self removeObserver:self forKeyPath:@"annotations" context:NIMPRController.class];
     [self removeObserver:self forKeyPath:@"rtoolTag" context:NIMPRController.class];
     [self removeObserver:self forKeyPath:@"ltoolTag" context:NIMPRController.class];
@@ -138,7 +146,8 @@
     self.ltool = self.rtool = nil;
     self.x = self.y = self.z = nil;
     self.data = nil;
-    [_glowingAnnotations release];
+    [_selectedAnnotations release];
+    [_highlightedAnnotations release];
     [_annotations release];
     [super dealloc];
 }
@@ -165,7 +174,7 @@
     
     if ([keyPath isEqualToString:@"annotations"]) {
         for (id collector in [self.mprViews arrayByAddingObject:self]) {
-            NSMutableSet* set = [collector publicAnnotations];
+            NSMutableSet* set = [collector mutableAnnotations];
             for (NIAnnotation* a in change[NSKeyValueChangeOldKey])
                 [set removeObject:a];
             for (NIAnnotation* a in change[NSKeyValueChangeNewKey])
@@ -173,9 +182,19 @@
         }
     }
     
-    if ([keyPath isEqualToString:@"glowingAnnotations"]) {
+    if ([keyPath isEqualToString:@"highlightedAnnotations"]) {
         for (id collector in [self.mprViews arrayByAddingObject:self]) {
-            NSMutableSet* set = [collector publicGlowingAnnotations];
+            NSMutableSet* set = [collector mutableHighlightedAnnotations];
+            for (NIAnnotation* a in change[NSKeyValueChangeOldKey])
+                [set removeObject:a];
+            for (NIAnnotation* a in change[NSKeyValueChangeNewKey])
+                [set addObject:a];
+        }
+    }
+    
+    if ([keyPath isEqualToString:@"selectedAnnotations"]) {
+        for (id collector in [self.mprViews arrayByAddingObject:self]) {
+            NSMutableSet* set = [collector mutableSelectedAnnotations];
             for (NIAnnotation* a in change[NSKeyValueChangeOldKey])
                 [set removeObject:a];
             for (NIAnnotation* a in change[NSKeyValueChangeNewKey])
@@ -228,7 +247,7 @@
         view.pixelSpacing = pixelSpacing/pixelSpacingSize*fmin(NSWidth(view.frame), NSHeight(view.frame));
 }
 
-- (NSMutableSet*)publicAnnotations {
+- (NSMutableSet*)mutableAnnotations {
     return [self mutableSetValueForKey:@"annotations"];
 }
 
@@ -240,16 +259,28 @@
     [_annotations removeObject:object];
 }
 
-- (NSMutableSet*)publicGlowingAnnotations {
-    return [self mutableSetValueForKey:@"glowingAnnotations"];
+- (NSMutableSet*)mutableHighlightedAnnotations {
+    return [self mutableSetValueForKey:@"highlightedAnnotations"];
 }
 
-- (void)addGlowingAnnotationsObject:(id)object {
-    [_glowingAnnotations addObject:object];
+- (void)addHighlightedAnnotationsObject:(id)object {
+    [_highlightedAnnotations addObject:object];
 }
 
-- (void)removeGlowingAnnotationsObject:(id)object {
-    [_glowingAnnotations removeObject:object];
+- (void)removeHighlightedAnnotationsObject:(id)object {
+    [_highlightedAnnotations removeObject:object];
+}
+
+- (NSMutableSet*)mutableSelectedAnnotations {
+    return [self mutableSetValueForKey:@"selectedAnnotations"];
+}
+
+- (void)addSelectedAnnotationsObject:(id)object {
+    [_selectedAnnotations addObject:object];
+}
+
+- (void)removeSelectedAnnotationsObject:(id)object {
+    [_selectedAnnotations removeObject:object];
 }
 
 - (IBAction)test:(id)sender {
@@ -276,9 +307,9 @@
         NIAffineTransform planeToDicomTransform = NIAffineTransformTranslate(req.sliceToDicomTransform, center.x-image.size.width/2, center.y-image.size.height/2, 0);
         
         NIImageAnnotation* ia = [[NIImageAnnotation alloc] initWithImage:image transform:planeToDicomTransform];
-        ia.colorify = YES;
+//        ia.colorify = YES;
         
-        [self.publicAnnotations addObject:ia];
+        [self.mutableAnnotations addObject:ia];
     }];
 }
 

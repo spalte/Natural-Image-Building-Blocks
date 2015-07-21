@@ -55,6 +55,8 @@
 - (void)rotate:(CGFloat)rads axis:(NIVector)axis;
 - (void)rotateToInitial;
 
+- (NIAnnotation*)annotationAtLocation:(NSPoint)location;
+
 @end
 
 //@interface NIMPRView (super)

@@ -158,12 +158,18 @@
     return self;
 }
 
+- (void)translate:(NIVector)translation {
+    self.planeToDicomTransform = NIAffineTransformConcat(self.planeToDicomTransform, NIAffineTransformMakeTranslationWithVector(translation));
+}
+
 - (NIBezierPath*)NIBezierPath {
+    if (!NIAffineTransformIsAffine(self.planeToDicomTransform))
+        return nil;
     return [[NIBezierPath bezierPathWithNSBezierPath:self.NSBezierPath] bezierPathByApplyingTransform:self.planeToDicomTransform];
 }
 
 + (NSSet*)keyPathsForValuesAffectingNIBezierPath {
-    return [NSSet setWithObject:@"NSBezierPath"];
+    return [NSSet setWithObjects: @"NSBezierPath", @"planeToDicomTransform", nil];
 }
 
 - (NSBezierPath*)NSBezierPath {

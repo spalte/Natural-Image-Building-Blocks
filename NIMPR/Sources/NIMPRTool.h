@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger, NIMPRToolTag) {
 @protocol NIMPRTool <NSObject>
 
 - (NSEvent*)mouseDownEvent;
-- (NSArray*)cursors;
+- (NSArray*)cursorsForView:(NIMPRView*)view;
 
 // notice that the view redirects rightMouse* and otherMouse* events to mouse*
 @optional

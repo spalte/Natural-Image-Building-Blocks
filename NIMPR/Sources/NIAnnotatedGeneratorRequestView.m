@@ -22,6 +22,10 @@
 @synthesize annotationsBaseAlpha = _annotationsBaseAlpha;
 @synthesize annotationsCaches = _annotationsCaches;
 
+@synthesize annotations = _annotations;
+@synthesize highlightedAnnotations = _highlightedAnnotations;
+@synthesize selectedAnnotations = _selectedAnnotations;
+
 - (void)initialize:(Class)class {
     [super initialize:class];
     
@@ -29,7 +33,8 @@
         return;
     
     _annotations = [[NSMutableSet alloc] init];
-    _glowingAnnotations = [[NSMutableSet alloc] init];
+    _highlightedAnnotations = [[NSMutableSet alloc] init];
+    _selectedAnnotations = [[NSMutableSet alloc] init];
     _annotationsCaches = [[NSMutableDictionary alloc] init];
     
     _annotationsBaseAlpha = .2;
@@ -49,13 +54,16 @@
                                                  name:NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotification object:self];
     
     [self addObserver:self forKeyPath:@"annotations" options:NSKeyValueObservingOptionInitial+NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIAnnotatedGeneratorRequestView.class];
-    [self addObserver:self forKeyPath:@"glowingAnnotations" options:NSKeyValueObservingOptionInitial+NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIAnnotatedGeneratorRequestView.class];
+    [self addObserver:self forKeyPath:@"highlightedAnnotations" options:NSKeyValueObservingOptionInitial+NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIAnnotatedGeneratorRequestView.class];
+    [self addObserver:self forKeyPath:@"selectedAnnotations" options:NSKeyValueObservingOptionInitial+NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIAnnotatedGeneratorRequestView.class];
 }
 
 - (void)dealloc {
-    [self observeValueForKeyPath:@"glowingAnnotations" ofObject:self change:@{ NSKeyValueChangeOldKey: self.publicGlowingAnnotations } context:NIAnnotatedGeneratorRequestView.class];
-    [self removeObserver:self forKeyPath:@"glowingAnnotations" context:NIAnnotatedGeneratorRequestView.class];
-    [self observeValueForKeyPath:@"annotations" ofObject:self change:@{ NSKeyValueChangeOldKey: self.publicAnnotations } context:NIAnnotatedGeneratorRequestView.class];
+    [self observeValueForKeyPath:@"selectedAnnotations" ofObject:self change:@{ NSKeyValueChangeOldKey: self.mutableSelectedAnnotations } context:NIAnnotatedGeneratorRequestView.class];
+    [self removeObserver:self forKeyPath:@"selectedAnnotations" context:NIAnnotatedGeneratorRequestView.class];
+    [self observeValueForKeyPath:@"highlightedAnnotations" ofObject:self change:@{ NSKeyValueChangeOldKey: self.mutableHighlightedAnnotations } context:NIAnnotatedGeneratorRequestView.class];
+    [self removeObserver:self forKeyPath:@"highlightedAnnotations" context:NIAnnotatedGeneratorRequestView.class];
+    [self observeValueForKeyPath:@"annotations" ofObject:self change:@{ NSKeyValueChangeOldKey: self.mutableAnnotations } context:NIAnnotatedGeneratorRequestView.class];
     [self removeObserver:self forKeyPath:@"annotations" context:NIAnnotatedGeneratorRequestView.class];
 
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotification object:self];
@@ -72,6 +80,8 @@
         return [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     
     if ([keyPath isEqualToString:@"annotations"]) {
+        [self.mutableSelectedAnnotations minusSet:change[NSKeyValueChangeOldKey]];
+        [self.mutableHighlightedAnnotations minusSet:change[NSKeyValueChangeOldKey]];
         for (NIAnnotation* a in change[NSKeyValueChangeOldKey]) {
             [a removeObserver:self forKeyPath:@"annotation" context:context];
             [self.annotationsCaches removeObjectForKey:[NSValue valueWithPointer:a]];
@@ -82,12 +92,12 @@
         }
     }
     
-    if ([keyPath isEqualToString:@"annotation"]) {
-        [self.annotationsCaches[[NSValue valueWithPointer:object]] removeObjectForKey:NIAnnotationDrawCache];
+    if ([keyPath isEqualToString:@"highlightedAnnotations"] || [keyPath isEqualToString:@"selectedAnnotations"]) {
         [self.annotationsLayer setNeedsDisplay];
     }
     
-    if ([keyPath isEqualToString:@"glowingAnnotations"]) {
+    if ([keyPath isEqualToString:@"annotation"]) {
+        [self.annotationsCaches[[NSValue valueWithPointer:object]] removeObjectForKey:NIAnnotationDrawCache];
         [self.annotationsLayer setNeedsDisplay];
     }
 }
@@ -109,17 +119,32 @@
         [NSGraphicsContext saveGraphicsState];
         [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:ctx flipped:NO]];
         
-        NSMutableArray* abs = [NSMutableArray array]; // @[ annotation, border ]
+        NSMutableArray* selected_acbs = [NSMutableArray array]; // @[ annotation, cache, border ]
+        NSMutableArray* glowing_acbs = [NSMutableArray array]; // @[ annotation, cache, border ]
         
-        for (NIAnnotation* a in self.publicAnnotations) {
+        for (NIAnnotation* a in self.mutableAnnotations) {
             NSMutableDictionary* cache = self.annotationsCaches[[NSValue valueWithPointer:a]];
             NSBezierPath* border = [a drawInView:self cache:cache layer:layer context:ctx];
-            if ([self.publicGlowingAnnotations containsObject:a])
-                [abs addObject:@[ a, cache, [NSNull either:border] ]];
+            if ([self.selectedAnnotations containsObject:a])
+                [selected_acbs addObject:@[ a, cache, [NSNull either:border] ]];
+            if ([self.mutableHighlightedAnnotations containsObject:a])
+                [glowing_acbs addObject:@[ a, cache, [NSNull either:border] ]];
         }
         
-        for (NSArray* ab in abs)
-            [ab[0] glowInView:self cache:ab[1] layer:layer context:ctx path:[ab[2] if:NSBezierPath.class]];
+        NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(self.presentedGeneratorRequest.sliceToDicomTransform);
+        
+        [NSColor.selectedTextBackgroundColor set];
+        for (NSArray* acb in selected_acbs)
+            [acb[0] highlightWithColor:NSColor.selectedTextBackgroundColor inView:self cache:acb[1] layer:layer context:ctx path:[acb[2] if:NSBezierPath.class]];
+        for (NSArray* acb in selected_acbs)
+            for (NIAnnotationHandle* handle in [acb[0] handles]) {
+                NSPoint point = NSPointFromNIVector(NIVectorApplyTransform(handle.vector, dicomToSliceTransform));
+                [[NSBezierPath bezierPathWithRect:NSMakeRect(point.x-NIAnnotationHandleSize/2, point.y-NIAnnotationHandleSize/2, NIAnnotationHandleSize, NIAnnotationHandleSize)] fill];
+            }
+        
+        NSColor* color = [NSColor highlightColor];
+        for (NSArray* acb in glowing_acbs)
+            [acb[0] highlightWithColor:color inView:self cache:acb[1] layer:layer context:ctx path:[acb[2] if:NSBezierPath.class]];
         
         [NSGraphicsContext restoreGraphicsState];
     }
@@ -127,7 +152,7 @@
     [super drawLayer:layer inContext:ctx];
 }
 
-- (NSMutableSet*)publicAnnotations {
+- (NSMutableSet*)mutableAnnotations {
     return [self mutableSetValueForKey:@"annotations"];
 }
 
@@ -139,16 +164,28 @@
     [_annotations removeObject:object];
 }
 
-- (NSMutableSet*)publicGlowingAnnotations {
-    return [self mutableSetValueForKey:@"glowingAnnotations"];
+- (NSMutableSet*)mutableHighlightedAnnotations {
+    return [self mutableSetValueForKey:@"highlightedAnnotations"];
 }
 
-- (void)addGlowingAnnotationsObject:(id)object {
-    [_glowingAnnotations addObject:object];
+- (void)addHighlightedAnnotationsObject:(id)object {
+    [_highlightedAnnotations addObject:object];
 }
 
-- (void)removeGlowingAnnotationsObject:(id)object {
-    [_glowingAnnotations removeObject:object];
+- (void)removeHighlightedAnnotationsObject:(id)object {
+    [_highlightedAnnotations removeObject:object];
+}
+
+- (NSMutableSet*)mutableSelectedAnnotations {
+    return [self mutableSetValueForKey:@"selectedAnnotations"];
+}
+
+- (void)addSelectedAnnotationsObject:(id)object {
+    [_selectedAnnotations addObject:object];
+}
+
+- (void)removeSelectedAnnotationsObject:(id)object {
+    [_selectedAnnotations removeObject:object];
 }
 
 - (NIAnnotation*)annotationClosestToSlicePoint:(NSPoint)location closestPoint:(NSPoint*)closestPoint distance:(CGFloat*)distance {
@@ -158,7 +195,7 @@
 - (NIAnnotation*)annotationClosestToSlicePoint:(NSPoint)location closestPoint:(NSPoint*)closestPoint distance:(CGFloat*)distance filter:(BOOL (^)(NIAnnotation*))filter {
     NSMutableArray* adps = [NSMutableArray array]; // @[ annotation, distance ]
     
-    for (NIAnnotation* a in self.publicAnnotations)
+    for (NIAnnotation* a in self.mutableAnnotations)
         if (!filter || filter(a)) {
             NSPoint closestPoint;
             CGFloat distance = [a distanceToSlicePoint:location cache:self.annotationsCaches[[NSValue valueWithPointer:a]] view:self closestPoint:&closestPoint];
@@ -186,7 +223,7 @@
 - (NSSet*)annotationsIntersectingWithSliceRect:(NSRect)sliceRect {
     NSMutableSet* rset = [NSMutableSet set];
     
-    for (NIAnnotation* a in self.publicAnnotations)
+    for (NIAnnotation* a in self.mutableAnnotations)
         if ([a intersectsSliceRect:sliceRect cache:self.annotationsCaches[[NSValue valueWithPointer:a]] view:self])
             [rset addObject:a];
     

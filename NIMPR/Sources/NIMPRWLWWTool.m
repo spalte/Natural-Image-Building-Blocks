@@ -34,7 +34,7 @@
     return YES;
 }
 
-- (NSArray*)cursors {
+- (NSArray*)cursorsForView:(NIMPRView*)view {
     return @[ NSCursor.arrowCursor, NSNull.null ];
 }
 

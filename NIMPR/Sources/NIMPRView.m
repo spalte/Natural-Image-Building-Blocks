@@ -13,8 +13,7 @@
 #import "NIMPRQuaternion.h"
 #import <NIBuildingBlocks/NIVolumeDataProperties.h>
 #import <NIBuildingBlocks/NIGeneratorRequest.h>
-//#import <OsiriXAPI/NSImage+N2.h>
-#import <Quartz/Quartz.h>
+#import "NIImageAnnotation.h"
 
 @implementation NIMPRView
 
@@ -63,11 +62,15 @@
 //    [self bind:@"windowWidth" toObject:self withKeyPath:@"dataProperties.windowWidth" options:0];
     [self addObserver:self forKeyPath:@"window.windowController.spacebarDown" options:0 context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"window.windowController.ltool" options:0 context:NIMPRView.class];
+    [self addObserver:self forKeyPath:@"annotations" options:0 context:NIMPRView.class];
+    [self addObserver:self forKeyPath:@"selectedAnnotations" options:0 context:NIMPRView.class];
 
     self.rimThickness = 1;
 }
 
 - (void)dealloc {
+    [self removeObserver:self forKeyPath:@"selectedAnnotations" context:NIMPRView.class];
+    [self removeObserver:self forKeyPath:@"annotations" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"window.windowController.ltool" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"window.windowController.spacebarDown" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"displayOverlays" context:NIMPRView.class];
@@ -130,6 +133,10 @@
     
     if ([keyPath isEqualToString:@"window.windowController.spacebarDown"] || [keyPath isEqualToString:@"window.windowController.ltool"]) {
         [self hover:nil location:[self convertPoint:[self.window convertPointFromScreen:[NSEvent mouseLocation]] fromView:nil]];
+    }
+    
+    if ([keyPath isEqualToString:@"annotations"] || [keyPath isEqualToString:@"selectedAnnotations"]) {
+        [self flagsChanged:[NSApp currentEvent]];
     }
 }
 
@@ -224,6 +231,30 @@
     if (self.displayOverlays)
         return [super rimColor];
     return [NSColor clearColor];
+}
+
+- (NIAnnotation*)annotationAtLocation:(NSPoint)location {
+    NIAnnotation* annotation = nil;
+    
+    if (NSPointInRect(location, self.bounds))
+        for (size_t i = 0; i < 2; ++i) { // first try by filtering out image annotations, then with them
+            CGFloat distance;
+            
+            if (!i)
+                annotation = [super annotationClosestToSlicePoint:location closestPoint:NULL distance:&distance filter:^BOOL(NIAnnotation* annotation) {
+                    return ![annotation isKindOfClass:NIImageAnnotation.class];
+                }];
+            else
+                annotation = [super annotationClosestToSlicePoint:location closestPoint:NULL distance:&distance];
+            
+            if (annotation && distance > NIAnnotationDistant)
+                annotation = nil;
+            
+            if (annotation)
+                break;
+        }
+    
+    return annotation;
 }
 
 @end

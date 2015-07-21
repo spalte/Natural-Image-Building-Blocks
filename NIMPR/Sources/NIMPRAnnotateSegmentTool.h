@@ -10,7 +10,7 @@
 
 @class NISegmentAnnotation;
 
-@interface NIMPRAnnotateSegmentTool : NIMPRAnnotateTool
+@interface NIMPRAnnotateSegmentTool : NIMPRValidatedAnnotateTool
 
 @property(retain) NISegmentAnnotation* annotation;
 

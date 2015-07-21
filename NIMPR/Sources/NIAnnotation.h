@@ -33,8 +33,10 @@ extern CGFloat const NIAnnotationDistant;
 @property(readonly) BOOL annotation; // the value of this property is always YES, but you can observe it in order to observe changes in the annotation's properties
 + (NSSet*)keyPathsForValuesAffectingAnnotation;
 
+- (void)translate:(NIVector)translation;
+
 - (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx; // return the border path
-- (void)glowInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx path:(NSBezierPath*)path;
+- (void)highlightWithColor:(NSColor*)color inView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx path:(NSBezierPath*)path;
 
 - (CGFloat)distanceToSlicePoint:(NSPoint)point cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint; // point is on slice
 - (BOOL)intersectsSliceRect:(NSRect)rect cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view;
@@ -42,6 +44,8 @@ extern CGFloat const NIAnnotationDistant;
 - (NSSet*)handles;
 
 @end
+
+extern const CGFloat NIAnnotationHandleSize;
 
 @interface NIAnnotationHandle : NSObject {
     NIVector _vector;

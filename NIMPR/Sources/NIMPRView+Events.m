@@ -14,7 +14,6 @@
 #import <NIBuildingBlocks/NIIntersection.h>
 #import "NIMPRController.h"
 #import "NIMPRAnnotationInteractionTool.h"
-#import "NIImageAnnotation.h"
 #import <objc/runtime.h>
 
 @implementation NIMPRView (Events)
@@ -48,7 +47,7 @@
 }
 
 - (void)mouseDown:(NSEvent*)event {
-    [self.publicGlowingAnnotations removeAllObjects];
+//    [self.mutableHighlightedAnnotations removeAllObjects];
     [self tool:self.ltool sel:_cmd event:event otherwise:nil];
 }
 
@@ -64,13 +63,13 @@
 
 - (void)mouseUp:(NSEvent*)event {
     [self tool:self.ltool sel:_cmd event:event otherwise:^{
-        [self hover:event location:[self convertPoint:event.locationInWindow fromView:nil]];
+        [self flagsChanged:event];
         NIMPRView* view = [[self.window.contentView hitTest:event.locationInWindow] if:NIMPRView.class];
         if (view != self)
             [view hover:event location:[view convertPoint:event.locationInWindow fromView:nil]];
         else {
             if (event.clickCount == 2)
-                self.ltcAtSecondClick = [self toolForLocation:[view convertPoint:event.locationInWindow fromView:nil] event:nil annotation:NULL];
+                self.ltcAtSecondClick = [self toolForLocation:[view convertPoint:event.locationInWindow fromView:nil] event:nil/* annotation:NULL*/];
             if (event.clickCount >= 2) {
                 if (self.ltcAtSecondClick == NIMPRRotateAxisTool.class) {
                     if (event.clickCount == 2)
@@ -133,8 +132,9 @@
     [self tool:self.ltool sel:_cmd event:event otherwise:^{
         NIMPRToolTag tool = 0;
         
-        if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == 0)
+        if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == 0 || (event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSFunctionKeyMask)
             switch ([event.characters.lowercaseString characterAtIndex:0]) {
+                // tools
                 case 'w': {
                     tool = NIMPRToolWLWW;
                 } break;
@@ -146,6 +146,19 @@
                 } break;
                 case 'r': {
                     tool = NIMPRToolRotate;
+                } break;
+                case 's': {
+                    tool = NIMPRToolInteract;
+                } break;
+                // action: delete key
+                case NSDeleteFunctionKey:
+                case NSDeleteCharFunctionKey:
+                case 0x7f: {
+                    [self.mutableAnnotations minusSet:self.selectedAnnotations];
+                } break;
+                // action: escape key
+                case 0x1b: {
+                    [self.mutableSelectedAnnotations removeAllObjects];
                 } break;
             }
         else
@@ -182,25 +195,28 @@
     if (!event)
         event = [NSApp currentEvent];
 
-    NIAnnotation* annotation = nil;
-    Class ltc = [self toolForLocation:location event:event annotation:&annotation];
+//    NIAnnotation* annotation = nil;
+    Class ltc = [self toolForLocation:location event:event/* annotation:&annotation*/];
 
-    if (annotation && [self.publicGlowingAnnotations containsObject:annotation])
-        [self.publicGlowingAnnotations intersectSet:[NSSet setWithObject:annotation]];
-    else {
-        [self.publicGlowingAnnotations removeAllObjects];
-        if (annotation)
-            [self.publicGlowingAnnotations addObject:annotation];
-    }
+//    if (annotation && [self.mutableHighlightedAnnotations containsObject:annotation])
+//        [self.mutableHighlightedAnnotations intersectSet:[NSSet setWithObject:annotation]];
+//    else {
+//        [self.mutableHighlightedAnnotations removeAllObjects];
+//        if (annotation)
+//            [self.mutableHighlightedAnnotations addObject:annotation];
+//    }
     
-    if (self.ltool.class != ltc)
+    if (self.ltool.class != ltc) {
         self.ltool = [[[ltc alloc] init] autorelease];
+        if ([self.ltool respondsToSelector:@selector(view:flagsChanged:)])
+            [self.ltool view:self flagsChanged:event];
+    }
     
     [self enumerateIntersectionsWithBlock:^(NSString* key, NIIntersection* intersection, BOOL* stop) {
         intersection.maskAroundMouse = !ltc;
     }];
     
-    [NIMPRTool setCursor:(NSPointInRect(location, self.bounds)? [self.ltool cursors][0] : nil)];
+    [NIMPRTool setCursor:(NSPointInRect(location, self.bounds)? [self.ltool cursorsForView:self][0] : nil)];
     
     Class rtc = nil;
     
@@ -211,7 +227,7 @@
         self.rtool = [[[rtc alloc] init] autorelease];
 }
 
-- (Class)toolForLocation:(NSPoint)location event:(NSEvent*)event annotation:(NIAnnotation**)rannotation {
+- (Class)toolForLocation:(NSPoint)location event:(NSEvent*)event /*annotation:(NIAnnotation**)rannotation*/ {
     if (event.type == NSMouseExited)
         return nil;
     if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSCommandKeyMask)
@@ -250,30 +266,11 @@
     }
     
     if (!ltc) {
-        NIAnnotation* annotation = nil;
-        
-        if (NSPointInRect(location, self.bounds))
-            for (size_t i = 0; i < 2; ++i) { // first try by filtering out image annotations, then with them
-                CGFloat distance;
-                
-                if (!i)
-                    annotation = [self annotationClosestToSlicePoint:location closestPoint:NULL distance:&distance filter:^BOOL(NIAnnotation* annotation) {
-                        return ![annotation isKindOfClass:NIImageAnnotation.class];
-                    }];
-                else
-                    annotation = [self annotationClosestToSlicePoint:location closestPoint:NULL distance:&distance];
-                
-                if (annotation && distance > NIAnnotationDistant)
-                    annotation = nil;
-                
-                if (annotation)
-                    break;
-            }
-        
+        NIAnnotation* annotation = [self annotationAtLocation:location];
         if (annotation)
             ltc = NIMPRAnnotationInteractionTool.class;
-        if (rannotation)
-            *rannotation = annotation;
+//        if (rannotation)
+//            *rannotation = annotation;
     }
     
     return ltc;

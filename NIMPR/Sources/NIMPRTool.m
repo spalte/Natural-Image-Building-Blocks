@@ -79,7 +79,7 @@ static BOOL NIMPRToolHidingCursor = NO;
     } else if (confirm)
         confirm();
     
-    self.class.cursor = self.cursors[1];
+    self.class.cursor = [self cursorsForView:view][1];
     
     return YES;
 }
@@ -115,6 +115,7 @@ static BOOL NIMPRToolHidingCursor = NO;
     }
     
     self.mouseDownView = nil;
+    self.mouseDownEvent = nil;
     
     return r;
 }
@@ -133,12 +134,8 @@ static BOOL NIMPRToolHidingCursor = NO;
     self.timeoutBlock = self.confirmBlock = nil;
 }
 
-- (NSArray*)cursors {
+- (NSArray*)cursorsForView:(NIMPRView*)view {
     return @[ NSCursor.arrowCursor, NSCursor.arrowCursor ];
-}
-
-- (void)setHoverCursor {
-    [self.class setCursor:self.cursors[0]];
 }
 
 + (void)setCursor:(NSCursor*)cursor {

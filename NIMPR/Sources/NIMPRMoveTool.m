@@ -27,7 +27,7 @@
     return NO;
 }
 
-- (NSArray*)cursors {
+- (NSArray*)cursorsForView:(NIMPRView*)view {
     return @[ NSCursor.openHandCursor, NSNull.null ];
 }
 

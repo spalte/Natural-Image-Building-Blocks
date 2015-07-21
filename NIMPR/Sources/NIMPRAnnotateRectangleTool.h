@@ -10,7 +10,7 @@
 
 @class NIRectangleAnnotation;
 
-@interface NIMPRAnnotateRectangleTool : NIMPRAnnotateTool
+@interface NIMPRAnnotateRectangleTool : NIMPRValidatedAnnotateTool
 
 @property(retain) NIRectangleAnnotation* annotation;
 

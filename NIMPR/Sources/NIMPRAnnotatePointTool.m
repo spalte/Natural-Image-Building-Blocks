@@ -15,7 +15,7 @@
 
 - (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())otherwise {
     return [super view:view mouseDown:event otherwise:otherwise confirm:^{
-        [view.publicAnnotations addObject:(self.annotation = [NIAnnotation pointWithVector:self.mouseDownLocationVector])];
+        [view.mutableAnnotations addObject:(self.annotation = [NIAnnotation pointWithVector:self.mouseDownLocationVector])];
     }];
 }
 
