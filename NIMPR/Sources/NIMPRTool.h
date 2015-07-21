@@ -17,6 +17,7 @@ typedef NS_ENUM(NSInteger, NIMPRToolTag) {
     NIMPRToolInteract,
     NIMPRToolAnnotatePoint,
     NIMPRToolAnnotateSegment,
+    NIMPRToolAnnotatePoly,
     NIMPRToolAnnotateRectangle,
     NIMPRToolAnnotateEllipse,
 };
@@ -40,6 +41,8 @@ typedef NS_ENUM(NSInteger, NIMPRToolTag) {
 - (BOOL)view:(NIMPRView*)view keyDown:(NSEvent*)event;
 - (BOOL)view:(NIMPRView*)view keyUp:(NSEvent*)event;
 - (BOOL)view:(NIMPRView*)view flagsChanged:(NSEvent*)event;
+
+- (void)view:(NIMPRView*)view switchingTo:(Class)tc event:(NSEvent*)event;
 
 @end
 

@@ -98,6 +98,10 @@
     return [NSValue valueWithBytes:bytes objCType:type];
 }
 
+- (NSUInteger)count {
+    return 0;
+}
+
 @end
 
 @implementation NSNull (NIMPR)

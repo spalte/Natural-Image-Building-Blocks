@@ -17,6 +17,7 @@
 #import "NIMPRAnnotationInteractionTool.h"
 #import "NIMPRAnnotatePointTool.h"
 #import "NIMPRAnnotateSegmentTool.h"
+#import "NIMPRAnnotatePolyTool.h"
 #import "NIMPRAnnotateRectangleTool.h"
 #import "NIMPRAnnotateEllipseTool.h"
 #import "NSMenu+NIMPR.h"
@@ -87,6 +88,7 @@ NSString* const NIMPRControllerToolbarItemIdentifierSlabWidth = @"NIMPRSlabWidth
     static NSArray* tools = nil;
     if (!tools) tools = [@[ [NIMPRToolRecord toolWithTag:NIMPRToolAnnotatePoint label:NSLocalizedString(@"Point", nil) image:[NIMPR image:@"Tool-Annotate-Point"] handler:NIMPRAnnotatePointTool.class],
                             [NIMPRToolRecord toolWithTag:NIMPRToolAnnotateSegment label:NSLocalizedString(@"Segment", nil) image:[NIMPR image:@"Tool-Annotate-Segment"] handler:NIMPRAnnotateSegmentTool.class],
+                            [NIMPRToolRecord toolWithTag:NIMPRToolAnnotatePoly label:NSLocalizedString(@"Poly", nil) image:[NIMPR image:@"Tool-Annotate-Poly"] handler:NIMPRAnnotatePolyTool.class],
                             [NIMPRToolRecord toolWithTag:NIMPRToolAnnotateRectangle label:NSLocalizedString(@"Rectangle", nil) image:[NIMPR image:@"Tool-Annotate-Rectangle"] handler:NIMPRAnnotateRectangleTool.class],
                             [NIMPRToolRecord toolWithTag:NIMPRToolAnnotateEllipse label:NSLocalizedString(@"Ellipse", nil) image:[NIMPR image:@"Tool-Annotate-Ellipse"] handler:NIMPRAnnotateEllipseTool.class] ] retain];
     return tools;

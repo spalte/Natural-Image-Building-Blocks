@@ -47,6 +47,8 @@
 		71B249301B18886F00F8E0AD /* NIMPRWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B2492F1B18886F00F8E0AD /* NIMPRWindow.m */; };
 		71FD92321B5E750C0041E95F /* NIMPRAnnotationHandleInteractionTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 71FD92311B5E750C0041E95F /* NIMPRAnnotationHandleInteractionTool.m */; };
 		71FD92361B5E7FC90041E95F /* NIAnnotationHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 71FD92351B5E7FC90041E95F /* NIAnnotationHandle.m */; };
+		71FD92391B5EA0310041E95F /* NIMPRAnnotatePolyTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 71FD92381B5EA0310041E95F /* NIMPRAnnotatePolyTool.m */; };
+		71FD923C1B5EA04D0041E95F /* NIPolyAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 71FD923B1B5EA04D0041E95F /* NIPolyAnnotation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -140,6 +142,11 @@
 		71FD92311B5E750C0041E95F /* NIMPRAnnotationHandleInteractionTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRAnnotationHandleInteractionTool.m; sourceTree = "<group>"; };
 		71FD92341B5E7FC90041E95F /* NIAnnotationHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIAnnotationHandle.h; sourceTree = "<group>"; };
 		71FD92351B5E7FC90041E95F /* NIAnnotationHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIAnnotationHandle.m; sourceTree = "<group>"; };
+		71FD92371B5EA0310041E95F /* NIMPRAnnotatePolyTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRAnnotatePolyTool.h; sourceTree = "<group>"; };
+		71FD92381B5EA0310041E95F /* NIMPRAnnotatePolyTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRAnnotatePolyTool.m; sourceTree = "<group>"; };
+		71FD923A1B5EA04D0041E95F /* NIPolyAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPolyAnnotation.h; sourceTree = "<group>"; };
+		71FD923B1B5EA04D0041E95F /* NIPolyAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPolyAnnotation.m; sourceTree = "<group>"; };
+		71FD923D1B5EDBE10041E95F /* NIMPRTool+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NIMPRTool+Private.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,6 +207,8 @@
 				712F62751B4D7172004AC1AE /* NIPointAnnotation.m */,
 				712F627D1B4FDB79004AC1AE /* NISegmentAnnotation.h */,
 				712F627E1B4FDB79004AC1AE /* NISegmentAnnotation.m */,
+				71FD923A1B5EA04D0041E95F /* NIPolyAnnotation.h */,
+				71FD923B1B5EA04D0041E95F /* NIPolyAnnotation.m */,
 				714D19C31B53A81100EBA644 /* NIMaskAnnotation.h */,
 				714D19C41B53A81100EBA644 /* NIMaskAnnotation.m */,
 				714D19CD1B54010400EBA644 /* NIImageAnnotation.h */,
@@ -217,6 +226,7 @@
 		713341271B147D9D0014CE09 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				71FD923D1B5EDBE10041E95F /* NIMPRTool+Private.h */,
 				7133412B1B147E0A0014CE09 /* NIMPRTool.h */,
 				7133412C1B147E0A0014CE09 /* NIMPRTool.m */,
 				713341281B147DF50014CE09 /* NIMPRWLWWTool.h */,
@@ -237,6 +247,8 @@
 				712F62661B4D56D8004AC1AE /* NIMPRAnnotatePointTool.m */,
 				712F62831B50076E004AC1AE /* NIMPRAnnotateSegmentTool.h */,
 				712F62841B50076E004AC1AE /* NIMPRAnnotateSegmentTool.m */,
+				71FD92371B5EA0310041E95F /* NIMPRAnnotatePolyTool.h */,
+				71FD92381B5EA0310041E95F /* NIMPRAnnotatePolyTool.m */,
 				714D19CA1B53C8A700EBA644 /* NIMPRAnnotateRectangleTool.h */,
 				714D19CB1B53C8A700EBA644 /* NIMPRAnnotateRectangleTool.m */,
 				712F62861B5040F8004AC1AE /* NIMPRAnnotateEllipseTool.h */,
@@ -450,11 +462,13 @@
 				719CC5261B0B1C2800DC1ED5 /* NIMPRView.m in Sources */,
 				71FD92321B5E750C0041E95F /* NIMPRAnnotationHandleInteractionTool.m in Sources */,
 				712F62851B50076E004AC1AE /* NIMPRAnnotateSegmentTool.m in Sources */,
+				71FD923C1B5EA04D0041E95F /* NIPolyAnnotation.m in Sources */,
 				713341301B147E360014CE09 /* NIMPRMoveTool.m in Sources */,
 				713341251B146EE50014CE09 /* NIMPRController+Toolbar.m in Sources */,
 				713341401B15A4FA0014CE09 /* NIMPRView+Events.m in Sources */,
 				719CC51E1B0B1BBC00DC1ED5 /* NIMPRController.m in Sources */,
 				712F62731B4D6DC0004AC1AE /* NIAnnotation.m in Sources */,
+				71FD92391B5EA0310041E95F /* NIMPRAnnotatePolyTool.m in Sources */,
 				712F62671B4D56D8004AC1AE /* NIMPRAnnotatePointTool.m in Sources */,
 				712F62821B4FDFFD004AC1AE /* NIMPRAnnotateTool.m in Sources */,
 				719CC53A1B0CC17000DC1ED5 /* NIMPRQuaternion.mm in Sources */,

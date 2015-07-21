@@ -205,6 +205,8 @@
     Class ltc = [self toolForLocation:location event:event];
     
     if (self.ltool.class != ltc) {
+        if ([self.ltool respondsToSelector:@selector(view:switchingTo:event:)])
+            [self.ltool view:self switchingTo:ltc event:event];
         self.ltool = [[[ltc alloc] init] autorelease];
         if ([self.ltool respondsToSelector:@selector(view:flagsChanged:)])
             [self.ltool view:self flagsChanged:event];

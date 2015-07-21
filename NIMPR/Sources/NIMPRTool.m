@@ -6,32 +6,12 @@
 //  Copyright (c) 2015 volz.io. All rights reserved.
 //
 
-#import "NIMPRTool.h"
+#import "NIMPRTool+Private.h"
 #import "NIMPRView.h"
-#import "NIMPRWLWWTool.h"
-#import "NIMPRMoveTool.h"
-#import "NIMPRZoomTool.h"
-#import "NIMPRRotateTool.h"
-#import "NIMPRAnnotatePointTool.h"
-#import "NIMPRAnnotateSegmentTool.h"
-#import "NIMPRAnnotateRectangleTool.h"
-#import "NIMPRAnnotateEllipseTool.h"
 #import <NIBuildingBlocks/NIIntersection.h>
 #import <NIBuildingBlocks/NIGeneratorRequest.h>
 
 static BOOL NIMPRToolHidingCursor = NO;
-
-@interface NIMPRTool ()
-
-@property(readwrite, retain) NSView* mouseDownView;
-@property(retain, readwrite) NSEvent* mouseDownEvent;
-@property(copy) void (^timeoutBlock)(), (^confirmBlock)();
-@property(retain, readwrite) NSTimer* timeoutTimer;
-@property(readwrite) NSPoint mouseDownLocation, currentLocation, previousLocation;
-@property(readwrite) NIVector mouseDownLocationVector, currentLocationVector, previousLocationVector;
-@property(readwrite) NIAffineTransform mouseDownGeneratorRequestSliceToDicomTransform;
-
-@end
 
 @implementation NIMPRTool
 
