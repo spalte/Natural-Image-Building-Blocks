@@ -132,7 +132,7 @@
     }
     
     if ([keyPath isEqualToString:@"window.windowController.spacebarDown"] || [keyPath isEqualToString:@"window.windowController.ltool"]) {
-        [self hover:nil location:[self convertPoint:[self.window convertPointFromScreen:[NSEvent mouseLocation]] fromView:nil]];
+        [self flagsChanged:nil];
     }
     
     if ([keyPath isEqualToString:@"annotations"] || [keyPath isEqualToString:@"selectedAnnotations"]) {

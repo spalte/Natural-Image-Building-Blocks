@@ -197,6 +197,42 @@
 
 @end
 
+@implementation NSEvent (NIMPR)
+
+- (NSPoint)locationInView:(NSView*)view {
+    switch (self.type) {
+        case NSLeftMouseDown:
+        case NSLeftMouseUp:
+        case NSRightMouseDown:
+        case NSRightMouseUp:
+        case NSMouseMoved:
+        case NSLeftMouseDragged:
+        case NSRightMouseDragged:
+        case NSMouseEntered:
+        case NSMouseExited:
+        case NSOtherMouseDown:
+        case NSOtherMouseUp:
+        case NSOtherMouseDragged:
+        case NSCursorUpdate:
+        case NSScrollWheel:
+        case NSTabletPoint:
+        case NSTabletProximity: {
+            NSPoint location = self.locationInWindow;
+            
+            if (self.window != view.window)
+                location = [view.window convertPointFromScreen:[self.window convertPointToScreen:location]];
+            
+            return [view convertPoint:location fromView:nil];
+        } break;
+        default: {
+        } break;
+    }
+    
+    return [view convertPoint:[view.window convertPointFromScreen:[NSEvent mouseLocation]] fromView:nil];
+}
+
+@end
+
 CGFloat NIMPR_CGFloatMax(CGFloat lha, CGFloat rha) {
     return lha > rha ? lha : rha;
 }

@@ -18,7 +18,7 @@
 - (BOOL)view:(NIMPRView *)view mouseMoved:(NSEvent *)event {
     self.currentLocation = [view convertPoint:[view.window convertPointFromScreen:[NSEvent mouseLocation]] fromView:nil];
     
-    [self view:view flagsChanged:event];
+//    [self view:view flagsChanged:event];
 
     return NO;
 }
@@ -26,7 +26,7 @@
 - (BOOL)view:(NIMPRView *)view mouseExited:(NSEvent *)event {
     self.currentLocation = NSMakePoint(CGFLOAT_MAX, CGFLOAT_MAX);
     
-    [self view:view flagsChanged:event];
+//    [self view:view flagsChanged:event];
     
     return NO;
 }
@@ -63,12 +63,12 @@
     return YES;
 }
 
-- (void)view:(NIMPRView*)view switchingTo:(Class)tc event:(NSEvent*)event {
+//- (void)view:(NIMPRView*)view switchingTo:(Class)tc event:(NSEvent*)event {
 //    if (tc == NIMPRAnnotationInteractionTool.class)
 //        if (event.type == NSLeftMouseUp && NSEqualPoints([view convertPoint:event.locationInWindow fromView:nil], NSPointFromNIVector(NIVectorApplyTransform([self.annotation.vectors.lastObject NIVectorValue], NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform))))) {
 //            self.annotation = nil;
 //        }
-}
+//}
 
 - (void)drawInView:(NIMPRView *)view {
     if (self.annotation.vectors.count > 0 && !NSEqualPoints(self.currentLocation, NSMakePoint(CGFLOAT_MAX, CGFLOAT_MAX))) {

@@ -19,10 +19,10 @@
 
 @synthesize mode = _mode;
 
-- (BOOL)view:(NIMPRView *)view mouseMoved:(NSEvent *)event {
-    [self view:view flagsChanged:event];
-    return NO;
-}
+//- (BOOL)view:(NIMPRView *)view mouseMoved:(NSEvent *)event {
+//    [self view:view flagsChanged:event];
+//    return NO;
+//}
 
 - (BOOL)view:(NIMPRView*)view flagsChanged:(NSEvent*)event {
     if (self.mouseDownEvent)
@@ -93,7 +93,7 @@
         } else [view.mutableSelectedAnnotations set:view.highlightedAnnotations];
     }
 
-    [self view:view flagsChanged:event];
+//    [self view:view flagsChanged:event];
     [super view:view mouseUp:event];
     
     return NO;

@@ -10,6 +10,4 @@
 
 @interface NIMPRView (Events)
 
-- (void)hover:(NSEvent*)event location:(NSPoint)location;
-
 @end

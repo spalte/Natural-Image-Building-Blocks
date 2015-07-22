@@ -15,6 +15,7 @@
 #import "NIMPRController.h"
 #import "NIMPRAnnotationInteractionTool.h"
 #import "NIMPRAnnotationHandleInteractionTool.h"
+#import "+NIMPR.h"
 #import <objc/runtime.h>
 
 @implementation NIMPRView (Events)
@@ -34,6 +35,8 @@
         self.mouseDown = NO;
 
     SEL vsel = NSSelectorFromString([@"view:" stringByAppendingString:ssel]), orvsel = NSSelectorFromString([NSString stringWithFormat:@"view:%@otherwise:", ssel]);
+    
+    
     if ([tool respondsToSelector:orvsel]) {
         if ([[tool performSelector:orvsel withObjects:self:event:block] boolValue])
             return;
@@ -67,7 +70,7 @@
         [self flagsChanged:event];
         NIMPRView* view = [[self.window.contentView hitTest:event.locationInWindow] if:NIMPRView.class];
         if (view != self)
-            [view hover:event location:[view convertPoint:event.locationInWindow fromView:nil]];
+            [view hover:event];
         else {
             if (event.clickCount == 2)
                 self.ltcAtSecondClick = [self toolForLocation:[view convertPoint:event.locationInWindow fromView:nil] event:nil];
@@ -96,7 +99,7 @@
 
 - (void)mouseMoved:(NSEvent*)event {
     [self tool:self.ltool sel:_cmd event:event otherwise:^{
-        [self hover:event location:[self convertPoint:event.locationInWindow fromView:nil]];
+        [self hover:event];
     }];
 }
 
@@ -125,7 +128,7 @@
 
 - (void)mouseExited:(NSEvent*)event {
     [self tool:self.ltool sel:_cmd event:event otherwise:^{
-        [self hover:event location:[self convertPoint:event.locationInWindow fromView:nil]];
+        [self hover:event];
     }];
 }
 
@@ -187,11 +190,13 @@
 
 - (void)flagsChanged:(NSEvent*)event {
     [self tool:self.ltool sel:_cmd event:event otherwise:^{
-        [self hover:event location:[self convertPoint:[self.window convertPointFromScreen:[NSEvent mouseLocation]] fromView:nil]];
+        [self hover:event];
     }];
 }
 
-- (void)hover:(NSEvent*)event location:(NSPoint)location {
+- (void)hover:(NSEvent*)event {
+    NSPoint location = [event locationInView:self];
+    
     BOOL displayOverlays = ((event.modifierFlags&NSCommandKeyMask) == 0) || ((event.modifierFlags&NSShiftKeyMask) == NSShiftKeyMask);
     if ([self.window.windowController displayOverlays] != displayOverlays)
         [self.window.windowController setDisplayOverlays:displayOverlays];
@@ -205,8 +210,8 @@
     Class ltc = [self toolForLocation:location event:event];
     
     if (self.ltool.class != ltc) {
-        if ([self.ltool respondsToSelector:@selector(view:switchingTo:event:)])
-            [self.ltool view:self switchingTo:ltc event:event];
+//        if ([self.ltool respondsToSelector:@selector(view:switchingTo:event:)])
+//            [self.ltool view:self switchingTo:ltc event:event];
         self.ltool = [[[ltc alloc] init] autorelease];
         if ([self.ltool respondsToSelector:@selector(view:flagsChanged:)])
             [self.ltool view:self flagsChanged:event];
@@ -225,6 +230,9 @@
     
     if (self.rtool.class != rtc)
         self.rtool = [[[rtc alloc] init] autorelease];
+    
+    [self tool:self.ltool sel:@selector(hover:) event:event otherwise:nil];
+    [self tool:self.rtool sel:@selector(hover:) event:event otherwise:nil];
 }
 
 - (Class)toolForLocation:(NSPoint)location event:(NSEvent*)event {

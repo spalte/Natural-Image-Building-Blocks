@@ -49,6 +49,12 @@
 
 @end
 
+@interface NSEvent (NIMPR)
+
+- (NSPoint)locationInView:(NSView*)view;
+
+@end
+
 #define CGFloatMax NIMPR_CGFloatMax
 extern CGFloat NIMPR_CGFloatMax(CGFloat lha, CGFloat rha);
 #define CGFloatMin NIMPR_CGFloatMin
