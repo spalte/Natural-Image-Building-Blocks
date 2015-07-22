@@ -14,7 +14,7 @@
 #import "NIMPRMoveTool.h"
 #import "NIMPRZoomTool.h"
 #import "NIMPRRotateTool.h"
-#import "NIMPRAnnotationInteractionTool.h"
+#import "NIMPRAnnotationSelectionTool.h"
 #import "NIMPRAnnotatePointTool.h"
 #import "NIMPRAnnotateSegmentTool.h"
 #import "NIMPRAnnotatePolyTool.h"
@@ -80,7 +80,7 @@ NSString* const NIMPRControllerToolbarItemIdentifierSlabWidth = @"NIMPRSlabWidth
                             [NIMPRToolRecord toolWithTag:NIMPRToolMove label:NSLocalizedString(@"Move", nil) image:[NIMPR image:@"Tool-Move"] handler:NIMPRMoveTool.class],
                             [NIMPRToolRecord toolWithTag:NIMPRToolZoom label:NSLocalizedString(@"Zoom", nil) image:[NIMPR image:@"Tool-Zoom"] handler:NIMPRZoomTool.class],
                             [NIMPRToolRecord toolWithTag:NIMPRToolRotate label:NSLocalizedString(@"Rotate", nil) image:[NIMPR image:@"Tool-Rotate"] handler:NIMPRRotateTool.class],
-                            [NIMPRToolRecord toolWithTag:NIMPRToolInteract label:NSLocalizedString(@"Interact", nil) image:[NSCursor.pointingHandCursor image] handler:NIMPRAnnotationInteractionTool.class] ] retain];
+                            [NIMPRToolRecord toolWithTag:NIMPRToolInteract label:NSLocalizedString(@"Interact", nil) image:[NSCursor.pointingHandCursor image] handler:NIMPRAnnotationSelectionTool.class] ] retain];
     return tools;
 }
 

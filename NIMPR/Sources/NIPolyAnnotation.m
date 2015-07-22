@@ -25,6 +25,12 @@
     [super dealloc];
 }
 
+- (void)translate:(NIVector)translation {
+    [self.vectors enumerateObjectsUsingBlock:^(NSValue* vv, NSUInteger idx, BOOL* stop) {
+        [self.mutableVectors replaceObjectAtIndex:idx withObject:[NSValue valueWithNIVector:NIVectorAdd(vv.NIVectorValue, translation)]];
+    }];
+}
+
 + (NSSet*)keyPathsForValuesAffectingNIBezierPath {
     return [NSSet setWithObjects: @"vectors", nil];
 }
@@ -61,6 +67,21 @@
 
 - (void)removeObjectFromVectorsAtIndex:(NSUInteger)index {
     [_vectors removeObjectAtIndex:index];
+}
+
+- (NSSet*)handlesInView:(NIAnnotatedGeneratorRequestView*)view {
+    NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform);
+    
+    NSMutableSet* handles = [NSMutableSet set];
+    
+    [self.vectors enumerateObjectsUsingBlock:^(NSValue* vv, NSUInteger idx, BOOL* stop) {
+        [handles addObject:[NIHandlerAnnotationHandle handleAtSliceVector:NIVectorApplyTransform(vv.NIVectorValue, dicomToSliceTransform)
+                                                                  handler:^(NIAnnotatedGeneratorRequestView* view, NIVector d) {
+                                                                      [self.mutableVectors replaceObjectAtIndex:idx withObject:[NSValue valueWithNIVector:NIVectorAdd([self.vectors[idx] NIVectorValue], d)]];
+                                                                  }]];
+    }];
+    
+    return handles;
 }
 
 @end

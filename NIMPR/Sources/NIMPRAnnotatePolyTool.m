@@ -7,7 +7,7 @@
 //
 
 #import "NIMPRAnnotatePolyTool.h"
-#import "NIMPRAnnotationInteractionTool.h"
+#import "NIMPRAnnotationSelectionTool.h"
 #import "NIMPRTool+Private.h"
 #import "NIPolyAnnotation.h"
 
@@ -63,12 +63,13 @@
     return YES;
 }
 
-//- (void)view:(NIMPRView*)view switchingTo:(Class)tc event:(NSEvent*)event {
-//    if (tc == NIMPRAnnotationInteractionTool.class)
-//        if (event.type == NSLeftMouseUp && NSEqualPoints([view convertPoint:event.locationInWindow fromView:nil], NSPointFromNIVector(NIVectorApplyTransform([self.annotation.vectors.lastObject NIVectorValue], NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform))))) {
-//            self.annotation = nil;
-//        }
-//}
+- (void)view:(NIMPRView*)view handled:(NSEvent*)event {
+    if (self.annotation)
+        if (event.type == NSLeftMouseDown && NSEqualPoints([event locationInView:view], self.currentLocation)) {
+            self.annotation = nil;
+        }
+    [view.toolsLayer setNeedsDisplay];
+}
 
 - (void)drawInView:(NIMPRView *)view {
     if (self.annotation.vectors.count > 0 && !NSEqualPoints(self.currentLocation, NSMakePoint(CGFLOAT_MAX, CGFLOAT_MAX))) {

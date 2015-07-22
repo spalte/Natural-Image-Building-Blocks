@@ -78,7 +78,12 @@ static BOOL NIMPRToolHidingCursor = NO;
     self.previousLocation = self.currentLocation;
     self.previousLocationVector = self.currentLocationVector;
     self.currentLocation = [view convertPoint:event.locationInWindow fromView:nil];
-    self.currentLocationVector = NIVectorApplyTransform(NIVectorMakeFromNSPoint(self.currentLocation), self.mouseDownGeneratorRequestSliceToDicomTransform);
+
+    NIAffineTransform sliceToDicomTransform = self.mouseDownGeneratorRequestSliceToDicomTransform;
+    if (!NIAffineTransformIsAffine(sliceToDicomTransform))
+        sliceToDicomTransform = view.presentedGeneratorRequest.sliceToDicomTransform;
+    
+    self.currentLocationVector = NIVectorApplyTransform(NIVectorMakeFromNSPoint(self.currentLocation), sliceToDicomTransform);
     
     return r;
 }

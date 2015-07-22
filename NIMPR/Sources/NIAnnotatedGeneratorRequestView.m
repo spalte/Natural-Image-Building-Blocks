@@ -38,7 +38,7 @@
     _selectedAnnotations = [[NSMutableSet alloc] init];
     _annotationsCaches = [[NSMutableDictionary alloc] init];
     
-    _annotationsBaseAlpha = .2;
+    _annotationsBaseAlpha = .5;
     
     CALayer* layer = self.annotationsLayer = [[[CALayer alloc] init] autorelease];
     layer.delegate = self;

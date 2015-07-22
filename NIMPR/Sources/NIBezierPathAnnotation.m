@@ -125,7 +125,7 @@
 }
 
 - (CGFloat)distanceToSlicePoint:(NSPoint)point cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint {
-    NIBezierPath* slicePath = [self.NIBezierPath bezierPathByApplyingTransform:NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)];
+    NIBezierPath* slicePath = [[self.NIBezierPath bezierPathByApplyingTransform:NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)] bezierPathByCollapsingZ];
     
     if (self.isSolid && [slicePath.NSBezierPath containsPoint:point]) {
         if (rpoint) *rpoint = point;
@@ -136,7 +136,7 @@
     [slicePath relativePositionClosestToLine:NILineMake(NIVectorMakeFromNSPoint(point), NIVectorZBasis) closestVector:&closestVector];
     
     if (rpoint) *rpoint = NSPointFromNIVector(closestVector);
-    return NIVectorDistance(NIVectorMakeFromNSPoint(point), NIVectorZeroZ(closestVector));
+    return NIVectorDistance(NIVectorMakeFromNSPoint(point), closestVector);
 }
 
 - (BOOL)intersectsSliceRect:(NSRect)rect cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view {
@@ -176,5 +176,7 @@
     [NSException raise:NSInvalidArgumentException format:@"Method -[%@ NSBezierPath] must be implemented for all NINSBezierPathAnnotation subclasses", self.className];
     return nil;
 }
+
+
 
 @end

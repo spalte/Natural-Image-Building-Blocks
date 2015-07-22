@@ -30,7 +30,7 @@
 		714D19C91B53C42100EBA644 /* NIRectangleAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 714D19C81B53C42100EBA644 /* NIRectangleAnnotation.m */; };
 		714D19CC1B53C8A700EBA644 /* NIMPRAnnotateRectangleTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 714D19CB1B53C8A700EBA644 /* NIMPRAnnotateRectangleTool.m */; };
 		714D19CF1B54010400EBA644 /* NIImageAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 714D19CE1B54010400EBA644 /* NIImageAnnotation.m */; };
-		714D19D31B564FD300EBA644 /* NIMPRAnnotationInteractionTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 714D19D21B564FD300EBA644 /* NIMPRAnnotationInteractionTool.m */; };
+		714D19D31B564FD300EBA644 /* NIMPRAnnotationSelectionTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 714D19D21B564FD300EBA644 /* NIMPRAnnotationSelectionTool.m */; };
 		714D19DA1B57F5AC00EBA644 /* NSBezierPath+NIMPR.m in Sources */ = {isa = PBXBuildFile; fileRef = 714D19D91B57F5AC00EBA644 /* NSBezierPath+NIMPR.m */; };
 		719473611B1D9802009363AE /* NIMPR.m in Sources */ = {isa = PBXBuildFile; fileRef = 719473601B1D9802009363AE /* NIMPR.m */; };
 		7194736A1B1D9C68009363AE /* NIBuildingBlocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 719473691B1D9C68009363AE /* NIBuildingBlocks.framework */; };
@@ -49,6 +49,7 @@
 		71FD92361B5E7FC90041E95F /* NIAnnotationHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 71FD92351B5E7FC90041E95F /* NIAnnotationHandle.m */; };
 		71FD92391B5EA0310041E95F /* NIMPRAnnotatePolyTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 71FD92381B5EA0310041E95F /* NIMPRAnnotatePolyTool.m */; };
 		71FD923C1B5EA04D0041E95F /* NIPolyAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 71FD923B1B5EA04D0041E95F /* NIPolyAnnotation.m */; };
+		71FD92441B5FA1690041E95F /* NIMPRAnnotationTranslationTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 71FD92431B5FA1690041E95F /* NIMPRAnnotationTranslationTool.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,8 +110,8 @@
 		714D19CB1B53C8A700EBA644 /* NIMPRAnnotateRectangleTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRAnnotateRectangleTool.m; sourceTree = "<group>"; };
 		714D19CD1B54010400EBA644 /* NIImageAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIImageAnnotation.h; sourceTree = "<group>"; };
 		714D19CE1B54010400EBA644 /* NIImageAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIImageAnnotation.m; sourceTree = "<group>"; };
-		714D19D11B564FD300EBA644 /* NIMPRAnnotationInteractionTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRAnnotationInteractionTool.h; sourceTree = "<group>"; };
-		714D19D21B564FD300EBA644 /* NIMPRAnnotationInteractionTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRAnnotationInteractionTool.m; sourceTree = "<group>"; };
+		714D19D11B564FD300EBA644 /* NIMPRAnnotationSelectionTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRAnnotationSelectionTool.h; sourceTree = "<group>"; };
+		714D19D21B564FD300EBA644 /* NIMPRAnnotationSelectionTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRAnnotationSelectionTool.m; sourceTree = "<group>"; };
 		714D19D81B57F5AB00EBA644 /* NSBezierPath+NIMPR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+NIMPR.h"; sourceTree = "<group>"; };
 		714D19D91B57F5AC00EBA644 /* NSBezierPath+NIMPR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+NIMPR.m"; sourceTree = "<group>"; };
 		7194735F1B1D9802009363AE /* NIMPR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPR.h; sourceTree = "<group>"; };
@@ -147,6 +148,8 @@
 		71FD923A1B5EA04D0041E95F /* NIPolyAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPolyAnnotation.h; sourceTree = "<group>"; };
 		71FD923B1B5EA04D0041E95F /* NIPolyAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPolyAnnotation.m; sourceTree = "<group>"; };
 		71FD923D1B5EDBE10041E95F /* NIMPRTool+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NIMPRTool+Private.h"; sourceTree = "<group>"; };
+		71FD92421B5FA1690041E95F /* NIMPRAnnotationTranslationTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRAnnotationTranslationTool.h; sourceTree = "<group>"; };
+		71FD92431B5FA1690041E95F /* NIMPRAnnotationTranslationTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRAnnotationTranslationTool.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -229,30 +232,9 @@
 				71FD923D1B5EDBE10041E95F /* NIMPRTool+Private.h */,
 				7133412B1B147E0A0014CE09 /* NIMPRTool.h */,
 				7133412C1B147E0A0014CE09 /* NIMPRTool.m */,
-				713341281B147DF50014CE09 /* NIMPRWLWWTool.h */,
-				713341291B147DF50014CE09 /* NIMPRWLWWTool.m */,
-				7133412E1B147E360014CE09 /* NIMPRMoveTool.h */,
-				7133412F1B147E360014CE09 /* NIMPRMoveTool.m */,
-				713341311B147E810014CE09 /* NIMPRZoomTool.h */,
-				713341321B147E810014CE09 /* NIMPRZoomTool.m */,
-				713341341B147E910014CE09 /* NIMPRRotateTool.h */,
-				713341351B147E910014CE09 /* NIMPRRotateTool.m */,
-				712F62801B4FDFFD004AC1AE /* NIMPRAnnotateTool.h */,
-				712F62811B4FDFFD004AC1AE /* NIMPRAnnotateTool.m */,
-				714D19D11B564FD300EBA644 /* NIMPRAnnotationInteractionTool.h */,
-				714D19D21B564FD300EBA644 /* NIMPRAnnotationInteractionTool.m */,
-				71FD92301B5E750C0041E95F /* NIMPRAnnotationHandleInteractionTool.h */,
-				71FD92311B5E750C0041E95F /* NIMPRAnnotationHandleInteractionTool.m */,
-				712F62651B4D56D8004AC1AE /* NIMPRAnnotatePointTool.h */,
-				712F62661B4D56D8004AC1AE /* NIMPRAnnotatePointTool.m */,
-				712F62831B50076E004AC1AE /* NIMPRAnnotateSegmentTool.h */,
-				712F62841B50076E004AC1AE /* NIMPRAnnotateSegmentTool.m */,
-				71FD92371B5EA0310041E95F /* NIMPRAnnotatePolyTool.h */,
-				71FD92381B5EA0310041E95F /* NIMPRAnnotatePolyTool.m */,
-				714D19CA1B53C8A700EBA644 /* NIMPRAnnotateRectangleTool.h */,
-				714D19CB1B53C8A700EBA644 /* NIMPRAnnotateRectangleTool.m */,
-				712F62861B5040F8004AC1AE /* NIMPRAnnotateEllipseTool.h */,
-				712F62871B5040F8004AC1AE /* NIMPRAnnotateEllipseTool.m */,
+				71FD923E1B5FA0D30041E95F /* Navigation */,
+				71FD92401B5FA10E0041E95F /* Annotation */,
+				71FD92411B5FA1200041E95F /* Interaction */,
 			);
 			name = Tools;
 			sourceTree = "<group>";
@@ -328,6 +310,53 @@
 				719D029E1AC1CB25002F76C1 /* NIMPR.osirixplugin */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		71FD923E1B5FA0D30041E95F /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				713341281B147DF50014CE09 /* NIMPRWLWWTool.h */,
+				713341291B147DF50014CE09 /* NIMPRWLWWTool.m */,
+				7133412E1B147E360014CE09 /* NIMPRMoveTool.h */,
+				7133412F1B147E360014CE09 /* NIMPRMoveTool.m */,
+				713341311B147E810014CE09 /* NIMPRZoomTool.h */,
+				713341321B147E810014CE09 /* NIMPRZoomTool.m */,
+				713341341B147E910014CE09 /* NIMPRRotateTool.h */,
+				713341351B147E910014CE09 /* NIMPRRotateTool.m */,
+			);
+			name = Navigation;
+			sourceTree = "<group>";
+		};
+		71FD92401B5FA10E0041E95F /* Annotation */ = {
+			isa = PBXGroup;
+			children = (
+				712F62801B4FDFFD004AC1AE /* NIMPRAnnotateTool.h */,
+				712F62811B4FDFFD004AC1AE /* NIMPRAnnotateTool.m */,
+				712F62651B4D56D8004AC1AE /* NIMPRAnnotatePointTool.h */,
+				712F62661B4D56D8004AC1AE /* NIMPRAnnotatePointTool.m */,
+				712F62831B50076E004AC1AE /* NIMPRAnnotateSegmentTool.h */,
+				712F62841B50076E004AC1AE /* NIMPRAnnotateSegmentTool.m */,
+				71FD92371B5EA0310041E95F /* NIMPRAnnotatePolyTool.h */,
+				71FD92381B5EA0310041E95F /* NIMPRAnnotatePolyTool.m */,
+				714D19CA1B53C8A700EBA644 /* NIMPRAnnotateRectangleTool.h */,
+				714D19CB1B53C8A700EBA644 /* NIMPRAnnotateRectangleTool.m */,
+				712F62861B5040F8004AC1AE /* NIMPRAnnotateEllipseTool.h */,
+				712F62871B5040F8004AC1AE /* NIMPRAnnotateEllipseTool.m */,
+			);
+			name = Annotation;
+			sourceTree = "<group>";
+		};
+		71FD92411B5FA1200041E95F /* Interaction */ = {
+			isa = PBXGroup;
+			children = (
+				714D19D11B564FD300EBA644 /* NIMPRAnnotationSelectionTool.h */,
+				714D19D21B564FD300EBA644 /* NIMPRAnnotationSelectionTool.m */,
+				71FD92421B5FA1690041E95F /* NIMPRAnnotationTranslationTool.h */,
+				71FD92431B5FA1690041E95F /* NIMPRAnnotationTranslationTool.m */,
+				71FD92301B5E750C0041E95F /* NIMPRAnnotationHandleInteractionTool.h */,
+				71FD92311B5E750C0041E95F /* NIMPRAnnotationHandleInteractionTool.m */,
+			);
+			name = Interaction;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -457,6 +486,7 @@
 				719D02AA1AC1D367002F76C1 /* NIMPRPlugin.m in Sources */,
 				7133412A1B147DF50014CE09 /* NIMPRWLWWTool.m in Sources */,
 				719473611B1D9802009363AE /* NIMPR.m in Sources */,
+				71FD92441B5FA1690041E95F /* NIMPRAnnotationTranslationTool.m in Sources */,
 				714D19C91B53C42100EBA644 /* NIRectangleAnnotation.m in Sources */,
 				712F627C1B4ED30E004AC1AE /* NIBezierPathAnnotation.m in Sources */,
 				719CC5261B0B1C2800DC1ED5 /* NIMPRView.m in Sources */,
@@ -480,7 +510,7 @@
 				712F62791B4EBDB9004AC1AE /* NIEllipseAnnotation.m in Sources */,
 				712F62881B5040F8004AC1AE /* NIMPRAnnotateEllipseTool.m in Sources */,
 				713341331B147E810014CE09 /* NIMPRZoomTool.m in Sources */,
-				714D19D31B564FD300EBA644 /* NIMPRAnnotationInteractionTool.m in Sources */,
+				714D19D31B564FD300EBA644 /* NIMPRAnnotationSelectionTool.m in Sources */,
 				713341441B15F3000014CE09 /* +NIMPR.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

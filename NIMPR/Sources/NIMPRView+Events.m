@@ -13,7 +13,8 @@
 #import "NIMPRZoomTool.h"
 #import <NIBuildingBlocks/NIIntersection.h>
 #import "NIMPRController.h"
-#import "NIMPRAnnotationInteractionTool.h"
+#import "NIMPRAnnotationSelectionTool.h"
+#import "NIMPRAnnotationTranslationTool.h"
 #import "NIMPRAnnotationHandleInteractionTool.h"
 #import "+NIMPR.h"
 #import <objc/runtime.h>
@@ -24,7 +25,21 @@
     return YES;
 }
 
-- (void)tool:(NIMPRTool*)tool sel:(SEL)sel event:(NSEvent*)event otherwise:(void(^)())block {
+- (NSArray*)ltools {
+    NIMPRTool* ltool = self.ltool;
+    if (ltool == _ltool)
+        return [NSArray arrayWithObjects: ltool, [self.window.windowController ltool], nil ];
+    return [NSArray arrayWithObjects: ltool, nil ];
+}
+
+- (NSArray*)rtools {
+    NIMPRTool* rtool = self.rtool;
+    if (rtool == _rtool)
+        return [NSArray arrayWithObjects: rtool, [self.window.windowController rtool], nil ];
+    return [NSArray arrayWithObjects: rtool, nil ];
+}
+
+- (void)tools:(NSArray*)tools sel:(SEL)sel event:(NSEvent*)event otherwise:(void(^)())block {
     NSString* ssel = NSStringFromSelector(sel);
     if ([ssel hasPrefix:@"rightMouse"] || [ssel hasPrefix:@"otherMouse"])
         ssel = [@"mouse" stringByAppendingString:[ssel substringFromIndex:NSMaxRange([ssel rangeOfString:@"Mouse"])]];
@@ -36,13 +51,22 @@
 
     SEL vsel = NSSelectorFromString([@"view:" stringByAppendingString:ssel]), orvsel = NSSelectorFromString([NSString stringWithFormat:@"view:%@otherwise:", ssel]);
     
+    NIMPRTool* tool = tools.count? tools[0] : nil;
+    bool r = NO;
     
     if ([tool respondsToSelector:orvsel]) {
         if ([[tool performSelector:orvsel withObjects:self:event:block] boolValue])
-            return;
+            r = YES;
     } else if ([tool respondsToSelector:vsel])
         if ([[tool performSelector:vsel withObjects:self:event] boolValue])
-            return;
+            r = YES;
+    
+    for (NSUInteger i = 1; i < tools.count; ++i)
+        if ([tools[i] respondsToSelector:@selector(view:handled:)])
+            [tools[i] view:self handled:event];
+    
+    if (r)
+        return;
     
     if (block)
         block();
@@ -52,21 +76,21 @@
 
 - (void)mouseDown:(NSEvent*)event {
 //    [self.mutableHighlightedAnnotations removeAllObjects];
-    [self tool:self.ltool sel:_cmd event:event otherwise:nil];
+    [self tools:self.ltools sel:_cmd event:event otherwise:nil];
 }
 
 - (void)rightMouseDown:(NSEvent*)event {
-    [self tool:self.rtool sel:_cmd event:event otherwise:^{
+    [self tools:self.rtools sel:_cmd event:event otherwise:^{
         [NSMenu popUpContextMenu:self.menu withEvent:event forView:self];
     }];
 }
 
 - (void)otherMouseDown:(NSEvent*)event {
-    [self tool:self.ltool sel:_cmd event:event otherwise:nil];
+    [self tools:self.ltools sel:_cmd event:event otherwise:nil];
 }
 
 - (void)mouseUp:(NSEvent*)event {
-    [self tool:self.ltool sel:_cmd event:event otherwise:^{
+    [self tools:self.ltools sel:_cmd event:event otherwise:^{
         [self flagsChanged:event];
         NIMPRView* view = [[self.window.contentView hitTest:event.locationInWindow] if:NIMPRView.class];
         if (view != self)
@@ -90,50 +114,50 @@
 }
 
 - (void)rightMouseUp:(NSEvent*)event {
-    [self tool:self.rtool sel:_cmd event:event otherwise:nil];
+    [self tools:self.rtools sel:_cmd event:event otherwise:nil];
 }
 
 - (void)otherMouseUp:(NSEvent*)event {
-    [self tool:self.ltool sel:_cmd event:event otherwise:nil];
+    [self tools:self.ltools sel:_cmd event:event otherwise:nil];
 }
 
 - (void)mouseMoved:(NSEvent*)event {
-    [self tool:self.ltool sel:_cmd event:event otherwise:^{
+    [self tools:self.ltools sel:_cmd event:event otherwise:^{
         [self hover:event];
     }];
 }
 
 - (void)mouseDragged:(NSEvent*)event {
-    [self tool:self.ltool sel:_cmd event:event otherwise:nil];
+    [self tools:self.ltools sel:_cmd event:event otherwise:nil];
     [super mouseDragged:event];
 }
 
 - (void)scrollWheel:(NSEvent*)event {
-    [self tool:self.ltool sel:_cmd event:event otherwise:nil];
+    [self tools:self.ltools sel:_cmd event:event otherwise:nil];
 }
 
 - (void)rightMouseDragged:(NSEvent*)event {
-    [self tool:self.rtool sel:_cmd event:event otherwise:nil];
+    [self tools:self.rtools sel:_cmd event:event otherwise:nil];
 }
 
 - (void)otherMouseDragged:(NSEvent*)event {
-    [self tool:self.ltool sel:_cmd event:event otherwise:nil];
+    [self tools:self.ltools sel:_cmd event:event otherwise:nil];
 }
 
 - (void)mouseEntered:(NSEvent*)event {
     [self.window makeFirstResponder:self];
     [self.window makeKeyAndOrderFront:self];
-    [self tool:self.ltool sel:_cmd event:event otherwise:nil];
+    [self tools:self.ltools sel:_cmd event:event otherwise:nil];
 }
 
 - (void)mouseExited:(NSEvent*)event {
-    [self tool:self.ltool sel:_cmd event:event otherwise:^{
+    [self tools:self.ltools sel:_cmd event:event otherwise:^{
         [self hover:event];
     }];
 }
 
 - (void)keyDown:(NSEvent*)event {
-    [self tool:self.ltool sel:_cmd event:event otherwise:^{
+    [self tools:self.ltools sel:_cmd event:event otherwise:^{
         NIMPRToolTag tool = 0;
         
         if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == 0 || (event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSFunctionKeyMask)
@@ -185,11 +209,11 @@
 }
 
 - (void)keyUp:(NSEvent*)event {
-    [self tool:self.ltool sel:_cmd event:event otherwise:nil];
+    [self tools:self.ltools sel:_cmd event:event otherwise:nil];
 }
 
 - (void)flagsChanged:(NSEvent*)event {
-    [self tool:self.ltool sel:_cmd event:event otherwise:^{
+    [self tools:self.ltools sel:_cmd event:event otherwise:^{
         [self hover:event];
     }];
 }
@@ -210,12 +234,13 @@
     Class ltc = [self toolForLocation:location event:event];
     
     if (self.ltool.class != ltc) {
-//        if ([self.ltool respondsToSelector:@selector(view:switchingTo:event:)])
-//            [self.ltool view:self switchingTo:ltc event:event];
+        if ([self.ltool respondsToSelector:@selector(view:dismissing:)])
+            [self.ltool view:self dismissing:event];
         self.ltool = [[[ltc alloc] init] autorelease];
-        if ([self.ltool respondsToSelector:@selector(view:flagsChanged:)])
-            [self.ltool view:self flagsChanged:event];
     }
+    
+    if ([self.ltool respondsToSelector:@selector(view:flagsChanged:)])
+        [self.ltool view:self flagsChanged:event];
     
     [self enumerateIntersectionsWithBlock:^(NSString* key, NIIntersection* intersection, BOOL* stop) {
         intersection.maskAroundMouse = !ltc;
@@ -231,8 +256,8 @@
     if (self.rtool.class != rtc)
         self.rtool = [[[rtc alloc] init] autorelease];
     
-    [self tool:self.ltool sel:@selector(hover:) event:event otherwise:nil];
-    [self tool:self.rtool sel:@selector(hover:) event:event otherwise:nil];
+    [self tools:self.ltools sel:@selector(hover:) event:event otherwise:nil];
+    [self tools:self.rtools sel:@selector(hover:) event:event otherwise:nil];
 }
 
 - (Class)toolForLocation:(NSPoint)location event:(NSEvent*)event {
@@ -277,10 +302,24 @@
             ltc = NIMPRRotateTool.class;
     }
     
+    if (event.modifierFlags&NSShiftKeyMask)
+        ltc = NIMPRAnnotationSelectionTool.class;
+    
     if (!ltc) {
         NIAnnotation* annotation = [self annotationAtLocation:location];
-        if (annotation)
-            ltc = NIMPRAnnotationInteractionTool.class;
+        
+        if (annotation) {
+            if ([self.selectedAnnotations containsObject:annotation])
+                [self.mutableHighlightedAnnotations set:self.selectedAnnotations];
+            else [self.mutableHighlightedAnnotations set:annotation];
+        } else
+            [self.mutableHighlightedAnnotations removeAllObjects];
+        
+        if (annotation) {
+            if ([self.selectedAnnotations containsObject:annotation])
+                ltc = NIMPRAnnotationTranslationTool.class;
+            else ltc = NIMPRAnnotationSelectionTool.class;
+        }
     }
     
     return ltc;
