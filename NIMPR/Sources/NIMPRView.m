@@ -17,7 +17,7 @@
 
 @implementation NIMPRView
 
-@synthesize data = _data, dataProperties = _dataProperties, windowLevel = _windowLevel, windowWidth = _windowWidth, slabWidth = _slabWidth;
+@synthesize data = _data, dataProperties = _dataProperties, windowLevel = _windowLevel, windowWidth = _windowWidth, slabWidth = _slabWidth, projectionMode = _projectionMode, projectionFlag = _projectionFlag;
 @synthesize point = _point, normal = _normal, xdir = _xdir, ydir = _ydir, reference = _reference;
 @synthesize pixelSpacing = _pixelSpacing;
 @synthesize menu = _menu;
@@ -47,10 +47,14 @@
     [layer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight]];
     [self.frameLayer addSublayer:layer];
     
+    self.projectionMode = NIProjectionModeMIP;
+    
     [self addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"data" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"windowLevel" options:0 context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"windowWidth" options:0 context:NIMPRView.class];
+    [self addObserver:self forKeyPath:@"projectionFlag" options:0 context:NIMPRView.class];
+    [self addObserver:self forKeyPath:@"projectionMode" options:0 context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"slabWidth" options:0 context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"point" options:0 context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"normal" options:0 context:NIMPRView.class];
@@ -80,6 +84,8 @@
     [self removeObserver:self forKeyPath:@"normal" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"point" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"slabWidth" context:NIMPRView.class];
+    [self removeObserver:self forKeyPath:@"projectionMode" context:NIMPRView.class];
+    [self removeObserver:self forKeyPath:@"projectionFlag" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"windowWidth" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"windowLevel" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"data" context:NIMPRView.class];
@@ -108,7 +114,7 @@
         [self updateGeneratorRequest];
     }
     
-    if ([keyPath isEqualToString:@"point"] || [keyPath isEqualToString:@"normal"] || [keyPath isEqualToString:@"xdir"] || [keyPath isEqualToString:@"ydir"] || [keyPath isEqualToString:@"pixelSpacing"] || [keyPath isEqualToString:@"slabWidth"]) {
+    if ([keyPath isEqualToString:@"point"] || [keyPath isEqualToString:@"normal"] || [keyPath isEqualToString:@"xdir"] || [keyPath isEqualToString:@"ydir"] || [keyPath isEqualToString:@"pixelSpacing"] || [keyPath isEqualToString:@"projectionFlag"] || [keyPath isEqualToString:@"projectionMode"] || [keyPath isEqualToString:@"slabWidth"]) {
         [self updateGeneratorRequest];
     }
     
@@ -175,12 +181,9 @@
         maxdiameter = fmax(maxdiameter, NIVectorDistance(edges[i*2], edges[i*2+1]));
     
     NIObliqueSliceGeneratorRequest* req = [[[NIObliqueSliceGeneratorRequest alloc] initWithCenter:self.point pixelsWide:NSWidth(self.frame) pixelsHigh:NSHeight(self.frame) xBasis:NIVectorScalarMultiply(self.xdir.vector, self.pixelSpacing) yBasis:NIVectorScalarMultiply(self.ydir.vector, self.pixelSpacing)] autorelease];
-    if (self.slabWidth > 0) {
+    if (self.projectionFlag) {
         req.slabWidth = self.slabWidth*maxdiameter;
-        req.projectionMode = NIProjectionModeMIP;
-    } else {
-        req.slabWidth = 0;
-        req.projectionMode = NIProjectionModeNone;
+        req.projectionMode = req.slabWidth? self.projectionMode : NIProjectionModeNone;
     }
     
     if (![req isEqual:self.generatorRequest])

@@ -68,7 +68,7 @@
 
 NSString* const NIMPRControllerToolbarItemIdentifierTools = @"NIMPRTools";
 NSString* const NIMPRControllerToolbarItemIdentifierAnnotationTools = @"NIMPRAnnotationTools";
-NSString* const NIMPRControllerToolbarItemIdentifierSlabWidth = @"NIMPRSlabWidth";
+NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIMPRProjection";
 
 - (NSArray*)tools {
     return [self.navigationTools arrayByAddingObjectsFromArray:self.annotationTools];
@@ -101,11 +101,11 @@ NSString* const NIMPRControllerToolbarItemIdentifierSlabWidth = @"NIMPRSlabWidth
 }
 
 - (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar {
-    return @[ NIMPRControllerToolbarItemIdentifierTools, NIMPRControllerToolbarItemIdentifierSlabWidth ];
+    return @[ NIMPRControllerToolbarItemIdentifierTools, NIMPRControllerToolbarItemIdentifierProjection ];
 }
 
 - (NSArray*)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar {
-    return @[ NIMPRControllerToolbarItemIdentifierTools, NIMPRControllerToolbarItemIdentifierAnnotationTools, NSToolbarSpaceItemIdentifier, NIMPRControllerToolbarItemIdentifierSlabWidth, @"Test" ];
+    return @[ NIMPRControllerToolbarItemIdentifierTools, NIMPRControllerToolbarItemIdentifierAnnotationTools, NSToolbarSpaceItemIdentifier, NIMPRControllerToolbarItemIdentifierProjection, @"Test" ];
 }
 
 - (NSToolbarItem*)toolbar:(NSToolbar*)toolbar itemForItemIdentifier:(NSString*)identifier willBeInsertedIntoToolbar:(BOOL)flag {
@@ -120,6 +120,7 @@ NSString* const NIMPRControllerToolbarItemIdentifierSlabWidth = @"NIMPRSlabWidth
         
         NIMPRSegmentedControl* seg = [[[NIMPRSegmentedControl alloc] initWithFrame:NSZeroRect] autorelease];
         NIMPRSegmentedCell* cell = [seg cell];
+        seg.toolTip = ta[0];
         
         NSMenu* menu = [[[NSMenu alloc] init] autorelease];
         item.menuFormRepresentation = [[NSMenuItem alloc] initWithTitle:ta[0] action:nil keyEquivalent:@""];
@@ -138,41 +139,69 @@ NSString* const NIMPRControllerToolbarItemIdentifierSlabWidth = @"NIMPRSlabWidth
         cell.controlSize = NSSmallControlSize;
         [seg sizeToFit];
         item.view = seg;
+
+        [cell bind:@"selectedTag" toObject:self withKeyPath:@"ltoolTag" options:0];
+        [cell bind:@"rselectedTag" toObject:self withKeyPath:@"rtoolTag" options:0];
     }
     
-    if ([identifier isEqualToString:NIMPRControllerToolbarItemIdentifierSlabWidth]) {
-        item.label = NSLocalizedString(@"Slab Width", nil);
+    if ([identifier isEqualToString:NIMPRControllerToolbarItemIdentifierProjection]) {
+        item.label = NSLocalizedString(@"Projection", nil);
         
-        NSSlider* slider = [[[NSSlider alloc] initWithFrame:NSZeroRect] autorelease];
-        NSSliderCell* cell = slider.cell;
+        NSButton* checkbox = [[[NSButton alloc] initWithFrame:NSZeroRect] autorelease];
+        checkbox.controlSize = NSMiniControlSize;
+        checkbox.title = nil;
+        [checkbox.cell setButtonType:NSSwitchButton];
+        checkbox.translatesAutoresizingMaskIntoConstraints = NO;
+        [checkbox sizeToFit];
+        [checkbox bind:@"value" toObject:self withKeyPath:@"projectionFlag" options:0];
+
+        NSPopUpButton* popup = [[NSPopUpButton alloc] initWithFrame:NSZeroRect];
+        [popup.menu addItemWithTitle:NSLocalizedString(@"MIP", nil) alt:NSLocalizedString(@"MIP - Maximum intensity projection", nil) tag:NIProjectionModeMIP];
+        [popup.menu addItemWithTitle:NSLocalizedString(@"MinIP", nil) alt:NSLocalizedString(@"MinIP - Minimum intensity projection", nil) tag:NIProjectionModeMinIP];
+        [popup.menu addItemWithTitle:NSLocalizedString(@"Mean", nil) tag:NIProjectionModeMean];
+        [popup.cell setControlSize:NSMiniControlSize];
+        popup.font = [NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]];
+        popup.toolTip = NSLocalizedString(@"Projection mode", nil);
+        popup.translatesAutoresizingMaskIntoConstraints = NO;
+        [popup sizeToFit];
+        [popup bind:@"selectedTag" toObject:self withKeyPath:@"projectionMode" options:0];
+        [popup bind:@"enabled" toObject:self withKeyPath:@"projectionFlag" options:0];
+        
+        NSSlider* slider = [[[NSSlider alloc] initWithFrame:NSZeroRect] autorelease]; // NSMakeRect(0, 0, 100, 20)
         slider.minValue = 0; slider.maxValue = 1;
         slider.numberOfTickMarks = 10;
         slider.allowsTickMarkValuesOnly = NO;
         slider.doubleValue = 0;
+        [slider.cell setControlSize:NSMiniControlSize];
+        slider.toolTip = NSLocalizedString(@"Slab width", nil);
+        slider.translatesAutoresizingMaskIntoConstraints = NO;
+        [slider sizeToFit];
+        [slider bind:@"value" toObject:self withKeyPath:@"slabWidth" options:0];
+        [slider bind:@"enabled" toObject:self withKeyPath:@"projectionFlag" options:0];
         
-        cell.controlSize = NSSmallControlSize;
-        slider.frame = NSMakeRect(0, 0, 100, 20);
-        item.view = slider;
+        NSView* view = [[[NSView alloc] initWithFrame:NSZeroRect] autorelease];
+        [view addSubview:checkbox];
+        [view addSubview:popup];
+        [view addSubview:slider];
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[checkbox]-d-[popup]-0-|" options:0 metrics:@{@"d":@(-4)} views:NSDictionaryOfVariableBindings(checkbox, popup)]];
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[slider]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(slider)]];
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|->=0-[popup]-d-[slider]->=0-|" options:0 metrics:@{@"d":@(-1)} views:NSDictionaryOfVariableBindings(popup, slider)]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:checkbox attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:popup attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+        view.translatesAutoresizingMaskIntoConstraints = NO;
+
+        [view setFrameSize:NSMakeSize(100, 28)];
+        [view layout];
+        
+        item.view = view;
     }
     
     item.autovalidates = NO;
     return item;
 }
 
-- (void)toolbarWillAddItem:(NSNotification*)notification {
-    NSToolbarItem* item = notification.userInfo[@"item"];
-    
-    if ([item.itemIdentifier isEqualToString:NIMPRControllerToolbarItemIdentifierTools] || [item.itemIdentifier isEqualToString:NIMPRControllerToolbarItemIdentifierAnnotationTools]) {
-        NIMPRSegmentedControl* seg = (id)item.view;
-        [seg.cell bind:@"selectedTag" toObject:self withKeyPath:@"ltoolTag" options:0];
-        [seg.cell bind:@"rselectedTag" toObject:self withKeyPath:@"rtoolTag" options:0];
-    }
-    
-    if ([item.itemIdentifier isEqualToString:NIMPRControllerToolbarItemIdentifierSlabWidth]) {
-        NSSlider* slider = (id)item.view;
-        [slider bind:@"value" toObject:self withKeyPath:@"slabWidth" options:0];
-    }
-}
+//- (void)toolbarWillAddItem:(NSNotification*)notification {
+//    NSToolbarItem* item = notification.userInfo[@"item"];
+//}
 
 @end
 

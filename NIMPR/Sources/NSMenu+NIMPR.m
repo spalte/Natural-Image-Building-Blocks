@@ -95,7 +95,40 @@ NSString* const NIMPRSubmenuMenuItemBlockKey = @"NIMPRSubmenuMenuItemBlock";
 
 @end
 
+@interface NIMPRAltMenuItem : NSMenuItem {
+    NSString* _altTitle;
+}
+
+@property(retain) NSString* altTitle;
+
+@end
+
+@implementation NIMPRAltMenuItem
+
+@synthesize altTitle = _altTitle;
+
+- (void)dealloc {
+    self.altTitle = nil;
+    [super dealloc];
+}
+
+@end
+
 @implementation NSMenu (NIMPR)
+
+- (NSMenuItem*)addItemWithTitle:(NSString *)title tag:(NSInteger)tag {
+    NSMenuItem* r = [self addItemWithTitle:title action:nil keyEquivalent:@""];
+    r.tag = tag;
+    return r;
+}
+
+- (NSMenuItem*)addItemWithTitle:(NSString *)title alt:(NSString *)alt tag:(NSInteger)tag {
+    NIMPRAltMenuItem* item = [[[NIMPRAltMenuItem alloc] initWithTitle:title action:nil keyEquivalent:@""] autorelease];
+    item.altTitle = alt;
+    item.tag = tag;
+    [self addItem:item];
+    return item;
+}
 
 - (NSMenuItem*)addItemWithTitle:(NSString*)title block:(void(^)())block {
     return [self addItemWithTitle:title keyEquivalent:@"" block:block];

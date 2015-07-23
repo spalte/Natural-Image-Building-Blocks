@@ -22,15 +22,15 @@ const CGFloat NIAnnotationHandleSize = 4;
     return self;
 }
 
-- (void)translateFromSlicePoint:(NSPoint)from toSlicePoint:(NSPoint)to view:(NIAnnotatedGeneratorRequestView*)view; {
-    NSLog(@"Warning: -[%@ translateFrom:to:view:]", self.className);
+- (void)translateFromSlicePoint:(NSPoint)from toSlicePoint:(NSPoint)to view:(NIAnnotatedGeneratorRequestView*)view event:(NSEvent*)event {
+    NSLog(@"Warning: -[%@ translateFromSlicePoint:toSlicePoint:view:event:]", self.className);
 }
 
 @end
 
 @interface NIHandlerAnnotationHandle ()
 
-@property(copy) void (^handler)(NIAnnotatedGeneratorRequestView* view, NIVector dd);
+@property(copy) void (^handler)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector dd);
 
 @end
 
@@ -38,15 +38,15 @@ const CGFloat NIAnnotationHandleSize = 4;
 
 @synthesize handler = _handler;
 
-+ (instancetype)handleAtSliceVector:(NIVector)sliceVector handler:(void(^)(NIAnnotatedGeneratorRequestView* view, NIVector dd))handler {
++ (instancetype)handleAtSliceVector:(NIVector)sliceVector handler:(void(^)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector dd))handler {
     return [self.class handleAtSlicePoint:NSPointFromNIVector(sliceVector) handler:handler];
 }
 
-+ (instancetype)handleAtSlicePoint:(NSPoint)slicePoint handler:(void(^)(NIAnnotatedGeneratorRequestView* view, NIVector dd))handler {
++ (instancetype)handleAtSlicePoint:(NSPoint)slicePoint handler:(void(^)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector dd))handler {
     return [[[self.class alloc] initWithSlicePoint:slicePoint handler:handler] autorelease];
 }
 
-- (id)initWithSlicePoint:(NSPoint)slicePoint handler:(void(^)(NIAnnotatedGeneratorRequestView* view, NIVector dd))handler {
+- (id)initWithSlicePoint:(NSPoint)slicePoint handler:(void(^)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector dd))handler {
     if ((self = [super initWithSlicePoint:slicePoint])) {
         self.handler = handler;
     }
@@ -59,8 +59,8 @@ const CGFloat NIAnnotationHandleSize = 4;
     [super dealloc];
 }
 
-- (void)translateFromSlicePoint:(NSPoint)from toSlicePoint:(NSPoint)to view:(NIAnnotatedGeneratorRequestView*)view {
-    self.handler(view, NIVectorSubtract(NIVectorApplyTransform(NIVectorMakeFromNSPoint(to), view.presentedGeneratorRequest.sliceToDicomTransform), NIVectorApplyTransform(NIVectorMakeFromNSPoint(from), view.presentedGeneratorRequest.sliceToDicomTransform)));
+- (void)translateFromSlicePoint:(NSPoint)from toSlicePoint:(NSPoint)to view:(NIAnnotatedGeneratorRequestView*)view event:(NSEvent*)event {
+    self.handler(view, event, NIVectorSubtract(NIVectorApplyTransform(NIVectorMakeFromNSPoint(to), view.presentedGeneratorRequest.sliceToDicomTransform), NIVectorApplyTransform(NIVectorMakeFromNSPoint(from), view.presentedGeneratorRequest.sliceToDicomTransform)));
 }
 
 @end
@@ -88,22 +88,22 @@ const CGFloat NIAnnotationHandleSize = 4;
     [super dealloc];
 }
 
-- (void)translateFromSlicePoint:(NSPoint)sfrom toSlicePoint:(NSPoint)sto view:(NIAnnotatedGeneratorRequestView *)view {
+- (void)translateFromSlicePoint:(NSPoint)sfrom toSlicePoint:(NSPoint)sto view:(NIAnnotatedGeneratorRequestView *)view event:(NSEvent*)event {
     NIAffineTransform sliceToPlaneTransform = NIAffineTransformConcat(view.presentedGeneratorRequest.sliceToDicomTransform, NIAffineTransformInvert(self.annotation.planeToDicomTransform));
     NIVector pfrom = NILineIntersectionWithPlane(NILineApplyTransform(NILineMake(NIVectorMakeFromNSPoint(sfrom), NIVectorZBasis), sliceToPlaneTransform), NIPlaneZZero);
     NIVector pto = NILineIntersectionWithPlane(NILineApplyTransform(NILineMake(NIVectorMakeFromNSPoint(sto), NIVectorZBasis), sliceToPlaneTransform), NIPlaneZZero);
-    [self translateFromPlaneVector:pfrom toPlaneVector:pto view:view];
+    [self translateFromPlaneVector:pfrom toPlaneVector:pto view:view event:event];
 }
 
-- (void)translateFromPlaneVector:(NIVector)vfrom toPlaneVector:(NIVector)vto view:(NIAnnotatedGeneratorRequestView *)view {
-    NSLog(@"Warning: -[%@ translateFromVector:toVector:view:] is missing", self.className);
+- (void)translateFromPlaneVector:(NIVector)vfrom toPlaneVector:(NIVector)vto view:(NIAnnotatedGeneratorRequestView *)view event:(NSEvent*)event {
+    NSLog(@"Warning: -[%@ translateFromPlaneVector:toPlaneVector:view:event:] is missing", self.className);
 }
 
 @end
 
 @interface NIHandlerPlaneAnnotationHandle ()
 
-@property(copy) void (^handler)(NIAnnotatedGeneratorRequestView* view, NIVector pd);
+@property(copy) void (^handler)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector pd);
 
 @end
 
@@ -111,15 +111,15 @@ const CGFloat NIAnnotationHandleSize = 4;
 
 @synthesize handler = _handler;
 
-+ (instancetype)handleAtSliceVector:(NIVector)sliceVector annotation:(NIAnnotation<NIPlaneAnnotation>*)a handler:(void(^)(NIAnnotatedGeneratorRequestView* view, NIVector pd))handler {
++ (instancetype)handleAtSliceVector:(NIVector)sliceVector annotation:(NIAnnotation<NIPlaneAnnotation>*)a handler:(void(^)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector pd))handler {
     return [self.class handleAtSlicePoint:NSPointFromNIVector(sliceVector) annotation:a handler:handler];
 }
 
-+ (instancetype)handleAtSlicePoint:(NSPoint)slicePoint annotation:(NIAnnotation<NIPlaneAnnotation>*)a handler:(void(^)(NIAnnotatedGeneratorRequestView* view, NIVector pd))handler {
++ (instancetype)handleAtSlicePoint:(NSPoint)slicePoint annotation:(NIAnnotation<NIPlaneAnnotation>*)a handler:(void(^)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector pd))handler {
     return [[[self.class alloc] initWithSlicePoint:slicePoint annotation:a handler:handler] autorelease];
 }
 
-- (id)initWithSlicePoint:(NSPoint)slicePoint annotation:(NIAnnotation<NIPlaneAnnotation>*)a handler:(void(^)(NIAnnotatedGeneratorRequestView* view, NIVector pd))handler {
+- (id)initWithSlicePoint:(NSPoint)slicePoint annotation:(NIAnnotation<NIPlaneAnnotation>*)a handler:(void(^)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector pd))handler {
     if ((self = [super initWithSlicePoint:slicePoint annotation:a])) {
         self.handler = handler;
     }
@@ -132,8 +132,8 @@ const CGFloat NIAnnotationHandleSize = 4;
     [super dealloc];
 }
 
-- (void)translateFromPlaneVector:(NIVector)vfrom toPlaneVector:(NIVector)vto view:(NIAnnotatedGeneratorRequestView *)view {
-    self.handler(view, NIVectorSubtract(vto, vfrom));
+- (void)translateFromPlaneVector:(NIVector)vfrom toPlaneVector:(NIVector)vto view:(NIAnnotatedGeneratorRequestView *)view event:(NSEvent*)event {
+    self.handler(view, event, NIVectorSubtract(vto, vfrom));
 }
 
 @end

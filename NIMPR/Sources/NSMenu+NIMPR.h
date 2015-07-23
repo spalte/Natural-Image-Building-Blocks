@@ -26,6 +26,9 @@
 
 @interface NSMenu (NIMPR)
 
+- (NSMenuItem*)addItemWithTitle:(NSString *)title tag:(NSInteger)tag;
+- (NSMenuItem*)addItemWithTitle:(NSString *)aString alt:(NSString*)alt tag:(NSInteger)tag;
+
 - (NSMenuItem*)addItemWithTitle:(NSString*)title block:(void(^)())block;
 - (NSMenuItem*)addItemWithTitle:(NSString*)title keyEquivalent:(NSString*)keyEquivalent block:(void(^)())block;
 - (NSMenuItem*)addItemWithTitle:(NSString*)title submenu:(NSMenu*)submenu;

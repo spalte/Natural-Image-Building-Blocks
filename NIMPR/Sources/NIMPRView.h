@@ -29,6 +29,8 @@
     NSMenu* _menu;
     id <NIMPRTool> _ltool, _rtool;
     Class _ltcAtSecondClick;
+    BOOL _projectionFlag;
+    NIProjectionMode _projectionMode;
     CGFloat _slabWidth;
     BOOL _mouseDown, _displayOverlays;
     CALayer* _toolsLayer;
@@ -36,6 +38,9 @@
 
 @property(retain) NIVolumeData* data;
 @property CGFloat windowLevel, windowWidth;
+
+@property BOOL projectionFlag;
+@property NIProjectionMode projectionMode;
 @property CGFloat slabWidth;
 
 @property NIVector point;

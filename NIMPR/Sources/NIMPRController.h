@@ -8,8 +8,7 @@
 
 #pragma once
 
-#import <Cocoa/Cocoa.h>
-//#import <OsiriXAPI/N3Geometry.h>
+#import <NIBuildingBlocks/NIGeneratorRequest.h>
 #import "NIMPRTool.h"
 
 @class NIVolumeData;
@@ -21,7 +20,7 @@ typedef NS_OPTIONS(NSUInteger, NIMPRFlags) {
     NIMPRSupportsAxisRotation  = 1<<1,
 };
 
-@interface NIMPRController : NSWindowController <NSSplitViewDelegate, NSToolbarDelegate> {
+@interface NIMPRController : NSWindowController <NSSplitViewDelegate, NSToolbarDelegate, NSMenuDelegate> {
     NSSplitView* _leftrightSplit;
     NSSplitView* _topbottomSplit;
     NIMPRView* _axialView;
@@ -45,6 +44,8 @@ typedef NS_OPTIONS(NSUInteger, NIMPRFlags) {
     NIMPRToolTag _ltoolTag, _rtoolTag;
     NIMPRTool *_ltool, *_rtool;
     
+    BOOL _projectionFlag;
+    NIProjectionMode _projectionMode;
     CGFloat _slabWidth;
     
     BOOL _spacebarDown;
@@ -69,6 +70,8 @@ typedef NS_OPTIONS(NSUInteger, NIMPRFlags) {
 @property NIMPRToolTag ltoolTag, rtoolTag;
 @property(retain, readonly) NIMPRTool *ltool, *rtool;
 
+@property BOOL projectionFlag;
+@property NIProjectionMode projectionMode;
 @property CGFloat slabWidth;
 
 @property(readonly,getter=spacebarIsDown) BOOL spacebarDown;

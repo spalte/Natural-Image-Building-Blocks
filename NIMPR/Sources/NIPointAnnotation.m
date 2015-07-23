@@ -69,7 +69,7 @@
 - (NSSet*)handlesInView:(NIAnnotatedGeneratorRequestView*)view {
     return [NSSet setWithObjects:
             [NIHandlerAnnotationHandle handleAtSlicePoint:NSPointFromNIVector(NIVectorApplyTransform(self.vector, NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)))
-                                                  handler:^(NIAnnotatedGeneratorRequestView* view, NIVector deltaDicomVector) {
+                                                  handler:^(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector deltaDicomVector) {
                                                       self.vector = NIVectorAdd(self.vector, deltaDicomVector);
                                                   }], nil];
 }

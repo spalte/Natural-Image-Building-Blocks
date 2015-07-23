@@ -15,11 +15,13 @@ extern NSString* const NIAnnotationDrawCache;
 extern CGFloat const NIAnnotationDistant;
 
 @interface NIAnnotation : NSObject {
+    NSString* _name;
     NSColor* _color;
 //    NSDictionary* _userInfo;
     NSMutableDictionary* _changes;
 }
 
+@property(retain, nonatomic) NSString* name;
 @property(retain, nonatomic) NSColor* color;
 
 + (id)pointWithVector:(NIVector)vector;
@@ -42,6 +44,8 @@ extern CGFloat const NIAnnotationDistant;
 - (BOOL)intersectsSliceRect:(NSRect)rect cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view;
 
 - (NSSet*)handlesInView:(NIAnnotatedGeneratorRequestView*)view;
+
+- (NSArray*)menuItems;
 
 @end
 

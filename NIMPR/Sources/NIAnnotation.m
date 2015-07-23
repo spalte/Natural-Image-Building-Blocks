@@ -24,6 +24,7 @@ CGFloat const NIAnnotationDistant = 4;
 
 @implementation NIAnnotation
 
+@synthesize name = _name;
 @synthesize color = _color;
 @synthesize changes = _changes;
 
@@ -41,6 +42,8 @@ CGFloat const NIAnnotationDistant = 4;
     [self removeObserver:self forKeyPath:@"annotation" context:NIAnnotation.class];
     [self enableChangeObservers:NO];
     self.changes = nil;
+    [_color release];
+    [_name release];
     [super dealloc];
 }
 
@@ -133,8 +136,23 @@ static NSColor* NIAnnotationDefaultColor = nil;
     return [self.class defaultColor];
 }
 
+- (NSString*)name {
+    if (_name)
+        return _name;
+    
+    NSString* name = [self.className substringFromIndex:2];
+    if ([name hasSuffix:@"Annotation"])
+        name = [name substringToIndex:name.length-10];
+    
+    return name;
+}
+
 - (NSSet*)handlesInView:(NIAnnotatedGeneratorRequestView*)view {
     return [NSSet set];
+}
+
+- (NSArray*)menuItems {
+    return nil;
 }
 
 + (id)pointWithVector:(NIVector)vector {

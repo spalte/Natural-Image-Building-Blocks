@@ -10,7 +10,7 @@
 
 extern NSString* const NIMPRControllerToolbarItemIdentifierTools;
 extern NSString* const NIMPRControllerToolbarItemIdentifierAnnotationTools;
-extern NSString* const NIMPRControllerToolbarItemIdentifierSlabWidth;
+extern NSString* const NIMPRControllerToolbarItemIdentifierProjection;
 
 @interface NIMPRController (Toolbar)
 

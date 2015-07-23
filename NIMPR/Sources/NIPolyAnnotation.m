@@ -76,7 +76,7 @@
     
     [self.vectors enumerateObjectsUsingBlock:^(NSValue* vv, NSUInteger idx, BOOL* stop) {
         [handles addObject:[NIHandlerAnnotationHandle handleAtSliceVector:NIVectorApplyTransform(vv.NIVectorValue, dicomToSliceTransform)
-                                                                  handler:^(NIAnnotatedGeneratorRequestView* view, NIVector d) {
+                                                                  handler:^(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector d) {
                                                                       [self.mutableVectors replaceObjectAtIndex:idx withObject:[NSValue valueWithNIVector:NIVectorAdd([self.vectors[idx] NIVectorValue], d)]];
                                                                   }]];
     }];

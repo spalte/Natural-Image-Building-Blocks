@@ -34,11 +34,10 @@
 - (BOOL)view:(NIMPRView*)view mouseDragged:(NSEvent*)event {
     [super view:view mouseDragged:event];
     
-    [self.handle translateFromSlicePoint:self.previousLocation toSlicePoint:self.currentLocation view:view];
+    [self.handle translateFromSlicePoint:self.previousLocation toSlicePoint:self.currentLocation view:view event:event];
     
     return YES;
 }
-
 
 - (NSArray*)cursorsForView:(NIMPRView*)view {
     return @[ NSCursor.pointingHandCursor, NSCursor.closedHandCursor ];

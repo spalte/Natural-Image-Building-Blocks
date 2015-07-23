@@ -33,11 +33,6 @@
     [super dealloc];
 }
 
-//- (BOOL)view:(NIMPRView *)view mouseMoved:(NSEvent *)event {
-//    [self view:view flagsChanged:event];
-//    return NO;
-//}
-
 - (BOOL)view:(NIMPRView*)view flagsChanged:(NSEvent*)event {
     if (self.mouseDownEvent)
         return NO;
@@ -54,7 +49,6 @@
 }
 
 - (BOOL)view:(NIMPRView*)view mouseDragged:(NSEvent*)event {
-    NSLog(@"DRAG!");
     [super view:view mouseDragged:event];
     
     [view.toolsLayer setNeedsDisplay];
@@ -75,7 +69,6 @@
 }
 
 - (BOOL)view:(NIMPRView*)view mouseUp:(NSEvent*)event {
-    NSLog(@"UP!");
     [view.toolsLayer setNeedsDisplay];
 
     if (self.mouseDownEvent.modifierFlags&NSShiftKeyMask) {
@@ -88,10 +81,6 @@
     
     return NO;
 }
-
-//- (void)view:(NIMPRView *)view dismissing:(NSEvent*)event {
-//    [view.mutableHighlightedAnnotations removeAllObjects];
-//}
 
 - (void)drawInView:(NIMPRView*)view {
     if (self.mouseDownView) {

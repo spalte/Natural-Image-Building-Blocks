@@ -37,6 +37,8 @@
 @synthesize ltoolTag = _ltoolTag, rtoolTag = _rtoolTag;
 @synthesize ltool = _ltool, rtool = _rtool;
 
+@synthesize projectionFlag = _projectionFlag;
+@synthesize projectionMode = _projectionMode;
 @synthesize slabWidth = _slabWidth;
 
 @synthesize spacebarDown = _spacebarDown;
@@ -56,6 +58,7 @@
         self.rtoolTag = NIMPRToolZoom;
         self.displayRims = YES;
         self.displayOverlays = YES;
+        self.projectionMode = NIProjectionModeMIP;
         _annotations = [[NSMutableSet alloc] init];
         _highlightedAnnotations = [[NSMutableSet alloc] init];
         _selectedAnnotations = [[NSMutableSet alloc] init];
@@ -65,6 +68,10 @@
 }
 
 - (void)awakeFromNib {
+    [self.axialView retain];
+    [self.sagittalView retain];
+    [self.coronalView retain];
+
     self.axialView.rimColor = [NSColor orangeColor];
     self.sagittalView.rimColor = [NSColor purpleColor];
     self.coronalView.rimColor = [NSColor blueColor];
@@ -82,6 +89,8 @@
         [view bind:@"displayOrientationLabels" toObject:self withKeyPath:@"displayOrientationLabels" options:nil];
         [view bind:@"displayScaleBar" toObject:self withKeyPath:@"displayScaleBars" options:nil];
         [view bind:@"displayRim" toObject:self withKeyPath:@"displayRims" options:nil];
+        [view bind:@"projectionFlag" toObject:self withKeyPath:@"projectionFlag" options:nil];
+        [view bind:@"projectionMode" toObject:self withKeyPath:@"projectionMode" options:nil];
         [view bind:@"slabWidth" toObject:self withKeyPath:@"slabWidth" options:nil];
         [view bind:@"displayOverlays" toObject:self withKeyPath:@"displayOverlays" options:nil];
         [view addObserver:self forKeyPath:@"annotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
@@ -97,6 +106,7 @@
     [self addObserver:self forKeyPath:@"selectedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
     
     self.menu = [[NSMenu alloc] init];
+    self.menu.delegate = self;
     
     [self.menu addItemWithTitle:NSLocalizedString(@"Reset this view's rotation", nil) block:^{
         if ([self.window.firstResponder isKindOfClass:NIMPRView.class])
@@ -122,7 +132,6 @@
     [[self.menu addItemWithTitle:NSLocalizedString(@"Display rims", nil) block:^{
         self.displayRims = !self.displayRims;
     }] bind:@"state" toObject:self withKeyPath:@"displayRims" options:nil];
-    
 }
 
 - (void)view:(NIMPRView*)view addIntersections:(NSDictionary*)others {
@@ -149,6 +158,11 @@
     [_selectedAnnotations release];
     [_highlightedAnnotations release];
     [_annotations release];
+    
+    [self.axialView release];
+    [self.sagittalView release];
+    [self.coronalView release];
+    
     [super dealloc];
 }
 
@@ -245,6 +259,47 @@
     
     for (NIMPRView* view in self.mprViews)
         view.pixelSpacing = pixelSpacing/pixelSpacingSize*fmin(NSWidth(view.frame), NSHeight(view.frame));
+}
+
+static NSString* const NIMPRControllerMenuAnnotationsDelimiter = @"NIMPRControllerMenuAnnotationsDelimiter";
+
+- (void)menuWillOpen:(NSMenu*)menu {
+//    [menu remove];
+    
+    NSInteger i = 0;
+    
+    NSMenuItem* delimiter = [[menu.itemArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"representedObject = %@", NIMPRControllerMenuAnnotationsDelimiter]] lastObject];
+    if (delimiter) {
+        for (i = [menu.itemArray indexOfObject:delimiter]-1; i >= 0; --i)
+            if ([[[menu itemAtIndex:i] representedObject] isKindOfClass:NIAnnotation.class])
+                [menu removeItemAtIndex:i];
+            else break;
+        ++i;
+    }
+    
+    for (NIAnnotation* a in self.highlightedAnnotations) {
+        NSMenuItem* mi = [[[NSMenuItem alloc] initWithTitle:a.name action:nil keyEquivalent:@""] autorelease];
+        mi.representedObject = a;
+        mi.submenu = [[[NSMenu alloc] init] autorelease];
+        
+        NSArray* smis = a.menuItems;
+        if (smis.count) {
+            for (NSMenuItem* smi in a.menuItems)
+                [mi.submenu addItem:smi];
+            [mi.submenu addItem:[NSMenuItem separatorItem]];
+        }
+        
+        [menu insertItem:mi atIndex:i++];
+    }
+    
+    if (self.highlightedAnnotations.count) {
+        if (!delimiter) {
+            NSMenuItem* s = [NSMenuItem separatorItem];
+            s.representedObject = NIMPRControllerMenuAnnotationsDelimiter;
+            [menu insertItem:s atIndex:i];
+        }
+    } else if (delimiter)
+        [menu removeItem:delimiter];
 }
 
 - (NSMutableSet*)mutableAnnotations {
