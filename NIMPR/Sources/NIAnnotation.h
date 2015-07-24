@@ -45,8 +45,6 @@ extern CGFloat const NIAnnotationDistant;
 
 - (NSSet*)handlesInView:(NIAnnotatedGeneratorRequestView*)view;
 
-- (NSArray*)menuItems;
-
 @end
 
 @protocol NIPlaneAnnotation <NSObject>

@@ -138,8 +138,8 @@
         }
         
         [NSColor.selectedTextBackgroundColor set];
-        for (NSArray* acb in selected_acbs)
-            [acb[0] highlightWithColor:NSColor.selectedTextBackgroundColor inView:self cache:acb[1] layer:layer context:ctx path:[acb[2] if:NSBezierPath.class]];
+//        for (NSArray* acb in selected_acbs)
+//            [acb[0] highlightWithColor:NSColor.selectedTextBackgroundColor inView:self cache:acb[1] layer:layer context:ctx path:[acb[2] if:NSBezierPath.class]];
         for (NSArray* acb in selected_acbs)
             for (NIAnnotationHandle* handle in [acb[0] handlesInView:self])
                 [[self.class NSBezierPathForHandle:handle] fill];

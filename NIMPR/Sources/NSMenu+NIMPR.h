@@ -12,7 +12,7 @@
     void(^_block)();
 }
 
-//+ (instancetype)itemWithTitle:(NSString*)title block:(void(^)())block;
++ (instancetype)itemWithTitle:(NSString *)title keyEquivalent:(NSString*)keyEquivalent block:(void(^)())block;
 
 @end
 

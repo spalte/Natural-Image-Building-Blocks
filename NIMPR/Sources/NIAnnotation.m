@@ -151,10 +151,6 @@ static NSColor* NIAnnotationDefaultColor = nil;
     return [NSSet set];
 }
 
-- (NSArray*)menuItems {
-    return nil;
-}
-
 + (id)pointWithVector:(NIVector)vector {
     return [[[NIPointAnnotation alloc] initWithVector:vector] autorelease];
 }

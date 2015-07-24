@@ -32,6 +32,7 @@
 		714D19CF1B54010400EBA644 /* NIImageAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 714D19CE1B54010400EBA644 /* NIImageAnnotation.m */; };
 		714D19D31B564FD300EBA644 /* NIMPRAnnotationSelectionTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 714D19D21B564FD300EBA644 /* NIMPRAnnotationSelectionTool.m */; };
 		714D19DA1B57F5AC00EBA644 /* NSBezierPath+NIMPR.m in Sources */ = {isa = PBXBuildFile; fileRef = 714D19D91B57F5AC00EBA644 /* NSBezierPath+NIMPR.m */; };
+		7157FDF01B623BE700AA90E2 /* NIBezierSurfaceAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7157FDED1B6184D500AA90E2 /* NIBezierSurfaceAnnotation.m */; };
 		719473611B1D9802009363AE /* NIMPR.m in Sources */ = {isa = PBXBuildFile; fileRef = 719473601B1D9802009363AE /* NIMPR.m */; };
 		7194736A1B1D9C68009363AE /* NIBuildingBlocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 719473691B1D9C68009363AE /* NIBuildingBlocks.framework */; };
 		719CC51E1B0B1BBC00DC1ED5 /* NIMPRController.m in Sources */ = {isa = PBXBuildFile; fileRef = 719CC51D1B0B1BBC00DC1ED5 /* NIMPRController.m */; };
@@ -114,6 +115,8 @@
 		714D19D21B564FD300EBA644 /* NIMPRAnnotationSelectionTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRAnnotationSelectionTool.m; sourceTree = "<group>"; };
 		714D19D81B57F5AB00EBA644 /* NSBezierPath+NIMPR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+NIMPR.h"; sourceTree = "<group>"; };
 		714D19D91B57F5AC00EBA644 /* NSBezierPath+NIMPR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+NIMPR.m"; sourceTree = "<group>"; };
+		7157FDEC1B6184D500AA90E2 /* NIBezierSurfaceAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIBezierSurfaceAnnotation.h; sourceTree = "<group>"; };
+		7157FDED1B6184D500AA90E2 /* NIBezierSurfaceAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIBezierSurfaceAnnotation.m; sourceTree = "<group>"; };
 		7194735F1B1D9802009363AE /* NIMPR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPR.h; sourceTree = "<group>"; };
 		719473601B1D9802009363AE /* NIMPR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPR.m; sourceTree = "<group>"; };
 		719473621B1D9883009363AE /* NIMPR+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NIMPR+Private.h"; sourceTree = "<group>"; };
@@ -222,6 +225,8 @@
 				714D19C81B53C42100EBA644 /* NIRectangleAnnotation.m */,
 				712F62771B4EBDB9004AC1AE /* NIEllipseAnnotation.h */,
 				712F62781B4EBDB9004AC1AE /* NIEllipseAnnotation.m */,
+				7157FDEC1B6184D500AA90E2 /* NIBezierSurfaceAnnotation.h */,
+				7157FDED1B6184D500AA90E2 /* NIBezierSurfaceAnnotation.m */,
 			);
 			name = Annotations;
 			sourceTree = "<group>";
@@ -495,6 +500,7 @@
 				71FD923C1B5EA04D0041E95F /* NIPolyAnnotation.m in Sources */,
 				713341301B147E360014CE09 /* NIMPRMoveTool.m in Sources */,
 				713341251B146EE50014CE09 /* NIMPRController+Toolbar.m in Sources */,
+				7157FDF01B623BE700AA90E2 /* NIBezierSurfaceAnnotation.m in Sources */,
 				713341401B15A4FA0014CE09 /* NIMPRView+Events.m in Sources */,
 				719CC51E1B0B1BBC00DC1ED5 /* NIMPRController.m in Sources */,
 				712F62731B4D6DC0004AC1AE /* NIAnnotation.m in Sources */,

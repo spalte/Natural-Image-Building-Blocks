@@ -186,7 +186,7 @@
 
 - (CGFloat)distanceToPoint:(NSPoint)point closestPoint:(NSPoint *)rpoint
 {
-    if (_generatorRequestView == nil || _intersectingObject == nil) {;
+    if (_generatorRequestView == nil || _intersectingObject == nil || !_generatorRequestView.presentedGeneratorRequest) {;
         return CGFLOAT_MAX;
     }
 

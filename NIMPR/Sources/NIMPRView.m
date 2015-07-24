@@ -124,17 +124,19 @@
         self.dataProperties.windowWidth = self.windowWidth;
     
     if ([keyPath isEqualToString:@"frame"]) {
-        NSRect o = [change[NSKeyValueChangeOldKey] rectValue], n = [change[NSKeyValueChangeNewKey] rectValue];
+//        NSRect o = [change[NSKeyValueChangeOldKey] rectValue], n = [change[NSKeyValueChangeNewKey] rectValue];
 
         if (self.track) [self removeTrackingArea:self.track];
         [self addTrackingArea:(self.track = [[[NSTrackingArea alloc] initWithRect:self.bounds options:NSTrackingMouseEnteredAndExited|NSTrackingMouseMoved+NSTrackingActiveInActiveApp owner:self userInfo:@{ @"NIMPRViewTrackingArea": @YES }] autorelease])];
 
-        [CATransaction begin];
-        [CATransaction setDisableActions:YES];
+//        [CATransaction begin];
+//        [CATransaction setDisableActions:YES];
+//        
+//        self.pixelSpacing = self.pixelSpacing / fmin(NSWidth(n), NSHeight(n)) * fmin(NSWidth(o), NSHeight(o));
+//        
+//        [CATransaction commit];
         
-        self.pixelSpacing = self.pixelSpacing / fmin(NSWidth(n), NSHeight(n)) * fmin(NSWidth(o), NSHeight(o));
-        
-        [CATransaction commit];
+        [self updateGeneratorRequest];
     }
     
     if ([keyPath isEqualToString:@"window.windowController.spacebarDown"] || [keyPath isEqualToString:@"window.windowController.ltool"]) {

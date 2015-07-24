@@ -18,8 +18,8 @@
 
 @implementation NIMPRController
 
-@synthesize leftrightSplit = _leftrightSplit;
-@synthesize topbottomSplit = _topbottomSplit;
+//@synthesize leftrightSplit = _leftrightSplit;
+//@synthesize topbottomSplit = _topbottomSplit;
 @synthesize axialView = _axialView;
 @synthesize sagittalView = _sagittalView;
 @synthesize coronalView = _coronalView;
@@ -36,6 +36,8 @@
 
 @synthesize ltoolTag = _ltoolTag, rtoolTag = _rtoolTag;
 @synthesize ltool = _ltool, rtool = _rtool;
+
+@synthesize viewsLayout = _viewsLayout;
 
 @synthesize projectionFlag = _projectionFlag;
 @synthesize projectionMode = _projectionMode;
@@ -68,18 +70,14 @@
 }
 
 - (void)awakeFromNib {
-    [self.axialView retain];
-    [self.sagittalView retain];
-    [self.coronalView retain];
+//    [self.axialView retain];
+//    [self.sagittalView retain];
+//    [self.coronalView retain];
 
     self.axialView.rimColor = [NSColor orangeColor];
     self.sagittalView.rimColor = [NSColor purpleColor];
     self.coronalView.rimColor = [NSColor blueColor];
     
-    [self view:self.axialView addIntersections:@{ @"abscissa": self.sagittalView, @"ordinate": self.coronalView }];
-    [self view:self.sagittalView addIntersections:@{ @"abscissa": self.coronalView, @"ordinate": self.axialView }];
-    [self view:self.coronalView addIntersections:@{ @"abscissa": self.sagittalView, @"ordinate": self.axialView }];
-
     for (NIMPRView* view in @[ self.axialView, self.sagittalView, self.coronalView ]) {
         [view bind:@"data" toObject:self withKeyPath:@"data" options:nil];
         [view bind:@"windowLevel" toObject:self withKeyPath:@"windowLevel" options:nil];
@@ -98,6 +96,7 @@
         [view addObserver:self forKeyPath:@"selectedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
     }
     
+    [self addObserver:self forKeyPath:@"viewsLayout" options:NSKeyValueObservingOptionInitial+NSKeyValueObservingOptionNew context:NIMPRController.class];
     [self addObserver:self forKeyPath:@"data" options:NSKeyValueObservingOptionInitial context:NIMPRController.class];
     [self addObserver:self forKeyPath:@"ltoolTag" options:NSKeyValueObservingOptionInitial context:NIMPRController.class];
     [self addObserver:self forKeyPath:@"rtoolTag" options:NSKeyValueObservingOptionInitial context:NIMPRController.class];
@@ -105,6 +104,12 @@
     [self addObserver:self forKeyPath:@"highlightedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
     [self addObserver:self forKeyPath:@"selectedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
     
+    [self reset];
+    
+    [self view:self.axialView addIntersections:@{ @"abscissa": self.sagittalView, @"ordinate": self.coronalView }];
+    [self view:self.sagittalView addIntersections:@{ @"abscissa": self.coronalView, @"ordinate": self.axialView }];
+    [self view:self.coronalView addIntersections:@{ @"abscissa": self.sagittalView, @"ordinate": self.axialView }];
+
     self.menu = [[NSMenu alloc] init];
     self.menu.delegate = self;
     
@@ -146,6 +151,7 @@
 }
 
 - (void)dealloc {
+    [self removeObserver:self forKeyPath:@"viewsLayout" context:NIMPRController.class];
     [self removeObserver:self forKeyPath:@"selectedAnnotations" context:NIMPRController.class];
     [self removeObserver:self forKeyPath:@"highlightedAnnotations" context:NIMPRController.class];
     [self removeObserver:self forKeyPath:@"annotations" context:NIMPRController.class];
@@ -159,11 +165,15 @@
     [_highlightedAnnotations release];
     [_annotations release];
     
-    [self.axialView release];
-    [self.sagittalView release];
-    [self.coronalView release];
+//    [self.axialView release];
+//    [self.sagittalView release];
+//    [self.coronalView release];
     
     [super dealloc];
+}
+
+- (NSView*)mprViewsContainer {
+    return [self.window contentView];
 }
 
 - (NSArray*)mprViews {
@@ -215,6 +225,69 @@
                 [set addObject:a];
         }
     }
+    
+    if ([keyPath isEqualToString:@"viewsLayout"]) {
+        [CATransaction begin];
+        [CATransaction setDisableActions:YES];
+        
+        NSView* container = self.mprViewsContainer;
+        [container.subviews enumerateObjectsUsingBlock:^(NSView* view, NSUInteger idx, BOOL *stop) {
+            [view removeFromSuperview];
+        }];
+        
+        switch ([change[NSKeyValueChangeNewKey] integerValue]) {
+            case NIMPRLayoutClassic: {
+                NSSplitView* tbs = [[[NSSplitView alloc] initWithFrame:NSZeroRect] autorelease];
+                tbs.translatesAutoresizingMaskIntoConstraints = NO;
+                tbs.dividerStyle = NSSplitViewDividerStyleThin;
+                [tbs addSubview:self.axialView];
+                [tbs addSubview:self.sagittalView];
+                NSSplitView* lrs = [[[NSSplitView alloc] initWithFrame:NSZeroRect] autorelease];
+                lrs.translatesAutoresizingMaskIntoConstraints = NO;
+                lrs.dividerStyle = NSSplitViewDividerStyleThin;
+                lrs.vertical = YES;
+                [lrs addSubview:tbs];
+                [lrs addSubview:self.coronalView];
+                [container addSubview:lrs];
+                [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[lrs]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(lrs)]];
+                [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[lrs]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(lrs)]];
+                [tbs setFrameSize:NSMakeSize(container.frame.size.height, container.frame.size.height/2)];
+                [self.coronalView setFrameSize:NSMakeSize(container.frame.size.height, container.frame.size.width-lrs.dividerThickness-container.frame.size.height/2)];
+                [container layout];
+                [lrs adjustSubviews];
+                [tbs adjustSubviews];
+            } break;
+            case NIMPRLayoutVertical: {
+                NSSplitView* split = [[[NSSplitView alloc] initWithFrame:NSZeroRect] autorelease];
+                split.translatesAutoresizingMaskIntoConstraints = NO;
+                split.dividerStyle = NSSplitViewDividerStyleThin;
+                split.vertical = YES;
+                [split addSubview:self.axialView];
+                [split addSubview:self.sagittalView];
+                [split addSubview:self.coronalView];
+                [container addSubview:split];
+                [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[split]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(split)]];
+                [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[split]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(split)]];
+                [container layout];
+                [split adjustSubviews];
+            } break;
+            case NIMPRLayoutHorizontal: {
+                NSSplitView* split = [[[NSSplitView alloc] initWithFrame:NSZeroRect] autorelease];
+                split.translatesAutoresizingMaskIntoConstraints = NO;
+                split.dividerStyle = NSSplitViewDividerStyleThin;
+                [split addSubview:self.axialView];
+                [split addSubview:self.sagittalView];
+                [split addSubview:self.coronalView];
+                [container addSubview:split];
+                [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[split]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(split)]];
+                [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[split]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(split)]];
+                [container layout];
+                [split adjustSubviews];
+            } break;
+        }
+        
+        [CATransaction commit];
+    }
 }
 
 - (void)rotate:(CGFloat)rads axis:(NIVector)axis excluding:(NIMPRView*)eview {
@@ -248,24 +321,25 @@
     self.windowLevel = self.initialWindowLevel;
     self.windowWidth = self.initialWindowWidth;
     
-    CGFloat pixelSpacing = 0, pixelSpacingSize = 0;
-    for (NIMPRView* view in self.mprViews) {
-        CGFloat pss = fmin(NSWidth(view.frame), NSHeight(view.frame)), ps = pss/NIVectorDistance(NIVectorZero, NIVectorMake(self.data.pixelsWide, self.data.pixelsHigh, self.data.pixelsDeep));
-        if (!pixelSpacing || ps < pixelSpacing) {
-            pixelSpacing = ps;
-            pixelSpacingSize = pss;
-        }
-    }
+    CGFloat pixelSpacing = 0;//, pixelSpacingSize = 0;
+//    for (NIMPRView* view in self.mprViews) {
+//        CGFloat pss = fmin(NSWidth(view.frame), NSHeight(view.frame)), ps = pss/NIVectorDistance(NIVectorZero, NIVectorMake(self.data.pixelsWide, self.data.pixelsHigh, self.data.pixelsDeep));
+//        if (!pixelSpacing || ps < pixelSpacing) {
+//            pixelSpacing = ps;
+//            pixelSpacingSize = pss;
+//        }
+//    }
+    
+    pixelSpacing = (self.data.pixelSpacingX+self.data.pixelSpacingY+self.data.pixelSpacingZ)/3;
     
     for (NIMPRView* view in self.mprViews)
-        view.pixelSpacing = pixelSpacing/pixelSpacingSize*fmin(NSWidth(view.frame), NSHeight(view.frame));
+        view.pixelSpacing = pixelSpacing;
+//        view.pixelSpacing = pixelSpacing/pixelSpacingSize*fmin(NSWidth(view.frame), NSHeight(view.frame));
 }
 
 static NSString* const NIMPRControllerMenuAnnotationsDelimiter = @"NIMPRControllerMenuAnnotationsDelimiter";
 
 - (void)menuWillOpen:(NSMenu*)menu {
-//    [menu remove];
-    
     NSInteger i = 0;
     
     NSMenuItem* delimiter = [[menu.itemArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"representedObject = %@", NIMPRControllerMenuAnnotationsDelimiter]] lastObject];
@@ -282,12 +356,7 @@ static NSString* const NIMPRControllerMenuAnnotationsDelimiter = @"NIMPRControll
         mi.representedObject = a;
         mi.submenu = [[[NSMenu alloc] init] autorelease];
         
-        NSArray* smis = a.menuItems;
-        if (smis.count) {
-            for (NSMenuItem* smi in a.menuItems)
-                [mi.submenu addItem:smi];
-            [mi.submenu addItem:[NSMenuItem separatorItem]];
-        }
+        [self menu:mi.submenu populateForAnnotation:a];
         
         [menu insertItem:mi atIndex:i++];
     }
@@ -300,6 +369,12 @@ static NSString* const NIMPRControllerMenuAnnotationsDelimiter = @"NIMPRControll
         }
     } else if (delimiter)
         [menu removeItem:delimiter];
+}
+
+- (void)menu:(NSMenu*)menu populateForAnnotation:(NIAnnotation*)a {
+    [menu addItemWithTitle:NSLocalizedString(@"Delete", nil) block:^{
+        [self.mutableAnnotations removeObject:a];
+    }];
 }
 
 - (NSMutableSet*)mutableAnnotations {

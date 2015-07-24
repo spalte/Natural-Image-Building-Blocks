@@ -8,9 +8,7 @@
             <connections>
                 <outlet property="axialView" destination="Fox-6d-HeJ" id="Eif-YD-XZB"/>
                 <outlet property="coronalView" destination="t1C-ae-ikp" id="fbY-7B-6gg"/>
-                <outlet property="leftrightSplit" destination="aBq-Gb-4R2" id="ZdK-yR-eyG"/>
                 <outlet property="sagittalView" destination="yMd-LL-Gbp" id="bg1-zY-ij4"/>
-                <outlet property="topbottomSplit" destination="sD6-V0-zVr" id="3LR-Ka-Cyr"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="tPa-gv-Nv2"/>
             </connections>
         </customObject>
@@ -24,57 +22,12 @@
             <view key="contentView" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="2" width="1113" height="806"/>
                 <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <splitView dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aBq-Gb-4R2">
-                        <rect key="frame" x="0.0" y="0.0" width="1113" height="806"/>
-                        <subviews>
-                            <splitView fixedFrame="YES" dividerStyle="thin" id="sD6-V0-zVr">
-                                <rect key="frame" x="0.0" y="0.0" width="560" height="806"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <subviews>
-                                    <customView fixedFrame="YES" id="Fox-6d-HeJ" customClass="NIMPRView">
-                                        <rect key="frame" x="0.0" y="0.0" width="560" height="393"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                    </customView>
-                                    <customView fixedFrame="YES" id="yMd-LL-Gbp" customClass="NIMPRView">
-                                        <rect key="frame" x="0.0" y="394" width="560" height="412"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                    </customView>
-                                </subviews>
-                                <holdingPriorities>
-                                    <real value="250"/>
-                                    <real value="250"/>
-                                </holdingPriorities>
-                                <connections>
-                                    <outlet property="delegate" destination="-2" id="AXa-u4-hCP"/>
-                                </connections>
-                            </splitView>
-                            <customView fixedFrame="YES" id="t1C-ae-ikp" customClass="NIMPRView">
-                                <rect key="frame" x="561" y="0.0" width="552" height="806"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                            </customView>
-                        </subviews>
-                        <holdingPriorities>
-                            <real value="250"/>
-                            <real value="250"/>
-                        </holdingPriorities>
-                        <connections>
-                            <outlet property="delegate" destination="-2" id="6wk-71-U1m"/>
-                        </connections>
-                    </splitView>
-                </subviews>
-                <constraints>
-                    <constraint firstItem="aBq-Gb-4R2" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="B6T-kQ-ZHj"/>
-                    <constraint firstAttribute="bottom" secondItem="aBq-Gb-4R2" secondAttribute="bottom" id="GG6-SG-vQO"/>
-                    <constraint firstAttribute="trailing" secondItem="aBq-Gb-4R2" secondAttribute="trailing" id="UZW-gB-BUx"/>
-                    <constraint firstItem="aBq-Gb-4R2" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="h4M-mA-XCB"/>
-                </constraints>
             </view>
             <toolbar key="toolbar" implicitIdentifier="DEDDBAC3-B336-4481-9E89-DF9CA566060A" showsBaselineSeparator="NO" displayMode="iconOnly" sizeMode="small" id="XsA-Wd-FQa">
                 <allowedToolbarItems>
                     <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="GhZ-02-wZ2"/>
                     <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="dlU-Wm-AQH"/>
-                    <toolbarItem implicitItemIdentifier="1461AAA1-B3EB-4F9E-9390-548FAA635DCF" explicitItemIdentifier="Test" label="Image" paletteLabel="Image" tag="-1" image="NSRevealFreestandingTemplate" id="6bI-Vc-lKA">
+                    <toolbarItem implicitItemIdentifier="1461AAA1-B3EB-4F9E-9390-548FAA635DCF" explicitItemIdentifier="Test" label="Test" paletteLabel="Test" tag="-1" image="NSRevealFreestandingTemplate" id="6bI-Vc-lKA" userLabel="Test">
                         <connections>
                             <action selector="test:" target="-2" id="Bfb-tz-boV"/>
                         </connections>
@@ -89,6 +42,30 @@
             </toolbar>
             <point key="canvasLocation" x="364.5" y="438"/>
         </window>
+        <customView translatesAutoresizingMaskIntoConstraints="NO" id="t1C-ae-ikp" userLabel="Coronal View" customClass="NIMPRView">
+            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+            <constraints>
+                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="10" id="cPn-aQ-WRk"/>
+                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="10" id="oHm-NE-KHQ"/>
+            </constraints>
+            <point key="canvasLocation" x="-97.5" y="1000.5"/>
+        </customView>
+        <customView translatesAutoresizingMaskIntoConstraints="NO" id="Fox-6d-HeJ" userLabel="Axial View" customClass="NIMPRView">
+            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+            <constraints>
+                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="10" id="7Ua-Pp-ORU"/>
+                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="10" id="gv5-52-NoN"/>
+            </constraints>
+            <point key="canvasLocation" x="84" y="1000"/>
+        </customView>
+        <customView translatesAutoresizingMaskIntoConstraints="NO" id="yMd-LL-Gbp" userLabel="Sagittal View" customClass="NIMPRView">
+            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+            <constraints>
+                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="10" id="35H-Wg-wYO"/>
+                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="10" id="VJ9-QL-2zh"/>
+            </constraints>
+            <point key="canvasLocation" x="262" y="1000"/>
+        </customView>
     </objects>
     <resources>
         <image name="NSRevealFreestandingTemplate" width="14" height="14"/>

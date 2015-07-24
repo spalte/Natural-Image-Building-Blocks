@@ -20,9 +20,15 @@ typedef NS_OPTIONS(NSUInteger, NIMPRFlags) {
     NIMPRSupportsAxisRotation  = 1<<1,
 };
 
-@interface NIMPRController : NSWindowController <NSSplitViewDelegate, NSToolbarDelegate, NSMenuDelegate> {
-    NSSplitView* _leftrightSplit;
-    NSSplitView* _topbottomSplit;
+typedef NS_ENUM(NSInteger, NIMPRLayoutTag) {
+    NIMPRLayoutClassic = 0,
+    NIMPRLayoutVertical,
+    NIMPRLayoutHorizontal,
+};
+
+@interface NIMPRController : NSWindowController <NSToolbarDelegate, NSMenuDelegate> {
+//    NSSplitView* _leftrightSplit;
+//    NSSplitView* _topbottomSplit;
     NIMPRView* _axialView;
     NIMPRView* _sagittalView;
     NIMPRView* _coronalView;
@@ -44,6 +50,8 @@ typedef NS_OPTIONS(NSUInteger, NIMPRFlags) {
     NIMPRToolTag _ltoolTag, _rtoolTag;
     NIMPRTool *_ltool, *_rtool;
     
+    NIMPRLayoutTag _viewsLayout;
+    
     BOOL _projectionFlag;
     NIProjectionMode _projectionMode;
     CGFloat _slabWidth;
@@ -51,8 +59,8 @@ typedef NS_OPTIONS(NSUInteger, NIMPRFlags) {
     BOOL _spacebarDown;
 }
 
-@property(assign) IBOutlet NSSplitView* leftrightSplit;
-@property(assign) IBOutlet NSSplitView* topbottomSplit;
+//@property(assign) IBOutlet NSSplitView* leftrightSplit;
+//@property(assign) IBOutlet NSSplitView* topbottomSplit;
 @property(assign) IBOutlet NIMPRView* axialView; // top-left
 @property(assign) IBOutlet NIMPRView* sagittalView; // bottom-left
 @property(assign) IBOutlet NIMPRView* coronalView; // right
@@ -70,6 +78,8 @@ typedef NS_OPTIONS(NSUInteger, NIMPRFlags) {
 @property NIMPRToolTag ltoolTag, rtoolTag;
 @property(retain, readonly) NIMPRTool *ltool, *rtool;
 
+@property NIMPRLayoutTag viewsLayout;
+
 @property BOOL projectionFlag;
 @property NIProjectionMode projectionMode;
 @property CGFloat slabWidth;
@@ -79,6 +89,7 @@ typedef NS_OPTIONS(NSUInteger, NIMPRFlags) {
 - (instancetype)initWithData:(NIVolumeData*)data window:(CGFloat)wl :(CGFloat)ww;
 
 - (NSArray*)mprViews;
+- (NSView*)mprViewsContainer;
 
 @property(readonly, copy) NSSet* annotations;
 - (NSMutableSet*)mutableAnnotations;

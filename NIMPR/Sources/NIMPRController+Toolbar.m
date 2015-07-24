@@ -22,24 +22,6 @@
 #import "NIMPRAnnotateEllipseTool.h"
 #import "NSMenu+NIMPR.h"
 
-@interface NIMPRToolRecord : NSObject {
-    NIMPRToolTag _tag;
-    NSString* _label;
-    NSImage* _image;
-    Class _handler;
-    NSMenu* _submenu;
-}
-
-@property NIMPRToolTag tag;
-@property(retain) NSString* label;
-@property(retain) NSImage* image;
-@property Class handler;
-@property(retain) NSMenu* submenu;
-
-+ (instancetype)toolWithTag:(NIMPRToolTag)tag label:(NSString*)label image:(NSImage*)image handler:(Class)handler;
-
-@end
-
 @class NIMPRSegmentedCell;
 
 @interface NIMPRSegmentedControl : NSSegmentedControl
@@ -68,51 +50,100 @@
 
 NSString* const NIMPRControllerToolbarItemIdentifierTools = @"NIMPRTools";
 NSString* const NIMPRControllerToolbarItemIdentifierAnnotationTools = @"NIMPRAnnotationTools";
+NSString* const NIMPRControllerToolbarItemIdentifierLayouts = @"NIMPRLayouts";
 NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIMPRProjection";
 
-- (NSArray*)tools {
-    return [self.navigationTools arrayByAddingObjectsFromArray:self.annotationTools];
++ (NSArray*)tools {
+    return [self.class.navigationTools arrayByAddingObjectsFromArray:self.class.annotationTools];
 }
 
-- (NSArray*)navigationTools {
++ (NSArray*)navigationTools {
     static NSArray* tools = nil;
-    if (!tools) tools = [@[ [NIMPRToolRecord toolWithTag:NIMPRToolWLWW label:NSLocalizedString(@"WL/WW", nil) image:[NIMPR image:@"Tool-WLWW"] handler:NIMPRWLWWTool.class],
-                            [NIMPRToolRecord toolWithTag:NIMPRToolMove label:NSLocalizedString(@"Move", nil) image:[NIMPR image:@"Tool-Move"] handler:NIMPRMoveTool.class],
-                            [NIMPRToolRecord toolWithTag:NIMPRToolZoom label:NSLocalizedString(@"Zoom", nil) image:[NIMPR image:@"Tool-Zoom"] handler:NIMPRZoomTool.class],
-                            [NIMPRToolRecord toolWithTag:NIMPRToolRotate label:NSLocalizedString(@"Rotate", nil) image:[NIMPR image:@"Tool-Rotate"] handler:NIMPRRotateTool.class],
-                            [NIMPRToolRecord toolWithTag:NIMPRToolInteract label:NSLocalizedString(@"Interact", nil) image:[NSCursor.pointingHandCursor image] handler:NIMPRAnnotationSelectionTool.class] ] retain];
+    if (!tools)
+        tools = [@[[NIMPRToolRecord recordWithLabel:NSLocalizedString(@"WL/WW", nil) image:[NIMPR image:@"Tool-WLWW"] tag:NIMPRToolWLWW handler:NIMPRWLWWTool.class],
+                   [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Move", nil) image:[NIMPR image:@"Tool-Move"] tag:NIMPRToolMove handler:NIMPRMoveTool.class],
+                   [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Zoom", nil) image:[NIMPR image:@"Tool-Zoom"] tag:NIMPRToolZoom handler:NIMPRZoomTool.class],
+                   [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Rotate", nil) image:[NIMPR image:@"Tool-Rotate"] tag:NIMPRToolRotate handler:NIMPRRotateTool.class],
+                   [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Interact", nil) image:[NSCursor.pointingHandCursor image] tag:NIMPRToolInteract handler:NIMPRAnnotationSelectionTool.class]] retain];
     return tools;
 }
 
-- (NSArray*)annotationTools {
++ (NSArray*)annotationTools {
     static NSArray* tools = nil;
-    if (!tools) tools = [@[ [NIMPRToolRecord toolWithTag:NIMPRToolAnnotatePoint label:NSLocalizedString(@"Point", nil) image:[NIMPR image:@"Tool-Annotate-Point"] handler:NIMPRAnnotatePointTool.class],
-                            [NIMPRToolRecord toolWithTag:NIMPRToolAnnotateSegment label:NSLocalizedString(@"Segment", nil) image:[NIMPR image:@"Tool-Annotate-Segment"] handler:NIMPRAnnotateSegmentTool.class],
-                            [NIMPRToolRecord toolWithTag:NIMPRToolAnnotatePoly label:NSLocalizedString(@"Poly", nil) image:[NIMPR image:@"Tool-Annotate-Poly"] handler:NIMPRAnnotatePolyTool.class],
-                            [NIMPRToolRecord toolWithTag:NIMPRToolAnnotateRectangle label:NSLocalizedString(@"Rectangle", nil) image:[NIMPR image:@"Tool-Annotate-Rectangle"] handler:NIMPRAnnotateRectangleTool.class],
-                            [NIMPRToolRecord toolWithTag:NIMPRToolAnnotateEllipse label:NSLocalizedString(@"Ellipse", nil) image:[NIMPR image:@"Tool-Annotate-Ellipse"] handler:NIMPRAnnotateEllipseTool.class] ] retain];
+    if (!tools)
+        tools = [@[[NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Point", nil) image:[NIMPR image:@"Tool-Annotate-Point"] tag:NIMPRToolAnnotatePoint handler:NIMPRAnnotatePointTool.class],
+                   [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Segment", nil) image:[NIMPR image:@"Tool-Annotate-Segment"] tag:NIMPRToolAnnotateSegment handler:NIMPRAnnotateSegmentTool.class],
+                   [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Poly", nil) image:[NIMPR image:@"Tool-Annotate-Poly"] tag:NIMPRToolAnnotateSegment handler:NIMPRAnnotatePolyTool.class],
+                   [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Rectangle", nil) image:[NIMPR image:@"Tool-Annotate-Rectangle"] tag:NIMPRToolAnnotateRectangle handler:NIMPRAnnotateRectangleTool.class],
+                   [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Ellipse", nil) image:[NIMPR image:@"Tool-Annotate-Ellipse"] tag:NIMPRToolAnnotateEllipse handler:NIMPRAnnotateEllipseTool.class] ] retain];
     return tools;
+}
+
++ (NIMPRToolRecord*)defaultTool {
+    return self.class.navigationTools[0];
+}
+
++ (NSArray*)layouts {
+    static NSArray* modes = nil;
+    if (!modes)
+        modes = [@[[NIMPRLayoutRecord recordWithLabel:NSLocalizedString(@"Classic", nil) image:[NIMPR image:@"Layout-Classic"] tag:NIMPRLayoutClassic],
+                   [NIMPRLayoutRecord recordWithLabel:NSLocalizedString(@"Vertical", nil) image:[NIMPR image:@"Layout-Vertical"] tag:NIMPRLayoutVertical],
+                   [NIMPRLayoutRecord recordWithLabel:NSLocalizedString(@"Horizontal", nil) image:[NIMPR image:@"Layout-Horizontal"] tag:NIMPRLayoutHorizontal]] retain];
+    return modes;
+}
+
++ (NIMPRLayoutRecord*)defaultLayout {
+    return self.class.layouts[0];
 }
 
 - (Class)toolClassForTag:(NIMPRToolTag)tag {
-    return [[[self.tools filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NIMPRToolRecord* tool, NSDictionary* bindings) {
+    return [[[self.class.tools filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NIMPRToolRecord* tool, NSDictionary* bindings) {
         return (tool.tag == tag);
     }]] lastObject] handler];
 }
 
-- (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar {
-    return @[ NIMPRControllerToolbarItemIdentifierTools, NIMPRControllerToolbarItemIdentifierProjection ];
+- (NSArray*)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar {
+    return @[ NIMPRControllerToolbarItemIdentifierTools, NIMPRControllerToolbarItemIdentifierAnnotationTools, NIMPRControllerToolbarItemIdentifierLayouts, NIMPRControllerToolbarItemIdentifierProjection ];
 }
 
 - (NSArray*)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar {
-    return @[ NIMPRControllerToolbarItemIdentifierTools, NIMPRControllerToolbarItemIdentifierAnnotationTools, NSToolbarSpaceItemIdentifier, NIMPRControllerToolbarItemIdentifierProjection, @"Test" ];
+    return @[ NIMPRControllerToolbarItemIdentifierTools, NIMPRControllerToolbarItemIdentifierAnnotationTools, NSToolbarSpaceItemIdentifier, NIMPRControllerToolbarItemIdentifierProjection, NSToolbarFlexibleSpaceItemIdentifier, NIMPRControllerToolbarItemIdentifierLayouts, @"Test" ];
 }
 
 - (NSToolbarItem*)toolbar:(NSToolbar*)toolbar itemForItemIdentifier:(NSString*)identifier willBeInsertedIntoToolbar:(BOOL)flag {
     NSToolbarItem* item = [[[NSToolbarItem alloc] initWithItemIdentifier:identifier] autorelease];
     
-    NSDictionary* tas = @{ NIMPRControllerToolbarItemIdentifierTools: @[ NSLocalizedString(@"Navigation", nil), self.navigationTools ],
-                           NIMPRControllerToolbarItemIdentifierAnnotationTools: @[ NSLocalizedString(@"Annotations", nil), self.annotationTools ] };
+    NSDictionary* tas = @{ NIMPRControllerToolbarItemIdentifierTools: @[ NSLocalizedString(@"Navigation", nil), self.class.navigationTools ],
+                           NIMPRControllerToolbarItemIdentifierAnnotationTools: @[ NSLocalizedString(@"Annotations", nil), self.class.annotationTools ] };
+    
+    if ([identifier isEqualToString:NIMPRControllerToolbarItemIdentifierLayouts]) {
+        item.label = NSLocalizedString(@"Layout", nil);
+        
+        NSSegmentedControl* seg = [[[NSSegmentedControl alloc] initWithFrame:NSZeroRect] autorelease];
+        NSSegmentedCell* cell = [seg cell];
+        seg.toolTip = item.label;
+        
+        NSMenu* menu = [[[NSMenu alloc] init] autorelease];
+        item.menuFormRepresentation = [[NSMenuItem alloc] initWithTitle:item.label action:nil keyEquivalent:@""];
+        item.menuFormRepresentation.submenu = menu;
+        
+        NSArray* layouts = self.class.layouts;
+        
+        seg.segmentCount = layouts.count;
+        [layouts enumerateObjectsUsingBlock:^(NIMPRLayoutRecord* r, NSUInteger i, BOOL* stop) {
+            [cell setTag:r.tag forSegment:i];
+            [seg setImage:r.image forSegment:i];
+            [menu addItem:[NIMPRBlockMenuItem itemWithTitle:r.label keyEquivalent:@"" block:^{
+                self.viewsLayout = r.tag;
+            }]];
+        }];
+        
+        cell.controlSize = NSSmallControlSize;
+        [seg sizeToFit];
+        item.view = seg;
+        
+        [cell bind:@"selectedTag" toObject:self withKeyPath:@"viewsLayout" options:0];
+    }
     
     NSArray* ta = [tas objectForKey:identifier];
     if (ta) {
@@ -120,7 +151,7 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIMPRProjecti
         
         NIMPRSegmentedControl* seg = [[[NIMPRSegmentedControl alloc] initWithFrame:NSZeroRect] autorelease];
         NIMPRSegmentedCell* cell = [seg cell];
-        seg.toolTip = ta[0];
+        seg.toolTip = item.label;
         
         NSMenu* menu = [[[NSMenu alloc] init] autorelease];
         item.menuFormRepresentation = [[NSMenuItem alloc] initWithTitle:ta[0] action:nil keyEquivalent:@""];
@@ -139,7 +170,7 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIMPRProjecti
         cell.controlSize = NSSmallControlSize;
         [seg sizeToFit];
         item.view = seg;
-
+        
         [cell bind:@"selectedTag" toObject:self withKeyPath:@"ltoolTag" options:0];
         [cell bind:@"rselectedTag" toObject:self withKeyPath:@"rtoolTag" options:0];
     }
@@ -213,19 +244,41 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIMPRProjecti
 @synthesize handler = _handler;
 @synthesize submenu = _submenu;
 
-+ (instancetype)toolWithTag:(NIMPRToolTag)tag label:(NSString*)label image:(NSImage*)image handler:(Class)handler {
-    NIMPRToolRecord* tool = [[[self.class alloc] init] autorelease];
-    tool.tag = tag;
-    tool.label = label;
-    tool.image = image; image.size = NSMakeSize(14,14);
-    tool.handler = handler;
-    return tool;
++ (instancetype)recordWithLabel:(NSString*)label image:(NSImage*)image tag:(NIMPRToolTag)tag handler:(Class)handler {
+    NIMPRToolRecord* r = [[[self.class alloc] init] autorelease];
+    r.label = label;
+    r.image = image;
+    r.tag = tag;
+    r.handler = handler;
+    return r;
 }
 
 - (void)dealloc {
     self.label = nil;
     self.image = nil;
     self.submenu = nil;
+    [super dealloc];
+}
+
+@end
+
+@implementation NIMPRLayoutRecord
+
+@synthesize label = _label;
+@synthesize image = _image;
+@synthesize tag = _tag;
+
++ (instancetype)recordWithLabel:(NSString *)label image:(NSImage *)image tag:(NIMPRLayoutTag)tag {
+    NIMPRLayoutRecord* r = [[[self.class alloc] init] autorelease];
+    r.label = label;
+    r.image = image;
+    r.tag = tag;
+    return r;
+}
+
+- (void)dealloc {
+    self.label = nil;
+    self.image = nil;
     [super dealloc];
 }
 
