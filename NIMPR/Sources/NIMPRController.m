@@ -13,6 +13,7 @@
 #import "NIMPRView.h"
 #import "NIMPRQuaternion.h"
 #import "NSMenu+NIMPR.h"
+#import "NIPolyAnnotation.h"
 
 #import "NIImageAnnotation.h"
 
@@ -371,10 +372,14 @@ static NSString* const NIMPRControllerMenuAnnotationsDelimiter = @"NIMPRControll
         [menu removeItem:delimiter];
 }
 
-- (void)menu:(NSMenu*)menu populateForAnnotation:(NIAnnotation*)a {
+- (void)menu:(NSMenu*)menu populateForAnnotation:(id)a {
     [menu addItemWithTitle:NSLocalizedString(@"Delete", nil) block:^{
         [self.mutableAnnotations removeObject:a];
     }];
+    if ([a isKindOfClass:NIPolyAnnotation.class])
+        [[menu addItemWithTitle:NSLocalizedString(@"Smoothen", nil) block:^{
+            [a setSmoothen:![a smoothen]];
+        }] bind:@"state" toObject:a withKeyPath:@"smoothen" options:nil];
 }
 
 - (NSMutableSet*)mutableAnnotations {

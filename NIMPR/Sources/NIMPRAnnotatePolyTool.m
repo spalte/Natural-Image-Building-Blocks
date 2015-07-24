@@ -17,6 +17,7 @@
 
 - (BOOL)view:(NIMPRView *)view mouseMoved:(NSEvent *)event {
     self.currentLocation = [view convertPoint:[view.window convertPointFromScreen:[NSEvent mouseLocation]] fromView:nil];
+    self.currentLocationVector = NIVectorApplyTransform(NIVectorMakeFromNSPoint(self.currentLocation), view.presentedGeneratorRequest.sliceToDicomTransform);
     
 //    [self view:view flagsChanged:event];
 
@@ -72,9 +73,19 @@
 }
 
 - (void)drawInView:(NIMPRView *)view {
-    if (self.annotation.vectors.count > 0 && !NSEqualPoints(self.currentLocation, NSMakePoint(CGFLOAT_MAX, CGFLOAT_MAX))) {
-        [[self.annotation.color colorWithAlphaComponent:self.annotation.color.alphaComponent/2] setStroke];
-        [NSBezierPath strokeLineFromPoint:self.currentLocation toPoint:NSPointFromNIVector(NIVectorApplyTransform([self.annotation.vectors.lastObject NIVectorValue], NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)))];
+    if (self.annotation.vectors.count > 0 && !self.mouseDownEvent && !NSEqualPoints(self.currentLocation, NSMakePoint(CGFLOAT_MAX, CGFLOAT_MAX))) {
+        NSColor* c = [self.annotation.color colorWithAlphaComponent:self.annotation.color.alphaComponent/2];
+        if (!self.annotation.smoothen) {
+            [c setStroke];
+            [NSBezierPath strokeLineFromPoint:self.currentLocation toPoint:NSPointFromNIVector(NIVectorApplyTransform([self.annotation.vectors.lastObject NIVectorValue], NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)))];
+        } else {
+            NIPolyAnnotation* stroke = [[[NIPolyAnnotation alloc] init] autorelease];
+            [stroke.mutableVectors addObjectsFromArray:self.annotation.vectors];
+            [stroke.mutableVectors addObject:[NSValue valueWithNIVector:self.currentLocationVector]];
+            stroke.color = c;
+            stroke.smoothen = YES;
+            [stroke drawInView:view cache:nil layer:nil context:nil];
+        }
     }
 }
 
