@@ -10,6 +10,8 @@
 #import "NIMPRController+Toolbar.h"
 #import <NIBuildingBlocks/NIIntersection.h>
 #import <NIBuildingBlocks/NIVolumeData.h>
+#import <objc/runtime.h>
+#import "NIMPRWindow.h"
 #import "NIMPRView.h"
 #import "NIMPRQuaternion.h"
 #import "NSMenu+NIMPR.h"
@@ -52,8 +54,16 @@
 @synthesize highlightedAnnotations = _highlightedAnnotations;
 @synthesize selectedAnnotations = _selectedAnnotations;
 
-- (instancetype)initWithData:(NIVolumeData*)data window:(CGFloat)wl :(CGFloat)ww {
-    if ((self = [super initWithWindowNibName:@"NIMPR" owner:self])) {
+- (id)initWithData:(NIVolumeData*)data wl:(CGFloat)wl ww:(CGFloat)ww {
+    return [self initWithData:data window:[[[NIMPRWindow alloc] initWithContentRect:NSMakeRect(10, 10, 800, 600)
+                                                                          styleMask:NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask
+                                                                            backing:NSBackingStoreBuffered
+                                                                              defer:NO] autorelease]
+                           wl:wl ww:ww];
+}
+
+- (id)initWithData:(NIVolumeData*)data window:(NSWindow*)window wl:(CGFloat)wl ww:(CGFloat)ww {
+    if ((self = [super initWithWindow:window])) { // Path:[NIMPR.bundle pathForResource:@"NIMPR" ofType:]
         self.data = data;
         self.initialWindowLevel = self.windowLevel = wl;
         self.initialWindowWidth = self.windowWidth = ww;
@@ -62,82 +72,93 @@
         self.displayRims = YES;
         self.displayOverlays = YES;
         self.projectionMode = NIProjectionModeMIP;
+        
         _annotations = [[NSMutableSet alloc] init];
         _highlightedAnnotations = [[NSMutableSet alloc] init];
         _selectedAnnotations = [[NSMutableSet alloc] init];
+        
+        NSToolbar* toolbar = [[[NSToolbar alloc] initWithIdentifier:@"NIMPR"] autorelease];
+        toolbar.allowsUserCustomization = window.toolbar.autosavesConfiguration = YES;
+        toolbar.displayMode = NSToolbarDisplayModeIconOnly;
+        toolbar.sizeMode = NSToolbarSizeModeSmall;
+        toolbar.delegate = self;
+        window.toolbar = toolbar;
+        window.showsToolbarButton = YES;
+        
+        Class mprViewClass = [self.class mprViewClass];
+        if (![mprViewClass isSubclassOfClass:NIMPRView.class])
+            NSLog(@"Warning: MPR view class %@ should be a subclass of %@, will very likely crash", mprViewClass.className, NIMPRView.className);
+        
+        NSRect frame = NSMakeRect(0, 0, 100, 100);
+        self.axialView = [[mprViewClass alloc] initWithFrame:frame];
+        self.axialView.rimColor = [NSColor orangeColor];
+        self.sagittalView = [[mprViewClass alloc] initWithFrame:frame];
+        self.sagittalView.rimColor = [NSColor purpleColor];
+        self.coronalView = [[mprViewClass alloc] initWithFrame:frame];
+        self.coronalView.rimColor = [NSColor blueColor];
+
+        [self view:self.axialView addIntersections:@{ @"abscissa": self.sagittalView, @"ordinate": self.coronalView }];
+        [self view:self.sagittalView addIntersections:@{ @"abscissa": self.coronalView, @"ordinate": self.axialView }];
+        [self view:self.coronalView addIntersections:@{ @"abscissa": self.sagittalView, @"ordinate": self.axialView }];
+
+        for (NIMPRView* view in @[ self.axialView, self.sagittalView, self.coronalView ]) {
+            [view bind:@"data" toObject:self withKeyPath:@"data" options:nil];
+            [view bind:@"windowLevel" toObject:self withKeyPath:@"windowLevel" options:nil];
+            [view bind:@"windowWidth" toObject:self withKeyPath:@"windowWidth" options:nil];
+            [view bind:@"point" toObject:self withKeyPath:@"point" options:nil];
+            [view bind:@"menu" toObject:self withKeyPath:@"menu" options:nil];
+            [view bind:@"displayOrientationLabels" toObject:self withKeyPath:@"displayOrientationLabels" options:nil];
+            [view bind:@"displayScaleBar" toObject:self withKeyPath:@"displayScaleBars" options:nil];
+            [view bind:@"displayRim" toObject:self withKeyPath:@"displayRims" options:nil];
+            [view bind:@"projectionFlag" toObject:self withKeyPath:@"projectionFlag" options:nil];
+            [view bind:@"projectionMode" toObject:self withKeyPath:@"projectionMode" options:nil];
+            [view bind:@"slabWidth" toObject:self withKeyPath:@"slabWidth" options:nil];
+            [view bind:@"displayOverlays" toObject:self withKeyPath:@"displayOverlays" options:nil];
+            [view addObserver:self forKeyPath:@"annotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
+            [view addObserver:self forKeyPath:@"highlightedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
+            [view addObserver:self forKeyPath:@"selectedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
+        }
+        
+        [self addObserver:self forKeyPath:@"viewsLayout" options:NSKeyValueObservingOptionInitial+NSKeyValueObservingOptionNew context:NIMPRController.class];
+        [self addObserver:self forKeyPath:@"data" options:NSKeyValueObservingOptionInitial context:NIMPRController.class];
+        [self addObserver:self forKeyPath:@"ltoolTag" options:NSKeyValueObservingOptionInitial context:NIMPRController.class];
+        [self addObserver:self forKeyPath:@"rtoolTag" options:NSKeyValueObservingOptionInitial context:NIMPRController.class];
+        [self addObserver:self forKeyPath:@"annotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
+        [self addObserver:self forKeyPath:@"highlightedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
+        [self addObserver:self forKeyPath:@"selectedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
+        
+        [self reset];
+        
+        self.menu = [[NSMenu alloc] init];
+        self.menu.delegate = self;
+        
+        [self.menu addItemWithTitle:NSLocalizedString(@"Reset this view's rotation", nil) block:^{
+            if ([self.window.firstResponder isKindOfClass:NIMPRView.class])
+                [(NIMPRView*)self.window.firstResponder rotateToInitial];
+        }];
+        [self.menu addItemWithTitle:NSLocalizedString(@"Reset all rotations", nil) block:^{
+            [self rotateToInitial];
+        }];
+        [self.menu addItemWithTitle:NSLocalizedString(@"Reset all", nil) keyEquivalent:@"r" block:^{
+            [self reset];
+        }];
+        
+        [self.menu addItem:[NSMenuItem separatorItem]];
+        
+        [[self.menu addItemWithTitle:NSLocalizedString(@"Display orientation labels", nil) block:^{
+            self.displayOrientationLabels = !self.displayOrientationLabels;
+        }] bind:@"state" toObject:self withKeyPath:@"displayOrientationLabels" options:nil];
+        
+        [[self.menu addItemWithTitle:NSLocalizedString(@"Display scale bars", nil) block:^{
+            self.displayScaleBars = !self.displayScaleBars;
+        }] bind:@"state" toObject:self withKeyPath:@"displayScaleBars" options:nil];
+        
+        [[self.menu addItemWithTitle:NSLocalizedString(@"Display rims", nil) block:^{
+            self.displayRims = !self.displayRims;
+        }] bind:@"state" toObject:self withKeyPath:@"displayRims" options:nil];
     }
     
     return self;
-}
-
-- (void)awakeFromNib {
-//    [self.axialView retain];
-//    [self.sagittalView retain];
-//    [self.coronalView retain];
-
-    self.axialView.rimColor = [NSColor orangeColor];
-    self.sagittalView.rimColor = [NSColor purpleColor];
-    self.coronalView.rimColor = [NSColor blueColor];
-    
-    for (NIMPRView* view in @[ self.axialView, self.sagittalView, self.coronalView ]) {
-        [view bind:@"data" toObject:self withKeyPath:@"data" options:nil];
-        [view bind:@"windowLevel" toObject:self withKeyPath:@"windowLevel" options:nil];
-        [view bind:@"windowWidth" toObject:self withKeyPath:@"windowWidth" options:nil];
-        [view bind:@"point" toObject:self withKeyPath:@"point" options:nil];
-        [view bind:@"menu" toObject:self withKeyPath:@"menu" options:nil];
-        [view bind:@"displayOrientationLabels" toObject:self withKeyPath:@"displayOrientationLabels" options:nil];
-        [view bind:@"displayScaleBar" toObject:self withKeyPath:@"displayScaleBars" options:nil];
-        [view bind:@"displayRim" toObject:self withKeyPath:@"displayRims" options:nil];
-        [view bind:@"projectionFlag" toObject:self withKeyPath:@"projectionFlag" options:nil];
-        [view bind:@"projectionMode" toObject:self withKeyPath:@"projectionMode" options:nil];
-        [view bind:@"slabWidth" toObject:self withKeyPath:@"slabWidth" options:nil];
-        [view bind:@"displayOverlays" toObject:self withKeyPath:@"displayOverlays" options:nil];
-        [view addObserver:self forKeyPath:@"annotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
-        [view addObserver:self forKeyPath:@"highlightedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
-        [view addObserver:self forKeyPath:@"selectedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
-    }
-    
-    [self addObserver:self forKeyPath:@"viewsLayout" options:NSKeyValueObservingOptionInitial+NSKeyValueObservingOptionNew context:NIMPRController.class];
-    [self addObserver:self forKeyPath:@"data" options:NSKeyValueObservingOptionInitial context:NIMPRController.class];
-    [self addObserver:self forKeyPath:@"ltoolTag" options:NSKeyValueObservingOptionInitial context:NIMPRController.class];
-    [self addObserver:self forKeyPath:@"rtoolTag" options:NSKeyValueObservingOptionInitial context:NIMPRController.class];
-    [self addObserver:self forKeyPath:@"annotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
-    [self addObserver:self forKeyPath:@"highlightedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
-    [self addObserver:self forKeyPath:@"selectedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
-    
-    [self reset];
-    
-    [self view:self.axialView addIntersections:@{ @"abscissa": self.sagittalView, @"ordinate": self.coronalView }];
-    [self view:self.sagittalView addIntersections:@{ @"abscissa": self.coronalView, @"ordinate": self.axialView }];
-    [self view:self.coronalView addIntersections:@{ @"abscissa": self.sagittalView, @"ordinate": self.axialView }];
-
-    self.menu = [[NSMenu alloc] init];
-    self.menu.delegate = self;
-    
-    [self.menu addItemWithTitle:NSLocalizedString(@"Reset this view's rotation", nil) block:^{
-        if ([self.window.firstResponder isKindOfClass:NIMPRView.class])
-            [(NIMPRView*)self.window.firstResponder rotateToInitial];
-    }];
-    [self.menu addItemWithTitle:NSLocalizedString(@"Reset all rotations", nil) block:^{
-        [self rotateToInitial];
-    }];
-    [self.menu addItemWithTitle:NSLocalizedString(@"Reset all", nil) keyEquivalent:@"r" block:^{
-        [self reset];
-    }];
-
-    [self.menu addItem:[NSMenuItem separatorItem]];
-    
-    [[self.menu addItemWithTitle:NSLocalizedString(@"Display orientation labels", nil) block:^{
-        self.displayOrientationLabels = !self.displayOrientationLabels;
-    }] bind:@"state" toObject:self withKeyPath:@"displayOrientationLabels" options:nil];
-    
-    [[self.menu addItemWithTitle:NSLocalizedString(@"Display scale bars", nil) block:^{
-        self.displayScaleBars = !self.displayScaleBars;
-    }] bind:@"state" toObject:self withKeyPath:@"displayScaleBars" options:nil];
-    
-    [[self.menu addItemWithTitle:NSLocalizedString(@"Display rims", nil) block:^{
-        self.displayRims = !self.displayRims;
-    }] bind:@"state" toObject:self withKeyPath:@"displayRims" options:nil];
 }
 
 - (void)view:(NIMPRView*)view addIntersections:(NSDictionary*)others {
@@ -166,11 +187,15 @@
     [_highlightedAnnotations release];
     [_annotations release];
     
-//    [self.axialView release];
-//    [self.sagittalView release];
-//    [self.coronalView release];
+    self.axialView = nil;
+    self.sagittalView = nil;
+    self.coronalView = nil;
     
     [super dealloc];
+}
+
++ (Class)mprViewClass {
+    return NIMPRView.class;
 }
 
 - (NSView*)mprViewsContainer {

@@ -27,8 +27,6 @@ typedef NS_ENUM(NSInteger, NIMPRLayoutTag) {
 };
 
 @interface NIMPRController : NSWindowController <NSToolbarDelegate, NSMenuDelegate> {
-//    NSSplitView* _leftrightSplit;
-//    NSSplitView* _topbottomSplit;
     NIMPRView* _axialView;
     NIMPRView* _sagittalView;
     NIMPRView* _coronalView;
@@ -59,11 +57,9 @@ typedef NS_ENUM(NSInteger, NIMPRLayoutTag) {
     BOOL _spacebarDown;
 }
 
-//@property(assign) IBOutlet NSSplitView* leftrightSplit;
-//@property(assign) IBOutlet NSSplitView* topbottomSplit;
-@property(assign) IBOutlet NIMPRView* axialView; // top-left
-@property(assign) IBOutlet NIMPRView* sagittalView; // bottom-left
-@property(assign) IBOutlet NIMPRView* coronalView; // right
+@property(readonly,retain) NIMPRView* axialView; // top-left
+@property(readonly,retain) NIMPRView* sagittalView; // bottom-left
+@property(readonly,retain) NIMPRView* coronalView; // right
 
 @property(retain) NIVolumeData* data;
 @property CGFloat windowWidth, windowLevel;
@@ -86,8 +82,10 @@ typedef NS_ENUM(NSInteger, NIMPRLayoutTag) {
 
 @property(readonly,getter=spacebarIsDown) BOOL spacebarDown;
 
-- (instancetype)initWithData:(NIVolumeData*)data window:(CGFloat)wl :(CGFloat)ww;
+- (id)initWithData:(NIVolumeData*)data wl:(CGFloat)wl ww:(CGFloat)ww;
+- (id)initWithData:(NIVolumeData*)data window:(NSWindow*)window wl:(CGFloat)wl ww:(CGFloat)ww;
 
++ (Class)mprViewClass;
 - (NSArray*)mprViews;
 - (NSView*)mprViewsContainer;
 
@@ -102,5 +100,7 @@ typedef NS_ENUM(NSInteger, NIMPRLayoutTag) {
 - (void)rotateToInitial;
 - (void)moveToInitial;
 - (void)reset;
+
+- (IBAction)test:(id)sender;
 
 @end

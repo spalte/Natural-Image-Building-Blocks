@@ -10,6 +10,10 @@
 
 @interface NIMPRController ()
 
+@property(readwrite,retain) NIMPRView* axialView; // top-left
+@property(readwrite,retain) NIMPRView* sagittalView; // bottom-left
+@property(readwrite,retain) NIMPRView* coronalView; // right
+
 @property CGFloat initialWindowLevel, initialWindowWidth;
 @property(retain, readwrite) NIMPRQuaternion *x, *y, *z;
 @property(retain, readwrite) NIMPRTool *ltool, *rtool;

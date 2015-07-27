@@ -103,7 +103,7 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIMPRProjecti
 }
 
 - (NSArray*)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar {
-    return @[ NIMPRControllerToolbarItemIdentifierTools, NIMPRControllerToolbarItemIdentifierAnnotationTools, NIMPRControllerToolbarItemIdentifierLayouts, NIMPRControllerToolbarItemIdentifierProjection ];
+    return @[ NIMPRControllerToolbarItemIdentifierTools, NIMPRControllerToolbarItemIdentifierAnnotationTools, NIMPRControllerToolbarItemIdentifierLayouts, NIMPRControllerToolbarItemIdentifierProjection, @"Test" ];
 }
 
 - (NSArray*)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar {
@@ -224,6 +224,12 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIMPRProjecti
         [view layout];
         
         item.view = view;
+    }
+    
+    if ([identifier isEqualToString:@"Test"]) {
+        item.label = item.toolTip = identifier;
+        item.image = [NSImage imageNamed:@"NSRevealFreestandingTemplate"];
+        item.action = @selector(test:);
     }
     
     item.autovalidates = NO;

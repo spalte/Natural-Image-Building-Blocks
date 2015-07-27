@@ -31,7 +31,7 @@ static NIMPRPlugin* instance = nil;
 - (long)filterImage:(NSString*)menuName {
     NIVolumeData* data = [viewerController NIVolumeDataForMovieIndex:viewerController.curMovieIndex];
     
-    NIMPRController* mpr = [[NIMPRController alloc] initWithData:data window:viewerController.curWL:viewerController.curWW];
+    NIMPRController* mpr = [[NIMPRController alloc] initWithData:data wl:viewerController.curWL ww:viewerController.curWW];
     mpr.displayScaleBars = mpr.displayOrientationLabels = YES;
     
     [mpr.window makeKeyAndOrderFront:self];
