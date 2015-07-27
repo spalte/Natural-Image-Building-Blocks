@@ -93,6 +93,8 @@
 }
 
 + (void)spline:(NSArray*)ksa :(NSArray**)rcp1s :(NSArray**)rcp2s { // this is based on http://www.codeproject.com/Articles/31859/Draw-a-Smooth-Curve-through-a-Set-of-D-Points-wit - check http://www.codeproject.com/Articles/33776/Draw-Closed-Smooth-Curve-with-Bezier-Spline for closed paths..
+    assert(rcp1s != NULL && rcp2s != NULL);
+    
     if (ksa.count <= 2) {
         *rcp1s = *rcp2s = nil;
         return;

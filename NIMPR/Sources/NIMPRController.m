@@ -253,9 +253,9 @@
     }
     
     if ([keyPath isEqualToString:@"viewsLayout"]) {
-        [CATransaction begin];
-        [CATransaction setDisableActions:YES];
-        
+//        [CATransaction begin];
+//        [CATransaction setDisableActions:YES];
+
         NSView* container = self.mprViewsContainer;
         [container.subviews enumerateObjectsUsingBlock:^(NSView* view, NSUInteger idx, BOOL *stop) {
             [view removeFromSuperview];
@@ -263,23 +263,23 @@
         
         switch ([change[NSKeyValueChangeNewKey] integerValue]) {
             case NIMPRLayoutClassic: {
-                NSSplitView* tbs = [[[NSSplitView alloc] initWithFrame:NSZeroRect] autorelease];
-                tbs.translatesAutoresizingMaskIntoConstraints = NO;
-                tbs.dividerStyle = NSSplitViewDividerStyleThin;
-                [tbs addSubview:self.axialView];
-                [tbs addSubview:self.sagittalView];
                 NSSplitView* lrs = [[[NSSplitView alloc] initWithFrame:NSZeroRect] autorelease];
                 lrs.translatesAutoresizingMaskIntoConstraints = NO;
                 lrs.dividerStyle = NSSplitViewDividerStyleThin;
                 lrs.vertical = YES;
-                [lrs addSubview:tbs];
-                [lrs addSubview:self.coronalView];
                 [container addSubview:lrs];
                 [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[lrs]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(lrs)]];
                 [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[lrs]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(lrs)]];
-                [tbs setFrameSize:NSMakeSize(container.frame.size.height, container.frame.size.height/2)];
-                [self.coronalView setFrameSize:NSMakeSize(container.frame.size.height, container.frame.size.width-lrs.dividerThickness-container.frame.size.height/2)];
-                [container layout];
+                NSSplitView* tbs = [[[NSSplitView alloc] initWithFrame:NSMakeRect(0, 0, (container.frame.size.width-lrs.dividerThickness)/2, container.frame.size.height)] autorelease];
+                tbs.translatesAutoresizingMaskIntoConstraints = NO;
+                tbs.dividerStyle = NSSplitViewDividerStyleThin;
+                [lrs addSubview:tbs];
+                [self.axialView setFrame:NSMakeRect(0, 0, (container.frame.size.width-lrs.dividerThickness)/2, (container.frame.size.height-lrs.dividerThickness)/2)];
+                [tbs addSubview:self.axialView];
+                [self.sagittalView setFrame:NSMakeRect(0, (container.frame.size.height-lrs.dividerThickness)/2+tbs.dividerThickness, (container.frame.size.width-lrs.dividerThickness)/2, (container.frame.size.height-lrs.dividerThickness)/2)];
+                [tbs addSubview:self.sagittalView];
+                [lrs addSubview:self.coronalView];
+                [self.coronalView setFrame:NSMakeRect((container.frame.size.width-lrs.dividerThickness)/2+lrs.dividerThickness, 0, (container.frame.size.width-lrs.dividerThickness)/2, container.frame.size.height)];
                 [lrs adjustSubviews];
                 [tbs adjustSubviews];
             } break;
@@ -288,31 +288,35 @@
                 split.translatesAutoresizingMaskIntoConstraints = NO;
                 split.dividerStyle = NSSplitViewDividerStyleThin;
                 split.vertical = YES;
-                [split addSubview:self.axialView];
-                [split addSubview:self.sagittalView];
-                [split addSubview:self.coronalView];
                 [container addSubview:split];
                 [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[split]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(split)]];
                 [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[split]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(split)]];
-                [container layout];
+                [self.axialView setFrame:NSMakeRect(0, 0, (container.frame.size.width-split.dividerThickness*2)/3, container.frame.size.height)];
+                [split addSubview:self.axialView];
+                [self.sagittalView setFrame:NSMakeRect((container.frame.size.width-split.dividerThickness*2)/3+split.dividerThickness, 0, (container.frame.size.width-split.dividerThickness*2)/3, container.frame.size.height)];
+                [split addSubview:self.sagittalView];
+                [self.coronalView setFrame:NSMakeRect((container.frame.size.width-split.dividerThickness*2)/3*2+split.dividerThickness*2, 0, (container.frame.size.width-split.dividerThickness*2)/3, container.frame.size.height)];
+                [split addSubview:self.coronalView];
                 [split adjustSubviews];
             } break;
             case NIMPRLayoutHorizontal: {
                 NSSplitView* split = [[[NSSplitView alloc] initWithFrame:NSZeroRect] autorelease];
                 split.translatesAutoresizingMaskIntoConstraints = NO;
                 split.dividerStyle = NSSplitViewDividerStyleThin;
-                [split addSubview:self.axialView];
-                [split addSubview:self.sagittalView];
-                [split addSubview:self.coronalView];
                 [container addSubview:split];
                 [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[split]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(split)]];
                 [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[split]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(split)]];
-                [container layout];
+                [self.axialView setFrame:NSMakeRect(0, 0, container.frame.size.width, (container.frame.size.height-split.dividerThickness*2)/3)];
+                [split addSubview:self.axialView];
+                [self.sagittalView setFrame:NSMakeRect(0, (container.frame.size.height-split.dividerThickness*2)/3+split.dividerThickness, container.frame.size.width, (container.frame.size.height-split.dividerThickness*2)/3)];
+                [split addSubview:self.sagittalView];
+                [self.coronalView setFrame:NSMakeRect(0, (container.frame.size.height-split.dividerThickness*2)/3*2+split.dividerThickness*2, container.frame.size.width, (container.frame.size.height-split.dividerThickness*2)/3)];
+                [split addSubview:self.coronalView];
                 [split adjustSubviews];
             } break;
         }
         
-        [CATransaction commit];
+//        [CATransaction commit];
     }
 }
 

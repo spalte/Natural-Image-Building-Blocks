@@ -14,6 +14,7 @@
 @class NIVolumeData;
 @class NIMPRView;
 @class NIMPRQuaternion;
+@class NIMPRLayoutRecord;
 
 typedef NS_OPTIONS(NSUInteger, NIMPRFlags) {
     NIMPRSupportsRotation      = 1<<0,
@@ -24,6 +25,7 @@ typedef NS_ENUM(NSInteger, NIMPRLayoutTag) {
     NIMPRLayoutClassic = 0,
     NIMPRLayoutVertical,
     NIMPRLayoutHorizontal,
+    NIMPRLayoutsCount
 };
 
 @interface NIMPRController : NSWindowController <NSToolbarDelegate, NSMenuDelegate> {
