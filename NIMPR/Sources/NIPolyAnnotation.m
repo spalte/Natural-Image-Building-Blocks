@@ -92,7 +92,7 @@
     return handles;
 }
 
-+ (void)spline:(NSArray*)ksa :(NSArray**)rcp1s :(NSArray**)rcp2s {
++ (void)spline:(NSArray*)ksa :(NSArray**)rcp1s :(NSArray**)rcp2s { // this is based on http://www.codeproject.com/Articles/31859/Draw-a-Smooth-Curve-through-a-Set-of-D-Points-wit - check http://www.codeproject.com/Articles/33776/Draw-Closed-Smooth-Curve-with-Bezier-Spline for closed paths..
     if (ksa.count <= 2) {
         *rcp1s = *rcp2s = nil;
         return;
@@ -110,20 +110,20 @@
     t[0] = NIVectorAdd(ks[0], NIVectorScalarMultiply(ks[1], 2));
     for (NSUInteger i = 1; i < n-1; ++i)
         t[i] = NIVectorAdd(NIVectorScalarMultiply(ks[i], 4), NIVectorScalarMultiply(ks[i+1], 2));
-    t[n-1] = NIVectorScalarMultiply(NIVectorAdd(NIVectorScalarMultiply(ks[n-1], 8), ks[n]), .5);
+    t[n-1] = NIVectorScalarDivide(NIVectorAdd(NIVectorScalarMultiply(ks[n-1], 8), ks[n]), 2);
     
     NIVector r[n], tmp[n], b = NIVectorMake(2, 2, 2);
     
-    r[0] = NIVectorMake(t[0].x/b.x, t[0].y/b.y, t[0].z/b.z);
+    r[0] = NIVectorDivide(t[0], b);
     for (NSUInteger i = 1; i < n; ++i) { // decomposition and forward substitution
-        tmp[i] = NIVectorMake(1./b.x, 1./b.y, 1./b.z);
+        tmp[i] = NIVectorDivide(NIVectorOne, b);
         CGFloat bb = (i < n-1 ? 4.0 : 3.5);
         b = NIVectorMake(bb-tmp[i].x, bb-tmp[i].y, bb-tmp[i].z);
-        r[i] = NIVectorMake((t[i].x-r[i-1].x)/b.x, (t[i].y-r[i-1].y)/b.y, (t[i].z-r[i-1].z)/b.z);
+        r[i] = NIVectorDivide(NIVectorSubtract(t[i], r[i-1]), b);
     }
     
     for (NSUInteger i = 1; i < n; ++i) // backsubstitution
-        r[n-i-1] = NIVectorSubtract(r[n-i-1], NIVectorMake(tmp[n-i].x*r[n-i].x, tmp[n-i].y*r[n-i].y, tmp[n-i].z*r[n-i].z));
+        r[n-i-1] = NIVectorSubtract(r[n-i-1], NIVectorMultiply(tmp[n-i], r[n-i]));
     
     NSMutableArray* cp1s = [NSMutableArray array];
     NSMutableArray* cp2s = [NSMutableArray array];

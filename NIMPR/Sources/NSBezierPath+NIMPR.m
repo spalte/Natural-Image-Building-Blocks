@@ -199,7 +199,7 @@ static BOOL _curvedLineIntersectsRect(const NSPoint *c, NSRect rect, CGFloat tol
     startPoint = currentPoint = points[0];
     needANewStartPoint = NO;
     
-    for(i=1;i<count;i++) {
+    for(i=1; i < count; i++) {
         NSBezierPathElement element = [self elementAtIndex:i associatedPoints:points];
         switch(element) {
             case NSMoveToBezierPathElement:

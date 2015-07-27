@@ -27,6 +27,7 @@
 static const CGFloat _NIGeometrySmallNumber = (CGFLOAT_MIN * 1E5);
 
 const NIVector NIVectorZero = {0.0, 0.0, 0.0};
+const NIVector NIVectorOne = {1.0, 1.0, 1.0};
 const NIVector NIVectorXBasis = {1.0, 0.0, 0.0};
 const NIVector NIVectorYBasis = {0.0, 1.0, 0.0};
 const NIVector NIVectorZBasis = {0.0, 0.0, 1.0};
@@ -89,6 +90,24 @@ NIVector NIVectorSubtract(NIVector vector1, NIVector vector2)
     return vector;
 }
 
+NIVector NIVectorMultiply(NIVector vector1, NIVector vector2)
+{
+    NIVector newVector;
+    newVector.x = vector1.x * vector2.x;
+    newVector.y = vector1.y * vector2.y;
+    newVector.z = vector1.z * vector2.z;
+    return newVector;
+}
+
+NIVector NIVectorDivide(NIVector vector1, NIVector vector2)
+{
+    NIVector newVector;
+    newVector.x = vector1.x / vector2.x;
+    newVector.y = vector1.y / vector2.y;
+    newVector.z = vector1.z / vector2.z;
+    return newVector;
+}
+
 NIVector NIVectorScalarMultiply(NIVector vector, CGFloat scalar)
 {
     NIVector newVector;
@@ -96,6 +115,11 @@ NIVector NIVectorScalarMultiply(NIVector vector, CGFloat scalar)
     newVector.y = vector.y * scalar;
     newVector.z = vector.z * scalar;
     return newVector;
+}
+
+NIVector NIVectorScalarDivide(NIVector vector, CGFloat scalar)
+{
+    return NIVectorScalarMultiply(vector, 1./scalar);
 }
 
 NIVector NIVectorZeroZ(NIVector vector)

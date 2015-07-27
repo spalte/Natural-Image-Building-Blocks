@@ -85,6 +85,7 @@ typedef NIAffineTransform *NIAffineTransformPointer;
 typedef NIAffineTransform *NIAffineTransformArray;
 
 extern const NIVector NIVectorZero;
+extern const NIVector NIVectorOne; // TODO: should we name this NIVectorBasis?
 
 extern const NIVector NIVectorXBasis;
 extern const NIVector NIVectorYBasis;
@@ -99,7 +100,10 @@ bool NIVectorIsUnit(NIVector vector);
 
 NIVector NIVectorAdd(NIVector vector1, NIVector vector2);
 NIVector NIVectorSubtract(NIVector vector1, NIVector vector2);
+NIVector NIVectorMultiply(NIVector vector1, NIVector vector2);
+NIVector NIVectorDivide(NIVector vector1, NIVector vector2);
 NIVector NIVectorScalarMultiply(NIVector vector1, CGFloat scalar);
+NIVector NIVectorScalarDivide(NIVector vector1, CGFloat scalar);
 NIVector NIVectorZeroZ(NIVector vector);
 
 NIVector NIVectorANormalVector(NIVector vector); // returns a vector that is normal to the given vector
