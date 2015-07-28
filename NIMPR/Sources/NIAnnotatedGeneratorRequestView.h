@@ -38,6 +38,7 @@
 - (NSSet*)annotationsIntersectingWithSliceRect:(NSRect)sliceRect;
 
 - (NIAnnotationHandle*)handleForSlicePoint:(NSPoint)location;
++ (NSBezierPath*)NSBezierPathForHandle:(NIAnnotationHandle*)handle;
 
 @end
 

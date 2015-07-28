@@ -253,8 +253,8 @@
     }
     
     if ([keyPath isEqualToString:@"viewsLayout"]) {
-//        [CATransaction begin];
-//        [CATransaction setDisableActions:YES];
+        [CATransaction begin];
+        [CATransaction setDisableActions:YES];
 
         NSView* container = self.mprViewsContainer;
         [container.subviews enumerateObjectsUsingBlock:^(NSView* view, NSUInteger idx, BOOL *stop) {
@@ -316,7 +316,7 @@
             } break;
         }
         
-//        [CATransaction commit];
+        [CATransaction commit];
     }
 }
 
@@ -405,10 +405,16 @@ static NSString* const NIMPRControllerMenuAnnotationsDelimiter = @"NIMPRControll
     [menu addItemWithTitle:NSLocalizedString(@"Delete", nil) block:^{
         [self.mutableAnnotations removeObject:a];
     }];
-    if ([a isKindOfClass:NIPolyAnnotation.class])
-        [[menu addItemWithTitle:NSLocalizedString(@"Smoothen", nil) block:^{
-            [a setSmoothen:![a smoothen]];
-        }] bind:@"state" toObject:a withKeyPath:@"smoothen" options:nil];
+    if ([a isKindOfClass:NIPolyAnnotation.class]) {
+        NSUInteger i = 0;
+        [[menu insertItemWithTitle:NSLocalizedString(@"Smoothen", nil) block:^{
+            [a setSmooth:![a smooth]];
+        } atIndex:i++] bind:@"state" toObject:a withKeyPath:@"smooth" options:nil];
+        [[menu insertItemWithTitle:NSLocalizedString(@"Close", nil) block:^{
+            [a setClosed:![a closed]];
+        } atIndex:i++] bind:@"state" toObject:a withKeyPath:@"closed" options:nil];
+        [menu insertItem:[NSMenuItem separatorItem] atIndex:i++];
+    }
 }
 
 - (NSMutableSet*)mutableAnnotations {

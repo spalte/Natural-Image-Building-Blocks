@@ -105,14 +105,14 @@
         }
     } else {
         NIBezierPath *bezierPath = [self bezierpath];
-        NIVector rotationAxis = NIVectorCrossProduct(_axialDirection, NIVectorMake(0, 0, 1));
+        NIVector rotationAxis = NIVectorCrossProduct(_axialDirection, NIVectorZBasis);
         CGFloat rotationAngle = asin(NIVectorLength(rotationAxis));
         if (NIVectorIsZero(rotationAxis)) {
             rotationAxis = NIVectorANormalVector(rotationAxis);
         } else {
             rotationAxis = NIVectorNormalize(rotationAxis);
         }
-        if (NIVectorDotProduct(_axialDirection, NIVectorMake(0, 0, 1)) < 0) {
+        if (NIVectorDotProduct(_axialDirection, NIVectorZBasis) < 0) {
             rotationAngle = M_PI - rotationAngle;
         }
 

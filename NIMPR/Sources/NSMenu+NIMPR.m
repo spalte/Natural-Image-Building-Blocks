@@ -130,15 +130,25 @@ NSString* const NIMPRSubmenuMenuItemBlockKey = @"NIMPRSubmenuMenuItemBlock";
     return item;
 }
 
+
 - (NSMenuItem*)addItemWithTitle:(NSString*)title block:(void(^)())block {
     return [self addItemWithTitle:title keyEquivalent:@"" block:block];
 }
 
 - (NSMenuItem*)addItemWithTitle:(NSString*)title keyEquivalent:(NSString*)keyEquivalent block:(void(^)())block {
+    return [self insertItemWithTitle:title keyEquivalent:keyEquivalent block:block atIndex:self.numberOfItems];
+}
+
+- (NSMenuItem*)insertItemWithTitle:(NSString*)title block:(void(^)())block atIndex:(NSUInteger)idx {
+    return [self insertItemWithTitle:title keyEquivalent:@"" block:block atIndex:idx];
+}
+
+- (NSMenuItem*)insertItemWithTitle:(NSString*)title keyEquivalent:(NSString*)keyEquivalent block:(void(^)())block atIndex:(NSUInteger)idx {
     NIMPRBlockMenuItem* item = [NIMPRBlockMenuItem itemWithTitle:title keyEquivalent:keyEquivalent block:block];
-    [self addItem:item];
+    [self insertItem:item atIndex:idx];
     return item;
 }
+
 
 - (NSMenuItem*)addItemWithTitle:(NSString*)title submenu:(NSMenu*)submenu {
     NSMenuItem* item = [self addItemWithTitle:title action:nil keyEquivalent:@""];

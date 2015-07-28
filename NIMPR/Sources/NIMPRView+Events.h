@@ -10,4 +10,7 @@
 
 @interface NIMPRView (Events)
 
+- (NSArray*)ltools;
+- (NSArray*)rtools;
+
 @end

@@ -124,17 +124,17 @@
         self.dataProperties.windowWidth = self.windowWidth;
     
     if ([keyPath isEqualToString:@"frame"]) {
-//        NSRect o = [change[NSKeyValueChangeOldKey] rectValue], n = [change[NSKeyValueChangeNewKey] rectValue];
+        NSRect o = [change[NSKeyValueChangeOldKey] rectValue], n = [change[NSKeyValueChangeNewKey] rectValue];
 
         if (self.track) [self removeTrackingArea:self.track];
         [self addTrackingArea:(self.track = [[[NSTrackingArea alloc] initWithRect:self.bounds options:NSTrackingMouseEnteredAndExited|NSTrackingMouseMoved+NSTrackingActiveInActiveApp owner:self userInfo:@{ @"NIMPRViewTrackingArea": @YES }] autorelease])];
 
-//        [CATransaction begin];
-//        [CATransaction setDisableActions:YES];
-//        
-//        self.pixelSpacing = self.pixelSpacing / fmin(NSWidth(n), NSHeight(n)) * fmin(NSWidth(o), NSHeight(o));
-//        
-//        [CATransaction commit];
+        [CATransaction begin];
+        [CATransaction setDisableActions:YES];
+        
+        self.pixelSpacing = self.pixelSpacing / fmin(NSWidth(n), NSHeight(n)) * fmin(NSWidth(o), NSHeight(o));
+        
+        [CATransaction commit];
         
         [self updateGeneratorRequest];
     }
@@ -219,7 +219,7 @@
         [NSGraphicsContext saveGraphicsState];
         [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:ctx flipped:NO]];
         
-        for (NIMPRTool* tool in @[ self.rtool, self.ltool ])
+        for (NIMPRTool* tool in [self.rtools arrayByAddingObjectsFromArray:self.ltools])
             [tool drawInView:self];
         
         [NSGraphicsContext restoreGraphicsState];

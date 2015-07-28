@@ -31,6 +31,9 @@
 
 - (NSMenuItem*)addItemWithTitle:(NSString*)title block:(void(^)())block;
 - (NSMenuItem*)addItemWithTitle:(NSString*)title keyEquivalent:(NSString*)keyEquivalent block:(void(^)())block;
+- (NSMenuItem*)insertItemWithTitle:(NSString*)title block:(void(^)())block atIndex:(NSUInteger)idx;
+- (NSMenuItem*)insertItemWithTitle:(NSString*)title keyEquivalent:(NSString*)keyEquivalent block:(void(^)())block atIndex:(NSUInteger)idx;
+
 - (NSMenuItem*)addItemWithTitle:(NSString*)title submenu:(NSMenu*)submenu;
 
 @end

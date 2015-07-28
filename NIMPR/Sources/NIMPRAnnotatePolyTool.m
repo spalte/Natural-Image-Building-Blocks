@@ -11,9 +11,16 @@
 #import "NIMPRTool+Private.h"
 #import "NIPolyAnnotation.h"
 
+@interface NIMPRAnnotatePolyTool ()
+
+@property BOOL closedPreview;
+
+@end
+
 @implementation NIMPRAnnotatePolyTool
 
 @dynamic annotation;
+@synthesize closedPreview = _closedPreview;
 
 - (BOOL)view:(NIMPRView *)view mouseMoved:(NSEvent *)event {
     self.currentLocation = [view convertPoint:[view.window convertPointFromScreen:[NSEvent mouseLocation]] fromView:nil];
@@ -65,27 +72,48 @@
 }
 
 - (void)view:(NIMPRView*)view handled:(NSEvent*)event {
-    if (self.annotation)
-        if (event.type == NSLeftMouseDown && NSEqualPoints([event locationInView:view], self.currentLocation)) {
-            self.annotation = nil;
+    self.closedPreview = NO;
+    
+    [self view:view mouseMoved:event];
+    
+    if (self.annotation) {
+        NSBezierPath* h;
+        if (event.type == NSLeftMouseDown) {
+            h = [view.class NSBezierPathForHandle:[view handleForSlicePoint:NSPointFromNIVector(NIVectorApplyTransform([self.annotation.vectors.lastObject NIVectorValue], NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)))]];
+            if ([h containsPoint:[event locationInView:view]])
+                self.annotation = nil;
+            h = [view.class NSBezierPathForHandle:[view handleForSlicePoint:NSPointFromNIVector(NIVectorApplyTransform([self.annotation.vectors[0] NIVectorValue], NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)))]];
+            if ([h containsPoint:[event locationInView:view]]) {
+                self.annotation.closed = YES;
+                self.annotation = nil;
+            }
+        } else if (event.type == NSMouseMoved) {
+            h = [view.class NSBezierPathForHandle:[view handleForSlicePoint:NSPointFromNIVector(NIVectorApplyTransform([self.annotation.vectors[0] NIVectorValue], NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)))]];
+            if ([h containsPoint:[event locationInView:view]]) {
+                self.closedPreview = YES;
+            }
         }
+    }
+    
     [view.toolsLayer setNeedsDisplay];
 }
 
 - (void)drawInView:(NIMPRView *)view {
+    NSBezierPath* hl = [view.class NSBezierPathForHandle:[view handleForSlicePoint:NSPointFromNIVector(NIVectorApplyTransform([self.annotation.vectors.lastObject NIVectorValue], NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)))]];
+    
     if (self.annotation.vectors.count > 0 && !self.mouseDownEvent && !NSEqualPoints(self.currentLocation, NSMakePoint(CGFLOAT_MAX, CGFLOAT_MAX))) {
-        NSColor* c = [self.annotation.color colorWithAlphaComponent:self.annotation.color.alphaComponent/2];
-        if (!self.annotation.smoothen) {
-            [c setStroke];
-            [NSBezierPath strokeLineFromPoint:self.currentLocation toPoint:NSPointFromNIVector(NIVectorApplyTransform([self.annotation.vectors.lastObject NIVectorValue], NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)))];
-        } else {
-            NIPolyAnnotation* stroke = [[[NIPolyAnnotation alloc] init] autorelease];
-            [stroke.mutableVectors addObjectsFromArray:self.annotation.vectors];
+        NIPolyAnnotation* stroke = [[[NIPolyAnnotation alloc] init] autorelease];
+        [stroke.mutableVectors addObjectsFromArray:self.annotation.vectors];
+        
+        if (!self.closedPreview && ![hl containsPoint:self.currentLocation])
             [stroke.mutableVectors addObject:[NSValue valueWithNIVector:self.currentLocationVector]];
-            stroke.color = c;
-            stroke.smoothen = YES;
-            [stroke drawInView:view cache:nil layer:nil context:nil];
-        }
+        if (self.annotation.smooth)
+            stroke.smooth = YES;
+        if (self.annotation.closed || self.closedPreview)
+            stroke.closed = self.closedPreview;
+        
+        stroke.color = [self.annotation.color colorWithAlphaComponent:self.annotation.color.alphaComponent/2];
+        [stroke drawInView:view cache:nil layer:nil context:nil];
     }
 }
 

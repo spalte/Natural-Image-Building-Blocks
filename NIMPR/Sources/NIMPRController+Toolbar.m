@@ -22,6 +22,25 @@
 #import "NIMPRAnnotateEllipseTool.h"
 #import "NSMenu+NIMPR.h"
 
+
+
+//@interface ASDView : NSView
+//
+//@end
+//
+//@implementation ASDView
+//
+//- (void)drawRect:(NSRect)dirtyRect {
+//    [super drawRect:dirtyRect];
+//    [NSColor.redColor set];
+//    [[NSBezierPath bezierPathWithRect:self.bounds] fill];
+//}
+//
+//@end
+
+
+
+
 @class NIMPRSegmentedCell;
 
 @interface NIMPRSegmentedControl : NSSegmentedControl
@@ -103,11 +122,23 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIMPRProjecti
 }
 
 - (NSArray*)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar {
-    return @[ NIMPRControllerToolbarItemIdentifierTools, NIMPRControllerToolbarItemIdentifierAnnotationTools, NIMPRControllerToolbarItemIdentifierLayouts, NIMPRControllerToolbarItemIdentifierProjection, @"Test" ];
+    return @[ NSToolbarSpaceItemIdentifier,
+              NSToolbarFlexibleSpaceItemIdentifier,
+              NIMPRControllerToolbarItemIdentifierTools,
+              NIMPRControllerToolbarItemIdentifierAnnotationTools,
+              NIMPRControllerToolbarItemIdentifierLayouts,
+              NIMPRControllerToolbarItemIdentifierProjection,
+              @"Test" ];
 }
 
 - (NSArray*)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar {
-    return @[ NIMPRControllerToolbarItemIdentifierTools, NIMPRControllerToolbarItemIdentifierAnnotationTools, NSToolbarSpaceItemIdentifier, NIMPRControllerToolbarItemIdentifierProjection, NSToolbarFlexibleSpaceItemIdentifier, NIMPRControllerToolbarItemIdentifierLayouts, @"Test" ];
+    return @[ NIMPRControllerToolbarItemIdentifierTools,
+              NIMPRControllerToolbarItemIdentifierAnnotationTools,
+              NSToolbarSpaceItemIdentifier,
+              NIMPRControllerToolbarItemIdentifierProjection,
+              NSToolbarFlexibleSpaceItemIdentifier,
+              NIMPRControllerToolbarItemIdentifierLayouts,
+              @"Test" ];
 }
 
 - (NSToolbarItem*)toolbar:(NSToolbar*)toolbar itemForItemIdentifier:(NSString*)identifier willBeInsertedIntoToolbar:(BOOL)flag {
@@ -179,33 +210,33 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIMPRProjecti
         item.label = NSLocalizedString(@"Projection", nil);
         
         NSButton* checkbox = [[[NSButton alloc] initWithFrame:NSZeroRect] autorelease];
+        checkbox.translatesAutoresizingMaskIntoConstraints = NO;
         checkbox.controlSize = NSMiniControlSize;
         checkbox.title = nil;
         [checkbox.cell setButtonType:NSSwitchButton];
-        checkbox.translatesAutoresizingMaskIntoConstraints = NO;
         [checkbox sizeToFit];
         [checkbox bind:@"value" toObject:self withKeyPath:@"projectionFlag" options:0];
 
         NSPopUpButton* popup = [[NSPopUpButton alloc] initWithFrame:NSZeroRect];
+        popup.translatesAutoresizingMaskIntoConstraints = NO;
         [popup.menu addItemWithTitle:NSLocalizedString(@"MIP", nil) alt:NSLocalizedString(@"MIP - Maximum intensity projection", nil) tag:NIProjectionModeMIP];
         [popup.menu addItemWithTitle:NSLocalizedString(@"MinIP", nil) alt:NSLocalizedString(@"MinIP - Minimum intensity projection", nil) tag:NIProjectionModeMinIP];
         [popup.menu addItemWithTitle:NSLocalizedString(@"Mean", nil) tag:NIProjectionModeMean];
         [popup.cell setControlSize:NSMiniControlSize];
         popup.font = [NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]];
         popup.toolTip = NSLocalizedString(@"Projection mode", nil);
-        popup.translatesAutoresizingMaskIntoConstraints = NO;
         [popup sizeToFit];
         [popup bind:@"selectedTag" toObject:self withKeyPath:@"projectionMode" options:0];
         [popup bind:@"enabled" toObject:self withKeyPath:@"projectionFlag" options:0];
         
         NSSlider* slider = [[[NSSlider alloc] initWithFrame:NSZeroRect] autorelease]; // NSMakeRect(0, 0, 100, 20)
+        slider.translatesAutoresizingMaskIntoConstraints = NO;
         slider.minValue = 0; slider.maxValue = 1;
         slider.numberOfTickMarks = 10;
         slider.allowsTickMarkValuesOnly = NO;
         slider.doubleValue = 0;
         [slider.cell setControlSize:NSMiniControlSize];
         slider.toolTip = NSLocalizedString(@"Slab width", nil);
-        slider.translatesAutoresizingMaskIntoConstraints = NO;
         [slider sizeToFit];
         [slider bind:@"value" toObject:self withKeyPath:@"slabWidth" options:0];
         [slider bind:@"enabled" toObject:self withKeyPath:@"projectionFlag" options:0];
@@ -216,9 +247,8 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIMPRProjecti
         [view addSubview:slider];
         [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[checkbox]-d-[popup]-0-|" options:0 metrics:@{@"d":@(-4)} views:NSDictionaryOfVariableBindings(checkbox, popup)]];
         [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[slider]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(slider)]];
-        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|->=0-[popup]-d-[slider]->=0-|" options:0 metrics:@{@"d":@(-1)} views:NSDictionaryOfVariableBindings(popup, slider)]];
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[popup]-d-[slider]-0-|" options:0 metrics:@{@"d":@(-1)} views:NSDictionaryOfVariableBindings(popup, slider)]];
         [view addConstraint:[NSLayoutConstraint constraintWithItem:checkbox attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:popup attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
-        view.translatesAutoresizingMaskIntoConstraints = NO;
 
         [view setFrameSize:NSMakeSize(100, 28)];
         [view layout];
@@ -238,6 +268,12 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIMPRProjecti
 
 //- (void)toolbarWillAddItem:(NSNotification*)notification {
 //    NSToolbarItem* item = notification.userInfo[@"item"];
+//    
+//    NSLog(@"added %@", item.itemIdentifier);
+//    
+//    if ([item.itemIdentifier isEqualToString:NIMPRControllerToolbarItemIdentifierProjection]) {
+//        
+//    }
 //}
 
 @end

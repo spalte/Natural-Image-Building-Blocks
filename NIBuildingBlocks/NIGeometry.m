@@ -799,7 +799,7 @@ NSString *NIVectorCArmOrientationString(NIVector vector)
     NIVector normalizedVector = NIVectorNormalize(vector);
     NSMutableString *string = [NSMutableString string];
 
-    NIVector aoProjectedVector = NIVectorNormalize(NIVectorProjectPerpendicularToVector(NIVectorMake(0, 0, 1), normalizedVector));
+    NIVector aoProjectedVector = NIVectorNormalize(NIVectorProjectPerpendicularToVector(NIVectorZBasis, normalizedVector));
 
 #if CGFLOAT_IS_DOUBLE
     CGFloat aoAngle = acos(NIVectorDotProduct(aoProjectedVector, NIVectorMake(0, -1, 0)));
