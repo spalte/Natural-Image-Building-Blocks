@@ -93,6 +93,9 @@ CGFloat const NIAnnotationDistant = 4;
 }
 
 - (void)highlightWithColor:(NSColor*)color inView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx path:(NSBezierPath*)path {
+    if (!path.elementCount)
+        return NSLog(@"Warning: -[%@ highlightWithColor:inView:cache:layer:context:path:] is missing, or alternatively -[%@ drawInView:cache:layer:context:] should return an instance of NSBezierPath", self.className, self.className);
+    
     [NSGraphicsContext saveGraphicsState];
     NSGraphicsContext* context = [NSGraphicsContext currentContext];
     

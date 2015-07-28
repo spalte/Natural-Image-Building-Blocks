@@ -154,128 +154,128 @@ CF_EXTERN_C_END
 }
 
 ///-----------------------------------
-/// @name Creating ROI Masks
+/// @name Creating Masks
 ///-----------------------------------
 
-/** Returns a newly created empty ROI Mask.
+/** Returns a newly created empty mask.
  
- @return The newly crated and initialized ROI Mask object.
+ @return The newly crated and initialized mask object.
  */
-+ (instancetype)ROIMask;
++ (instancetype)mask;
 
-/** Returns a newly created ROI Mask that has the shape of a sphere with the specified diameter.
+/** Returns a newly created mask that has the shape of a sphere with the specified diameter.
  
- @return The newly crated and initialized ROI Mask object.
+ @return The newly crated and initialized mask object.
  */
-+ (instancetype)ROIMaskWithSphereDiameter:(NSUInteger)diameter;
++ (instancetype)maskWithSphereDiameter:(NSUInteger)diameter;
 
-/** Returns a newly created ROI Mask that has the shape of a cube with the specified size.
+/** Returns a newly created mask that has the shape of a cube with the specified size.
  
- @return The newly crated and initialized ROI Mask object.
+ @return The newly crated and initialized mask object.
  */
-+ (instancetype)ROIMaskWithCubeSize:(NSUInteger)size;
++ (instancetype)maskWithCubeSize:(NSUInteger)size;
 
-/** Returns a newly created ROI Mask that has the shape of a box with the specified sizes.
+/** Returns a newly created mask that has the shape of a box with the specified sizes.
  
- @return The newly crated and initialized ROI Mask object.
+ @return The newly crated and initialized mask object.
  */
-+ (instancetype)ROIMaskWithBoxWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth;
++ (instancetype)maskWithBoxWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth;
 
-/** Returns a newly created ROI Mask that has the shape of an elipsoid with the specified sizes.
+/** Returns a newly created mask that has the shape of an elipsoid with the specified sizes.
  
- @return The newly crated and initialized ROI Mask object.
+ @return The newly crated and initialized mask object.
  */
-+ (instancetype)ROIMaskWithElipsoidWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth;
++ (instancetype)maskWithElipsoidWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth;
 
-/** Returns a newly created ROI Mask based on the intesities of the floatVolumeData.
+/** Returns a newly created mask based on the intesities of the floatVolumeData.
  
  The returned mask  is a mask on the floatVolumeData with the intensities of the floatVolumeData.
  
- @return The newly crated and initialized ROI Mask object or `nil` if there was a problem initializing the object.
+ @return The newly crated and initialized mask object or `nil` if there was a problem initializing the object.
  @param floatVolumeData The NIVolumeData on which to build and base the mask.
  @param volumeTransformPtr Returns the transform needed to go from DICOM space to the mask
  */
-+ (instancetype)ROIMaskFromVolumeData:(NIVolumeData *)floatVolumeData volumeTransform:(NIAffineTransformPointer)volumeTransformPtr;
-+ (instancetype)ROIMaskFromVolumeData:(NIVolumeData *)floatVolumeData __deprecated;
++ (instancetype)maskFromVolumeData:(NIVolumeData *)floatVolumeData volumeTransform:(NIAffineTransformPointer)volumeTransformPtr;
++ (instancetype)maskFromVolumeData:(NIVolumeData *)floatVolumeData __deprecated;
 
-/** Initializes and returns a newly created empty ROI Mask.
+/** Initializes and returns a newly created empty mask.
  
- Creates an empty ROI Mask.
+ Creates an empty mask.
  
- @return The initialized ROI Mask object.
+ @return The initialized mask object.
  */
 - (instancetype)init;
 
 // create the thing, maybe we should really be working with C arrays.... or at least give the option
-/** Initializes and returns a newly created ROI Mask.
+/** Initializes and returns a newly created mask.
  
- Creates a ROI Mask based on the given individual runs.
+ Creates a mask based on the given individual runs.
  
- @return The initialized ROI Mask object or `nil` if there was a problem initializing the object.
+ @return The initialized mask object or `nil` if there was a problem initializing the object.
  @param maskRuns An array of NIMaskRun structs in NSValues.
  */
 - (instancetype)initWithMaskRuns:(NSArray *)maskRuns;
 
-/** Initializes and returns a newly created ROI Mask.
+/** Initializes and returns a newly created mask.
  
- Creates a ROI Mask based on the given individual runs.
+ Creates a mask based on the given individual runs.
  
- @return The initialized ROI Mask object or `nil` if there was a problem initializing the object.
+ @return The initialized mask object or `nil` if there was a problem initializing the object.
  @param maskRunData is the serialized NIMaskRuns.
  */
 - (instancetype)initWithMaskRunData:(NSData *)maskRunData;
 
-/** Initializes and returns a newly created ROI Mask.
+/** Initializes and returns a newly created mask.
  
- Creates a ROI Mask based on the given individual runs. The mask runs must be sorted.
+ Creates a mask based on the given individual runs. The mask runs must be sorted.
  
- @return The initialized ROI Mask object or `nil` if there was a problem initializing the object.
+ @return The initialized mask object or `nil` if there was a problem initializing the object.
  @param maskRunData is the serialized NIMaskRuns.
  */
 - (instancetype)initWithSortedMaskRunData:(NSData *)maskRunData;
 
 // create the thing, maybe we should really be working with C arrays.... or at least give the option
-/** Initializes and returns a newly created ROI Mask.
+/** Initializes and returns a newly created mask.
  
- Creates a ROI Mask based on the given individual runs. The mask runs must be sorted.
+ Creates a mask based on the given individual runs. The mask runs must be sorted.
  
- @return The initialized ROI Mask object or `nil` if there was a problem initializing the object.
+ @return The initialized mask object or `nil` if there was a problem initializing the object.
  @param maskRuns An array of NIMaskRun structs in NSValues.
  */
 - (instancetype)initWithSortedMaskRuns:(NSArray *)maskRuns;
 
-/** Initializes and returns a newly created ROI Mask.
+/** Initializes and returns a newly created mask.
  
- Creates a ROI Mask based on the given individual indexes.
+ Creates a mask based on the given individual indexes.
  
- @return The initialized ROI Mask object or `nil` if there was a problem initializing the object.
+ @return The initialized mask object or `nil` if there was a problem initializing the object.
  @param maskRuns An array of NIMaskIndex structs in NSValues.
  */
 - (instancetype)initWithIndexes:(NSArray *)maskIndexes;
 
-/** Initializes and returns a newly created ROI Mask.
+/** Initializes and returns a newly created mask.
  
- Creates a ROI Mask based on the given individual indexes.
+ Creates a mask based on the given individual indexes.
  
- @return The initialized ROI Mask object or `nil` if there was a problem initializing the object.
+ @return The initialized mask object or `nil` if there was a problem initializing the object.
  @param indexData is the serialized NIMaskIndexes.
  */
 - (instancetype)initWithIndexData:(NSData *)indexData;
 
-/** Initializes and returns a newly created ROI Mask.
+/** Initializes and returns a newly created mask.
  
- Creates a ROI Mask based on the given individual indexes. The mask indexes must be sorted.
+ Creates a mask based on the given individual indexes. The mask indexes must be sorted.
  
- @return The initialized ROI Mask object or `nil` if there was a problem initializing the object.
+ @return The initialized mask object or `nil` if there was a problem initializing the object.
  @param maskRuns An array of NIMaskIndex structs in NSValues.
  */
 - (instancetype)initWithSortedIndexes:(NSArray *)maskIndexes;
 
-/** Initializes and returns a newly created ROI Mask.
+/** Initializes and returns a newly created mask.
  
- Creates a ROI Mask based on the given individual indexes. The mask indexes must be sorted.
+ Creates a mask based on the given individual indexes. The mask indexes must be sorted.
  
- @return The initialized ROI Mask object or `nil` if there was a problem initializing the object.
+ @return The initialized mask object or `nil` if there was a problem initializing the object.
  @param maskRuns An array of NIMaskIndex structs in NSValues.
  */
 - (instancetype)initWithSortedIndexData:(NSData *)indexData;
@@ -287,22 +287,22 @@ CF_EXTERN_C_END
 /** Returns a mask made by translating the receiever by the given distances.
  
  */
-- (NIMask *)ROIMaskByTranslatingByX:(NSInteger)x Y:(NSInteger)y Z:(NSInteger)z;
+- (NIMask *)maskByTranslatingByX:(NSInteger)x Y:(NSInteger)y Z:(NSInteger)z;
 
 /** Returns a mask that represents the intersection of the receiver and the given mask .
  
  */
-- (NIMask *)ROIMaskByIntersectingWithMask:(NIMask *)otherMask;
+- (NIMask *)maskByIntersectingWithMask:(NIMask *)otherMask;
 
 /** Returns a mask that represents the union of the receiver and the given mask .
  
  */
-- (NIMask *)ROIMaskByUnioningWithMask:(NIMask *)otherMask;
+- (NIMask *)maskByUnioningWithMask:(NIMask *)otherMask;
 
 /** Returns a mask formed by subtracting otherMask from the receiver.
  
  */
-- (NIMask *)ROIMaskBySubtractingMask:(NIMask *)otherMask;
+- (NIMask *)maskBySubtractingMask:(NIMask *)otherMask;
 
 /** Returns a NIVolumeData filled with the intensities of the mask.
  
@@ -312,7 +312,7 @@ CF_EXTERN_C_END
 /** Returns a mask formed by cropping any indexes that are further out than the bounds specified from the receiver.
  
  */
-- (NIMask *)ROIMaskCroppedToWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth;
+- (NIMask *)maskCroppedToWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth;
 
 /** Returns YES if the two masks intersect.
  
@@ -328,14 +328,14 @@ CF_EXTERN_C_END
  
  The evaluated object used for the predicate responds to:
  -(float)intensity; The value of the pixel
- -(float)ROIMaskIntensity; The value of the intesity stored in the mask
- -(NSUInteger)ROIMaskIndexX;
- -(NSUInteger)ROIMaskIndexY;
- -(NSUInteger)ROIMaskIndexZ;
+ -(float)maskIntensity; The value of the intesity stored in the mask
+ -(NSUInteger)maskIndexX;
+ -(NSUInteger)maskIndexY;
+ -(NSUInteger)maskIndexZ;
  
  @return The resulting mask after having applied the predicate to the receiver.
  */
-- (NIMask *)filteredROIMaskUsingPredicate:(NSPredicate *)predicate floatVolumeData:(NIVolumeData *)floatVolumeData;
+- (NIMask *)filteredMaskUsingPredicate:(NSPredicate *)predicate floatVolumeData:(NIVolumeData *)floatVolumeData;
 
 /** Returns the mask as a set ofNIMaskRun structs in NSValues.
  
@@ -379,7 +379,7 @@ CF_EXTERN_C_END
 /** Returns a mask that has been resampled from being in the volume as the position fromTransform to a mask that is in the volume at position toTransform.
  
  */
-- (instancetype)ROIMaskByResamplingFromVolumeTransform:(NIAffineTransform)fromTransform toVolumeTransform:(NIAffineTransform)toTransform interpolationMode:(NIInterpolationMode)interpolationsMode;
+- (instancetype)maskByResamplingFromVolumeTransform:(NIAffineTransform)fromTransform toVolumeTransform:(NIAffineTransform)toTransform interpolationMode:(NIInterpolationMode)interpolationsMode;
 
 /** Returns the extent of the receiver. All values are inclusive.
  

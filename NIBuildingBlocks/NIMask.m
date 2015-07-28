@@ -41,26 +41,26 @@ NSUInteger NIMaskRunLastWidthIndex(NIMaskRun maskRun)
 
 const NIMaskRun NIMaskRunZero = {{0.0, 0.0}, 0, 0, 1.0};
 
-@interface OSIMaskIndexPredicateStandIn : NSObject
+@interface NIMaskIndexPredicateStandIn : NSObject
 {
     float intensity;
-    float ROIMaskIntensity;
-    NSUInteger ROIMaskIndexX;
-    NSUInteger ROIMaskIndexY;
-    NSUInteger ROIMaskIndexZ;
+    float maskIntensity;
+    NSUInteger maskIndexX;
+    NSUInteger maskIndexY;
+    NSUInteger maskIndexZ;
 }
 @property (nonatomic, readwrite, assign) float intensity;
-@property (nonatomic, readwrite, assign) float ROIMaskIntensity;
-@property (nonatomic, readwrite, assign) NSUInteger ROIMaskIndexX;
-@property (nonatomic, readwrite, assign) NSUInteger ROIMaskIndexY;
-@property (nonatomic, readwrite, assign) NSUInteger ROIMaskIndexZ;
+@property (nonatomic, readwrite, assign) float maskIntensity;
+@property (nonatomic, readwrite, assign) NSUInteger maskIndexX;
+@property (nonatomic, readwrite, assign) NSUInteger maskIndexY;
+@property (nonatomic, readwrite, assign) NSUInteger maskIndexZ;
 @end
-@implementation OSIMaskIndexPredicateStandIn
+@implementation NIMaskIndexPredicateStandIn
 @synthesize intensity;
-@synthesize ROIMaskIntensity;
-@synthesize ROIMaskIndexX;
-@synthesize ROIMaskIndexY;
-@synthesize ROIMaskIndexZ;
+@synthesize maskIntensity;
+@synthesize maskIndexX;
+@synthesize maskIndexY;
+@synthesize maskIndexZ;
 @end
 
 
@@ -183,23 +183,23 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
 
 @implementation NIMask
 
-+ (instancetype)ROIMask
++ (instancetype)mask
 {
     return [[[[self class] alloc] init] autorelease];
 }
 
 
-+ (instancetype)ROIMaskWithSphereDiameter:(NSUInteger)diameter
++ (instancetype)maskWithSphereDiameter:(NSUInteger)diameter
 {
-    return [self ROIMaskWithElipsoidWidth:diameter height:diameter depth:diameter];
+    return [self maskWithElipsoidWidth:diameter height:diameter depth:diameter];
 }
 
-+ (instancetype)ROIMaskWithCubeSize:(NSUInteger)size
++ (instancetype)maskWithCubeSize:(NSUInteger)size
 {
-    return [[self class] ROIMaskWithBoxWidth:size height:size depth:size];
+    return [[self class] maskWithBoxWidth:size height:size depth:size];
 }
 
-+ (instancetype)ROIMaskWithBoxWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth;
++ (instancetype)maskWithBoxWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth;
 {
     NSUInteger i = 0;
     NSUInteger j = 0;
@@ -216,7 +216,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return [[[NIMask alloc] initWithSortedMaskRunData:[NSData dataWithBytesNoCopy:maskRuns length:width * height * sizeof(NIMaskRun) freeWhenDone:YES]] autorelease];
 }
 
-+ (instancetype)ROIMaskWithElipsoidWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth
++ (instancetype)maskWithElipsoidWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth
 {
     NSUInteger i = 0;
     NSUInteger j = 0;
@@ -259,13 +259,13 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return [[[NIMask alloc] initWithSortedMaskRunData:[NSData dataWithBytesNoCopy:maskRuns length:k * sizeof(NIMaskRun) freeWhenDone:YES]] autorelease];
 }
 
-+ (instancetype)ROIMaskFromVolumeData:(NIVolumeData *)floatVolumeData __deprecated
++ (instancetype)maskFromVolumeData:(NIVolumeData *)floatVolumeData __deprecated
 {
-    return [self ROIMaskFromVolumeData:floatVolumeData volumeTransform:NULL];
+    return [self maskFromVolumeData:floatVolumeData volumeTransform:NULL];
 }
 
 
-+ (id)ROIMaskFromVolumeData:(NIVolumeData *)floatVolumeData volumeTransform:(NIAffineTransformPointer)volumeTransformPtr
++ (id)maskFromVolumeData:(NIVolumeData *)floatVolumeData volumeTransform:(NIAffineTransformPointer)volumeTransformPtr
 {
     NSInteger i;
     NSInteger j;
@@ -512,7 +512,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     [super dealloc];
 }
 
-- (NIMask *)ROIMaskByTranslatingByX:(NSInteger)x Y:(NSInteger)y Z:(NSInteger)z
+- (NIMask *)maskByTranslatingByX:(NSInteger)x Y:(NSInteger)y Z:(NSInteger)z
 {
     const NIMaskRun *maskRuns = (const NIMaskRun *)[[self maskRunsData] bytes];
     NSInteger maskRunCount = [self maskRunCount];
@@ -546,12 +546,12 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return [[[NIMask alloc] initWithSortedMaskRunData:[NSData dataWithBytesNoCopy:newMaskRuns length:newMaskRunsIndex * sizeof(NIMaskRun) freeWhenDone:YES]] autorelease];
 }
 
-- (NIMask *)ROIMaskByIntersectingWithMask:(NIMask *)otherMask
+- (NIMask *)maskByIntersectingWithMask:(NIMask *)otherMask
 {
-    return [self ROIMaskBySubtractingMask:[self ROIMaskBySubtractingMask:otherMask]];
+    return [self maskBySubtractingMask:[self maskBySubtractingMask:otherMask]];
 }
 
-- (NIMask *)ROIMaskByUnioningWithMask:(NIMask *)otherMask
+- (NIMask *)maskByUnioningWithMask:(NIMask *)otherMask
 {
     NSUInteger index1 = 0;
     NSUInteger index2 = 0;
@@ -648,7 +648,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return [[[NIVolumeData alloc] initWithData:floatData pixelsWide:width pixelsHigh:height pixelsDeep:depth volumeTransform:shiftedVolumeTransform outOfBoundsValue:0] autorelease];
 }
 
-- (NIMask *)ROIMaskBySubtractingMask:(NIMask *)subtractMask
+- (NIMask *)maskBySubtractingMask:(NIMask *)subtractMask
 {
     NIMaskRunStack *templateRunStack = [[NIMaskRunStack alloc] initWithMaskRunData:[self maskRunsData]];
     NIMaskRun newMaskRun;
@@ -729,7 +729,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return [[[NIMask alloc] initWithSortedMaskRunData:resultMaskRuns] autorelease];
 }
 
-- (NIMask *)ROIMaskCroppedToWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth
+- (NIMask *)maskCroppedToWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth
 {
     const NIMaskRun *maskRuns = (const NIMaskRun *)[[self maskRunsData] bytes];
     NSInteger maskRunCount = [self maskRunCount];
@@ -752,7 +752,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     NSUInteger newMaskRunsCount = maskRunCount - badRuns;
     
     if (newMaskRunsCount == 0) {
-        return [NIMask ROIMask];
+        return [NIMask mask];
     }
     
     NIMaskRun *newMaskRuns = malloc(newMaskRunsCount * sizeof(NIMaskRun));
@@ -778,27 +778,27 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
 
 - (BOOL)intersectsMask:(NIMask *)otherMask // probably could use a faster implementation...
 {
-    NIMask *intersection = [self ROIMaskByIntersectingWithMask:otherMask];
+    NIMask *intersection = [self maskByIntersectingWithMask:otherMask];
     return [intersection maskRunCount] > 0;
 }
 
 - (BOOL)isEqualToMask:(NIMask *)otherMask // super lazy implementation FIXME!
 {
-    NIMask *intersection = [self ROIMaskByIntersectingWithMask:otherMask];
-    NIMask *subMask1 = [self ROIMaskBySubtractingMask:intersection];
-    NIMask *subMask2 = [otherMask ROIMaskBySubtractingMask:intersection];
+    NIMask *intersection = [self maskByIntersectingWithMask:otherMask];
+    NIMask *subMask1 = [self maskBySubtractingMask:intersection];
+    NIMask *subMask2 = [otherMask maskBySubtractingMask:intersection];
     
     return [subMask1 maskRunCount] == 0 && [subMask2 maskRunCount] == 0;
 }
 
 
-- (NIMask *)filteredROIMaskUsingPredicate:(NSPredicate *)predicate floatVolumeData:(NIVolumeData *)floatVolumeData
+- (NIMask *)filteredMaskUsingPredicate:(NSPredicate *)predicate floatVolumeData:(NIVolumeData *)floatVolumeData
 {
     NSMutableArray *newMaskArray = [NSMutableArray array];
     NIMaskRun activeMaskRun;
     BOOL isMaskRunActive = NO;
     float intensity;
-    OSIMaskIndexPredicateStandIn *standIn = [[[OSIMaskIndexPredicateStandIn alloc] init] autorelease];
+    NIMaskIndexPredicateStandIn *standIn = [[[NIMaskIndexPredicateStandIn alloc] init] autorelease];
     
     for (NSValue *maskRunValue in [self maskRuns]) {
         NIMaskRun maskRun = [maskRunValue NIMaskRunValue];
@@ -807,13 +807,13 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
         maskIndex.y = maskRun.heightIndex;
         maskIndex.z = maskRun.depthIndex;
         
-        standIn.ROIMaskIntensity = maskRun.intensity;
-        standIn.ROIMaskIndexY = maskIndex.y;
-        standIn.ROIMaskIndexZ = maskIndex.z;
+        standIn.maskIntensity = maskRun.intensity;
+        standIn.maskIndexY = maskIndex.y;
+        standIn.maskIndexZ = maskIndex.z;
         
         for (maskIndex.x = maskRun.widthRange.location; maskIndex.x < NSMaxRange(maskRun.widthRange); maskIndex.x++) {
             [floatVolumeData getFloat:&intensity atPixelCoordinateX:maskIndex.x y:maskIndex.y z:maskIndex.z];
-            standIn.ROIMaskIndexX = maskIndex.x;
+            standIn.maskIndexX = maskIndex.x;
             standIn.intensity = intensity;
             
             if ([predicate evaluateWithObject:standIn]) {
@@ -962,7 +962,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return NO;
 }
 
-- (instancetype)ROIMaskByResamplingFromVolumeTransform:(NIAffineTransform)fromTransform toVolumeTransform:(NIAffineTransform)toTransform interpolationMode:(NIInterpolationMode)interpolationsMode
+- (instancetype)maskByResamplingFromVolumeTransform:(NIAffineTransform)fromTransform toVolumeTransform:(NIAffineTransform)toTransform interpolationMode:(NIInterpolationMode)interpolationsMode
 {
     if (NIAffineTransformEqualToTransform(fromTransform, toTransform)) {
         return self;
@@ -979,7 +979,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     @autoreleasepool {
         NIVolumeData *fromVolumeData = [self floatVolumeDataRepresentationWithVolumeTransform:fromTransform];
         NIVolumeData *toVolumeData = [fromVolumeData volumeDataResampledWithVolumeTransform:toTransform interpolationMode:interpolationsMode];
-        resampledMask = [NIMask ROIMaskFromVolumeData:toVolumeData volumeTransform:&toVolumeTransform];
+        resampledMask = [NIMask maskFromVolumeData:toVolumeData volumeTransform:&toVolumeTransform];
         
         // volumeDataResampledWithVolumeTransform can shift the data so that it doesn't store more than it needs to, so figure out how much the shift was, and translate the mask so that is is at the right place
         shift = NIVectorApplyTransform(NIVectorZero, NIAffineTransformConcat(NIAffineTransformInvert(toTransform), toVolumeTransform));
@@ -994,7 +994,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
         shift.z = roundf(shift.z);
 #endif
         
-        resampledMask = [[resampledMask ROIMaskByTranslatingByX:(NSInteger)-shift.x Y:(NSInteger)-shift.y Z:(NSInteger)-shift.z] retain];
+        resampledMask = [[resampledMask maskByTranslatingByX:(NSInteger)-shift.x Y:(NSInteger)-shift.y Z:(NSInteger)-shift.z] retain];
     }
     
     return [resampledMask autorelease];
@@ -1185,7 +1185,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
 
 @end
 
-@implementation NSValue (OSIMaskRun)
+@implementation NSValue (NIMaskRun)
 
 + (NSValue *)valueWithNIMaskRun:(NIMaskRun)volumeRun
 {
