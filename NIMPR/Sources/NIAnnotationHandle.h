@@ -28,30 +28,30 @@ extern const CGFloat NIAnnotationDistant;
 
 @end
 
-@interface NIHandlerAnnotationHandle : NIAnnotationHandle {
-    void (^_handler)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector deltaDicomVector);
+@interface NIAnnotationBlockHandle : NIAnnotationHandle {
+    void (^_block)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector deltaDicomVector);
 }
 
-+ (instancetype)handleAtSliceVector:(NIVector)sliceVector handler:(void(^)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector deltaDicomVector))handler;
-+ (instancetype)handleAtSlicePoint:(NSPoint)slicePoint handler:(void(^)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector deltaDicomVector))handler;
++ (instancetype)handleAtSliceVector:(NIVector)sliceVector block:(void(^)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector deltaDicomVector))handler;
++ (instancetype)handleAtSlicePoint:(NSPoint)slicePoint block:(void(^)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector deltaDicomVector))handler;
 
 @end
 
-@interface NIPlaneAnnotationHandle : NIAnnotationHandle {
-    NIAnnotation<NIPlaneAnnotation>* _annotation;
+@interface NIPlanarAnnotationHandle : NIAnnotationHandle {
+    NIAnnotation<NITransformAnnotation>* _annotation;
 }
 
-- (id)initWithSlicePoint:(NSPoint)slicePoint annotation:(NIAnnotation<NIPlaneAnnotation>*)a;
+- (id)initWithSlicePoint:(NSPoint)slicePoint annotation:(NIAnnotation<NITransformAnnotation>*)a;
 
 - (void)translateFromPlaneVector:(NIVector)vfrom toPlaneVector:(NIVector)vto view:(NIAnnotatedGeneratorRequestView *)view event:(NSEvent*)event;
 
 @end
 
-@interface NIHandlerPlaneAnnotationHandle : NIPlaneAnnotationHandle {
-    void (^_handler)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector deltaPlaneVector);
+@interface NIPlanarAnnotationBlockHandle : NIPlanarAnnotationHandle {
+    void (^_block)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector deltaPlaneVector);
 }
 
-+ (instancetype)handleAtSliceVector:(NIVector)sliceVector annotation:(NIAnnotation<NIPlaneAnnotation>*)a handler:(void(^)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector deltaPlaneVector))handler;
-+ (instancetype)handleAtSlicePoint:(NSPoint)slicePoint annotation:(NIAnnotation<NIPlaneAnnotation>*)a handler:(void(^)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector deltaPlaneVector))handler;
++ (instancetype)handleAtSliceVector:(NIVector)sliceVector annotation:(NIAnnotation<NITransformAnnotation>*)a block:(void(^)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector deltaPlaneVector))handler;
++ (instancetype)handleAtSlicePoint:(NSPoint)slicePoint annotation:(NIAnnotation<NITransformAnnotation>*)a block:(void(^)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector deltaPlaneVector))handler;
 
 @end

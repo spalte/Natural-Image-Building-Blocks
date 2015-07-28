@@ -107,6 +107,7 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 // will copy fill length*sizeof(float) bytes, the coordinates better be within the volume!!!
 // a run a is a series of pixels in the x direction
 - (BOOL)getFloatRun:(float *)buffer atPixelCoordinateX:(NSUInteger)x y:(NSUInteger)y z:(NSUInteger)z length:(NSUInteger)length;
+- (BOOL)getFloat:(float *)floatPtr atPixelCoordinateX:(NSUInteger)x y:(NSUInteger)y z:(NSUInteger)z;
 
 - (NIUnsignedInt16ImageRep *)unsignedInt16ImageRepForSliceAtIndex:(NSUInteger)z;
 - (NIVolumeData *)volumeDataForSliceAtIndex:(NSUInteger)z;

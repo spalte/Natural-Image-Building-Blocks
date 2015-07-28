@@ -7,7 +7,14 @@
 //
 
 #import "NIAnnotation.h"
+#import <NIBuildingBlocks/NIMask.h>
 
-@interface NIMaskAnnotation : NIAnnotation
+@interface NIMaskAnnotation : NIAnnotation <NITransformAnnotation> {
+    NIMask* _mask;
+    NIAffineTransform _modelToDicomTransform;
+}
+
+@property(retain) NIMask* mask;
+@property NIAffineTransform modelToDicomTransform;
 
 @end

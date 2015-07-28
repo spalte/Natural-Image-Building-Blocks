@@ -47,8 +47,8 @@ extern CGFloat const NIAnnotationDistant;
 
 @end
 
-@protocol NIPlaneAnnotation <NSObject>
+@protocol NITransformAnnotation <NSObject>
 
-- (NIAffineTransform)planeToDicomTransform;
+- (NIAffineTransform)modelToDicomTransform;
 
 @end

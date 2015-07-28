@@ -19,11 +19,11 @@
 
 @end
 
-@interface NINSBezierPathAnnotation : NIBezierPathAnnotation <NIPlaneAnnotation> {
-    NIAffineTransform _planeToDicomTransform;
+@interface NINSBezierPathAnnotation : NIBezierPathAnnotation <NITransformAnnotation> {
+    NIAffineTransform _modelToDicomTransform;
 }
 
-@property NIAffineTransform planeToDicomTransform;
+@property NIAffineTransform modelToDicomTransform;
 
 - (instancetype)initWithTransform:(NIAffineTransform)sliceToDicomTransform;
 

@@ -43,6 +43,12 @@
 
 @end
 
+@interface NSSet (NIMPR)
+
+- (NSSet*)setByAddingObjects:(id)obj, ... NS_REQUIRES_NIL_TERMINATION;
+
+@end
+
 @interface NSMutableSet (NIMPR)
 
 - (void)set:(id)set; // an object or a NSSet of objects

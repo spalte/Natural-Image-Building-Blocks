@@ -474,9 +474,9 @@ static NSString* const NIMPRControllerMenuAnnotationsDelimiter = @"NIMPRControll
         NSPoint center = [view convertPointFromDICOMVector:self.point];
         
         NIObliqueSliceGeneratorRequest* req = view.presentedGeneratorRequest;
-        NIAffineTransform planeToDicomTransform = NIAffineTransformTranslate(req.sliceToDicomTransform, center.x-image.size.width/2, center.y-image.size.height/2, 0);
+        NIAffineTransform modelToDicomTransform = NIAffineTransformTranslate(req.sliceToDicomTransform, center.x-image.size.width/2, center.y-image.size.height/2, 0);
         
-        NIImageAnnotation* ia = [[NIImageAnnotation alloc] initWithImage:image transform:planeToDicomTransform];
+        NIImageAnnotation* ia = [[NIImageAnnotation alloc] initWithImage:image transform:modelToDicomTransform];
 //        ia.colorify = YES;
         
         [self.mutableAnnotations addObject:ia];

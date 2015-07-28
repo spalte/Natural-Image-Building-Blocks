@@ -19,7 +19,7 @@ typedef struct {
 @synthesize colorify = _colorify;
 
 + (NSSet*)keyPathsForValuesAffectingAnnotation {
-    return [[super keyPathsForValuesAffectingAnnotation] setByAddingObjectsFromArray:@[ @"image", @"colorify" ]];
+    return [super.keyPathsForValuesAffectingAnnotation setByAddingObjects: @"image", @"colorify", nil];
 }
 
 - (instancetype)initWithImage:(NSImage*)image transform:(NIAffineTransform)sliceToDicomTransform {
@@ -56,9 +56,9 @@ static NSString* const NIImageAnnotationProjectedMask = @"NIImageAnnotationProje
         NIAffineTransform sliceToDicomTransform = view.presentedGeneratorRequest.sliceToDicomTransform, dicomToSliceTransform = NIAffineTransformInvert(sliceToDicomTransform);
         
         NIBezierPath* ipath = [self NIBezierPathForSlabView:view complete:YES];
-        NIBezierPath* pipath = [[ipath bezierPathByApplyingTransform:sliceToDicomTransform] bezierPathByApplyingTransform:NIAffineTransformInvert(self.planeToDicomTransform)];
+        NIBezierPath* pipath = [[ipath bezierPathByApplyingTransform:sliceToDicomTransform] bezierPathByApplyingTransform:NIAffineTransformInvert(self.modelToDicomTransform)];
         
-        CGAffineTransform cgat = CATransform3DGetAffineTransform(NIAffineTransformConcat(self.planeToDicomTransform, dicomToSliceTransform));
+        CGAffineTransform cgat = CATransform3DGetAffineTransform(NIAffineTransformConcat(self.modelToDicomTransform, dicomToSliceTransform));
         NSAffineTransformStruct nsatts = {cgat.a, cgat.b, cgat.c, cgat.d, cgat.tx, cgat.ty};
         NSAffineTransform* nsat = [NSAffineTransform transform];
         nsat.transformStruct = nsatts;

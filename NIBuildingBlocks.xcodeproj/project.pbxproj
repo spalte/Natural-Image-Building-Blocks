@@ -80,6 +80,10 @@
 		4F4409B71B21A0F6006AC3B6 /* NIWindowingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4409B51B21A0F6006AC3B6 /* NIWindowingView.m */; };
 		4FF07D901B24C30D00380630 /* NITextLabelGroupLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF07D8E1B24C30D00380630 /* NITextLabelGroupLayer.h */; };
 		4FF07D911B24C30D00380630 /* NITextLabelGroupLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D8F1B24C30D00380630 /* NITextLabelGroupLayer.m */; };
+		7106843F1B678D800078903A /* NIMask.h in Headers */ = {isa = PBXBuildFile; fileRef = 7106843D1B678D800078903A /* NIMask.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		710684401B678D800078903A /* NIMask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7106843E1B678D800078903A /* NIMask.m */; };
+		710684441B678FD30078903A /* NIMaskRunStack.h in Headers */ = {isa = PBXBuildFile; fileRef = 710684421B678FD30078903A /* NIMaskRunStack.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		710684451B678FD30078903A /* NIMaskRunStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 710684431B678FD30078903A /* NIMaskRunStack.m */; };
 		719473721B1DA0F1009363AE /* NIOrientationTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 719473711B1DA0F1009363AE /* NIOrientationTextLayer.m */; };
 /* End PBXBuildFile section */
 
@@ -159,6 +163,10 @@
 		4F4409B51B21A0F6006AC3B6 /* NIWindowingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIWindowingView.m; sourceTree = "<group>"; };
 		4FF07D8E1B24C30D00380630 /* NITextLabelGroupLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITextLabelGroupLayer.h; sourceTree = "<group>"; };
 		4FF07D8F1B24C30D00380630 /* NITextLabelGroupLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITextLabelGroupLayer.m; sourceTree = "<group>"; };
+		7106843D1B678D800078903A /* NIMask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMask.h; sourceTree = "<group>"; };
+		7106843E1B678D800078903A /* NIMask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMask.m; sourceTree = "<group>"; };
+		710684421B678FD30078903A /* NIMaskRunStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMaskRunStack.h; sourceTree = "<group>"; };
+		710684431B678FD30078903A /* NIMaskRunStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMaskRunStack.m; sourceTree = "<group>"; };
 		719473711B1DA0F1009363AE /* NIOrientationTextLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIOrientationTextLayer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -200,6 +208,10 @@
 			children = (
 				4F151F301B1CCB3F00C8F767 /* NIVolumeData.h */,
 				4F151F311B1CCB3F00C8F767 /* NIVolumeData.m */,
+				7106843D1B678D800078903A /* NIMask.h */,
+				7106843E1B678D800078903A /* NIMask.m */,
+				710684421B678FD30078903A /* NIMaskRunStack.h */,
+				710684431B678FD30078903A /* NIMaskRunStack.m */,
 				4F151F7A1B1CD35C00C8F767 /* NIImageReps */,
 				4F151F751B1CD01900C8F767 /* NIGeometry */,
 				4F151F2F1B1CCAD200C8F767 /* NIGenerator */,
@@ -381,6 +393,8 @@
 				4F151F941B1CFB3700C8F767 /* NIAnnularPath.h in Headers */,
 				4F151F901B1CFB2E00C8F767 /* NSBezierPath+NI.h in Headers */,
 				4F4409B61B21A0F6006AC3B6 /* NIWindowingView.h in Headers */,
+				7106843F1B678D800078903A /* NIMask.h in Headers */,
+				710684441B678FD30078903A /* NIMaskRunStack.h in Headers */,
 				4F0727E11B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.h in Headers */,
 				4F151F071B1CCA1400C8F767 /* NIGeneratorRequestLayer.h in Headers */,
 				4F151F0F1B1CCA1400C8F767 /* NIScaleBarLayer.h in Headers */,
@@ -477,6 +491,8 @@
 				4F151F241B1CCA6200C8F767 /* NIIntersection.m in Sources */,
 				4F151F531B1CCC0100C8F767 /* NIProjectionOperation.m in Sources */,
 				4F151F791B1CD35600C8F767 /* NIUnsignedInt16ImageRep.m in Sources */,
+				710684401B678D800078903A /* NIMask.m in Sources */,
+				710684451B678FD30078903A /* NIMaskRunStack.m in Sources */,
 				4F151F951B1CFB3700C8F767 /* NIAnnularPath.m in Sources */,
 				4F151F701B1CCFDA00C8F767 /* NIBezierCore.m in Sources */,
 				4F4409B71B21A0F6006AC3B6 /* NIWindowingView.m in Sources */,

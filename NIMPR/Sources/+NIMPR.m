@@ -182,6 +182,22 @@
 
 @end
 
+@implementation NSSet (NIMPR)
+
+- (NSSet*)setByAddingObjects:(id)obj, ... {
+    NSMutableSet* r = [[self mutableCopy] autorelease];
+    
+    va_list args;
+    va_start(args, obj);
+    for (id arg = obj; arg != nil; arg = va_arg(args, id))
+        [r addObject:arg];
+    va_end(args);
+    
+    return r;
+}
+
+@end
+
 @implementation NSMutableSet (NIMPR)
 
 - (void)set:(id)set {

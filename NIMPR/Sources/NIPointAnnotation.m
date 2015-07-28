@@ -8,15 +8,13 @@
 
 #import "NIPointAnnotation.h"
 #import "NIAnnotationHandle.h"
-//#import <NIBuildingBlocks/NIGeneratorRequest.h>
 
 @implementation NIPointAnnotation
 
 @synthesize vector = _vector;
-//@dynamic x, y, z;
 
 + (NSSet*)keyPathsForValuesAffectingAnnotation {
-    return [[super keyPathsForValuesAffectingAnnotation] setByAddingObject:@"vector"];
+    return [super.keyPathsForValuesAffectingAnnotation setByAddingObject:@"vector"];
 }
 
 - (instancetype)initWithVector:(NIVector)vector {
@@ -68,8 +66,8 @@
 
 - (NSSet*)handlesInView:(NIAnnotatedGeneratorRequestView*)view {
     return [NSSet setWithObjects:
-            [NIHandlerAnnotationHandle handleAtSlicePoint:NSPointFromNIVector(NIVectorApplyTransform(self.vector, NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)))
-                                                  handler:^(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector deltaDicomVector) {
+            [NIAnnotationBlockHandle handleAtSlicePoint:NSPointFromNIVector(NIVectorApplyTransform(self.vector, NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)))
+                                                  block:^(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector deltaDicomVector) {
                                                       self.vector = NIVectorAdd(self.vector, deltaDicomVector);
                                                   }], nil];
 }

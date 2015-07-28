@@ -11,13 +11,13 @@
 
 @implementation NIBezierPathAnnotation
 
++ (NSSet*)keyPathsForValuesAffectingAnnotation {
+    return [super.keyPathsForValuesAffectingAnnotation setByAddingObject:@"NIBezierPath"];
+}
+
 - (NIBezierPath*)NIBezierPath {
     [NSException raise:NSInvalidArgumentException format:@"Method -[%@ NIBezierPath] must be implemented for all NIBezierPathAnnotation subclasses", self.className];
     return nil;
-}
-
-+ (NSSet*)keyPathsForValuesAffectingAnnotation {
-    return [[super keyPathsForValuesAffectingAnnotation] setByAddingObject:@"NIBezierPath"];
 }
 
 + (NIBezierPath*)bezierPath:(NIBezierPath*)path minmax:(CGFloat)mm complete:(BOOL)complete {
@@ -148,28 +148,28 @@
 
 @implementation NINSBezierPathAnnotation
 
-@synthesize planeToDicomTransform = _planeToDicomTransform;
+@synthesize modelToDicomTransform = _modelToDicomTransform;
 
 - (instancetype)initWithTransform:(NIAffineTransform)sliceToDicomTransform {
     if ((self = [super init])) {
-        self.planeToDicomTransform = sliceToDicomTransform;
+        self.modelToDicomTransform = sliceToDicomTransform;
     }
     
     return self;
 }
 
 - (void)translate:(NIVector)translation {
-    self.planeToDicomTransform = NIAffineTransformConcat(self.planeToDicomTransform, NIAffineTransformMakeTranslationWithVector(translation));
+    self.modelToDicomTransform = NIAffineTransformConcat(self.modelToDicomTransform, NIAffineTransformMakeTranslationWithVector(translation));
 }
 
 - (NIBezierPath*)NIBezierPath {
-    if (!NIAffineTransformIsAffine(self.planeToDicomTransform))
+    if (!NIAffineTransformIsAffine(self.modelToDicomTransform))
         return nil;
-    return [[NIBezierPath bezierPathWithNSBezierPath:self.NSBezierPath] bezierPathByApplyingTransform:self.planeToDicomTransform];
+    return [[NIBezierPath bezierPathWithNSBezierPath:self.NSBezierPath] bezierPathByApplyingTransform:self.modelToDicomTransform];
 }
 
 + (NSSet*)keyPathsForValuesAffectingNIBezierPath {
-    return [NSSet setWithObjects: @"NSBezierPath", @"planeToDicomTransform", nil];
+    return [NSSet setWithObjects: @"NSBezierPath", @"modelToDicomTransform", nil];
 }
 
 - (NSBezierPath*)NSBezierPath {

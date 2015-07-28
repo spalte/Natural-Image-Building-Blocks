@@ -10,4 +10,16 @@
 
 @implementation NIMaskAnnotation
 
+@synthesize mask = _mask;
+@synthesize modelToDicomTransform = _modelToDicomTransform;
+
++ (NSSet*)keyPathsForValuesAffectingAnnotation {
+    return [super.keyPathsForValuesAffectingAnnotation setByAddingObjects: @"mask", @"modelToDicomTransform", nil ];
+}
+
+- (void)dealloc {
+    self.mask = nil;
+    [super dealloc];
+}
+
 @end
