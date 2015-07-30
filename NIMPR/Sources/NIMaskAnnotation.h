@@ -17,4 +17,6 @@
 @property(retain) NIMask* mask;
 @property NIAffineTransform modelToDicomTransform;
 
+- (id)initWithMask:(NIMask*)mask transform:(NIAffineTransform)modelToDicomTransform;
+
 @end

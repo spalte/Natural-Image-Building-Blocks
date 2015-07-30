@@ -19,8 +19,6 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import <Accelerate/Accelerate.h>
-
 #import "NIVolumeData.h"
 #import "NIUnsignedInt16ImageRep.h"
 #import "NIGenerator.h"
@@ -260,11 +258,19 @@
     return [self convertVolumeVectorFromDICOMVectorBlock](vector);
 }
 
+- (vImage_Buffer)floatBufferForSliceAtIndex:(NSUInteger)z {
+    vImage_Buffer floatBuffer;
+    floatBuffer.data = (void *)self.floatBytes + (_pixelsWide * _pixelsHigh * sizeof(float) * z);
+    floatBuffer.height = _pixelsHigh;
+    floatBuffer.width = _pixelsWide;
+    floatBuffer.rowBytes = sizeof(float) * _pixelsWide;
+    return floatBuffer;
+}
+
 - (NIUnsignedInt16ImageRep *)unsignedInt16ImageRepForSliceAtIndex:(NSUInteger)z
 {
     NIUnsignedInt16ImageRep *imageRep;
-    uint16_t *unsignedInt16Data;
-    vImage_Buffer floatBuffer;
+    vImage_Buffer floatBuffer = [self floatBufferForSliceAtIndex:z];
     vImage_Buffer unsignedInt16Buffer;
 
     imageRep = [[NIUnsignedInt16ImageRep alloc] initWithData:NULL pixelsWide:_pixelsWide pixelsHigh:_pixelsHigh];
@@ -273,14 +279,7 @@
     imageRep.sliceThickness = [self pixelSpacingZ];
     imageRep.imageToDicomTransform = NIAffineTransformConcat(NIAffineTransformMakeTranslation(0.0, 0.0, (CGFloat)z), NIAffineTransformInvert(_volumeTransform));
 
-    unsignedInt16Data = [imageRep unsignedInt16Data];
-
-    floatBuffer.data = (void *)self.floatBytes + (_pixelsWide * _pixelsHigh * sizeof(float) * z);
-    floatBuffer.height = _pixelsHigh;
-    floatBuffer.width = _pixelsWide;
-    floatBuffer.rowBytes = sizeof(float) * _pixelsWide;
-
-    unsignedInt16Buffer.data = unsignedInt16Data;
+    unsignedInt16Buffer.data = [imageRep unsignedInt16Data];
     unsignedInt16Buffer.height = _pixelsHigh;
     unsignedInt16Buffer.width = _pixelsWide;
     unsignedInt16Buffer.rowBytes = sizeof(uint16_t) * _pixelsWide;

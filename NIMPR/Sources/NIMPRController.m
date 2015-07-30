@@ -18,6 +18,7 @@
 #import "NIPolyAnnotation.h"
 
 #import "NIImageAnnotation.h"
+#import "NIMaskAnnotation.h"
 
 @implementation NIMPRController
 
@@ -453,7 +454,7 @@ static NSString* const NIMPRControllerMenuAnnotationsDelimiter = @"NIMPRControll
     [_selectedAnnotations removeObject:object];
 }
 
-- (IBAction)test:(id)sender {
+- (IBAction)testImage:(id)sender {
     NSOpenPanel* op = [NSOpenPanel openPanel];
     op.canChooseFiles = op.resolvesAliases = YES;
     op.canChooseDirectories = op.allowsMultipleSelection = NO;
@@ -472,15 +473,28 @@ static NSString* const NIMPRControllerMenuAnnotationsDelimiter = @"NIMPRControll
         NSImage* image = [[[NSImage alloc] initWithContentsOfURL:op.URL] autorelease];
         
         NSPoint center = [view convertPointFromDICOMVector:self.point];
-        
-        NIObliqueSliceGeneratorRequest* req = view.presentedGeneratorRequest;
-        NIAffineTransform modelToDicomTransform = NIAffineTransformTranslate(req.sliceToDicomTransform, center.x-image.size.width/2, center.y-image.size.height/2, 0);
+        NIAffineTransform modelToDicomTransform = NIAffineTransformTranslate(view.presentedGeneratorRequest.sliceToDicomTransform, center.x-image.size.width/2, center.y-image.size.height/2, 0);
         
         NIImageAnnotation* ia = [[NIImageAnnotation alloc] initWithImage:image transform:modelToDicomTransform];
 //        ia.colorify = YES;
         
         [self.mutableAnnotations addObject:ia];
     }];
+}
+
+- (IBAction)testMask:(id)sender {
+    NIMPRView* view = [[self.window firstResponder] if:NIMPRView.class];
+    if (!view)
+        view = self.coronalView;
+    
+    NIMask* mask = [NIMask maskWithSphereDiameter:30];
+    
+//    NSPoint center = [view convertPointFromDICOMVector:self.point];
+    NIAffineTransform modelToDicomTransform = NIAffineTransformMakeTranslationWithVector(NIVectorSubtract(NIVectorMake(15, 15, 15), self.point)); //NIAffineTransformTranslate(view.presentedGeneratorRequest.sliceToDicomTransform, center.x, center.y, 0);//NIAffineTransformTranslate(view.presentedGeneratorRequest.sliceToDicomTransform, center.x-15, center.y-15, -15);
+    
+    NIMaskAnnotation* ma = [[NIMaskAnnotation alloc] initWithMask:mask transform:modelToDicomTransform];
+    
+    [self.mutableAnnotations addObject:ma];
 }
 
 @end

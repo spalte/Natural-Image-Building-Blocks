@@ -259,13 +259,13 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return [[[NIMask alloc] initWithSortedMaskRunData:[NSData dataWithBytesNoCopy:maskRuns length:k * sizeof(NIMaskRun) freeWhenDone:YES]] autorelease];
 }
 
-+ (instancetype)maskFromVolumeData:(NIVolumeData *)floatVolumeData __deprecated
++ (instancetype)maskFromVolumeData:(NIVolumeData *)volumeData __deprecated
 {
-    return [self maskFromVolumeData:floatVolumeData volumeTransform:NULL];
+    return [self maskFromVolumeData:volumeData volumeTransform:NULL];
 }
 
 
-+ (id)maskFromVolumeData:(NIVolumeData *)floatVolumeData volumeTransform:(NIAffineTransformPointer)volumeTransformPtr
++ (id)maskFromVolumeData:(NIVolumeData *)volumeData volumeTransform:(NIAffineTransformPointer)volumeTransformPtr
 {
     NSInteger i;
     NSInteger j;
@@ -279,7 +279,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     maskRun = NIMaskRunZero;
     maskRun.intensity = 0.0;
     
-    [floatVolumeData aquireInlineBuffer:&inlineBuffer];
+    [volumeData aquireInlineBuffer:&inlineBuffer];
     for (k = 0; k < inlineBuffer.pixelsDeep; k++) {
         for (j = 0; j < inlineBuffer.pixelsHigh; j++) {
             for (i = 0; i < inlineBuffer.pixelsWide; i++) {
@@ -315,7 +315,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     }
     
     if (volumeTransformPtr) {
-        *volumeTransformPtr = floatVolumeData.volumeTransform;
+        *volumeTransformPtr = volumeData.volumeTransform;
     }
     
     return [[[[self class] alloc] initWithMaskRuns:maskRuns] autorelease];
@@ -607,7 +607,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return [[[NIMask alloc] initWithSortedMaskRunData:resultMaskRuns] autorelease];
 }
 
-- (NIVolumeData *)floatVolumeDataRepresentationWithVolumeTransform:(NIAffineTransform)volumeTransform;
+- (NIVolumeData *)volumeDataRepresentationWithVolumeTransform:(NIAffineTransform)volumeTransform;
 {
     NSUInteger maxHeight = NSIntegerMin;
     NSUInteger minHeight = NSIntegerMax;
@@ -792,7 +792,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
 }
 
 
-- (NIMask *)filteredMaskUsingPredicate:(NSPredicate *)predicate floatVolumeData:(NIVolumeData *)floatVolumeData
+- (NIMask *)filteredMaskUsingPredicate:(NSPredicate *)predicate volumeData:(NIVolumeData *)volumeData
 {
     NSMutableArray *newMaskArray = [NSMutableArray array];
     NIMaskRun activeMaskRun;
@@ -812,7 +812,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
         standIn.maskIndexZ = maskIndex.z;
         
         for (maskIndex.x = maskRun.widthRange.location; maskIndex.x < NSMaxRange(maskRun.widthRange); maskIndex.x++) {
-            [floatVolumeData getFloat:&intensity atPixelCoordinateX:maskIndex.x y:maskIndex.y z:maskIndex.z];
+            [volumeData getFloat:&intensity atPixelCoordinateX:maskIndex.x y:maskIndex.y z:maskIndex.z];
             standIn.maskIndexX = maskIndex.x;
             standIn.intensity = intensity;
             
@@ -977,7 +977,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     NIAffineTransform toVolumeTransform = NIAffineTransformIdentity;
     NIVector shift = NIVectorZero;
     @autoreleasepool {
-        NIVolumeData *fromVolumeData = [self floatVolumeDataRepresentationWithVolumeTransform:fromTransform];
+        NIVolumeData *fromVolumeData = [self volumeDataRepresentationWithVolumeTransform:fromTransform];
         NIVolumeData *toVolumeData = [fromVolumeData volumeDataResampledWithVolumeTransform:toTransform interpolationMode:interpolationsMode];
         resampledMask = [NIMask maskFromVolumeData:toVolumeData volumeTransform:&toVolumeTransform];
         

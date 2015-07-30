@@ -103,6 +103,7 @@ typedef NS_ENUM(NSInteger, NIMPRLayoutTag) {
 - (void)moveToInitial;
 - (void)reset;
 
-- (IBAction)test:(id)sender;
+- (IBAction)testImage:(id)sender;
+- (IBAction)testMask:(id)sender;
 
 @end

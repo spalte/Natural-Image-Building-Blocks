@@ -187,16 +187,16 @@ CF_EXTERN_C_END
  */
 + (instancetype)maskWithElipsoidWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth;
 
-/** Returns a newly created mask based on the intesities of the floatVolumeData.
+/** Returns a newly created mask based on the intesities of the volumeData.
  
- The returned mask  is a mask on the floatVolumeData with the intensities of the floatVolumeData.
+ The returned mask  is a mask on the volumeData with the intensities of the volumeData.
  
  @return The newly crated and initialized mask object or `nil` if there was a problem initializing the object.
- @param floatVolumeData The NIVolumeData on which to build and base the mask.
+ @param volumeData The NIVolumeData on which to build and base the mask.
  @param volumeTransformPtr Returns the transform needed to go from DICOM space to the mask
  */
-+ (instancetype)maskFromVolumeData:(NIVolumeData *)floatVolumeData volumeTransform:(NIAffineTransformPointer)volumeTransformPtr;
-+ (instancetype)maskFromVolumeData:(NIVolumeData *)floatVolumeData __deprecated;
++ (instancetype)maskFromVolumeData:(NIVolumeData *)volumeData volumeTransform:(NIAffineTransformPointer)volumeTransformPtr;
++ (instancetype)maskFromVolumeData:(NIVolumeData *)volumeData __deprecated;
 
 /** Initializes and returns a newly created empty mask.
  
@@ -307,7 +307,7 @@ CF_EXTERN_C_END
 /** Returns a NIVolumeData filled with the intensities of the mask.
  
  */
-- (NIVolumeData *)floatVolumeDataRepresentationWithVolumeTransform:(NIAffineTransform)volumeTransform;
+- (NIVolumeData *)volumeDataRepresentationWithVolumeTransform:(NIAffineTransform)volumeTransform;
 
 /** Returns a mask formed by cropping any indexes that are further out than the bounds specified from the receiver.
  
@@ -335,7 +335,7 @@ CF_EXTERN_C_END
  
  @return The resulting mask after having applied the predicate to the receiver.
  */
-- (NIMask *)filteredMaskUsingPredicate:(NSPredicate *)predicate floatVolumeData:(NIVolumeData *)floatVolumeData;
+- (NIMask *)filteredMaskUsingPredicate:(NSPredicate *)predicate volumeData:(NIVolumeData *)volumeData;
 
 /** Returns the mask as a set ofNIMaskRun structs in NSValues.
  

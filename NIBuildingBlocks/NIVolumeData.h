@@ -20,6 +20,7 @@
 //  THE SOFTWARE.
 
 #import <Cocoa/Cocoa.h>
+#import <Accelerate/Accelerate.h>
 #import "NIGeometry.h"
 
 @class NIUnsignedInt16ImageRep;
@@ -109,6 +110,7 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 - (BOOL)getFloatRun:(float *)buffer atPixelCoordinateX:(NSUInteger)x y:(NSUInteger)y z:(NSUInteger)z length:(NSUInteger)length;
 - (BOOL)getFloat:(float *)floatPtr atPixelCoordinateX:(NSUInteger)x y:(NSUInteger)y z:(NSUInteger)z;
 
+- (vImage_Buffer)floatBufferForSliceAtIndex:(NSUInteger)z;
 - (NIUnsignedInt16ImageRep *)unsignedInt16ImageRepForSliceAtIndex:(NSUInteger)z;
 - (NIVolumeData *)volumeDataForSliceAtIndex:(NSUInteger)z;
 
@@ -137,19 +139,19 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 
 @end
 
-
-@interface NIVolumeData (DCMPixAndVolume) // make a nice clean interface between the rest of of OsiriX that deals with pixlist and all their complications, and fill out our convenient data structure.
-
-- (id) initWithWithPixList:(NSArray *)pixList volume:(NSData *)volume;
-
-- (void)getOrientation:(float[6])orientation;
-- (void)getOrientationDouble:(double[6])orientation;
-
-@property (readonly) float originX;
-@property (readonly) float originY;
-@property (readonly) float originZ;
-
-@end
+// TODO: what should we do with the next few commented-out lines?
+//@interface NIVolumeData (DCMPixAndVolume) // make a nice clean interface between the rest of of OsiriX that deals with pixlist and all their complications, and fill out our convenient data structure.
+//
+//- (id) initWithWithPixList:(NSArray *)pixList volume:(NSData *)volume;
+//
+//- (void)getOrientation:(float[6])orientation;
+//- (void)getOrientationDouble:(double[6])orientation;
+//
+//@property (readonly) float originX;
+//@property (readonly) float originY;
+//@property (readonly) float originZ;
+//
+//@end
 
 CF_INLINE const float* NIVolumeDataFloatBytes(NIVolumeDataInlineBuffer *inlineBuffer)
 {
