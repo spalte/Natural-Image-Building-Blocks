@@ -61,10 +61,22 @@
 
 @end
 
-#define CGFloatMax NIMPR_CGFloatMax
-extern CGFloat NIMPR_CGFloatMax(CGFloat lha, CGFloat rha);
-#define CGFloatMin NIMPR_CGFloatMin
-extern CGFloat NIMPR_CGFloatMin(CGFloat lha, CGFloat rha);
+#ifndef CGFloatMax
+#if CGFLOAT_IS_DOUBLE
+#define CGFloatMax fmax
+#else
+#define CGFloatMax fmaxf
+#endif
+#endif
+
+#ifndef CGFloatMin
+#if CGFLOAT_IS_DOUBLE
+#define CGFloatMin fmin
+#else
+#define CGFloatMin fminf
+#endif
+#endif
+
 #define CGFloatAbs NIMPR_CGFloatAbs
 extern CGFloat NIMPR_CGFloatAbs(CGFloat f);
 #define CGFloatSign NIMPR_CGFloatSign

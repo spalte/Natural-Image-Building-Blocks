@@ -42,7 +42,6 @@
 @property (nonatomic, readwrite, assign) CGFloat windowWidth; // these will affect how this rep will draw when part of an NSImage
 @property (nonatomic, readwrite, assign) CGFloat windowLevel;
 
-
 - (id)initWithData:(uint16_t *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh;
 
 - (uint16_t *)unsignedInt16Data;

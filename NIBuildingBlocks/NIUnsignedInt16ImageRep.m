@@ -70,8 +70,12 @@
 
 -(BOOL)draw
 {
-    assert(false); // one day it would be cool if this could actually be used as an image rep in an NSImage
-    return NO;
+    assert(false); // I haven't tested the next few lines yet...
+    
+     unsigned char* bdp[1] = {(unsigned char*)self.unsignedInt16Data};
+     NSBitmapImageRep* bitmap = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:bdp pixelsWide:self.pixelsWide pixelsHigh:self.pixelsHigh bitsPerSample:sizeof(uint16)*8 samplesPerPixel:1
+                                                                          hasAlpha:NO isPlanar:NO colorSpaceName:NSDeviceWhiteColorSpace bitmapFormat:0 bytesPerRow:sizeof(uint16)*self.pixelsWide bitsPerPixel:sizeof(uint16)*8] autorelease];
+    return [bitmap draw];
 }
 
 - (uint16_t *)unsignedInt16Data

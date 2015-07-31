@@ -249,14 +249,6 @@
 
 @end
 
-CGFloat NIMPR_CGFloatMax(CGFloat lha, CGFloat rha) {
-    return lha > rha ? lha : rha;
-}
-
-CGFloat NIMPR_CGFloatMin(CGFloat lha, CGFloat rha) {
-    return lha < rha ? lha : rha;
-}
-
 CGFloat NIMPR_CGFloatAbs(CGFloat f) {
     return f >= 0 ? f : -f;
 }

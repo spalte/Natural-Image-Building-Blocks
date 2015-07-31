@@ -236,6 +236,7 @@
     if (self.ltool.class != ltc) {
         if ([self.ltool respondsToSelector:@selector(view:dismissing:)])
             [self.ltool view:self dismissing:event];
+        [self.mutableHighlightedAnnotations removeAllObjects];
         self.ltool = [[[ltc alloc] init] autorelease];
     }
     

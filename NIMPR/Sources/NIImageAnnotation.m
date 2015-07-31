@@ -74,6 +74,7 @@ static NSString* const NIImageAnnotationProjectedMask = @"NIImageAnnotationProje
                 
                 [irep drawInRect:self.bounds fromRect:NSZeroRect operation:NSCompositeCopy fraction:1 respectFlipped:YES hints:nil];
                 
+                // invert clip
                 NSBezierPath* clip = [NSBezierPath bezierPath];
                 clip.windingRule = NSEvenOddWindingRule;
                 [clip appendBezierPath:self.NSBezierPath];
@@ -175,8 +176,6 @@ static NSString* const NIImageAnnotationProjectedMask = @"NIImageAnnotationProje
             
             [hti unlockFocus];
             
-            [hti.TIFFRepresentation writeToFile:@"/Users/ale/Desktop/TEST.tif" atomically:YES];
-            
             if ([hti hitTestRect:NSMakeRect(NIAnnotationDistant-r, NIAnnotationDistant-r, r*2+1, r*2+1) withImageDestinationRect:NSMakeRect(0, 0, hti.size.width, hti.size.height) context:nil hints:nil flipped:NO]) {
                 distance = r;
                 break;
@@ -190,7 +189,7 @@ static NSString* const NIImageAnnotationProjectedMask = @"NIImageAnnotationProje
 - (BOOL)intersectsSliceRect:(NSRect)hitRect cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view {
 //    if (![super intersectsSliceRect:hitRect cache:cache view:view])
 //        return NO;
-//    
+    
     NSMutableDictionary* cached = cache[NIAnnotationDrawCache];
     NSImage* image = cached[NIImageAnnotationProjectedRender];
     

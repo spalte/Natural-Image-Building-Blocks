@@ -35,51 +35,170 @@
     self.modelToDicomTransform = NIAffineTransformConcat(self.modelToDicomTransform, NIAffineTransformMakeTranslationWithVector(translation));
 }
 
-- (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx {
-    // TODO: cache
-    
-    NIVolumeData* data = [self.mask volumeDataRepresentationWithVolumeTransform:self.modelToDicomTransform];
-    
-    NIVolumeData* sd = [NIGenerator synchronousRequestVolume:view.presentedGeneratorRequest volumeData:data];
-    vImage_Buffer floatBuffer = [sd floatBufferForSliceAtIndex:0];
-    
-    unsigned char* bdp[1] = {floatBuffer.data};
-    NSBitmapImageRep* bitmap = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:bdp pixelsWide:floatBuffer.width pixelsHigh:floatBuffer.height bitsPerSample:sizeof(float)*8 samplesPerPixel:1
-                                                                         hasAlpha:NO isPlanar:NO colorSpaceName:NSDeviceWhiteColorSpace bitmapFormat:NSFloatingPointSamplesBitmapFormat bytesPerRow:floatBuffer.rowBytes bitsPerPixel:sizeof(float)*8];
-    
-    [NSGraphicsContext saveGraphicsState];
-    NSGraphicsContext* context = [NSGraphicsContext currentContext];
-    
-    NSAffineTransform* t = [NSAffineTransform transform];
-    [t translateXBy:0 yBy:bitmap.size.height];
-    [t scaleXBy:1 yBy:-1];
-    [t set];
-    
-    NSRect bounds = NSMakeRect(0, 0, bitmap.size.width, bitmap.size.height);
-    CGContextClipToMask(context.CGContext, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height), [bitmap CGImageForProposedRect:&bounds context:context hints:nil]);
-    [self.color set];
-    [context setCompositingOperation:NSCompositeSourceOver];
-    CGContextFillRect(context.CGContext, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height));
+static NSString* const NIMaskAnnotationProjectedRender = @"NIMaskAnnotationProjectedRender";
+static NSString* const NIMaskAnnotationProjectedMask = @"NIMaskAnnotationProjectedMask";
 
-    //    [bitmap drawAtPoint:NSZeroPoint];
+- (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx {
+    NSMutableDictionary* cached = cache[NIAnnotationDrawCache];
+    if (!cached) cached = cache[NIAnnotationDrawCache] = [NSMutableDictionary dictionary];
     
-    [NSGraphicsContext restoreGraphicsState];
+    NSImage* cimage = cached[NIMaskAnnotationProjectedRender];
+    NSImage* cmask = cached[NIMaskAnnotationProjectedMask];
+    if (!cimage) {
+        cimage = cached[NIMaskAnnotationProjectedRender] = [[[NSImage alloc] initWithSize:view.bounds.size] autorelease];
+        cmask = cached[NIMaskAnnotationProjectedMask] = [[[NSImage alloc] initWithSize:view.bounds.size] autorelease];
+        
+        NIVolumeData* data = [self.mask volumeDataRepresentationWithVolumeTransform:self.modelToDicomTransform];
+        vImage_Buffer sib, wib;
+        NSBitmapImageRep *si, *wi;
+
+        NIObliqueSliceGeneratorRequest* req = [[view.presentedGeneratorRequest copy] autorelease];
+        req.interpolationMode = NIInterpolationModeNearestNeighbor;
+        
+        {
+            NIVolumeData* vd = [NIGenerator synchronousRequestVolume:req volumeData:data];
+            sib = [vd floatBufferForSliceAtIndex:0];
+            unsigned char* bdp[1] = {sib.data};
+            si = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:bdp pixelsWide:sib.width pixelsHigh:sib.height bitsPerSample:sizeof(float)*8 samplesPerPixel:1
+                                                            hasAlpha:NO isPlanar:NO colorSpaceName:NSDeviceWhiteColorSpace bitmapFormat:NSFloatingPointSamplesBitmapFormat bytesPerRow:sib.rowBytes bitsPerPixel:sizeof(float)*8] autorelease];
+        }
+        
+        {
+            NIVector dc = NIVectorApplyTransform([data convertVolumeVectorToDICOMVector:NIVectorMake(data.pixelsWide/2, data.pixelsHigh/2, data.pixelsDeep/2)], NIAffineTransformInvert(req.sliceToDicomTransform));
+            req.sliceToDicomTransform = NIAffineTransformConcat(NIAffineTransformMakeTranslation(0, 0, dc.z), req.sliceToDicomTransform);
+            req.slabWidth = data.maximumDiagonal+1;
+            req.projectionMode = NIProjectionModeMIP;
+            NIVolumeData* vd = [NIGenerator synchronousRequestVolume:req volumeData:data];
+            wib = [vd floatBufferForSliceAtIndex:0];
+            unsigned char* bdp[1] = {wib.data};
+            wi = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:bdp pixelsWide:wib.width pixelsHigh:wib.height bitsPerSample:sizeof(float)*8 samplesPerPixel:1
+                                                            hasAlpha:NO isPlanar:NO colorSpaceName:NSDeviceWhiteColorSpace bitmapFormat:NSFloatingPointSamplesBitmapFormat bytesPerRow:wib.rowBytes bitsPerPixel:sizeof(float)*8] autorelease];
+        }
+
+        [cimage lockFocus];
+        @try {
+            NSGraphicsContext* context = [NSGraphicsContext currentContext];
+            [context setCompositingOperation:NSCompositeSourceOver];
+            NSRect bounds = NSMakeRect(0, 0, cimage.size.width, cimage.size.height);
+            NSBezierPath* bp = [NSBezierPath bezierPathWithRect:bounds];
+            // flip
+            NSAffineTransform* t = [NSAffineTransform transform];
+            [t translateXBy:0 yBy:bounds.size.height];
+            [t scaleXBy:1 yBy:-1];
+            [t set];
+            
+            CGContextClipToMask(context.CGContext, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height), [si CGImageForProposedRect:&bounds context:context hints:nil]);
+            [self.color set];
+            [bp fill];
+
+            if (view.annotationsBaseAlpha) {
+                float *fsib = (float*)sib.data, *fwib = (float*)wib.data;
+                for (vImagePixelCount p = 0; p < sib.height*sib.width; ++p)
+                    fsib[p] = fmax(fwib[p]-fsib[p], 0);
+                        
+                [bp setClip];
+                CGContextClipToMask(context.CGContext, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height), [si CGImageForProposedRect:&bounds context:context hints:nil]);
+                [[self.color colorWithAlphaComponent:self.color.alphaComponent*view.annotationsBaseAlpha] set];
+                [bp fill];
+            }
+            
+        } @catch (NSException* e) {
+            [e log];
+        } @finally {
+            [cimage unlockFocus];
+        }
+        
+        dispatch_semaphore_t s = dispatch_semaphore_create(0);
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            @synchronized (cmask) {
+                dispatch_semaphore_signal(s);
+                
+                [cmask lockFocus];
+                @try {
+                    NSGraphicsContext* context = [NSGraphicsContext currentContext];
+                    NSRect bounds = NSMakeRect(0, 0, cimage.size.width, cimage.size.height);
+                    // flip
+                    NSAffineTransform* t = [NSAffineTransform transform];
+                    [t translateXBy:0 yBy:bounds.size.height];
+                    [t scaleXBy:1 yBy:-1];
+                    [t set];
+                    
+                    CGContextClipToMask(context.CGContext, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height), [wi CGImageForProposedRect:&bounds context:context hints:nil]);
+                    [context setCompositingOperation:NSCompositeSourceOver];
+                    [[self.color colorWithAlphaComponent:self.color.alphaComponent*view.annotationsBaseAlpha] set];
+                    [[NSBezierPath bezierPathWithRect:bounds] fill];
+                    
+                } @catch (NSException* e) {
+                    [e log];
+                } @finally {
+                    [cmask unlockFocus];
+                }
+            }
+        });
+        
+        dispatch_semaphore_wait(s, DISPATCH_TIME_FOREVER);
+        dispatch_release(s);
+    }
+    
+    [cimage drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1];
     
     return nil;
 }
 
 - (void)highlightWithColor:(NSColor*)color inView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx path:(NSBezierPath*)path {
+    NSMutableDictionary* cached = cache[NIAnnotationDrawCache];
+    NSImage* cmask = cached[NIMaskAnnotationProjectedRender];
     
+    [NSGraphicsContext saveGraphicsState];
+    NSGraphicsContext* context = [NSGraphicsContext currentContext];
+    
+    NSRect bounds;
+    @synchronized (cmask) {
+        bounds = NSMakeRect(0, 0, cmask.size.width, cmask.size.height);
+        CGContextClipToMask(context.CGContext, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height), [cmask CGImageForProposedRect:&bounds context:context hints:nil]);
+    }
+    
+    [color set];
+    [context setCompositingOperation:NSCompositeSourceOver]; // NSCompositeHighlight
+    CGContextFillRect(context.CGContext, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height));
+    
+    [NSGraphicsContext restoreGraphicsState];
 }
 
-- (CGFloat)distanceToSlicePoint:(NSPoint)point cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint {
-   // NSLog(@"Warning: -[%@ distanceToSlicePoint:view:closestPoint:] is missing", self.className);
-    return CGFLOAT_MAX;
+- (CGFloat)distanceToSlicePoint:(NSPoint)slicePoint cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint {
+    CGFloat distance = NIAnnotationDistant+1;
+    
+    @autoreleasepool {
+        NSMutableDictionary* cached = cache[NIAnnotationDrawCache];
+        NSImage* image = cached[NIMaskAnnotationProjectedMask];
+        
+        NSImage* hti = [[NSImage alloc] initWithSize:NSMakeSize(NIAnnotationDistant*2+1, NIAnnotationDistant*2+1)];
+        
+        for (size_t r = 0; r <= (size_t)NIAnnotationDistant; ++r) {
+            [hti lockFocus];
+            
+            [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(NIAnnotationDistant-r, NIAnnotationDistant-r, r*2+1, r*2+1)] setClip];
+            [image drawAtPoint:NSMakePoint(NIAnnotationDistant-r, NIAnnotationDistant-r) fromRect:NSMakeRect(slicePoint.x-r, slicePoint.y-r, r*2+1, r*2+1) operation:NSCompositeCopy fraction:1];
+            
+            [hti unlockFocus];
+            
+            if ([hti hitTestRect:NSMakeRect(NIAnnotationDistant-r, NIAnnotationDistant-r, r*2+1, r*2+1) withImageDestinationRect:NSMakeRect(0, 0, hti.size.width, hti.size.height) context:nil hints:nil flipped:NO]) {
+                distance = r;
+                break;
+            }
+        }
+    }
+    
+    return distance;
 }
 
-- (BOOL)intersectsSliceRect:(NSRect)rect cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view {
-   // NSLog(@"Warning: -[%@ intersectsSliceRect:view:] is missing", self.className);
-    return NO;
+- (BOOL)intersectsSliceRect:(NSRect)hitRect cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view {
+    NSMutableDictionary* cached = cache[NIAnnotationDrawCache];
+    NSImage* image = cached[NIMaskAnnotationProjectedMask];
+    
+    return [image hitTestRect:hitRect withImageDestinationRect:NSMakeRect(0, 0, image.size.width, image.size.height) context:nil hints:nil flipped:NO];
 }
+
 
 @end

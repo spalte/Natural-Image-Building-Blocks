@@ -175,17 +175,15 @@
     if (!self.pixelSpacing)
         return;
     
-    NIVector edges[] = {{0,0,0},{1,1,1},{1,0,0},{0,1,1},{0,1,0},{1,0,1},{1,1,0},{0,0,1}}; // these 8 points define the 4 volume diagonals (1-2, 3-4, 5-6, 7-8)
-    NIVectorApplyTransformToVectors(NIAffineTransformMakeScale(self.data.pixelsWide, self.data.pixelsHigh, self.data.pixelsDeep), edges, 8);
-    NIVectorApplyTransformToVectors(self.data.volumeTransform, edges, 8);
-    CGFloat maxdiameter = 0;
-    for (size_t i = 0; i < 4; ++i)
-        maxdiameter = fmax(maxdiameter, NIVectorDistance(edges[i*2], edges[i*2+1]));
+    CGFloat maxd = [self.data maximumDiagonal];
     
     NIObliqueSliceGeneratorRequest* req = [[[NIObliqueSliceGeneratorRequest alloc] initWithCenter:self.point pixelsWide:NSWidth(self.frame) pixelsHigh:NSHeight(self.frame) xBasis:NIVectorScalarMultiply(self.xdir.vector, self.pixelSpacing) yBasis:NIVectorScalarMultiply(self.ydir.vector, self.pixelSpacing)] autorelease];
+    req.interpolationMode = NIInterpolationModeCubic;
     if (self.projectionFlag) {
-        req.slabWidth = self.slabWidth*maxdiameter;
+        req.slabWidth = self.slabWidth*maxd;
         req.projectionMode = req.slabWidth? self.projectionMode : NIProjectionModeNone;
+        if (req.slabWidth)
+            req.interpolationMode = NIInterpolationModeNone; // the superposition of many slices should result in a smooth render anyway...
     }
     
     if (![req isEqual:self.generatorRequest])
