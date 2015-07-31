@@ -37,7 +37,7 @@ extern const CGFloat NIAnnotationDistant;
 
 @end
 
-@interface NIPlanarAnnotationHandle : NIAnnotationHandle {
+@interface NITransformAnnotationHandle : NIAnnotationHandle {
     NIAnnotation<NITransformAnnotation>* _annotation;
 }
 
@@ -47,7 +47,7 @@ extern const CGFloat NIAnnotationDistant;
 
 @end
 
-@interface NIPlanarAnnotationBlockHandle : NIPlanarAnnotationHandle {
+@interface NITransformAnnotationBlockHandle : NITransformAnnotationHandle {
     void (^_block)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector deltaPlaneVector);
 }
 

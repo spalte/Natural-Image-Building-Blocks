@@ -7,6 +7,7 @@
 //
 
 #import "NIMaskAnnotation.h"
+#import "NIAnnotationHandle.h"
 
 @implementation NIMaskAnnotation
 
@@ -48,7 +49,7 @@ static NSString* const NIMaskAnnotationProjectedMask = @"NIMaskAnnotationProject
         cimage = cached[NIMaskAnnotationProjectedRender] = [[[NSImage alloc] initWithSize:view.bounds.size] autorelease];
         cmask = cached[NIMaskAnnotationProjectedMask] = [[[NSImage alloc] initWithSize:view.bounds.size] autorelease];
         
-        NIVolumeData* data = [self.mask volumeDataRepresentationWithVolumeTransform:self.modelToDicomTransform];
+        NIVolumeData* data = [self.mask volumeDataRepresentationWithVolumeTransform:NIAffineTransformInvert(self.modelToDicomTransform)];
         vImage_Buffer sib, wib;
         NSBitmapImageRep *si, *wi;
 
@@ -198,6 +199,21 @@ static NSString* const NIMaskAnnotationProjectedMask = @"NIMaskAnnotationProject
     NSImage* image = cached[NIMaskAnnotationProjectedMask];
     
     return [image hitTestRect:hitRect withImageDestinationRect:NSMakeRect(0, 0, image.size.width, image.size.height) context:nil hints:nil flipped:NO];
+}
+
+- (NSSet*)handlesInView:(NIAnnotatedGeneratorRequestView *)view {
+    NIVolumeData* data = [self.mask volumeDataRepresentationWithVolumeTransform:NIAffineTransformInvert(self.modelToDicomTransform)];
+    
+    NIVector edges[] = {{0,0,0},{1,1,1},{1,0,0},{0,1,1},{0,1,0},{1,0,1},{1,1,0},{0,0,1}};
+    NIVectorApplyTransformToVectors(NIAffineTransformMakeScale(data.pixelsWide*data.pixelSpacingX, data.pixelsHigh*data.pixelSpacingY, data.pixelsDeep*data.pixelSpacingZ), edges, 8);
+    NIVectorApplyTransformToVectors(NIAffineTransformConcat(self.modelToDicomTransform, NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)), edges, 8);
+    
+    NSMutableSet* set = [NSMutableSet set];
+    
+    for (size_t i = 0; i < 8; ++i)
+        [set addObject:[NIAnnotationBlockHandle handleAtSliceVector:edges[i] block:nil]];
+    
+    return set;
 }
 
 

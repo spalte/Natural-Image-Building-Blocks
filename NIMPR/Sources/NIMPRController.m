@@ -475,7 +475,7 @@ static NSString* const NIMPRControllerMenuAnnotationsDelimiter = @"NIMPRControll
         NSPoint center = [view convertPointFromDICOMVector:self.point];
         NIAffineTransform modelToDicomTransform = NIAffineTransformTranslate(view.presentedGeneratorRequest.sliceToDicomTransform, center.x-image.size.width/2, center.y-image.size.height/2, 0);
         
-        NIImageAnnotation* ia = [[NIImageAnnotation alloc] initWithImage:image transform:modelToDicomTransform];
+        NIImageAnnotation* ia = [[NIImageAnnotation alloc] initWithImage:image transform:NIAffineTransformInvert(modelToDicomTransform)];
 //        ia.colorify = YES;
         
         [self.mutableAnnotations addObject:ia];
@@ -490,7 +490,7 @@ static NSString* const NIMPRControllerMenuAnnotationsDelimiter = @"NIMPRControll
     NIMask* mask = [NIMask maskWithSphereDiameter:30];
     
 //    NSPoint center = [view convertPointFromDICOMVector:self.point];
-    NIAffineTransform modelToDicomTransform = NIAffineTransformMakeTranslationWithVector(NIVectorSubtract(NIVectorMake(15, 15, 15), self.point)); //NIAffineTransformTranslate(view.presentedGeneratorRequest.sliceToDicomTransform, center.x, center.y, 0);//NIAffineTransformTranslate(view.presentedGeneratorRequest.sliceToDicomTransform, center.x-15, center.y-15, -15);
+    NIAffineTransform modelToDicomTransform = NIAffineTransformMakeTranslationWithVector(NIVectorSubtract(self.point, NIVectorMake(15, 15, 15))); //NIAffineTransformTranslate(view.presentedGeneratorRequest.sliceToDicomTransform, center.x, center.y, 0);//NIAffineTransformTranslate(view.presentedGeneratorRequest.sliceToDicomTransform, center.x-15, center.y-15, -15);
     
     NIMaskAnnotation* ma = [[NIMaskAnnotation alloc] initWithMask:mask transform:modelToDicomTransform];
     

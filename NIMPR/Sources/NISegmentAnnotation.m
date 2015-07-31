@@ -37,11 +37,11 @@
 - (NSSet*)handlesInView:(NIAnnotatedGeneratorRequestView*)view {
     NIAffineTransform planeToSliceTransform = NIAffineTransformConcat(self.modelToDicomTransform, NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform));
     return [NSSet setWithObjects:
-            [NIPlanarAnnotationBlockHandle handleAtSliceVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(self.p), planeToSliceTransform) annotation:self
+            [NITransformAnnotationBlockHandle handleAtSliceVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(self.p), planeToSliceTransform) annotation:self
                                                         block:^(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector d) {
                                                             self.p = NSMakePoint(self.p.x+d.x, self.p.y+d.y);
                                                         }],
-            [NIPlanarAnnotationBlockHandle handleAtSliceVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(self.q), planeToSliceTransform) annotation:self
+            [NITransformAnnotationBlockHandle handleAtSliceVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(self.q), planeToSliceTransform) annotation:self
                                                         block:^(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector d) {
                                                             self.q = NSMakePoint(self.q.x+d.x, self.q.y+d.y);
                                                         }], nil];

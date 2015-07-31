@@ -60,18 +60,19 @@ const CGFloat NIAnnotationHandleSize = 4;
 }
 
 - (void)translateFromSlicePoint:(NSPoint)from toSlicePoint:(NSPoint)to view:(NIAnnotatedGeneratorRequestView*)view event:(NSEvent*)event {
-    self.block(view, event, NIVectorSubtract(NIVectorApplyTransform(NIVectorMakeFromNSPoint(to), view.presentedGeneratorRequest.sliceToDicomTransform), NIVectorApplyTransform(NIVectorMakeFromNSPoint(from), view.presentedGeneratorRequest.sliceToDicomTransform)));
+    if (self.block)
+        self.block(view, event, NIVectorSubtract(NIVectorApplyTransform(NIVectorMakeFromNSPoint(to), view.presentedGeneratorRequest.sliceToDicomTransform), NIVectorApplyTransform(NIVectorMakeFromNSPoint(from), view.presentedGeneratorRequest.sliceToDicomTransform)));
 }
 
 @end
 
-@interface NIPlanarAnnotationHandle ()
+@interface NITransformAnnotationHandle ()
 
 @property(retain) NIAnnotation<NITransformAnnotation>* annotation;
 
 @end
 
-@implementation NIPlanarAnnotationHandle
+@implementation NITransformAnnotationHandle
 
 @synthesize annotation = _annotation;
 
@@ -89,9 +90,9 @@ const CGFloat NIAnnotationHandleSize = 4;
 }
 
 - (void)translateFromSlicePoint:(NSPoint)sfrom toSlicePoint:(NSPoint)sto view:(NIAnnotatedGeneratorRequestView *)view event:(NSEvent*)event {
-    NIAffineTransform sliceToPlaneTransform = NIAffineTransformConcat(view.presentedGeneratorRequest.sliceToDicomTransform, NIAffineTransformInvert(self.annotation.modelToDicomTransform));
-    NIVector pfrom = NILineIntersectionWithPlane(NILineApplyTransform(NILineMake(NIVectorMakeFromNSPoint(sfrom), NIVectorZBasis), sliceToPlaneTransform), NIPlaneZZero);
-    NIVector pto = NILineIntersectionWithPlane(NILineApplyTransform(NILineMake(NIVectorMakeFromNSPoint(sto), NIVectorZBasis), sliceToPlaneTransform), NIPlaneZZero);
+    NIAffineTransform sliceToModelTransform = NIAffineTransformConcat(view.presentedGeneratorRequest.sliceToDicomTransform, NIAffineTransformInvert(self.annotation.modelToDicomTransform));
+    NIVector pfrom = NILineIntersectionWithPlane(NILineApplyTransform(NILineMake(NIVectorMakeFromNSPoint(sfrom), NIVectorZBasis), sliceToModelTransform), NIPlaneZZero);
+    NIVector pto = NILineIntersectionWithPlane(NILineApplyTransform(NILineMake(NIVectorMakeFromNSPoint(sto), NIVectorZBasis), sliceToModelTransform), NIPlaneZZero);
     [self translateFromPlaneVector:pfrom toPlaneVector:pto view:view event:event];
 }
 
@@ -101,13 +102,13 @@ const CGFloat NIAnnotationHandleSize = 4;
 
 @end
 
-@interface NIPlanarAnnotationBlockHandle ()
+@interface NITransformAnnotationBlockHandle ()
 
 @property(copy) void (^block)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector pd);
 
 @end
 
-@implementation NIPlanarAnnotationBlockHandle
+@implementation NITransformAnnotationBlockHandle
 
 @synthesize block = _block;
 
@@ -133,7 +134,8 @@ const CGFloat NIAnnotationHandleSize = 4;
 }
 
 - (void)translateFromPlaneVector:(NIVector)vfrom toPlaneVector:(NIVector)vto view:(NIAnnotatedGeneratorRequestView *)view event:(NSEvent*)event {
-    self.block(view, event, NIVectorSubtract(vto, vfrom));
+    if (self.block)
+        self.block(view, event, NIVectorSubtract(vto, vfrom));
 }
 
 @end
