@@ -13,7 +13,6 @@ typedef NS_ENUM(NSInteger, NIMPRToolTag) {
     NIMPRToolMove,
     NIMPRToolZoom,
     NIMPRToolRotate,
-    NIMPRToolRotateAxis,
     NIMPRToolInteract,
     NIMPRToolAnnotatePoint,
     NIMPRToolAnnotateSegment,

@@ -19,6 +19,7 @@
 
 #import "NIImageAnnotation.h"
 #import "NIMaskAnnotation.h"
+#import "NIMPRRegionGrowTool.h"
 
 @implementation NIMPRController
 
@@ -489,12 +490,16 @@ static NSString* const NIMPRControllerMenuAnnotationsDelimiter = @"NIMPRControll
     
     NIMask* mask = [NIMask maskWithSphereDiameter:30];
     
-//    NSPoint center = [view convertPointFromDICOMVector:self.point];
     NIAffineTransform modelToDicomTransform = NIAffineTransformMakeTranslationWithVector(NIVectorSubtract(self.point, NIVectorMake(15, 15, 15))); //NIAffineTransformTranslate(view.presentedGeneratorRequest.sliceToDicomTransform, center.x, center.y, 0);//NIAffineTransformTranslate(view.presentedGeneratorRequest.sliceToDicomTransform, center.x-15, center.y-15, -15);
     
     NIMaskAnnotation* ma = [[NIMaskAnnotation alloc] initWithMask:mask transform:modelToDicomTransform];
+    ma.color = [NSColor.redColor colorWithAlphaComponent:0.5];
     
     [self.mutableAnnotations addObject:ma];
+}
+
+- (IBAction)testRegionGrow:(id)sender {
+    self.ltool = [[[NIMPRRegionGrowTool alloc] init] autorelease];
 }
 
 @end

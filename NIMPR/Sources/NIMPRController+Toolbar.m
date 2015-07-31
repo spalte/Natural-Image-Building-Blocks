@@ -129,7 +129,8 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
               NIMPRControllerToolbarItemIdentifierLayouts,
               NIMPRControllerToolbarItemIdentifierProjection,
               @"ImageTest",
-              @"MaskTest"  ];
+              @"MaskTest",
+              @"RegionGrowTest" ];
 }
 
 - (NSArray*)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar {
@@ -140,7 +141,8 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
               NSToolbarFlexibleSpaceItemIdentifier,
               NIMPRControllerToolbarItemIdentifierLayouts,
               @"ImageTest",
-              @"MaskTest"  ];
+              @"MaskTest",
+              @"RegionGrowTest" ];
 }
 
 - (NSToolbarItem*)toolbar:(NSToolbar*)toolbar itemForItemIdentifier:(NSString*)identifier willBeInsertedIntoToolbar:(BOOL)flag {
@@ -193,6 +195,11 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
         item.label = item.toolTip = identifier;
         item.image = [NSImage imageNamed:@"NSRevealFreestandingTemplate"];
         item.action = @selector(testMask:);
+    }
+    if ([identifier isEqualToString:@"RegionGrowTest"]) {
+        item.label = item.toolTip = identifier;
+        item.image = [NSImage imageNamed:@"NSRevealFreestandingTemplate"];
+        item.action = @selector(testRegionGrow:);
     }
     
     item.autovalidates = NO;
