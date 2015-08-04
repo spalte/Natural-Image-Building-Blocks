@@ -20,6 +20,7 @@
 #import "NIMPRAnnotatePolyTool.h"
 #import "NIMPRAnnotateRectangleTool.h"
 #import "NIMPRAnnotateEllipseTool.h"
+#import "NIMPRRegionGrowingTool.h"
 #import "NSMenu+NIMPR.h"
 
 
@@ -37,17 +38,6 @@
 //}
 //
 //@end
-
-
-
-
-@class NIMPRSegmentedCell;
-
-@interface NIMPRSegmentedControl : NSSegmentedControl
-
-- (NIMPRSegmentedCell*)cell;
-
-@end
 
 @interface NIMPRSegmentedCell : NSSegmentedCell {
     NSInteger _rselectedTag;
@@ -94,7 +84,8 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
                    [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Segment", nil) image:[NIMPR image:@"Tool-Annotate-Segment"] tag:NIMPRToolAnnotateSegment handler:NIMPRAnnotateSegmentTool.class],
                    [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Poly", nil) image:[NIMPR image:@"Tool-Annotate-Poly"] tag:NIMPRToolAnnotateSegment handler:NIMPRAnnotatePolyTool.class],
                    [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Rectangle", nil) image:[NIMPR image:@"Tool-Annotate-Rectangle"] tag:NIMPRToolAnnotateRectangle handler:NIMPRAnnotateRectangleTool.class],
-                   [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Ellipse", nil) image:[NIMPR image:@"Tool-Annotate-Ellipse"] tag:NIMPRToolAnnotateEllipse handler:NIMPRAnnotateEllipseTool.class] ] retain];
+                   [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Ellipse", nil) image:[NIMPR image:@"Tool-Annotate-Ellipse"] tag:NIMPRToolAnnotateEllipse handler:NIMPRAnnotateEllipseTool.class],
+                   [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Region Growing", nil) image:[NIMPR image:@"Tool-Annotate-RegionGrowing"] tag:NIMPRToolRegionGrowing handler:NIMPRRegionGrowingTool.class]] retain];
     return tools;
 }
 
@@ -158,11 +149,10 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
     
     NSArray* ta = [tas objectForKey:identifier];
     if (ta) {
-        item.label = ta[0];
+        item.label = item.toolTip = ta[0];
         
         NIMPRSegmentedControl* seg = [[[NIMPRSegmentedControl alloc] initWithFrame:NSZeroRect] autorelease];
         NIMPRSegmentedCell* cell = [seg cell];
-        seg.toolTip = item.label;
         
         NSMenu* menu = [[[NSMenu alloc] init] autorelease];
         item.menuFormRepresentation = [[NSMenuItem alloc] initWithTitle:ta[0] action:nil keyEquivalent:@""];
@@ -177,6 +167,8 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
             mi.submenu = tool.submenu;
             [menu addItem:mi];
         }];
+        
+        seg.action = @selector(toolbarItemAction:);
         
         cell.controlSize = NSSmallControlSize;
         [seg sizeToFit];
@@ -204,6 +196,17 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
     
     item.autovalidates = NO;
     return item;
+}
+
+- (void)toolbarItemAction:(id)sender {
+    NSEvent* event = [NSApp currentEvent];
+    [self performBlock:^{
+        NIMPRTool* tool = self.ltool;
+        if (event.type == NSRightMouseUp)
+            tool = self.rtool;
+        if ([tool respondsToSelector:@selector(toolbarItemAction:)])
+            [tool toolbarItemAction:sender];
+    } afterDelay:0];
 }
 
 - (NSToolbarItem*)toolbar:(NSToolbar*)toolbar itemForLayouts:(BOOL)willBeInsertedIntoToolbar {
@@ -389,12 +392,16 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
     return YES;
 }
 
+- (NSRect)boundsForSegment:(NSInteger)s {
+    return [self.cell boundsForSegment:s inView:self];
+}
+
 - (void)rightMouseDown:(NSEvent*)event {
     NSPoint location = [self convertPoint:event.locationInWindow fromView:nil];
     
     NSInteger s; NSRect sframe;
     for (s = 0; s < self.segmentCount; ++s) {
-        sframe = [self.cell boundsForSegment:s inView:self];
+        sframe = [self boundsForSegment:s];
         if (location.x <= NSMaxX(sframe))
             break;
     }
@@ -405,9 +412,10 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
     do {
         self.cell.rightMouseInside = NSPointInRect(event.locationInWindow, [self convertRect:self.cell.rightMouseFrame toView:nil]);
         if (event.type == NSRightMouseUp) {
-            if (self.cell.rightMouseInside)
+            if (self.cell.rightMouseInside) {
                 self.cell.rselectedTag = [self.cell tagForSegment:s];
-            break;
+                [self sendAction:self.action to:nil];
+            } break;
         }
     } while ((event = [self.window nextEventMatchingMask:NSRightMouseDraggedMask|NSRightMouseUpMask]));
     
@@ -488,8 +496,6 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
 
 - (NSRect)boundsForSegment:(NSInteger)s inView:(NIMPRSegmentedControl*)view {
     return [self _rectForSegment:s inFrame:view.bounds];
-//    CGFloat cellwidth = view.frame.size.width/view.segmentCount;
-//    return NSMakeRect(cellwidth*s, 0, cellwidth, view.frame.size.height);
 }
 
 @end

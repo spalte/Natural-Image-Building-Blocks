@@ -19,6 +19,7 @@ typedef NS_ENUM(NSInteger, NIMPRToolTag) {
     NIMPRToolAnnotatePoly,
     NIMPRToolAnnotateRectangle,
     NIMPRToolAnnotateEllipse,
+    NIMPRToolRegionGrowing,
 };
 
 @class NIMPRView;
@@ -43,7 +44,8 @@ typedef NS_ENUM(NSInteger, NIMPRToolTag) {
 
 - (void)view:(NIMPRView*)view dismissing:(NSEvent*)event;
 - (void)view:(NIMPRView*)view handled:(NSEvent*)event;
-//- (void)view:(NIMPRView*)view switchingTo:(Class)tc event:(NSEvent*)event;
+
+- (void)toolbarItemAction:(id)sender;
 
 @end
 

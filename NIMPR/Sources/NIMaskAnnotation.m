@@ -13,9 +13,10 @@
 
 @synthesize mask = _mask;
 @synthesize modelToDicomTransform = _modelToDicomTransform;
+@synthesize volume = _volume;
 
 + (NSSet*)keyPathsForValuesAffectingAnnotation {
-    return [super.keyPathsForValuesAffectingAnnotation setByAddingObjects: @"mask", @"modelToDicomTransform", nil ];
+    return [super.keyPathsForValuesAffectingAnnotation setByAddingObjects: @"mask", @"modelToDicomTransform", @"volume", nil ];
 }
 
 - (id)initWithMask:(NIMask*)mask transform:(NIAffineTransform)modelToDicomTransform {
@@ -27,8 +28,18 @@
     return self;
 }
 
+- (id)initWithVolume:(NIVolumeData *)volume {
+    if ((self = [super init])) {
+        self.volume = volume;
+        self.modelToDicomTransform = NIAffineTransformIdentity;
+    }
+    
+    return self;
+}
+
 - (void)dealloc {
     self.mask = nil;
+    self.volume = nil;
     [super dealloc];
 }
 
@@ -49,7 +60,14 @@ static NSString* const NIMaskAnnotationProjectedMask = @"NIMaskAnnotationProject
         cimage = cached[NIMaskAnnotationProjectedRender] = [[[NSImage alloc] initWithSize:view.bounds.size] autorelease];
         cmask = cached[NIMaskAnnotationProjectedMask] = [[[NSImage alloc] initWithSize:view.bounds.size] autorelease];
         
-        NIVolumeData* data = [self.mask volumeDataRepresentationWithVolumeTransform:NIAffineTransformInvert(self.modelToDicomTransform)];
+        NIVolumeData* data = nil;
+        if (self.volume) {
+            if (NIAffineTransformIsIdentity(self.modelToDicomTransform))
+                data = self.volume;
+            else data = [self.volume volumeDataByApplyingTransform:NIAffineTransformInvert(self.modelToDicomTransform)];
+        } else
+            data = [self.mask volumeDataRepresentationWithVolumeTransform:NIAffineTransformInvert(self.modelToDicomTransform)];
+        
         vImage_Buffer sib, wib;
         NSBitmapImageRep *si, *wi;
 
@@ -125,7 +143,7 @@ static NSString* const NIMaskAnnotationProjectedMask = @"NIMaskAnnotationProject
                     [t scaleXBy:1 yBy:-1];
                     [t set];
                     
-                    CGContextClipToMask(context.CGContext, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height), [wi CGImageForProposedRect:&bounds context:context hints:nil]);
+                    CGContextClipToMask(context.CGContext, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height), [/*wi*/si CGImageForProposedRect:&bounds context:context hints:nil]);
                     [context setCompositingOperation:NSCompositeSourceOver];
                     [[self.color colorWithAlphaComponent:self.color.alphaComponent*view.annotationsBaseAlpha] set];
                     [[NSBezierPath bezierPathWithRect:bounds] fill];

@@ -812,7 +812,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
         standIn.maskIndexZ = maskIndex.z;
         
         for (maskIndex.x = maskRun.widthRange.location; maskIndex.x < NSMaxRange(maskRun.widthRange); maskIndex.x++) {
-            [volumeData getFloat:&intensity atPixelCoordinateX:maskIndex.x y:maskIndex.y z:maskIndex.z];
+            intensity = [volumeData floatAtPixelCoordinateX:maskIndex.x y:maskIndex.y z:maskIndex.z];
             standIn.maskIndexX = maskIndex.x;
             standIn.intensity = intensity;
             

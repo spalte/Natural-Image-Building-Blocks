@@ -23,4 +23,34 @@
 
 + (NSImage*)image:(NSString*)name;
 
+//- (void)setStorage:(id<NIStorage>)storage;
+
+
+
 @end
+
+
+//
+//
+//
+//@protocol NIStorage <NSObject>
+//
+//- (void)store:(NSData*)data forVolume:(NIVolumeData*)data key:(NSString*)key;
+//- (NSData*)dataForVolume:(NIVolumeData*)data key:(NSString*)key;
+//
+//@end
+//
+//
+//
+//
+//dans osi
+//
+//
+//- (void)initPlugin {
+//    [NIBB initForOsiriX];
+//    
+//}
+//
+//+ (void)initForOsiriX {
+//    [NIMPR.instance setStorage:[[[NIStorageOsiriX alloc] init] autorelease]];
+//}

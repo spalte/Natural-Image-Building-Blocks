@@ -14,6 +14,8 @@
 - (id)performSelector:(SEL)sel withObjects:(id)obj1 :(id)obj2;
 - (id)performSelector:(SEL)sel withObjects:(id)obj1 :(id)obj2 :(id)obj3;
 
+- (void)performBlock:(void (^)())block afterDelay:(NSTimeInterval)delay;
+
 @end
 
 @interface NSNull (NIMPR)

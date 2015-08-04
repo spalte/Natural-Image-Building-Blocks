@@ -216,15 +216,6 @@
     return YES;
 }
 
-- (BOOL)getFloat:(float *)floatPtr atPixelCoordinateX:(NSUInteger)x y:(NSUInteger)y z:(NSUInteger)z // TODO: added this to match the OSI API
-{
-    NIVolumeDataInlineBuffer inlineBuffer;
-    
-    [self aquireInlineBuffer:&inlineBuffer];
-    *floatPtr = NIVolumeDataGetFloatAtPixelCoordinate(&inlineBuffer, x, y, z);
-    return YES;
-}
-
 - (BOOL)isCurved
 {
     return NO;

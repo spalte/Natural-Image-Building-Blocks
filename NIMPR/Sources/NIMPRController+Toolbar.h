@@ -62,3 +62,13 @@ extern NSString* const NIMPRControllerToolbarItemIdentifierLayouts;
 + (instancetype)recordWithLabel:(NSString*)label image:(NSImage*)image tag:(NIMPRLayoutTag)tag;
 
 @end
+
+@class NIMPRSegmentedCell;
+
+@interface NIMPRSegmentedControl : NSSegmentedControl
+
+- (NIMPRSegmentedCell*)cell;
+
+- (NSRect)boundsForSegment:(NSInteger)s;
+
+@end

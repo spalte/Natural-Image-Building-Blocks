@@ -58,6 +58,15 @@
     return rv;
 }
 
+- (void)performBlock:(void (^)())block afterDelay:(NSTimeInterval)delay {
+    [self performSelector:@selector(performBlock:) withObject:[block copy] afterDelay:delay];
+}
+
+- (void)performBlock:(void (^)())block {
+    block();
+    [block release];
+}
+
 + (id)valueWithBytes:(const void*)bytes objCType:(const char*)type {
     if (strlen(type) == 1)
         switch (type[0]) {

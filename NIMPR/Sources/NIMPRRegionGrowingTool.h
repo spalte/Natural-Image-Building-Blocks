@@ -9,13 +9,14 @@
 #import "NIMPRAnnotateTool.h"
 
 @class NIMaskAnnotation;
-@class NIMPRRegionGrowToolWindowController;
 
-@interface NIMPRRegionGrowTool : NIMPRAnnotateTool {
-    NIMPRRegionGrowToolWindowController* _controller;
+@interface NIMPRRegionGrowingTool : NIMPRAnnotateTool <NSPopoverDelegate> {
+    NSPopover* _popover;
 }
 
 @property(retain) NIMaskAnnotation* annotation;
-@property(readonly, retain) NIMPRRegionGrowToolWindowController* controller;
+
+- (NSPopover*)popover;
+- (NSView*)popoverView;
 
 @end

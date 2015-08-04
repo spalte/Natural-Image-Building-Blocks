@@ -19,7 +19,7 @@
 
 #import "NIImageAnnotation.h"
 #import "NIMaskAnnotation.h"
-#import "NIMPRRegionGrowTool.h"
+#import "NIMPRRegionGrowingTool.h"
 
 @implementation NIMPRController
 
@@ -476,8 +476,8 @@ static NSString* const NIMPRControllerMenuAnnotationsDelimiter = @"NIMPRControll
         NSPoint center = [view convertPointFromDICOMVector:self.point];
         NIAffineTransform modelToDicomTransform = NIAffineTransformTranslate(view.presentedGeneratorRequest.sliceToDicomTransform, center.x-image.size.width/2, center.y-image.size.height/2, 0);
         
-        NIImageAnnotation* ia = [[NIImageAnnotation alloc] initWithImage:image transform:NIAffineTransformInvert(modelToDicomTransform)];
-//        ia.colorify = YES;
+        NIImageAnnotation* ia = [[NIImageAnnotation alloc] initWithImage:image transform:modelToDicomTransform];
+        //        ia.colorify = YES;
         
         [self.mutableAnnotations addObject:ia];
     }];
@@ -490,7 +490,7 @@ static NSString* const NIMPRControllerMenuAnnotationsDelimiter = @"NIMPRControll
     
     NIMask* mask = [NIMask maskWithSphereDiameter:30];
     
-    NIAffineTransform modelToDicomTransform = NIAffineTransformMakeTranslationWithVector(NIVectorSubtract(self.point, NIVectorMake(15, 15, 15))); //NIAffineTransformTranslate(view.presentedGeneratorRequest.sliceToDicomTransform, center.x, center.y, 0);//NIAffineTransformTranslate(view.presentedGeneratorRequest.sliceToDicomTransform, center.x-15, center.y-15, -15);
+    NIAffineTransform modelToDicomTransform = NIAffineTransformMakeTranslationWithVector(NIVectorSubtract(self.point, NIVectorMake(15, 15, 15)));
     
     NIMaskAnnotation* ma = [[NIMaskAnnotation alloc] initWithMask:mask transform:modelToDicomTransform];
     ma.color = [NSColor.redColor colorWithAlphaComponent:0.5];
@@ -499,7 +499,7 @@ static NSString* const NIMPRControllerMenuAnnotationsDelimiter = @"NIMPRControll
 }
 
 - (IBAction)testRegionGrow:(id)sender {
-    self.ltool = [[[NIMPRRegionGrowTool alloc] init] autorelease];
+    self.ltool = [[[NIMPRRegionGrowingTool alloc] init] autorelease];
 }
 
 @end

@@ -99,11 +99,11 @@
 		710683FD1B6645290078903A /* Tool-Rotate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 710683F11B6645290078903A /* Tool-Rotate.pdf */; };
 		710683FE1B6645290078903A /* Tool-WLWW.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 710683F21B6645290078903A /* Tool-WLWW.pdf */; };
 		710683FF1B6645290078903A /* Tool-Zoom.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 710683F31B6645290078903A /* Tool-Zoom.pdf */; };
-		7106844E1B6B9FC10078903A /* NIMPRRegionGrowTool.h in Headers */ = {isa = PBXBuildFile; fileRef = 7106844C1B6B9FC10078903A /* NIMPRRegionGrowTool.h */; };
-		7106844F1B6B9FC10078903A /* NIMPRRegionGrowTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 7106844D1B6B9FC10078903A /* NIMPRRegionGrowTool.m */; };
-		710684541B6BA0F70078903A /* NIMPRRegionGrowToolWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 710684511B6BA0F70078903A /* NIMPRRegionGrowToolWindowController.h */; };
-		710684551B6BA0F70078903A /* NIMPRRegionGrowToolWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 710684521B6BA0F70078903A /* NIMPRRegionGrowToolWindowController.m */; };
-		710684561B6BA0F70078903A /* NIMPRRegionGrowToolWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 710684531B6BA0F70078903A /* NIMPRRegionGrowToolWindowController.xib */; };
+		7106844E1B6B9FC10078903A /* NIMPRRegionGrowingTool.h in Headers */ = {isa = PBXBuildFile; fileRef = 7106844C1B6B9FC10078903A /* NIMPRRegionGrowingTool.h */; };
+		7106844F1B6B9FC10078903A /* NIMPRRegionGrowingTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 7106844D1B6B9FC10078903A /* NIMPRRegionGrowingTool.m */; };
+		7106845F1B6F89100078903A /* Tool-Annotate-RegionGrowing.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 7106845E1B6F89100078903A /* Tool-Annotate-RegionGrowing.pdf */; };
+		710684621B6FADA60078903A /* NIBackgroundView.h in Headers */ = {isa = PBXBuildFile; fileRef = 710684601B6FADA60078903A /* NIBackgroundView.h */; };
+		710684631B6FADA60078903A /* NIBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 710684611B6FADA60078903A /* NIBackgroundView.m */; };
 		719CC52E1B0B21A900DC1ED5 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 719CC52D1B0B21A900DC1ED5 /* OpenGL.framework */; };
 		719CC52F1B0B21BA00DC1ED5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 719CC5291B0B216D00DC1ED5 /* Cocoa.framework */; };
 		719CC5311B0B222100DC1ED5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 719CC5301B0B222100DC1ED5 /* Foundation.framework */; };
@@ -175,11 +175,11 @@
 		710683F11B6645290078903A /* Tool-Rotate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Tool-Rotate.pdf"; sourceTree = "<group>"; };
 		710683F21B6645290078903A /* Tool-WLWW.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Tool-WLWW.pdf"; sourceTree = "<group>"; };
 		710683F31B6645290078903A /* Tool-Zoom.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Tool-Zoom.pdf"; sourceTree = "<group>"; };
-		7106844C1B6B9FC10078903A /* NIMPRRegionGrowTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRRegionGrowTool.h; sourceTree = "<group>"; };
-		7106844D1B6B9FC10078903A /* NIMPRRegionGrowTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRRegionGrowTool.m; sourceTree = "<group>"; };
-		710684511B6BA0F70078903A /* NIMPRRegionGrowToolWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRRegionGrowToolWindowController.h; sourceTree = "<group>"; };
-		710684521B6BA0F70078903A /* NIMPRRegionGrowToolWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRRegionGrowToolWindowController.m; sourceTree = "<group>"; };
-		710684531B6BA0F70078903A /* NIMPRRegionGrowToolWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NIMPRRegionGrowToolWindowController.xib; sourceTree = "<group>"; };
+		7106844C1B6B9FC10078903A /* NIMPRRegionGrowingTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRRegionGrowingTool.h; sourceTree = "<group>"; };
+		7106844D1B6B9FC10078903A /* NIMPRRegionGrowingTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRRegionGrowingTool.m; sourceTree = "<group>"; };
+		7106845E1B6F89100078903A /* Tool-Annotate-RegionGrowing.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Tool-Annotate-RegionGrowing.pdf"; sourceTree = "<group>"; };
+		710684601B6FADA60078903A /* NIBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIBackgroundView.h; sourceTree = "<group>"; };
+		710684611B6FADA60078903A /* NIBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIBackgroundView.m; sourceTree = "<group>"; };
 		712F62651B4D56D8004AC1AE /* NIMPRAnnotatePointTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRAnnotatePointTool.h; sourceTree = "<group>"; };
 		712F62661B4D56D8004AC1AE /* NIMPRAnnotatePointTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRAnnotatePointTool.m; sourceTree = "<group>"; };
 		712F62691B4D5FC4004AC1AE /* NIAnnotatedGeneratorRequestView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIAnnotatedGeneratorRequestView.h; sourceTree = "<group>"; };
@@ -312,11 +312,8 @@
 		710684501B6BA0570078903A /* Region Growing */ = {
 			isa = PBXGroup;
 			children = (
-				7106844C1B6B9FC10078903A /* NIMPRRegionGrowTool.h */,
-				7106844D1B6B9FC10078903A /* NIMPRRegionGrowTool.m */,
-				710684511B6BA0F70078903A /* NIMPRRegionGrowToolWindowController.h */,
-				710684521B6BA0F70078903A /* NIMPRRegionGrowToolWindowController.m */,
-				710684531B6BA0F70078903A /* NIMPRRegionGrowToolWindowController.xib */,
+				7106844C1B6B9FC10078903A /* NIMPRRegionGrowingTool.h */,
+				7106844D1B6B9FC10078903A /* NIMPRRegionGrowingTool.m */,
 			);
 			name = "Region Growing";
 			sourceTree = "<group>";
@@ -410,6 +407,8 @@
 				713341431B15F3000014CE09 /* +NIMPR.m */,
 				714D19D81B57F5AB00EBA644 /* NSBezierPath+NIMPR.h */,
 				714D19D91B57F5AC00EBA644 /* NSBezierPath+NIMPR.m */,
+				710684601B6FADA60078903A /* NIBackgroundView.h */,
+				710684611B6FADA60078903A /* NIBackgroundView.m */,
 			);
 			name = Extras;
 			sourceTree = "<group>";
@@ -444,6 +443,7 @@
 				710683ED1B6645290078903A /* Tool-Annotate-Poly.pdf */,
 				710683EE1B6645290078903A /* Tool-Annotate-Rectangle.pdf */,
 				710683EF1B6645290078903A /* Tool-Annotate-Segment.pdf */,
+				7106845E1B6F89100078903A /* Tool-Annotate-RegionGrowing.pdf */,
 				710683F01B6645290078903A /* Tool-Move.pdf */,
 				710683F11B6645290078903A /* Tool-Rotate.pdf */,
 				710683F21B6645290078903A /* Tool-WLWW.pdf */,
@@ -535,7 +535,6 @@
 				710683AE1B662AB70078903A /* NIMPRView.h in Headers */,
 				710683AF1B662AB70078903A /* NIMPRView+Events.h in Headers */,
 				710683B01B662AB70078903A /* NIAnnotatedGeneratorRequestView.h in Headers */,
-				710684541B6BA0F70078903A /* NIMPRRegionGrowToolWindowController.h in Headers */,
 				710683B11B662AB70078903A /* NIAnnotation.h in Headers */,
 				710683B21B662AB70078903A /* NIAnnotationHandle.h in Headers */,
 				710683B31B662AB70078903A /* NIPointAnnotation.h in Headers */,
@@ -560,11 +559,12 @@
 				710683C61B662AB70078903A /* NIMPRAnnotateEllipseTool.h in Headers */,
 				710683C71B662AB70078903A /* NIMPRAnnotationSelectionTool.h in Headers */,
 				710683C81B662AB70078903A /* NIMPRAnnotationTranslationTool.h in Headers */,
+				710684621B6FADA60078903A /* NIBackgroundView.h in Headers */,
 				710683C91B662AB70078903A /* NIMPRAnnotationHandleInteractionTool.h in Headers */,
 				710683CA1B662AB70078903A /* NIMPRQuaternion.h in Headers */,
 				710683CB1B662AB70078903A /* NSMenu+NIMPR.h in Headers */,
 				710683CC1B662AB70078903A /* +NIMPR.h in Headers */,
-				7106844E1B6B9FC10078903A /* NIMPRRegionGrowTool.h in Headers */,
+				7106844E1B6B9FC10078903A /* NIMPRRegionGrowingTool.h in Headers */,
 				710683CD1B662AB70078903A /* NSBezierPath+NIMPR.h in Headers */,
 				710683CE1B662AE30078903A /* NIMPR+Private.h in Headers */,
 				710683CF1B662AE30078903A /* NIMPRController+Private.h in Headers */,
@@ -673,7 +673,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				710684561B6BA0F70078903A /* NIMPRRegionGrowToolWindowController.xib in Resources */,
 				710683F71B6645290078903A /* Tool-Annotate-Ellipse.pdf in Resources */,
 				710683FE1B6645290078903A /* Tool-WLWW.pdf in Resources */,
 				710683F81B6645290078903A /* Tool-Annotate-Point.pdf in Resources */,
@@ -682,6 +681,7 @@
 				710683FC1B6645290078903A /* Tool-Move.pdf in Resources */,
 				710683FD1B6645290078903A /* Tool-Rotate.pdf in Resources */,
 				710683F51B6645290078903A /* Layout-Horizontal.pdf in Resources */,
+				7106845F1B6F89100078903A /* Tool-Annotate-RegionGrowing.pdf in Resources */,
 				710683FF1B6645290078903A /* Tool-Zoom.pdf in Resources */,
 				710683F41B6645290078903A /* Layout-Classic.pdf in Resources */,
 				710683FB1B6645290078903A /* Tool-Annotate-Segment.pdf in Resources */,
@@ -747,6 +747,7 @@
 				7106836D1B6628720078903A /* NISegmentAnnotation.m in Sources */,
 				7106836F1B6628720078903A /* NIPolyAnnotation.m in Sources */,
 				710683711B6628720078903A /* NIMaskAnnotation.m in Sources */,
+				710684631B6FADA60078903A /* NIBackgroundView.m in Sources */,
 				710683731B6628720078903A /* NIImageAnnotation.m in Sources */,
 				710683751B6628720078903A /* NIBezierPathAnnotation.m in Sources */,
 				710683771B6628720078903A /* NIRectangleAnnotation.m in Sources */,
@@ -763,9 +764,8 @@
 				7106838E1B6628720078903A /* NIMPRAnnotatePolyTool.m in Sources */,
 				710683901B6628720078903A /* NIMPRAnnotateRectangleTool.m in Sources */,
 				710683921B6628720078903A /* NIMPRAnnotateEllipseTool.m in Sources */,
-				710684551B6BA0F70078903A /* NIMPRRegionGrowToolWindowController.m in Sources */,
 				710683941B6628720078903A /* NIMPRAnnotationSelectionTool.m in Sources */,
-				7106844F1B6B9FC10078903A /* NIMPRRegionGrowTool.m in Sources */,
+				7106844F1B6B9FC10078903A /* NIMPRRegionGrowingTool.m in Sources */,
 				710683961B6628720078903A /* NIMPRAnnotationTranslationTool.m in Sources */,
 				710683981B6628720078903A /* NIMPRAnnotationHandleInteractionTool.m in Sources */,
 				7106839A1B6628720078903A /* NIMPRQuaternion.mm in Sources */,
