@@ -95,21 +95,25 @@
     return NO;
 }
 
-- (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx {
+- (void)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache {
     NIObliqueSliceGeneratorRequest* req = view.presentedGeneratorRequest;
     NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(req.sliceToDicomTransform);
     
     NIBezierPath* slicePath = [self.NIBezierPath bezierPathByApplyingTransform:dicomToSliceTransform];
     
     NSColor* color = self.color;
+    if ([view.highlightedAnnotations containsObject:self])
+        color = [view.highlightColor colorWithAlphaComponent:color.alphaComponent];
+
     [[color colorWithAlphaComponent:color.alphaComponent*view.annotationsBaseAlpha] set];
+    
     [slicePath.NSBezierPath stroke];
     
     // clip and draw the part in the current slab
     
     NIBezierPath *cpath = [self NIBezierPathForSlabView:view];
     
-    [self.color set];
+    [color set];
     [cpath.NSBezierPath stroke];
     // TODO: draw ext path with alpha, stop drawing full path
     
@@ -121,7 +125,7 @@
         [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(p.x-radius, p.y-radius, radius*2, radius*2)] fill];
     }
     
-    return [slicePath NSBezierPath];
+//    return [slicePath NSBezierPath];
 }
 
 - (CGFloat)distanceToSlicePoint:(NSPoint)point cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint {

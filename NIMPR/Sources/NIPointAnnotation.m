@@ -29,7 +29,7 @@
     self.vector = NIVectorAdd(self.vector, translation);
 }
 
-- (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx {
+- (void)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache {
     NIObliqueSliceGeneratorRequest* req = view.presentedGeneratorRequest;
 
     CGFloat distanceToPlane = CGFloatMax(NIVectorDistanceToPlane(self.vector, req.plane) - req.slabWidth/2, 0), maximumDistanceToPlane = view.maximumDistanceToPlane;
@@ -38,19 +38,19 @@
     
     CGFloat minRadius = 0.5, maxRadius = 2, radius = CGFloatMax(minRadius, maxRadius-(maxRadius-minRadius)/maximumDistanceToPlane*(distanceToPlane-maximumDistanceToPlane));
     NSRect ovalRect = NSMakeRect(p.x - radius, p.y - radius, radius*2, radius*2);
-    
+    NSBezierPath* path = [NSBezierPath bezierPathWithOvalInRect:ovalRect];
+
     NSColor* color = self.color;
+    if ([view.highlightedAnnotations containsObject:self])
+        color = [view.highlightColor colorWithAlphaComponent:color.alphaComponent];
+
     if (distanceToPlane > maximumDistanceToPlane)
         color = [color colorWithAlphaComponent:color.alphaComponent*view.annotationsBaseAlpha];
     
-    NSBezierPath* path = [NSBezierPath bezierPathWithOvalInRect:ovalRect];
-    
     [color setFill];
     [path fill];
-    [[[NSColor blackColor] colorWithAlphaComponent:color.alphaComponent*.6] setStroke];
-    [path stroke];
-    
-    return path;
+//    [[[NSColor blackColor] colorWithAlphaComponent:color.alphaComponent*.6] setStroke];
+//    [path stroke];
 }
 
 - (CGFloat)distanceToSlicePoint:(NSPoint)point cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)closestPoint {

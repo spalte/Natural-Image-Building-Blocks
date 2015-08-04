@@ -40,7 +40,7 @@ typedef struct {
     return YES;
 }
 
-- (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx {
+- (void)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache {
     NSMutableDictionary* rcache = cache[NIAnnotationRenderCache];
     NSImage* cimage = rcache[NIAnnotationProjection];
     NSImage* cmask = rcache[NIAnnotationProjectionMask];
@@ -115,39 +115,42 @@ typedef struct {
     NSGraphicsContext* context = [NSGraphicsContext currentContext];
     [[NSAffineTransform transform] set];
     
-    if (!self.colorify)
+    BOOL highlight = [view.highlightedAnnotations containsObject:self];
+    if (!self.colorify && !highlight)
         [cimage drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:self.color.alphaComponent];
     else {
+        NSColor* color = self.color;
+        if (highlight)
+            color = [view.highlightColor colorWithAlphaComponent:color.alphaComponent];
+        [color set];
+
         NSRect bounds = NSMakeRect(0, 0, cimage.size.width, cimage.size.height);
         CGContextClipToMask(context.CGContext, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height), [cimage CGImageForProposedRect:&bounds context:context hints:nil]);
-        [self.color set];
         [context setCompositingOperation:NSCompositeSourceOver];
         CGContextFillRect(context.CGContext, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height));
     }
 
     [NSGraphicsContext restoreGraphicsState];
-
-    return nil;
 }
 
-- (void)highlightWithColor:(NSColor*)color inView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx path:(NSBezierPath*)path {
-    NSImage* cmask = cache[NIAnnotationRenderCache][NIAnnotationProjection];
-
-    [NSGraphicsContext saveGraphicsState];
-    NSGraphicsContext* context = [NSGraphicsContext currentContext];
-    
-    NSRect bounds;
-    @synchronized (cmask) {
-        bounds = NSMakeRect(0, 0, cmask.size.width, cmask.size.height);
-        CGContextClipToMask(context.CGContext, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height), [cmask CGImageForProposedRect:&bounds context:context hints:nil]);
-    }
-    
-    [color set];
-    [context setCompositingOperation:NSCompositeSourceOver]; // NSCompositeHighlight
-    CGContextFillRect(context.CGContext, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height));
-
-    [NSGraphicsContext restoreGraphicsState];
-}
+//- (void)highlightWithColor:(NSColor*)color inView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx path:(NSBezierPath*)path {
+//    NSImage* cmask = cache[NIAnnotationRenderCache][NIAnnotationProjection];
+//
+//    [NSGraphicsContext saveGraphicsState];
+//    NSGraphicsContext* context = [NSGraphicsContext currentContext];
+//    
+//    NSRect bounds;
+//    @synchronized (cmask) {
+//        bounds = NSMakeRect(0, 0, cmask.size.width, cmask.size.height);
+//        CGContextClipToMask(context.CGContext, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height), [cmask CGImageForProposedRect:&bounds context:context hints:nil]);
+//    }
+//    
+//    [color set];
+//    [context setCompositingOperation:NSCompositeSourceOver]; // NSCompositeHighlight
+//    CGContextFillRect(context.CGContext, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height));
+//
+//    [NSGraphicsContext restoreGraphicsState];
+//}
 
 - (CGFloat)distanceToSlicePoint:(NSPoint)slicePoint cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)closestPoint {
     CGFloat distance = [super distanceToSlicePoint:slicePoint cache:cache view:view closestPoint:closestPoint];

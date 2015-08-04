@@ -133,28 +133,26 @@ NSString* const NIAnnotationRenderCache = @"NIAnnotationRequestCache"; // NSDict
         [NSGraphicsContext saveGraphicsState];
         [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:ctx flipped:NO]];
         
-        NSMutableArray* selected_acbs = [NSMutableArray array]; // @[ annotation, cache, border ]
-        NSMutableArray* glowing_acbs = [NSMutableArray array]; // @[ annotation, cache, border ]
+        NSMutableArray* selected_acbs = [NSMutableArray array]; // @[ annotation, cache ]
+//        NSMutableArray* glowing_acbs = [NSMutableArray array]; // @[ annotation, cache ]
         
         for (NIAnnotation* a in self.mutableAnnotations) {
             NSMutableDictionary* cache = self.annotationsCaches[[NSValue valueWithPointer:a]];
-            NSBezierPath* border = [a drawInView:self cache:cache layer:layer context:ctx];
+            [a drawInView:self cache:cache];
             if ([self.selectedAnnotations containsObject:a])
-                [selected_acbs addObject:@[ a, cache, [NSNull either:border] ]];
-            if ([self.mutableHighlightedAnnotations containsObject:a])
-                [glowing_acbs addObject:@[ a, cache, [NSNull either:border] ]];
+                [selected_acbs addObject:@[ a, cache ]];
         }
         
-        [NSColor.selectedTextBackgroundColor set];
 //        for (NSArray* acb in selected_acbs)
 //            [acb[0] highlightWithColor:NSColor.selectedTextBackgroundColor inView:self cache:acb[1] layer:layer context:ctx path:[acb[2] if:NSBezierPath.class]];
+        [NSColor.selectedTextBackgroundColor set];
         for (NSArray* acb in selected_acbs)
             for (NIAnnotationHandle* handle in [acb[0] handlesInView:self])
                 [[self.class NSBezierPathForHandle:handle] fill];
         
-        NSColor* color = [NSColor highlightColor];
-        for (NSArray* acb in glowing_acbs)
-            [acb[0] highlightWithColor:color inView:self cache:acb[1] layer:layer context:ctx path:[acb[2] if:NSBezierPath.class]];
+//        NSColor* color = [NSColor highlightColor];
+//        for (NSArray* acb in glowing_acbs)
+//            [acb[0] highlightWithColor:color inView:self cache:acb[1]];
         
         [NSGraphicsContext restoreGraphicsState];
     }
@@ -196,6 +194,14 @@ NSString* const NIAnnotationRenderCache = @"NIAnnotationRequestCache"; // NSDict
 
 - (void)removeSelectedAnnotationsObject:(id)object {
     [_selectedAnnotations removeObject:object];
+}
+
+- (NSColor*)highlightColor {
+    return [NSColor highlightColor];
+}
+
+- (NSColor*)selectColor {
+    return [NSColor selectedTextBackgroundColor];
 }
 
 - (NIAnnotation*)annotationClosestToSlicePoint:(NSPoint)location closestPoint:(NSPoint*)closestPoint distance:(CGFloat*)distance {

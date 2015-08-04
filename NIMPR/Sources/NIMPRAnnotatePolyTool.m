@@ -113,7 +113,7 @@
             stroke.closed = self.closedPreview;
         
         stroke.color = [self.annotation.color colorWithAlphaComponent:self.annotation.color.alphaComponent/2];
-        [stroke drawInView:view cache:nil layer:nil context:nil];
+        [stroke drawInView:view cache:nil];
     }
 }
 

@@ -43,6 +43,9 @@ extern NSString* const NIAnnotationRenderCache; // NSDictionary, cleaned when th
 - (NIAnnotationHandle*)handleForSlicePoint:(NSPoint)location;
 + (NSBezierPath*)NSBezierPathForHandle:(NIAnnotationHandle*)handle;
 
+- (NSColor*)highlightColor;
+- (NSColor*)selectColor;
+
 @end
 
 @interface NIAnnotatedGeneratorRequestView (Super)

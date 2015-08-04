@@ -92,26 +92,25 @@ CGFloat const NIAnnotationDistant = 4;
     NSLog(@"Warning: -[%@ translate:] is missing", self.className);
 }
 
-- (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx {
-    NSLog(@"Warning: -[%@ drawInView:cache:layer:context:] is missing", self.className);
-    return nil;
+- (void)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache {
+    NSLog(@"Warning: -[%@ drawInView:cache:] is missing", self.className);
 }
 
-- (void)highlightWithColor:(NSColor*)color inView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx path:(NSBezierPath*)path {
-    if (!path.elementCount)
-        return NSLog(@"Warning: -[%@ highlightWithColor:inView:cache:layer:context:path:] is missing, or alternatively -[%@ drawInView:cache:layer:context:] should return an instance of NSBezierPath", self.className, self.className);
-    
-    [NSGraphicsContext saveGraphicsState];
-    NSGraphicsContext* context = [NSGraphicsContext currentContext];
-    
-//    path = [[path copy] autorelease];
-//    path.lineWidth = path.lineWidth+1;
-    [color set];
-    [context setCompositingOperation:NSCompositeSourceOver]; // NSCompositeHighlight
-    [path stroke];
-    
-    [NSGraphicsContext restoreGraphicsState];
-}
+//- (void)highlightWithColor:(NSColor*)color inView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache {
+////    if (!path.elementCount)
+//        return NSLog(@"Warning: -[%@ highlightWithColor:inView:cache:] is missing", self.className);
+//    
+////    [NSGraphicsContext saveGraphicsState];
+////    NSGraphicsContext* context = [NSGraphicsContext currentContext];
+////    
+//////    path = [[path copy] autorelease];
+//////    path.lineWidth = path.lineWidth+1;
+////    [color set];
+////    [context setCompositingOperation:NSCompositeSourceOver]; // NSCompositeHighlight
+////    [path stroke];
+////    
+////    [NSGraphicsContext restoreGraphicsState];
+//}
 
 - (CGFloat)distanceToSlicePoint:(NSPoint)point cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint {
     NSLog(@"Warning: -[%@ distanceToSlicePoint:view:closestPoint:] is missing", self.className);
