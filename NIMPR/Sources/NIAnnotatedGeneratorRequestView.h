@@ -11,6 +11,9 @@
 @class NIAnnotation;
 @class NIAnnotationHandle;
 
+// NIAnnotation cache keys
+extern NSString* const NIAnnotationRenderCache; // NSDictionary, cleaned when the NIGeneratorRequest is updated
+
 @interface NIAnnotatedGeneratorRequestView : NIGeneratorRequestView {
     CALayer* _annotationsLayer;
     NSMutableSet* _annotations;

@@ -40,18 +40,14 @@ typedef struct {
     return YES;
 }
 
-static NSString* const NIImageAnnotationProjectedRender = @"NIImageAnnotationProjectedRender";
-static NSString* const NIImageAnnotationProjectedMask = @"NIImageAnnotationProjectedMask";
-
 - (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx {
-    NSMutableDictionary* cached = cache[NIAnnotationDrawCache];
-    if (!cached) cached = cache[NIAnnotationDrawCache] = [NSMutableDictionary dictionary];
-    
-    NSImage* cimage = cached[NIImageAnnotationProjectedRender];
-    NSImage* cmask = cached[NIImageAnnotationProjectedMask];
+    NSMutableDictionary* rcache = cache[NIAnnotationRenderCache];
+    NSImage* cimage = rcache[NIAnnotationProjection];
+    NSImage* cmask = rcache[NIAnnotationProjectionMask];
+
     if (!cimage) {
-        cimage = cached[NIImageAnnotationProjectedRender] = [[[NSImage alloc] initWithSize:view.bounds.size] autorelease];
-        cmask = cached[NIImageAnnotationProjectedMask] = [[[NSImage alloc] initWithSize:view.bounds.size] autorelease];
+        cimage = rcache[NIAnnotationProjection] = [[[NSImage alloc] initWithSize:view.bounds.size] autorelease];
+        cmask = rcache[NIAnnotationProjectionMask] = [[[NSImage alloc] initWithSize:view.bounds.size] autorelease];
 
         NIAffineTransform sliceToDicomTransform = view.presentedGeneratorRequest.sliceToDicomTransform, dicomToSliceTransform = NIAffineTransformInvert(sliceToDicomTransform);
         
@@ -135,8 +131,7 @@ static NSString* const NIImageAnnotationProjectedMask = @"NIImageAnnotationProje
 }
 
 - (void)highlightWithColor:(NSColor*)color inView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx path:(NSBezierPath*)path {
-    NSMutableDictionary* cached = cache[NIAnnotationDrawCache];
-    NSImage* cmask = cached[NIImageAnnotationProjectedMask];
+    NSImage* cmask = cache[NIAnnotationRenderCache][NIAnnotationProjection];
 
     [NSGraphicsContext saveGraphicsState];
     NSGraphicsContext* context = [NSGraphicsContext currentContext];
@@ -163,8 +158,7 @@ static NSString* const NIImageAnnotationProjectedMask = @"NIImageAnnotationProje
     distance = NIAnnotationDistant+1;
     
     @autoreleasepool {
-        NSMutableDictionary* cached = cache[NIAnnotationDrawCache];
-        NSImage* image = cached[NIImageAnnotationProjectedRender];
+        NSImage* cimage = cache[NIAnnotationRenderCache][NIAnnotationProjectionMask];
 
         NSImage* hti = [[NSImage alloc] initWithSize:NSMakeSize(NIAnnotationDistant*2+1, NIAnnotationDistant*2+1)];
 
@@ -172,7 +166,7 @@ static NSString* const NIImageAnnotationProjectedMask = @"NIImageAnnotationProje
             [hti lockFocus];
 
             [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(NIAnnotationDistant-r, NIAnnotationDistant-r, r*2+1, r*2+1)] setClip];
-            [image drawAtPoint:NSMakePoint(NIAnnotationDistant-r, NIAnnotationDistant-r) fromRect:NSMakeRect(slicePoint.x-r, slicePoint.y-r, r*2+1, r*2+1) operation:NSCompositeCopy fraction:1];
+            [cimage drawAtPoint:NSMakePoint(NIAnnotationDistant-r, NIAnnotationDistant-r) fromRect:NSMakeRect(slicePoint.x-r, slicePoint.y-r, r*2+1, r*2+1) operation:NSCompositeCopy fraction:1];
             
             [hti unlockFocus];
             
@@ -190,10 +184,9 @@ static NSString* const NIImageAnnotationProjectedMask = @"NIImageAnnotationProje
 //    if (![super intersectsSliceRect:hitRect cache:cache view:view])
 //        return NO;
     
-    NSMutableDictionary* cached = cache[NIAnnotationDrawCache];
-    NSImage* image = cached[NIImageAnnotationProjectedRender];
+    NSImage* cimage = cache[NIAnnotationRenderCache][NIAnnotationProjectionMask];
     
-    return [image hitTestRect:hitRect withImageDestinationRect:NSMakeRect(0, 0, image.size.width, image.size.height) context:nil hints:nil flipped:NO];
+    return [cimage hitTestRect:hitRect withImageDestinationRect:NSMakeRect(0, 0, cimage.size.width, cimage.size.height) context:nil hints:nil flipped:NO];
 }
 
 @end

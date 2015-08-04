@@ -10,6 +10,9 @@
 #import "NIAnnotation.h"
 #import "NIAnnotationHandle.h"
 
+// NIAnnotation cache keys
+NSString* const NIAnnotationRenderCache = @"NIAnnotationRequestCache"; // NSDictionary, cleaned when the NIGeneratorRequest is updated
+
 @interface NIAnnotatedGeneratorRequestView ()
 
 @property(readwrite, retain) CALayer* annotationsLayer;
@@ -89,7 +92,7 @@
         }
         for (NIAnnotation* a in change[NSKeyValueChangeNewKey]) {
             [a addObserver:self forKeyPath:@"annotation" options:NSKeyValueObservingOptionInitial context:context];
-            self.annotationsCaches[[NSValue valueWithPointer:a]] = [NSMutableDictionary dictionary];
+            self.annotationsCaches[[NSValue valueWithPointer:a]] = [NSMutableDictionary dictionaryWithObject:[NSMutableDictionary dictionary] forKey:NIAnnotationRenderCache];
         }
     }
     
@@ -98,15 +101,20 @@
     }
     
     if ([keyPath isEqualToString:@"annotation"]) {
-        [self.annotationsCaches[[NSValue valueWithPointer:object]] removeObjectForKey:NIAnnotationDrawCache];
+        [self.annotationsCaches[[NSValue valueWithPointer:object]][NIAnnotationRenderCache] removeAllObjects];
         [self.annotationsLayer setNeedsDisplay];
     }
 }
 
 - (void)didUpdatePresentedGeneratorRequestNotification:(NSNotification*)notification {
+    
     [self.annotationsCaches enumerateKeysAndObjectsUsingBlock:^(NSString* key, NSMutableDictionary* cache, BOOL* stop) {
-        [cache removeObjectForKey:NIAnnotationDrawCache];
+        NSMutableDictionary* arc = [cache[NIAnnotationRenderCache] if:NSMutableDictionary.class];
+        if (arc)
+            [arc removeAllObjects];
+        else [cache removeObjectForKey:NIAnnotationRenderCache];
     }];
+    
     [self.annotationsLayer setNeedsDisplay];
 }
 

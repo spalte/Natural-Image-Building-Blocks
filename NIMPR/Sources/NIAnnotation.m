@@ -11,9 +11,14 @@
 #import "NISegmentAnnotation.h"
 #import "NIEllipseAnnotation.h"
 
+// NIAnnotationRequestCache dictionary keys
+NSString* const NIAnnotationRequest = @"NIAnnotationRequest"; // NIGeneratorRequest
+NSString* const NIAnnotationProjection = @"NIAnnotationProjection"; // NSImage
+NSString* const NIAnnotationProjectionMask = @"NIAnnotationProjectionMask"; // NSImage
+
 NSString* const NIAnnotationChangeNotification = @"NIAnnotationChange";
 NSString* const NIAnnotationChangeNotificationChangesKey = @"changes";
-NSString* const NIAnnotationDrawCache = @"NIAnnotationDrawCache";
+
 CGFloat const NIAnnotationDistant = 4;
 
 @interface NIAnnotation ()

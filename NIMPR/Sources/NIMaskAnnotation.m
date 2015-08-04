@@ -47,18 +47,14 @@
     self.modelToDicomTransform = NIAffineTransformConcat(self.modelToDicomTransform, NIAffineTransformMakeTranslationWithVector(translation));
 }
 
-static NSString* const NIMaskAnnotationProjectedRender = @"NIMaskAnnotationProjectedRender";
-static NSString* const NIMaskAnnotationProjectedMask = @"NIMaskAnnotationProjectedMask";
-
 - (NSBezierPath*)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx {
-    NSMutableDictionary* cached = cache[NIAnnotationDrawCache];
-    if (!cached) cached = cache[NIAnnotationDrawCache] = [NSMutableDictionary dictionary];
-    
-    NSImage* cimage = cached[NIMaskAnnotationProjectedRender];
-    NSImage* cmask = cached[NIMaskAnnotationProjectedMask];
+    NSMutableDictionary* rcache = cache[NIAnnotationRenderCache];
+    NSImage* cimage = rcache[NIAnnotationProjection];
+    NSImage* cmask = rcache[NIAnnotationProjectionMask];
+
     if (!cimage) {
-        cimage = cached[NIMaskAnnotationProjectedRender] = [[[NSImage alloc] initWithSize:view.bounds.size] autorelease];
-        cmask = cached[NIMaskAnnotationProjectedMask] = [[[NSImage alloc] initWithSize:view.bounds.size] autorelease];
+        cimage = rcache[NIAnnotationProjection] = [[[NSImage alloc] initWithSize:view.bounds.size] autorelease];
+        cmask = rcache[NIAnnotationProjectionMask] = [[[NSImage alloc] initWithSize:view.bounds.size] autorelease];
         
         NIVolumeData* data = nil;
         if (self.volume) {
@@ -68,8 +64,8 @@ static NSString* const NIMaskAnnotationProjectedMask = @"NIMaskAnnotationProject
         } else
             data = [self.mask volumeDataRepresentationWithVolumeTransform:NIAffineTransformInvert(self.modelToDicomTransform)];
         
-        vImage_Buffer sib, wib;
-        NSBitmapImageRep *si, *wi;
+        vImage_Buffer sib;//, wib;
+        NSBitmapImageRep *si;//, *wi;
 
         NIObliqueSliceGeneratorRequest* req = [[view.presentedGeneratorRequest copy] autorelease];
         req.interpolationMode = NIInterpolationModeNearestNeighbor;
@@ -82,17 +78,20 @@ static NSString* const NIMaskAnnotationProjectedMask = @"NIMaskAnnotationProject
                                                             hasAlpha:NO isPlanar:NO colorSpaceName:NSDeviceWhiteColorSpace bitmapFormat:NSFloatingPointSamplesBitmapFormat bytesPerRow:sib.rowBytes bitsPerPixel:sizeof(float)*8] autorelease];
         }
         
-        {
-            NIVector dc = NIVectorApplyTransform([data convertVolumeVectorToDICOMVector:NIVectorMake(data.pixelsWide/2, data.pixelsHigh/2, data.pixelsDeep/2)], NIAffineTransformInvert(req.sliceToDicomTransform));
-            req.sliceToDicomTransform = NIAffineTransformConcat(NIAffineTransformMakeTranslation(0, 0, dc.z), req.sliceToDicomTransform);
-            req.slabWidth = data.maximumDiagonal+1;
-            req.projectionMode = NIProjectionModeMIP;
-            NIVolumeData* vd = [NIGenerator synchronousRequestVolume:req volumeData:data];
-            wib = [vd floatBufferForSliceAtIndex:0];
-            unsigned char* bdp[1] = {wib.data};
-            wi = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:bdp pixelsWide:wib.width pixelsHigh:wib.height bitsPerSample:sizeof(float)*8 samplesPerPixel:1
-                                                            hasAlpha:NO isPlanar:NO colorSpaceName:NSDeviceWhiteColorSpace bitmapFormat:NSFloatingPointSamplesBitmapFormat bytesPerRow:wib.rowBytes bitsPerPixel:sizeof(float)*8] autorelease];
-        }
+        // TODO: render thick slab in background and update the view, but wait for the NIGenerator async block API
+        
+//        {
+//            NIVector dc = NIVectorApplyTransform([data convertVolumeVectorToDICOMVector:NIVectorMake(data.pixelsWide/2, data.pixelsHigh/2, data.pixelsDeep/2)], NIAffineTransformInvert(req.sliceToDicomTransform));
+//            req.sliceToDicomTransform = NIAffineTransformConcat(NIAffineTransformMakeTranslation(0, 0, dc.z), req.sliceToDicomTransform);
+//            req.slabWidth = data.maximumDiagonal+1;
+//            req.projectionMode = NIProjectionModeMIP;
+//                NIVolumeData* vd = [NIGenerator synchronousRequestVolume:req volumeData:data];
+//                wib = [vd floatBufferForSliceAtIndex:0];
+//                unsigned char* bdp[1] = {wib.data};
+//                
+//                wi = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:bdp pixelsWide:wib.width pixelsHigh:wib.height bitsPerSample:sizeof(float)*8 samplesPerPixel:1
+//                                                                                  hasAlpha:NO isPlanar:NO colorSpaceName:NSDeviceWhiteColorSpace bitmapFormat:NSFloatingPointSamplesBitmapFormat bytesPerRow:wib.rowBytes bitsPerPixel:sizeof(float)*8] autorelease];
+//        }
 
         [cimage lockFocus];
         @try {
@@ -110,16 +109,16 @@ static NSString* const NIMaskAnnotationProjectedMask = @"NIMaskAnnotationProject
             [self.color set];
             [bp fill];
 
-            if (view.annotationsBaseAlpha) {
-                float *fsib = (float*)sib.data, *fwib = (float*)wib.data;
-                for (vImagePixelCount p = 0; p < sib.height*sib.width; ++p)
-                    fsib[p] = fmax(fwib[p]-fsib[p], 0);
-                        
-                [bp setClip];
-                CGContextClipToMask(context.CGContext, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height), [si CGImageForProposedRect:&bounds context:context hints:nil]);
-                [[self.color colorWithAlphaComponent:self.color.alphaComponent*view.annotationsBaseAlpha] set];
-                [bp fill];
-            }
+//            if (view.annotationsBaseAlpha) {
+//                float *fsib = (float*)sib.data, *fwib = (float*)wib.data;
+//                for (vImagePixelCount p = 0; p < sib.height*sib.width; ++p)
+//                    fsib[p] = fmax(fwib[p]-fsib[p], 0);
+//                        
+//                [bp setClip];
+//                CGContextClipToMask(context.CGContext, CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height), [si CGImageForProposedRect:&bounds context:context hints:nil]);
+//                [[self.color colorWithAlphaComponent:self.color.alphaComponent*view.annotationsBaseAlpha] set];
+//                [bp fill];
+//            }
             
         } @catch (NSException* e) {
             [e log];
@@ -166,8 +165,7 @@ static NSString* const NIMaskAnnotationProjectedMask = @"NIMaskAnnotationProject
 }
 
 - (void)highlightWithColor:(NSColor*)color inView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache layer:(CALayer*)layer context:(CGContextRef)ctx path:(NSBezierPath*)path {
-    NSMutableDictionary* cached = cache[NIAnnotationDrawCache];
-    NSImage* cmask = cached[NIMaskAnnotationProjectedRender];
+    NSImage* cmask = cache[NIAnnotationRenderCache][NIAnnotationProjection];
     
     [NSGraphicsContext saveGraphicsState];
     NSGraphicsContext* context = [NSGraphicsContext currentContext];
@@ -189,8 +187,7 @@ static NSString* const NIMaskAnnotationProjectedMask = @"NIMaskAnnotationProject
     CGFloat distance = NIAnnotationDistant+1;
     
     @autoreleasepool {
-        NSMutableDictionary* cached = cache[NIAnnotationDrawCache];
-        NSImage* image = cached[NIMaskAnnotationProjectedMask];
+        NSImage* cmask = cache[NIAnnotationRenderCache][NIAnnotationProjectionMask];
         
         NSImage* hti = [[NSImage alloc] initWithSize:NSMakeSize(NIAnnotationDistant*2+1, NIAnnotationDistant*2+1)];
         
@@ -198,7 +195,7 @@ static NSString* const NIMaskAnnotationProjectedMask = @"NIMaskAnnotationProject
             [hti lockFocus];
             
             [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(NIAnnotationDistant-r, NIAnnotationDistant-r, r*2+1, r*2+1)] setClip];
-            [image drawAtPoint:NSMakePoint(NIAnnotationDistant-r, NIAnnotationDistant-r) fromRect:NSMakeRect(slicePoint.x-r, slicePoint.y-r, r*2+1, r*2+1) operation:NSCompositeCopy fraction:1];
+            [cmask drawAtPoint:NSMakePoint(NIAnnotationDistant-r, NIAnnotationDistant-r) fromRect:NSMakeRect(slicePoint.x-r, slicePoint.y-r, r*2+1, r*2+1) operation:NSCompositeCopy fraction:1];
             
             [hti unlockFocus];
             
@@ -213,10 +210,9 @@ static NSString* const NIMaskAnnotationProjectedMask = @"NIMaskAnnotationProject
 }
 
 - (BOOL)intersectsSliceRect:(NSRect)hitRect cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view {
-    NSMutableDictionary* cached = cache[NIAnnotationDrawCache];
-    NSImage* image = cached[NIMaskAnnotationProjectedMask];
+    NSImage* cmask = cache[NIAnnotationRenderCache][NIAnnotationProjectionMask];
     
-    return [image hitTestRect:hitRect withImageDestinationRect:NSMakeRect(0, 0, image.size.width, image.size.height) context:nil hints:nil flipped:NO];
+    return [cmask hitTestRect:hitRect withImageDestinationRect:NSMakeRect(0, 0, cmask.size.width, cmask.size.height) context:nil hints:nil flipped:NO];
 }
 
 - (NSSet*)handlesInView:(NIAnnotatedGeneratorRequestView *)view {

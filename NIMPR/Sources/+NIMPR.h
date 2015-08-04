@@ -27,10 +27,12 @@
 //@interface NSDictionary (NIMPRAdditions)
 //
 //@end
-//
-//@interface NSMutableDictionary (NIMPRAdditions)
-//
-//@end
+
+@interface NSMutableDictionary (NIMPR)
+
+- (void)set:(NSDictionary*)set;
+
+@end
 
 @interface NSWindow (NIMPR)
 

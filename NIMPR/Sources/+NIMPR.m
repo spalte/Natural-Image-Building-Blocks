@@ -134,16 +134,24 @@
 //
 //@end
 //
-//@implementation NSMutableDictionary (NIMPRAdditions)
-//
+@implementation NSMutableDictionary (NIMPR)
+
+- (void)set:(NSDictionary*)set {
+    for (id key in self.allKeys)
+        if (!set[key])
+            [self removeObjectForKey:key];
+    for (id key in set)
+        self[key] = set[key];
+}
+
 //- (void)setValue:(id)value forKeyPath:(NSString*)keyPath {
 //    NSRange r = [keyPath rangeOfString:@"."];
 //    if (r.location != NSNotFound)
 //        [[self valueForKey:[keyPath substringToIndex:r.location]] setValue:value forKeyPath:[keyPath substringFromIndex:r.location+r.length]];
 //    else [self setValue:value forKey:keyPath];
 //}
-//
-//@end
+
+@end
 
 @implementation NSWindow (NIMPR)
 

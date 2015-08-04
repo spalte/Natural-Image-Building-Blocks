@@ -8,9 +8,12 @@
 
 #import "NIAnnotatedGeneratorRequestView.h"
 
-extern NSString* const NIAnnotationChangeNotification; // to observe an annotation's changes you can either observe these notifications or observe the annotation's changed property
+// NIAnnotationRequestCache dictionary keys
+extern NSString* const NIAnnotationProjection; // NSImage
+extern NSString* const NIAnnotationProjectionMask; // NSImage
 
-extern NSString* const NIAnnotationDrawCache;
+extern NSString* const NIAnnotationChangeNotification; // to observe an annotation's changes you can either observe these notifications or observe the annotation's changed property
+extern NSString* const NIAnnotationChangeNotificationChangesKey;
 
 extern CGFloat const NIAnnotationDistant;
 
