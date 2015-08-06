@@ -7,7 +7,7 @@
 //
 
 #import "NIThresholdSegmentation.h"
-#import "NIBackgroundView.h"
+#import "NSView+NI.h"
 #import "NIMaskAnnotation.h"
 #import <NIBuildingBlocks/NIGeometry.h>
 #import <NIBuildingBlocks/NIVolumeData.h>
@@ -37,30 +37,18 @@
 - (NSView*)view {
     NIBackgroundView* view = [[[NIBackgroundView alloc] initWithFrame:NSZeroRect] autorelease];
     
-    NSTextField* lbetween = [[[NSTextField alloc] initWithFrame:NSZeroRect] autorelease];
-    lbetween.translatesAutoresizingMaskIntoConstraints = lbetween.selectable = lbetween.bordered = lbetween.drawsBackground = NO;
-    lbetween.controlSize = NSSmallControlSize;
-    lbetween.font = [NSFont labelFontOfSize:[NSFont systemFontSizeForControlSize:lbetween.controlSize]];
+    NSTextField* lbetween = [NSTextField labelWithControlSize:NSSmallControlSize];
     lbetween.stringValue = NSLocalizedString(@"Between", nil);
     [view addSubview:lbetween];
     
-    NSTextField* t1 = [[[NSTextField alloc] initWithFrame:NSZeroRect] autorelease];
-    t1.translatesAutoresizingMaskIntoConstraints = NO;
-    t1.controlSize = NSSmallControlSize;
-    t1.font = [NSFont labelFontOfSize:[NSFont systemFontSizeForControlSize:t1.controlSize]];
+    NSTextField* t1 = [NSTextField fieldWithControlSize:NSSmallControlSize];
     [view addSubview:t1];
     
-    NSTextField* land = [[[NSTextField alloc] initWithFrame:NSZeroRect] autorelease];
-    land.translatesAutoresizingMaskIntoConstraints = land.selectable = land.bordered = land.drawsBackground = NO;
-    land.controlSize = NSSmallControlSize;
-    land.font = [NSFont labelFontOfSize:[NSFont systemFontSizeForControlSize:land.controlSize]];
+    NSTextField* land = [NSTextField labelWithControlSize:NSSmallControlSize];
     land.stringValue = NSLocalizedString(@"and", nil);
     [view addSubview:land];
     
-    NSTextField* t2 = [[[NSTextField alloc] initWithFrame:NSZeroRect] autorelease];
-    t2.translatesAutoresizingMaskIntoConstraints = NO;
-    t2.controlSize = NSSmallControlSize;
-    t2.font = [NSFont labelFontOfSize:[NSFont systemFontSizeForControlSize:t2.controlSize]];
+    NSTextField* t2 = [NSTextField fieldWithControlSize:NSSmallControlSize];
     [view addSubview:t2];
     
     [t1 addConstraint:[NSLayoutConstraint constraintWithItem:t1 attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:40]];
@@ -161,17 +149,11 @@
 - (NSView*)view {
     NIBackgroundView* view = [[[NIBackgroundView alloc] initWithFrame:NSZeroRect] autorelease];
     
-    NSTextField* linterval = [[[NSTextField alloc] initWithFrame:NSZeroRect] autorelease];
-    linterval.translatesAutoresizingMaskIntoConstraints = linterval.selectable = linterval.bordered = linterval.drawsBackground = NO;
-    linterval.controlSize = NSSmallControlSize;
-    linterval.font = [NSFont labelFontOfSize:[NSFont systemFontSizeForControlSize:linterval.controlSize]];
+    NSTextField* linterval = [NSTextField labelWithControlSize:NSSmallControlSize];
     linterval.stringValue = NSLocalizedString(@"Interval:", nil);
     [view addSubview:linterval];
     
-    NSTextField* finterval = [[[NSTextField alloc] initWithFrame:NSZeroRect] autorelease];
-    finterval.translatesAutoresizingMaskIntoConstraints = NO;
-    finterval.controlSize = NSSmallControlSize;
-    finterval.font = [NSFont labelFontOfSize:[NSFont systemFontSizeForControlSize:finterval.controlSize]];
+    NSTextField* finterval = [NSTextField fieldWithControlSize:NSSmallControlSize];
     [view addSubview:finterval];
     
     [finterval addConstraint:[NSLayoutConstraint constraintWithItem:finterval attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:40]];

@@ -8,12 +8,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-//@interface NIObserver : NSObject {
-//    
-//}
-
-//extern NSString* const NIViewDidMoveToSuperviewNotification;
-
 @interface NIBackgroundView : NSView {
     NSColor* _backgroundColor;
     void (^_updateConstraintsBlock)();
@@ -28,5 +22,12 @@
 - (id)initWithFrame:(NSRect)frameRect color:(NSColor*)backgroundColor;
 
 - (id)retain:(id)obj;
+
+@end
+
+@interface NSTextField (NI)
+
++ (instancetype)labelWithControlSize:(NSControlSize)controlSize;
++ (instancetype)fieldWithControlSize:(NSControlSize)controlSize;
 
 @end

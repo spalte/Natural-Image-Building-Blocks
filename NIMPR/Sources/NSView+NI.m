@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 volz.io. All rights reserved.
 //
 
-#import "NIBackgroundView.h"
+#import "NSView+NI.h"
 
 //NSString* const NIViewDidMoveToSuperviewNotification = @"NIViewDidMoveToSuperviewNotification";
 
@@ -93,6 +93,24 @@
     if (self.needsUpdateConstraints)
         [self updateConstraints];
     [super viewWillDraw];
+}
+
+@end
+
+@implementation NSTextField (NI)
+
++ (instancetype)labelWithControlSize:(NSControlSize)controlSize {
+    NSTextField* r = [self.class fieldWithControlSize:controlSize];
+    r.selectable = r.bordered = r.drawsBackground = NO;
+    return r;
+}
+
++ (instancetype)fieldWithControlSize:(NSControlSize)controlSize {
+    NSTextField* r = [[[self.class alloc] initWithFrame:NSZeroRect] autorelease];
+    r.controlSize = controlSize;
+    r.font = [NSFont labelFontOfSize:[NSFont systemFontSizeForControlSize:controlSize]];
+    r.translatesAutoresizingMaskIntoConstraints = NO;
+    return r;
 }
 
 @end

@@ -102,8 +102,8 @@
 		7106844E1B6B9FC10078903A /* NIMPRRegionGrowingTool.h in Headers */ = {isa = PBXBuildFile; fileRef = 7106844C1B6B9FC10078903A /* NIMPRRegionGrowingTool.h */; };
 		7106844F1B6B9FC10078903A /* NIMPRRegionGrowingTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 7106844D1B6B9FC10078903A /* NIMPRRegionGrowingTool.m */; };
 		7106845F1B6F89100078903A /* Tool-Annotate-RegionGrowing.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 7106845E1B6F89100078903A /* Tool-Annotate-RegionGrowing.pdf */; };
-		710684621B6FADA60078903A /* NIBackgroundView.h in Headers */ = {isa = PBXBuildFile; fileRef = 710684601B6FADA60078903A /* NIBackgroundView.h */; };
-		710684631B6FADA60078903A /* NIBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 710684611B6FADA60078903A /* NIBackgroundView.m */; };
+		710684621B6FADA60078903A /* NSView+NI.h in Headers */ = {isa = PBXBuildFile; fileRef = 710684601B6FADA60078903A /* NSView+NI.h */; };
+		710684631B6FADA60078903A /* NSView+NI.m in Sources */ = {isa = PBXBuildFile; fileRef = 710684611B6FADA60078903A /* NSView+NI.m */; };
 		719CC52E1B0B21A900DC1ED5 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 719CC52D1B0B21A900DC1ED5 /* OpenGL.framework */; };
 		719CC52F1B0B21BA00DC1ED5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 719CC5291B0B216D00DC1ED5 /* Cocoa.framework */; };
 		719CC5311B0B222100DC1ED5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 719CC5301B0B222100DC1ED5 /* Foundation.framework */; };
@@ -184,8 +184,8 @@
 		7106844C1B6B9FC10078903A /* NIMPRRegionGrowingTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRRegionGrowingTool.h; sourceTree = "<group>"; };
 		7106844D1B6B9FC10078903A /* NIMPRRegionGrowingTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRRegionGrowingTool.m; sourceTree = "<group>"; };
 		7106845E1B6F89100078903A /* Tool-Annotate-RegionGrowing.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Tool-Annotate-RegionGrowing.pdf"; sourceTree = "<group>"; };
-		710684601B6FADA60078903A /* NIBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIBackgroundView.h; sourceTree = "<group>"; };
-		710684611B6FADA60078903A /* NIBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIBackgroundView.m; sourceTree = "<group>"; };
+		710684601B6FADA60078903A /* NSView+NI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+NI.h"; sourceTree = "<group>"; };
+		710684611B6FADA60078903A /* NSView+NI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+NI.m"; sourceTree = "<group>"; };
 		712F62651B4D56D8004AC1AE /* NIMPRAnnotatePointTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRAnnotatePointTool.h; sourceTree = "<group>"; };
 		712F62661B4D56D8004AC1AE /* NIMPRAnnotatePointTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRAnnotatePointTool.m; sourceTree = "<group>"; };
 		712F62691B4D5FC4004AC1AE /* NIAnnotatedGeneratorRequestView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIAnnotatedGeneratorRequestView.h; sourceTree = "<group>"; };
@@ -423,8 +423,8 @@
 				713341431B15F3000014CE09 /* +NIMPR.m */,
 				714D19D81B57F5AB00EBA644 /* NSBezierPath+NIMPR.h */,
 				714D19D91B57F5AC00EBA644 /* NSBezierPath+NIMPR.m */,
-				710684601B6FADA60078903A /* NIBackgroundView.h */,
-				710684611B6FADA60078903A /* NIBackgroundView.m */,
+				710684601B6FADA60078903A /* NSView+NI.h */,
+				710684611B6FADA60078903A /* NSView+NI.m */,
 				71DFA2CC1B710BC1008AB997 /* NIViewController.h */,
 				71DFA2CD1B710BC1008AB997 /* NIViewController.m */,
 			);
@@ -579,7 +579,7 @@
 				710683C61B662AB70078903A /* NIMPRAnnotateEllipseTool.h in Headers */,
 				710683C71B662AB70078903A /* NIMPRAnnotationSelectionTool.h in Headers */,
 				710683C81B662AB70078903A /* NIMPRAnnotationTranslationTool.h in Headers */,
-				710684621B6FADA60078903A /* NIBackgroundView.h in Headers */,
+				710684621B6FADA60078903A /* NSView+NI.h in Headers */,
 				71DFA2D21B71FF52008AB997 /* NISegmentationAlgorithm.h in Headers */,
 				710683C91B662AB70078903A /* NIMPRAnnotationHandleInteractionTool.h in Headers */,
 				710683CA1B662AB70078903A /* NIMPRQuaternion.h in Headers */,
@@ -770,7 +770,7 @@
 				7106836D1B6628720078903A /* NISegmentAnnotation.m in Sources */,
 				7106836F1B6628720078903A /* NIPolyAnnotation.m in Sources */,
 				710683711B6628720078903A /* NIMaskAnnotation.m in Sources */,
-				710684631B6FADA60078903A /* NIBackgroundView.m in Sources */,
+				710684631B6FADA60078903A /* NSView+NI.m in Sources */,
 				710683731B6628720078903A /* NIImageAnnotation.m in Sources */,
 				71DFA2D31B71FF52008AB997 /* NISegmentationAlgorithm.m in Sources */,
 				710683751B6628720078903A /* NIBezierPathAnnotation.m in Sources */,

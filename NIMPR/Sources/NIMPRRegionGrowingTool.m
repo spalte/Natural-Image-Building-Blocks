@@ -8,7 +8,7 @@
 
 #import "NIMPRRegionGrowingTool.h"
 #import "NIMaskAnnotation.h"
-#import "NIBackgroundView.h"
+#import "NSView+NI.h"
 #import "NIMPRController+Toolbar.h"
 #import "NIThresholdSegmentation.h"
 #import "NSMenu+NIMPR.h"
@@ -131,10 +131,7 @@
 - (NSView*)popoverView {
     NIBackgroundView* view = [[[NIBackgroundView alloc] initWithFrame:NSZeroRect color:[NSColor.blackColor colorWithAlphaComponent:.8]] autorelease];
     
-    NSTextField* label = [[[NSTextField alloc] initWithFrame:NSZeroRect] autorelease];
-    label.translatesAutoresizingMaskIntoConstraints = label.selectable = label.bordered = label.drawsBackground = NO;
-    label.controlSize = NSSmallControlSize;
-    label.font = [NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:label.controlSize]];
+    NSTextField* label = [NSTextField labelWithControlSize:NSSmallControlSize];
     label.stringValue = NSLocalizedString(@"Region Growing", nil);
     [view addSubview:label];
     
@@ -146,7 +143,6 @@
     for (id <NISegmentationAlgorithm> sac in self.segmentationAlgorithms)
         [algorithms.menu addItemWithTitle:sac.name block:^{
             self.segmentationAlgorithm = sac;
-//            algorithms.title = sac.shortName;
         }];
     [view addSubview:algorithms];
     
