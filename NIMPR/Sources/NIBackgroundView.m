@@ -20,7 +20,7 @@
 
 @synthesize backgroundColor = _backgroundColor;
 @synthesize updateConstraintsBlock = _updateConstraintsBlock;
-@synthesize willMoveToSuperviewBlock = _willMoveToSuperviewBlock;
+//@synthesize willMoveToSuperviewBlock = _willMoveToSuperviewBlock;
 @synthesize retains = _retains;
 
 - (id)initWithFrame:(NSRect)frameRect {
@@ -44,7 +44,7 @@
     self.retains = nil;
     self.backgroundColor = nil;
     self.updateConstraintsBlock = nil;
-    self.willMoveToSuperviewBlock = nil;
+//    self.willMoveToSuperviewBlock = nil;
     [super dealloc];
 }
 
@@ -83,11 +83,11 @@
         self.updateConstraintsBlock();
 }
 
-- (void)viewWillMoveToSuperview:(NSView *)newSuperview {
-    if (self.willMoveToSuperviewBlock)
-        self.willMoveToSuperviewBlock(newSuperview);
-    [super viewWillMoveToSuperview:newSuperview];
-}
+//- (void)viewWillMoveToSuperview:(NSView *)newSuperview {
+//    if (self.willMoveToSuperviewBlock)
+//        self.willMoveToSuperviewBlock(newSuperview);
+//    [super viewWillMoveToSuperview:newSuperview];
+//}
 
 - (void)viewWillDraw {
     if (self.needsUpdateConstraints)

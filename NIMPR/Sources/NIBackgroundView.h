@@ -17,13 +17,13 @@
 @interface NIBackgroundView : NSView {
     NSColor* _backgroundColor;
     void (^_updateConstraintsBlock)();
-    void (^_willMoveToSuperviewBlock)(NSView*);
+//    void (^_willMoveToSuperviewBlock)(NSView*);
     NSMutableArray* _retains;
 }
 
 @property(retain) NSColor* backgroundColor;
 @property(copy) void (^updateConstraintsBlock)();
-@property(copy) void (^willMoveToSuperviewBlock)(NSView*);
+//@property(copy) void (^willMoveToSuperviewBlock)(NSView*);
 
 - (id)initWithFrame:(NSRect)frameRect color:(NSColor*)backgroundColor;
 
