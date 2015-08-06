@@ -98,6 +98,9 @@ typedef NS_ENUM(NSInteger, NIMPRLayoutTag) {
 @property(readonly, copy) NSSet* selectedAnnotations;
 - (NSMutableSet*)mutableSelectedAnnotations;
 
+- (NSSize)windowWillResize:(NSWindow *)sender toSize:(NSSize)frameSize NS_REQUIRES_SUPER;
+- (void)windowDidResize:(NSNotification *)notification NS_REQUIRES_SUPER;
+
 - (void)rotate:(CGFloat)rads axis:(NIVector)axis excluding:(NIMPRView*)view;
 - (void)rotateToInitial;
 - (void)moveToInitial;

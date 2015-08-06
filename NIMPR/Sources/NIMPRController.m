@@ -328,6 +328,15 @@
     }
 }
 
+- (NSSize)windowWillResize:(NSWindow *)sender toSize:(NSSize)frameSize {
+    [self.window willChangeValueForKey:@"frame"];
+    return frameSize;
+}
+
+- (void)windowDidResize:(NSNotification *)notification {
+    [self.window didChangeValueForKey:@"frame"];
+}
+
 - (void)rotate:(CGFloat)rads axis:(NIVector)axis excluding:(NIMPRView*)eview {
     for (NIMPRQuaternion* quaternion in @[ self.x, self.y, self.z ])
         [quaternion rotate:rads axis:axis];

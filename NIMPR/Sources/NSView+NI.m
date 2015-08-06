@@ -10,30 +10,26 @@
 
 //NSString* const NIViewDidMoveToSuperviewNotification = @"NIViewDidMoveToSuperviewNotification";
 
-@interface NIViewController ()
+@interface NIRetainer ()
 
-@property(retain) NSMutableDictionary* retains;
+@property(retain, nonatomic) NSMutableDictionary* retains;
 
 @end
 
-@implementation NIViewController
+@implementation NIRetainer
 
-@synthesize updateConstraintsBlock = _updateConstraintsBlock;
 @synthesize retains = _retains;
 
-- (id)initWithView:(NSView*)view {
+- (id)init {
     if ((self = [super init])) {
-        self.view = view;
-        [self addObserver:self forKeyPath:@"updateConstraintsBlock" options:0 context:NIViewController.class];
+        self.retains = [NSMutableDictionary dictionary];
     }
     
     return self;
 }
 
 - (void)dealloc {
-    [self removeObserver:self forKeyPath:@"updateConstraintsBlock" context:NIViewController.class];
     self.retains = nil;
-    self.updateConstraintsBlock = nil;
     [super dealloc];
 }
 
@@ -42,11 +38,72 @@
 }
 
 - (void)retain:(id)obj forKey:(id)key {
-    if (!self.retains)
-        self.retains = [NSMutableDictionary dictionary];
     if (obj)
         self.retains[key] = obj;
     else [self.retains removeObjectForKey:key];
+}
+
+@end
+
+@implementation NIView
+
+@synthesize controller = _controller;
+
+- (id)initWithFrame:(NSRect)frameRect {
+    if ((self = [super initWithFrame:frameRect])) {
+        self.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    
+    return self;
+}
+
+- (void)updateConstraints {
+    [super updateConstraints];
+    [self.controller updateViewConstraints];
+}
+
+@end
+
+@interface NIViewController ()
+
+@property(readwrite, retain, nonatomic) NIRetainer* retainer;
+
+@end
+
+@implementation NIViewController
+
+@synthesize updateConstraintsBlock = _updateConstraintsBlock;
+@synthesize retainer = _retainer;
+
+@dynamic view;
+
+- (id)initWithView:(NIView*)view {
+    return [self initWithView:view updateConstraints:nil];
+}
+
+- (id)initWithView:(NIView*)view updateConstraints:(void (^)())updateConstraintsBlock {
+    return [self initWithView:view updateConstraints:updateConstraintsBlock and:nil];
+}
+
+- (id)initWithView:(NIView*)view updateConstraints:(void (^)())updateConstraintsBlock and:(void (^)(NIRetainer* r))block {
+    if ((self = [super init])) {
+        self.view = view;
+        self.updateConstraintsBlock = updateConstraintsBlock;
+        
+        [self addObserver:self forKeyPath:@"updateConstraintsBlock" options:NSKeyValueObservingOptionInitial context:NIViewController.class];
+        
+        if (block)
+            block(self.retainer);
+    }
+    
+    return self;
+}
+
+- (void)dealloc {
+    [self removeObserver:self forKeyPath:@"updateConstraintsBlock" context:NIViewController.class];
+    self.retainer = nil;
+    self.updateConstraintsBlock = nil;
+    [super dealloc];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -58,10 +115,21 @@
     }
 }
 
+- (void)setView:(NIView*)view {
+    view.controller = self;
+    [super setView:view];
+}
+
 - (void)updateViewConstraints {
-    [super updateViewConstraints];
+//    [super updateViewConstraints];
     if (self.updateConstraintsBlock)
         self.updateConstraintsBlock();
+}
+
+- (NIRetainer*)retainer {
+    if (!_retainer)
+        _retainer = [[NIRetainer alloc] init];
+    return _retainer;
 }
 
 @end
@@ -84,7 +152,7 @@
 
 - (id)initWithFrame:(NSRect)frameRect color:(NSColor*)backgroundColor {
     if ((self = [super initWithFrame:frameRect])) {
-        self.translatesAutoresizingMaskIntoConstraints = NO;
+//        self.translatesAutoresizingMaskIntoConstraints = NO;
         self.backgroundColor = backgroundColor;
         [self addObserver:self forKeyPath:@"backgroundColor" options:0 context:NIBackgroundView.class];
     }

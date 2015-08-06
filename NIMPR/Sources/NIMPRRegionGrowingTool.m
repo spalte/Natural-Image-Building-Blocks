@@ -120,7 +120,7 @@
 }
 
 - (NSOperation*)seed:(NIMaskIndex)seed volume:(NIVolumeData*)data annotation:(NIMaskAnnotation*)ma {
-    NSBlockOperation* op = [NSBlockOperation blockOperationWithBlock:^{
+    __block NSBlockOperation* op = [NSBlockOperation blockOperationWithBlock:^{
         [self.segmentationAlgorithm processWithSeeds:@[[NSValue valueWithNIMaskIndex:seed]] volume:data annotation:ma operation:op];
     }];
     
@@ -139,7 +139,7 @@
 }
 
 - (NSViewController*)popoverViewController {
-    NSView* view = [[[NSView alloc] initWithFrame:NSZeroRect] autorelease];
+    NIView* view = [[[NIView alloc] initWithFrame:NSZeroRect] autorelease];
     
     NSTextField* label = [NSTextField labelWithControlSize:NSSmallControlSize];
     label.stringValue = NSLocalizedString(@"Region Growing", nil);
@@ -162,71 +162,37 @@
     
     [label addConstraint:[NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:label.fittingSize.width]];
 
-    NIViewController* vc = [[[NIViewController alloc] initWithView:view] autorelease]; // avoid retain cycles inside this object's retains dictionary
-    vc.updateConstraintsBlock = ^{
+    return [[[NIViewController alloc] initWithView:view updateConstraints:^{
         [view removeAllConstraints];
         NSDictionary* m = @{ @"h": @8, @"v": @8, @"lmargin": (self.popoverDetached? @24 : @7) };
         [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-lmargin-[label]-h-|" options:0 metrics:m views:NSDictionaryOfVariableBindings(label)]];
         [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-h-[algorithms]-h-|" options:0 metrics:m views:NSDictionaryOfVariableBindings(algorithms)]];
         [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-h-[algorithm]-h-|" options:0 metrics:m views:NSDictionaryOfVariableBindings(algorithm)]];
         [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-v-[label]-v-[algorithms]-v-[algorithm]-v-|" options:0 metrics:m views:NSDictionaryOfVariableBindings(label, algorithms, algorithm)]];
-    };
-    
-    [vc retain:[self observeKeyPath:@"segmentationAlgorithm" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionNew block:^(NSDictionary *change) {
-        for (NSView* v in algorithm.subviews)
-            [v removeFromSuperview];
-        NSView* v = [[change[NSKeyValueChangeNewKey] viewController] view];
-        [algorithm addSubview:v];
-        [algorithm addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[v]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(v)]];
-        [algorithm addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[v]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(v)]];
-    }]];
-    
-    __block NSRect previousParentWindowFrame = NSZeroRect;
-    __block id pwfno = nil;
-    [vc retain:[view observeKeyPath:@"window.parentWindow" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld block:^(NSDictionary *change) {
-        NSWindow* parentWindow = [change[NSKeyValueChangeNewKey] if:NSWindow.class];
-        previousParentWindowFrame = [parentWindow frame];
-        
-        [pwfno release];
-        pwfno = [[parentWindow observeNotifications:@[NSWindowDidMoveNotification, NSWindowDidResizeNotification] options:0 block:^(NSNotification *notification) {
-            NSRect parentWindowFrame = [parentWindow frame];
+    } and:^(NIRetainer* r) {
+        [r retain:[self observeKeyPath:@"segmentationAlgorithm" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionNew block:^(NSDictionary *change) {
+            for (NSView* v in algorithm.subviews)
+                [v removeFromSuperview];
+            NSView* v = [[change[NSKeyValueChangeNewKey] viewController] view];
+            [algorithm addSubview:v];
+            [algorithm addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[v]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(v)]];
+            [algorithm addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[v]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(v)]];
+        }]];
+        [r retain:[view observeKeyPath:@"window.parentWindow.frame" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld block:^(NSDictionary *change) {
+            NSValue *nfv = [change[NSKeyValueChangeNewKey] if:NSValue.class], *ofv = [change[NSKeyValueChangeOldKey] if:NSValue.class];
+            if (!nfv || !ofv || !_popoverDetached)
+                return;
+            NSRect frame = view.window.frame, nf = [nfv rectValue], of = [ofv rectValue];
             
-            if (!NSEqualRects(previousParentWindowFrame, NSZeroRect)) {
-                NSRect frame = view.window.frame;
-                
-                NSPoint delta = NSMakePoint(0, NSMaxY(parentWindowFrame)-NSMaxY(previousParentWindowFrame));
-                if (NSMidX(frame) < NSMidX(parentWindowFrame))
-                    delta.x = NSMinX(parentWindowFrame)-NSMinX(previousParentWindowFrame);
-                else delta.x = NSMaxX(parentWindowFrame)-NSMaxX(previousParentWindowFrame);
-                
-                frame.origin = NSMakePoint(frame.origin.x+delta.x, frame.origin.y+delta.y);
-                [view.window setFrame:frame display:YES];
-            }
+            NSPoint delta = NSMakePoint(0, NSMaxY(nf)-NSMaxY(of));
+            if (NSMidX(frame) < NSMidX(view.window.parentWindow.frame))
+                delta.x = NSMinX(nf)-NSMinX(of);
+            else delta.x = NSMaxX(nf)-NSMaxX(of);
             
-            previousParentWindowFrame = parentWindowFrame;
-        }] retain];
-    }]];
-    
-    [vc retain:[NIObject dealloc:^{
-        [pwfno release]; pwfno = nil;
-    }]];
-    
-//    [vc retain:[view observeKeyPath:@"window.parentWindow.frame" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld block:^(NSDictionary *change) { // this would be much simpler than the previous block-in-the-block, but the frame KVO observer isn't change on size changed :(
-//        NSValue *nfv = [change[NSKeyValueChangeNewKey] if:NSValue.class], *ofv = [change[NSKeyValueChangeOldKey] if:NSValue.class];
-//        if (!nfv || !ofv)
-//            return;
-//        NSRect frame = view.window.frame, nf = [nfv rectValue], of = [ofv rectValue];
-//        
-//        NSPoint delta = NSMakePoint(0, NSMaxY(nf)-NSMaxY(of));
-//        if (NSMidX(frame) < NSMidX(view.window.parentWindow.frame))
-//            delta.x = NSMinX(nf)-NSMinX(of);
-//        else delta.x = NSMaxX(nf)-NSMaxX(of);
-//        
-//        frame.origin = NSMakePoint(frame.origin.x+delta.x, frame.origin.y+delta.y);
-//        [view.window setFrame:frame display:YES];
-//    }]];
-    
-    return vc;
+            frame.origin = NSMakePoint(frame.origin.x+delta.x, frame.origin.y+delta.y);
+            [view.window setFrame:frame display:YES];
+        }]];
+    }] autorelease]; // avoid retain cycles inside this object's retains dictionary
 }
 
 @end

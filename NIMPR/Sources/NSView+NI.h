@@ -8,17 +8,38 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface NIViewController : NSViewController {
-    void (^_updateConstraintsBlock)();
+@class NIViewController;
+
+@interface NIRetainer : NSObject {
     NSMutableDictionary* _retains;
 }
 
-@property(copy) void (^updateConstraintsBlock)();
-
-- (id)initWithView:(NSView*)view;
-
 - (void)retain:(id)obj;
 - (void)retain:(id)obj forKey:(id)key;
+
+@end
+
+@interface NIView : NSView {
+    NIViewController* _controller;
+}
+
+@property(assign) NIViewController* controller;
+
+@end
+
+@interface NIViewController : NSViewController {
+    void (^_updateConstraintsBlock)();
+    NIRetainer* _retainer;
+}
+
+@property(copy) void (^updateConstraintsBlock)();
+@property(readonly, retain, nonatomic) NIRetainer* retainer;
+
+@property(retain) NIView* view;
+
+- (id)initWithView:(NIView*)view;
+- (id)initWithView:(NIView*)view updateConstraints:(void (^)())updateConstraintsBlock;
+- (id)initWithView:(NIView*)view updateConstraints:(void (^)())updateConstraintsBlock and:(void (^)(NIRetainer* r))block;
 
 @end
 
@@ -28,7 +49,7 @@
 
 @end
 
-@interface NIBackgroundView : NSView {
+@interface NIBackgroundView : NIView {
     NSColor* _backgroundColor;
 }
 

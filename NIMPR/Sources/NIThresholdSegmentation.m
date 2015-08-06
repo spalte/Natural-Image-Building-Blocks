@@ -35,7 +35,7 @@
 }
 
 - (NSViewController*)viewController {
-    NSView* view = [[[NSView alloc] initWithFrame:NSZeroRect] autorelease];
+    NIView* view = [[[NIView alloc] initWithFrame:NSZeroRect] autorelease];
     
     NSTextField* lbetween = [NSTextField labelWithControlSize:NSSmallControlSize];
     lbetween.stringValue = NSLocalizedString(@"Between", nil);
@@ -54,24 +54,17 @@
     [t1 addConstraint:[NSLayoutConstraint constraintWithItem:t1 attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:40]];
     [t2 addConstraint:[NSLayoutConstraint constraintWithItem:t2 attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:40]];
     
-    NIViewController* vc = [[[NIViewController alloc] initWithView:view] autorelease];
-    vc.updateConstraintsBlock = ^{
+    [t1 bind:@"value" toObject:self withKeyPath:@"lowerThreshold" options:nil];
+    [t2 bind:@"value" toObject:self withKeyPath:@"higherThreshold" options:nil];
+
+    return [[[NIViewController alloc] initWithView:view updateConstraints:^{
         [view removeAllConstraints];
         NSDictionary* m = @{ @"d": @0, @"s": @3 };
         [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-d-[lbetween]-s-[t1]-s-[land]-s-[t2]-d-|" options:NSLayoutFormatAlignAllBaseline metrics:m views:NSDictionaryOfVariableBindings(lbetween, t1, land, t2)]];
         [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-d-[t1]-d-|" options:0 metrics:m views:NSDictionaryOfVariableBindings(t1)]];
         [view addConstraint:[NSLayoutConstraint constraintWithItem:t1 attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:t2 attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
         [view addConstraint:[NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:view.fittingSize.width]];
-    };
-    
-    [t1 bind:@"value" toObject:self withKeyPath:@"lowerThreshold" options:nil];
-    [t2 bind:@"value" toObject:self withKeyPath:@"higherThreshold" options:nil];
-    [vc retain:[NIObject dealloc:^{
-        [t1 unbind:@"value"];
-        [t2 unbind:@"value"];
-    }]];
-
-    return vc;
+    }] autorelease];
 }
 
 - (void)processWithSeeds:(NSArray*)seeds volume:(NIVolumeData*)data annotation:(NIMaskAnnotation*)ma operation:(NSOperation*)op {
@@ -152,7 +145,7 @@
 }
 
 - (NSViewController*)viewController {
-    NSView* view = [[[NSView alloc] initWithFrame:NSZeroRect] autorelease];
+    NIView* view = [[[NIView alloc] initWithFrame:NSZeroRect] autorelease];
     
     NSTextField* linterval = [NSTextField labelWithControlSize:NSSmallControlSize];
     linterval.stringValue = NSLocalizedString(@"Interval:", nil);
@@ -163,21 +156,15 @@
     
     [finterval addConstraint:[NSLayoutConstraint constraintWithItem:finterval attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:40]];
     
-    NIViewController* vc = [[[NIViewController alloc] initWithView:view] autorelease];
-    vc.updateConstraintsBlock = ^{
+    [finterval bind:@"value" toObject:self withKeyPath:@"interval" options:nil];
+
+    return [[[NIViewController alloc] initWithView:view updateConstraints:^{
         [view removeAllConstraints];
         NSDictionary* m = @{ @"d": @0, @"s": @3 };
         [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-d-[linterval]-s-[finterval]-d-|" options:NSLayoutFormatAlignAllBaseline metrics:m views:NSDictionaryOfVariableBindings(linterval, finterval)]];
         [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-d-[finterval]-d-|" options:0 metrics:m views:NSDictionaryOfVariableBindings(finterval)]];
         [view addConstraint:[NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:view.fittingSize.width]];
-    };
-    
-    [finterval bind:@"value" toObject:self withKeyPath:@"interval" options:nil];
-    [vc retain:[NIObject dealloc:^{
-        [finterval unbind:@"value"];
-    }]];
-    
-    return vc;
+    }] autorelease];
 }
 
 - (void)processWithSeeds:(NSArray*)seeds volume:(NIVolumeData*)data annotation:(NIMaskAnnotation*)ma operation:(NSOperation*)op {
