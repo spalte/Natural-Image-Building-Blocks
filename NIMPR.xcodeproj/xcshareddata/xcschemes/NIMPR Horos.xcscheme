@@ -79,9 +79,17 @@
       debugDocumentVersioning = "YES">
       <PathRunnable
          runnableDebuggingMode = "0"
-         BundleIdentifier = "com.rossetantoine.osirix"
-         FilePath = "/Applications/OsiriX MD.app">
+         FilePath = "/Applications/Horos.app">
       </PathRunnable>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "719D029D1AC1CB25002F76C1"
+            BuildableName = "NIMPR.osirixplugin"
+            BlueprintName = "NIMPR.osirixplugin"
+            ReferencedContainer = "container:NIMPR.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

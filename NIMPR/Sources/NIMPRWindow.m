@@ -41,6 +41,15 @@
     [super sendEvent:event];
 }
 
++ (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString *)key {
+    NSSet* set = [super keyPathsForValuesAffectingValueForKey:key];
+    
+    if ([key isEqualToString:@"frame"])
+        set = [set setByAddingObject:@"contentView.size"];
+    
+    return set;
+}
+
 @end
 
 @implementation NSView (NIMPRWindow)

@@ -14,7 +14,7 @@
 
 - (NSString*)name;
 - (NSString*)shortName;
-- (NSView*)view;
+- (NSViewController*)viewController;
 
 - (void)processWithSeeds:(NSArray*)seedIndexes volume:(NIVolumeData*)volume annotation:(NIMaskAnnotation*)annotation operation:(NSOperation*)operation;
 

@@ -7,6 +7,45 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "extobjc.h"
+
+#define ext_weakify_(INDEX, CONTEXT, VAR) \
+    CONTEXT __typeof__(VAR) metamacro_concat(VAR, _weak_) = (VAR);
+
+#define ext_strongify_(INDEX, VAR) \
+    __strong __typeof__(VAR) VAR = metamacro_concat(VAR, _weak_);
+
+#if DEBUG
+#define ext_keywordify autoreleasepool {}
+#else
+#define ext_keywordify try {} @catch (...) {}
+#endif
+
+#define weakify(...) \
+    ext_keywordify \
+    metamacro_foreach_cxt(ext_weakify_,, __weak, __VA_ARGS__)
+
+#define unsafeify(...) \
+    ext_keywordify \
+    metamacro_foreach_cxt(ext_weakify_,, __unsafe_unretained, __VA_ARGS__)
+
+#define strongify(...) \
+    ext_keywordify \
+    _Pragma("clang diagnostic push") \
+    _Pragma("clang diagnostic ignored \"-Wshadow\"") \
+    metamacro_foreach(ext_strongify_,, __VA_ARGS__) \
+    _Pragma("clang diagnostic pop")
+
+@interface NIObject : NSObject {
+    void (^_deallocBlock)();
+}
+
+@property(copy) void (^deallocBlock)();
+
++ (instancetype)dealloc:(void (^)())deallocBlock;
+
+@end
+
 
 typedef NS_OPTIONS(NSUInteger, NINotificationObservingOptions) {
     NINotificationObservingOptionInitial = 0x01,
@@ -21,7 +60,9 @@ typedef NS_OPTIONS(NSUInteger, NINotificationObservingOptions) {
 - (void)performBlock:(void (^)())block afterDelay:(NSTimeInterval)delay;
 
 - (id)observeKeyPath:(NSString*)keyPath options:(NSKeyValueObservingOptions)opt block:(void (^)(NSDictionary* change))block; // retain the returned object until you want to stop observing
+- (id)observeKeyPaths:(NSArray*)keyPaths options:(NSKeyValueObservingOptions)options block:(void (^)(NSDictionary*))block; // retain the returned object until you want to stop observing
 - (id)observeNotification:(NSString*)name options:(NINotificationObservingOptions)options block:(void (^)(NSNotification* notification))block; // retain the returned object until you want to stop observing
+- (id)observeNotifications:(NSArray*)names options:(NINotificationObservingOptions)options block:(void (^)(NSNotification* notification))block; // retain the returned object until you want to stop observing
 
 @end
 

@@ -10,7 +10,7 @@
 #define NIMPR_pch
 
 #include <Cocoa/Cocoa.h>
-#include "+NIMPR.h"
+#import "NSObject+NI.h"
 
 #define ifd(D,C) D; if (C)
 

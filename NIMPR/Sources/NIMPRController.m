@@ -79,6 +79,8 @@
         _highlightedAnnotations = [[NSMutableSet alloc] init];
         _selectedAnnotations = [[NSMutableSet alloc] init];
         
+        window.delegate = self;
+        
         NSToolbar* toolbar = [[[NSToolbar alloc] initWithIdentifier:@"NIMPR"] autorelease];
         toolbar.allowsUserCustomization = window.toolbar.autosavesConfiguration = YES;
         toolbar.displayMode = NSToolbarDisplayModeIconOnly;
@@ -217,10 +219,14 @@
     }
     
     if (object == self && [keyPath isEqualToString:@"ltoolTag"]) {
+        if ([self.ltool respondsToSelector:@selector(dismissing)])
+            [self.ltool dismissing];
         self.ltool = [[[[self toolClassForTag:self.ltoolTag] alloc] init] autorelease];
     }
     
     if (object == self && [keyPath isEqualToString:@"rtoolTag"]) {
+        if ([self.rtool  respondsToSelector:@selector(dismissing)])
+            [self.rtool  dismissing];
         self.rtool = [[[[self toolClassForTag:self.rtoolTag] alloc] init] autorelease];
     }
     

@@ -65,10 +65,16 @@ extern NSString* const NIMPRControllerToolbarItemIdentifierLayouts;
 
 @class NIMPRSegmentedCell;
 
-@interface NIMPRSegmentedControl : NSSegmentedControl
+@interface NIMPRSegmentedControl : NSSegmentedControl {
+    NSTrackingArea* _track;
+    NSString* _tempToolTip;
+}
 
 - (NIMPRSegmentedCell*)cell;
 
 - (NSRect)boundsForSegment:(NSInteger)s;
+
+- (NSString*)toolTipForSegment:(NSInteger)s;
+- (void)setToolTip:(NSString *)toolTip forSegment:(NSInteger)s;
 
 @end

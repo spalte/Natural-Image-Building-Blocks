@@ -16,7 +16,6 @@
 #import "NIMPRAnnotationSelectionTool.h"
 #import "NIMPRAnnotationTranslationTool.h"
 #import "NIMPRAnnotationHandleInteractionTool.h"
-#import "+NIMPR.h"
 #import <objc/runtime.h>
 
 @implementation NIMPRView (Events)
@@ -234,8 +233,6 @@
     Class ltc = [self toolForLocation:location event:event];
     
     if (self.ltool.class != ltc) {
-        if ([self.ltool respondsToSelector:@selector(view:dismissing:)])
-            [self.ltool view:self dismissing:event];
         [self.mutableHighlightedAnnotations removeAllObjects];
         self.ltool = [[[ltc alloc] init] autorelease];
     }

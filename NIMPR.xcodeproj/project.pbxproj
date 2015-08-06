@@ -41,7 +41,7 @@
 		710683981B6628720078903A /* NIMPRAnnotationHandleInteractionTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 71FD92311B5E750C0041E95F /* NIMPRAnnotationHandleInteractionTool.m */; };
 		7106839A1B6628720078903A /* NIMPRQuaternion.mm in Sources */ = {isa = PBXBuildFile; fileRef = 719CC5391B0CC17000DC1ED5 /* NIMPRQuaternion.mm */; };
 		7106839C1B6628720078903A /* NSMenu+NIMPR.m in Sources */ = {isa = PBXBuildFile; fileRef = 719CC53D1B0E039E00DC1ED5 /* NSMenu+NIMPR.m */; };
-		7106839E1B6628720078903A /* +NIMPR.m in Sources */ = {isa = PBXBuildFile; fileRef = 713341431B15F3000014CE09 /* +NIMPR.m */; };
+		7106839E1B6628720078903A /* NSObject+NI.m in Sources */ = {isa = PBXBuildFile; fileRef = 713341431B15F3000014CE09 /* NSObject+NI.m */; };
 		710683A01B6628720078903A /* NSBezierPath+NIMPR.m in Sources */ = {isa = PBXBuildFile; fileRef = 714D19D91B57F5AC00EBA644 /* NSBezierPath+NIMPR.m */; };
 		710683A31B6628FC0078903A /* NIMPRPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 719D02A91AC1D367002F76C1 /* NIMPRPlugin.m */; };
 		710683AB1B662AB70078903A /* NIMPRWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 71B2492E1B18886F00F8E0AD /* NIMPRWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -77,7 +77,7 @@
 		710683C91B662AB70078903A /* NIMPRAnnotationHandleInteractionTool.h in Headers */ = {isa = PBXBuildFile; fileRef = 71FD92301B5E750C0041E95F /* NIMPRAnnotationHandleInteractionTool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		710683CA1B662AB70078903A /* NIMPRQuaternion.h in Headers */ = {isa = PBXBuildFile; fileRef = 719CC5381B0CC17000DC1ED5 /* NIMPRQuaternion.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		710683CB1B662AB70078903A /* NSMenu+NIMPR.h in Headers */ = {isa = PBXBuildFile; fileRef = 719CC53C1B0E039E00DC1ED5 /* NSMenu+NIMPR.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		710683CC1B662AB70078903A /* +NIMPR.h in Headers */ = {isa = PBXBuildFile; fileRef = 713341421B15F3000014CE09 /* +NIMPR.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		710683CC1B662AB70078903A /* NSObject+NI.h in Headers */ = {isa = PBXBuildFile; fileRef = 713341421B15F3000014CE09 /* NSObject+NI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		710683CD1B662AB70078903A /* NSBezierPath+NIMPR.h in Headers */ = {isa = PBXBuildFile; fileRef = 714D19D81B57F5AB00EBA644 /* NSBezierPath+NIMPR.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		710683CE1B662AE30078903A /* NIMPR+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 719473621B1D9883009363AE /* NIMPR+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		710683CF1B662AE30078903A /* NIMPRController+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 713341371B1483B90014CE09 /* NIMPRController+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -107,8 +107,6 @@
 		719CC52E1B0B21A900DC1ED5 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 719CC52D1B0B21A900DC1ED5 /* OpenGL.framework */; };
 		719CC52F1B0B21BA00DC1ED5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 719CC5291B0B216D00DC1ED5 /* Cocoa.framework */; };
 		719CC5311B0B222100DC1ED5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 719CC5301B0B222100DC1ED5 /* Foundation.framework */; };
-		71DFA2CE1B710BC1008AB997 /* NIViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 71DFA2CC1B710BC1008AB997 /* NIViewController.h */; };
-		71DFA2CF1B710BC1008AB997 /* NIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71DFA2CD1B710BC1008AB997 /* NIViewController.m */; };
 		71DFA2D21B71FF52008AB997 /* NISegmentationAlgorithm.h in Headers */ = {isa = PBXBuildFile; fileRef = 71DFA2D01B71FF52008AB997 /* NISegmentationAlgorithm.h */; };
 		71DFA2D31B71FF52008AB997 /* NISegmentationAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = 71DFA2D11B71FF52008AB997 /* NISegmentationAlgorithm.m */; };
 		71DFA2D61B7200A2008AB997 /* NIThresholdSegmentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 71DFA2D41B7200A2008AB997 /* NIThresholdSegmentation.h */; };
@@ -222,8 +220,8 @@
 		7133413E1B15A4FA0014CE09 /* NIMPRView+Events.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NIMPRView+Events.h"; sourceTree = "<group>"; };
 		7133413F1B15A4FA0014CE09 /* NIMPRView+Events.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NIMPRView+Events.m"; sourceTree = "<group>"; };
 		713341411B15A8C90014CE09 /* NIMPRView+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NIMPRView+Private.h"; sourceTree = "<group>"; };
-		713341421B15F3000014CE09 /* +NIMPR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "+NIMPR.h"; sourceTree = "<group>"; };
-		713341431B15F3000014CE09 /* +NIMPR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "+NIMPR.m"; sourceTree = "<group>"; };
+		713341421B15F3000014CE09 /* NSObject+NI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+NI.h"; sourceTree = "<group>"; };
+		713341431B15F3000014CE09 /* NSObject+NI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+NI.m"; sourceTree = "<group>"; };
 		714D19C31B53A81100EBA644 /* NIMaskAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMaskAnnotation.h; sourceTree = "<group>"; };
 		714D19C41B53A81100EBA644 /* NIMaskAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMaskAnnotation.m; sourceTree = "<group>"; };
 		714D19C71B53C42100EBA644 /* NIRectangleAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIRectangleAnnotation.h; sourceTree = "<group>"; };
@@ -259,12 +257,11 @@
 		719D02A91AC1D367002F76C1 /* NIMPRPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NIMPRPlugin.m; path = NIMPR/Sources/NIMPRPlugin.m; sourceTree = "<group>"; };
 		71B2492E1B18886F00F8E0AD /* NIMPRWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRWindow.h; sourceTree = "<group>"; };
 		71B2492F1B18886F00F8E0AD /* NIMPRWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRWindow.m; sourceTree = "<group>"; };
-		71DFA2CC1B710BC1008AB997 /* NIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIViewController.h; sourceTree = "<group>"; };
-		71DFA2CD1B710BC1008AB997 /* NIViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIViewController.m; sourceTree = "<group>"; };
 		71DFA2D01B71FF52008AB997 /* NISegmentationAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NISegmentationAlgorithm.h; sourceTree = "<group>"; };
 		71DFA2D11B71FF52008AB997 /* NISegmentationAlgorithm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NISegmentationAlgorithm.m; sourceTree = "<group>"; };
 		71DFA2D41B7200A2008AB997 /* NIThresholdSegmentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIThresholdSegmentation.h; sourceTree = "<group>"; };
 		71DFA2D51B7200A2008AB997 /* NIThresholdSegmentation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIThresholdSegmentation.m; sourceTree = "<group>"; };
+		71DFA2D81B737E09008AB997 /* extobjc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = extobjc.h; sourceTree = "<group>"; };
 		71FD92301B5E750C0041E95F /* NIMPRAnnotationHandleInteractionTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRAnnotationHandleInteractionTool.h; sourceTree = "<group>"; };
 		71FD92311B5E750C0041E95F /* NIMPRAnnotationHandleInteractionTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRAnnotationHandleInteractionTool.m; sourceTree = "<group>"; };
 		71FD92341B5E7FC90041E95F /* NIAnnotationHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIAnnotationHandle.h; sourceTree = "<group>"; };
@@ -419,14 +416,13 @@
 				719CC5391B0CC17000DC1ED5 /* NIMPRQuaternion.mm */,
 				719CC53C1B0E039E00DC1ED5 /* NSMenu+NIMPR.h */,
 				719CC53D1B0E039E00DC1ED5 /* NSMenu+NIMPR.m */,
-				713341421B15F3000014CE09 /* +NIMPR.h */,
-				713341431B15F3000014CE09 /* +NIMPR.m */,
+				713341421B15F3000014CE09 /* NSObject+NI.h */,
+				713341431B15F3000014CE09 /* NSObject+NI.m */,
 				714D19D81B57F5AB00EBA644 /* NSBezierPath+NIMPR.h */,
 				714D19D91B57F5AC00EBA644 /* NSBezierPath+NIMPR.m */,
 				710684601B6FADA60078903A /* NSView+NI.h */,
 				710684611B6FADA60078903A /* NSView+NI.m */,
-				71DFA2CC1B710BC1008AB997 /* NIViewController.h */,
-				71DFA2CD1B710BC1008AB997 /* NIViewController.m */,
+				71DFA2D81B737E09008AB997 /* extobjc.h */,
 			);
 			name = Extras;
 			sourceTree = "<group>";
@@ -550,7 +546,6 @@
 				710683AB1B662AB70078903A /* NIMPRWindow.h in Headers */,
 				71DFA2D61B7200A2008AB997 /* NIThresholdSegmentation.h in Headers */,
 				710683AC1B662AB70078903A /* NIMPRController.h in Headers */,
-				71DFA2CE1B710BC1008AB997 /* NIViewController.h in Headers */,
 				710683AD1B662AB70078903A /* NIMPRController+Toolbar.h in Headers */,
 				710683AE1B662AB70078903A /* NIMPRView.h in Headers */,
 				710683AF1B662AB70078903A /* NIMPRView+Events.h in Headers */,
@@ -584,7 +579,7 @@
 				710683C91B662AB70078903A /* NIMPRAnnotationHandleInteractionTool.h in Headers */,
 				710683CA1B662AB70078903A /* NIMPRQuaternion.h in Headers */,
 				710683CB1B662AB70078903A /* NSMenu+NIMPR.h in Headers */,
-				710683CC1B662AB70078903A /* +NIMPR.h in Headers */,
+				710683CC1B662AB70078903A /* NSObject+NI.h in Headers */,
 				7106844E1B6B9FC10078903A /* NIMPRRegionGrowingTool.h in Headers */,
 				710683CD1B662AB70078903A /* NSBezierPath+NIMPR.h in Headers */,
 				710683CE1B662AE30078903A /* NIMPR+Private.h in Headers */,
@@ -755,7 +750,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				71DFA2CF1B710BC1008AB997 /* NIViewController.m in Sources */,
 				710683541B6628710078903A /* NIMPR.m in Sources */,
 				710683591B6628720078903A /* NIMPRWindow.m in Sources */,
 				7106835C1B6628720078903A /* NIMPRController.m in Sources */,
@@ -794,7 +788,7 @@
 				710683981B6628720078903A /* NIMPRAnnotationHandleInteractionTool.m in Sources */,
 				7106839A1B6628720078903A /* NIMPRQuaternion.mm in Sources */,
 				7106839C1B6628720078903A /* NSMenu+NIMPR.m in Sources */,
-				7106839E1B6628720078903A /* +NIMPR.m in Sources */,
+				7106839E1B6628720078903A /* NSObject+NI.m in Sources */,
 				710683A01B6628720078903A /* NSBezierPath+NIMPR.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

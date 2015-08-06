@@ -22,8 +22,7 @@
 #import "NIMPRAnnotateEllipseTool.h"
 #import "NIMPRRegionGrowingTool.h"
 #import "NSMenu+NIMPR.h"
-
-
+#import "NSObject+NI.h"
 
 //@interface ASDView : NSView
 //
@@ -162,6 +161,7 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
         [ta[1] enumerateObjectsUsingBlock:^(NIMPRToolRecord* tool, NSUInteger i, BOOL* stop) {
             [cell setTag:tool.tag forSegment:i];
             [seg setImage:tool.image forSegment:i];
+            [cell setToolTip:tool.label forSegment:i];
             NSMenuItem* mi = [[NSMenuItem alloc] initWithTitle:tool.label action:nil keyEquivalent:@""];
             mi.tag = tool.tag;
             mi.submenu = tool.submenu;
@@ -358,19 +358,32 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
 
 //static NSString* const NIMPRSegment = @"NIMPRSegment";
 
+@interface NIMPRSegmentedControl ()
+
+@property(retain) NSTrackingArea* track;
+@property(retain) NSString* tempToolTip;
+
+@end
+
 @implementation NIMPRSegmentedControl
+
+@synthesize track = _track;
+@synthesize tempToolTip = _tempToolTip;
 
 - (instancetype)initWithFrame:(NSRect)frame {
     if ((self = [super initWithFrame:frame])) {
         self.cell = [[[NIMPRSegmentedCell alloc] init] autorelease];
-        [self addObserver:self forKeyPath:@"cell.rightMouseInside" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRSegmentedControl.class];
+        [self addObserver:self forKeyPath:@"cell.rightMouseInside" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:NIMPRSegmentedControl.class];
+        [self addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:NIMPRSegmentedControl.class];
     }
     
     return self;
 }
 
 - (void)dealloc {
+    [self removeObserver:self forKeyPath:@"frame" context:NIMPRSegmentedControl.class];
     [self removeObserver:self forKeyPath:@"cell.rightMouseInside" context:NIMPRSegmentedControl.class];
+    self.track = nil;
     [super dealloc];
 }
 
@@ -382,6 +395,11 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
         if ([[change[NSKeyValueChangeNewKey] if:NSNumber.class] boolValue] != [[change[NSKeyValueChangeOldKey] if:NSNumber.class] boolValue]) {
             [self setNeedsDisplay];
         }
+    
+    if ([keyPath isEqualToString:@"frame"]) {
+        if (self.track) [self removeTrackingArea:self.track];
+        [self addTrackingArea:(self.track = [[[NSTrackingArea alloc] initWithRect:self.bounds options:NSTrackingMouseEnteredAndExited|NSTrackingMouseMoved+NSTrackingActiveInActiveApp owner:self userInfo:@{ @"NIMPRViewTrackingArea": @YES }] autorelease])];
+    }
 }
 
 - (NIMPRSegmentedCell*)cell {
@@ -396,17 +414,21 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
     return [self.cell boundsForSegment:s inView:self];
 }
 
-- (void)rightMouseDown:(NSEvent*)event {
-    NSPoint location = [self convertPoint:event.locationInWindow fromView:nil];
-    
-    NSInteger s; NSRect sframe;
-    for (s = 0; s < self.segmentCount; ++s) {
-        sframe = [self boundsForSegment:s];
-        if (location.x <= NSMaxX(sframe))
-            break;
+- (NSInteger)segmentAtLocation:(NSPoint)location frame:(NSRect*)rframe {
+    for (NSInteger s = 0; s < self.segmentCount; ++s) {
+        NSRect frame = [self boundsForSegment:s];
+        if (location.x <= NSMaxX(frame)) {
+            if (rframe)
+                *rframe = frame;
+            return s;
+        }
     }
     
-//    self.cell.rightMouseFrame = NSMakeRect(px+0, 0, x-px-1, NSHeight(self.bounds)-2);
+    return -1;
+}
+
+- (void)rightMouseDown:(NSEvent*)event {
+    NSRect sframe; NSInteger s = [self segmentAtLocation:[event locationInView:self] frame:&sframe];
     self.cell.rightMouseFrame = sframe;
     
     do {
@@ -421,6 +443,20 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
     
     self.cell.rightMouseInside = NO;
     self.cell.rightMouseFrame = NSZeroRect;
+}
+
+static NSString* const NSSegmentedControlSegmentToolTip = @"ToolTip";
+
+- (NSString*)toolTipForSegment:(NSInteger)s {
+    return self.cell.segments[s][NSSegmentedControlSegmentToolTip];
+}
+
+- (void)setToolTip:(NSString *)toolTip forSegment:(NSInteger)s {
+    self.cell.segments[s][NSSegmentedControlSegmentToolTip] = toolTip;
+}
+
+- (NSString *)view:(NSView *)view stringForToolTip:(NSToolTipTag)tag point:(NSPoint)point userData:(void *)data {
+    return [self toolTipForSegment:(NSInteger)data];
 }
 
 @end
@@ -444,8 +480,10 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
 
 - (void)setSegmentCount:(NSInteger)count {
     [super setSegmentCount:count];
-    if (!self.segments) self.segments = [NSMutableArray array];
-    if (self.segments.count > count) [self.segments removeObjectsInRange:NSMakeRange(count, self.segments.count-count)];
+    if (!self.segments)
+        self.segments = [NSMutableArray array];
+    if (self.segments.count > count)
+        [self.segments removeObjectsInRange:NSMakeRange(count, self.segments.count-count)];
     while (self.segments.count < count)
         [self.segments addObject:[NSMutableDictionary dictionary]];
 }
@@ -468,8 +506,18 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
     }
 }
 
+static NSString* const NSSegmentedControlSegmentToolTipTagRecord = @"ToolTipTagRecord";
+
 - (void)drawSegment:(NSInteger)s inFrame:(NSRect)frame withView:(NIMPRSegmentedControl*)view {
     [super drawSegment:s inFrame:frame withView:view];
+    @unsafeify(view)
+    
+    NSToolTipTag ttt = [view addToolTipRect:[self boundsForSegment:s inView:view] owner:view userData:(void*)s];
+    self.segments[s][NSSegmentedControlSegmentToolTipTagRecord] = [NIObject dealloc:^{
+        @strongify(view)
+        [view removeToolTip:ttt];
+    }];
+
     if ([self tagForSegment:s] == self.rselectedTag) {
         [NSGraphicsContext saveGraphicsState];
         frame = NSInsetRect([self boundsForSegment:s inView:view], 2, -1); // NSInsetRect(frame, (NSWidth(view.frame)-view.totalWidth)/(view.segmentCount*2)-1, -2);

@@ -10,18 +10,73 @@
 
 //NSString* const NIViewDidMoveToSuperviewNotification = @"NIViewDidMoveToSuperviewNotification";
 
-@interface NIBackgroundView ()
+@interface NIViewController ()
 
-@property(retain) NSMutableArray* retains;
+@property(retain) NSMutableDictionary* retains;
+
+@end
+
+@implementation NIViewController
+
+@synthesize updateConstraintsBlock = _updateConstraintsBlock;
+@synthesize retains = _retains;
+
+- (id)initWithView:(NSView*)view {
+    if ((self = [super init])) {
+        self.view = view;
+        [self addObserver:self forKeyPath:@"updateConstraintsBlock" options:0 context:NIViewController.class];
+    }
+    
+    return self;
+}
+
+- (void)dealloc {
+    [self removeObserver:self forKeyPath:@"updateConstraintsBlock" context:NIViewController.class];
+    self.retains = nil;
+    self.updateConstraintsBlock = nil;
+    [super dealloc];
+}
+
+- (void)retain:(id)obj {
+    [self retain:obj forKey:[NSValue valueWithPointer:obj]];
+}
+
+- (void)retain:(id)obj forKey:(id)key {
+    if (!self.retains)
+        self.retains = [NSMutableDictionary dictionary];
+    if (obj)
+        self.retains[key] = obj;
+    else [self.retains removeObjectForKey:key];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if (context != NIViewController.class)
+        return [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    
+    if ([keyPath isEqualToString:@"updateConstraintsBlock"]) {
+        self.view.needsUpdateConstraints = YES;
+    }
+}
+
+- (void)updateViewConstraints {
+    [super updateViewConstraints];
+    if (self.updateConstraintsBlock)
+        self.updateConstraintsBlock();
+}
+
+@end
+
+@implementation NSView (NI)
+
+- (void)removeAllConstraints {
+    [self removeConstraints:self.constraints];
+}
 
 @end
 
 @implementation NIBackgroundView
 
 @synthesize backgroundColor = _backgroundColor;
-@synthesize updateConstraintsBlock = _updateConstraintsBlock;
-//@synthesize willMoveToSuperviewBlock = _willMoveToSuperviewBlock;
-@synthesize retains = _retains;
 
 - (id)initWithFrame:(NSRect)frameRect {
     return [self initWithFrame:frameRect color:nil];
@@ -32,27 +87,15 @@
         self.translatesAutoresizingMaskIntoConstraints = NO;
         self.backgroundColor = backgroundColor;
         [self addObserver:self forKeyPath:@"backgroundColor" options:0 context:NIBackgroundView.class];
-        [self addObserver:self forKeyPath:@"updateConstraintsBlock" options:0 context:NIBackgroundView.class];
     }
     
     return self;
 }
 
 - (void)dealloc {
-    [self removeObserver:self forKeyPath:@"updateConstraintsBlock" context:NIBackgroundView.class];
     [self removeObserver:self forKeyPath:@"backgroundColor" context:NIBackgroundView.class];
-    self.retains = nil;
     self.backgroundColor = nil;
-    self.updateConstraintsBlock = nil;
-//    self.willMoveToSuperviewBlock = nil;
     [super dealloc];
-}
-
-- (id)retain:(id)obj {
-    if (!self.retains)
-        self.retains = [NSMutableArray array];
-    [self.retains addObject:obj];
-    return obj;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -61,10 +104,6 @@
     
     if ([keyPath isEqualToString:@"backgroundColor"]) {
         self.needsDisplay = YES;
-    }
-    
-    if ([keyPath isEqualToString:@"updateConstraintsBlock"]) {
-        self.needsUpdateConstraints = YES;
     }
 }
 
@@ -76,18 +115,6 @@
     
     [super drawRect:dirtyRect];
 }
-
-- (void)updateConstraints {
-    [super updateConstraints];
-    if (self.updateConstraintsBlock)
-        self.updateConstraintsBlock();
-}
-
-//- (void)viewWillMoveToSuperview:(NSView *)newSuperview {
-//    if (self.willMoveToSuperviewBlock)
-//        self.willMoveToSuperviewBlock(newSuperview);
-//    [super viewWillMoveToSuperview:newSuperview];
-//}
 
 - (void)viewWillDraw {
     if (self.needsUpdateConstraints)

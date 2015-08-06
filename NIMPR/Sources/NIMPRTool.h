@@ -42,8 +42,9 @@ typedef NS_ENUM(NSInteger, NIMPRToolTag) {
 - (BOOL)view:(NIMPRView*)view keyUp:(NSEvent*)event;
 - (BOOL)view:(NIMPRView*)view flagsChanged:(NSEvent*)event;
 
-- (void)view:(NIMPRView*)view dismissing:(NSEvent*)event;
 - (void)view:(NIMPRView*)view handled:(NSEvent*)event;
+
+- (void)dismissing;
 
 - (void)toolbarItemAction:(id)sender;
 

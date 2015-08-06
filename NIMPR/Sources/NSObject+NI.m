@@ -6,8 +6,27 @@
 //  Copyright (c) 2015 volz.io. All rights reserved.
 //
 
-#import "+NIMPR.h"
+#import "NSObject+NI.h"
 #include <execinfo.h>
+
+@implementation NIObject
+
+@synthesize deallocBlock = _deallocBlock;
+
++ (instancetype)dealloc:(void (^)())deallocBlock {
+    NIObject* r = [[[self.class alloc] init] autorelease];
+    r.deallocBlock = deallocBlock;
+    return r;
+}
+
+- (void)dealloc {
+    if (self.deallocBlock)
+        self.deallocBlock();
+    self.deallocBlock = nil;
+    [super dealloc];
+}
+
+@end
 
 @interface NIKeyValueObserver : NSObject {
     id _object;
@@ -33,14 +52,14 @@
         self.keyPath = keyPath;
         self.block = block;
         
-        [object addObserver:self forKeyPath:keyPath options:options context:nil];
+        [object addObserver:self forKeyPath:keyPath options:options context:self];
     }
         
     return self;
 }
 
 - (void)dealloc {
-    [self.object removeObserver:self forKeyPath:self.keyPath context:nil];
+    [self.object removeObserver:self forKeyPath:self.keyPath context:self];
     self.keyPath = nil;
     self.block = nil;
     [super dealloc];
@@ -158,11 +177,25 @@
 }
 
 - (id)observeKeyPath:(NSString*)keyPath options:(NSKeyValueObservingOptions)options block:(void (^)(NSDictionary*))block {
-    return [[NIKeyValueObserver alloc] initWithObject:self keyPath:keyPath options:options block:block];
+    return [[[NIKeyValueObserver alloc] initWithObject:self keyPath:keyPath options:options block:block] autorelease];
+}
+
+- (id)observeKeyPaths:(NSArray*)keyPaths options:(NSKeyValueObservingOptions)options block:(void (^)(NSDictionary*))block {
+    NSMutableArray* r = [NSMutableArray array];
+    for (NSString* keyPath in keyPaths)
+        [r addObject:[self observeKeyPath:keyPath options:options block:block]];
+    return r;
 }
 
 - (id)observeNotification:(NSString*)name options:(NINotificationObservingOptions)options block:(void (^)(NSNotification* notification))block {
     return [[[NINotificationObserver alloc] initWithObject:self name:name options:options block:block] autorelease];
+}
+
+- (id)observeNotifications:(NSArray*)names options:(NINotificationObservingOptions)options block:(void (^)(NSNotification* notification))block {
+    NSMutableArray* r = [NSMutableArray array];
+    for (NSString* name in names)
+        [r addObject:[self observeNotification:name options:options block:block]];
+    return r;
 }
 
 + (id)valueWithBytes:(const void*)bytes objCType:(const char*)type {

@@ -14,6 +14,7 @@
 @interface NIMPRRegionGrowingTool : NIMPRAnnotateTool <NSPopoverDelegate> {
     NSPopover* _popover;
     BOOL _popoverDetached;
+    NSWindow* _window;
     id <NISegmentationAlgorithm> _segmentationAlgorithm;
 }
 
@@ -22,6 +23,6 @@
 @property(readonly, retain) id <NISegmentationAlgorithm> segmentationAlgorithm;
 
 - (NSPopover*)popover;
-- (NSView*)popoverView;
+- (NSViewController*)popoverViewController;
 
 @end

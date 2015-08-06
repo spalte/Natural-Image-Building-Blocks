@@ -8,20 +8,33 @@
 
 #import <Cocoa/Cocoa.h>
 
+@interface NIViewController : NSViewController {
+    void (^_updateConstraintsBlock)();
+    NSMutableDictionary* _retains;
+}
+
+@property(copy) void (^updateConstraintsBlock)();
+
+- (id)initWithView:(NSView*)view;
+
+- (void)retain:(id)obj;
+- (void)retain:(id)obj forKey:(id)key;
+
+@end
+
+@interface NSView (NI)
+
+- (void)removeAllConstraints;
+
+@end
+
 @interface NIBackgroundView : NSView {
     NSColor* _backgroundColor;
-    void (^_updateConstraintsBlock)();
-//    void (^_willMoveToSuperviewBlock)(NSView*);
-    NSMutableArray* _retains;
 }
 
 @property(retain) NSColor* backgroundColor;
-@property(copy) void (^updateConstraintsBlock)();
-//@property(copy) void (^willMoveToSuperviewBlock)(NSView*);
 
 - (id)initWithFrame:(NSRect)frameRect color:(NSColor*)backgroundColor;
-
-- (id)retain:(id)obj;
 
 @end
 
