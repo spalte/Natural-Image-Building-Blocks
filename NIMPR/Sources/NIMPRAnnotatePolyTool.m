@@ -110,7 +110,7 @@
         if (self.annotation.smooth)
             stroke.smooth = YES;
         if (self.annotation.closed || self.closedPreview)
-            stroke.closed = self.closedPreview;
+            stroke.closed = YES;
         
         stroke.color = [self.annotation.color colorWithAlphaComponent:self.annotation.color.alphaComponent/2];
         [stroke drawInView:view cache:nil];

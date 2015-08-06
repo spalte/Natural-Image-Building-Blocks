@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_OPTIONS(NSUInteger, NINotificationObservingOptions) {
+    NINotificationObservingOptionInitial = 0x01,
+};
+
 @interface NSObject (NIMPR)
 
 - (id)if:(Class)c;
@@ -15,6 +19,9 @@
 - (id)performSelector:(SEL)sel withObjects:(id)obj1 :(id)obj2 :(id)obj3;
 
 - (void)performBlock:(void (^)())block afterDelay:(NSTimeInterval)delay;
+
+- (id)observeKeyPath:(NSString*)keyPath options:(NSKeyValueObservingOptions)opt block:(void (^)(NSDictionary* change))block; // retain the returned object until you want to stop observing
+- (id)observeNotification:(NSString*)name options:(NINotificationObservingOptions)options block:(void (^)(NSNotification* notification))block; // retain the returned object until you want to stop observing
 
 @end
 

@@ -16,7 +16,8 @@
     [super view:view mouseDragged:event];
     
     for (NIAnnotation* a in view.selectedAnnotations)
-        [a translate:NIVectorSubtract(self.currentLocationVector, self.previousLocationVector)];
+        if (!a.locked)
+            [a translate:NIVectorSubtract(self.currentLocationVector, self.previousLocationVector)];
     
     return YES;
 }

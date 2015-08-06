@@ -85,6 +85,8 @@
             si = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:bdp pixelsWide:sib.width pixelsHigh:sib.height bitsPerSample:sizeof(float)*8 samplesPerPixel:1
                                                             hasAlpha:NO isPlanar:NO colorSpaceName:NSDeviceWhiteColorSpace bitmapFormat:NSFloatingPointSamplesBitmapFormat bytesPerRow:sib.rowBytes bitsPerPixel:sizeof(float)*8] autorelease];
             
+            // render border
+            
             sibd = sib; sibd.data = [[NSMutableData dataWithLength:sib.rowBytes*sib.height] mutableBytes];
             float kernel[25] = {1,1,1,1,1,1,1,1,1};
             vImageDilate_PlanarF(&sib, &sibd, 0, 0, kernel, 3, 3, kvImageNoFlags);

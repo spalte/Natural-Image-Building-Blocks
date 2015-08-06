@@ -8,20 +8,24 @@
 
 #import "NSMenu+NIMPR.h"
 
-@interface NIMPRBlockMenuItem ()
+@interface NIBlockMenuItem ()
 
-@property(copy) void(^block)();
+@property(copy) void(^block)(id sender);
 
 @end
 
-@implementation NIMPRBlockMenuItem
+@implementation NIBlockMenuItem
 
-static NSString* const NIMPRBlockMenuItemBlockKey = @"NIMPRBlockMenuItemBlock";
+static NSString* const NIBlockMenuItemBlockKey = @"NIBlockMenuItemBlock";
 
 @synthesize block = _block;
 
++ (instancetype)itemWithTitle:(NSString *)title block:(void(^)())block {
+    return [self.class itemWithTitle:title keyEquivalent:@"" block:block];
+}
+
 + (instancetype)itemWithTitle:(NSString *)title keyEquivalent:(NSString*)keyEquivalent block:(void(^)())block {
-    NIMPRBlockMenuItem* item = [[[self.class alloc] initWithTitle:title action:@selector(action:) keyEquivalent:keyEquivalent] autorelease];
+    NIBlockMenuItem* item = [[[self.class alloc] initWithTitle:title action:@selector(action:) keyEquivalent:keyEquivalent] autorelease];
     item.target = item;
     item.block = block;
     return item;
@@ -29,7 +33,7 @@ static NSString* const NIMPRBlockMenuItemBlockKey = @"NIMPRBlockMenuItemBlock";
 
 - (id)initWithCoder:(NSCoder*)coder {
     if ((self = [super initWithCoder:coder])) {
-        self.block = [coder decodeObjectForKey:NIMPRBlockMenuItemBlockKey];
+        self.block = [coder decodeObjectForKey:NIBlockMenuItemBlockKey];
     }
     
     return self;
@@ -37,7 +41,7 @@ static NSString* const NIMPRBlockMenuItemBlockKey = @"NIMPRBlockMenuItemBlock";
 
 - (void)encodeWithCoder:(NSCoder*)coder {
     [super encodeWithCoder:coder];
-    [coder encodeObject:self.block forKey:NIMPRBlockMenuItemBlockKey];
+    [coder encodeObject:self.block forKey:NIBlockMenuItemBlockKey];
 }
 
 - (void)dealloc {
@@ -46,7 +50,7 @@ static NSString* const NIMPRBlockMenuItemBlockKey = @"NIMPRBlockMenuItemBlock";
 }
 
 - (void)action:(id)sender {
-    self.block();
+    self.block(sender);
 }
 
 @end
@@ -95,15 +99,7 @@ NSString* const NIMPRSubmenuMenuItemBlockKey = @"NIMPRSubmenuMenuItemBlock";
 
 @end
 
-@interface NIMPRAltMenuItem : NSMenuItem {
-    NSString* _altTitle;
-}
-
-@property(retain) NSString* altTitle;
-
-@end
-
-@implementation NIMPRAltMenuItem
+@implementation NIMenuItem
 
 @synthesize altTitle = _altTitle;
 
@@ -123,7 +119,7 @@ NSString* const NIMPRSubmenuMenuItemBlockKey = @"NIMPRSubmenuMenuItemBlock";
 }
 
 - (NSMenuItem*)addItemWithTitle:(NSString *)title alt:(NSString *)alt tag:(NSInteger)tag {
-    NIMPRAltMenuItem* item = [[[NIMPRAltMenuItem alloc] initWithTitle:title action:nil keyEquivalent:@""] autorelease];
+    NIMenuItem* item = [[[NIMenuItem alloc] initWithTitle:title action:nil keyEquivalent:@""] autorelease];
     item.altTitle = alt;
     item.tag = tag;
     [self addItem:item];
@@ -132,23 +128,31 @@ NSString* const NIMPRSubmenuMenuItemBlockKey = @"NIMPRSubmenuMenuItemBlock";
 
 
 - (NSMenuItem*)addItemWithTitle:(NSString*)title block:(void(^)())block {
-    return [self addItemWithTitle:title keyEquivalent:@"" block:block];
+    return [self addItemWithTitle:title alt:nil keyEquivalent:@"" block:block];
 }
 
-- (NSMenuItem*)addItemWithTitle:(NSString*)title keyEquivalent:(NSString*)keyEquivalent block:(void(^)())block {
-    return [self insertItemWithTitle:title keyEquivalent:keyEquivalent block:block atIndex:self.numberOfItems];
+- (NSMenuItem*)addItemWithTitle:(NSString*)title keyEquivalent:(NSString*)ke block:(void(^)())block {
+    return [self addItemWithTitle:title alt:nil keyEquivalent:ke block:block];
+}
+
+- (NSMenuItem*)addItemWithTitle:(NSString*)title alt:(NSString*)alt block:(void(^)())block {
+    return [self addItemWithTitle:title alt:alt keyEquivalent:@"" block:block];
+}
+
+- (NSMenuItem*)addItemWithTitle:(NSString*)title alt:(NSString*)alt keyEquivalent:(NSString*)keyEquivalent block:(void(^)())block {
+    return [self insertItemWithTitle:title alt:alt keyEquivalent:keyEquivalent block:block atIndex:self.numberOfItems];
 }
 
 - (NSMenuItem*)insertItemWithTitle:(NSString*)title block:(void(^)())block atIndex:(NSUInteger)idx {
-    return [self insertItemWithTitle:title keyEquivalent:@"" block:block atIndex:idx];
+    return [self insertItemWithTitle:title alt:nil keyEquivalent:@"" block:block atIndex:idx];
 }
 
-- (NSMenuItem*)insertItemWithTitle:(NSString*)title keyEquivalent:(NSString*)keyEquivalent block:(void(^)())block atIndex:(NSUInteger)idx {
-    NIMPRBlockMenuItem* item = [NIMPRBlockMenuItem itemWithTitle:title keyEquivalent:keyEquivalent block:block];
+- (NSMenuItem*)insertItemWithTitle:(NSString*)title alt:(NSString*)alt keyEquivalent:(NSString*)keyEquivalent block:(void(^)())block atIndex:(NSUInteger)idx {
+    NIBlockMenuItem* item = [NIBlockMenuItem itemWithTitle:title keyEquivalent:keyEquivalent block:block];
+    item.altTitle = alt;
     [self insertItem:item atIndex:idx];
     return item;
 }
-
 
 - (NSMenuItem*)addItemWithTitle:(NSString*)title submenu:(NSMenu*)submenu {
     NSMenuItem* item = [self addItemWithTitle:title action:nil keyEquivalent:@""];

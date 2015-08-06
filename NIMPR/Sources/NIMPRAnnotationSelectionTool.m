@@ -43,7 +43,7 @@
 }
 
 - (BOOL)view:(NIMPRView *)view mouseDown:(NSEvent *)event otherwise:(void (^)())otherwise confirm:(void (^)())confirm {
-    return [super view:view mouseDown:event otherwise:otherwise confirm:^() {
+    return [super view:view mouseDown:event otherwise:otherwise confirm:^{
         [self view:view mouseDragged:event];
     }];
 }

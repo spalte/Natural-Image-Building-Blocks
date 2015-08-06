@@ -227,7 +227,7 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
     [layouts enumerateObjectsUsingBlock:^(NIMPRLayoutRecord* r, NSUInteger i, BOOL* stop) {
         [cell setTag:r.tag forSegment:i];
         [seg setImage:r.image forSegment:i];
-        [menu addItem:[NIMPRBlockMenuItem itemWithTitle:r.label keyEquivalent:@"" block:^{
+        [menu addItem:[NIBlockMenuItem itemWithTitle:r.label block:^{
             self.viewsLayout = r.tag;
         }]];
     }];

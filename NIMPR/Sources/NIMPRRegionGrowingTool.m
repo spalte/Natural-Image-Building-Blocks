@@ -9,10 +9,15 @@
 #import "NIMPRRegionGrowingTool.h"
 #import "NIMaskAnnotation.h"
 #import "NIBackgroundView.h"
+#import "NIMPRController+Toolbar.h"
+#import "NIThresholdSegmentation.h"
+#import "NSMenu+NIMPR.h"
 
 @interface NIMPRRegionGrowingTool ()
 
 @property(readwrite, retain, nonatomic) NSPopover* popover;
+@property(readwrite) BOOL popoverDetached;
+@property(readwrite, retain) id <NISegmentationAlgorithm> segmentationAlgorithm;
 
 @end
 
@@ -20,6 +25,34 @@
 
 @dynamic annotation;
 @synthesize popover = _popover;
+@synthesize popoverDetached = _popoverDetached;
+@synthesize segmentationAlgorithm = _segmentationAlgorithm;
+
+- (id)init {
+    if ((self = [super init])) {
+        self.segmentationAlgorithm = self.segmentationAlgorithms[0];
+    }
+    
+    return self;
+}
+
+- (void)dealloc {
+    [_popover performClose:nil];
+    [_popover release];
+    self.segmentationAlgorithm = nil;
+//    [_superviewObserver release];
+//    [_observers release];
+    [super dealloc];
+}
+
+//- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+//    if (context != NIMPRRegionGrowingTool.class)
+//        return [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+//    
+//    if ([keyPath isEqualToString:@"segmentationAlgorithm"]) {
+//        self.popover.contentViewController.view.needsUpdateConstraints = YES;
+//    }
+//}
 
 - (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())otherwise {
     return [super view:view mouseDown:event otherwise:otherwise confirm:^{
@@ -29,6 +62,7 @@
         NIMask* mask = [[[NIMask alloc] initWithIndexes:@[[NSValue valueWithNIMaskIndex:mi]]] autorelease];
         
         NIMaskAnnotation* ma = [[NIMaskAnnotation alloc] initWithMask:mask transform:NIAffineTransformInvert(view.data.volumeTransform)];
+        ma.locked = YES;
         [view.mutableAnnotations addObject:ma];
         
         [self.class seed:mi volume:view.data annotation:ma];
@@ -36,9 +70,19 @@
 }
 
 - (void)toolbarItemAction:(id)sender {
-    if (!self.popover.isShown)
-        [self.popover showRelativeToRect:[sender bounds] ofView:sender preferredEdge:NSMaxYEdge];
-    else [self.popover performClose:sender];
+    if (!self.popover.isShown) {
+        NSEvent* event = [NSApp currentEvent];
+        NSRect r = [sender bounds];
+        if ([sender isKindOfClass:NIMPRSegmentedControl.class])
+            for (NSInteger i = 0; i < [sender segmentCount]; ++i) {
+                NSRect ir = [sender boundsForSegment:i];
+                if (NSPointInRect([event locationInView:sender], [sender boundsForSegment:i])) {
+                    r = NSInsetRect(ir, 0, 2);
+                    break;
+                }
+            }
+        [self.popover showRelativeToRect:r ofView:sender preferredEdge:NSMaxYEdge];
+    } else [self.popover performClose:sender];
 }
 
 - (NSPopover*)popover {
@@ -54,105 +98,82 @@
     return po;
 }
 
-- (void)dealloc {
-    [_popover performClose:nil];
-    [_popover release];
-    [super dealloc];
+- (void)popoverWillShow:(NSNotification*)notification {
+    self.popoverDetached = NO;
+    [self.popover.contentViewController.view setNeedsUpdateConstraints:YES];
 }
 
 - (BOOL)popoverShouldDetach:(NSPopover*)popover {
+    self.popoverDetached = YES;
+    [self.popover.contentViewController.view setNeedsUpdateConstraints:YES];
     return YES;
 }
 
-+ (void)seed:(NIMaskIndex)seed volume:(NIVolumeData*)data annotation:(NIMaskAnnotation*)ma {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        const NIVector dirs[6] = {{1,0,0},{0,1,0},{0,0,1},{-1,0,0},{0,-1,0},{0,0,-1}};
-        const size_t xd = data.pixelsWide, yd = data.pixelsHigh, zd = data.pixelsDeep, xyd = xd*yd, xyzd = xyd*zd;
-        
-        NSMutableArray* queue = [NSMutableArray arrayWithObject:[NSValue valueWithNIMaskIndex:seed]];
-        
-        NSMutableData* visitedd = [[[NSMutableData alloc] initWithLength:sizeof(float)*xyzd] autorelease];
-#define visited(i) ((float*)visitedd.mutableBytes)[i.x+i.y*xd+i.z*xyd]
-        NSMutableData* voxels = [[[NSMutableData alloc] initWithLength:sizeof(float)*xyzd] autorelease];
-#define voxel(i) ((float*)voxels.mutableBytes)[i.x+i.y*xd+i.z*xyd]
-        NIVolumeData* result = [[[NIVolumeData alloc] initWithData:voxels pixelsWide:data.pixelsWide pixelsHigh:data.pixelsHigh pixelsDeep:data.pixelsDeep volumeTransform:NIAffineTransformIdentity outOfBoundsValue:0] autorelease];
-        
-        visited(seed) = 1; voxel(seed) = 1;
-        float seedv = [data floatAtPixelCoordinateX:seed.x y:seed.y z:seed.z];
-        NSTimeInterval lut = [NSDate timeIntervalSinceReferenceDate];
-        
-//        NSUInteger vc = 1, pc = 1;
-        
-        while (queue.count) {
-            NIMaskIndex mi = [queue[0] NIMaskIndexValue];
-            [queue removeObjectAtIndex:0];
-            
-            for (size_t i = 0; i < 6; ++i) {
-                NIMaskIndex imi = {mi.x+dirs[i].x, mi.y+dirs[i].y, mi.z+dirs[i].z};
-                
-                if (imi.x == NSUIntegerMax || imi.y == NSUIntegerMax || imi.z == NSUIntegerMax || imi.x >= data.pixelsWide || imi.y >= data.pixelsHigh || imi.z >= data.pixelsDeep)
-                    continue;
-                if (visited(imi))
-                    continue;
-                
-                visited(imi) = true;
-                
-//                ++vc;
-                float imiv = [data floatAtPixelCoordinateX:imi.x y:imi.y z:imi.z];
-                if (fabs(imiv-seedv) < 75) {
-                    voxel(imi) = 1;
-//                    ++pc;
-                    [queue addObject:[NSValue valueWithNIMaskIndex:imi]];
-                }
-            }
-            
-            NSTimeInterval t = [NSDate timeIntervalSinceReferenceDate];
-            if (t >= lut+1 || !queue.count) {
-                lut = t;
-//                NSLog(@"Updating %d %d q%d", vc, pc, queue.count);
-                NSData* data = [voxels.copy autorelease];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    ma.volume = [[NIVolumeData alloc] initWithData:data pixelsWide:result.pixelsWide pixelsHigh:result.pixelsHigh pixelsDeep:result.pixelsDeep volumeTransform:NIAffineTransformIdentity outOfBoundsValue:0];
-                });
-            }
-        }
-        
-#undef visited
-#undef rvoxel
-    });
+- (NSOperation*)seed:(NIMaskIndex)seed volume:(NIVolumeData*)data annotation:(NIMaskAnnotation*)ma {
+    NSBlockOperation* op = [NSBlockOperation blockOperationWithBlock:^{
+        [self.segmentationAlgorithm processWithSeeds:@[[NSValue valueWithNIMaskIndex:seed]] volume:data annotation:ma operation:op];
+    }];
+    
+    NSOperationQueue* queue = [[[NSOperationQueue alloc] init] autorelease];
+    [queue addOperation:op];
+
+    return op;
+}
+
+- (NSArray*)segmentationAlgorithms {
+    static NSArray* sas = nil;
+    if (!sas)
+        sas = [@[ [[[NIThresholdIntervalSegmentation alloc] init] autorelease],
+                  [[[NIThresholdSegmentation alloc] init] autorelease] ] retain];
+    return sas;
 }
 
 - (NSView*)popoverView {
     NIBackgroundView* view = [[[NIBackgroundView alloc] initWithFrame:NSZeroRect color:[NSColor.blackColor colorWithAlphaComponent:.8]] autorelease];
-    view.translatesAutoresizingMaskIntoConstraints = NO;
-    [view addConstraint:[NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:120]];
     
     NSTextField* label = [[[NSTextField alloc] initWithFrame:NSZeroRect] autorelease];
     label.translatesAutoresizingMaskIntoConstraints = label.selectable = label.bordered = label.drawsBackground = NO;
     label.controlSize = NSSmallControlSize;
+    label.font = [NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:label.controlSize]];
     label.stringValue = NSLocalizedString(@"Region Growing", nil);
-    
     [view addSubview:label];
-//    [view addObserver:<#(NSObject *)#> forKeyPath:<#(NSString *)#> options:<#(NSKeyValueObservingOptions)#> context:<#(void *)#>];
-//    
-//    [view addObserver:self forKeyPath:<#(NSString *)#> options:<#(NSKeyValueObservingOptions)#> context:<#(void *)#>];
     
-//    [[NSOperationQueue mainQueue] add];
+    NSPopUpButton* algorithms = [[[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO] autorelease];
+    algorithms.translatesAutoresizingMaskIntoConstraints = NO;
+    algorithms.focusRingType = NSFocusRingTypeNone;
+    algorithms.controlSize = NSSmallControlSize;
+    algorithms.font = [NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:algorithms.controlSize]];
+    for (id <NISegmentationAlgorithm> sac in self.segmentationAlgorithms)
+        [algorithms.menu addItemWithTitle:sac.name block:^{
+            self.segmentationAlgorithm = sac;
+//            algorithms.title = sac.shortName;
+        }];
+    [view addSubview:algorithms];
     
-//    
-//    [view addObserver:^{
-//        
-//    } forKeyPath:@"superview" options:0];
-//    
+    NSView* algorithm = [[[NSView alloc] initWithFrame:NSZeroRect] autorelease];
+    algorithm.translatesAutoresizingMaskIntoConstraints = NO;
+    [view addSubview:algorithm];
     
-    NSDictionary* m = @{ @"d": @5 };
+    [view retain:[self observeKeyPath:@"segmentationAlgorithm" options:NSKeyValueObservingOptionInitial block:^(NSDictionary *change) {
+        for (NSView* view in algorithm.subviews)
+             [view removeFromSuperview];
+        NSView* view = [self.segmentationAlgorithm view];
+        [algorithm addSubview:view];
+        [algorithm addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[view]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(view)]];
+        [algorithm addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[view]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(view)]];
+    }]];
     
-    [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-d-[label]-d-|" options:0 metrics:m views:NSDictionaryOfVariableBindings(label)]];
-    [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-d-[label]" options:0 metrics:m views:NSDictionaryOfVariableBindings(label)]];
+    [label addConstraint:[NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:label.fittingSize.width]];
 
-    [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[label]-d-|" options:0 metrics:m views:NSDictionaryOfVariableBindings(label)]];
+    view.updateConstraintsBlock = ^{
+        [view removeConstraints:view.constraints];
+        NSDictionary* m = @{ @"h": @8, @"v": @8, @"lmargin": (_popoverDetached? @24 : @7) };
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-lmargin-[label]-h-|" options:0 metrics:m views:NSDictionaryOfVariableBindings(label)]];
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-h-[algorithms]-h-|" options:0 metrics:m views:NSDictionaryOfVariableBindings(algorithms)]];
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-h-[algorithm]-h-|" options:0 metrics:m views:NSDictionaryOfVariableBindings(algorithm)]];
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-v-[label]-v-[algorithms]-v-[algorithm]-v-|" options:0 metrics:m views:NSDictionaryOfVariableBindings(label, algorithms, algorithm)]];
+    };
     
-    [view layout];
     return view;
 }
 

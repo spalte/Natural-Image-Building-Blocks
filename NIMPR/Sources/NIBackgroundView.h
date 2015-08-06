@@ -12,13 +12,21 @@
 //    
 //}
 
+//extern NSString* const NIViewDidMoveToSuperviewNotification;
+
 @interface NIBackgroundView : NSView {
     NSColor* _backgroundColor;
-//    NSArray* _observers;
+    void (^_updateConstraintsBlock)();
+    void (^_willMoveToSuperviewBlock)(NSView*);
+    NSMutableArray* _retains;
 }
 
 @property(retain) NSColor* backgroundColor;
+@property(copy) void (^updateConstraintsBlock)();
+@property(copy) void (^willMoveToSuperviewBlock)(NSView*);
 
 - (id)initWithFrame:(NSRect)frameRect color:(NSColor*)backgroundColor;
+
+- (id)retain:(id)obj;
 
 @end

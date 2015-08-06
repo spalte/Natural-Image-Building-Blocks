@@ -9,6 +9,96 @@
 #import "+NIMPR.h"
 #include <execinfo.h>
 
+@interface NIKeyValueObserver : NSObject {
+    id _object;
+    NSString* _keyPath;
+    void (^_block)(NSDictionary*);
+}
+
+@property(assign) id object;
+@property(retain) NSString* keyPath;
+@property(copy) void (^block)(NSDictionary*);
+
+@end
+
+@implementation NIKeyValueObserver
+
+@synthesize object = _object;
+@synthesize keyPath = _keyPath;
+@synthesize block = _block;
+
+- (id)initWithObject:(id)object keyPath:(NSString*)keyPath options:(NSKeyValueObservingOptions)options block:(void (^)(NSDictionary*))block {
+    if ((self = [super init])) {
+        self.object = object;
+        self.keyPath = keyPath;
+        self.block = block;
+        
+        [object addObserver:self forKeyPath:keyPath options:options context:nil];
+    }
+        
+    return self;
+}
+
+- (void)dealloc {
+    [self.object removeObserver:self forKeyPath:self.keyPath context:nil];
+    self.keyPath = nil;
+    self.block = nil;
+    [super dealloc];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    self.block(change);
+}
+
+@end
+
+@interface NINotificationObserver : NSObject {
+    id _object;
+    NSString* _name;
+    void (^_block)(NSNotification*);
+}
+
+@property(assign) id object;
+@property(retain) NSString* name;
+@property(copy) void (^block)(NSNotification*);
+
+@end
+
+@implementation NINotificationObserver
+
+@synthesize object = _object, name = _name, block = _block;
+
+- (id)initWithObject:(id)object name:(NSString*)name options:(NINotificationObservingOptions)options block:(void (^)(NSNotification*))block {
+    if ((self = [super init])) {
+        self.object = object;
+        self.name = name;
+        self.block = block;
+
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_observeNotification:) name:name object:object];
+        
+        @try {
+            if (options&NINotificationObservingOptionInitial)
+                block(nil);
+        } @catch (...) {
+        }
+    }
+    
+    return self;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:self.name object:self.object];
+    self.name = nil;
+    self.block = nil;
+    [super dealloc];
+}
+
+- (void)_observeNotification:(NSNotification*)notification {
+    self.block(notification);
+}
+
+@end
+
 @implementation NSObject (NIMPR)
 
 - (id)if:(Class)class {
@@ -59,12 +149,20 @@
 }
 
 - (void)performBlock:(void (^)())block afterDelay:(NSTimeInterval)delay {
-    [self performSelector:@selector(performBlock:) withObject:[block copy] afterDelay:delay];
+    [self performSelector:@selector(_performBlock:) withObject:[block copy] afterDelay:delay];
 }
 
-- (void)performBlock:(void (^)())block {
+- (void)_performBlock:(void (^)())block {
     block();
     [block release];
+}
+
+- (id)observeKeyPath:(NSString*)keyPath options:(NSKeyValueObservingOptions)options block:(void (^)(NSDictionary*))block {
+    return [[NIKeyValueObserver alloc] initWithObject:self keyPath:keyPath options:options block:block];
+}
+
+- (id)observeNotification:(NSString*)name options:(NINotificationObservingOptions)options block:(void (^)(NSNotification* notification))block {
+    return [[[NINotificationObserver alloc] initWithObject:self name:name options:options block:block] autorelease];
 }
 
 + (id)valueWithBytes:(const void*)bytes objCType:(const char*)type {

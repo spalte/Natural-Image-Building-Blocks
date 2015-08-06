@@ -20,12 +20,14 @@ extern CGFloat const NIAnnotationDistant;
 @interface NIAnnotation : NSObject {
     NSString* _name;
     NSColor* _color;
+    BOOL _locked;
 //    NSDictionary* _userInfo;
     NSMutableDictionary* _changes;
 }
 
 @property(retain, nonatomic) NSString* name;
 @property(retain, nonatomic) NSColor* color;
+@property BOOL locked;
 
 + (id)pointWithVector:(NIVector)vector;
 + (id)segmentWithPoints:(NSPoint)p :(NSPoint)q transform:(NIAffineTransform)sliceToDicomTransform;

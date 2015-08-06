@@ -31,6 +31,7 @@ CGFloat const NIAnnotationDistant = 4;
 
 @synthesize name = _name;
 @synthesize color = _color;
+@synthesize locked = _locked;
 @synthesize changes = _changes;
 
 - (instancetype)init {
