@@ -9,7 +9,7 @@
 #pragma once
 
 #import "NIAnnotatedGeneratorRequestView.h"
-#import "NIMPRController.h"
+#import "NIMPRWindowController.h"
 
 @class NIObliqueSliceGeneratorRequest;
 @class NIMPRQuaternion;

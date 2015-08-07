@@ -8,7 +8,7 @@
 
 #import "NIMPRView+Private.h"
 #import "NIMPRView+Events.h"
-#import "NIMPRController.h"
+#import "NIMPRWindowController.h"
 #import "NIMPRTool.h"
 #import "NIMPRQuaternion.h"
 #import <NIBuildingBlocks/NIVolumeDataProperties.h>

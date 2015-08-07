@@ -12,7 +12,7 @@
 #import "NIMPRRotateTool.h"
 #import "NIMPRZoomTool.h"
 #import <NIBuildingBlocks/NIIntersection.h>
-#import "NIMPRController.h"
+#import "NIMPRWindowController.h"
 #import "NIMPRAnnotationSelectionTool.h"
 #import "NIMPRAnnotationTranslationTool.h"
 #import "NIMPRAnnotationHandleInteractionTool.h"

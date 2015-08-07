@@ -8,7 +8,7 @@
 
 #import "NIMPRPlugin.h"
 #import "NIMPR.h"
-#import "NIMPRController.h"
+#import "NIMPRWindowController.h"
 #import <NIBuildingBlocks/NIBuildingBlocks.h>
 
 static NIMPRPlugin* instance = nil;
@@ -31,7 +31,7 @@ static NIMPRPlugin* instance = nil;
 - (long)filterImage:(NSString*)menuName {
     NIVolumeData* data = [viewerController NIVolumeDataForMovieIndex:viewerController.curMovieIndex];
     
-    NIMPRController* mpr = [[NIMPRController alloc] initWithData:data wl:viewerController.curWL ww:viewerController.curWW];
+    NIMPRWindowController* mpr = [[NIMPRWindowController alloc] initWithData:data wl:viewerController.curWL ww:viewerController.curWW];
     mpr.displayScaleBars = mpr.displayOrientationLabels = YES;
     
     [mpr.window makeKeyAndOrderFront:self];

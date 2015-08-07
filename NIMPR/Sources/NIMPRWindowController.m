@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 volz.io. All rights reserved.
 //
 
-#import "NIMPRController+Private.h"
-#import "NIMPRController+Toolbar.h"
+#import "NIMPRWindowController+Private.h"
+#import "NIMPRWindowController+Toolbar.h"
 #import <NIBuildingBlocks/NIIntersection.h>
 #import <NIBuildingBlocks/NIVolumeData.h>
 #import <objc/runtime.h>
@@ -21,7 +21,7 @@
 #import "NIMaskAnnotation.h"
 #import "NIMPRRegionGrowingTool.h"
 
-@implementation NIMPRController
+@implementation NIMPRWindowController
 
 //@synthesize leftrightSplit = _leftrightSplit;
 //@synthesize topbottomSplit = _topbottomSplit;
@@ -118,18 +118,18 @@
             [view bind:@"projectionMode" toObject:self withKeyPath:@"projectionMode" options:nil];
             [view bind:@"slabWidth" toObject:self withKeyPath:@"slabWidth" options:nil];
             [view bind:@"displayOverlays" toObject:self withKeyPath:@"displayOverlays" options:nil];
-            [view addObserver:self forKeyPath:@"annotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
-            [view addObserver:self forKeyPath:@"highlightedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
-            [view addObserver:self forKeyPath:@"selectedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
+            [view addObserver:self forKeyPath:@"annotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRWindowController.class];
+            [view addObserver:self forKeyPath:@"highlightedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRWindowController.class];
+            [view addObserver:self forKeyPath:@"selectedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRWindowController.class];
         }
         
-        [self addObserver:self forKeyPath:@"viewsLayout" options:NSKeyValueObservingOptionInitial+NSKeyValueObservingOptionNew context:NIMPRController.class];
-        [self addObserver:self forKeyPath:@"data" options:NSKeyValueObservingOptionInitial context:NIMPRController.class];
-        [self addObserver:self forKeyPath:@"ltoolTag" options:NSKeyValueObservingOptionInitial context:NIMPRController.class];
-        [self addObserver:self forKeyPath:@"rtoolTag" options:NSKeyValueObservingOptionInitial context:NIMPRController.class];
-        [self addObserver:self forKeyPath:@"annotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
-        [self addObserver:self forKeyPath:@"highlightedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
-        [self addObserver:self forKeyPath:@"selectedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRController.class];
+        [self addObserver:self forKeyPath:@"viewsLayout" options:NSKeyValueObservingOptionInitial+NSKeyValueObservingOptionNew context:NIMPRWindowController.class];
+        [self addObserver:self forKeyPath:@"data" options:NSKeyValueObservingOptionInitial context:NIMPRWindowController.class];
+        [self addObserver:self forKeyPath:@"ltoolTag" options:NSKeyValueObservingOptionInitial context:NIMPRWindowController.class];
+        [self addObserver:self forKeyPath:@"rtoolTag" options:NSKeyValueObservingOptionInitial context:NIMPRWindowController.class];
+        [self addObserver:self forKeyPath:@"annotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRWindowController.class];
+        [self addObserver:self forKeyPath:@"highlightedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRWindowController.class];
+        [self addObserver:self forKeyPath:@"selectedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRWindowController.class];
         
         [self reset];
         
@@ -177,13 +177,13 @@
 }
 
 - (void)dealloc {
-    [self removeObserver:self forKeyPath:@"viewsLayout" context:NIMPRController.class];
-    [self removeObserver:self forKeyPath:@"selectedAnnotations" context:NIMPRController.class];
-    [self removeObserver:self forKeyPath:@"highlightedAnnotations" context:NIMPRController.class];
-    [self removeObserver:self forKeyPath:@"annotations" context:NIMPRController.class];
-    [self removeObserver:self forKeyPath:@"rtoolTag" context:NIMPRController.class];
-    [self removeObserver:self forKeyPath:@"ltoolTag" context:NIMPRController.class];
-    [self removeObserver:self forKeyPath:@"data" context:NIMPRController.class];
+    [self removeObserver:self forKeyPath:@"viewsLayout" context:NIMPRWindowController.class];
+    [self removeObserver:self forKeyPath:@"selectedAnnotations" context:NIMPRWindowController.class];
+    [self removeObserver:self forKeyPath:@"highlightedAnnotations" context:NIMPRWindowController.class];
+    [self removeObserver:self forKeyPath:@"annotations" context:NIMPRWindowController.class];
+    [self removeObserver:self forKeyPath:@"rtoolTag" context:NIMPRWindowController.class];
+    [self removeObserver:self forKeyPath:@"ltoolTag" context:NIMPRWindowController.class];
+    [self removeObserver:self forKeyPath:@"data" context:NIMPRWindowController.class];
     self.ltool = self.rtool = nil;
     self.x = self.y = self.z = nil;
     self.data = nil;
@@ -211,7 +211,7 @@
 }
 
 - (void)observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context {
-    if (context != NIMPRController.class)
+    if (context != NIMPRWindowController.class)
         return [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     
     if (object == self && [keyPath isEqualToString:@"data"]) {

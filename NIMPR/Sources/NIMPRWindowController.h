@@ -28,7 +28,7 @@ typedef NS_ENUM(NSInteger, NIMPRLayoutTag) {
     NIMPRLayoutsCount
 };
 
-@interface NIMPRController : NSWindowController <NSWindowDelegate, NSToolbarDelegate, NSMenuDelegate> {
+@interface NIMPRWindowController : NSWindowController <NSWindowDelegate, NSToolbarDelegate, NSMenuDelegate> {
     NIMPRView* _axialView;
     NIMPRView* _sagittalView;
     NIMPRView* _coronalView;

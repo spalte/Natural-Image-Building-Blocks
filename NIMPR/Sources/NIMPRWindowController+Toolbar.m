@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 volz.io. All rights reserved.
 //
 
-#import "NIMPRController+Toolbar.h"
-#import "NIMPRController+Private.h"
+#import "NIMPRWindowController+Toolbar.h"
+#import "NIMPRWindowController+Private.h"
 #import "NIMPRWindow.h"
 #import "NIMPR.h"
 #import "NIMPRWLWWTool.h"
@@ -54,7 +54,7 @@
 
 @end
 
-@implementation NIMPRController (Toolbar)
+@implementation NIMPRWindowController (Toolbar)
 
 NSString* const NIMPRControllerToolbarItemIdentifierTools = @"NITools";
 NSString* const NIMPRControllerToolbarItemIdentifierAnnotationTools = @"NIAnnotationTools";

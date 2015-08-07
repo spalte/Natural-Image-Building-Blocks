@@ -9,7 +9,7 @@
 #import "NIMPRRegionGrowingTool.h"
 #import "NIMaskAnnotation.h"
 #import "NSView+NI.h"
-#import "NIMPRController+Toolbar.h"
+#import "NIMPRWindowController+Toolbar.h"
 #import "NIThresholdSegmentation.h"
 #import "NSMenu+NIMPR.h"
 

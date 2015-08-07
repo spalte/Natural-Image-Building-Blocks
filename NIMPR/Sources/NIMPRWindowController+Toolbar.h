@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 volz.io. All rights reserved.
 //
 
-#import "NIMPRController.h"
+#import "NIMPRWindowController.h"
 
 extern NSString* const NIMPRControllerToolbarItemIdentifierTools;
 extern NSString* const NIMPRControllerToolbarItemIdentifierAnnotationTools;
@@ -16,7 +16,7 @@ extern NSString* const NIMPRControllerToolbarItemIdentifierLayouts;
 @class NIMPRToolRecord;
 @class NIMPRLayoutRecord;
 
-@interface NIMPRController (Toolbar)
+@interface NIMPRWindowController (Toolbar)
 
 + (NSArray*)navigationTools; // returns an array of NIMPRToolRecord instances
 + (NSArray*)annotationTools; // returns an array of NIMPRToolRecord instances

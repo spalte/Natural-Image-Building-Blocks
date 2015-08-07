@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 volz.io. All rights reserved.
 //
 
-#import "NIMPRController.h"
+#import "NIMPRWindowController.h"
 
-@interface NIMPRController ()
+@interface NIMPRWindowController ()
 
 @property(readwrite,retain) NIMPRView* axialView; // top-left
 @property(readwrite,retain) NIMPRView* sagittalView; // bottom-left

@@ -7,7 +7,7 @@
 //
 
 #import "NIMPRWindow.h"
-#import "NIMPRController+Private.h"
+#import "NIMPRWindowController+Private.h"
 
 @interface NSToolbarView : NSView
 @end
