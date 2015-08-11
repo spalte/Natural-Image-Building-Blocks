@@ -64,6 +64,10 @@ typedef struct NIMaskIndex NIMaskIndex;
 
 CF_EXTERN_C_BEGIN
 
+extern const NIMaskIndex NIMaskIndexInvalid;
+
+BOOL NIMaskIndexEqualToMaskIndex(NIMaskIndex mi1, NIMaskIndex mi2);
+
 /** Transforms the maskIndex using the given transform, and returns an NIVector
  
  */

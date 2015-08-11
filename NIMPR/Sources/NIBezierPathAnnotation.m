@@ -27,7 +27,7 @@
 
     NIMutableBezierPath* rpath = [NIMutableBezierPath bezierPath];
     
-    NIVector ip, bp; BOOL ipset = NO, bpin = NO;
+    NIVector ip, bp = NIVectorZero; BOOL ipset = NO, bpin = NO;
     NIVector c1, c2, ep;
     NSInteger elementCount = mpath.elementCount;
     NIBezierPathElement e;
@@ -64,7 +64,6 @@
                             else [rpath lineToVector:bp]; }
                         if (complete) {
                             [rpath lineToVector:ip];
-                            bp = ip;
                         } else
                             [rpath close];
                         bpin = YES;

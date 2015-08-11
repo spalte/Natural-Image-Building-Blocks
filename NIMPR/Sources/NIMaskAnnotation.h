@@ -13,11 +13,12 @@
     NIMask* _mask;
     NIAffineTransform _modelToDicomTransform;
     NIVolumeData* _volume;
+    NSLock* _volumeLock;
 }
 
-@property(retain) NIMask* mask;
-@property NIAffineTransform modelToDicomTransform;
-@property(retain) NIVolumeData* volume;
+@property(retain, nonatomic) NIMask* mask;
+@property(nonatomic) NIAffineTransform modelToDicomTransform;
+@property(retain, nonatomic) NIVolumeData* volume;
 
 - (id)initWithMask:(NIMask*)mask transform:(NIAffineTransform)modelToDicomTransform;
 - (id)initWithVolume:(NIVolumeData*)volume;

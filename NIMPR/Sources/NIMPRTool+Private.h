@@ -10,6 +10,7 @@
 
 @interface NIMPRTool ()
 
+@property(readwrite, assign) NIMPRWindowController* viewer;
 @property(readwrite, retain) NSView* mouseDownView;
 @property(retain, readwrite) NSEvent* mouseDownEvent;
 @property(copy) void (^timeoutBlock)(), (^confirmBlock)();

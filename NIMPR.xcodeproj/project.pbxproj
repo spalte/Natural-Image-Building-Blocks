@@ -261,7 +261,6 @@
 		71DFA2D11B71FF52008AB997 /* NISegmentationAlgorithm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NISegmentationAlgorithm.m; sourceTree = "<group>"; };
 		71DFA2D41B7200A2008AB997 /* NIThresholdSegmentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIThresholdSegmentation.h; sourceTree = "<group>"; };
 		71DFA2D51B7200A2008AB997 /* NIThresholdSegmentation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIThresholdSegmentation.m; sourceTree = "<group>"; };
-		71DFA2D81B737E09008AB997 /* extobjc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = extobjc.h; sourceTree = "<group>"; };
 		71FD92301B5E750C0041E95F /* NIMPRAnnotationHandleInteractionTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMPRAnnotationHandleInteractionTool.h; sourceTree = "<group>"; };
 		71FD92311B5E750C0041E95F /* NIMPRAnnotationHandleInteractionTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMPRAnnotationHandleInteractionTool.m; sourceTree = "<group>"; };
 		71FD92341B5E7FC90041E95F /* NIAnnotationHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIAnnotationHandle.h; sourceTree = "<group>"; };
@@ -422,7 +421,6 @@
 				714D19D91B57F5AC00EBA644 /* NSBezierPath+NIMPR.m */,
 				710684601B6FADA60078903A /* NSView+NI.h */,
 				710684611B6FADA60078903A /* NSView+NI.m */,
-				71DFA2D81B737E09008AB997 /* extobjc.h */,
 			);
 			name = Extras;
 			sourceTree = "<group>";

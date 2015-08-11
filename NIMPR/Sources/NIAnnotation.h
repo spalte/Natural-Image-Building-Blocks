@@ -17,7 +17,7 @@ extern NSString* const NIAnnotationChangeNotificationChangesKey;
 
 extern CGFloat const NIAnnotationDistant;
 
-@interface NIAnnotation : NSObject {
+@interface NIAnnotation : NSObject <NSCoding> {
     NSString* _name;
     NSColor* _color;
     BOOL _locked;
@@ -29,10 +29,13 @@ extern CGFloat const NIAnnotationDistant;
 @property(retain, nonatomic) NSColor* color;
 @property BOOL locked;
 
-+ (id)pointWithVector:(NIVector)vector;
-+ (id)segmentWithPoints:(NSPoint)p :(NSPoint)q transform:(NIAffineTransform)sliceToDicomTransform;
-+ (id)rectangleWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform;
-+ (id)ellipseWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform;
+//+ (id)pointWithVector:(NIVector)vector;
+//+ (id)segmentWithPoints:(NSPoint)p :(NSPoint)q transform:(NIAffineTransform)sliceToDicomTransform;
+//+ (id)rectangleWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform;
+//+ (id)ellipseWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform;
+
+- (id)init NS_DESIGNATED_INITIALIZER;
+- (id)initWithCoder:(NSCoder*)aDecoder;
 
 + (NSColor*)defaultColor;
 + (void)setDefaultColor:(NSColor*)color;

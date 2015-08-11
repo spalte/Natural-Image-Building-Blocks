@@ -14,6 +14,7 @@
 
 @property NSRect bounds;
 
++ (id)rectangleWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform;
 - (instancetype)initWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform;
 
 @end

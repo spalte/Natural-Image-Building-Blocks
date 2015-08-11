@@ -15,6 +15,7 @@
 
 @property NIVector vector;
 
++ (instancetype)pointWithVector:(NIVector)vector;
 - (instancetype)initWithVector:(NIVector)vector;
 
 @end

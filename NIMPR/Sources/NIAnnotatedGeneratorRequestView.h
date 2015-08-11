@@ -8,6 +8,9 @@
 
 #import <NIBuildingBlocks/NIBuildingBlocks.h>
 
+extern NSString* const NIAnnotationRemovedNotification;
+extern NSString* const NIAnnotationViewerKey;
+
 @class NIAnnotation;
 @class NIAnnotationHandle;
 

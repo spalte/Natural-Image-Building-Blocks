@@ -25,6 +25,10 @@
 
 @property(assign) NIViewController* controller;
 
++ (id)labelWithControlSize:(NSControlSize)controlSize;
++ (id)fieldWithControlSize:(NSControlSize)controlSize;
++ (id)buttonWithControlSize:(NSControlSize)controlSize bezelStyle:(NSBezelStyle)bezelStyle title:(NSString*)title block:(void (^)())actionBlock;
+
 @end
 
 @interface NIViewController : NSViewController {
@@ -45,7 +49,18 @@
 
 @interface NSView (NI)
 
+- (void)removeAllSubviews;
 - (void)removeAllConstraints;
+
+@end
+
+@interface NIButton : NSButton {
+    void (^_actionBlock)();
+}
+
+@property(copy) void (^actionBlock)();
+
+- (id)initWithBlock:(void (^)())actionBlock;
 
 @end
 
@@ -59,9 +74,3 @@
 
 @end
 
-@interface NSTextField (NI)
-
-+ (instancetype)labelWithControlSize:(NSControlSize)controlSize;
-+ (instancetype)fieldWithControlSize:(NSControlSize)controlSize;
-
-@end

@@ -8,3 +8,26 @@
 
 #import "NISegmentationAlgorithm.h"
 
+@implementation NISegmentationAlgorithm
+
++ (NSSet*)keyPathsForValuesAffectingSegmentationAlgorithm {
+    return [NSSet set];
+}
+
+- (NSString*)name {
+    return nil;
+}
+
+- (NSString*)shortName {
+    return nil;
+}
+
+- (NSViewController*)viewController {
+    return nil;
+}
+
+- (void)processWithSeeds:(NSArray*)seedIndexes volume:(NIVolumeData*)volume annotation:(NIMaskAnnotation*)annotation operation:(NSOperation*)operation {
+}
+
+
+@end

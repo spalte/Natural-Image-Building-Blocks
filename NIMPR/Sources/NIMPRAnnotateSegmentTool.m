@@ -16,7 +16,7 @@
 - (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())otherwise {
     return [super view:view mouseDown:event otherwise:otherwise confirm:^{
         NIObliqueSliceGeneratorRequest* req = view.presentedGeneratorRequest;
-        [view.mutableAnnotations addObject:(self.annotation = [NIAnnotation segmentWithPoints:self.mouseDownLocation :self.mouseDownLocation transform:req.sliceToDicomTransform])];
+        [view.mutableAnnotations addObject:(self.annotation = [NISegmentAnnotation segmentWithPoints:self.mouseDownLocation :self.mouseDownLocation transform:req.sliceToDicomTransform])];
     }];
 }
 

@@ -163,7 +163,7 @@ typedef struct {
     @autoreleasepool {
         NSImage* cimage = cache[NIAnnotationRenderCache][NIAnnotationProjectionMask];
 
-        NSImage* hti = [[NSImage alloc] initWithSize:NSMakeSize(NIAnnotationDistant*2+1, NIAnnotationDistant*2+1)];
+        NSImage* hti = [[[NSImage alloc] initWithSize:NSMakeSize(NIAnnotationDistant*2+1, NIAnnotationDistant*2+1)] autorelease];
 
         for (size_t r = 0; r <= (size_t)NIAnnotationDistant; ++r) {
             [hti lockFocus];

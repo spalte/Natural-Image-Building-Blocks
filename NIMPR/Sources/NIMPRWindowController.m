@@ -16,6 +16,7 @@
 #import "NIMPRQuaternion.h"
 #import "NSMenu+NIMPR.h"
 #import "NIPolyAnnotation.h"
+#import "NSView+NI.h"
 
 #import "NIImageAnnotation.h"
 #import "NIMaskAnnotation.h"
@@ -94,11 +95,11 @@
             NSLog(@"Warning: MPR view class %@ should be a subclass of %@, will very likely crash", mprViewClass.className, NIMPRView.className);
         
         NSRect frame = NSMakeRect(0, 0, 100, 100);
-        self.axialView = [[mprViewClass alloc] initWithFrame:frame];
+        self.axialView = [[[mprViewClass alloc] initWithFrame:frame] autorelease];
         self.axialView.rimColor = [NSColor orangeColor];
-        self.sagittalView = [[mprViewClass alloc] initWithFrame:frame];
+        self.sagittalView = [[[mprViewClass alloc] initWithFrame:frame] autorelease];
         self.sagittalView.rimColor = [NSColor purpleColor];
-        self.coronalView = [[mprViewClass alloc] initWithFrame:frame];
+        self.coronalView = [[[mprViewClass alloc] initWithFrame:frame] autorelease];
         self.coronalView.rimColor = [NSColor blueColor];
 
         [self view:self.axialView addIntersections:@{ @"abscissa": self.sagittalView, @"ordinate": self.coronalView }];
@@ -133,7 +134,7 @@
         
         [self reset];
         
-        self.menu = [[NSMenu alloc] init];
+        self.menu = [[[NSMenu alloc] init] autorelease];
         self.menu.delegate = self;
         
         [self.menu addItemWithTitle:NSLocalizedString(@"Reset this view's rotation", nil) block:^{
@@ -221,13 +222,13 @@
     if (object == self && [keyPath isEqualToString:@"ltoolTag"]) {
         if ([self.ltool respondsToSelector:@selector(dismissing)])
             [self.ltool dismissing];
-        self.ltool = [[[[self toolClassForTag:self.ltoolTag] alloc] init] autorelease];
+        self.ltool = [[[[self toolClassForTag:self.ltoolTag] alloc] initWithViewer:self] autorelease];
     }
     
     if (object == self && [keyPath isEqualToString:@"rtoolTag"]) {
         if ([self.rtool  respondsToSelector:@selector(dismissing)])
             [self.rtool  dismissing];
-        self.rtool = [[[[self toolClassForTag:self.rtoolTag] alloc] init] autorelease];
+        self.rtool = [[[[self toolClassForTag:self.rtoolTag] alloc] initWithViewer:self] autorelease];
     }
     
     if ([keyPath isEqualToString:@"annotations"]) {
@@ -265,9 +266,7 @@
         [CATransaction setDisableActions:YES];
 
         NSView* container = self.mprViewsContainer;
-        [container.subviews enumerateObjectsUsingBlock:^(NSView* view, NSUInteger idx, BOOL *stop) {
-            [view removeFromSuperview];
-        }];
+        [container removeAllSubviews];
         
         switch ([change[NSKeyValueChangeNewKey] integerValue]) {
             case NIMPRLayoutClassic: {
@@ -491,7 +490,7 @@ static NSString* const NIMPRControllerMenuAnnotationsDelimiter = @"NIMPRControll
         NSPoint center = [view convertPointFromDICOMVector:self.point];
         NIAffineTransform modelToDicomTransform = NIAffineTransformTranslate(view.presentedGeneratorRequest.sliceToDicomTransform, center.x-image.size.width/2, center.y-image.size.height/2, 0);
         
-        NIImageAnnotation* ia = [[NIImageAnnotation alloc] initWithImage:image transform:modelToDicomTransform];
+        NIImageAnnotation* ia = [[[NIImageAnnotation alloc] initWithImage:image transform:modelToDicomTransform] autorelease];
         //        ia.colorify = YES;
         
         [self.mutableAnnotations addObject:ia];
@@ -499,22 +498,14 @@ static NSString* const NIMPRControllerMenuAnnotationsDelimiter = @"NIMPRControll
 }
 
 - (IBAction)testMask:(id)sender {
-    NIMPRView* view = [[self.window firstResponder] if:NIMPRView.class];
-    if (!view)
-        view = self.coronalView;
-    
     NIMask* mask = [NIMask maskWithSphereDiameter:30];
     
     NIAffineTransform modelToDicomTransform = NIAffineTransformMakeTranslationWithVector(NIVectorSubtract(self.point, NIVectorMake(15, 15, 15)));
     
-    NIMaskAnnotation* ma = [[NIMaskAnnotation alloc] initWithMask:mask transform:modelToDicomTransform];
+    NIMaskAnnotation* ma = [[[NIMaskAnnotation alloc] initWithMask:mask transform:modelToDicomTransform] autorelease];
     ma.color = [NSColor.redColor colorWithAlphaComponent:0.5];
     
     [self.mutableAnnotations addObject:ma];
-}
-
-- (IBAction)testRegionGrow:(id)sender {
-    self.ltool = [[[NIMPRRegionGrowingTool alloc] init] autorelease];
 }
 
 @end

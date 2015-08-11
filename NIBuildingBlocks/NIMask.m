@@ -23,6 +23,12 @@
 #import "NIMaskRunStack.h"
 #include <Accelerate/Accelerate.h>
 
+const NIMaskIndex NIMaskIndexInvalid = {NSUIntegerMax,NSUIntegerMax,NSUIntegerMax};
+
+BOOL NIMaskIndexEqualToMaskIndex(NIMaskIndex mi1, NIMaskIndex mi2) {
+    return mi1.x == mi2.x && mi1.y == mi2.y && mi1.z == mi2.z;
+}
+
 NIMaskRun NIMaskRunMake(NSRange widthRange, NSUInteger heightIndex, NSUInteger depthIndex, float intensity)
 {
     NIMaskRun maskRun = {widthRange, heightIndex, depthIndex, intensity};

@@ -9,18 +9,33 @@
 #import "NIMaskAnnotation.h"
 #import "NIAnnotationHandle.h"
 
+@interface NIMaskAnnotation ()
+
+@property(retain) NSLock* volumeLock;
+
+@end
+
 @implementation NIMaskAnnotation
 
 @synthesize mask = _mask;
 @synthesize modelToDicomTransform = _modelToDicomTransform;
 @synthesize volume = _volume;
+@synthesize volumeLock = _volumeLock;
 
 + (NSSet*)keyPathsForValuesAffectingAnnotation {
     return [super.keyPathsForValuesAffectingAnnotation setByAddingObjects: @"mask", @"modelToDicomTransform", @"volume", nil ];
 }
 
-- (id)initWithMask:(NIMask*)mask transform:(NIAffineTransform)modelToDicomTransform {
+- (id)init {
     if ((self = [super init])) {
+        self.volumeLock = [[[NSLock alloc] init] autorelease];
+    }
+    
+    return self;
+}
+
+- (id)initWithMask:(NIMask*)mask transform:(NIAffineTransform)modelToDicomTransform {
+    if ((self = [self init])) {
         self.mask = mask;
         self.modelToDicomTransform = modelToDicomTransform;
     }
@@ -29,7 +44,7 @@
 }
 
 - (id)initWithVolume:(NIVolumeData *)volume {
-    if ((self = [super init])) {
+    if ((self = [self init])) {
         self.volume = volume;
         self.modelToDicomTransform = NIAffineTransformIdentity;
     }
@@ -40,7 +55,32 @@
 - (void)dealloc {
     self.mask = nil;
     self.volume = nil;
+    self.volumeLock = nil;
     [super dealloc];
+}
+
+- (void)setMask:(NIMask *)mask {
+    if (mask != _mask) {
+        [self.volumeLock lock];
+        [_mask release];
+        _mask = [mask retain];
+        [self.volumeLock unlock];
+    }
+}
+
+- (void)setModelToDicomTransform:(NIAffineTransform)modelToDicomTransform {
+    [self.volumeLock lock];
+    _modelToDicomTransform = modelToDicomTransform;
+    [self.volumeLock unlock];
+}
+
+- (void)setVolume:(NIVolumeData *)volume {
+    if (volume != _volume) {
+        [self.volumeLock lock];
+        [_volume release];
+        _volume = [volume retain];
+        [self.volumeLock unlock];
+    }
 }
 
 - (void)translate:(NIVector)translation {
@@ -78,7 +118,8 @@
         NIObliqueSliceGeneratorRequest* req = [[view.presentedGeneratorRequest copy] autorelease];
         req.interpolationMode = NIInterpolationModeNearestNeighbor;
         
-        {
+        [self.volumeLock lock];
+        @try {
             NIVolumeData* vd = [NIGenerator synchronousRequestVolume:req volumeData:data];
             sib = [vd floatBufferForSliceAtIndex:0];
             unsigned char* bdp[1] = {sib.data};
@@ -88,8 +129,9 @@
             // render border
             
             sibd = sib; sibd.data = [[NSMutableData dataWithLength:sib.rowBytes*sib.height] mutableBytes];
-            float kernel[25] = {1,1,1,1,1,1,1,1,1};
+            float kernel[] = {1,1,1,1,1,1,1,1,1};
             vImageDilate_PlanarF(&sib, &sibd, 0, 0, kernel, 3, 3, kvImageNoFlags);
+
             bdp[0] = sibd.data;
             sid = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:bdp pixelsWide:sib.width pixelsHigh:sib.height bitsPerSample:sizeof(float)*8 samplesPerPixel:1
                                                              hasAlpha:NO isPlanar:NO colorSpaceName:NSDeviceWhiteColorSpace bitmapFormat:NSFloatingPointSamplesBitmapFormat bytesPerRow:sib.rowBytes bitsPerPixel:sizeof(float)*8] autorelease];
@@ -101,6 +143,10 @@
             [context setCompositingOperation:NSCompositeSourceOver];
             NSRectFill(bounds);
             [csel unlockFocus];
+        } @catch (...) {
+            @throw;
+        } @finally {
+            [self.volumeLock unlock];
         }
         
         // TODO: render thick slab in background and update the view, but wait for the NIGenerator async block API
@@ -159,7 +205,7 @@
                     CGContextClipToMask(context.CGContext, NSRectToCGRect(bounds), [/*wi*/si CGImageForProposedRect:NULL context:context hints:nil]);
                     [context setCompositingOperation:NSCompositeSourceOver];
                     [self.color set];
-                    [[NSBezierPath bezierPathWithRect:bounds] fill];
+                    NSRectFill(bounds);
                     
                 } @catch (NSException* e) {
                     [e log];
@@ -223,7 +269,7 @@
     @autoreleasepool {
         NSImage* cmask = cache[NIAnnotationRenderCache][NIAnnotationProjectionMask];
         
-        NSImage* hti = [[NSImage alloc] initWithSize:NSMakeSize(NIAnnotationDistant*2+1, NIAnnotationDistant*2+1)];
+        NSImage* hti = [[[NSImage alloc] initWithSize:NSMakeSize(NIAnnotationDistant*2+1, NIAnnotationDistant*2+1)] autorelease];
         
         for (size_t r = 0; r <= (size_t)NIAnnotationDistant; ++r) {
             [hti lockFocus];

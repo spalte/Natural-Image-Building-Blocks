@@ -17,6 +17,10 @@
 
 @synthesize lowerThreshold = _lowerThreshold, higherThreshold = _higherThreshold;
 
++ (NSSet*)keyPathsForValuesAffectingSegmentationAlgorithm {
+    return [NSSet setWithObjects: @"lowerThreshold", @"higherThreshold", nil];
+}
+
 - (id)init {
     if ((self = [super init])) {
         self.lowerThreshold = 0;
@@ -37,19 +41,21 @@
 - (NSViewController*)viewController {
     NIView* view = [[[NIView alloc] initWithFrame:NSZeroRect] autorelease];
     
-    NSTextField* lbetween = [NSTextField labelWithControlSize:NSSmallControlSize];
+    NSTextField* lbetween = [NIView labelWithControlSize:NSSmallControlSize];
     lbetween.stringValue = NSLocalizedString(@"Between", nil);
     [view addSubview:lbetween];
     
-    NSTextField* t1 = [NSTextField fieldWithControlSize:NSSmallControlSize];
+    NSTextField* t1 = [NIView fieldWithControlSize:NSSmallControlSize];
     [view addSubview:t1];
     
-    NSTextField* land = [NSTextField labelWithControlSize:NSSmallControlSize];
+    NSTextField* land = [NIView labelWithControlSize:NSSmallControlSize];
     land.stringValue = NSLocalizedString(@"and", nil);
     [view addSubview:land];
     
-    NSTextField* t2 = [NSTextField fieldWithControlSize:NSSmallControlSize];
+    NSTextField* t2 = [NIView fieldWithControlSize:NSSmallControlSize];
     [view addSubview:t2];
+    
+    t1.nextResponder = t2;
     
     [t1 addConstraint:[NSLayoutConstraint constraintWithItem:t1 attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:40]];
     [t2 addConstraint:[NSLayoutConstraint constraintWithItem:t2 attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:40]];
@@ -59,27 +65,32 @@
 
     return [[[NIViewController alloc] initWithView:view updateConstraints:^{
         [view removeAllConstraints];
-        NSDictionary* m = @{ @"d": @0, @"s": @3 };
-        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-d-[lbetween]-s-[t1]-s-[land]-s-[t2]-d-|" options:NSLayoutFormatAlignAllBaseline metrics:m views:NSDictionaryOfVariableBindings(lbetween, t1, land, t2)]];
-        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-d-[t1]-d-|" options:0 metrics:m views:NSDictionaryOfVariableBindings(t1)]];
+        NSDictionary* m = @{ @"s": @3 };
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[lbetween]-s-[t1]-s-[land]-s-[t2]|" options:NSLayoutFormatAlignAllBaseline metrics:m views:NSDictionaryOfVariableBindings(lbetween, t1, land, t2)]];
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[t1]|" options:0 metrics:m views:NSDictionaryOfVariableBindings(t1)]];
         [view addConstraint:[NSLayoutConstraint constraintWithItem:t1 attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:t2 attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
         [view addConstraint:[NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:view.fittingSize.width]];
     }] autorelease];
 }
 
 - (void)processWithSeeds:(NSArray*)seeds volume:(NIVolumeData*)data annotation:(NIMaskAnnotation*)ma operation:(NSOperation*)op {
+    [self processWithSeeds:seeds volume:data annotation:ma operation:op thresholds:self.lowerThreshold:self.higherThreshold];
+}
+
+- (void)processWithSeeds:(NSArray*)seeds volume:(NIVolumeData*)data annotation:(NIMaskAnnotation*)ma operation:(NSOperation*)op thresholds:(CGFloat)lowert :(CGFloat)highert {
     static const NIVector dirs[6] = {{1,0,0},{0,1,0},{0,0,1},{-1,0,0},{0,-1,0},{0,0,-1}};
     const size_t xd = data.pixelsWide, yd = data.pixelsHigh, zd = data.pixelsDeep, xyd = xd*yd, xyzd = xyd*zd;
     
     NSMutableArray* queue = [[seeds mutableCopy] autorelease];
     
-    NSMutableData* visitedd = [[[NSMutableData alloc] initWithLength:sizeof(float)*xyzd] autorelease];
-#define visited(i) ((float*)visitedd.mutableBytes)[i.x+i.y*xd+i.z*xyd]
-    NSMutableData* voxels = [[[NSMutableData alloc] initWithLength:sizeof(float)*xyzd] autorelease];
-#define voxel(i) ((float*)voxels.mutableBytes)[i.x+i.y*xd+i.z*xyd]
-    NIVolumeData* result = [[[NIVolumeData alloc] initWithData:voxels pixelsWide:data.pixelsWide pixelsHigh:data.pixelsHigh pixelsDeep:data.pixelsDeep volumeTransform:NIAffineTransformIdentity outOfBoundsValue:0] autorelease];
+    NSMutableData* visitedd = [[[NSMutableData alloc] initWithLength:sizeof(bool)*xyzd] autorelease];
+    bool* visiteddf = (bool*)visitedd.mutableBytes;
+#define visited(i) visiteddf[i.x+i.y*xd+i.z*xyd]
+    NSMutableData* voxeld = [[[NSMutableData alloc] initWithLength:sizeof(float)*xyzd] autorelease];
+    float* voxeldf = (float*)voxeld.mutableBytes;
+#define voxel(i) voxeldf[i.x+i.y*xd+i.z*xyd]
+    NIVolumeData* result = [[[NIVolumeData alloc] initWithData:voxeld pixelsWide:data.pixelsWide pixelsHigh:data.pixelsHigh pixelsDeep:data.pixelsDeep volumeTransform:NIAffineTransformIdentity outOfBoundsValue:0] autorelease];
     
-    CGFloat lowert = self.lowerThreshold, highert = self.higherThreshold;
     if (lowert > highert) {
         CGFloat temp = lowert;
         lowert = highert;
@@ -117,9 +128,9 @@
         NSTimeInterval t = [NSDate timeIntervalSinceReferenceDate];
         if ((t >= lut+1 || !queue.count) && !op.isCancelled) {
             lut = t;
-            NSData* data = [voxels.copy autorelease];
+            NSData* voxeldc = [voxeld.copy autorelease];
             dispatch_async(dispatch_get_main_queue(), ^{
-                ma.volume = [[NIVolumeData alloc] initWithData:data pixelsWide:result.pixelsWide pixelsHigh:result.pixelsHigh pixelsDeep:result.pixelsDeep volumeTransform:NIAffineTransformIdentity outOfBoundsValue:0];
+                ma.volume = [[[NIVolumeData alloc] initWithData:voxeldc pixelsWide:result.pixelsWide pixelsHigh:result.pixelsHigh pixelsDeep:result.pixelsDeep volumeTransform:NIAffineTransformIdentity outOfBoundsValue:0] autorelease];
             });
         }
     }
@@ -147,11 +158,11 @@
 - (NSViewController*)viewController {
     NIView* view = [[[NIView alloc] initWithFrame:NSZeroRect] autorelease];
     
-    NSTextField* linterval = [NSTextField labelWithControlSize:NSSmallControlSize];
+    NSTextField* linterval = [NIView labelWithControlSize:NSSmallControlSize];
     linterval.stringValue = NSLocalizedString(@"Interval:", nil);
     [view addSubview:linterval];
     
-    NSTextField* finterval = [NSTextField fieldWithControlSize:NSSmallControlSize];
+    NSTextField* finterval = [NIView fieldWithControlSize:NSSmallControlSize];
     [view addSubview:finterval];
     
     [finterval addConstraint:[NSLayoutConstraint constraintWithItem:finterval attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:40]];
@@ -160,9 +171,9 @@
 
     return [[[NIViewController alloc] initWithView:view updateConstraints:^{
         [view removeAllConstraints];
-        NSDictionary* m = @{ @"d": @0, @"s": @3 };
-        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-d-[linterval]-s-[finterval]-d-|" options:NSLayoutFormatAlignAllBaseline metrics:m views:NSDictionaryOfVariableBindings(linterval, finterval)]];
-        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-d-[finterval]-d-|" options:0 metrics:m views:NSDictionaryOfVariableBindings(finterval)]];
+        NSDictionary* m = @{ @"z": @0, @"s": @3 };
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-z-[linterval]-s-[finterval]-z-|" options:NSLayoutFormatAlignAllBaseline metrics:m views:NSDictionaryOfVariableBindings(linterval, finterval)]];
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-z-[finterval]-z-|" options:0 metrics:m views:NSDictionaryOfVariableBindings(finterval)]];
         [view addConstraint:[NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:view.fittingSize.width]];
     }] autorelease];
 }
@@ -170,9 +181,7 @@
 - (void)processWithSeeds:(NSArray*)seeds volume:(NIVolumeData*)data annotation:(NIMaskAnnotation*)ma operation:(NSOperation*)op {
     NIMaskIndex seed = [seeds[0] NIMaskIndexValue];
     CGFloat seedv = [data floatAtPixelCoordinateX:seed.x y:seed.y z:seed.z], interval = self.interval;
-    self.lowerThreshold = seedv-interval/2;
-    self.higherThreshold = seedv+interval/2;
-    [super processWithSeeds:seeds volume:data annotation:ma operation:op];
+    [super processWithSeeds:seeds volume:data annotation:ma operation:op thresholds:seedv-interval/2 :seedv+interval/2];
 }
 
 @end

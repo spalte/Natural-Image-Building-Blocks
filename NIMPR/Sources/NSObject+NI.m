@@ -51,7 +51,6 @@
         self.object = object;
         self.keyPath = keyPath;
         self.block = block;
-        
         [object addObserver:self forKeyPath:keyPath options:options context:self];
     }
         
@@ -187,6 +186,10 @@
     return r;
 }
 
+- (id)observeNotification:(NSString*)name block:(void (^)(NSNotification* notification))block {
+    return [self observeNotification:name options:0 block:block];
+}
+
 - (id)observeNotification:(NSString*)name options:(NINotificationObservingOptions)options block:(void (^)(NSNotification* notification))block {
     return [[[NINotificationObserver alloc] initWithObject:self name:name options:options block:block] autorelease];
 }
@@ -254,7 +257,14 @@
 
 @end
 
-//@implementation NSDictionary (NIMPRAdditions)
+@implementation NSDictionary (NIMPR)
+
+- (NSDictionary*)dictionaryByAddingObject:(id)obj forKey:(id)key {
+    NSMutableDictionary* r = [NSMutableDictionary dictionaryWithDictionary:self];
+    r[key] = obj;
+    return r;
+}
+
 //
 //- (id)valueForKeyPath:(NSString*)keyPath {
 //    NSRange r = [keyPath rangeOfString:@"."];
@@ -263,8 +273,8 @@
 //    else return [self valueForKey:keyPath];
 //}
 //
-//@end
-//
+@end
+
 @implementation NSMutableDictionary (NIMPR)
 
 - (void)set:(NSDictionary*)set {
@@ -396,6 +406,30 @@
 }
 
 @end
+
+//@implementation NIOperation
+//
+//@synthesize object = _object;
+//
+//+ (instancetype)operationWithObject:(id)object block:(void (^)())block {
+//    return [[[self.class alloc] initWithObject:object block:block] autorelease];
+//}
+//
+//- (id)initWithObject:(id)object block:(void (^)())block {
+//    if ((self = [super init])) {
+//        self.object = object;
+//        [self addExecutionBlock:block];
+//    }
+//    
+//    return self;
+//}
+//
+//- (void)dealloc {
+//    self.object = nil;
+//    [super dealloc];
+//}
+//
+//@end
 
 CGFloat NIMPR_CGFloatAbs(CGFloat f) {
     return f >= 0 ? f : -f;

@@ -7,34 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "extobjc.h"
-
-#define ext_weakify_(INDEX, CONTEXT, VAR) \
-    CONTEXT __typeof__(VAR) metamacro_concat(VAR, _weak_) = (VAR);
-
-#define ext_strongify_(INDEX, VAR) \
-    __strong __typeof__(VAR) VAR = metamacro_concat(VAR, _weak_);
-
-#if DEBUG
-#define ext_keywordify autoreleasepool {}
-#else
-#define ext_keywordify try {} @catch (...) {}
-#endif
-
-#define weakify(...) \
-    ext_keywordify \
-    metamacro_foreach_cxt(ext_weakify_,, __weak, __VA_ARGS__)
-
-#define unsafeify(...) \
-    ext_keywordify \
-    metamacro_foreach_cxt(ext_weakify_,, __unsafe_unretained, __VA_ARGS__)
-
-#define strongify(...) \
-    ext_keywordify \
-    _Pragma("clang diagnostic push") \
-    _Pragma("clang diagnostic ignored \"-Wshadow\"") \
-    metamacro_foreach(ext_strongify_,, __VA_ARGS__) \
-    _Pragma("clang diagnostic pop")
 
 @interface NIObject : NSObject {
     void (^_deallocBlock)();
@@ -61,6 +33,7 @@ typedef NS_OPTIONS(NSUInteger, NINotificationObservingOptions) {
 
 - (id)observeKeyPath:(NSString*)keyPath options:(NSKeyValueObservingOptions)opt block:(void (^)(NSDictionary* change))block; // retain the returned object until you want to stop observing
 - (id)observeKeyPaths:(NSArray*)keyPaths options:(NSKeyValueObservingOptions)options block:(void (^)(NSDictionary*))block; // retain the returned object until you want to stop observing
+- (id)observeNotification:(NSString*)name block:(void (^)(NSNotification* notification))block;
 - (id)observeNotification:(NSString*)name options:(NINotificationObservingOptions)options block:(void (^)(NSNotification* notification))block; // retain the returned object until you want to stop observing
 - (id)observeNotifications:(NSArray*)names options:(NINotificationObservingOptions)options block:(void (^)(NSNotification* notification))block; // retain the returned object until you want to stop observing
 
@@ -72,9 +45,11 @@ typedef NS_OPTIONS(NSUInteger, NINotificationObservingOptions) {
 
 @end
 
-//@interface NSDictionary (NIMPRAdditions)
-//
-//@end
+@interface NSDictionary (NIMPR)
+
+- (NSDictionary*)dictionaryByAddingObject:(id)obj forKey:(id)key;
+
+@end
 
 @interface NSMutableDictionary (NIMPR)
 
@@ -97,7 +72,7 @@ typedef NS_OPTIONS(NSUInteger, NINotificationObservingOptions) {
 
 @interface NSSet (NIMPR)
 
-- (NSSet*)setByAddingObjects:(id)obj, ... NS_REQUIRES_NIL_TERMINATION;
+- (NSSet*)setByAddingObjects: (id)obj, ... NS_REQUIRES_NIL_TERMINATION;
 
 @end
 
@@ -112,6 +87,16 @@ typedef NS_OPTIONS(NSUInteger, NINotificationObservingOptions) {
 - (NSPoint)locationInView:(NSView*)view;
 
 @end
+
+//@interface NIOperation : NSBlockOperation {
+//    id _object;
+//}
+//
+//@property(retain) id object;
+//
+//+ (NIOperation*)operationWithObject:(id)object block:(void (^)())block;
+//
+//@end
 
 #ifndef CGFloatMax
 #if CGFLOAT_IS_DOUBLE

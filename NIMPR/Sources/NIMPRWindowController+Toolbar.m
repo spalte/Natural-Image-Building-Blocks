@@ -119,8 +119,7 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
               NIMPRControllerToolbarItemIdentifierLayouts,
               NIMPRControllerToolbarItemIdentifierProjection,
               @"ImageTest",
-              @"MaskTest",
-              @"RegionGrowTest" ];
+              @"MaskTest" ];
 }
 
 - (NSArray*)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar {
@@ -131,8 +130,7 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
               NSToolbarFlexibleSpaceItemIdentifier,
               NIMPRControllerToolbarItemIdentifierLayouts,
               @"ImageTest",
-              @"MaskTest",
-              @"RegionGrowTest" ];
+              @"MaskTest" ];
 }
 
 - (NSToolbarItem*)toolbar:(NSToolbar*)toolbar itemForItemIdentifier:(NSString*)identifier willBeInsertedIntoToolbar:(BOOL)flag {
@@ -154,7 +152,7 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
         NIMPRSegmentedCell* cell = [seg cell];
         
         NSMenu* menu = [[[NSMenu alloc] init] autorelease];
-        item.menuFormRepresentation = [[NSMenuItem alloc] initWithTitle:ta[0] action:nil keyEquivalent:@""];
+        item.menuFormRepresentation = [[[NSMenuItem alloc] initWithTitle:ta[0] action:nil keyEquivalent:@""] autorelease];
         item.menuFormRepresentation.submenu = menu;
         
         seg.segmentCount = [ta[1] count];
@@ -162,7 +160,7 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
             [cell setTag:tool.tag forSegment:i];
             [seg setImage:tool.image forSegment:i];
             [cell setToolTip:tool.label forSegment:i];
-            NSMenuItem* mi = [[NSMenuItem alloc] initWithTitle:tool.label action:nil keyEquivalent:@""];
+            NSMenuItem* mi = [[[NSMenuItem alloc] initWithTitle:tool.label action:nil keyEquivalent:@""] autorelease];
             mi.tag = tool.tag;
             mi.submenu = tool.submenu;
             [menu addItem:mi];
@@ -187,11 +185,6 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
         item.label = item.toolTip = identifier;
         item.image = [NSImage imageNamed:@"NSRevealFreestandingTemplate"];
         item.action = @selector(testMask:);
-    }
-    if ([identifier isEqualToString:@"RegionGrowTest"]) {
-        item.label = item.toolTip = identifier;
-        item.image = [NSImage imageNamed:@"NSRevealFreestandingTemplate"];
-        item.action = @selector(testRegionGrow:);
     }
     
     item.autovalidates = NO;
@@ -218,7 +211,7 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
     seg.toolTip = item.label;
     
     NSMenu* menu = [[[NSMenu alloc] init] autorelease];
-    item.menuFormRepresentation = [[NSMenuItem alloc] initWithTitle:item.label action:nil keyEquivalent:@""];
+    item.menuFormRepresentation = [[[NSMenuItem alloc] initWithTitle:item.label action:nil keyEquivalent:@""] autorelease];
     item.menuFormRepresentation.submenu = menu;
     
     NSArray* layouts = self.class.layouts;
@@ -254,7 +247,7 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
     [checkbox sizeToFit];
     [checkbox bind:@"value" toObject:self withKeyPath:@"projectionFlag" options:0];
     
-    NSPopUpButton* popup = [[NSPopUpButton alloc] initWithFrame:NSZeroRect];
+    NSPopUpButton* popup = [[[NSPopUpButton alloc] initWithFrame:NSZeroRect] autorelease];
     popup.translatesAutoresizingMaskIntoConstraints = NO;
     [popup.menu addItemWithTitle:NSLocalizedString(@"MIP", nil) alt:NSLocalizedString(@"MIP - Maximum intensity projection", nil) tag:NIProjectionModeMIP];
     [popup.menu addItemWithTitle:NSLocalizedString(@"MinIP", nil) alt:NSLocalizedString(@"MinIP - Minimum intensity projection", nil) tag:NIProjectionModeMinIP];
@@ -428,7 +421,7 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
 }
 
 - (void)rightMouseDown:(NSEvent*)event {
-    NSRect sframe; NSInteger s = [self segmentAtLocation:[event locationInView:self] frame:&sframe];
+    NSRect sframe = NSZeroRect; NSInteger s = [self segmentAtLocation:[event locationInView:self] frame:&sframe];
     self.cell.rightMouseFrame = sframe;
     
     do {
@@ -510,11 +503,11 @@ static NSString* const NSSegmentedControlSegmentToolTipTagRecord = @"ToolTipTagR
 
 - (void)drawSegment:(NSInteger)s inFrame:(NSRect)frame withView:(NIMPRSegmentedControl*)view {
     [super drawSegment:s inFrame:frame withView:view];
-    @unsafeify(view)
+//    @unsafeify(view)
     
     NSToolTipTag ttt = [view addToolTipRect:[self boundsForSegment:s inView:view] owner:view userData:(void*)s];
     self.segments[s][NSSegmentedControlSegmentToolTipTagRecord] = [NIObject dealloc:^{
-        @strongify(view)
+//        @strongify(view)
         [view removeToolTip:ttt];
     }];
 

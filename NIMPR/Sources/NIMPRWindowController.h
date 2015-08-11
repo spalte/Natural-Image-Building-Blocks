@@ -108,6 +108,5 @@ typedef NS_ENUM(NSInteger, NIMPRLayoutTag) {
 
 - (IBAction)testImage:(id)sender;
 - (IBAction)testMask:(id)sender;
-- (IBAction)testRegionGrow:(id)sender;
 
 @end

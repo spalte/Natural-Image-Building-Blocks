@@ -44,7 +44,35 @@ CGFloat const NIAnnotationDistant = 4;
     return self;
 }
 
+static NSString* const NIAnnotationNameKey = @"name";
+static NSString* const NIAnnotationColorKey = @"color";
+static NSString* const NIAnnotationLockedKey = @"locked";
+
+- (id)initWithCoder:(NSCoder*)coder {
+    if ((self = [self init])) {
+        self.name = [coder decodeObjectForKey:NIAnnotationNameKey];
+        self.color = [coder decodeObjectForKey:NIAnnotationColorKey];
+        self.locked = [coder decodeBoolForKey:NIAnnotationLockedKey];
+    }
+    
+    return self;
+}
+
+//- (id)awakeAfterUsingCoder:(NSCoder*)decoder {
+//    
+//}
+
+- (void)encodeWithCoder:(NSCoder*)coder {
+    if (!coder.allowsKeyedCoding)
+        [NSException raise:NSGenericException format:@"Annotation storage requires keyed coding support"];
+    
+    [coder encodeObject:self.name forKey:NIAnnotationNameKey];
+    [coder encodeObject:self.color forKey:NIAnnotationColorKey];
+    [coder encodeBool:self.locked forKey:NIAnnotationLockedKey];
+}
+
 - (void)dealloc {
+    [self.class cancelPreviousPerformRequestsWithTarget:self];
     [self removeObserver:self forKeyPath:@"annotation" context:NIAnnotation.class];
     [self enableChangeObservers:NO];
     self.changes = nil;
@@ -157,22 +185,6 @@ static NSColor* NIAnnotationDefaultColor = nil;
 
 - (NSSet*)handlesInView:(NIAnnotatedGeneratorRequestView*)view {
     return [NSSet set];
-}
-
-+ (id)pointWithVector:(NIVector)vector {
-    return [[[NIPointAnnotation alloc] initWithVector:vector] autorelease];
-}
-
-+ (id)segmentWithPoints:(NSPoint)p :(NSPoint)q transform:(NIAffineTransform)sliceToDicomTransform {
-    return [[[NISegmentAnnotation alloc] initWithPoints:p:q transform:sliceToDicomTransform] autorelease];
-}
-
-+ (id)rectangleWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform {
-    return [[[NIRectangleAnnotation alloc] initWithBounds:bounds transform:sliceToDicomTransform] autorelease];
-}
-
-+ (id)ellipseWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform {
-    return [[[NIEllipseAnnotation alloc] initWithBounds:bounds transform:sliceToDicomTransform] autorelease];
 }
 
 @end

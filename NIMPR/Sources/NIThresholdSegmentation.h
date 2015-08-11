@@ -8,7 +8,7 @@
 
 #import "NISegmentationAlgorithm.h"
 
-@interface NIThresholdSegmentation : NSObject <NISegmentationAlgorithm> {
+@interface NIThresholdSegmentation : NISegmentationAlgorithm {
     CGFloat _lowerThreshold, _higherThreshold;
 }
 

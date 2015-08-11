@@ -17,6 +17,10 @@
     return [super.keyPathsForValuesAffectingAnnotation setByAddingObject:@"vector"];
 }
 
++ (instancetype)pointWithVector:(NIVector)vector {
+    return [[[self.class alloc] initWithVector:vector] autorelease];
+}
+
 - (instancetype)initWithVector:(NIVector)vector {
     if ((self = [super init])) {
         self.vector = vector;

@@ -10,4 +10,6 @@
 
 @interface NIEllipseAnnotation : NIRectangleAnnotation
 
++ (id)ellipseWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform;
+
 @end

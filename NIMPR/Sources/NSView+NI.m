@@ -62,6 +62,30 @@
     [self.controller updateViewConstraints];
 }
 
++ (id)labelWithControlSize:(NSControlSize)controlSize {
+    NSTextField* r = [self.class fieldWithControlSize:controlSize];
+    r.selectable = r.bordered = r.drawsBackground = NO;
+    return r;
+}
+
++ (id)fieldWithControlSize:(NSControlSize)controlSize {
+    NSTextField* r = [[[NSTextField alloc] initWithFrame:NSZeroRect] autorelease];
+    r.translatesAutoresizingMaskIntoConstraints = NO;
+    r.controlSize = controlSize;
+    r.font = [NSFont labelFontOfSize:[NSFont systemFontSizeForControlSize:controlSize]];
+    return r;
+}
+
++ (id)buttonWithControlSize:(NSControlSize)controlSize bezelStyle:(NSBezelStyle)bezelStyle title:(NSString*)title block:(void (^)())actionBlock {
+    NSButton* r = [[[NIButton alloc] initWithBlock:actionBlock] autorelease];
+    r.translatesAutoresizingMaskIntoConstraints = NO;
+    r.controlSize = NSSmallControlSize;
+    r.title = title;
+    if ((r.bezelStyle = bezelStyle) == NSRecessedBezelStyle)
+        r.attributedTitle = [[[NSAttributedString alloc] initWithString:title attributes:@{ NSForegroundColorAttributeName: NSColor.whiteColor, NSFontAttributeName: [NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:controlSize]] }] autorelease];
+    return r;
+}
+
 @end
 
 @interface NIViewController ()
@@ -100,6 +124,7 @@
 }
 
 - (void)dealloc {
+    self.view.controller = nil;
     [self removeObserver:self forKeyPath:@"updateConstraintsBlock" context:NIViewController.class];
     self.retainer = nil;
     self.updateConstraintsBlock = nil;
@@ -136,8 +161,39 @@
 
 @implementation NSView (NI)
 
+- (void)removeAllSubviews {
+    for (NSView* view in self.subviews)
+        [view removeFromSuperview];
+}
+
 - (void)removeAllConstraints {
     [self removeConstraints:self.constraints];
+}
+
+@end
+
+@implementation NIButton
+
+@synthesize actionBlock = _actionBlock;
+
+- (id)initWithBlock:(void (^)())actionBlock {
+    if ((self = [super initWithFrame:NSZeroRect])) {
+        self.actionBlock = actionBlock;
+        self.target = self;
+        self.action = @selector(_action:);
+    }
+    
+    return self;
+}
+
+- (void)dealloc {
+    self.actionBlock = nil;
+    [super dealloc];
+}
+
+- (void)_action:(id)sender {
+    if (self.actionBlock)
+        self.actionBlock();
 }
 
 @end
@@ -192,20 +248,3 @@
 
 @end
 
-@implementation NSTextField (NI)
-
-+ (instancetype)labelWithControlSize:(NSControlSize)controlSize {
-    NSTextField* r = [self.class fieldWithControlSize:controlSize];
-    r.selectable = r.bordered = r.drawsBackground = NO;
-    return r;
-}
-
-+ (instancetype)fieldWithControlSize:(NSControlSize)controlSize {
-    NSTextField* r = [[[self.class alloc] initWithFrame:NSZeroRect] autorelease];
-    r.controlSize = controlSize;
-    r.font = [NSFont labelFontOfSize:[NSFont systemFontSizeForControlSize:controlSize]];
-    r.translatesAutoresizingMaskIntoConstraints = NO;
-    return r;
-}
-
-@end

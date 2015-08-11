@@ -10,6 +10,9 @@
 #import "NIAnnotation.h"
 #import "NIAnnotationHandle.h"
 
+NSString* const NIAnnotationRemovedNotification = @"NIAnnotationRemovedNotification"; // object: NIAnnotation, userInfo keys: NIAnnotationViewerKey
+NSString* const NIAnnotationViewerKey = @"NIAnnotationViewer";
+
 // NIAnnotation cache keys
 NSString* const NIAnnotationRenderCache = @"NIAnnotationRequestCache"; // NSDictionary, cleaned when the NIGeneratorRequest is updated
 
@@ -89,6 +92,7 @@ NSString* const NIAnnotationRenderCache = @"NIAnnotationRequestCache"; // NSDict
         for (NIAnnotation* a in change[NSKeyValueChangeOldKey]) {
             [a removeObserver:self forKeyPath:@"annotation" context:context];
             [self.annotationsCaches removeObjectForKey:[NSValue valueWithPointer:a]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:NIAnnotationRemovedNotification object:a userInfo:@{ NIAnnotationViewerKey: self }];
         }
         for (NIAnnotation* a in change[NSKeyValueChangeNewKey]) {
             [a addObserver:self forKeyPath:@"annotation" options:NSKeyValueObservingOptionInitial context:context];

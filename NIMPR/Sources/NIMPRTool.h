@@ -22,7 +22,7 @@ typedef NS_ENUM(NSInteger, NIMPRToolTag) {
     NIMPRToolRegionGrowing,
 };
 
-@class NIMPRView;
+@class NIMPRView, NIMPRWindowController;
 
 @protocol NIMPRTool <NSObject>
 
@@ -51,6 +51,7 @@ typedef NS_ENUM(NSInteger, NIMPRToolTag) {
 @end
 
 @interface NIMPRTool : NSObject <NIMPRTool> {
+    NIMPRWindowController* _viewer;
     NSView* _mouseDownView;
     NSEvent* _mouseDownEvent;
     void (^_timeoutBlock)(), (^_confirmBlock)();
@@ -60,6 +61,7 @@ typedef NS_ENUM(NSInteger, NIMPRToolTag) {
     NIAffineTransform _mouseDownGeneratorRequestSliceToDicomTransform;
 }
 
+@property(readonly, assign) NIMPRWindowController* viewer;
 @property(readonly, retain) NSEvent* mouseDownEvent;
 @property(readonly, retain) NSTimer* timeoutTimer;
 
@@ -67,6 +69,9 @@ typedef NS_ENUM(NSInteger, NIMPRToolTag) {
 @property(readonly) NIVector mouseDownLocationVector, currentLocationVector, previousLocationVector;
 @property(readonly, retain) NSView* mouseDownView;
 @property(readonly) NIAffineTransform mouseDownGeneratorRequestSliceToDicomTransform;
+
+- (id)init UNAVAILABLE_ATTRIBUTE;
+- (id)initWithViewer:(NIMPRWindowController*)viewer NS_DESIGNATED_INITIALIZER;
 
 - (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event UNAVAILABLE_ATTRIBUTE;
 - (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())otherwise confirm:(void(^)())confirm NS_REQUIRES_SUPER;

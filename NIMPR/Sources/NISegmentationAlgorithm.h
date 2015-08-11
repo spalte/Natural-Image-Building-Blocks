@@ -10,7 +10,9 @@
 
 @class NIVolumeData, NIMaskAnnotation;
 
-@protocol NISegmentationAlgorithm <NSObject>
+@interface NISegmentationAlgorithm : NSObject
+
++ (NSSet*)keyPathsForValuesAffectingSegmentationAlgorithm;
 
 - (NSString*)name;
 - (NSString*)shortName;

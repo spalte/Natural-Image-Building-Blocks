@@ -10,6 +10,10 @@
 
 @implementation NIEllipseAnnotation
 
++ (id)ellipseWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform {
+    return [[[self.class alloc] initWithBounds:bounds transform:sliceToDicomTransform] autorelease];
+}
+
 - (NSBezierPath*)NSBezierPath {
     return [NSBezierPath bezierPathWithOvalInRect:self.bounds];
 }

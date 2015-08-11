@@ -15,6 +15,7 @@ static BOOL NIMPRToolHidingCursor = NO;
 
 @implementation NIMPRTool
 
+@synthesize viewer = _viewer;
 @synthesize mouseDownView = _mouseDownView, mouseDownEvent = _mouseDownEvent;
 @synthesize timeoutBlock = _timeoutBlock, confirmBlock = _confirmBlock;
 @synthesize timeoutTimer = _timeoutTimer;
@@ -22,6 +23,14 @@ static BOOL NIMPRToolHidingCursor = NO;
 @synthesize mouseDownLocation = _mouseDownLocation, currentLocation = _currentLocation, previousLocation = _previousLocation;
 @synthesize mouseDownLocationVector = _mouseDownLocationVector, currentLocationVector = _currentLocationVector, previousLocationVector = _previousLocationVector;
 @synthesize mouseDownGeneratorRequestSliceToDicomTransform = _mouseDownGeneratorRequestSliceToDicomTransform;
+
+- (id)initWithViewer:(NIMPRWindowController*)viewer {
+    if ((self = [super init])) {
+        self.viewer = viewer;
+    }
+        
+    return self;
+}
 
 - (void)dealloc {
     [self.timeoutTimer invalidate];

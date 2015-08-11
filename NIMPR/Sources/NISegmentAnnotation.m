@@ -16,6 +16,10 @@
     return [NSSet setWithObjects: @"p", @"q", nil];
 }
 
++ (id)segmentWithPoints:(NSPoint)p :(NSPoint)q transform:(NIAffineTransform)sliceToDicomTransform {
+    return [[[self.class alloc] initWithPoints:p:q transform:sliceToDicomTransform] autorelease];
+}
+
 - (instancetype)initWithPoints:(NSPoint)p :(NSPoint)q transform:(NIAffineTransform)sliceToDicomTransform {
     if ((self = [super initWithTransform:sliceToDicomTransform])) {
         self.p = p;

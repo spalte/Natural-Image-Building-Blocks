@@ -144,8 +144,8 @@
 }
 
 - (void)mouseEntered:(NSEvent*)event {
-    [self.window makeFirstResponder:self];
-    [self.window makeKeyAndOrderFront:self];
+//    [self.window makeFirstResponder:self];
+//    [self.window makeKeyAndOrderFront:self];
     [self tools:self.ltools sel:_cmd event:event otherwise:nil];
 }
 

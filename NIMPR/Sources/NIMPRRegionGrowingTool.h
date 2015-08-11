@@ -15,14 +15,19 @@
     NSPopover* _popover;
     BOOL _popoverDetached;
     NSWindow* _window;
-    id <NISegmentationAlgorithm> _segmentationAlgorithm;
+    NISegmentationAlgorithm* _algorithm;
+    NIMaskIndex _seedPoint;
+    NSOperation* _segmentation;
 }
 
 @property(retain) NIMaskAnnotation* annotation;
 @property(readonly) BOOL popoverDetached;
-@property(readonly, retain) id <NISegmentationAlgorithm> segmentationAlgorithm;
+@property(readonly, retain) NISegmentationAlgorithm* algorithm;
+@property NIMaskIndex seedPoint;
 
 - (NSPopover*)popover;
 - (NSViewController*)popoverViewController;
+
+- (NSOperation*)segmentationWithSeed:(NIMaskIndex)seed volume:(NIVolumeData*)data annotation:(NIMaskAnnotation*)ma;
 
 @end
