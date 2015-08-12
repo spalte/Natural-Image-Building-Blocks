@@ -11,13 +11,15 @@
 
 @class NIMaskAnnotation;
 
-@interface NIMPRRegionGrowingTool : NIMPRAnnotateTool <NSPopoverDelegate> {
+@interface NIMPRRegionGrowingTool : NIMPRAnnotateTool <NSPopoverDelegate, NSMenuDelegate> {
     NSPopover* _popover;
     BOOL _popoverDetached;
     NSWindow* _window;
-    NISegmentationAlgorithm* _algorithm;
     NIMaskIndex _seedPoint;
     NSOperation* _segmentation;
+    NSArrayController* _segmentationAlgorithms;
+    id _segmentationAlgorithmsSelectionObserver;
+    NISegmentationAlgorithm* _algorithm;
 }
 
 @property(retain) NIMaskAnnotation* annotation;

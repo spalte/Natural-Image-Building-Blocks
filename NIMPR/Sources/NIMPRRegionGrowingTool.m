@@ -13,12 +13,87 @@
 #import "NIThresholdSegmentation.h"
 #import "NSMenu+NIMPR.h"
 
+@interface NIMPRPopUpButtonCell : NSPopUpButtonCell {
+    NSString* (^_titleBlock)();
+}
+
+@property(copy) NSString* (^titleBlock)();
+
+@end
+
+@implementation NIMPRPopUpButtonCell
+
+@synthesize titleBlock = _titleBlock;
+
+- (void)dealloc {
+    self.titleBlock = nil;
+    [super dealloc];
+}
+
+- (NSString*)title {
+    if (self.titleBlock)
+        return self.titleBlock();
+    return [super title];
+}
+
+@end
+
+@interface NIMPRPopUpButton : NSPopUpButton {
+    CGFloat _extraWidth;
+}
+
+@property(retain) NIMPRPopUpButtonCell* cell;
+
+@end
+
+@implementation NIMPRPopUpButton
+
+@dynamic cell;
+
+- (id)initWithFrame:(NSRect)buttonFrame pullsDown:(BOOL)flag {
+    if ((self = [super initWithFrame:buttonFrame pullsDown:flag])) {
+        self.cell = [[NIMPRPopUpButtonCell alloc] init];
+    }
+    
+    return self;
+}
+
+- (void)updateConstraints {
+ //   [self removeAllConstraints];
+    [super updateConstraints];
+
+    NSDictionary* attrs = @{ NSFontAttributeName: self.font };
+
+    NSLayoutConstraint* wc = [[self.constraints filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"firstAttribute = %d", NSLayoutAttributeWidth]] lastObject];
+    if (!_extraWidth) {
+        CGFloat maxw = 0;
+        for (NSString* title in self.itemTitles)
+            maxw = CGFloatMax(maxw, [title sizeWithAttributes:attrs].width);
+        _extraWidth = wc.constant - maxw;
+    }
+    
+    [self removeConstraints:@[wc]];
+    
+    wc = [NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:[self.cell.title sizeWithAttributes:attrs].width+_extraWidth];
+    wc.priority = NSLayoutPriorityDragThatCanResizeWindow;
+    [self addConstraint:wc];
+//    [self setContentHuggingPriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
+//    [self setContentCompressionResistancePriority:NSLayoutPriorityDefaultHigh forOrientation:NSLayoutConstraintOrientationHorizontal];
+}
+
+- (CGFloat)cellWidth {
+    return 100;
+}
+
+@end
+
 @interface NIMPRRegionGrowingTool ()
 
 @property(readwrite, assign, nonatomic) NSPopover* popover;
 @property(readwrite) BOOL popoverDetached;
 @property(readwrite, retain) NISegmentationAlgorithm* algorithm;
 @property(retain) NSOperation* segmentation;
+@property(retain) NSArrayController* segmentationAlgorithms;
 
 @end
 
@@ -30,13 +105,20 @@
 @synthesize algorithm = _algorithm;
 @synthesize segmentation = _segmentation;
 @synthesize seedPoint = _seedPoint;
+@synthesize segmentationAlgorithms = _segmentationAlgorithms;
 
 - (id)initWithViewer:(NIMPRWindowController *)viewer {
     if ((self = [super initWithViewer:viewer])) {
-        self.algorithm = self.algorithms[0];
         self.seedPoint = NIMaskIndexInvalid;
+        self.segmentationAlgorithms = [[[NSArrayController alloc] initWithContent:self.algorithms] autorelease];
+        _segmentationAlgorithmsSelectionObserver = [[self.segmentationAlgorithms observeKeyPath:@"selection" options:NSKeyValueObservingOptionInitial block:^(NSDictionary *change) {
+            self.algorithm = [self.segmentationAlgorithms.selectedObjects lastObject];
+        }] retain];
         [self addObserver:self forKeyPath:@"algorithm" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:NIMPRRegionGrowingTool.class];
         [self addObserver:self forKeyPath:@"seedPoint" options:0 context:NIMPRRegionGrowingTool.class];
+//        [[self observeKeyPath:@"algorithm" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld block:^(NSDictionary *change) {
+//            NSLog(@"%@", change);
+//        }] retain];
     }
     
     return self;
@@ -47,10 +129,12 @@
     [self removeObserver:self forKeyPath:@"seedPoint" context:NIMPRRegionGrowingTool.class];
     [self observeValueForKeyPath:@"algorithm" ofObject:self change:@{ NSKeyValueChangeOldKey: self.algorithm } context:NIMPRRegionGrowingTool.class];
     [self removeObserver:self forKeyPath:@"algorithm" context:NIMPRRegionGrowingTool.class];
+    [_segmentationAlgorithmsSelectionObserver release]; _segmentationAlgorithmsSelectionObserver = nil;
     [_popover performClose:nil];
 //    [_popover release];
-    self.algorithm = nil;
+//    self.algorithm = nil;
     self.segmentation = nil;
+    self.segmentationAlgorithms = nil;
 //    [_superviewObserver release];
 //    [_observers release];
     [super dealloc];
@@ -171,22 +255,44 @@
     return sas;
 }
 
+//+ (NSSet*)keyPathsForValuesAffectingAlgorithm {
+//    return [NSSet setWithObject:@"segmentationAlgorithms.selectedObjects"];
+//}
+//
+//- (NISegmentationAlgorithm*)algorithm {
+//    return self.segmentationAlgorithms.selectedObjects.lastObject;
+//}
+//
+//- (void)setAlgorithm:(NISegmentationAlgorithm *)algorithm {
+//    [self.segmentationAlgorithms setSelectedObjects:@[algorithm]];
+//}
+
+//static NSString* const NIMPRRegionGrowingToolMenuDidCloseNotification = @"NIMPRRegionGrowingToolMenuDidCloseNotification";
+
 - (NSViewController*)popoverViewController {
     NIView* view = [[[NIBackgroundView alloc] initWithFrame:NSZeroRect color:[NSColor.blackColor colorWithAlphaComponent:.8]] autorelease];
     
     NSTextField* label = [NIView labelWithControlSize:NSSmallControlSize];
     label.stringValue = NSLocalizedString(@"Region Growing", nil);
-    [label addConstraint:[NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:label.fittingSize.width]];
+    [label addConstraint:[NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:label.fittingSize.width]];
     [view addSubview:label];
     
-    NSPopUpButton* algorithms = [[[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO] autorelease];
+    NIMPRPopUpButton* algorithms = [[[NIMPRPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO] autorelease];
     algorithms.translatesAutoresizingMaskIntoConstraints = NO;
     algorithms.controlSize = NSSmallControlSize;
     algorithms.font = [NSFont menuFontOfSize:[NSFont systemFontSizeForControlSize:algorithms.controlSize]];
-    for (NISegmentationAlgorithm* sac in self.algorithms)
-        [algorithms.menu addItemWithTitle:sac.name block:^{
-            self.algorithm = sac;
-        }];
+    algorithms.menu.delegate = self;
+//    for (NISegmentationAlgorithm* sac in self.algorithms)
+//        [algorithms.menu addItemWithTitle:sac.name alt:sac.shortName block:^{
+//            self.algorithm = sac;
+//        }];
+    [algorithms bind:@"content" toObject:self.segmentationAlgorithms withKeyPath:@"arrangedObjects" options:nil];
+    [algorithms bind:@"contentObjects" toObject:self.segmentationAlgorithms withKeyPath:@"arrangedObjects" options:nil];
+    [algorithms bind:@"contentValues" toObject:self.segmentationAlgorithms withKeyPath:@"arrangedObjects.name" options:nil];
+    [algorithms bind:@"selectedIndex" toObject:self.segmentationAlgorithms withKeyPath:@"selectionIndex" options:nil];
+    algorithms.cell.titleBlock = ^NSString*() {
+        return [self.segmentationAlgorithms.selectedObjects.lastObject shortName];
+    };
     [view addSubview:algorithms];
     
     NSView* algorithm = [[[NSView alloc] initWithFrame:NSZeroRect] autorelease];
@@ -229,7 +335,7 @@
         NSDictionary* mu = [m dictionaryByAddingObject:(self.popoverDetached? @24 : @7) forKey:@"lmargin"];
         NSMutableString* v = [NSMutableString stringWithString:@"V:|-v-[label]-v-[algorithms]-v-[algorithm]"];
 
-        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-lmargin-[label]-h-|" options:0 metrics:mu views:NSDictionaryOfVariableBindings(label)]];
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-lmargin-[label]->=h-|" options:0 metrics:mu views:NSDictionaryOfVariableBindings(label)]];
         [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-h-[algorithms]-h-|" options:0 metrics:mu views:NSDictionaryOfVariableBindings(algorithms)]];
         [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-h-[algorithm]-h-|" options:0 metrics:mu views:NSDictionaryOfVariableBindings(algorithm)]];
         
@@ -239,6 +345,10 @@
         
         [v appendFormat:@"-v-|"];
         [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:v options:0 metrics:mu views:NSDictionaryOfVariableBindings(label, algorithms, algorithm, annotation)]];
+        
+        NSLayoutConstraint* wc = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:CGFloatMax(view.fittingSize.width, 150)];
+        wc.priority = NSLayoutPriorityDragThatCanResizeWindow;
+        [view addConstraint:wc];
     } and:^(__unsafe_unretained NIRetainer* r) {
         [r retain:[self observeKeyPath:@"algorithm" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionNew block:^(NSDictionary *change) {
             [algorithm removeAllSubviews];
@@ -249,8 +359,9 @@
             [algorithm addSubview:view];
             [algorithm addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[view]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(view)]];
             [algorithm addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(view)]];
+            view.needsUpdateConstraints = YES;
         }]];
-        [r retain:[self observeKeyPath:@"annotation" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld block:^(NSDictionary *change) {
+        [r retain:[self observeKeyPaths:@[@"annotation", ] options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld block:^(NSDictionary *change) {
             view.needsUpdateConstraints = YES;
             [r retain:[[change[NSKeyValueChangeNewKey] if:NIAnnotation.class] observeNotification:NIAnnotationRemovedNotification block:^(NSNotification *notification) {
                 [self cancel];
@@ -270,6 +381,13 @@
             frame.origin = NSMakePoint(frame.origin.x+delta.x, frame.origin.y+delta.y);
             [view.window setFrame:frame display:YES];
         }]];
+//        __unsafe_unretained __block NSLayoutConstraint* algorithmsWidthConstraint = nil;
+//        [r retain:[algorithms.menu observeNotification:NSPopUpButtonWillPopUpNotification block:^(NSNotification *notification) {
+//            [algorithms addConstraint:(algorithmsWidthConstraint = [NSLayoutConstraint constraintWithItem:algorithms attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:algorithms.frame.size.width])];
+//        }]];
+//        [r retain:[algorithms.menu observeNotification:NIMPRRegionGrowingToolMenuDidCloseNotification block:^(NSNotification *notification) {
+//            [algorithms removeConstraint:algorithmsWidthConstraint];
+//        }]];
     }] autorelease]; // avoid retain cycles inside this object's retains dictionary
 }
 
@@ -283,5 +401,18 @@
     self.annotation = nil;
 //    [self.popover performClose:nil];
 }
+
+//- (void)menuWillOpen:(NSMenu *)menu {
+//    [menu.itemArray enumerateObjectsUsingBlock:^(NSMenuItem* mi, NSUInteger i, BOOL* stop) {
+//        mi.title = [self.segmentationAlgorithms.arrangedObjects[i] name];
+//    }];
+//}
+//
+//- (void)menuDidClose:(NSMenu *)menu {
+//    [[NSNotificationCenter defaultCenter] postNotificationName:NIMPRRegionGrowingToolMenuDidCloseNotification object:menu];
+//    [menu.itemArray enumerateObjectsUsingBlock:^(NSMenuItem* mi, NSUInteger i, BOOL* stop) {
+//        mi.title = [self.segmentationAlgorithms.arrangedObjects[i] shortName];
+//    }];
+//}
 
 @end
