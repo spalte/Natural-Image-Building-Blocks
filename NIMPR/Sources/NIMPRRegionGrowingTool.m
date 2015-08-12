@@ -320,7 +320,7 @@
     }];
     [annotation addSubview:ok];
     
-    NSDictionary* m = @{ @"s": @3, @"h": @8, @"v": @8 };
+    NSDictionary* m = @{ @"s": @4, @"h": @7, @"v": @7 };
     [annotation addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[pi]-s-[cancel]-s-[ok]|" options:NSLayoutFormatAlignAllCenterY metrics:m views:NSDictionaryOfVariableBindings(pi, cancel, ok)]];
     [annotation addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[ok]|" options:0 metrics:m views:NSDictionaryOfVariableBindings(ok)]];
     

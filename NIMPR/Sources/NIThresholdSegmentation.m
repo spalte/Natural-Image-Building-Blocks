@@ -65,7 +65,7 @@
 
     return [[[NIViewController alloc] initWithView:view updateConstraints:^{
         [view removeAllConstraints];
-        NSDictionary* m = @{ @"s": @3 };
+        NSDictionary* m = @{ @"s": @4 };
         [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[lbetween]-s-[t1]-s-[land]-s-[t2]|" options:NSLayoutFormatAlignAllBaseline metrics:m views:NSDictionaryOfVariableBindings(lbetween, t1, land, t2)]];
         [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[t1]|" options:0 metrics:m views:NSDictionaryOfVariableBindings(t1)]];
         [view addConstraint:[NSLayoutConstraint constraintWithItem:t1 attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:t2 attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
@@ -171,9 +171,9 @@
 
     return [[[NIViewController alloc] initWithView:view updateConstraints:^{
         [view removeAllConstraints];
-        NSDictionary* m = @{ @"z": @0, @"s": @3 };
-        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-z-[linterval]-s-[finterval]-z-|" options:NSLayoutFormatAlignAllBaseline metrics:m views:NSDictionaryOfVariableBindings(linterval, finterval)]];
-        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-z-[finterval]-z-|" options:0 metrics:m views:NSDictionaryOfVariableBindings(finterval)]];
+        NSDictionary* m = @{ @"s": @4 };
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[linterval]-s-[finterval]|" options:NSLayoutFormatAlignAllBaseline metrics:m views:NSDictionaryOfVariableBindings(linterval, finterval)]];
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[finterval]|" options:0 metrics:m views:NSDictionaryOfVariableBindings(finterval)]];
         [view addConstraint:[NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:view.fittingSize.width]];
     }] autorelease];
 }
