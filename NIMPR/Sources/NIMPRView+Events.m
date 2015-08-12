@@ -234,7 +234,7 @@
     
     if (self.ltool.class != ltc) {
         [self.mutableHighlightedAnnotations removeAllObjects];
-        self.ltool = [[[ltc alloc] init] autorelease];
+        self.ltool = [[[ltc alloc] initWithViewer:self.window.windowController] autorelease];
     }
     
     if ([self.ltool respondsToSelector:@selector(view:flagsChanged:)])

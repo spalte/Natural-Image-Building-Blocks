@@ -77,12 +77,6 @@
     wc = [NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:[self.cell.title sizeWithAttributes:attrs].width+_extraWidth];
     wc.priority = NSLayoutPriorityDragThatCanResizeWindow;
     [self addConstraint:wc];
-//    [self setContentHuggingPriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
-//    [self setContentCompressionResistancePriority:NSLayoutPriorityDefaultHigh forOrientation:NSLayoutConstraintOrientationHorizontal];
-}
-
-- (CGFloat)cellWidth {
-    return 100;
 }
 
 @end
