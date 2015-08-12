@@ -8,6 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+@interface NIRetainer : NSObject {
+    NSMutableDictionary* _retains;
+}
+
+- (void)retain:(id)obj;
+- (void)retain:(id)obj forKey:(id)key;
+
+@end
+
 @interface NIObject : NSObject {
     void (^_deallocBlock)();
 }
@@ -36,6 +45,10 @@ typedef NS_OPTIONS(NSUInteger, NINotificationObservingOptions) {
 - (id)observeNotification:(NSString*)name block:(void (^)(NSNotification* notification))block;
 - (id)observeNotification:(NSString*)name options:(NINotificationObservingOptions)options block:(void (^)(NSNotification* notification))block; // retain the returned object until you want to stop observing
 - (id)observeNotifications:(NSArray*)names options:(NINotificationObservingOptions)options block:(void (^)(NSNotification* notification))block; // retain the returned object until you want to stop observing
+
+- (void)retain:(id)obj;
+- (void)retain:(id)obj forKey:(id)key;
+- (NIRetainer*)retainer;
 
 @end
 

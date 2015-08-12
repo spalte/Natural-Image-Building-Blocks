@@ -81,6 +81,8 @@
         _selectedAnnotations = [[NSMutableSet alloc] init];
         
         window.delegate = self;
+        window.collectionBehavior = NSWindowCollectionBehaviorFullScreenPrimary;
+        window.titleVisibility = NSWindowTitleHidden;
         
         NSToolbar* toolbar = [[[NSToolbar alloc] initWithIdentifier:@"NIMPR"] autorelease];
         toolbar.allowsUserCustomization = window.toolbar.autosavesConfiguration = YES;
@@ -197,6 +199,10 @@
     self.coronalView = nil;
     
     [super dealloc];
+}
+
+- (NSApplicationPresentationOptions)window:(NSWindow *)window willUseFullScreenPresentationOptions:(NSApplicationPresentationOptions)proposedOptions {
+    return NSApplicationPresentationAutoHideDock|NSApplicationPresentationAutoHideMenuBar|NSApplicationPresentationFullScreen|NSApplicationPresentationAutoHideToolbar;
 }
 
 + (Class)mprViewClass {

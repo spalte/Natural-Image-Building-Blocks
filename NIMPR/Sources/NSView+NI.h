@@ -10,15 +10,6 @@
 
 @class NIViewController;
 
-@interface NIRetainer : NSObject {
-    NSMutableDictionary* _retains;
-}
-
-- (void)retain:(id)obj;
-- (void)retain:(id)obj forKey:(id)key;
-
-@end
-
 @interface NIView : NSView {
     NIViewController* _controller;
 }
@@ -33,17 +24,16 @@
 
 @interface NIViewController : NSViewController {
     void (^_updateConstraintsBlock)();
-    NIRetainer* _retainer;
 }
 
 @property(copy) void (^updateConstraintsBlock)();
-@property(readonly, retain, nonatomic) NIRetainer* retainer;
 
 @property(retain) NIView* view;
 
 - (id)initWithView:(NIView*)view;
 - (id)initWithView:(NIView*)view updateConstraints:(void (^)())updateConstraintsBlock;
 - (id)initWithView:(NIView*)view updateConstraints:(void (^)())updateConstraintsBlock and:(void (^)(NIRetainer* r))block;
+- (id)initWithTitle:(NSString*)title view:(NIView*)view updateConstraints:(void (^)())updateConstraintsBlock and:(void (^)(NIRetainer* r))block;
 
 @end
 
@@ -73,4 +63,3 @@
 - (id)initWithFrame:(NSRect)frameRect color:(NSColor*)backgroundColor;
 
 @end
-

@@ -8,6 +8,7 @@
 
 #import "NSObject+NI.h"
 #include <execinfo.h>
+#include <objc/runtime.h>
 
 @implementation NIObject
 
@@ -245,7 +246,58 @@
     return 0;
 }
 
+- (void)retain:(id)obj {
+    [self.retainer retain:obj];
+}
+
+- (void)retain:(id)obj forKey:(id)key{
+    [self.retainer retain:obj forKey:key];
+}
+
+- (NIRetainer*)retainer {
+    NIRetainer* r = objc_getAssociatedObject(self, @selector(retainer));
+    if (!r)
+        objc_setAssociatedObject(self, @selector(retainer), (r = [[NIRetainer alloc] init]), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    return r;
+}
+
 @end
+
+@interface NIRetainer ()
+
+@property(retain, nonatomic) NSMutableDictionary* retains;
+
+@end
+
+@implementation NIRetainer
+
+@synthesize retains = _retains;
+
+- (id)init {
+    if ((self = [super init])) {
+        self.retains = [NSMutableDictionary dictionary];
+    }
+    
+    return self;
+}
+
+- (void)dealloc {
+    self.retains = nil;
+    [super dealloc];
+}
+
+- (void)retain:(id)obj {
+    [self retain:obj forKey:[NSValue valueWithPointer:obj]];
+}
+
+- (void)retain:(id)obj forKey:(id)key {
+    if (obj)
+        self.retains[key] = obj;
+    else [self.retains removeObjectForKey:key];
+}
+
+@end
+
 
 @implementation NSNull (NIMPR)
 

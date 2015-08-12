@@ -183,17 +183,18 @@
 
 - (void)toolbarItemAction:(id)sender {
     if (!self.popover.isShown) {
+        _window = [sender window];
         NSEvent* event = [NSApp currentEvent];
         NSRect r = [sender bounds];
         if ([sender isKindOfClass:NIMPRSegmentedControl.class])
             for (NSInteger i = 0; i < [sender segmentCount]; ++i) {
                 NSRect ir = [sender boundsForSegment:i];
                 if (NSPointInRect([event locationInView:sender], [sender boundsForSegment:i])) {
-                    r = NSInsetRect(ir, 0, 5);
+                    if (!(_window.styleMask&NSFullScreenWindowMask))
+                        r = NSInsetRect(ir, 0, 5);
                     break;
                 }
             }
-        _window = [sender window];
         [self.popover showRelativeToRect:r ofView:sender preferredEdge:NSMaxYEdge];
     } else [self.popover performClose:sender];
 }
@@ -329,7 +330,7 @@
         NSDictionary* mu = [m dictionaryByAddingObject:(self.popoverDetached? @24 : @7) forKey:@"lmargin"];
         NSMutableString* v = [NSMutableString stringWithString:@"V:|-v-[label]-v-[algorithms]-v-[algorithm]"];
 
-        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-lmargin-[label]->=h-|" options:0 metrics:mu views:NSDictionaryOfVariableBindings(label)]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
         [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-h-[algorithms]-h-|" options:0 metrics:mu views:NSDictionaryOfVariableBindings(algorithms)]];
         [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-h-[algorithm]-h-|" options:0 metrics:mu views:NSDictionaryOfVariableBindings(algorithm)]];
         
@@ -344,6 +345,9 @@
         wc.priority = NSLayoutPriorityDragThatCanResizeWindow;
         [view addConstraint:wc];
     } and:^(__unsafe_unretained NIRetainer* r) {
+//        [r retain:[view observeKeyPath:@"window" options:NSKeyValueObservingOptionNew block:^(NSDictionary *change) {
+//            NSLog(@"frrrrame!! %@", change[NSKeyValueChangeNewKey]);
+//        }]];
         [r retain:[self observeKeyPath:@"algorithm" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionNew block:^(NSDictionary *change) {
             [algorithm removeAllSubviews];
             NISegmentationAlgorithm* sa = [change[NSKeyValueChangeNewKey] if:NISegmentationAlgorithm.class];

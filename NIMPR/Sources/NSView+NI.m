@@ -10,41 +10,6 @@
 
 //NSString* const NIViewDidMoveToSuperviewNotification = @"NIViewDidMoveToSuperviewNotification";
 
-@interface NIRetainer ()
-
-@property(retain, nonatomic) NSMutableDictionary* retains;
-
-@end
-
-@implementation NIRetainer
-
-@synthesize retains = _retains;
-
-- (id)init {
-    if ((self = [super init])) {
-        self.retains = [NSMutableDictionary dictionary];
-    }
-    
-    return self;
-}
-
-- (void)dealloc {
-    self.retains = nil;
-    [super dealloc];
-}
-
-- (void)retain:(id)obj {
-    [self retain:obj forKey:[NSValue valueWithPointer:obj]];
-}
-
-- (void)retain:(id)obj forKey:(id)key {
-    if (obj)
-        self.retains[key] = obj;
-    else [self.retains removeObjectForKey:key];
-}
-
-@end
-
 @implementation NIView
 
 @synthesize controller = _controller;
@@ -88,16 +53,9 @@
 
 @end
 
-@interface NIViewController ()
-
-@property(readwrite, retain, nonatomic) NIRetainer* retainer;
-
-@end
-
 @implementation NIViewController
 
 @synthesize updateConstraintsBlock = _updateConstraintsBlock;
-@synthesize retainer = _retainer;
 
 @dynamic view;
 
@@ -110,7 +68,12 @@
 }
 
 - (id)initWithView:(NIView*)view updateConstraints:(void (^)())updateConstraintsBlock and:(void (^)(NIRetainer* r))block {
+    return [self initWithTitle:nil view:view updateConstraints:updateConstraintsBlock and:block];
+}
+
+- (id)initWithTitle:(NSString*)title view:(NIView*)view updateConstraints:(void (^)())updateConstraintsBlock and:(void (^)(NIRetainer* r))block {
     if ((self = [super init])) {
+        self.title = title;
         self.view = view;
         self.updateConstraintsBlock = updateConstraintsBlock;
         
@@ -126,7 +89,6 @@
 - (void)dealloc {
     self.view.controller = nil;
     [self removeObserver:self forKeyPath:@"updateConstraintsBlock" context:NIViewController.class];
-    self.retainer = nil;
     self.updateConstraintsBlock = nil;
     [super dealloc];
 }
@@ -146,15 +108,10 @@
 }
 
 - (void)updateViewConstraints {
-//    [super updateViewConstraints];
-    if (self.updateConstraintsBlock)
+    if (self.updateConstraintsBlock) {
         self.updateConstraintsBlock();
-}
-
-- (NIRetainer*)retainer {
-    if (!_retainer)
-        _retainer = [[NIRetainer alloc] init];
-    return _retainer;
+        self.view.needsUpdateConstraints = NO;
+    } else [self.view updateConstraints];
 }
 
 @end
@@ -233,8 +190,16 @@
 
 - (void)drawRect:(NSRect)dirtyRect {
     if (self.backgroundColor) {
+        [NSGraphicsContext saveGraphicsState];
+//        [[NSAffineTransform transform] set];
+//        [[NSBezierPath bezierPathWithRect:[self.window.contentView frame]] setClip];
+        
         [self.backgroundColor set];
-        NSRectFill(self.bounds);
+//        if (self != self.window.contentView)
+            NSRectFill(self.bounds);
+//        else NSRectFill(NSMakeRect(0, 0, self.window.frame.size.width, self.window.frame.size.height+20));
+    
+        [NSGraphicsContext restoreGraphicsState];
     }
     
     [super drawRect:dirtyRect];
@@ -247,4 +212,6 @@
 }
 
 @end
+
+
 
