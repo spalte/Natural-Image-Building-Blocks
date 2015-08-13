@@ -236,7 +236,7 @@
     if ([view.highlightedAnnotations containsObject:self])
         color = [view.highlightColor colorWithAlphaComponent:color.alphaComponent];
     [color set];
-        
+    
     CGContextClipToMask(context.CGContext, NSRectToCGRect(bounds), [cimage CGImageForProposedRect:NULL context:context hints:nil]);
     [context setCompositingOperation:NSCompositeSourceOver];
     NSRectFill(bounds);
