@@ -112,7 +112,8 @@
         if (self.annotation.closed || self.closedPreview)
             stroke.closed = YES;
         
-        stroke.color = [self.annotation.color colorWithAlphaComponent:self.annotation.color.alphaComponent/2];
+        NSColor* color = [self.annotation.class color:self.annotation];
+        stroke.color = [color colorWithAlphaComponent:color.alphaComponent/2];
         [stroke drawInView:view cache:nil];
     }
 }

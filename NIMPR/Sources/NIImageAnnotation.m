@@ -116,10 +116,10 @@ typedef struct {
     [[NSAffineTransform transform] set];
     
     BOOL highlight = [view.highlightedAnnotations containsObject:self];
+    NSColor* color = [self.class color:self];
     if (!self.colorify && !highlight)
-        [cimage drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:self.color.alphaComponent];
+        [cimage drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:color.alphaComponent];
     else {
-        NSColor* color = self.color;
         if (highlight)
             color = [view.highlightColor colorWithAlphaComponent:color.alphaComponent];
         [color set];

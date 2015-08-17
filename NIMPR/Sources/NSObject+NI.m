@@ -120,10 +120,24 @@
 
 @implementation NSObject (NIMPR)
 
++ (id)either:(id)obj1 or:(id)obj2 {
+    return (obj1? obj1 : obj2);
+}
+
++ (id)either:(id)obj1 or:(id)obj2 or:obj3 {
+    return (obj1? obj1 : (obj2? obj2 : obj3));
+}
+
 - (id)if:(Class)class {
     if (![self isKindOfClass:class])
         return nil;
     return self;
+}
+
+- (id)ifn:(Class)class {
+    if (![self isKindOfClass:class])
+        return self;
+    return nil;
 }
 
 - (id)performSelector:(SEL)sel withObjects:(id)obj1 :(id)obj2 {

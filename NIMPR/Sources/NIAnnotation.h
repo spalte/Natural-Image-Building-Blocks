@@ -25,8 +25,10 @@ extern CGFloat const NIAnnotationDistant;
     NSMutableDictionary* _changes;
 }
 
-@property(retain, nonatomic) NSString* name;
-@property(retain, nonatomic) NSColor* color;
+@property(retain) NSString* name;
++ (NSString*)name:(NIAnnotation*)annotation;
+@property(retain) NSColor* color;
++ (NSColor*)color:(NIAnnotation*)annotation;
 @property BOOL locked;
 
 //+ (id)pointWithVector:(NIVector)vector;
@@ -39,6 +41,7 @@ extern CGFloat const NIAnnotationDistant;
 
 + (NSColor*)defaultColor;
 + (void)setDefaultColor:(NSColor*)color;
+- (NSColor*)color;
 
 @property(readonly) BOOL annotation; // the value of this property is always YES, but you can observe it in order to observe changes in the annotation's properties
 + (NSSet*)keyPathsForValuesAffectingAnnotation;

@@ -100,7 +100,7 @@
     
     NIBezierPath* slicePath = [self.NIBezierPath bezierPathByApplyingTransform:dicomToSliceTransform];
     
-    NSColor* color = self.color;
+    NSColor* color = [self.class color:self];
     if ([view.highlightedAnnotations containsObject:self])
         color = [view.highlightColor colorWithAlphaComponent:color.alphaComponent];
 

@@ -166,17 +166,21 @@ static NSColor* NIAnnotationDefaultColor = nil;
     }
 }
 
-- (NSColor*)color {
-    if (_color)
-        return _color;
-    return [self.class defaultColor];
++ (NSColor*)color:(NIAnnotation*)annotation {
+    NSColor* color = annotation.color;
+    if (color)
+        return color;
+    return [annotation.class defaultColor];
 }
 
-- (NSString*)name {
-    if (_name)
-        return _name;
++ (NSString*)name:(NIAnnotation*)annotation {
+    NSString* name = annotation.name;
+    if (name)
+        return name;
     
-    NSString* name = [self.className substringFromIndex:2];
+    name = annotation.className;
+    if ([name hasPrefix:@"NI"])
+        name = [name substringFromIndex:2];
     if ([name hasSuffix:@"Annotation"])
         name = [name substringToIndex:name.length-10];
     
@@ -188,5 +192,3 @@ static NSColor* NIAnnotationDefaultColor = nil;
 }
 
 @end
-
-

@@ -173,7 +173,6 @@
             [context setCompositingOperation:NSCompositeCopy];
             NSRectFill(bounds);
             
-            
 //            if (view.annotationsBaseAlpha) {
 //                float *fsib = (float*)sib.data, *fwib = (float*)wib.data;
 //                for (vImagePixelCount p = 0; p < sib.height*sib.width; ++p)
@@ -204,7 +203,7 @@
                     
                     CGContextClipToMask(context.CGContext, NSRectToCGRect(bounds), [/*wi*/si CGImageForProposedRect:NULL context:context hints:nil]);
                     [context setCompositingOperation:NSCompositeSourceOver];
-                    [self.color set];
+                    [[self.class color:self] set];
                     NSRectFill(bounds);
                     
                 } @catch (NSException* e) {

@@ -8,8 +8,13 @@
 
 #import "NIRectangleAnnotation.h"
 #import "NIAnnotationHandle.h"
+#import "NIJSONArchiver.h"
 
 @implementation NIRectangleAnnotation
+
++ (void)load {
+    [NIJSONArchiver setClassName:@"rectangle" forClass:NIRectangleAnnotation.class];
+}
 
 @synthesize bounds = _bounds;
 

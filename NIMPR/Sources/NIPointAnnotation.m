@@ -44,7 +44,7 @@
     NSRect ovalRect = NSMakeRect(p.x - radius, p.y - radius, radius*2, radius*2);
     NSBezierPath* path = [NSBezierPath bezierPathWithOvalInRect:ovalRect];
 
-    NSColor* color = self.color;
+    NSColor* color = [self.class color:self];
     if ([view.highlightedAnnotations containsObject:self])
         color = [view.highlightColor colorWithAlphaComponent:color.alphaComponent];
 

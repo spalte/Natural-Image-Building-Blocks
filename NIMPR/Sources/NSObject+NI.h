@@ -34,7 +34,13 @@ typedef NS_OPTIONS(NSUInteger, NINotificationObservingOptions) {
 
 @interface NSObject (NIMPR)
 
++ (id)valueWithBytes:(const void*)bytes objCType:(const char*)type;
+
++ (id)either:(id)obj1 or:(id)obj2;
++ (id)either:(id)obj1 or:(id)obj2 or:obj3;
+
 - (id)if:(Class)c;
+- (id)ifn:(Class)c;
 - (id)performSelector:(SEL)sel withObjects:(id)obj1 :(id)obj2;
 - (id)performSelector:(SEL)sel withObjects:(id)obj1 :(id)obj2 :(id)obj3;
 

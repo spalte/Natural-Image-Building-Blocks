@@ -404,7 +404,7 @@ static NSString* const NIMPRControllerMenuAnnotationsDelimiter = @"NIMPRControll
     }
     
     for (NIAnnotation* a in self.highlightedAnnotations) {
-        NSMenuItem* mi = [[[NSMenuItem alloc] initWithTitle:a.name action:nil keyEquivalent:@""] autorelease];
+        NSMenuItem* mi = [[[NSMenuItem alloc] initWithTitle:[a.class name:a] action:nil keyEquivalent:@""] autorelease];
         mi.representedObject = a;
         mi.submenu = [[[NSMenu alloc] init] autorelease];
         
