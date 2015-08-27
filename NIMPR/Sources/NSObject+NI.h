@@ -64,6 +64,12 @@ typedef NS_OPTIONS(NSUInteger, NINotificationObservingOptions) {
 
 @end
 
+@interface NSArray (NIMPR)
+
+- (id)objectAtIndex:(NSUInteger)index or:(id)orv;
+
+@end
+
 @interface NSDictionary (NIMPR)
 
 - (NSDictionary*)dictionaryByAddingObject:(id)obj forKey:(id)key;

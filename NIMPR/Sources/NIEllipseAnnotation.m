@@ -7,8 +7,13 @@
 //
 
 #import "NIEllipseAnnotation.h"
+#import "NIJSON.h"
 
 @implementation NIEllipseAnnotation
+
++ (void)load {
+    [NIJSON setName:@"ellipse" forClass:NIEllipseAnnotation.class];
+}
 
 + (id)ellipseWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform {
     return [[[self.class alloc] initWithBounds:bounds transform:sliceToDicomTransform] autorelease];

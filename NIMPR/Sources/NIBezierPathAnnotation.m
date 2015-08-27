@@ -149,16 +149,31 @@
 
 @end
 
+static NSString* const NINSBezierPathAnnotationTransform = @"transform";
+
 @implementation NINSBezierPathAnnotation
 
 @synthesize modelToDicomTransform = _modelToDicomTransform;
 
-- (instancetype)initWithTransform:(NIAffineTransform)sliceToDicomTransform {
+- (instancetype)init {
     if ((self = [super init])) {
+        self.modelToDicomTransform = NIAffineTransformIdentity;
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithTransform:(NIAffineTransform)sliceToDicomTransform {
+    if ((self = [self init])) {
         self.modelToDicomTransform = sliceToDicomTransform;
     }
     
     return self;
+}
+
+- (void)encodeWithCoder:(NSCoder*)coder {
+    [super encodeWithCoder:coder];
+    [coder encodeObject:[NSValue valueWithNIAffineTransform:self.modelToDicomTransform] forKey:NINSBezierPathAnnotationTransform];
 }
 
 - (void)translate:(NIVector)translation {

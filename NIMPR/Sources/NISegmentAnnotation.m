@@ -7,8 +7,13 @@
 //
 
 #import "NISegmentAnnotation.h"
+#import "NIJSON.h"
 
 @implementation NISegmentAnnotation
+
++ (void)load {
+    [NIJSON setName:@"segment" forClass:NISegmentAnnotation.class];
+}
 
 @synthesize p = _p, q = _q;
 
@@ -16,12 +21,17 @@
     return [NSSet setWithObjects: @"p", @"q", nil];
 }
 
-+ (id)segmentWithPoints:(NSPoint)p :(NSPoint)q transform:(NIAffineTransform)sliceToDicomTransform {
-    return [[[self.class alloc] initWithPoints:p:q transform:sliceToDicomTransform] autorelease];
++ (id)segmentWithPoints:(NIVector)p :(NIVector)q {
+    return [[[self.class alloc] initWithPoints:p:q] autorelease];
 }
 
-- (instancetype)initWithPoints:(NSPoint)p :(NSPoint)q transform:(NIAffineTransform)sliceToDicomTransform {
-    if ((self = [super initWithTransform:sliceToDicomTransform])) {
++ (id)segmentWithPoints:(NSPoint)p :(NSPoint)q transform:(NIAffineTransform)planeToDicomTransform {
+    NIVector pv = NIVectorApplyTransform(NIVectorMakeFromNSPoint(p), planeToDicomTransform), qv = NIVectorApplyTransform(NIVectorMakeFromNSPoint(q), planeToDicomTransform);
+    return [self segmentWithPoints:pv:qv];
+}
+
+- (instancetype)initWithPoints:(NIVector)p :(NIVector)q {
+    if ((self = [super init])) {
         self.p = p;
         self.q = q;
     }
@@ -29,26 +39,31 @@
     return self;
 }
 
-- (NSBezierPath*)NSBezierPath {
-    NSBezierPath* path = [NSBezierPath bezierPath];
+- (void)encodeWithCoder:(NSCoder *)coder {
+    [super encodeWithCoder:coder];
+    [coder encodeObject:@[ [NSValue valueWithNIVector:self.p], [NSValue valueWithNIVector:self.q] ] forKey:@"points"];
+}
+
+- (NIBezierPath*)NIBezierPath {
+    NIMutableBezierPath* path = [NIMutableBezierPath bezierPath];
     
-    [path moveToPoint:self.p];
-    [path lineToPoint:self.q];
+    [path moveToVector:self.p];
+    [path lineToVector:self.q];
     
     return path;
 }
 
 - (NSSet*)handlesInView:(NIAnnotatedGeneratorRequestView*)view {
-    NIAffineTransform planeToSliceTransform = NIAffineTransformConcat(self.modelToDicomTransform, NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform));
+    NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform);
     return [NSSet setWithObjects:
-            [NITransformAnnotationBlockHandle handleAtSliceVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(self.p), planeToSliceTransform) annotation:self
-                                                        block:^(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector d) {
-                                                            self.p = NSMakePoint(self.p.x+d.x, self.p.y+d.y);
-                                                        }],
-            [NITransformAnnotationBlockHandle handleAtSliceVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(self.q), planeToSliceTransform) annotation:self
-                                                        block:^(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector d) {
-                                                            self.q = NSMakePoint(self.q.x+d.x, self.q.y+d.y);
-                                                        }], nil];
+            [NIAnnotationBlockHandle handleAtSliceVector:NIVectorApplyTransform(self.p, dicomToSliceTransform)
+                                                   block:^(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector d) {
+                                                       self.p = NIVectorAdd(self.p, d);
+                                                   }],
+            [NIAnnotationBlockHandle handleAtSliceVector:NIVectorApplyTransform(self.q, dicomToSliceTransform)
+                                                   block:^(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector d) {
+                                                       self.q = NIVectorAdd(self.q, d);
+                                                   }], nil];
 }
 
 @end

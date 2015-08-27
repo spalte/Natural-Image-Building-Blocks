@@ -7,8 +7,13 @@
 //
 
 #import "NIPolyAnnotation.h"
+#import "NIJSON.h"
 
 @implementation NIPolyAnnotation
+
++ (void)load {
+    [NIJSON setName:@"poly" forClass:NIPolyAnnotation.class];
+}
 
 @synthesize vectors = _vectors;
 @synthesize smooth = _smooth, closed = _closed;
@@ -24,6 +29,13 @@
 - (void)dealloc {
     [_vectors release];
     [super dealloc];
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder {
+    [super encodeWithCoder:coder];
+    [coder encodeObject:self.vectors forKey:@"points"];
+    [coder encodeBool:self.smooth forKey:@"smooth"];
+    [coder encodeBool:self.closed forKey:@"closed"];
 }
 
 - (void)translate:(NIVector)translation {

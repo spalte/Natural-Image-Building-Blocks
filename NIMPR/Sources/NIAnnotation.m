@@ -10,6 +10,7 @@
 #import "NIPointAnnotation.h"
 #import "NISegmentAnnotation.h"
 #import "NIEllipseAnnotation.h"
+#import "NIJSON.h"
 
 // NIAnnotationRequestCache dictionary keys
 NSString* const NIAnnotationRequest = @"NIAnnotationRequest"; // NIGeneratorRequest

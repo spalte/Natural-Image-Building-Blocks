@@ -323,6 +323,14 @@
 
 @end
 
+@implementation NSArray (NIMPR)
+
+- (id)objectAtIndex:(NSUInteger)index or:(id)orv {
+    return (self.count < index ? self[index] : orv);
+}
+
+@end
+
 @implementation NSDictionary (NIMPR)
 
 - (NSDictionary*)dictionaryByAddingObject:(id)obj forKey:(id)key {

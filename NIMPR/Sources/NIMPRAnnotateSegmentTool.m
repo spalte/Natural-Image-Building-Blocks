@@ -15,15 +15,14 @@
 
 - (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())otherwise {
     return [super view:view mouseDown:event otherwise:otherwise confirm:^{
-        NIObliqueSliceGeneratorRequest* req = view.presentedGeneratorRequest;
-        [view.mutableAnnotations addObject:(self.annotation = [NISegmentAnnotation segmentWithPoints:self.mouseDownLocation :self.mouseDownLocation transform:req.sliceToDicomTransform])];
+        [view.mutableAnnotations addObject:(self.annotation = [NISegmentAnnotation segmentWithPoints:self.mouseDownLocationVector:self.mouseDownLocationVector])];
     }];
 }
 
 - (BOOL)view:(NIMPRView *)view mouseDragged:(NSEvent *)event {
     [super view:view mouseDragged:event];
     
-    self.annotation.q = self.currentLocation;
+    self.annotation.q = self.currentLocationVector;
     
     return YES;
 }

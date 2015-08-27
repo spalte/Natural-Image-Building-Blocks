@@ -39,6 +39,8 @@ extern CGFloat const NIAnnotationDistant;
 - (id)init NS_DESIGNATED_INITIALIZER;
 - (id)initWithCoder:(NSCoder*)aDecoder;
 
+- (void)encodeWithCoder:(NSCoder*)coder NS_REQUIRES_SUPER;
+
 + (NSColor*)defaultColor;
 + (void)setDefaultColor:(NSColor*)color;
 - (NSColor*)color;

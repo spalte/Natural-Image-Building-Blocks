@@ -25,6 +25,7 @@
 
 @property NIAffineTransform modelToDicomTransform;
 
+- (instancetype)init; // inits transform to NIAffineTransformIdentity
 - (instancetype)initWithTransform:(NIAffineTransform)sliceToDicomTransform;
 
 - (NSBezierPath*)NSBezierPath;

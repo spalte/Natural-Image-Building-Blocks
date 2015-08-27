@@ -8,6 +8,9 @@
 
 #import "NIMaskAnnotation.h"
 #import "NIAnnotationHandle.h"
+#import "NIJSON.h"
+
+static NSString* const NIMaskAnnotationMask = @"mask";
 
 @interface NIMaskAnnotation ()
 
@@ -16,6 +19,10 @@
 @end
 
 @implementation NIMaskAnnotation
+
++ (void)load {
+    [NIJSON setName:@"mask" forClass:NIMaskAnnotation.class];
+}
 
 @synthesize mask = _mask;
 @synthesize modelToDicomTransform = _modelToDicomTransform;
@@ -57,6 +64,11 @@
     self.volume = nil;
     self.volumeLock = nil;
     [super dealloc];
+}
+
+- (void)encodeWithCoder:(NSCoder*)coder {
+    [super encodeWithCoder:coder];
+    [coder encodeObject:self.mask forKey:NIMaskAnnotationMask];
 }
 
 - (void)setMask:(NIMask *)mask {
@@ -131,7 +143,7 @@
             sibd = sib; sibd.data = [[NSMutableData dataWithLength:sib.rowBytes*sib.height] mutableBytes];
             float kernel[] = {1,1,1,1,1,1,1,1,1};
             vImageDilate_PlanarF(&sib, &sibd, 0, 0, kernel, 3, 3, kvImageNoFlags);
-
+            
             bdp[0] = sibd.data;
             sid = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:bdp pixelsWide:sib.width pixelsHigh:sib.height bitsPerSample:sizeof(float)*8 samplesPerPixel:1
                                                              hasAlpha:NO isPlanar:NO colorSpaceName:NSDeviceWhiteColorSpace bitmapFormat:NSFloatingPointSamplesBitmapFormat bytesPerRow:sib.rowBytes bitsPerPixel:sizeof(float)*8] autorelease];

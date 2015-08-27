@@ -8,12 +8,14 @@
 
 #import "NIRectangleAnnotation.h"
 #import "NIAnnotationHandle.h"
-#import "NIJSONArchiver.h"
+#import "NIJSON.h"
+
+static NSString* const NIRectangleAnnotationBounds = @"bounds";
 
 @implementation NIRectangleAnnotation
 
 + (void)load {
-    [NIJSONArchiver setClassName:@"rectangle" forClass:NIRectangleAnnotation.class];
+    [NIJSON setName:@"rectangle" forClass:NIRectangleAnnotation.class];
 }
 
 @synthesize bounds = _bounds;
@@ -32,6 +34,11 @@
     }
     
     return self;
+}
+
+- (void)encodeWithCoder:(NSCoder*)coder {
+    [super encodeWithCoder:coder];
+    [coder encodeObject:[NSValue valueWithRect:self.bounds] forKey:NIRectangleAnnotationBounds];
 }
 
 - (NSBezierPath*)NSBezierPath {
