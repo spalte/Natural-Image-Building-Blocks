@@ -7,13 +7,8 @@
 //
 
 #import "NIPolyAnnotation.h"
-#import "NIJSON.h"
 
 @implementation NIPolyAnnotation
-
-+ (void)load {
-    [NIJSON setName:@"poly" forClass:NIPolyAnnotation.class];
-}
 
 @synthesize vectors = _vectors;
 @synthesize smooth = _smooth, closed = _closed;

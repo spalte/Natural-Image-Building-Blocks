@@ -8,7 +8,6 @@
 
 #import "NIMaskAnnotation.h"
 #import "NIAnnotationHandle.h"
-#import "NIJSON.h"
 
 static NSString* const NIMaskAnnotationMask = @"mask";
 
@@ -19,10 +18,6 @@ static NSString* const NIMaskAnnotationMask = @"mask";
 @end
 
 @implementation NIMaskAnnotation
-
-+ (void)load {
-    [NIJSON setName:@"mask" forClass:NIMaskAnnotation.class];
-}
 
 @synthesize mask = _mask;
 @synthesize modelToDicomTransform = _modelToDicomTransform;

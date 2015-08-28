@@ -89,10 +89,12 @@
 
 - (id)initWithObject:(id)object name:(NSString*)name options:(NINotificationObservingOptions)options block:(void (^)(NSNotification*))block {
     if ((self = [super init])) {
-        self.object = object;
         self.name = name;
         self.block = block;
 
+        if (object != [object class])
+            self.object = object;
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_observeNotification:) name:name object:object];
         
         @try {
@@ -214,6 +216,14 @@
     for (NSString* name in names)
         [r addObject:[self observeNotification:name options:options block:block]];
     return r;
+}
+
++ (id)observeNotification:(NSString*)name block:(void (^)(NSNotification* notification))block {
+    return [self.class observeNotification:name options:0 block:block];
+}
+
++ (id)observeNotification:(NSString*)name options:(NINotificationObservingOptions)options block:(void (^)(NSNotification* notification))block {
+    return [[[NINotificationObserver alloc] initWithObject:nil name:name options:options block:block] autorelease];
 }
 
 + (id)valueWithBytes:(const void*)bytes objCType:(const char*)type {

@@ -7,13 +7,8 @@
 //
 
 #import "NISegmentAnnotation.h"
-#import "NIJSON.h"
 
 @implementation NISegmentAnnotation
-
-+ (void)load {
-    [NIJSON setName:@"segment" forClass:NISegmentAnnotation.class];
-}
 
 @synthesize p = _p, q = _q;
 

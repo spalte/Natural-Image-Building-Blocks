@@ -10,6 +10,7 @@
 #import <NIBuildingBlocks/NIGeometry.h>
 #import <NIBuildingBlocks/NIMask.h>
 #import <objc/runtime.h>
+#import "NIAnnotation.h"
 
 static NSString* const NIJSONClass = @"class";
 static NSString* const NIJSONType = @"type";
@@ -73,118 +74,131 @@ typedef id (^NIJSONUnarchiverBlock)(NIJSONUnarchiver* unarchiver);
 @implementation NIJSON
 
 + (void)load {
-    [self setName:@"rect" forValueObjCType:@encode(NSRect) encoder:^(NIJSONArchiver *archiver, NSValue *val) {
-        NSRect rect = val.rectValue;
-        [archiver encodeObject:@[ @(rect.origin.x), @(rect.origin.y), @(rect.size.width), @(rect.size.height) ] forKey:@"xywh"];
-    } decoder:^NSValue *(NIJSONUnarchiver *unarchiver) {
-        NSArray* values = [unarchiver decodeObjectForKey:@"xywh"];
-        return [NSValue valueWithRect:NSMakeRect([values[0] CGFloatValue], [values[1] CGFloatValue], [values[2] CGFloatValue], [values[3] CGFloatValue])];
-    }];
+    [self setName:@"rect" forValueObjCType:@encode(NSRect)
+          encoder:^(NIJSONArchiver *archiver, NSValue *val) {
+              NSRect rect = val.rectValue;
+              [archiver encodeObject:@[ @(rect.origin.x), @(rect.origin.y), @(rect.size.width), @(rect.size.height) ] forKey:@"xywh"];
+          }
+          decoder:^NSValue *(NIJSONUnarchiver *unarchiver) {
+              NSArray* values = [unarchiver decodeObjectForKey:@"xywh"];
+              return [NSValue valueWithRect:NSMakeRect([values[0] CGFloatValue], [values[1] CGFloatValue], [values[2] CGFloatValue], [values[3] CGFloatValue])];
+          }];
     
-    [self setName:@"point" forValueObjCType:@encode(NIVector) encoder:^(NIJSONArchiver *archiver, NSValue *val) {
-        NIVector vect = val.NIVectorValue;
-        [archiver encodeObject:(vect.z? @[ @(vect.x), @(vect.y), @(vect.z) ] : @[ @(vect.x), @(vect.y) ]) forKey:@"xyz"];
-    } decoder:^NSValue *(NIJSONUnarchiver *unarchiver) {
-        NSArray* values = [unarchiver decodeObjectForKey:@"xyz"];
-        return [NSValue valueWithNIVector:NIVectorMake([values[0] CGFloatValue], [values[1] CGFloatValue], [[values objectAtIndex:2 or:@0] CGFloatValue])];
-    }];
+    [self setName:@"point" forValueObjCType:@encode(NIVector)
+          encoder:^(NIJSONArchiver *archiver, NSValue *val) {
+              NIVector vect = val.NIVectorValue;
+              [archiver encodeObject:(vect.z? @[ @(vect.x), @(vect.y), @(vect.z) ] : @[ @(vect.x), @(vect.y) ]) forKey:@"coords"];
+          }
+          decoder:^NSValue *(NIJSONUnarchiver *unarchiver) {
+              NSArray* values = [unarchiver decodeObjectForKey:@"coords"];
+              return [NSValue valueWithNIVector:NIVectorMake([values[0] CGFloatValue], [values[1] CGFloatValue], [[values objectAtIndex:2 or:@0] CGFloatValue])];
+          }];
     
-    [self setName:@"transform" forValueObjCType:@encode(NIAffineTransform) encoder:^(NIJSONArchiver *archiver, NSValue *val) {
-        NIAffineTransform t = val.NIAffineTransformValue;
-        [archiver encodeObject:@[ @(t.m11), @(t.m12), @(t.m13), @(t.m14), @(t.m21), @(t.m22), @(t.m23), @(t.m24), @(t.m31), @(t.m32), @(t.m33), @(t.m34), @(t.m41), @(t.m42), @(t.m43), @(t.m44) ] forKey:@"matrix"];
-    } decoder:^NSValue *(NIJSONUnarchiver *unarchiver) {
-        NSArray* values = [unarchiver decodeObjectForKey:@"matrix"];
-        NIAffineTransform t = { [values[0] CGFloatValue], [values[1] CGFloatValue], [values[2] CGFloatValue], [values[3] CGFloatValue],
-            [values[4] CGFloatValue], [values[5] CGFloatValue], [values[6] CGFloatValue], [values[7] CGFloatValue],
-            [values[8] CGFloatValue], [values[9] CGFloatValue], [values[10] CGFloatValue], [values[11] CGFloatValue],
-            [values[12] CGFloatValue], [values[13] CGFloatValue], [values[14] CGFloatValue], [values[15] CGFloatValue] };
-        return [NSValue valueWithNIAffineTransform:t];
-    }];
+    [self setName:@"transform" forValueObjCType:@encode(NIAffineTransform)
+          encoder:^(NIJSONArchiver *archiver, NSValue *val) {
+              NIAffineTransform t = val.NIAffineTransformValue;
+              [archiver encodeObject:@[ @(t.m11), @(t.m12), @(t.m13), @(t.m14), @(t.m21), @(t.m22), @(t.m23), @(t.m24), @(t.m31), @(t.m32), @(t.m33), @(t.m34), @(t.m41), @(t.m42), @(t.m43), @(t.m44) ] forKey:@"matrix"];
+          }
+          decoder:^NSValue *(NIJSONUnarchiver *unarchiver) {
+              NSArray* values = [unarchiver decodeObjectForKey:@"matrix"];
+              NIAffineTransform t = { [values[0] CGFloatValue], [values[1] CGFloatValue], [values[2] CGFloatValue], [values[3] CGFloatValue],
+                  [values[4] CGFloatValue], [values[5] CGFloatValue], [values[6] CGFloatValue], [values[7] CGFloatValue],
+                  [values[8] CGFloatValue], [values[9] CGFloatValue], [values[10] CGFloatValue], [values[11] CGFloatValue],
+                  [values[12] CGFloatValue], [values[13] CGFloatValue], [values[14] CGFloatValue], [values[15] CGFloatValue] };
+              return [NSValue valueWithNIAffineTransform:t];
+          }];
     
-    [self setName:@"data" forClass:NSData.class encoder:^(NIJSONArchiver *archiver, NSData* obj) { // we could encode using base85, but that would make thigs harder for other people trying to read our blobs... so, base64
-        [archiver encodeObject:[obj base64EncodedStringWithOptions:0] forKey:@"base64"];
-    } decoder:^id(NIJSONUnarchiver *unarchiver) {
-        return [[NSData alloc] initWithBase64EncodedString:[unarchiver decodeObjectForKey:@"base64"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
-    }];
+    [self setName:@"data" forClass:NSData.class
+          encoder:^(NIJSONArchiver *archiver, NSData* obj) { // we could encode using base85, but that would make thigs harder for other people trying to read our blobs... so, base64
+              [archiver encodeObject:[obj base64EncodedStringWithOptions:0] forKey:@"base64"];
+          }
+          decoder:^id(NIJSONUnarchiver *unarchiver) {
+              return [[[NSData alloc] initWithBase64EncodedString:[unarchiver decodeObjectForKey:@"base64"] options:NSDataBase64DecodingIgnoreUnknownCharacters] autorelease];
+          }];
     
     static NSColorList* colorlist = nil;
-    if (!colorlist)
+    if (!colorlist) {
         colorlist = [[NSColorList alloc] init];
-    [colorlist setColor:[NSColor blackColor] forKey:@"black"]; // 0.0 white
-    [colorlist setColor:[NSColor darkGrayColor] forKey:@"darkgray"]; // 0.333 white
-    [colorlist setColor:[NSColor lightGrayColor] forKey:@"lightgray"]; // 0.667 white
-    [colorlist setColor:[NSColor whiteColor] forKey:@"white"]; // 1.0 white
-    [colorlist setColor:[NSColor grayColor] forKey:@"gray"]; // 0.5 white
-    [colorlist setColor:[NSColor redColor] forKey:@"red"]; // 1.0, 0.0, 0.0 RGB
-    [colorlist setColor:[NSColor greenColor] forKey:@"green"]; // 0.0, 1.0, 0.0 RGB
-    [colorlist setColor:[NSColor blueColor] forKey:@"blue"]; // 0.0, 0.0, 1.0 RGB
-    [colorlist setColor:[NSColor cyanColor] forKey:@"cyan"]; // 0.0, 1.0, 1.0 RGB
-    [colorlist setColor:[NSColor yellowColor] forKey:@"yellow"]; // 1.0, 1.0, 0.0 RGB
-    [colorlist setColor:[NSColor magentaColor] forKey:@"magenta"]; // 1.0, 0.0, 1.0 RGB
-    [colorlist setColor:[NSColor orangeColor] forKey:@"orange"]; // 1.0, 0.5, 0.0 RGB
-    [colorlist setColor:[NSColor purpleColor] forKey:@"purple"]; // 0.5, 0.0, 0.5 RGB
-    [colorlist setColor:[NSColor brownColor] forKey:@"brown"]; // 0.6, 0.4, 0.2 RGB
+        [colorlist setColor:[NSColor blackColor] forKey:@"black"]; // 0.0 white
+        [colorlist setColor:[NSColor darkGrayColor] forKey:@"darkgray"]; // 0.333 white
+        [colorlist setColor:[NSColor lightGrayColor] forKey:@"lightgray"]; // 0.667 white
+        [colorlist setColor:[NSColor whiteColor] forKey:@"white"]; // 1.0 white
+        [colorlist setColor:[NSColor grayColor] forKey:@"gray"]; // 0.5 white
+        [colorlist setColor:[NSColor redColor] forKey:@"red"]; // 1.0, 0.0, 0.0 RGB
+        [colorlist setColor:[NSColor greenColor] forKey:@"green"]; // 0.0, 1.0, 0.0 RGB
+        [colorlist setColor:[NSColor blueColor] forKey:@"blue"]; // 0.0, 0.0, 1.0 RGB
+        [colorlist setColor:[NSColor cyanColor] forKey:@"cyan"]; // 0.0, 1.0, 1.0 RGB
+        [colorlist setColor:[NSColor yellowColor] forKey:@"yellow"]; // 1.0, 1.0, 0.0 RGB
+        [colorlist setColor:[NSColor magentaColor] forKey:@"magenta"]; // 1.0, 0.0, 1.0 RGB
+        [colorlist setColor:[NSColor orangeColor] forKey:@"orange"]; // 1.0, 0.5, 0.0 RGB
+        [colorlist setColor:[NSColor purpleColor] forKey:@"purple"]; // 0.5, 0.0, 0.5 RGB
+        [colorlist setColor:[NSColor brownColor] forKey:@"brown"]; // 0.6, 0.4, 0.2 RGB
+    }
     
-    [self setName:@"color" forClass:NSColor.class encoder:^(NIJSONArchiver *archiver, NSColor *color) {
-        NSColor* color1 = color.alphaComponent != 1 ? [color colorWithAlphaComponent:1] : color;
-        NSString* key = [[colorlist.allKeys filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSString* key, NSDictionary *bindings) {
-            return [[colorlist colorWithKey:key] isEqual:color1];
-        }]] lastObject];
-        if (key) {
-            [archiver encodeObject:key forKey:@"name"];
-            if (color.alphaComponent != 1)
-                [archiver encodeCGFloat:color.alphaComponent forKey:@"alpha"];
-        } else {
-            CGFloat components[4]; [[color colorUsingColorSpace:NSColorSpace.genericRGBColorSpace] getComponents:components];
-            NSArray* rgba = (components[3] != 1 ? @[ @(components[0]), @(components[1]), @(components[2]), @(components[3]) ] : @[ @(components[0]), @(components[1]), @(components[2]) ]);
-            [archiver encodeObject:rgba forKey:@"rgba"];
-        }
-    } decoder:^NSColor *(NIJSONUnarchiver *unarchiver) {
-        if ([unarchiver containsValueForKey:@"name"]) {
-            NSColor* color = [colorlist colorWithKey:[unarchiver decodeObjectForKey:@"name"]];
-            if ([unarchiver containsValueForKey:@"alpha"])
-                color = [color colorWithAlphaComponent:[unarchiver decodeCGFloatForKey:@"alpha"]];
-            return color;
-        }
-        
-        NSArray* rgba = [unarchiver decodeObjectForKey:@"rgba"];
-        return [NSColor colorWithCalibratedRed:[rgba[0] CGFloatValue] green:[rgba[1] CGFloatValue] blue:[rgba[2] CGFloatValue] alpha:[[rgba objectAtIndex:3 or:@1] CGFloatValue]];
-    }];
+    [self setName:@"color" forClass:NSColor.class
+          encoder:^(NIJSONArchiver *archiver, NSColor *color) {
+              NSColor* color1 = color.alphaComponent != 1 ? [color colorWithAlphaComponent:1] : color;
+              NSString* key = [[colorlist.allKeys filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSString* key, NSDictionary *bindings) {
+                  return [[colorlist colorWithKey:key] isEqual:color1];
+              }]] lastObject];
+              if (key) {
+                  [archiver encodeObject:key forKey:@"name"];
+                  if (color.alphaComponent != 1)
+                      [archiver encodeCGFloat:color.alphaComponent forKey:@"alpha"];
+              } else {
+                  CGFloat components[4]; [[color colorUsingColorSpace:NSColorSpace.genericRGBColorSpace] getComponents:components];
+                  NSArray* rgba = (components[3] != 1 ? @[ @(components[0]), @(components[1]), @(components[2]), @(components[3]) ] : @[ @(components[0]), @(components[1]), @(components[2]) ]);
+                  [archiver encodeObject:rgba forKey:@"rgba"];
+              }
+          }
+          decoder:^NSColor *(NIJSONUnarchiver *unarchiver) {
+              if ([unarchiver containsValueForKey:@"name"]) {
+                  NSColor* color = [colorlist colorWithKey:[unarchiver decodeObjectForKey:@"name"]];
+                  if ([unarchiver containsValueForKey:@"alpha"])
+                      color = [color colorWithAlphaComponent:[unarchiver decodeCGFloatForKey:@"alpha"]];
+                  return color;
+              }
+              
+              NSArray* rgba = [unarchiver decodeObjectForKey:@"rgba"];
+              return [NSColor colorWithCalibratedRed:[rgba[0] CGFloatValue] green:[rgba[1] CGFloatValue] blue:[rgba[2] CGFloatValue] alpha:[[rgba objectAtIndex:3 or:@1] CGFloatValue]];
+          }];
     
-    [self setName:@"mask" forClass:NIMask.class encoder:^(NIJSONArchiver *archiver, NIMask *mask) { // [ [ ([ widthLocation, widthLength ]|widthLocation), heightIndex, depthIndex ](, intensity) ] // if width range is specified as an integer, its length defaults to 1; intensity defaults to 1
-        NSMutableArray* mras = [NSMutableArray array];
-        for (NSValue* mrv in mask.maskRuns) {
-            NIMaskRun mr = mrv.NIMaskRunValue;
-            NSMutableArray* mra = [NSMutableArray arrayWithObject:[NSMutableArray array]];
-            if (mr.widthRange.length != 1)
-                [mra[0] addObject:@[ @(mr.widthRange.location), @(mr.widthRange.length) ]];
-            else [mra[0] addObject:@(mr.widthRange.location)];
-            [mra[0] addObjectsFromArray:@[ @(mr.heightIndex), @(mr.depthIndex) ]];
-            if (mr.intensity != 1)
-                [mra addObject:@(mr.intensity)];
-            [mras addObject:mra];
-        }
-        [archiver encodeObject:mras forKey:@"runs"];
-    } decoder:^NIMask *(NIJSONUnarchiver *unarchiver) {
-        NSArray* mras = [unarchiver decodeObjectForKey:@"runs"];
-        NSMutableArray* mrs = [NSMutableArray array];
-        for (NSArray* mra in mras) {
-            NIMaskRun mr;
-            if ([mra[0][0] isKindOfClass:NSArray.class]) {
-                mr.widthRange.location = [mra[0][0][0] CGFloatValue];
-                if ([mra[0][0] count] > 1)
-                    mr.widthRange.length = [mra[0][0][1] CGFloatValue];
-                else mr.widthRange.length = 1;
-            } else mr.widthRange = NSMakeRange([mra[0][0] CGFloatValue], 1);
-            mr.heightIndex = [mra[0][1] CGFloatValue];
-            mr.depthIndex = [mra[0][2] CGFloatValue];
-            if ([mra[0] count] > 1)
-                mr.intensity = [mra[1] CGFloatValue];
-            else mr.intensity = 1;
-            [mrs addObject:[NSValue valueWithNIMaskRun:mr]];
-        }
-        return [[[NIMask alloc] initWithMaskRuns:mrs] autorelease];
-    }];
+    [self setName:@"mask" forClass:NIMask.class
+          encoder:^(NIJSONArchiver *archiver, NIMask *mask) { // [ [ ([ widthLocation, widthLength ]|widthLocation), heightIndex, depthIndex ](, intensity) ] // if width range is specified as an integer, its length defaults to 1; intensity defaults to 1
+              NSMutableArray* mras = [NSMutableArray array];
+              for (NSValue* mrv in mask.maskRuns) {
+                  NIMaskRun mr = mrv.NIMaskRunValue;
+                  NSMutableArray* mra = [NSMutableArray arrayWithObject:[NSMutableArray array]];
+                  if (mr.widthRange.length != 1)
+                      [mra[0] addObject:@[ @(mr.widthRange.location), @(mr.widthRange.length) ]];
+                  else [mra[0] addObject:@(mr.widthRange.location)];
+                  [mra[0] addObjectsFromArray:@[ @(mr.heightIndex), @(mr.depthIndex) ]];
+                  if (mr.intensity != 1)
+                      [mra addObject:@(mr.intensity)];
+                  [mras addObject:mra];
+              }
+              [archiver encodeObject:mras forKey:@"runs"];
+          }
+          decoder:^NIMask *(NIJSONUnarchiver *unarchiver) {
+              NSArray* mras = [unarchiver decodeObjectForKey:@"runs"];
+              NSMutableArray* mrs = [NSMutableArray array];
+              for (NSArray* mra in mras) {
+                  NIMaskRun mr;
+                  if ([mra[0][0] isKindOfClass:NSArray.class]) {
+                      mr.widthRange.location = [mra[0][0][0] CGFloatValue];
+                      if ([mra[0][0] count] > 1)
+                          mr.widthRange.length = [mra[0][0][1] CGFloatValue];
+                      else mr.widthRange.length = 1;
+                  } else mr.widthRange = NSMakeRange([mra[0][0] CGFloatValue], 1);
+                  mr.heightIndex = [mra[0][1] CGFloatValue];
+                  mr.depthIndex = [mra[0][2] CGFloatValue];
+                  if ([mra[0] count] > 1)
+                      mr.intensity = [mra[1] CGFloatValue];
+                  else mr.intensity = 1;
+                  [mrs addObject:[NSValue valueWithNIMaskRun:mr]];
+              }
+              return [[[NIMask alloc] initWithMaskRuns:mrs] autorelease];
+          }];
 }
 
 static NSMutableArray* _NIJSONClassRecords = nil;
@@ -199,9 +213,13 @@ static NSMutableArray* _NIJSONClassRecords = nil;
     
     _NIJSONRecord* rec = [[_NIJSONClassRecords filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"name = %@", name]] lastObject];
     if (rec)
-        NSLog(@"Warning: registering class name %@ for class %@, name is already registered for class %@", name, NSStringFromClass(cls), NSStringFromClass(rec.type));
+        NSLog(@"Warning: registering class %@ with name %@, already registered with class %@", NSStringFromClass(cls), name, NSStringFromClass(rec.type));
     
     [_NIJSONClassRecords addObject:[_NIJSONRecord recordWithName:name type:cls encoder:encoder decoder:decoder]];
+}
+
++ (id)recordForClass:(Class)c {
+    return [self.class _recordForClass:c];
 }
 
 + (_NIJSONRecord*)_recordForClass:(Class)c {
@@ -223,6 +241,13 @@ static NSMutableArray* _NIJSONClassRecords = nil;
     }] lastObject] lastObject];
 }
 
++ (_NIJSONRecord*)_recordForClassName:(NSString*)name {
+    NSArray* recs = [_NIJSONClassRecords filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"name = %@", name]];
+    if (recs.count > 1)
+        NSLog(@"Warning: %lu class records with name %@, undefined behaviour", (unsigned long)recs.count, name);
+    return recs.lastObject;
+}
+
 static NSMutableArray* _NIJSONValueRecords = nil;
 
 + (void)setName:(NSString*)name forValueObjCType:(const char*)objcType encoder:(void (^)(NIJSONArchiver* archiver, NSValue* val))encoder decoder:(NSValue* (^)(NIJSONUnarchiver* unarchiver))decoder {
@@ -231,13 +256,20 @@ static NSMutableArray* _NIJSONValueRecords = nil;
     
     _NIJSONRecord* rec = [[_NIJSONValueRecords filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"name = %@", name]] lastObject];
     if (rec)
-        NSLog(@"Warning: registering type name %@ for obj-c type %s, name is already registered for obj-c type %@", name, objcType, rec.type);
+        NSLog(@"Warning: registering obj-c type %s with name %@, already registered with obj-c type %@", objcType, name, rec.type);
     
     [_NIJSONValueRecords addObject:[_NIJSONRecord recordWithName:name type:[NSString stringWithUTF8String:objcType] encoder:encoder decoder:decoder]];
 }
 
 + (_NIJSONRecord*)_recordForValueObjCType:(const char*)objCType {
     return [[_NIJSONValueRecords filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"type = %@", @(objCType)]] lastObject];
+}
+
++ (_NIJSONRecord*)_recordForValueObjCTypeName:(NSString*)name {
+    NSArray* recs = [_NIJSONValueRecords filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"name = %@", name]];
+    if (recs.count > 1)
+        NSLog(@"Warning: %lu obj-c type records with name %@, undefined behaviour", (unsigned long)recs.count, name);
+    return recs.lastObject;
 }
 
 @end
@@ -272,6 +304,10 @@ static NSMutableArray* _NIJSONValueRecords = nil;
     [super dealloc];
 }
 
+- (NSSet*)allowedClasses {
+    return [[NSSet setWithObjects: NSNull.class, NSString.class, NSNumber.class, NSValue.class, NSArray.class, NSDictionary.class, nil] setByAddingObjectsFromArray:[_NIJSONClassRecords valueForKey:@"type"]];
+}
+
 - (void)encodeObject:(id)obj {
     return [self encodeObject:obj commas:YES];
 }
@@ -288,7 +324,8 @@ static NSMutableArray* _NIJSONValueRecords = nil;
     id objr = self.replacements[objrk];
     if (!objr) {
         objr = self.replacements[objrk] = [NSNull either:[self _archiver_willEncodeObject:obj]];
-        [self _archiver_willReplaceObject:obj withObject:[objr ifn:NSNull.class]];
+        if ([objr ifn:NSNull.class] != obj)
+            [self _archiver_willReplaceObject:obj withObject:[objr ifn:NSNull.class]];
     }
     obj = [objr ifn:NSNull.class];
     
@@ -319,18 +356,16 @@ static NSMutableArray* _NIJSONValueRecords = nil;
     else if ([obj isKindOfClass:NSArray.class]) {
         [self.json appendString:@"[ "];
         [self.stack addObject:@0];
-        [obj enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop) {
-            [self encodeObject:obj];
-        }];
+        for (id sobj in obj)
+            [self encodeObject:sobj];
         [self.stack removeLastObject];
         [self.json appendString:@" ]"];
     }
     else if ([obj isKindOfClass:NSDictionary.class]) {
         [self.json appendString:@"{ "];
         [self.stack addObject:@0];
-        [obj enumerateKeysAndObjectsUsingBlock:^(NSString* key, id obj, BOOL* stop) {
-            [self encodeObject:obj forKey:key];
-        }];
+        for (NSString* key in obj)
+            [self encodeObject:obj[key] forKey:key];
         [self.stack removeLastObject];
         [self.json appendString:@" }"];
     }
@@ -344,10 +379,20 @@ static NSMutableArray* _NIJSONValueRecords = nil;
         [self.stack removeLastObject];
         [self.json appendString:@" }"];
     }
-    else
-        [NSException raise:NSInvalidArgumentException format:@"Class %@ is not supported by %@", [obj className], self.className];
+    else [NSException raise:NSInvalidArchiveOperationException format:@"Class %@ is not supported by %@", [obj className], self.className];
     
     [self _archiver_didEncodeObject:obj];
+}
+
+- (void)finishEncoding {
+    [self _archiverWillFinish];
+    
+    while (self.stack.count) {
+        [self.stack removeLastObject];
+        [self.json appendString:@" }"];
+    }
+    
+    [self _archiverDidFinish];
 }
 
 - (void)encodeObject:(id)obj forKey:(NSString*)key {
@@ -361,16 +406,9 @@ static NSMutableArray* _NIJSONValueRecords = nil;
     [self encodeObject:obj commas:NO];
 }
 
-- (void)finishEncoding {
-    [self _archiverWillFinish];
-    
-    while (self.stack.count) {
-        [self.stack removeLastObject];
-        [self.json appendString:@" }"];
-    }
-    
-    [self _archiverDidFinish];
-}
+//- (void)encodeConditionalObject:(id)objv forKey:(NSString *)key {
+//    [NSException raise:NSInvalidArchiveOperationException format:@"Unsupported API: -[%@ %@]", self.className, NSStringFromSelector(_cmd)];
+//}
 
 - (void)encodeBool:(BOOL)boolv forKey:(NSString *)key {
     [self encodeObject:@(boolv) forKey:key];
@@ -408,8 +446,28 @@ static NSMutableArray* _NIJSONValueRecords = nil;
     [self encodeObject:[NSData dataWithBytesNoCopy:(void*)bytesp length:lenv] forKey:key];
 }
 
+- (void)encodeInteger:(NSInteger)intv forKey:(NSString *)key {
+    [self encodeObject:@(intv) forKey:key];
+}
 
-    
+- (BOOL)allowsKeyedCoding {
+    return YES;
+}
+
+- (void)encodeValueOfObjCType:(const char *)type at:(const void *)addr { // deprecated
+    [self encodeObject:[NSValue valueWithBytes:addr objCType:type]];
+}
+
+- (void)encodeDataObject:(NSData*)data {
+    [self encodeObject:data];
+}
+
+- (NSInteger)versionForClassName:(NSString*)className {
+    return 0;
+}
+
+// calling the delegate....
+
 - (id)_archiver_willEncodeObject:(id)obj {
     if ([self.delegate respondsToSelector:@selector(archiver:willEncodeObject:)])
         return [self.delegate archiver:self willEncodeObject:obj];
@@ -436,80 +494,160 @@ static NSMutableArray* _NIJSONValueRecords = nil;
         [self.delegate archiverDidFinish:self];
 }
 
+@end
 
+@interface NIJSONUnarchiver ()
 
+@property(retain) NSDictionary* json;
+@property(retain) NSMutableArray* stack;
 
+@end
 
+@implementation NIJSONUnarchiver // NSKeyedUnarchiver
 
-- (void)encodeValueOfObjCType:(const char *)type at:(const void *)addr {
-    
+@synthesize json = _json;
+@synthesize stack = _stack;
+@synthesize delegate = _delegate;
+
+- (instancetype)initForReadingWithString:(NSString *)string {
+    return [self initForReadingWithData:[string dataUsingEncoding:NSUTF8StringEncoding]];
 }
 
+- (instancetype)initForReadingWithData:(NSData*)data {
+    if ((self = [super init])) {
+        NSError* err = nil;
+        self.stack = [NSMutableArray array];
+        self.json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&err];
+        if (!self.json)
+            [NSException raise:NSInvalidUnarchiveOperationException format:@"NSJSONSerialization error: %@", err.localizedDescription];
+        [self.stack addObject:self.json];
+    }
+    
+    return self;
+}
 
+- (void)dealloc {
+    self.json = nil;
+    [super dealloc];
+}
 
+- (id)decodeObject:(id)obj {
+    [self.stack addObject:obj];
+    @try {
+        _NIJSONRecord* rec = nil;
+        
+        if ([obj isKindOfClass:NSNull.class]) {
+            return nil;
+        }
+        else if ([obj isKindOfClass:NSString.class]) {
+            return obj;
+        }
+        else if ([obj isKindOfClass:NSNumber.class]) {
+            return obj;
+        }
+        else if ([obj isKindOfClass:NSArray.class]) {
+            NSMutableArray* r = [NSMutableArray array];
+            for (id sobj in obj)
+                [r addObject:[self decodeObject:sobj]];
+            return r;
+        }
+        else if ([obj isKindOfClass:NSDictionary.class]) { // JSON objects are used to encode classes, structs and generic dictionaries
+            // is this an obj-c object?
+            if ((rec = [NIJSON _recordForClassName:obj[NIJSONClass]])) {
+                if (rec.decoder)
+                    return rec.decoder(self);
+                return [[[rec.type alloc] initWithCoder:self] autorelease];
+            }
+            // is this a struct?
+            if ((rec = [NIJSON _recordForValueObjCTypeName:obj[NIJSONClass]])) {
+                return rec.decoder(self);
+            }
+            // no, this is just a dictionary
+            NSMutableDictionary* r = [NSMutableDictionary dictionary];
+            for (NSString* key in obj)
+                r[key] = [self decodeObject:obj[key]];
+            return r;
+        }
+        
+    } @catch (...) {
+        @throw;
+    } @finally {
+        NSUInteger idx = [self.stack indexOfObject:obj];
+        if (idx != self.stack.count-1)
+            NSLog(@"Warning: unbalanced unarchiver stack");
+        [self.stack removeObjectsInRange:NSMakeRange(idx, self.stack.count-idx)];
+    }
+        
+    [NSException raise:NSInvalidUnarchiveOperationException format:@"Unexpected object class in JSON: %@", [obj className]];
+    return nil;
+}
 
-//- (void)encodeValueOfObjCType:(const char *)type at:(const void *)addr {
-//    NSLog(@"encodeValueOfObjCType:%s at:%lX -- %@", type, (unsigned long)addr, [NSObject valueWithBytes:addr objCType:type]);
-//    
-//    const size_t typelen = strlen(type);
-//    
-//    // JSON supports the following: Number, String, Boolean, Array, Object, null
-//    
-//    if (typelen == 0 && type[0] == '@') { // we're asked to encode an object... we only support some classes!
-//        id obj = [self.class encodeObject:*(id*)addr];
-//    }
-//    
-//    id obj = [NSObject valueWithBytes:addr objCType:type];
-//
-//    if ([obj isKindOfClass:NSNumber.class]) { // Numbers and Booleans
-//        
-//    }
-//    
-//    
-//    if (typelen == 1)
-//        switch (type[0]) {
-//            case 'B': {
-//                
-//            } break;
-//                
-//        }
-//    
-//}
+- (id)decodeObjectForKey:(NSString*)key {
+    return [self decodeObject:[self.stack.lastObject objectForKey:key]];
+}
 
-//+ (NSDictionary*)encodeObject:(id)obj {
-//    NSDictionary* ed = nil;
-//    if ([obj respondsToSelector:@selector(JSONObject)]) {
-//        ed = [obj JSONObject];
-//        if (!ed[NICodingClass])
-//            [NSException raise:NSInternalInconsistencyException format:@"Implementation of -[%@ JSONObject] must provide a value for the NICodingClass key ('class')"];
-//    }
-//    
-//    
-//    [NSException raise:NSInvalidArgumentException format:@"Unsupported class for JSON encoding: %@", [obj className]];
-//    return nil;
-//}
+- (BOOL)containsValueForKey:(NSString*)key {
+    return ([self.stack.lastObject objectForKey:key] != nil);
+}
 
-//- (void)encodeDataObject:(NSData *)data {
-//    [NSException raise:NSInternalInconsistencyException format:@"-[%@ %@] is not supported...", self.className, NSStringFromSelector(_cmd)];
-//}
+- (NSNumber*)decodeNumberForKey:(NSString *)key {
+    NSNumber* n = [self decodeObjectForKey:key];
+    if (n && ![n isKindOfClass:NSNumber.class])
+        [NSException raise:NSInvalidUnarchiveOperationException format:@"Value for key %@ is of class %@, can't be decoded as a number", key, n.className];
+    return n;
+}
 
-//- (void)decodeValueOfObjCType:(const char *)type at:(void *)data {
-//    
-//}
-//
-//- (NSData *)decodeDataObject {
-//    return nil;
-//}
+- (BOOL)decodeBoolForKey:(NSString *)key {
+    return [[self decodeNumberForKey:key] boolValue];
+}
 
-- (NSInteger)versionForClassName:(NSString *)className {
+- (int)decodeIntForKey:(NSString *)key {
+    return [[self decodeNumberForKey:key] intValue];
+}
+
+- (int32_t)decodeInt32ForKey:(NSString *)key {
+    return [[self decodeNumberForKey:key] intValue];
+}
+
+- (int64_t)decodeInt64ForKey:(NSString *)key {
+    return [[self decodeNumberForKey:key] longLongValue];
+}
+
+- (float)decodeFloatForKey:(NSString *)key {
+    return [[self decodeNumberForKey:key] floatValue];
+}
+
+- (double)decodeDoubleForKey:(NSString *)key {
+    return [[self decodeNumberForKey:key] doubleValue];
+}
+
+- (CGFloat)decodeCGFloatForKey:(NSString*)key {
+#if CGFLOAT_IS_DOUBLE
+    return [self decodeDoubleForKey:key];
+#else
+    return [self decodeFloatForKey:key];
+#endif
+}
+
+- (const uint8_t *)decodeBytesForKey:(NSString *)key returnedLength:(NSUInteger *)lengthp NS_RETURNS_INNER_POINTER {
+    
+    return nil;
+}
+
+- (NSInteger)decodeIntegerForKey:(NSString *)key {
+    
     return 0;
 }
 
-- (BOOL)allowsKeyedCoding {
-    return YES;
+- (id)decodeObjectOfClass:(Class)aClass forKey:(NSString *)key {
+    
+    return nil;
 }
 
-
+- (id)decodeObjectOfClasses:(NSSet *)classes forKey:(NSString *)key {
+    
+    return nil;
+}
 
 
 @end

@@ -7,9 +7,7 @@
 //
 
 #import "NIAnnotation.h"
-#import "NIPointAnnotation.h"
-#import "NISegmentAnnotation.h"
-#import "NIEllipseAnnotation.h"
+#import <objc/runtime.h>
 #import "NIJSON.h"
 
 // NIAnnotationRequestCache dictionary keys
@@ -29,6 +27,46 @@ CGFloat const NIAnnotationDistant = 4;
 @end
 
 @implementation NIAnnotation
+
++ (void)load {
+    /*id NSBundleDidLoadNotificationObserver =*/ [[NSBundle observeNotification:NSBundleDidLoadNotification block:^(NSNotification* n) {
+        BOOL hasWarnings = NO;
+
+        for (NSString* className in n.userInfo[NSLoadedClasses]) {
+            Class class = [n.object classNamed:className];
+            BOOL isKindOfAnnotation = NO;
+            for (Class sc = class_getSuperclass(class); sc; sc = class_getSuperclass(sc))
+                if (sc == NIAnnotation.class) {
+                    isKindOfAnnotation = YES;
+                    break;
+                }
+            if (isKindOfAnnotation) {
+                if (![NIJSON recordForClass:class]) {
+                    hasWarnings = YES;
+                    NSLog(@"Warning: annotation class %@ isn't registered to NIJSON", className);
+                } else {
+                    if (class_getMethodImplementation(class, @selector(initWithCoder:)) == class_getMethodImplementation(NIAnnotation.class, @selector(initWithCoder:))) {
+                        hasWarnings = YES;
+                        NSLog(@"Warning: missing method implementation -[%@ initWithCoder:]", className);
+                    }
+                    if (class_getMethodImplementation(class, @selector(encodeWithCoder:)) == class_getMethodImplementation(NIAnnotation.class, @selector(encodeWithCoder:))) {
+                        hasWarnings = YES;
+                        NSLog(@"Warning: missing method implementation -[%@ encodeWithCoder:]", className);
+                    }
+                }
+            }
+        }
+        
+        if (hasWarnings && n.object == [NSBundle bundleForClass:self.class]) {
+            NSLog(@"Exiting because of the warnings related to %@ (in %@, line %d)", [[n.object bundleURL] lastPathComponent], [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__);
+            exit(0);
+        }
+    }] retain];
+}
+
+//+ (void)finalize {
+//    [NSBundleDidLoadNotificationObserver autorelease];
+//}
 
 @synthesize name = _name;
 @synthesize color = _color;
@@ -66,6 +104,8 @@ static NSString* const NIAnnotationLockedKey = @"locked";
 - (void)encodeWithCoder:(NSCoder*)coder {
     if (!coder.allowsKeyedCoding)
         [NSException raise:NSGenericException format:@"Annotation storage requires keyed coding support"];
+    
+    
     
     [coder encodeObject:self.name forKey:NIAnnotationNameKey];
     [coder encodeObject:self.color forKey:NIAnnotationColorKey];

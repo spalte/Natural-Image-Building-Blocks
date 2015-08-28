@@ -8,15 +8,10 @@
 
 #import "NIRectangleAnnotation.h"
 #import "NIAnnotationHandle.h"
-#import "NIJSON.h"
 
 static NSString* const NIRectangleAnnotationBounds = @"bounds";
 
 @implementation NIRectangleAnnotation
-
-+ (void)load {
-    [NIJSON setName:@"rectangle" forClass:NIRectangleAnnotation.class];
-}
 
 @synthesize bounds = _bounds;
 
