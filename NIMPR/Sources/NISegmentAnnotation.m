@@ -56,6 +56,11 @@
     [coder encodeObject:@[ [NSValue valueWithNIVector:self.p], [NSValue valueWithNIVector:self.q] ] forKey:@"points"];
 }
 
+- (void)translate:(NIVector)translation {
+    self.p = NIVectorAdd(self.p, translation);
+    self.q = NIVectorAdd(self.q, translation);
+}
+
 - (NIBezierPath*)NIBezierPath {
     NIMutableBezierPath* path = [NIMutableBezierPath bezierPath];
     
