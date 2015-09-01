@@ -9,24 +9,46 @@
 #import "NIPointAnnotation.h"
 #import "NIAnnotationHandle.h"
 
+static NSString* const NIPointAnnotationCoordsKey = @"coords";
+
 @implementation NIPointAnnotation
 
 @synthesize vector = _vector;
 
 + (NSSet*)keyPathsForValuesAffectingAnnotation {
-    return [super.keyPathsForValuesAffectingAnnotation setByAddingObject:@"vector"];
+    return [[super keyPathsForValuesAffectingAnnotation] setByAddingObject:@"vector"];
 }
 
 + (instancetype)pointWithVector:(NIVector)vector {
     return [[[self.class alloc] initWithVector:vector] autorelease];
 }
 
-- (instancetype)initWithVector:(NIVector)vector {
+- (instancetype)init {
     if ((self = [super init])) {
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithVector:(NIVector)vector {
+    if ((self = [self init])) {
         self.vector = vector;
     }
     
     return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder*)coder {
+    if ((self = [super initWithCoder:coder])) {
+        self.vector = [[[coder decodeObjectForKey:NIPointAnnotationCoordsKey] requireValueWithObjCType:@encode(NIVector)] NIVectorValue];
+    }
+    
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder {
+    [super encodeWithCoder:coder];
+    [coder encodeObject:[NSValue valueWithNIVector:self.vector] forKey:NIPointAnnotationCoordsKey];
 }
 
 - (void)translate:(NIVector)translation {

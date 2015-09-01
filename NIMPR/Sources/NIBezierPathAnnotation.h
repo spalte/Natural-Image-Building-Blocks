@@ -11,6 +11,10 @@
 
 @interface NIBezierPathAnnotation : NIAnnotation
 
+- (instancetype)init NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithCoder:(NSCoder*)coder NS_DESIGNATED_INITIALIZER;
+
++ (NSSet*)keyPathsForValuesAffectingNIBezierPath;
 - (NIBezierPath*)NIBezierPath;
 - (NIBezierPath*)NIBezierPathForSlabView:(NIAnnotatedGeneratorRequestView*)view;
 - (NIBezierPath*)NIBezierPathForSlabView:(NIAnnotatedGeneratorRequestView*)view complete:(BOOL)complete;
@@ -25,9 +29,12 @@
 
 @property NIAffineTransform modelToDicomTransform;
 
-- (instancetype)init; // inits transform to NIAffineTransformIdentity
-- (instancetype)initWithTransform:(NIAffineTransform)sliceToDicomTransform;
+- (instancetype)init NS_DESIGNATED_INITIALIZER; // inits transform to NIAffineTransformIdentity
+- (instancetype)initWithCoder:(NSCoder*)coder NS_DESIGNATED_INITIALIZER;
 
+- (instancetype)initWithTransform:(NIAffineTransform)modelToDicomTransform;
+
++ (NSSet*)keyPathsForValuesAffectingNSBezierPath;
 - (NSBezierPath*)NSBezierPath;
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "NSView+NI.h"
+#import "NSMenu+NIMPR.h"
 
 //NSString* const NIViewDidMoveToSuperviewNotification = @"NIViewDidMoveToSuperviewNotification";
 
@@ -14,7 +15,7 @@
 
 @synthesize controller = _controller;
 
-- (id)initWithFrame:(NSRect)frameRect {
+- (instancetype)initWithFrame:(NSRect)frameRect {
     if ((self = [super initWithFrame:frameRect])) {
         self.translatesAutoresizingMaskIntoConstraints = NO;
     }
@@ -59,19 +60,19 @@
 
 @dynamic view;
 
-- (id)initWithView:(NIView*)view {
+- (instancetype)initWithView:(NIView*)view {
     return [self initWithView:view updateConstraints:nil];
 }
 
-- (id)initWithView:(NIView*)view updateConstraints:(void (^)())updateConstraintsBlock {
+- (instancetype)initWithView:(NIView*)view updateConstraints:(void (^)())updateConstraintsBlock {
     return [self initWithView:view updateConstraints:updateConstraintsBlock and:nil];
 }
 
-- (id)initWithView:(NIView*)view updateConstraints:(void (^)())updateConstraintsBlock and:(void (^)(NIRetainer* r))block {
+- (instancetype)initWithView:(NIView*)view updateConstraints:(void (^)())updateConstraintsBlock and:(void (^)(NIRetainer* r))block {
     return [self initWithTitle:nil view:view updateConstraints:updateConstraintsBlock and:block];
 }
 
-- (id)initWithTitle:(NSString*)title view:(NIView*)view updateConstraints:(void (^)())updateConstraintsBlock and:(void (^)(NIRetainer* r))block {
+- (instancetype)initWithTitle:(NSString*)title view:(NIView*)view updateConstraints:(void (^)())updateConstraintsBlock and:(void (^)(NIRetainer* r))block {
     if ((self = [super init])) {
         self.title = title;
         self.view = view;
@@ -133,7 +134,7 @@
 
 @synthesize actionBlock = _actionBlock;
 
-- (id)initWithBlock:(void (^)())actionBlock {
+- (instancetype)initWithBlock:(void (^)())actionBlock {
     if ((self = [super initWithFrame:NSZeroRect])) {
         self.actionBlock = actionBlock;
         self.target = self;
@@ -159,11 +160,11 @@
 
 @synthesize backgroundColor = _backgroundColor;
 
-- (id)initWithFrame:(NSRect)frameRect {
+- (instancetype)initWithFrame:(NSRect)frameRect {
     return [self initWithFrame:frameRect color:nil];
 }
 
-- (id)initWithFrame:(NSRect)frameRect color:(NSColor*)backgroundColor {
+- (instancetype)initWithFrame:(NSRect)frameRect color:(NSColor*)backgroundColor {
     if ((self = [super initWithFrame:frameRect])) {
 //        self.translatesAutoresizingMaskIntoConstraints = NO;
         self.backgroundColor = backgroundColor;
@@ -213,5 +214,46 @@
 
 @end
 
+@implementation NISavePanel
 
+@synthesize allowedFileTypesDictionary = _allowedFileTypesDictionary;
+
+- (void)dealloc {
+    self.allowedFileTypesDictionary = nil;
+    [super dealloc];
+}
+
+- (void)setAllowedFileTypesDictionary:(NSDictionary *)allowedFileTypesDictionary {
+    if (self.allowedFileTypesDictionary == allowedFileTypesDictionary)
+        return;
+    
+    [_allowedFileTypesDictionary release];
+    _allowedFileTypesDictionary = [allowedFileTypesDictionary retain];
+    
+    self.allowedFileTypes = allowedFileTypesDictionary.allKeys;
+    
+    NSTextField* label = [NIView labelWithControlSize:NSRegularControlSize];
+    label.stringValue = NSLocalizedString(@"Format:", nil);
+    [label addConstraint:[NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:label.fittingSize.width]];
+    
+    NSPopUpButton* popup = [[[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO] autorelease];
+    popup.translatesAutoresizingMaskIntoConstraints = NO;
+    [allowedFileTypesDictionary enumerateKeysAndObjectsUsingBlock:^(NSString* ext, NSString* desc, BOOL* stop) {
+        [popup.menu addItemWithTitle:desc block:^{
+            self.nameFieldStringValue = [[self.nameFieldStringValue stringByDeletingPathExtension] stringByAppendingPathExtension:ext];
+        }];
+    }];
+    
+    NIView* av = [[[NIView alloc] initWithFrame:NSZeroRect] autorelease];
+    [av removeAllConstraints];
+    [av addSubview:label];
+    [av addSubview:popup];
+    [av addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[label][popup]|" options:NSLayoutFormatAlignAllBaseline metrics:nil views:NSDictionaryOfVariableBindings(label, popup)]];
+    [av addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[popup]-1-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(popup)]];
+    [av setFrameSize:av.fittingSize];
+    
+    self.accessoryView = av;
+}
+
+@end
 

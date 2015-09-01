@@ -50,7 +50,7 @@
 
 @dynamic cell;
 
-- (id)initWithFrame:(NSRect)buttonFrame pullsDown:(BOOL)flag {
+- (instancetype)initWithFrame:(NSRect)buttonFrame pullsDown:(BOOL)flag {
     if ((self = [super initWithFrame:buttonFrame pullsDown:flag])) {
         self.cell = [[NIMPRPopUpButtonCell alloc] init];
     }
@@ -101,7 +101,7 @@
 @synthesize seedPoint = _seedPoint;
 @synthesize segmentationAlgorithms = _segmentationAlgorithms;
 
-- (id)initWithViewer:(NIMPRWindowController *)viewer {
+- (instancetype)initWithViewer:(NIMPRWindowController *)viewer {
     if ((self = [super initWithViewer:viewer])) {
         self.seedPoint = NIMaskIndexInvalid;
         self.segmentationAlgorithms = [[[NSArrayController alloc] initWithContent:self.algorithms] autorelease];

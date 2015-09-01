@@ -81,7 +81,7 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
     if (!tools)
         tools = [@[[NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Point", nil) image:[NIMPR image:@"Tool-Annotate-Point"] tag:NIMPRToolAnnotatePoint handler:NIMPRAnnotatePointTool.class],
                    [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Segment", nil) image:[NIMPR image:@"Tool-Annotate-Segment"] tag:NIMPRToolAnnotateSegment handler:NIMPRAnnotateSegmentTool.class],
-                   [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Poly", nil) image:[NIMPR image:@"Tool-Annotate-Poly"] tag:NIMPRToolAnnotateSegment handler:NIMPRAnnotatePolyTool.class],
+                   [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Poly", nil) image:[NIMPR image:@"Tool-Annotate-Poly"] tag:NIMPRToolAnnotatePoly handler:NIMPRAnnotatePolyTool.class],
                    [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Rectangle", nil) image:[NIMPR image:@"Tool-Annotate-Rectangle"] tag:NIMPRToolAnnotateRectangle handler:NIMPRAnnotateRectangleTool.class],
                    [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Ellipse", nil) image:[NIMPR image:@"Tool-Annotate-Ellipse"] tag:NIMPRToolAnnotateEllipse handler:NIMPRAnnotateEllipseTool.class],
                    [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Region Growing", nil) image:[NIMPR image:@"Tool-Annotate-RegionGrowing"] tag:NIMPRToolRegionGrowing handler:NIMPRRegionGrowingTool.class]] retain];
@@ -323,6 +323,10 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
     self.image = nil;
     self.submenu = nil;
     [super dealloc];
+}
+
+- (NSString*)description {
+    return [NSString stringWithFormat:@"<%@: 0x%lx %@ (%d)> ", self.className, (unsigned long)self, self.label, (int)self.tag];
 }
 
 @end

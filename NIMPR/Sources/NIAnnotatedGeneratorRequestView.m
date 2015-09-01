@@ -33,11 +33,8 @@ NSString* const NIAnnotationRenderCache = @"NIAnnotationRequestCache"; // NSDict
 @synthesize highlightedAnnotations = _highlightedAnnotations;
 @synthesize selectedAnnotations = _selectedAnnotations;
 
-- (void)initialize:(Class)class {
-    [super initialize:class];
-    
-    if (class != NIGeneratorRequestView.class)
-        return;
+- (void)initNIGeneratorRequestView {
+    [super initNIGeneratorRequestView];
     
     _annotations = [[NSMutableSet alloc] init];
     _highlightedAnnotations = [[NSMutableSet alloc] init];

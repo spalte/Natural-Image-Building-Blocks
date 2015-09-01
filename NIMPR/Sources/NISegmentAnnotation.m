@@ -12,7 +12,7 @@
 
 @synthesize p = _p, q = _q;
 
-+ (NSSet*)keyPathsForValuesAffectingNSBezierPath {
++ (NSSet*)keyPathsForValuesAffectingNIBezierPath {
     return [NSSet setWithObjects: @"p", @"q", nil];
 }
 
@@ -20,15 +20,32 @@
     return [[[self.class alloc] initWithPoints:p:q] autorelease];
 }
 
-+ (id)segmentWithPoints:(NSPoint)p :(NSPoint)q transform:(NIAffineTransform)planeToDicomTransform {
-    NIVector pv = NIVectorApplyTransform(NIVectorMakeFromNSPoint(p), planeToDicomTransform), qv = NIVectorApplyTransform(NIVectorMakeFromNSPoint(q), planeToDicomTransform);
++ (id)segmentWithPoints:(NSPoint)p :(NSPoint)q transform:(NIAffineTransform)modelToDicomTransform {
+    NIVector pv = NIVectorApplyTransform(NIVectorMakeFromNSPoint(p), modelToDicomTransform), qv = NIVectorApplyTransform(NIVectorMakeFromNSPoint(q), modelToDicomTransform);
     return [self segmentWithPoints:pv:qv];
 }
 
-- (instancetype)initWithPoints:(NIVector)p :(NIVector)q {
+- (instancetype)init {
     if ((self = [super init])) {
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithPoints:(NIVector)p :(NIVector)q {
+    if ((self = [self init])) {
         self.p = p;
         self.q = q;
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder*)coder {
+    if ((self = [super initWithCoder:coder])) {
+        NSArray* points = [[coder decodeObjectForKey:@"points"] requireArrayOfValuesWithObjCType:@encode(NIVector)];
+        self.p = [points[0] NIVectorValue];
+        self.q = [points[1] NIVectorValue];
     }
     
     return self;

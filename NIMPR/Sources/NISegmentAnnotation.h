@@ -15,7 +15,10 @@
 @property NIVector p, q;
 
 + (id)segmentWithPoints:(NIVector)p :(NIVector)q;
-+ (id)segmentWithPoints:(NSPoint)p :(NSPoint)q transform:(NIAffineTransform)planeToDicomTransform;
++ (id)segmentWithPoints:(NSPoint)p :(NSPoint)q transform:(NIAffineTransform)modelToDicomTransform;
+
+- (instancetype)init NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithCoder:(NSCoder*)coder NS_DESIGNATED_INITIALIZER;
 
 - (instancetype)initWithPoints:(NIVector)p :(NIVector)q;
 

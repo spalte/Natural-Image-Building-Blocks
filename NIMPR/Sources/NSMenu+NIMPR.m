@@ -31,7 +31,7 @@ static NSString* const NIBlockMenuItemBlockKey = @"NIBlockMenuItemBlock";
     return item;
 }
 
-- (id)initWithCoder:(NSCoder*)coder {
+- (instancetype)initWithCoder:(NSCoder*)coder {
     if ((self = [super initWithCoder:coder])) {
         self.block = [coder decodeObjectForKey:NIBlockMenuItemBlockKey];
     }
@@ -80,7 +80,7 @@ static NSString* const NIBlockMenuItemBlockKey = @"NIBlockMenuItemBlock";
 
 NSString* const NIMPRSubmenuMenuItemBlockKey = @"NIMPRSubmenuMenuItemBlock";
 
-- (id)initWithCoder:(NSCoder*)coder {
+- (instancetype)initWithCoder:(NSCoder*)coder {
     if ((self = [super initWithCoder:coder])) {
         self.block = [coder decodeObjectForKey:NIMPRSubmenuMenuItemBlockKey];
     }

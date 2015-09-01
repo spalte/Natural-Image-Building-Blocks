@@ -12,7 +12,30 @@
 @implementation NIBezierPathAnnotation
 
 + (NSSet*)keyPathsForValuesAffectingAnnotation {
-    return [super.keyPathsForValuesAffectingAnnotation setByAddingObject:@"NIBezierPath"];
+    return [[super keyPathsForValuesAffectingAnnotation] setByAddingObject:@"NIBezierPath"];
+}
+
+- (instancetype)init {
+    if ((self = [super init])) {
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder {
+    if ((self = [super initWithCoder:coder])) {
+    }
+    
+    return self;
+}
+
++ (BOOL)isAbstract {
+    return YES;
+}
+
++ (NSSet*)keyPathsForValuesAffectingNIBezierPath {
+    [NSException raise:NSInvalidArgumentException format:@"Method +[%@ keyPathsForValuesAffectingNIBezierPath] must be implemented for all NIBezierPathAnnotation subclasses", self.className];
+    return [NSSet set];
 }
 
 - (NIBezierPath*)NIBezierPath {
@@ -163,9 +186,17 @@ static NSString* const NINSBezierPathAnnotationTransform = @"transform";
     return self;
 }
 
-- (instancetype)initWithTransform:(NIAffineTransform)sliceToDicomTransform {
+- (instancetype)initWithTransform:(NIAffineTransform)modelToDicomTransform {
     if ((self = [self init])) {
-        self.modelToDicomTransform = sliceToDicomTransform;
+        self.modelToDicomTransform = modelToDicomTransform;
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder {
+    if ((self = [super initWithCoder:coder])) {
+        self.modelToDicomTransform = [[[coder decodeObjectForKey:NINSBezierPathAnnotationTransform] requireValueWithObjCType:@encode(NIAffineTransform)] NIAffineTransformValue];
     }
     
     return self;
@@ -174,6 +205,10 @@ static NSString* const NINSBezierPathAnnotationTransform = @"transform";
 - (void)encodeWithCoder:(NSCoder*)coder {
     [super encodeWithCoder:coder];
     [coder encodeObject:[NSValue valueWithNIAffineTransform:self.modelToDicomTransform] forKey:NINSBezierPathAnnotationTransform];
+}
+
++ (BOOL)isAbstract {
+    return YES;
 }
 
 - (void)translate:(NIVector)translation {
@@ -188,6 +223,11 @@ static NSString* const NINSBezierPathAnnotationTransform = @"transform";
 
 + (NSSet*)keyPathsForValuesAffectingNIBezierPath {
     return [NSSet setWithObjects: @"NSBezierPath", @"modelToDicomTransform", nil];
+}
+
++ (NSSet*)keyPathsForValuesAffectingNSBezierPath {
+    [NSException raise:NSInvalidArgumentException format:@"Method +[%@ keyPathsForValuesAffectingNSBezierPath] must be implemented for all NINSBezierPathAnnotation subclasses", self.className];
+    return [NSSet set];
 }
 
 - (NSBezierPath*)NSBezierPath {

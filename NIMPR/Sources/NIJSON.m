@@ -10,9 +10,10 @@
 #import <NIBuildingBlocks/NIGeometry.h>
 #import <NIBuildingBlocks/NIMask.h>
 #import <objc/runtime.h>
+#import "NSData+zlib.h"
 #import "NIAnnotation.h"
 
-static NSString* const NIJSONClass = @"class";
+//static NSString* const NIJSONClass = @"class";
 static NSString* const NIJSONType = @"type";
 //static NSString* const NIJSONValues = @"values";
 
@@ -84,13 +85,13 @@ typedef id (^NIJSONUnarchiverBlock)(NIJSONUnarchiver* unarchiver);
               return [NSValue valueWithRect:NSMakeRect([values[0] CGFloatValue], [values[1] CGFloatValue], [values[2] CGFloatValue], [values[3] CGFloatValue])];
           }];
     
-    [self setName:@"point" forValueObjCType:@encode(NIVector)
+    [self setName:@"vector" forValueObjCType:@encode(NIVector)
           encoder:^(NIJSONArchiver *archiver, NSValue *val) {
               NIVector vect = val.NIVectorValue;
-              [archiver encodeObject:(vect.z? @[ @(vect.x), @(vect.y), @(vect.z) ] : @[ @(vect.x), @(vect.y) ]) forKey:@"coords"];
+              [archiver encodeObject:(vect.z? @[ @(vect.x), @(vect.y), @(vect.z) ] : @[ @(vect.x), @(vect.y) ]) forKey:@"components"];
           }
           decoder:^NSValue *(NIJSONUnarchiver *unarchiver) {
-              NSArray* values = [unarchiver decodeObjectForKey:@"coords"];
+              NSArray* values = [unarchiver decodeObjectForKey:@"components"];
               return [NSValue valueWithNIVector:NIVectorMake([values[0] CGFloatValue], [values[1] CGFloatValue], [[values objectAtIndex:2 or:@0] CGFloatValue])];
           }];
     
@@ -108,11 +109,16 @@ typedef id (^NIJSONUnarchiverBlock)(NIJSONUnarchiver* unarchiver);
               return [NSValue valueWithNIAffineTransform:t];
           }];
     
-    [self setName:@"data" forClass:NSData.class
+    [self setName:@"data" forClass:NSData.class // TODO: zlib!
           encoder:^(NIJSONArchiver *archiver, NSData* obj) { // we could encode using base85, but that would make thigs harder for other people trying to read our blobs... so, base64
-              [archiver encodeObject:[obj base64EncodedStringWithOptions:0] forKey:@"base64"];
+              NSData* odef = [obj zlibDeflate:NULL];
+              if ([odef length] < .9*[obj length])
+                  [archiver encodeObject:[[odef base64EncodedStringWithOptions:NSDataBase64Encoding76CharacterLineLength|NSDataBase64EncodingEndLineWithLineFeed] stringByReplacingOccurrencesOfString:@"\n" withString:@" "] forKey:@"base64-gzip"];
+              else [archiver encodeObject:[[obj base64EncodedStringWithOptions:NSDataBase64Encoding76CharacterLineLength|NSDataBase64EncodingEndLineWithLineFeed] stringByReplacingOccurrencesOfString:@"\n" withString:@" "] forKey:@"base64"];
           }
           decoder:^id(NIJSONUnarchiver *unarchiver) {
+              if ([unarchiver containsValueForKey:@"base64-gzip"])
+                  return [[[[NSData alloc] initWithBase64EncodedString:[unarchiver decodeObjectForKey:@"base64-gzip"] options:NSDataBase64DecodingIgnoreUnknownCharacters] autorelease] zlibInflate:NULL];
               return [[[NSData alloc] initWithBase64EncodedString:[unarchiver decodeObjectForKey:@"base64"] options:NSDataBase64DecodingIgnoreUnknownCharacters] autorelease];
           }];
     
@@ -192,7 +198,7 @@ typedef id (^NIJSONUnarchiverBlock)(NIJSONUnarchiver* unarchiver);
                   } else mr.widthRange = NSMakeRange([mra[0][0] CGFloatValue], 1);
                   mr.heightIndex = [mra[0][1] CGFloatValue];
                   mr.depthIndex = [mra[0][2] CGFloatValue];
-                  if ([mra[0] count] > 1)
+                  if ([mra count] > 1)
                       mr.intensity = [mra[1] CGFloatValue];
                   else mr.intensity = 1;
                   [mrs addObject:[NSValue valueWithNIMaskRun:mr]];
@@ -201,37 +207,35 @@ typedef id (^NIJSONUnarchiverBlock)(NIJSONUnarchiver* unarchiver);
           }];
 }
 
-static NSMutableArray* _NIJSONClassRecords = nil;
++ (NSMutableArray*)records {
+    static NSMutableArray* records = nil;
+    if (!records)
+        records = [[NSMutableArray alloc] init];
+    return records;
+}
 
 + (void)setName:(NSString *)name forClass:(Class)cls {
     [self.class setName:name forClass:cls encoder:nil decoder:nil];
 }
 
 + (void)setName:(NSString *)name forClass:(Class)cls encoder:(void (^)(NIJSONArchiver *, id))encoder decoder:(id (^)(NIJSONUnarchiver *))decoder {
-    if (!_NIJSONClassRecords)
-        _NIJSONClassRecords = [[NSMutableArray alloc] init];
-    
-    _NIJSONRecord* rec = [[_NIJSONClassRecords filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"name = %@", name]] lastObject];
+    _NIJSONRecord* rec = [[self.records filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"name = %@", name]] lastObject];
     if (rec)
-        NSLog(@"Warning: registering class %@ with name %@, already registered with class %@", NSStringFromClass(cls), name, NSStringFromClass(rec.type));
-    
-    [_NIJSONClassRecords addObject:[_NIJSONRecord recordWithName:name type:cls encoder:encoder decoder:decoder]];
-}
-
-+ (id)recordForClass:(Class)c {
-    return [self.class _recordForClass:c];
+        NSLog(@"Warning: registering class type %@ with name %@, already registered with %@", NSStringFromClass(cls), name, rec.type);
+    [self.records addObject:[_NIJSONRecord recordWithName:name type:cls encoder:encoder decoder:decoder]];
 }
 
 + (_NIJSONRecord*)_recordForClass:(Class)c {
     NSMutableArray* recScores = [NSMutableArray array];
-    for (_NIJSONRecord* rec in _NIJSONClassRecords) {
-        NSUInteger i = 0;
-        for (Class ic = c; ic; ic = class_getSuperclass(ic), ++i)
-            if (ic == rec.type) {
-                [recScores addObject:@[ @(i), rec ]];
-                break;
-            }
-    }
+    for (_NIJSONRecord* rec in self.records)
+        if (![rec.type isKindOfClass:NSString.class]) {
+            NSUInteger i = 0;
+            for (Class ic = c; ic; ic = class_getSuperclass(ic), ++i)
+                if (ic == rec.type) {
+                    [recScores addObject:@[ @(i), rec ]];
+                    break;
+                }
+        }
     
     return [[[recScores sortedArrayUsingComparator:^NSComparisonResult(NSArray* a1, NSArray* a2) {
         NSUInteger v1 = [a1[0] unsignedIntegerValue], v2 = [a2[0] unsignedIntegerValue];
@@ -241,35 +245,36 @@ static NSMutableArray* _NIJSONClassRecords = nil;
     }] lastObject] lastObject];
 }
 
-+ (_NIJSONRecord*)_recordForClassName:(NSString*)name {
-    NSArray* recs = [_NIJSONClassRecords filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"name = %@", name]];
-    if (recs.count > 1)
-        NSLog(@"Warning: %lu class records with name %@, undefined behaviour", (unsigned long)recs.count, name);
-    return recs.lastObject;
-}
-
-static NSMutableArray* _NIJSONValueRecords = nil;
-
 + (void)setName:(NSString*)name forValueObjCType:(const char*)objcType encoder:(void (^)(NIJSONArchiver* archiver, NSValue* val))encoder decoder:(NSValue* (^)(NIJSONUnarchiver* unarchiver))decoder {
-    if (!_NIJSONValueRecords)
-        _NIJSONValueRecords = [[NSMutableArray alloc] init];
-    
-    _NIJSONRecord* rec = [[_NIJSONValueRecords filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"name = %@", name]] lastObject];
+    _NIJSONRecord* rec = [[self.records filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"name = %@", name]] lastObject];
     if (rec)
-        NSLog(@"Warning: registering obj-c type %s with name %@, already registered with obj-c type %@", objcType, name, rec.type);
-    
-    [_NIJSONValueRecords addObject:[_NIJSONRecord recordWithName:name type:[NSString stringWithUTF8String:objcType] encoder:encoder decoder:decoder]];
+        NSLog(@"Warning: registering obj-c type %s with name %@, already registered with %@", objcType, name, rec.type);
+    [self.records addObject:[_NIJSONRecord recordWithName:name type:@(objcType) encoder:encoder decoder:decoder]];
 }
 
-+ (_NIJSONRecord*)_recordForValueObjCType:(const char*)objCType {
-    return [[_NIJSONValueRecords filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"type = %@", @(objCType)]] lastObject];
++ (_NIJSONRecord*)_recordForValueObjCType:(const char*)objcType {
+    return [[self.records filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"type = %@", @(objcType)]] lastObject];
 }
 
-+ (_NIJSONRecord*)_recordForValueObjCTypeName:(NSString*)name {
-    NSArray* recs = [_NIJSONValueRecords filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"name = %@", name]];
++ (_NIJSONRecord*)_recordForName:(NSString*)name {
+    NSArray* recs = [self.records filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"name = %@", name]];
     if (recs.count > 1)
-        NSLog(@"Warning: %lu obj-c type records with name %@, undefined behaviour", (unsigned long)recs.count, name);
+        NSLog(@"Warning: %lu records with name %@, undefined behaviour", (unsigned long)recs.count, name);
     return recs.lastObject;
+}
+
++ (id)recordForClass:(Class)c {
+    return [self.class _recordForClass:c];
+}
+
+NSString* const NIJSONAnnotationsFileType = @"ojas";
+NSString* const NIJSONDeflatedAnnotationsFileType = @"ojaz";
+
++ (NSArray*)fileTypes:(NSDictionary**)descriptions {
+    if (descriptions)
+        *descriptions = @{ NIJSONAnnotationsFileType: NSLocalizedString(@"OJAS: Open JSON Annotations format", nil),
+                           NIJSONDeflatedAnnotationsFileType: NSLocalizedString(@"OJAZ: Deflated Open JSON Annotations", nil) };
+    return @[ NIJSONAnnotationsFileType, NIJSONDeflatedAnnotationsFileType ];
 }
 
 @end
@@ -286,6 +291,13 @@ static NSMutableArray* _NIJSONValueRecords = nil;
 
 @synthesize json = _json, stack = _stack, replacements = _replacements;
 @synthesize delegate = _delegate;
+
++ (NSString*)archivedStringWithRootObject:(id)obj {
+    NSMutableString* ms = [NSMutableString string];
+    NIJSONArchiver* archiver = [[[self.class alloc] initForWritingWithMutableString:ms] autorelease];
+    [archiver encodeObject:obj];
+    return ms;
+}
 
 - (instancetype)initForWritingWithMutableString:(NSMutableString*)string {
     if ((self = [super init])) {
@@ -305,11 +317,11 @@ static NSMutableArray* _NIJSONValueRecords = nil;
 }
 
 - (NSSet*)allowedClasses {
-    return [[NSSet setWithObjects: NSNull.class, NSString.class, NSNumber.class, NSValue.class, NSArray.class, NSDictionary.class, nil] setByAddingObjectsFromArray:[_NIJSONClassRecords valueForKey:@"type"]];
+    return [[NSSet setWithObjects: NSNull.class, NSString.class, NSNumber.class, NSValue.class, NSArray.class, NSDictionary.class, nil] setByAddingObjectsFromArray:[[NIJSON.records valueForKey:@"type"] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"class = %@", NSString.class]]];
 }
 
 - (void)encodeObject:(id)obj {
-    return [self encodeObject:obj commas:YES];
+    return [self encodeObject:obj commas:(self.stack.count > 0)];
 }
 
 - (void)encodeObject:(id)obj commas:(BOOL)commas {
@@ -372,7 +384,7 @@ static NSMutableArray* _NIJSONValueRecords = nil;
     else if ((rec = [NIJSON _recordForClass:[obj class]])) {
         [self.json appendString:@"{ "];
         [self.stack addObject:@0];
-        [self encodeObject:rec.name forKey:NIJSONClass];
+        [self encodeObject:rec.name forKey:NIJSONType];
         if (rec.encoder)
             rec.encoder(self, obj);
         else [obj encodeWithCoder:self];
@@ -509,6 +521,11 @@ static NSMutableArray* _NIJSONValueRecords = nil;
 @synthesize stack = _stack;
 @synthesize delegate = _delegate;
 
++ (id)unarchiveObjectWithString:(NSString*)string {
+    NIJSONUnarchiver* unarchiver = [[[self.class alloc] initForReadingWithString:string] autorelease];
+    return [unarchiver decodeObject:unarchiver.stack[0]];
+}
+
 - (instancetype)initForReadingWithString:(NSString *)string {
     return [self initForReadingWithData:[string dataUsingEncoding:NSUTF8StringEncoding]];
 }
@@ -532,6 +549,10 @@ static NSMutableArray* _NIJSONValueRecords = nil;
 }
 
 - (id)decodeObject:(id)obj {
+    if (!obj)
+        return nil;
+    
+    const NSUInteger oidx = self.stack.count;
     [self.stack addObject:obj];
     @try {
         _NIJSONRecord* rec = nil;
@@ -552,15 +573,11 @@ static NSMutableArray* _NIJSONValueRecords = nil;
             return r;
         }
         else if ([obj isKindOfClass:NSDictionary.class]) { // JSON objects are used to encode classes, structs and generic dictionaries
-            // is this an obj-c object?
-            if ((rec = [NIJSON _recordForClassName:obj[NIJSONClass]])) {
+            // is this an obj-c object, a struct?
+            if ((rec = [NIJSON _recordForName:obj[NIJSONType]])) {
                 if (rec.decoder)
                     return rec.decoder(self);
                 return [[[rec.type alloc] initWithCoder:self] autorelease];
-            }
-            // is this a struct?
-            if ((rec = [NIJSON _recordForValueObjCTypeName:obj[NIJSONClass]])) {
-                return rec.decoder(self);
             }
             // no, this is just a dictionary
             NSMutableDictionary* r = [NSMutableDictionary dictionary];
@@ -572,10 +589,9 @@ static NSMutableArray* _NIJSONValueRecords = nil;
     } @catch (...) {
         @throw;
     } @finally {
-        NSUInteger idx = [self.stack indexOfObject:obj];
-        if (idx != self.stack.count-1)
+        if (oidx != self.stack.count-1)
             NSLog(@"Warning: unbalanced unarchiver stack");
-        [self.stack removeObjectsInRange:NSMakeRange(idx, self.stack.count-idx)];
+        [self.stack removeObjectsInRange:NSMakeRange(oidx, self.stack.count-oidx)];
     }
         
     [NSException raise:NSInvalidUnarchiveOperationException format:@"Unexpected object class in JSON: %@", [obj className]];

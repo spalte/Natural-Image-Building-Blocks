@@ -8,15 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString* const NIJSONAnnotationsFileType;
+extern NSString* const NIJSONDeflatedAnnotationsFileType;
+
 @class NIJSONArchiver, NIJSONUnarchiver;
 
 @interface NIJSON : NSObject
 
 + (void)setName:(NSString*)name forClass:(Class)cls;
 + (void)setName:(NSString*)name forClass:(Class)cls encoder:(void (^)(NIJSONArchiver* archiver, id obj))encoder decoder:(id (^)(NIJSONUnarchiver* unarchiver))decoder;
++ (void)setName:(NSString*)name forValueObjCType:(const char*)objcType encoder:(void (^)(NIJSONArchiver* archiver, NSValue* val))encoder decoder:(NSValue* (^)(NIJSONUnarchiver* unarchiver))decoder;
 + (id)recordForClass:(Class)c;
 
-+ (void)setName:(NSString*)name forValueObjCType:(const char*)objcType encoder:(void (^)(NIJSONArchiver* archiver, NSValue* val))encoder decoder:(NSValue* (^)(NIJSONUnarchiver* unarchiver))decoder;
++ (NSArray*)fileTypes:(NSDictionary**)descriptions;
 
 @end
 
@@ -30,6 +34,8 @@
 }
 
 @property(assign) id<NIJSONArchiverDelegate> delegate;
+
++ (NSString*)archivedStringWithRootObject:(id)obj;
 
 - (instancetype)initForWritingWithMutableString:(NSMutableString*)string;
 
@@ -60,11 +66,16 @@
 
 @property(assign) id<NIJSONUnarchiverDelegate> delegate;
 
++ (id)unarchiveObjectWithString:(NSString*)string;
+
 - (instancetype)initForReadingWithString:(NSString *)string;
 - (instancetype)initForReadingWithData:(NSData*)data NS_DESIGNATED_INITIALIZER;
 
 - (NSNumber*)decodeNumberForKey:(NSString *)key;
 - (CGFloat)decodeCGFloatForKey:(NSString*)key;
+
+- (void)decodeValueOfObjCType:(const char *)type at:(void *)data NS_UNAVAILABLE;
+- (id)decodeObjectOfClass:(Class)aClass forKey:(NSString *)key NS_UNAVAILABLE;
 
 @end
 

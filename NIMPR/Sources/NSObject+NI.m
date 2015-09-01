@@ -47,7 +47,7 @@
 @synthesize keyPath = _keyPath;
 @synthesize block = _block;
 
-- (id)initWithObject:(id)object keyPath:(NSString*)keyPath options:(NSKeyValueObservingOptions)options block:(void (^)(NSDictionary*))block {
+- (instancetype)initWithObject:(id)object keyPath:(NSString*)keyPath options:(NSKeyValueObservingOptions)options block:(void (^)(NSDictionary*))block {
     if ((self = [super init])) {
         self.object = object;
         self.keyPath = keyPath;
@@ -87,7 +87,7 @@
 
 @synthesize object = _object, name = _name, block = _block;
 
-- (id)initWithObject:(id)object name:(NSString*)name options:(NINotificationObservingOptions)options block:(void (^)(NSNotification*))block {
+- (instancetype)initWithObject:(id)object name:(NSString*)name options:(NINotificationObservingOptions)options block:(void (^)(NSNotification*))block {
     if ((self = [super init])) {
         self.name = name;
         self.block = block;
@@ -141,6 +141,42 @@
         return self;
     return nil;
 }
+
+- (id)requireKindOfClass:(Class)class {
+    if (![self isKindOfClass:class])
+        [NSException raise:NSInvalidArgumentException format:@"Object class %@ is not of kind %@", self.className, NSStringFromClass(class)];
+    return self;
+}
+
+- (id)requireValueWithObjCType:(const char*)objCType {
+    if (![self isKindOfClass:NSValue.class])
+        [NSException raise:NSInvalidArgumentException format:@"Object class %@ is not of kind NSValue", self.className];
+    if (strcmp(objCType, [(id)self objCType]))
+        [NSException raise:NSInvalidArgumentException format:@"Value obj-c type %s doesn't match %s", [(id)self objCType], objCType];
+    return self;
+}
+
+- (id)requireArrayOfInstancesOfClass:(Class)class {
+    if (![self isKindOfClass:NSArray.class])
+        [NSException raise:NSInvalidArgumentException format:@"Object class %@ is not of kind NSArray", self.className];
+    for (id obj in (id)self)
+        if (![obj isKindOfClass:class])
+            [NSException raise:NSInvalidArgumentException format:@"Object class %@ is not of kind %@", [obj className], NSStringFromClass(class)];
+    return self;
+}
+
+- (id)requireArrayOfValuesWithObjCType:(const char*)objCType {
+    if (![self isKindOfClass:NSArray.class])
+        [NSException raise:NSInvalidArgumentException format:@"Object class %@ is not of kind NSArray", self.className];
+    for (NSValue* obj in (id)self) {
+        if (![obj isKindOfClass:NSValue.class])
+            [NSException raise:NSInvalidArgumentException format:@"Object class %@ is not of kind NSValue", obj.className];
+        if (strcmp([obj objCType], objCType))
+            [NSException raise:NSInvalidArgumentException format:@"Value obj-c type %s doesn't match %s", obj.objCType, objCType];
+    }
+    return self;
+}
+
 
 - (id)performSelector:(SEL)sel withObjects:(id)obj1 :(id)obj2 {
     NSMethodSignature* signature = [self methodSignatureForSelector:sel];
@@ -297,7 +333,7 @@
 
 @synthesize retains = _retains;
 
-- (id)init {
+- (instancetype)init {
     if ((self = [super init])) {
         self.retains = [NSMutableDictionary dictionary];
     }
@@ -336,7 +372,7 @@
 @implementation NSArray (NIMPR)
 
 - (id)objectAtIndex:(NSUInteger)index or:(id)orv {
-    return (self.count < index ? self[index] : orv);
+    return (index < self.count ? self[index] : orv);
 }
 
 @end
@@ -491,6 +527,18 @@
 
 @end
 
+@implementation NSAlert (NIMPR)
+
++ (instancetype)alertWithException:(NSException*)e {
+    NSAlert* alert = [[[self.class alloc] init] autorelease];
+    alert.messageText = NSLocalizedString(@"Error", nil);
+    alert.informativeText = e.userInfo[NSLocalizedDescriptionKey];
+    return alert;
+}
+
+@end
+
+
 //@implementation NIOperation
 //
 //@synthesize object = _object;
@@ -499,7 +547,7 @@
 //    return [[[self.class alloc] initWithObject:object block:block] autorelease];
 //}
 //
-//- (id)initWithObject:(id)object block:(void (^)())block {
+//- (instancetype)initWithObject:(id)object block:(void (^)())block {
 //    if ((self = [super init])) {
 //        self.object = object;
 //        [self addExecutionBlock:block];

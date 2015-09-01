@@ -158,7 +158,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self initialize:NIGeneratorRequestView.class];
+        [self initNIGeneratorRequestView];
     }
     return self;
 }
@@ -167,16 +167,13 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        [self initialize:NIGeneratorRequestView.class];
+        [self initNIGeneratorRequestView];
     }
     return self;
 }
 
-- (void)initialize:(Class)class
+- (void)initNIGeneratorRequestView
 {
-    if (class != NIGeneratorRequestView.class)
-        return;
-    
     [self setWantsLayer:YES];
     [self setLayerContentsRedrawPolicy:NSViewLayerContentsRedrawOnSetNeedsDisplay];
     

@@ -13,17 +13,27 @@
 @synthesize vectors = _vectors;
 @synthesize smooth = _smooth, closed = _closed;
 
-- (id)init {
+- (void)initNIAnnotation {
+    [super initNIAnnotation];
+    _vectors = [[NSMutableArray alloc] init];
+}
+
+- (instancetype)init {
     if ((self = [super init])) {
-        _vectors = [[NSMutableArray alloc] init];
     }
     
     return self;
 }
 
-- (void)dealloc {
-    [_vectors release];
-    [super dealloc];
+- (instancetype)initWithCoder:(NSCoder*)coder {
+    if ((self = [super initWithCoder:coder])) {
+        for (NSValue* point in [[coder decodeObjectForKey:@"points"] requireArrayOfValuesWithObjCType:@encode(NIVector)])
+            [self.mutableVectors addObject:point];
+        self.smooth = [coder decodeBoolForKey:@"smooth"];
+        self.closed = [coder decodeBoolForKey:@"closed"];
+    }
+    
+    return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
@@ -31,6 +41,11 @@
     [coder encodeObject:self.vectors forKey:@"points"];
     [coder encodeBool:self.smooth forKey:@"smooth"];
     [coder encodeBool:self.closed forKey:@"closed"];
+}
+
+- (void)dealloc {
+    [_vectors release];
+    [super dealloc];
 }
 
 - (void)translate:(NIVector)translation {

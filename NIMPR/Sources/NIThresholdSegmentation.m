@@ -21,7 +21,7 @@
     return [NSSet setWithObjects: @"lowerThreshold", @"higherThreshold", nil];
 }
 
-- (id)init {
+- (instancetype)init {
     if ((self = [super init])) {
         self.lowerThreshold = 0;
         self.higherThreshold = 100;

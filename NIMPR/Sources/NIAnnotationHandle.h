@@ -22,7 +22,7 @@ extern const CGFloat NIAnnotationDistant;
 
 @property NSPoint slicePoint;
 
-- (id)initWithSlicePoint:(NSPoint)slicePoint;
+- (instancetype)initWithSlicePoint:(NSPoint)slicePoint;
 
 - (void)translateFromSlicePoint:(NSPoint)from toSlicePoint:(NSPoint)to view:(NIAnnotatedGeneratorRequestView*)view event:(NSEvent*)event;
 
@@ -41,7 +41,7 @@ extern const CGFloat NIAnnotationDistant;
     NIAnnotation<NITransformAnnotation>* _annotation;
 }
 
-- (id)initWithSlicePoint:(NSPoint)slicePoint annotation:(NIAnnotation<NITransformAnnotation>*)a;
+- (instancetype)initWithSlicePoint:(NSPoint)slicePoint annotation:(NIAnnotation<NITransformAnnotation>*)a;
 
 - (void)translateFromPlaneVector:(NIVector)vfrom toPlaneVector:(NIVector)vto view:(NIAnnotatedGeneratorRequestView *)view event:(NSEvent*)event;
 

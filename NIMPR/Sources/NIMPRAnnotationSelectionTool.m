@@ -20,7 +20,7 @@
 
 @synthesize annotations = _annotations;
 
-- (id)initWithViewer:(NIMPRWindowController*)viewer {
+- (instancetype)initWithViewer:(NIMPRWindowController*)viewer {
     if ((self = [super initWithViewer:viewer])) {
         self.annotations = [NSMutableSet set];
     }

@@ -30,10 +30,10 @@
 
 @property(retain) NIView* view;
 
-- (id)initWithView:(NIView*)view;
-- (id)initWithView:(NIView*)view updateConstraints:(void (^)())updateConstraintsBlock;
-- (id)initWithView:(NIView*)view updateConstraints:(void (^)())updateConstraintsBlock and:(void (^)(NIRetainer* r))block;
-- (id)initWithTitle:(NSString*)title view:(NIView*)view updateConstraints:(void (^)())updateConstraintsBlock and:(void (^)(NIRetainer* r))block;
+- (instancetype)initWithView:(NIView*)view;
+- (instancetype)initWithView:(NIView*)view updateConstraints:(void (^)())updateConstraintsBlock;
+- (instancetype)initWithView:(NIView*)view updateConstraints:(void (^)())updateConstraintsBlock and:(void (^)(NIRetainer* r))block;
+- (instancetype)initWithTitle:(NSString*)title view:(NIView*)view updateConstraints:(void (^)())updateConstraintsBlock and:(void (^)(NIRetainer* r))block;
 
 @end
 
@@ -50,7 +50,7 @@
 
 @property(copy) void (^actionBlock)();
 
-- (id)initWithBlock:(void (^)())actionBlock;
+- (instancetype)initWithBlock:(void (^)())actionBlock;
 
 @end
 
@@ -60,6 +60,14 @@
 
 @property(retain) NSColor* backgroundColor;
 
-- (id)initWithFrame:(NSRect)frameRect color:(NSColor*)backgroundColor;
+- (instancetype)initWithFrame:(NSRect)frameRect color:(NSColor*)backgroundColor;
+
+@end
+
+@interface NISavePanel : NSSavePanel {
+    NSDictionary* _allowedFileTypesDictionary;
+}
+
+@property(retain, nonatomic) NSDictionary* allowedFileTypesDictionary;
 
 @end

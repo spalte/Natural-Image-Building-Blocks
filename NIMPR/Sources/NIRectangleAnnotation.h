@@ -14,7 +14,11 @@
 
 @property NSRect bounds;
 
-+ (id)rectangleWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform;
-- (instancetype)initWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform;
++ (id)rectangleWithBounds:(NSRect)bounds transform:(NIAffineTransform)modelToDicomTransform;
+
+- (instancetype)init NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithCoder:(NSCoder*)coder NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)initWithBounds:(NSRect)bounds transform:(NIAffineTransform)modelToDicomTransform;
 
 @end

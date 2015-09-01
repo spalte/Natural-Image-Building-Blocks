@@ -25,19 +25,19 @@ extern CGFloat const NIAnnotationDistant;
     NSMutableDictionary* _changes;
 }
 
++ (BOOL)isAbstract;
+
 @property(retain) NSString* name;
 + (NSString*)name:(NIAnnotation*)annotation;
 @property(retain) NSColor* color;
 + (NSColor*)color:(NIAnnotation*)annotation;
 @property BOOL locked;
 
-//+ (id)pointWithVector:(NIVector)vector;
-//+ (id)segmentWithPoints:(NSPoint)p :(NSPoint)q transform:(NIAffineTransform)sliceToDicomTransform;
-//+ (id)rectangleWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform;
-//+ (id)ellipseWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform;
++ (BOOL)lockedDefault; // default is NO, some subclasses may want YES (like NIMaskAnnotation)
 
-- (id)init NS_DESIGNATED_INITIALIZER;
-- (id)initWithCoder:(NSCoder*)aDecoder;
+- (instancetype)init NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithCoder:(NSCoder*)aDecoder NS_DESIGNATED_INITIALIZER;
+- (void)initNIAnnotation NS_REQUIRES_SUPER;
 
 - (void)encodeWithCoder:(NSCoder*)coder NS_REQUIRES_SUPER;
 
@@ -46,12 +46,11 @@ extern CGFloat const NIAnnotationDistant;
 - (NSColor*)color;
 
 @property(readonly) BOOL annotation; // the value of this property is always YES, but you can observe it in order to observe changes in the annotation's properties
-+ (NSSet*)keyPathsForValuesAffectingAnnotation;
++ (NSSet*)keyPathsForValuesAffectingAnnotation NS_REQUIRES_SUPER;
 
 - (void)translate:(NIVector)translation;
 
 - (void)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache;
-//- (void)highlightWithColor:(NSColor*)color inView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache;
 
 - (CGFloat)distanceToSlicePoint:(NSPoint)point cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint; // point is on slice
 - (BOOL)intersectsSliceRect:(NSRect)rect cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view;
@@ -59,6 +58,8 @@ extern CGFloat const NIAnnotationDistant;
 - (NSSet*)handlesInView:(NIAnnotatedGeneratorRequestView*)view;
 
 @end
+
+extern NSString* const NIAnnotationTransformKey;
 
 @protocol NITransformAnnotation <NSObject>
 

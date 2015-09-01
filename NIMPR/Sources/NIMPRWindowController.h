@@ -84,8 +84,8 @@ typedef NS_ENUM(NSInteger, NIMPRLayoutTag) {
 
 @property(readonly,getter=spacebarIsDown) BOOL spacebarDown;
 
-- (id)initWithData:(NIVolumeData*)data wl:(CGFloat)wl ww:(CGFloat)ww;
-- (id)initWithData:(NIVolumeData*)data window:(NSWindow*)window wl:(CGFloat)wl ww:(CGFloat)ww;
+- (instancetype)initWithData:(NIVolumeData*)data wl:(CGFloat)wl ww:(CGFloat)ww;
+- (instancetype)initWithData:(NIVolumeData*)data window:(NSWindow*)window wl:(CGFloat)wl ww:(CGFloat)ww;
 
 + (Class)mprViewClass;
 - (NSArray*)mprViews;

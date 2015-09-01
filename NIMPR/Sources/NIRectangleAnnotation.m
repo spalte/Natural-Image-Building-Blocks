@@ -19,13 +19,29 @@ static NSString* const NIRectangleAnnotationBounds = @"bounds";
     return [NSSet setWithObject:@"bounds"];
 }
 
-+ (id)rectangleWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform {
-    return [[[self.class alloc] initWithBounds:bounds transform:sliceToDicomTransform] autorelease];
++ (id)rectangleWithBounds:(NSRect)bounds transform:(NIAffineTransform)modelToDicomTransform {
+    return [[[self.class alloc] initWithBounds:bounds transform:modelToDicomTransform] autorelease];
 }
 
-- (instancetype)initWithBounds:(NSRect)bounds transform:(NIAffineTransform)sliceToDicomTransform {
-    if ((self = [super initWithTransform:sliceToDicomTransform])) {
+- (instancetype)init {
+    if ((self = [super init])) {
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithBounds:(NSRect)bounds transform:(NIAffineTransform)modelToDicomTransform {
+    if ((self = [self init])) {
+        self.modelToDicomTransform = modelToDicomTransform;
         self.bounds = bounds;
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder*)coder {
+    if ((self = [super initWithCoder:coder])) {
+        self.bounds = [[[coder decodeObjectForKey:NIRectangleAnnotationBounds] requireValueWithObjCType:@encode(NSRect)] rectValue];
     }
     
     return self;
@@ -41,10 +57,10 @@ static NSString* const NIRectangleAnnotationBounds = @"bounds";
 }
 
 - (NSSet*)handlesInView:(NIAnnotatedGeneratorRequestView*)view {
-    NIAffineTransform planeToSliceTransform = NIAffineTransformConcat(self.modelToDicomTransform, NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform));
+    NIAffineTransform modelToSliceTransform = NIAffineTransformConcat(self.modelToDicomTransform, NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform));
     NSRect b = self.bounds;
     return [NSSet setWithObjects:
-            [NITransformAnnotationBlockHandle handleAtSliceVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(b.origin), planeToSliceTransform) annotation:self
+            [NITransformAnnotationBlockHandle handleAtSliceVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(b.origin), modelToSliceTransform) annotation:self
                                                         block:^(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector pd) {
                                                             NSRect b = self.bounds;
                                                             b.origin.x += pd.x;
@@ -53,7 +69,7 @@ static NSString* const NIRectangleAnnotationBounds = @"bounds";
                                                             b.size.height -= pd.y;
                                                             self.bounds = b;
                                                         }],
-            [NITransformAnnotationBlockHandle handleAtSliceVector:NIVectorApplyTransform(NIVectorMake(b.origin.x+b.size.width, b.origin.y, 0), planeToSliceTransform) annotation:self
+            [NITransformAnnotationBlockHandle handleAtSliceVector:NIVectorApplyTransform(NIVectorMake(b.origin.x+b.size.width, b.origin.y, 0), modelToSliceTransform) annotation:self
                                                         block:^(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector pd) {
                                                             NSRect b = self.bounds;
                                                             b.size.width += pd.x;
@@ -61,14 +77,14 @@ static NSString* const NIRectangleAnnotationBounds = @"bounds";
                                                             b.size.height -= pd.y;
                                                             self.bounds = b;
                                                         }],
-            [NITransformAnnotationBlockHandle handleAtSliceVector:NIVectorApplyTransform(NIVectorMake(b.origin.x+b.size.width, b.origin.y+b.size.height, 0), planeToSliceTransform) annotation:self
+            [NITransformAnnotationBlockHandle handleAtSliceVector:NIVectorApplyTransform(NIVectorMake(b.origin.x+b.size.width, b.origin.y+b.size.height, 0), modelToSliceTransform) annotation:self
                                                         block:^(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector pd) {
                                                             NSRect b = self.bounds;
                                                             b.size.width += pd.x;
                                                             b.size.height += pd.y;
                                                             self.bounds = b;
                                                         }],
-            [NITransformAnnotationBlockHandle handleAtSliceVector:NIVectorApplyTransform(NIVectorMake(b.origin.x, b.origin.y+b.size.height, 0), planeToSliceTransform) annotation:self
+            [NITransformAnnotationBlockHandle handleAtSliceVector:NIVectorApplyTransform(NIVectorMake(b.origin.x, b.origin.y+b.size.height, 0), modelToSliceTransform) annotation:self
                                                         block:^(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector pd) {
                                                             NSRect b = self.bounds;
                                                             b.origin.x += pd.x;

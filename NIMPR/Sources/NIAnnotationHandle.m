@@ -14,7 +14,7 @@ const CGFloat NIAnnotationHandleSize = 4;
 
 @synthesize slicePoint = _slicePoint;
 
-- (id)initWithSlicePoint:(NSPoint)slicePoint {
+- (instancetype)initWithSlicePoint:(NSPoint)slicePoint {
     if ((self = [super init])) {
         self.slicePoint = slicePoint;
     }
@@ -46,7 +46,7 @@ const CGFloat NIAnnotationHandleSize = 4;
     return [[[self.class alloc] initWithSlicePoint:slicePoint block:block] autorelease];
 }
 
-- (id)initWithSlicePoint:(NSPoint)slicePoint block:(void(^)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector dd))block {
+- (instancetype)initWithSlicePoint:(NSPoint)slicePoint block:(void(^)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector dd))block {
     if ((self = [super initWithSlicePoint:slicePoint])) {
         self.block = block;
     }
@@ -76,7 +76,7 @@ const CGFloat NIAnnotationHandleSize = 4;
 
 @synthesize annotation = _annotation;
 
-- (id)initWithSlicePoint:(NSPoint)slicePoint annotation:(NIAnnotation<NITransformAnnotation>*)a {
+- (instancetype)initWithSlicePoint:(NSPoint)slicePoint annotation:(NIAnnotation<NITransformAnnotation>*)a {
     if ((self = [super initWithSlicePoint:slicePoint])) {
         self.annotation = a;
     }
@@ -120,7 +120,7 @@ const CGFloat NIAnnotationHandleSize = 4;
     return [[[self.class alloc] initWithSlicePoint:slicePoint annotation:a block:block] autorelease];
 }
 
-- (id)initWithSlicePoint:(NSPoint)slicePoint annotation:(NIAnnotation<NITransformAnnotation>*)a block:(void(^)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector pd))block {
+- (instancetype)initWithSlicePoint:(NSPoint)slicePoint annotation:(NIAnnotation<NITransformAnnotation>*)a block:(void(^)(NIAnnotatedGeneratorRequestView* view, NSEvent* event, NIVector pd))block {
     if ((self = [super initWithSlicePoint:slicePoint annotation:a])) {
         self.block = block;
     }

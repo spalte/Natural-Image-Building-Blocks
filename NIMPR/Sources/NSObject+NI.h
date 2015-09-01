@@ -41,6 +41,12 @@ typedef NS_OPTIONS(NSUInteger, NINotificationObservingOptions) {
 
 - (id)if:(Class)c;
 - (id)ifn:(Class)c;
+
+- (id)requireKindOfClass:(Class)c;
+- (id)requireValueWithObjCType:(const char*)objCType;
+- (id)requireArrayOfInstancesOfClass:(Class)c;
+- (id)requireArrayOfValuesWithObjCType:(const char*)objCType;
+
 - (id)performSelector:(SEL)sel withObjects:(id)obj1 :(id)obj2;
 - (id)performSelector:(SEL)sel withObjects:(id)obj1 :(id)obj2 :(id)obj3;
 
@@ -113,6 +119,12 @@ typedef NS_OPTIONS(NSUInteger, NINotificationObservingOptions) {
 @interface NSEvent (NIMPR)
 
 - (NSPoint)locationInView:(NSView*)view;
+
+@end
+
+@interface NSAlert (NIMPR)
+
++ (instancetype)alertWithException:(NSException*)e;
 
 @end
 

@@ -17,6 +17,8 @@
 #import "NSMenu+NIMPR.h"
 #import "NIPolyAnnotation.h"
 #import "NSView+NI.h"
+#import "NIJSON.h"
+#import "NSData+zlib.h"
 
 #import "NIImageAnnotation.h"
 #import "NIMaskAnnotation.h"
@@ -57,7 +59,7 @@
 @synthesize highlightedAnnotations = _highlightedAnnotations;
 @synthesize selectedAnnotations = _selectedAnnotations;
 
-- (id)initWithData:(NIVolumeData*)data wl:(CGFloat)wl ww:(CGFloat)ww {
+- (instancetype)initWithData:(NIVolumeData*)data wl:(CGFloat)wl ww:(CGFloat)ww {
     return [self initWithData:data window:[[[NIMPRWindow alloc] initWithContentRect:NSMakeRect(10, 10, 800, 600)
                                                                           styleMask:NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask
                                                                             backing:NSBackingStoreBuffered
@@ -65,7 +67,7 @@
                            wl:wl ww:ww];
 }
 
-- (id)initWithData:(NIVolumeData*)data window:(NSWindow*)window wl:(CGFloat)wl ww:(CGFloat)ww {
+- (instancetype)initWithData:(NIVolumeData*)data window:(NSWindow*)window wl:(CGFloat)wl ww:(CGFloat)ww {
     if ((self = [super initWithWindow:window])) { // Path:[NIMPR.bundle pathForResource:@"NIMPR" ofType:]
         self.data = data;
         self.initialWindowLevel = self.windowLevel = wl;
@@ -163,7 +165,59 @@
         [[self.menu addItemWithTitle:NSLocalizedString(@"Display rims", nil) block:^{
             self.displayRims = !self.displayRims;
         }] bind:@"state" toObject:self withKeyPath:@"displayRims" options:nil];
-    }
+
+        [self.menu addItem:[NSMenuItem separatorItem]];
+        
+        [self.menu addItemWithTitle:NSLocalizedString(@"Save annotations...", nil) block:^{
+            NISavePanel* sp = (NISavePanel*)[NISavePanel savePanel];
+            NSDictionary* ftds; [NIJSON fileTypes:&ftds];
+            sp.allowedFileTypesDictionary = ftds;
+            [sp beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
+                if (result == NSFileHandlingPanelCancelButton)
+                    return;
+                [sp close];
+                @try {
+                    NSString* json = [NIJSONArchiver archivedStringWithRootObject:self.annotations.allObjects];
+                    NSData* data = [json dataUsingEncoding:NSUTF8StringEncoding];
+                    NSError* err = nil;
+                    
+                    if ([sp.URL.pathExtension.lowercaseString isEqualToString:NIJSONDeflatedAnnotationsFileType])
+                        data = [data zlibDeflate:&err];
+                    if (err) return [[NSAlert alertWithError:err] beginSheetModalForWindow:self.window completionHandler:nil];
+                    
+                    [data writeToURL:sp.URL options:NSDataWritingAtomic error:&err];
+                    if (err) return [[NSAlert alertWithError:err] beginSheetModalForWindow:self.window completionHandler:nil];
+                } @catch (NSException* e) {
+                    [[NSAlert alertWithException:e] beginSheetModalForWindow:self.window completionHandler:nil];
+                }
+            }];
+        }];
+        
+        [self.menu addItemWithTitle:NSLocalizedString(@"Load annotations...", nil) block:^{
+            NSOpenPanel* op = [NSOpenPanel openPanel];
+            op.allowedFileTypes = [NIJSON fileTypes:NULL];
+//            op.directoryURL = [NSURL fileURLWithPath:@"~"];
+            [op beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
+                if (result == NSFileHandlingPanelCancelButton)
+                    return;
+                [op close];
+                @try {
+                    NSData* data = [NSData dataWithContentsOfURL:op.URL];
+                    @try {
+                        NSData* idata = [data zlibInflate:NULL];
+                        if (idata) data = idata;
+                    } @catch (...) {
+                    }
+                    
+                    NSString* json = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+                    NSArray* ans = [NIJSONUnarchiver unarchiveObjectWithString:json];
+                    [self.mutableAnnotations addObjectsFromArray:ans];
+                } @catch (NSException* e) {
+                    [[NSAlert alertWithException:e] beginSheetModalForWindow:self.window completionHandler:nil];
+                }
+            }];
+        }];
+}
     
     return self;
 }
@@ -232,8 +286,8 @@
     }
     
     if (object == self && [keyPath isEqualToString:@"rtoolTag"]) {
-        if ([self.rtool  respondsToSelector:@selector(dismissing)])
-            [self.rtool  dismissing];
+        if ([self.rtool respondsToSelector:@selector(dismissing)])
+            [self.rtool dismissing];
         self.rtool = [[[[self toolClassForTag:self.rtoolTag] alloc] initWithViewer:self] autorelease];
     }
     
@@ -483,21 +537,18 @@ static NSString* const NIMPRControllerMenuAnnotationsDelimiter = @"NIMPRControll
     op.directoryURL = [NSURL fileURLWithPath:@"~"];
     op.message = NSLocalizedString(@"Select an image to insert.", nil);
     
-    [op beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
-        if (returnCode == NSModalResponseAbort)
+    [op beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
+        if (result == NSFileHandlingPanelCancelButton)
             return;
         
         NIMPRView* view = [[self.window firstResponder] if:NIMPRView.class];
         if (!view)
             view = self.coronalView;
         
-        NSImage* image = [[[NSImage alloc] initWithContentsOfURL:op.URL] autorelease];
-        
+        NIImageAnnotation* ia = [[[NIImageAnnotation alloc] initWithData:[NSData dataWithContentsOfURL:op.URL]] autorelease];
         NSPoint center = [view convertPointFromDICOMVector:self.point];
-        NIAffineTransform modelToDicomTransform = NIAffineTransformTranslate(view.presentedGeneratorRequest.sliceToDicomTransform, center.x-image.size.width/2, center.y-image.size.height/2, 0);
-        
-        NIImageAnnotation* ia = [[[NIImageAnnotation alloc] initWithImage:image transform:modelToDicomTransform] autorelease];
-        //        ia.colorify = YES;
+        ia.modelToDicomTransform = NIAffineTransformTranslate(view.presentedGeneratorRequest.sliceToDicomTransform, center.x-ia.image.size.width/2, center.y-ia.image.size.height/2, 0);
+//        ia.colorify = YES;
         
         [self.mutableAnnotations addObject:ia];
     }];

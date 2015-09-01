@@ -20,6 +20,8 @@ NSString* const NIAnnotationChangeNotificationChangesKey = @"changes";
 
 CGFloat const NIAnnotationDistant = 4;
 
+NSString* const NIAnnotationTransformKey = @"transform";
+
 @interface NIAnnotation ()
 
 @property(retain) NSMutableDictionary* changes;
@@ -33,23 +35,32 @@ CGFloat const NIAnnotationDistant = 4;
         BOOL hasWarnings = NO;
 
         for (NSString* className in n.userInfo[NSLoadedClasses]) {
+            if ([className isEqualToString:@"NIImageAnnotation"])
+                NSLog(@"wtf");
             Class class = [n.object classNamed:className];
-            BOOL isKindOfAnnotation = NO;
+            BOOL flag = NO;
             for (Class sc = class_getSuperclass(class); sc; sc = class_getSuperclass(sc))
                 if (sc == NIAnnotation.class) {
-                    isKindOfAnnotation = YES;
+                    flag = YES;
                     break;
                 }
-            if (isKindOfAnnotation) {
-                if (![NIJSON recordForClass:class]) {
+            if (flag) {
+                Class iamc = class;
+                for (Class sc = class_getSuperclass(iamc); class_getClassMethod(sc, @selector(isAbstract)) == class_getClassMethod(iamc, @selector(isAbstract)); sc = class_getSuperclass(sc))
+                    iamc = sc;
+                if (iamc == class && class.isAbstract)
+                    flag = NO;
+            }
+            if (flag) {
+                if ([[NIJSON recordForClass:class] valueForKey:@"type"] != class) {
                     hasWarnings = YES;
                     NSLog(@"Warning: annotation class %@ isn't registered to NIJSON", className);
                 } else {
-                    if (class_getMethodImplementation(class, @selector(initWithCoder:)) == class_getMethodImplementation(NIAnnotation.class, @selector(initWithCoder:))) {
+                    if (class_getMethodImplementation(class, @selector(initWithCoder:)) == class_getMethodImplementation(class_getSuperclass(class), @selector(initWithCoder:))) {
                         hasWarnings = YES;
                         NSLog(@"Warning: missing method implementation -[%@ initWithCoder:]", className);
                     }
-                    if (class_getMethodImplementation(class, @selector(encodeWithCoder:)) == class_getMethodImplementation(NIAnnotation.class, @selector(encodeWithCoder:))) {
+                    if (class_getMethodImplementation(class, @selector(encodeWithCoder:)) == class_getMethodImplementation(class_getSuperclass(class), @selector(encodeWithCoder:))) {
                         hasWarnings = YES;
                         NSLog(@"Warning: missing method implementation -[%@ encodeWithCoder:]", className);
                     }
@@ -73,11 +84,16 @@ CGFloat const NIAnnotationDistant = 4;
 @synthesize locked = _locked;
 @synthesize changes = _changes;
 
+- (void)initNIAnnotation {
+    self.locked = [self.class lockedDefault];
+    self.changes = [NSMutableDictionary dictionary];
+    [self enableChangeObservers:YES];
+    [self addObserver:self forKeyPath:@"annotation" options:0 context:NIAnnotation.class];
+}
+
 - (instancetype)init {
     if ((self = [super init])) {
-        self.changes = [NSMutableDictionary dictionary];
-        [self enableChangeObservers:YES];
-        [self addObserver:self forKeyPath:@"annotation" options:0 context:NIAnnotation.class];
+        [self initNIAnnotation];
     }
     
     return self;
@@ -87,11 +103,12 @@ static NSString* const NIAnnotationNameKey = @"name";
 static NSString* const NIAnnotationColorKey = @"color";
 static NSString* const NIAnnotationLockedKey = @"locked";
 
-- (id)initWithCoder:(NSCoder*)coder {
-    if ((self = [self init])) {
+- (instancetype)initWithCoder:(NSCoder*)coder {
+    if ((self = [super init])) {
+        [self initNIAnnotation];
         self.name = [coder decodeObjectForKey:NIAnnotationNameKey];
         self.color = [coder decodeObjectForKey:NIAnnotationColorKey];
-        self.locked = [coder decodeBoolForKey:NIAnnotationLockedKey];
+        self.locked = ([coder containsValueForKey:NIAnnotationLockedKey]? [coder decodeBoolForKey:NIAnnotationLockedKey] : [self.class lockedDefault]);
     }
     
     return self;
@@ -104,12 +121,14 @@ static NSString* const NIAnnotationLockedKey = @"locked";
 - (void)encodeWithCoder:(NSCoder*)coder {
     if (!coder.allowsKeyedCoding)
         [NSException raise:NSGenericException format:@"Annotation storage requires keyed coding support"];
-    
-    
-    
-    [coder encodeObject:self.name forKey:NIAnnotationNameKey];
-    [coder encodeObject:self.color forKey:NIAnnotationColorKey];
-    [coder encodeBool:self.locked forKey:NIAnnotationLockedKey];
+
+    if (self.name.length) [coder encodeObject:self.name forKey:NIAnnotationNameKey];
+    if (self.color) [coder encodeObject:self.color forKey:NIAnnotationColorKey];
+    if (self.locked != [self.class lockedDefault]) [coder encodeBool:self.locked forKey:NIAnnotationLockedKey];
+}
+
++ (BOOL)lockedDefault {
+    return NO;
 }
 
 - (void)dealloc {
@@ -120,6 +139,10 @@ static NSString* const NIAnnotationLockedKey = @"locked";
     [_color release];
     [_name release];
     [super dealloc];
+}
+
++ (BOOL)isAbstract {
+    return YES;
 }
 
 - (void)enableChangeObservers:(BOOL)flag {

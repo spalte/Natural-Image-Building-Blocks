@@ -30,11 +30,8 @@
 @synthesize displayOverlays = _displayOverlays;
 @synthesize toolsLayer = _toolsLayer;
 
-- (void)initialize:(Class)class {
-    [super initialize:class];
-
-    if (class != NIGeneratorRequestView.class)
-        return;
+- (void)initNIGeneratorRequestView {
+    [super initNIGeneratorRequestView];
     
     CALayer* layer = self.toolsLayer = [[[CALayer alloc] init] autorelease];
     layer.delegate = self;

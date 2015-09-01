@@ -15,25 +15,83 @@ typedef struct {
 
 @implementation NIImageAnnotation
 
+@synthesize data = _data;
 @synthesize image = _image;
 @synthesize colorify = _colorify;
 
 + (NSSet*)keyPathsForValuesAffectingAnnotation {
-    return [super.keyPathsForValuesAffectingAnnotation setByAddingObjects: @"image", @"colorify", nil];
+    return [[super keyPathsForValuesAffectingAnnotation] setByAddingObjects: @"image", @"colorify", nil];
 }
 
-- (instancetype)initWithImage:(NSImage*)image transform:(NIAffineTransform)sliceToDicomTransform {
-    if ((self = [super initWithTransform:sliceToDicomTransform])) {
-        self.image = image;
-        self.bounds = NSMakeRect(0, 0, image.size.width, image.size.height);
+//- (instancetype)initWithImage:(NSImage*)image transform:(NIAffineTransform)sliceToDicomTransform __deprecated {
+//    if ((self = [super initWithTransform:sliceToDicomTransform])) {
+//        self.image = image;
+//        self.bounds = NSMakeRect(0, 0, image.size.width, image.size.height);
+//    }
+//    
+//    return self;
+//}
+
+- (void)initNIAnnotation {
+    [super initNIAnnotation];
+    [self addObserver:self forKeyPath:@"data" options:NSKeyValueObservingOptionNew context:NIImageAnnotation.class];
+}
+
+- (instancetype)init {
+    if ((self = [super init])) {
     }
     
     return self;
 }
 
+- (instancetype)initWithData:(NSData*)data {
+    return [self initWithData:data transform:NIAffineTransformIdentity];
+}
+
+- (instancetype)initWithData:(NSData*)data transform:(NIAffineTransform)modelToDicomTransform {
+    if ((self = [self init])) {
+        self.data = data;
+        self.modelToDicomTransform = modelToDicomTransform;
+        self.bounds = NSMakeRect(0, 0, self.image.size.width, self.image.size.height);
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder*)coder {
+    if ((self = [super initWithCoder:coder])) {
+        self.data = [coder decodeObjectForKey:@"data"];
+        self.colorify = [coder decodeBoolForKey:@"colorify"];
+    }
+    
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder {
+    [super encodeWithCoder:coder];
+    [coder encodeObject:self.data forKey:@"data"];
+    [coder encodeBool:self.colorify forKey:@"colorify"];
+}
+
 - (void)dealloc {
-    [_image release]; _image = nil;
+    self.data = nil;
+    [self removeObserver:self forKeyPath:@"data" context:NIImageAnnotation.class];
     [super dealloc];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if (context != NIImageAnnotation.class)
+        return [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    
+    if ([keyPath isEqualToString:@"data"]) {
+        if ([change[NSKeyValueChangeNewKey] isKindOfClass:NSData.class])
+            self.image = [[[NSImage alloc] initWithData:change[NSKeyValueChangeNewKey]] autorelease];
+        else self.image = nil;
+    }
+}
+
++ (NSSet*)keyPathsForValuesAffectingImage {
+    return [NSSet setWithObject:@"data"];
 }
 
 - (BOOL)isSolid {

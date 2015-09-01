@@ -13,7 +13,7 @@ static NSString* const NIMaskAnnotationMask = @"mask";
 
 @interface NIMaskAnnotation ()
 
-@property(retain) NSLock* volumeLock;
+//@property(retain) NSRecursiveLock* volumeLock;
 
 @end
 
@@ -22,21 +22,28 @@ static NSString* const NIMaskAnnotationMask = @"mask";
 @synthesize mask = _mask;
 @synthesize modelToDicomTransform = _modelToDicomTransform;
 @synthesize volume = _volume;
-@synthesize volumeLock = _volumeLock;
+//@synthesize volumeLock = _volumeLock;
 
 + (NSSet*)keyPathsForValuesAffectingAnnotation {
-    return [super.keyPathsForValuesAffectingAnnotation setByAddingObjects: @"mask", @"modelToDicomTransform", @"volume", nil ];
+    return [[super keyPathsForValuesAffectingAnnotation] setByAddingObjects: @"mask", @"modelToDicomTransform", @"volume", nil ];
 }
 
-- (id)init {
+- (void)initNIAnnotation {
+    [super initNIAnnotation];
+//    self.volumeLock = [[[NSRecursiveLock alloc] init] autorelease];
+    [self addObserver:self forKeyPath:@"mask" options:NSKeyValueObservingOptionNew context:NIMaskAnnotation.class];
+//    [self addObserver:self forKeyPath:@"modelToDicomTransform" options:NSKeyValueObservingOptionNew context:NIMaskAnnotation.class];
+    [self addObserver:self forKeyPath:@"volume" options:NSKeyValueObservingOptionNew context:NIMaskAnnotation.class];
+}
+
+- (instancetype)init {
     if ((self = [super init])) {
-        self.volumeLock = [[[NSLock alloc] init] autorelease];
     }
     
     return self;
 }
 
-- (id)initWithMask:(NIMask*)mask transform:(NIAffineTransform)modelToDicomTransform {
+- (instancetype)initWithMask:(NIMask*)mask transform:(NIAffineTransform)modelToDicomTransform {
     if ((self = [self init])) {
         self.mask = mask;
         self.modelToDicomTransform = modelToDicomTransform;
@@ -45,7 +52,7 @@ static NSString* const NIMaskAnnotationMask = @"mask";
     return self;
 }
 
-- (id)initWithVolume:(NIVolumeData *)volume {
+- (instancetype)initWithVolume:(NIVolumeData *)volume {
     if ((self = [self init])) {
         self.volume = volume;
         self.modelToDicomTransform = NIAffineTransformIdentity;
@@ -54,41 +61,84 @@ static NSString* const NIMaskAnnotationMask = @"mask";
     return self;
 }
 
-- (void)dealloc {
-    self.mask = nil;
-    self.volume = nil;
-    self.volumeLock = nil;
-    [super dealloc];
+- (instancetype)initWithCoder:(NSCoder*)coder {
+    if ((self = [super initWithCoder:coder])) {
+        self.modelToDicomTransform = [[[coder decodeObjectForKey:NIAnnotationTransformKey] requireValueWithObjCType:@encode(NIAffineTransform)] NIAffineTransformValue];
+        self.mask = [[coder decodeObjectForKey:NIMaskAnnotationMask] requireKindOfClass:NIMask.class];
+    }
+    
+    return self;
 }
 
 - (void)encodeWithCoder:(NSCoder*)coder {
     [super encodeWithCoder:coder];
-    [coder encodeObject:self.mask forKey:NIMaskAnnotationMask];
+    NIAffineTransform transform;
+    NIMask* mask = [self mask:&transform];
+    [coder encodeObject:[NSValue valueWithNIAffineTransform:transform] forKey:NIAnnotationTransformKey];
+    [coder encodeObject:mask forKey:NIMaskAnnotationMask];
 }
 
-- (void)setMask:(NIMask *)mask {
-    if (mask != _mask) {
-        [self.volumeLock lock];
-        [_mask release];
-        _mask = [mask retain];
-        [self.volumeLock unlock];
-    }
+- (void)dealloc {
+    [self removeObserver:self forKeyPath:@"volume" context:NIMaskAnnotation.class];
+//    [self removeObserver:self forKeyPath:@"modelToDicomTransform" context:NIMaskAnnotation.class];
+    [self removeObserver:self forKeyPath:@"mask" context:NIMaskAnnotation.class];
+    self.mask = nil;
+    self.volume = nil;
+//    self.volumeLock = nil;
+    [super dealloc];
 }
 
-- (void)setModelToDicomTransform:(NIAffineTransform)modelToDicomTransform {
-    [self.volumeLock lock];
-    _modelToDicomTransform = modelToDicomTransform;
-    [self.volumeLock unlock];
-}
+//- (void)setModelToDicomTransform:(NIAffineTransform)modelToDicomTransform {
+//    [self.volumeLock lock];
+//    _modelToDicomTransform = modelToDicomTransform;
+//    [self.volumeLock unlock];
+//}
 
-- (void)setVolume:(NIVolumeData *)volume {
-    if (volume != _volume) {
-        [self.volumeLock lock];
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if (context != NIMaskAnnotation.class)
+        return [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    
+    if ([keyPath isEqualToString:@"mask"]) {
         [_volume release];
-        _volume = [volume retain];
-        [self.volumeLock unlock];
+        _volume = nil;
+    }
+    
+    if ([keyPath isEqualToString:@"volume"]) {
+        [_mask release];
+        _mask = nil;
+        self.modelToDicomTransform = NIAffineTransformIdentity;
     }
 }
+
++ (BOOL)lockedDefault {
+    return YES;
+}
+
+- (NIVolumeData*)volume {
+//    [self.volumeLock lock];
+//    @try {
+        if (!_volume)
+            _volume = [[self.mask volumeDataRepresentationWithVolumeTransform:NIAffineTransformIdentity] retain];
+        if (NIAffineTransformIsIdentity(self.modelToDicomTransform))
+            return _volume;
+        else return [_volume volumeDataByApplyingTransform:NIAffineTransformInvert(self.modelToDicomTransform)];
+//    } @catch (...) {
+//        @throw;
+//    } @finally {
+//        [self.volumeLock unlock];
+//    }
+}
+
+- (NIMask*)mask:(NIAffineTransform*)rtransform {
+    if (self.mask) {
+        if (rtransform)
+            *rtransform = self.modelToDicomTransform;
+        return self.mask;
+    }
+    
+    return [NIMask maskFromVolumeData:self.volume volumeTransform:rtransform];
+}
+
 
 - (void)translate:(NIVector)translation {
     self.modelToDicomTransform = NIAffineTransformConcat(self.modelToDicomTransform, NIAffineTransformMakeTranslationWithVector(translation));
@@ -111,13 +161,7 @@ static NSString* const NIMaskAnnotationMask = @"mask";
         [flip translateXBy:0 yBy:bounds.size.height];
         [flip scaleXBy:1 yBy:-1];
         
-        NIVolumeData* data = nil;
-        if (self.volume) {
-            if (NIAffineTransformIsIdentity(self.modelToDicomTransform))
-                data = self.volume;
-            else data = [self.volume volumeDataByApplyingTransform:NIAffineTransformInvert(self.modelToDicomTransform)];
-        } else
-            data = [self.mask volumeDataRepresentationWithVolumeTransform:NIAffineTransformInvert(self.modelToDicomTransform)];
+        NIVolumeData* data = [self volume];
         
         vImage_Buffer sib, sibd;//, wib;
         NSBitmapImageRep *si, *sid;//, *wi;
@@ -125,7 +169,7 @@ static NSString* const NIMaskAnnotationMask = @"mask";
         NIObliqueSliceGeneratorRequest* req = [[view.presentedGeneratorRequest copy] autorelease];
         req.interpolationMode = NIInterpolationModeNearestNeighbor;
         
-        [self.volumeLock lock];
+//        [self.volumeLock lock];
         @try {
             NIVolumeData* vd = [NIGenerator synchronousRequestVolume:req volumeData:data];
             sib = [vd floatBufferForSliceAtIndex:0];
@@ -153,7 +197,7 @@ static NSString* const NIMaskAnnotationMask = @"mask";
         } @catch (...) {
             @throw;
         } @finally {
-            [self.volumeLock unlock];
+//            [self.volumeLock unlock];
         }
         
         // TODO: render thick slab in background and update the view, but wait for the NIGenerator async block API

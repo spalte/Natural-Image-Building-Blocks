@@ -70,8 +70,8 @@ typedef NS_ENUM(NSInteger, NIMPRToolTag) {
 @property(readonly, retain) NSView* mouseDownView;
 @property(readonly) NIAffineTransform mouseDownGeneratorRequestSliceToDicomTransform;
 
-- (id)init UNAVAILABLE_ATTRIBUTE;
-- (id)initWithViewer:(NIMPRWindowController*)viewer NS_DESIGNATED_INITIALIZER;
+- (instancetype)init UNAVAILABLE_ATTRIBUTE;
+- (instancetype)initWithViewer:(NIMPRWindowController*)viewer NS_DESIGNATED_INITIALIZER;
 
 - (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event UNAVAILABLE_ATTRIBUTE;
 - (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())otherwise confirm:(void(^)())confirm NS_REQUIRES_SUPER;

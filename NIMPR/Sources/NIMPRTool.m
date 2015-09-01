@@ -24,7 +24,7 @@ static BOOL NIMPRToolHidingCursor = NO;
 @synthesize mouseDownLocationVector = _mouseDownLocationVector, currentLocationVector = _currentLocationVector, previousLocationVector = _previousLocationVector;
 @synthesize mouseDownGeneratorRequestSliceToDicomTransform = _mouseDownGeneratorRequestSliceToDicomTransform;
 
-- (id)initWithViewer:(NIMPRWindowController*)viewer {
+- (instancetype)initWithViewer:(NIMPRWindowController*)viewer {
     if ((self = [super init])) {
         self.viewer = viewer;
     }
