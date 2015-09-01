@@ -130,7 +130,7 @@
             lut = t;
             NSData* voxeldc = [voxeld.copy autorelease];
             dispatch_async(dispatch_get_main_queue(), ^{
-                ma.volume = [[[NIVolumeData alloc] initWithData:voxeldc pixelsWide:result.pixelsWide pixelsHigh:result.pixelsHigh pixelsDeep:result.pixelsDeep volumeTransform:NIAffineTransformIdentity outOfBoundsValue:0] autorelease];
+                ma.volume = [[[NIVolumeData alloc] initWithData:voxeldc pixelsWide:result.pixelsWide pixelsHigh:result.pixelsHigh pixelsDeep:result.pixelsDeep volumeTransform:data.volumeTransform outOfBoundsValue:0] autorelease];
             });
         }
     }

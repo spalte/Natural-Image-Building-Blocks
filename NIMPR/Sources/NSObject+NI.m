@@ -531,8 +531,8 @@
 
 + (instancetype)alertWithException:(NSException*)e {
     NSAlert* alert = [[[self.class alloc] init] autorelease];
-    alert.messageText = NSLocalizedString(@"Error", nil);
-    alert.informativeText = e.userInfo[NSLocalizedDescriptionKey];
+    alert.messageText = e.name;
+    alert.informativeText = e.reason;
     return alert;
 }
 

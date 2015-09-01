@@ -16,8 +16,8 @@
 //    NSRecursiveLock* _volumeLock;
 }
 
-@property(retain) NIMask* mask;
-@property NIAffineTransform modelToDicomTransform;
+@property(retain, nonatomic) NIMask* mask;
+@property(nonatomic) NIAffineTransform modelToDicomTransform;
 @property(retain, nonatomic) NIVolumeData* volume;
 
 - (instancetype)init NS_DESIGNATED_INITIALIZER;

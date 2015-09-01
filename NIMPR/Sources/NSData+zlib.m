@@ -13,7 +13,25 @@ NSString* const ZlibDomain = @"zlib";
 
 @implementation NSData (zlib)
 
+static NIZlibCompressionLevel defaultCompressionLevel = NIZlibDefaultCompressionLevel;
+
++ (NIZlibCompressionLevel)defaultCompressionLevel {
+    return defaultCompressionLevel;
+}
+
++ (void)setDefaultCompressionLevel:(NIZlibCompressionLevel)compressionLevel {
+    defaultCompressionLevel = compressionLevel;
+}
+
+- (NSData*)zlibDeflate {
+    return [self zlibDeflate:NULL];
+}
+
 - (NSData*)zlibDeflate:(NSError**)err {
+    return [self zlibDeflate:err level:defaultCompressionLevel];
+}
+
+- (NSData*)zlibDeflate:(NSError**)err level:(NIZlibCompressionLevel)compressionLevel {
     if (self.length == 0)
         return self;
     
@@ -25,7 +43,13 @@ NSString* const ZlibDomain = @"zlib";
     zs.next_in = (Bytef*)self.bytes;
     zs.avail_in = (uInt)self.length;
     
-    int initError = deflateInit2(&zs, Z_DEFAULT_COMPRESSION, Z_DEFLATED, (MAX_WBITS+16), 8, Z_DEFAULT_STRATEGY);
+    int level = Z_DEFAULT_COMPRESSION;
+    switch (compressionLevel) {
+        case NIZlibDefaultCompressionLevel: level = Z_BEST_COMPRESSION; break;
+        case NIZlibBestCompressionLevel: break;
+    }
+    
+    int initError = deflateInit2(&zs, level, Z_DEFLATED, (MAX_WBITS+16), 8, Z_DEFAULT_STRATEGY);
     
     if (initError != Z_OK) {
         NSString* message = nil;
@@ -74,6 +98,10 @@ NSString* const ZlibDomain = @"zlib";
     [rd setLength:zs.total_out];
     
     return rd;
+}
+
+- (NSData*)zlibInflate {
+    return [self zlibDeflate:NULL];
 }
 
 - (NSData*)zlibInflate:(NSError**)err {

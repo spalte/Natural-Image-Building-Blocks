@@ -88,11 +88,13 @@ static NSString* const NIMaskAnnotationMask = @"mask";
     [super dealloc];
 }
 
-//- (void)setModelToDicomTransform:(NIAffineTransform)modelToDicomTransform {
+- (void)setModelToDicomTransform:(NIAffineTransform)modelToDicomTransform {
+    @synchronized(self) {
 //    [self.volumeLock lock];
-//    _modelToDicomTransform = modelToDicomTransform;
+    _modelToDicomTransform = modelToDicomTransform;
 //    [self.volumeLock unlock];
-//}
+    }
+}
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if (context != NIMaskAnnotation.class)
@@ -114,7 +116,17 @@ static NSString* const NIMaskAnnotationMask = @"mask";
     return YES;
 }
 
+- (void)setVolume:(NIVolumeData *)volume {
+    @synchronized(self) {
+        if (volume == _volume)
+            return;
+        [_volume release];
+        _volume = [volume retain];
+    }
+}
+
 - (NIVolumeData*)volume {
+    @synchronized(self) {
 //    [self.volumeLock lock];
 //    @try {
         if (!_volume)
@@ -127,16 +139,28 @@ static NSString* const NIMaskAnnotationMask = @"mask";
 //    } @finally {
 //        [self.volumeLock unlock];
 //    }
+    }
+}
+
+- (void)setMask:(NIMask*)mask {
+    @synchronized(self) {
+        if (mask == _mask)
+            return;
+        [_mask release];
+        _mask = [mask retain];
+    }
 }
 
 - (NIMask*)mask:(NIAffineTransform*)rtransform {
-    if (self.mask) {
-        if (rtransform)
-            *rtransform = self.modelToDicomTransform;
-        return self.mask;
+    @synchronized(self) {
+        if (self.mask) {
+            if (rtransform)
+                *rtransform = self.modelToDicomTransform;
+            return self.mask;
+        }
+        
+        return [NIMask maskFromVolumeData:self.volume volumeTransform:rtransform];
     }
-    
-    return [NIMask maskFromVolumeData:self.volume volumeTransform:rtransform];
 }
 
 
@@ -170,6 +194,7 @@ static NSString* const NIMaskAnnotationMask = @"mask";
         req.interpolationMode = NIInterpolationModeNearestNeighbor;
         
 //        [self.volumeLock lock];
+        @synchronized (self) {
         @try {
             NIVolumeData* vd = [NIGenerator synchronousRequestVolume:req volumeData:data];
             sib = [vd floatBufferForSliceAtIndex:0];
@@ -198,6 +223,7 @@ static NSString* const NIMaskAnnotationMask = @"mask";
             @throw;
         } @finally {
 //            [self.volumeLock unlock];
+        }
         }
         
         // TODO: render thick slab in background and update the view, but wait for the NIGenerator async block API

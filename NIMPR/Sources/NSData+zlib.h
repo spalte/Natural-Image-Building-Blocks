@@ -10,9 +10,21 @@
 
 extern NSString* const ZlibDomain;
 
+typedef enum : NSUInteger {
+    NIZlibDefaultCompressionLevel,
+    NIZlibBestCompressionLevel,
+} NIZlibCompressionLevel;
+
 @interface NSData (zlib)
 
-- (NSData*)zlibDeflate:(NSError**)err; // compress
-- (NSData*)zlibInflate:(NSError**)err; // decompress
++ (NIZlibCompressionLevel)defaultCompressionLevel;
++ (void)setDefaultCompressionLevel:(NIZlibCompressionLevel)compressionLevel;
+
+- (NSData*)zlibDeflate;
+- (NSData*)zlibDeflate:(NSError**)err;
+- (NSData*)zlibDeflate:(NSError**)err level:(NIZlibCompressionLevel)compressionLevel;
+
+- (NSData*)zlibInflate;
+- (NSData*)zlibInflate:(NSError**)err;
 
 @end
