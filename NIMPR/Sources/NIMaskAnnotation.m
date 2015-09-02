@@ -33,7 +33,7 @@ static NSString* const NIMaskAnnotationMask = @"mask";
 //    self.volumeLock = [[[NSRecursiveLock alloc] init] autorelease];
     [self addObserver:self forKeyPath:@"mask" options:NSKeyValueObservingOptionNew context:NIMaskAnnotation.class];
 //    [self addObserver:self forKeyPath:@"modelToDicomTransform" options:NSKeyValueObservingOptionNew context:NIMaskAnnotation.class];
-    [self addObserver:self forKeyPath:@"volume" options:NSKeyValueObservingOptionNew context:NIMaskAnnotation.class];
+    [self addObserver:self forKeyPath:@"volume" options:0 context:NIMaskAnnotation.class];
 }
 
 - (instancetype)init {
@@ -129,8 +129,12 @@ static NSString* const NIMaskAnnotationMask = @"mask";
     @synchronized(self) {
 //    [self.volumeLock lock];
 //    @try {
-        if (!_volume)
-            _volume = [[self.mask volumeDataRepresentationWithVolumeTransform:NIAffineTransformInvert(self.modelToDicomTransform)] retain];
+        if (!_volume) {
+            NIVolumeData* volume = [self.mask volumeDataRepresentationWithVolumeTransform:NIAffineTransformInvert(self.modelToDicomTransform)];
+            self.mask = nil;
+            self.modelToDicomTransform = NIAffineTransformIdentity;
+            _volume = [volume retain];
+        }
         return _volume;
 //    } @catch (...) {
 //        @throw;
@@ -168,7 +172,11 @@ static NSString* const NIMaskAnnotationMask = @"mask";
 
 
 - (void)translate:(NIVector)translation {
-    self.modelToDicomTransform = NIAffineTransformConcat(self.modelToDicomTransform, NIAffineTransformMakeTranslationWithVector(translation));
+    NIAffineTransform transform = NIAffineTransformMakeTranslationWithVector(translation);
+    if (_mask)
+        self.modelToDicomTransform = NIAffineTransformConcat(self.modelToDicomTransform, transform);
+    if (_volume)
+        self.volume = [self.volume volumeDataByApplyingTransform:transform];
 }
 
 - (void)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache {

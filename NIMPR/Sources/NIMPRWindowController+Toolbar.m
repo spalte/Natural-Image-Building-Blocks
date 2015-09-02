@@ -242,7 +242,8 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
     NSButton* checkbox = [[[NSButton alloc] initWithFrame:NSZeroRect] autorelease];
     checkbox.translatesAutoresizingMaskIntoConstraints = NO;
     checkbox.controlSize = NSMiniControlSize;
-    checkbox.title = nil;
+    checkbox.title = @"";
+//    checkbox.imagePosition = NSImageOnly;
     [checkbox.cell setButtonType:NSSwitchButton];
     [checkbox sizeToFit];
     [checkbox bind:@"value" toObject:self withKeyPath:@"projectionFlag" options:0];
@@ -275,10 +276,11 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
     [view addSubview:checkbox];
     [view addSubview:popup];
     [view addSubview:slider];
-    [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[checkbox]-d-[popup]-0-|" options:0 metrics:@{@"d":@(-4)} views:NSDictionaryOfVariableBindings(checkbox, popup)]];
-    [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-0-[slider]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(slider)]];
-    [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[popup]-d-[slider]-0-|" options:0 metrics:@{@"d":@(-1)} views:NSDictionaryOfVariableBindings(popup, slider)]];
+    [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[checkbox][popup]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(checkbox, popup)]];
+    [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[slider]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(slider)]];
+    [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[popup]-(-1)-[slider]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(popup, slider)]];
     [view addConstraint:[NSLayoutConstraint constraintWithItem:checkbox attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:popup attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+    [view addConstraint:[NSLayoutConstraint constraintWithItem:checkbox attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:checkbox.fittingSize.height]];
     
     [view setFrameSize:NSMakeSize(100, 28)];
     [view layout];
