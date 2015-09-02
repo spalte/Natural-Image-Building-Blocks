@@ -27,7 +27,7 @@
 @synthesize flags = _flags;
 @synthesize ltool = _ltool, rtool = _rtool, ltcAtSecondClick = _ltcAtSecondClick;
 @synthesize mouseDown = _mouseDown;
-@synthesize displayOverlays = _displayOverlays;
+@synthesize displayOverlays = _displayOverlays, displayAnnotations = _displayAnnotations;
 @synthesize toolsLayer = _toolsLayer;
 
 - (void)initNIGeneratorRequestView {
@@ -59,6 +59,7 @@
     [self addObserver:self forKeyPath:@"ydir" options:0 context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"pixelSpacing" options:0 context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"displayOverlays" options:0 context:NIMPRView.class];
+    [self addObserver:self forKeyPath:@"displayAnnotations" options:0 context:NIMPRView.class];
 //    [self bind:@"windowLevel" toObject:self withKeyPath:@"dataProperties.windowLevel" options:0];
 //    [self bind:@"windowWidth" toObject:self withKeyPath:@"dataProperties.windowWidth" options:0];
     [self addObserver:self forKeyPath:@"window.windowController.spacebarDown" options:0 context:NIMPRView.class];
@@ -74,6 +75,7 @@
     [self removeObserver:self forKeyPath:@"annotations" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"window.windowController.ltool" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"window.windowController.spacebarDown" context:NIMPRView.class];
+    [self removeObserver:self forKeyPath:@"displayAnnotations" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"displayOverlays" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"pixelSpacing" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"ydir" context:NIMPRView.class];
@@ -109,6 +111,10 @@
     
     if ([keyPath isEqualToString:@"displayOverlays"]) {
         [self updateGeneratorRequest];
+    }
+    
+    if ([keyPath isEqualToString:@"displayAnnotations"]) {
+        [self.annotationsLayer setHidden:!self.displayAnnotations];
     }
     
     if ([keyPath isEqualToString:@"point"] || [keyPath isEqualToString:@"normal"] || [keyPath isEqualToString:@"xdir"] || [keyPath isEqualToString:@"ydir"] || [keyPath isEqualToString:@"pixelSpacing"] || [keyPath isEqualToString:@"projectionFlag"] || [keyPath isEqualToString:@"projectionMode"] || [keyPath isEqualToString:@"slabWidth"]) {

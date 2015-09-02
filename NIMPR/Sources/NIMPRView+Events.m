@@ -223,6 +223,9 @@
     BOOL displayOverlays = ((event.modifierFlags&NSCommandKeyMask) == 0) || ((event.modifierFlags&NSShiftKeyMask) == NSShiftKeyMask);
     if ([self.window.windowController displayOverlays] != displayOverlays)
         [self.window.windowController setDisplayOverlays:displayOverlays];
+    BOOL displayAnnotations = !((event.modifierFlags&(NSCommandKeyMask|NSAlternateKeyMask)) == (NSCommandKeyMask|NSAlternateKeyMask)) || ((event.modifierFlags&NSShiftKeyMask) == NSShiftKeyMask);
+    if ([self.window.windowController displayAnnotations] != displayAnnotations)
+        [self.window.windowController setDisplayAnnotations:displayAnnotations];
     
     if (self.mouseDown)
         return;

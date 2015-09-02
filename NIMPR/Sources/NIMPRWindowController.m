@@ -34,7 +34,7 @@
 
 @synthesize data = _data;
 @synthesize windowWidth = _windowWidth, windowLevel = _windowLevel, initialWindowLevel = _initialWindowLevel, initialWindowWidth = _initialWindowWidth;
-@synthesize displayOrientationLabels = _displayOrientationLabels, displayScaleBars = _displayScaleBars, displayRims = _displayRims;
+@synthesize displayOrientationLabels = _displayOrientationLabels, displayScaleBars = _displayScaleBars, displayRims = _displayRims, displayAnnotations = _displayAnnotations;
 @synthesize menu = _menu;
 
 @synthesize point = _point;
@@ -74,8 +74,7 @@
         self.initialWindowWidth = self.windowWidth = ww;
         self.ltoolTag = NIMPRToolWLWW;
         self.rtoolTag = NIMPRToolZoom;
-        self.displayRims = YES;
-        self.displayOverlays = YES;
+        self.displayRims = self.displayOverlays = self.displayAnnotations = YES;
         self.projectionMode = NIProjectionModeMIP;
         
         _annotations = [[NSMutableSet alloc] init];
@@ -123,6 +122,7 @@
             [view bind:@"projectionMode" toObject:self withKeyPath:@"projectionMode" options:nil];
             [view bind:@"slabWidth" toObject:self withKeyPath:@"slabWidth" options:nil];
             [view bind:@"displayOverlays" toObject:self withKeyPath:@"displayOverlays" options:nil];
+            [view bind:@"displayAnnotations" toObject:self withKeyPath:@"displayAnnotations" options:nil];
             [view addObserver:self forKeyPath:@"annotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRWindowController.class];
             [view addObserver:self forKeyPath:@"highlightedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRWindowController.class];
             [view addObserver:self forKeyPath:@"selectedAnnotations" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRWindowController.class];

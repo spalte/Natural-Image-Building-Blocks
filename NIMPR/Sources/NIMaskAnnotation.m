@@ -130,10 +130,8 @@ static NSString* const NIMaskAnnotationMask = @"mask";
 //    [self.volumeLock lock];
 //    @try {
         if (!_volume)
-            _volume = [[self.mask volumeDataRepresentationWithVolumeTransform:NIAffineTransformIdentity] retain];
-        if (NIAffineTransformIsIdentity(self.modelToDicomTransform))
-            return _volume;
-        else return [_volume volumeDataByApplyingTransform:NIAffineTransformInvert(self.modelToDicomTransform)];
+            _volume = [[self.mask volumeDataRepresentationWithVolumeTransform:NIAffineTransformInvert(self.modelToDicomTransform)] retain];
+        return _volume;
 //    } @catch (...) {
 //        @throw;
 //    } @finally {
@@ -159,7 +157,12 @@ static NSString* const NIMaskAnnotationMask = @"mask";
             return self.mask;
         }
         
-        return [NIMask maskFromVolumeData:self.volume volumeTransform:rtransform];
+        NIAffineTransform volumeTransform;
+        NIMask* mask = [NIMask maskFromVolumeData:self.volume volumeTransform:&volumeTransform];
+        
+        if (rtransform)
+            *rtransform = NIAffineTransformInvert(volumeTransform);
+        return mask;
     }
 }
 

@@ -39,7 +39,7 @@ typedef NS_ENUM(NSInteger, NIMPRLayoutTag) {
     
     NIVolumeData* _data;
     CGFloat _windowWidth, _windowLevel, _initialWindowLevel, _initialWindowWidth;
-    BOOL _displayOverlays, _displayOrientationLabels, _displayScaleBars, _displayRims;
+    BOOL _displayOverlays, _displayOrientationLabels, _displayScaleBars, _displayRims, _displayAnnotations;
     NSMenu* _menu;
 
     NIVector _point;
@@ -65,7 +65,7 @@ typedef NS_ENUM(NSInteger, NIMPRLayoutTag) {
 
 @property(retain) NIVolumeData* data;
 @property CGFloat windowWidth, windowLevel;
-@property BOOL displayOverlays, displayOrientationLabels, displayScaleBars, displayRims;
+@property BOOL displayOverlays, displayOrientationLabels, displayScaleBars, displayRims, displayAnnotations;
 @property(retain) NSMenu* menu;
 
 @property(retain, readonly) NIMPRQuaternion *x, *y, *z;
