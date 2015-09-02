@@ -54,7 +54,7 @@ static BOOL NIMPRToolHidingCursor = NO;
     self.mouseDownView = view;
     self.mouseDownEvent = event;
 
-    self.mouseDownLocation = [view convertPoint:event.locationInWindow fromView:nil];
+    self.mouseDownLocation = [event locationInView:view];
     self.mouseDownGeneratorRequestSliceToDicomTransform = view.generatorRequest.sliceToDicomTransform;
     self.mouseDownLocationVector = NIVectorApplyTransform(NIVectorMakeFromNSPoint(self.mouseDownLocation), self.mouseDownGeneratorRequestSliceToDicomTransform);
     
@@ -86,7 +86,7 @@ static BOOL NIMPRToolHidingCursor = NO;
 
     self.previousLocation = self.currentLocation;
     self.previousLocationVector = self.currentLocationVector;
-    self.currentLocation = [view convertPoint:event.locationInWindow fromView:nil];
+    self.currentLocation = [event locationInView:view];
 
     NIAffineTransform sliceToDicomTransform = self.mouseDownGeneratorRequestSliceToDicomTransform;
     if (!NIAffineTransformIsAffine(sliceToDicomTransform))

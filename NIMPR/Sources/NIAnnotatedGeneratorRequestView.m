@@ -27,6 +27,7 @@ NSString* const NIAnnotationRenderCache = @"NIAnnotationRequestCache"; // NSDict
 
 @synthesize annotationsLayer = _annotationsLayer;
 @synthesize annotationsBaseAlpha = _annotationsBaseAlpha;
+@synthesize displayAnnotations = _displayAnnotations;
 @synthesize annotationsCaches = _annotationsCaches;
 
 @synthesize annotations = _annotations;
@@ -60,9 +61,11 @@ NSString* const NIAnnotationRenderCache = @"NIAnnotationRequestCache"; // NSDict
     [self addObserver:self forKeyPath:@"annotations" options:NSKeyValueObservingOptionInitial+NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIAnnotatedGeneratorRequestView.class];
     [self addObserver:self forKeyPath:@"highlightedAnnotations" options:NSKeyValueObservingOptionInitial+NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIAnnotatedGeneratorRequestView.class];
     [self addObserver:self forKeyPath:@"selectedAnnotations" options:NSKeyValueObservingOptionInitial+NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIAnnotatedGeneratorRequestView.class];
+    [self addObserver:self forKeyPath:@"displayAnnotations" options:0 context:NIAnnotatedGeneratorRequestView.class];
 }
 
 - (void)dealloc {
+    [self removeObserver:self forKeyPath:@"displayAnnotations" context:NIAnnotatedGeneratorRequestView.class];
     [self observeValueForKeyPath:@"selectedAnnotations" ofObject:self change:@{ NSKeyValueChangeOldKey: self.mutableSelectedAnnotations } context:NIAnnotatedGeneratorRequestView.class];
     [self removeObserver:self forKeyPath:@"selectedAnnotations" context:NIAnnotatedGeneratorRequestView.class];
     [self observeValueForKeyPath:@"highlightedAnnotations" ofObject:self change:@{ NSKeyValueChangeOldKey: self.mutableHighlightedAnnotations } context:NIAnnotatedGeneratorRequestView.class];
@@ -97,7 +100,7 @@ NSString* const NIAnnotationRenderCache = @"NIAnnotationRequestCache"; // NSDict
         }
     }
     
-    if ([keyPath isEqualToString:@"highlightedAnnotations"] || [keyPath isEqualToString:@"selectedAnnotations"]) {
+    if ([keyPath isEqualToString:@"displayAnnotations"] || [keyPath isEqualToString:@"highlightedAnnotations"] || [keyPath isEqualToString:@"selectedAnnotations"]) {
         [self.annotationsLayer setNeedsDisplay];
     }
     
@@ -130,7 +133,7 @@ NSString* const NIAnnotationRenderCache = @"NIAnnotationRequestCache"; // NSDict
 }
 
 - (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx {
-    if (layer == self.annotationsLayer) {
+    if (layer == self.annotationsLayer && self.displayAnnotations) {
         [NSGraphicsContext saveGraphicsState];
         [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:ctx flipped:NO]];
         

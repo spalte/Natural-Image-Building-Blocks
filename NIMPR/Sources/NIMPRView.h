@@ -32,7 +32,7 @@
     BOOL _projectionFlag;
     NIProjectionMode _projectionMode;
     CGFloat _slabWidth;
-    BOOL _mouseDown, _displayOverlays, _displayAnnotations;
+    BOOL _mouseDown, _displayOverlays;
     CALayer* _toolsLayer;
 }
 
@@ -49,7 +49,7 @@
 
 @property(retain) NSMenu* menu;
 
-@property BOOL displayOverlays, displayAnnotations;
+@property BOOL displayOverlays;
 
 @property NIMPRFlags flags;
 

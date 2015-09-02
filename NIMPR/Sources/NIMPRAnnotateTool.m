@@ -26,6 +26,11 @@
     return @[ NSCursor.crosshairCursor, NSCursor.crosshairCursor ];
 }
 
+- (void)drawInView:(NIMPRView *)view {
+    if (!view.displayAnnotations && self.annotation)
+        [self.annotation drawInView:view cache:nil];
+}
+
 @end
 
 @implementation NIMPRValidatedAnnotateTool

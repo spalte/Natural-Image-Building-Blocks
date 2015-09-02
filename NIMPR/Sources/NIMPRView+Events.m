@@ -63,7 +63,9 @@
     for (NSUInteger i = 1; i < tools.count; ++i)
         if ([tools[i] respondsToSelector:@selector(view:handled:)])
             [tools[i] view:self handled:event];
-    
+
+    [self.toolsLayer setNeedsDisplay];
+
     if (r)
         return;
     
@@ -264,7 +266,7 @@
 - (Class)toolForLocation:(NSPoint)location event:(NSEvent*)event {
     if (event.type == NSMouseExited)
         return nil;
-    if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSCommandKeyMask)
+    if ((event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == NSCommandKeyMask || (event.modifierFlags&NSDeviceIndependentModifierFlagsMask) == (NSCommandKeyMask|NSAlternateKeyMask))
         return nil;
     
     NIAnnotationHandle* h = [self handleForSlicePoint:location];

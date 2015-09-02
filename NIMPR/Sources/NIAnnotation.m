@@ -35,8 +35,6 @@ NSString* const NIAnnotationTransformKey = @"transform";
         BOOL hasWarnings = NO;
 
         for (NSString* className in n.userInfo[NSLoadedClasses]) {
-            if ([className isEqualToString:@"NIImageAnnotation"])
-                NSLog(@"wtf");
             Class class = [n.object classNamed:className];
             BOOL flag = NO;
             for (Class sc = class_getSuperclass(class); sc; sc = class_getSuperclass(sc))

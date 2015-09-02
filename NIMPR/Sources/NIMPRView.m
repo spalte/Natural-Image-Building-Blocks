@@ -27,7 +27,7 @@
 @synthesize flags = _flags;
 @synthesize ltool = _ltool, rtool = _rtool, ltcAtSecondClick = _ltcAtSecondClick;
 @synthesize mouseDown = _mouseDown;
-@synthesize displayOverlays = _displayOverlays, displayAnnotations = _displayAnnotations;
+@synthesize displayOverlays = _displayOverlays;
 @synthesize toolsLayer = _toolsLayer;
 
 - (void)initNIGeneratorRequestView {
@@ -58,25 +58,23 @@
     [self addObserver:self forKeyPath:@"xdir" options:0 context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"ydir" options:0 context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"pixelSpacing" options:0 context:NIMPRView.class];
-    [self addObserver:self forKeyPath:@"displayOverlays" options:0 context:NIMPRView.class];
-    [self addObserver:self forKeyPath:@"displayAnnotations" options:0 context:NIMPRView.class];
+//    [self.annotationsLayer bind:@"hidden" toObject:self withKeyPath:@"displayAnnotations" options:@{ NSValueTransformerNameBindingOption: NSNegateBooleanTransformerName }];
 //    [self bind:@"windowLevel" toObject:self withKeyPath:@"dataProperties.windowLevel" options:0];
 //    [self bind:@"windowWidth" toObject:self withKeyPath:@"dataProperties.windowWidth" options:0];
     [self addObserver:self forKeyPath:@"window.windowController.spacebarDown" options:0 context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"window.windowController.ltool" options:0 context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"annotations" options:0 context:NIMPRView.class];
     [self addObserver:self forKeyPath:@"selectedAnnotations" options:0 context:NIMPRView.class];
-
+    
     self.rimThickness = 1;
 }
 
 - (void)dealloc {
+//    [self.annotationsLayer unbind:@"hidden"];
     [self removeObserver:self forKeyPath:@"selectedAnnotations" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"annotations" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"window.windowController.ltool" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"window.windowController.spacebarDown" context:NIMPRView.class];
-    [self removeObserver:self forKeyPath:@"displayAnnotations" context:NIMPRView.class];
-    [self removeObserver:self forKeyPath:@"displayOverlays" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"pixelSpacing" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"ydir" context:NIMPRView.class];
     [self removeObserver:self forKeyPath:@"xdir" context:NIMPRView.class];
@@ -107,14 +105,6 @@
         if (n) [self insertVolumeData:n atIndex:0];
         self.dataProperties = (n? [self volumeDataPropertiesAtIndex:0] : nil);
         self.dataProperties.preferredInterpolationMode = NIInterpolationModeCubic;
-    }
-    
-    if ([keyPath isEqualToString:@"displayOverlays"]) {
-        [self updateGeneratorRequest];
-    }
-    
-    if ([keyPath isEqualToString:@"displayAnnotations"]) {
-        [self.annotationsLayer setHidden:!self.displayAnnotations];
     }
     
     if ([keyPath isEqualToString:@"point"] || [keyPath isEqualToString:@"normal"] || [keyPath isEqualToString:@"xdir"] || [keyPath isEqualToString:@"ydir"] || [keyPath isEqualToString:@"pixelSpacing"] || [keyPath isEqualToString:@"projectionFlag"] || [keyPath isEqualToString:@"projectionMode"] || [keyPath isEqualToString:@"slabWidth"]) {
@@ -174,7 +164,6 @@
 - (void)updateGeneratorRequest {
     if (self.blockGeneratorRequestUpdates)
         return;
-    
     if (!self.pixelSpacing)
         return;
     

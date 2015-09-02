@@ -24,10 +24,13 @@ extern NSString* const NIAnnotationRenderCache; // NSDictionary, cleaned when th
     NSMutableSet* _selectedAnnotations;
     CGFloat _annotationsBaseAlpha;
     NSMutableDictionary* _annotationsCaches;
+    BOOL _displayAnnotations;
+
 }
 
 @property(readonly, retain) CALayer* annotationsLayer;
 @property CGFloat annotationsBaseAlpha;
+@property BOOL displayAnnotations;
 
 @property(readonly, copy) NSSet* annotations;
 - (NSMutableSet*)mutableAnnotations;

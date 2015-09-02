@@ -107,7 +107,7 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
 - (NIBezierPath *)convertBezierPathToDICOM:(NSBezierPath *)bezierPath;
 
 @property (nonatomic, readonly, retain) CALayer *frameLayer; // the layer into which subclasses can add layers, this layer lays out sublayers using the CAConstraintLayoutManager
-                                                            // Use NIGeneratorRequestViewRequestLayerZPosition, etc to specify the depth of the layer you want to add.
+                                                             // Use NIGeneratorRequestViewRequestLayerZPosition, etc to specify the depth of the layer you want to add.
 
 @property (nonatomic, readwrite, assign) BOOL displayRim;
 @property (nonatomic, readwrite, retain) NSColor *rimColor;

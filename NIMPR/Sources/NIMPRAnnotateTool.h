@@ -15,6 +15,8 @@
 
 @property(retain) id annotation;
 
+- (void)drawInView:(NIMPRView*)view NS_REQUIRES_SUPER;
+
 @end
 
 @interface NIMPRValidatedAnnotateTool : NIMPRAnnotateTool

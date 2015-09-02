@@ -39,13 +39,13 @@
     return NO;
 }
 
-- (BOOL)view:(NIMPRView *)view flagsChanged:(NSEvent *)event {
-    if (self.annotation) {
-        [view.toolsLayer setNeedsDisplay];
-    }
-    
-    return NO;
-}
+//- (BOOL)view:(NIMPRView *)view flagsChanged:(NSEvent *)event {
+//    if (self.annotation) {
+//        [view.toolsLayer setNeedsDisplay];
+//    }
+//    
+//    return NO;
+//}
 
 - (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())otherwise {
     return [super view:view mouseDown:event otherwise:otherwise confirm:^{
@@ -94,11 +94,13 @@
             }
         }
     }
-    
-    [view.toolsLayer setNeedsDisplay];
+//    
+//    [view.toolsLayer setNeedsDisplay];
 }
 
 - (void)drawInView:(NIMPRView *)view {
+    [super drawInView:view];
+    
     NSBezierPath* hl = [view.class NSBezierPathForHandle:[view handleForSlicePoint:NSPointFromNIVector(NIVectorApplyTransform([self.annotation.vectors.lastObject NIVectorValue], NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)))]];
     
     if (self.annotation.vectors.count > 0 && !self.mouseDownEvent && !NSEqualPoints(self.currentLocation, NSMakePoint(CGFLOAT_MAX, CGFLOAT_MAX))) {
