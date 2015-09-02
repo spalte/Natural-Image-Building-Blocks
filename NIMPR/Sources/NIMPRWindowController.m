@@ -196,7 +196,6 @@
         [self.menu addItemWithTitle:NSLocalizedString(@"Load annotations...", nil) block:^{
             NSOpenPanel* op = [NSOpenPanel openPanel];
             op.allowedFileTypes = [NIJSON fileTypes:NULL];
-//            op.directoryURL = [NSURL fileURLWithPath:@"~"];
             [op beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
                 if (result == NSFileHandlingPanelCancelButton)
                     return;
@@ -204,8 +203,9 @@
                 @try {
                     NSData* data = [NSData dataWithContentsOfURL:op.URL];
                     @try {
-                        NSData* idata = [data zlibInflate:NULL];
-                        if (idata) data = idata;
+                        NSError* err = nil;
+                        NSData* idata = [data zlibInflate:&err];
+                        if (!err && idata) data = idata;
                     } @catch (...) {
                     }
                     

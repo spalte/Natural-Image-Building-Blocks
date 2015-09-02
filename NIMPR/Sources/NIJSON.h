@@ -13,11 +13,6 @@ extern NSString* const NIJSONDeflatedAnnotationsFileType;
 
 @class NIJSONArchiver, NIJSONUnarchiver;
 
-typedef enum : NSUInteger {
-    NIJSONArraysMaskStorageMode,
-    NIJSONDataMaskStorageMode,
-} NIJSONMaskStorageMode;
-
 @interface NIJSON : NSObject
 
 + (void)setName:(NSString*)name forClass:(Class)cls;
@@ -26,9 +21,6 @@ typedef enum : NSUInteger {
 + (id)recordForClass:(Class)c;
 
 + (NSArray*)fileTypes:(NSDictionary**)descriptions;
-
-+ (NIJSONMaskStorageMode)defaultMaskStorageMode;
-+ (void)setDefaultMaskStorageMode:(NIJSONMaskStorageMode)maskStorageMode;
 
 @end
 
@@ -39,11 +31,9 @@ typedef enum : NSUInteger {
     NSMutableArray* _stack;
     NSMutableDictionary *_replacements;
     id<NIJSONArchiverDelegate> _delegate;
-    NIJSONMaskStorageMode _maskStorageMode;
 }
 
 @property(assign) id<NIJSONArchiverDelegate> delegate;
-@property NIJSONMaskStorageMode maskStorageMode;
 
 + (NSString*)archivedStringWithRootObject:(id)obj;
 

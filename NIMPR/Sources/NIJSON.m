@@ -171,60 +171,39 @@ typedef id (^NIJSONUnarchiverBlock)(NIJSONUnarchiver* unarchiver);
     
     [self setName:@"mask" forClass:NIMask.class
           encoder:^(NIJSONArchiver *archiver, NIMask *mask) { // [ [ ([ widthLocation, widthLength ]|widthLocation), heightIndex, depthIndex ](, intensity) ] // if width range is specified as an integer, its length defaults to 1; intensity defaults to 1
-              switch (archiver.maskStorageMode) {
-                  case NIJSONArraysMaskStorageMode: {
-                      NSMutableArray* mras = [NSMutableArray array];
-                      for (NSValue* mrv in mask.maskRuns) {
-                          NIMaskRun mr = mrv.NIMaskRunValue;
-                          NSMutableArray* mra = [NSMutableArray arrayWithObject:[NSMutableArray array]];
-                          if (mr.widthRange.length != 1)
-                              [mra[0] addObject:@[ @(mr.widthRange.location), @(mr.widthRange.length) ]];
-                          else [mra[0] addObject:@(mr.widthRange.location)];
-                          [mra[0] addObjectsFromArray:@[ @(mr.heightIndex), @(mr.depthIndex) ]];
-                          if (mr.intensity != 1)
-                              [mra addObject:@(mr.intensity)];
-                          [mras addObject:mra];
-                      }
-                      [archiver encodeObject:mras forKey:@"runs"];
-                  } break;
-                  case NIJSONDataMaskStorageMode: {
-                      // TODO: encode mask runs...
-                      NSMutableData* runs = [NSMutableData data];
-                      for (NSValue* mrv in mask.maskRuns) {
-                          NIMaskRun mr = mrv.NIMaskRunValue;
-                          [runs appendBytes:&mr length:sizeof(NIMaskRun)];
-                      }
-                      [archiver encodeObject:runs forKey:@"runs"];
-                  } break;
+              NSMutableArray* mras = [NSMutableArray array];
+              for (NSValue* mrv in mask.maskRuns) {
+                  NIMaskRun mr = mrv.NIMaskRunValue;
+                  NSMutableArray* mra = [NSMutableArray array];
+                  if (mr.widthRange.length != 1)
+                      [mra addObject:@[ @(mr.widthRange.location), @(mr.widthRange.length) ]];
+                  else [mra addObject:@(mr.widthRange.location)];
+                  [mra addObjectsFromArray:@[ @(mr.heightIndex), @(mr.depthIndex) ]];
+                  if (mr.intensity != 1)
+                      [mra addObject:@(mr.intensity)];
+                  [mras addObject:mra];
               }
+              [archiver encodeObject:mras forKey:@"runs"];
           }
           decoder:^NIMask *(NIJSONUnarchiver *unarchiver) {
-              id obj = [unarchiver decodeObjectForKey:@"runs"];
-              if ([obj isKindOfClass:NSArray.class]) {
-                  NSMutableArray* mrs = [NSMutableArray array];
-                  for (NSArray* mra in obj) {
-                      NIMaskRun mr;
-                      if ([mra[0][0] isKindOfClass:NSArray.class]) {
-                          mr.widthRange.location = [mra[0][0][0] CGFloatValue];
-                          if ([mra[0][0] count] > 1)
-                              mr.widthRange.length = [mra[0][0][1] CGFloatValue];
-                          else mr.widthRange.length = 1;
-                      } else mr.widthRange = NSMakeRange([mra[0][0] CGFloatValue], 1);
-                      mr.heightIndex = [mra[0][1] CGFloatValue];
-                      mr.depthIndex = [mra[0][2] CGFloatValue];
-                      if ([mra count] > 1)
-                          mr.intensity = [mra[1] CGFloatValue];
-                      else mr.intensity = 1;
-                      [mrs addObject:[NSValue valueWithNIMaskRun:mr]];
-                  }
-                  return [[[NIMask alloc] initWithMaskRuns:mrs] autorelease];
-              } else if ([obj isKindOfClass:NSData.class]) {
-                  // TODO: decode mask runs...
-                  [NSException raise:NSInvalidUnarchiveOperationException format:@"Invalid mask runs data"];
+              id obj = [[unarchiver decodeObjectForKey:@"runs"] requireArrayOfInstancesOfClass:NSArray.class];
+              NSMutableArray* mrs = [NSMutableArray array];
+              for (NSArray* mra in obj) {
+                  NIMaskRun mr;
+                  if ([mra[0] isKindOfClass:NSArray.class]) {
+                      mr.widthRange.location = [[mra[0][0] requireKindOfClass:NSNumber.class] CGFloatValue];
+                      if ([mra[0] count] > 1)
+                          mr.widthRange.length = [[mra[0][1] requireKindOfClass:NSNumber.class] CGFloatValue];
+                      else mr.widthRange.length = 1;
+                  } else mr.widthRange = NSMakeRange([[mra[0] requireKindOfClass:NSNumber.class] CGFloatValue], 1);
+                  mr.heightIndex = [[mra[1] requireKindOfClass:NSNumber.class] CGFloatValue];
+                  mr.depthIndex = [[mra[2] requireKindOfClass:NSNumber.class] CGFloatValue];
+                  if ([mra count] > 3)
+                      mr.intensity = [[mra[3] requireKindOfClass:NSNumber.class] CGFloatValue];
+                  else mr.intensity = 1;
+                  [mrs addObject:[NSValue valueWithNIMaskRun:mr]];
               }
-              
-              [NSException raise:NSInvalidUnarchiveOperationException format:@"Invalid data type for mask runs: %@", [obj className]];
-              return nil;
+              return [[[NIMask alloc] initWithMaskRuns:mrs] autorelease];
           }];
 }
 
@@ -298,16 +277,6 @@ NSString* const NIJSONDeflatedAnnotationsFileType = @"ojaz";
     return @[ NIJSONAnnotationsFileType, NIJSONDeflatedAnnotationsFileType ];
 }
 
-static NIJSONMaskStorageMode defaultMaskStorageMode = NIJSONArraysMaskStorageMode;
-
-+ (NIJSONMaskStorageMode)defaultMaskStorageMode {
-    return defaultMaskStorageMode;
-}
-
-+ (void)setDefaultMaskStorageMode:(NIJSONMaskStorageMode)maskStorageMode {
-    defaultMaskStorageMode = maskStorageMode;
-}
-
 @end
 
 @interface NIJSONArchiver ()
@@ -322,7 +291,6 @@ static NIJSONMaskStorageMode defaultMaskStorageMode = NIJSONArraysMaskStorageMod
 
 @synthesize json = _json, stack = _stack, replacements = _replacements;
 @synthesize delegate = _delegate;
-@synthesize maskStorageMode = _maskStorageMode;
 
 + (NSString*)archivedStringWithRootObject:(id)obj {
     NSMutableString* ms = [NSMutableString string];
@@ -336,7 +304,6 @@ static NIJSONMaskStorageMode defaultMaskStorageMode = NIJSONArraysMaskStorageMod
         self.json = string;
         self.stack = [NSMutableArray array];
         self.replacements = [NSMutableDictionary dictionary];
-        self.maskStorageMode = [NIJSON defaultMaskStorageMode];
     }
     
     return self;
@@ -385,7 +352,12 @@ static NIJSONMaskStorageMode defaultMaskStorageMode = NIJSONArraysMaskStorageMod
     else if ([obj isKindOfClass:NSNumber.class]) {
         if (strcmp([obj objCType], @encode(BOOL)) == 0)
             [self.json appendString:([obj intValue]? @"true" : @"false")];
-        else [self.json appendFormat:@"%@", obj];
+        else {
+            NSString* objd = [obj description];
+            if ([objd isEqualToString:@"-0"])
+                objd = @"0";
+            [self.json appendString:objd];
+        }
     }
     else if ([obj isKindOfClass:NSValue.class]) {
         if (!(rec = [NIJSON _recordForValueObjCType:[obj objCType]]))
