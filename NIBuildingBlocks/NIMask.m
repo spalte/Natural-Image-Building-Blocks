@@ -197,7 +197,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
 
 + (instancetype)maskWithSphereDiameter:(NSUInteger)diameter
 {
-    return [self maskWithElipsoidWidth:diameter height:diameter depth:diameter];
+    return [self maskWithEllipsoidWidth:diameter height:diameter depth:diameter];
 }
 
 + (instancetype)maskWithCubeSize:(NSUInteger)size
@@ -222,7 +222,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return [[[NIMask alloc] initWithSortedMaskRunData:[NSData dataWithBytesNoCopy:maskRuns length:width * height * sizeof(NIMaskRun) freeWhenDone:YES]] autorelease];
 }
 
-+ (instancetype)maskWithElipsoidWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth
++ (instancetype)maskWithEllipsoidWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth
 {
     NSUInteger i = 0;
     NSUInteger j = 0;

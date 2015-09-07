@@ -185,11 +185,11 @@ CF_EXTERN_C_END
  */
 + (instancetype)maskWithBoxWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth;
 
-/** Returns a newly created mask that has the shape of an elipsoid with the specified sizes.
+/** Returns a newly created mask that has the shape of an ellipsoid with the specified sizes.
  
  @return The newly crated and initialized mask object.
  */
-+ (instancetype)maskWithElipsoidWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth;
++ (instancetype)maskWithEllipsoidWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth;
 
 /** Returns a newly created mask based on the intesities of the volumeData.
  
