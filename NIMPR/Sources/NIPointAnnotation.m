@@ -51,6 +51,10 @@ static NSString* const NIPointAnnotationCoordsKey = @"coords";
     [coder encodeObject:[NSValue valueWithNIVector:self.vector] forKey:NIPointAnnotationCoordsKey];
 }
 
+- (NIMask*)maskForVolume:(NIVolumeData *)volume {
+    return [[NIMask maskWithCubeSize:1] maskByResamplingFromVolumeTransform:NIAffineTransformMakeTranslationWithVector(self.vector) toVolumeTransform:volume.volumeTransform interpolationMode:NIInterpolationModeNone]; // TODO: none?
+}
+
 - (void)translate:(NIVector)translation {
     self.vector = NIVectorAdd(self.vector, translation);
 }

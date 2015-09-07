@@ -14,7 +14,7 @@
 - (instancetype)init NS_DESIGNATED_INITIALIZER;
 - (instancetype)initWithCoder:(NSCoder*)coder NS_DESIGNATED_INITIALIZER;
 
-+ (NSSet*)keyPathsForValuesAffectingNIBezierPath;
++ (NSSet*)keyPathsForValuesAffectingNIBezierPath NS_REQUIRES_SUPER; // subclasses are supposed to overload this in order to declare what properties of the subclass affect the instances
 - (NIBezierPath*)NIBezierPath;
 - (NIBezierPath*)NIBezierPathForSlabView:(NIAnnotatedGeneratorRequestView*)view;
 - (NIBezierPath*)NIBezierPathForSlabView:(NIAnnotatedGeneratorRequestView*)view complete:(BOOL)complete;
@@ -34,7 +34,7 @@
 
 - (instancetype)initWithTransform:(NIAffineTransform)modelToDicomTransform;
 
-+ (NSSet*)keyPathsForValuesAffectingNSBezierPath;
++ (NSSet*)keyPathsForValuesAffectingNSBezierPath NS_REQUIRES_SUPER; // subclasses are supposed to overload this in order to declare what properties of the subclass affect the instances
 - (NSBezierPath*)NSBezierPath;
 
 @end

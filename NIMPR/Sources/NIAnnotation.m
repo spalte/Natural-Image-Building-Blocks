@@ -31,46 +31,33 @@ NSString* const NIAnnotationTransformKey = @"transform";
 @implementation NIAnnotation
 
 + (void)load {
-    /*id NSBundleDidLoadNotificationObserver =*/ [[NSBundle observeNotification:NSBundleDidLoadNotification block:^(NSNotification* n) {
-        BOOL hasWarnings = NO;
-
+    [self.class retain:[NSBundle observeNotification:NSBundleDidLoadNotification block:^(NSNotification* n) {
         for (NSString* className in n.userInfo[NSLoadedClasses]) {
             Class class = [n.object classNamed:className];
-            BOOL flag = NO;
-            for (Class sc = class_getSuperclass(class); sc; sc = class_getSuperclass(sc))
-                if (sc == NIAnnotation.class) {
-                    flag = YES;
-                    break;
-                }
-            if (flag) {
-                Class iamc = class;
-                for (Class sc = class_getSuperclass(iamc); class_getClassMethod(sc, @selector(isAbstract)) == class_getClassMethod(iamc, @selector(isAbstract)); sc = class_getSuperclass(sc))
-                    iamc = sc;
-                if (iamc == class && class.isAbstract)
-                    flag = NO;
-            }
-            if (flag) {
-                if ([[NIJSON recordForClass:class] valueForKey:@"type"] != class) {
-                    hasWarnings = YES;
-                    NSLog(@"Warning: annotation class %@ isn't registered to NIJSON", className);
-                } else {
-                    if (class_getMethodImplementation(class, @selector(initWithCoder:)) == class_getMethodImplementation(class_getSuperclass(class), @selector(initWithCoder:))) {
-                        hasWarnings = YES;
-                        NSLog(@"Warning: missing method implementation -[%@ initWithCoder:]", className);
+            if (class_getClassMethod(class, @selector(isAbstract)) == class_getClassMethod(class_getSuperclass(class), @selector(isAbstract)) || !class.isAbstract)
+                for (Class sc = class_getSuperclass(class); sc; sc = class_getSuperclass(sc))
+                    if (sc == NIAnnotation.class) {
+                        if ([[NIJSON recordForClass:class] valueForKey:@"type"] != class)
+                            NSLog(@"Warning: annotation class %@ isn't registered to NIJSON", className);
+
+                        if (class_getMethodImplementation(class, @selector(initWithCoder:)) == class_getMethodImplementation(class_getSuperclass(class), @selector(initWithCoder:)))
+                            NSLog(@"Warning: missing method implementation -[%@ initWithCoder:]", className);
+                        if (class_getMethodImplementation(class, @selector(encodeWithCoder:)) == class_getMethodImplementation(class_getSuperclass(class), @selector(encodeWithCoder:)))
+                            NSLog(@"Warning: missing method implementation -[%@ encodeWithCoder:]", className);
+                        
+                        if (class_getMethodImplementation(class, @selector(translate:)) == class_getMethodImplementation(NIAnnotation.class, @selector(translate:)))
+                            NSLog(@"Warning: missing method implementation -[%@ translate:]", className);
+                        if (class_getMethodImplementation(class, @selector(maskForVolume:)) == class_getMethodImplementation(NIAnnotation.class, @selector(maskForVolume:)))
+                            NSLog(@"Warning: missing method implementation -[%@ maskForVolume:]", className);
+                        if (class_getMethodImplementation(class, @selector(drawInView:cache:)) == class_getMethodImplementation(NIAnnotation.class, @selector(drawInView:cache:)))
+                            NSLog(@"Warning: missing method implementation -[%@ drawInView:cache:]", className);
+                        if (class_getMethodImplementation(class, @selector(distanceToSlicePoint:cache:view:closestPoint:)) == class_getMethodImplementation(NIAnnotation.class, @selector(distanceToSlicePoint:cache:view:closestPoint:)))
+                            NSLog(@"Warning: missing method implementation -[%@ distanceToSlicePoint:cache:view:closestPoint:]", className);
+                        if (class_getMethodImplementation(class, @selector(intersectsSliceRect:cache:view:)) == class_getMethodImplementation(NIAnnotation.class, @selector(intersectsSliceRect:cache:view:)))
+                            NSLog(@"Warning: missing method implementation -[%@ intersectsSliceRect:cache:view:]", className);
                     }
-                    if (class_getMethodImplementation(class, @selector(encodeWithCoder:)) == class_getMethodImplementation(class_getSuperclass(class), @selector(encodeWithCoder:))) {
-                        hasWarnings = YES;
-                        NSLog(@"Warning: missing method implementation -[%@ encodeWithCoder:]", className);
-                    }
-                }
-            }
         }
-        
-        if (hasWarnings && n.object == [NSBundle bundleForClass:self.class]) {
-            NSLog(@"Exiting because of the warnings related to %@ (in %@, line %d)", [[n.object bundleURL] lastPathComponent], [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__);
-            exit(0);
-        }
-    }] retain];
+    }]];
 }
 
 //+ (void)finalize {
@@ -162,13 +149,13 @@ static NSString* const NIAnnotationLockedKey = @"locked";
     if (![keyPath isEqualToString:@"annotation"]) {
         self.changes[keyPath] = change;
     } else {
-        [self performSelector:@selector(notifyAnnotationChange) withObject:nil afterDelay:0];
+        [self performSelector:@selector(_notifyAnnotationChanges:) withObject:[[self.changes copy] autorelease] afterDelay:0];
+        [self.changes removeAllObjects];
     }
 }
 
-- (void)notifyAnnotationChange {
-    [[NSNotificationCenter defaultCenter] postNotificationName:NIAnnotationChangeNotification object:self userInfo:@{ NIAnnotationChangeNotificationChangesKey: [[self.changes copy] autorelease] }];
-    [self.changes removeAllObjects];
+- (void)_notifyAnnotationChanges:(NSDictionary*)changes {
+    [[NSNotificationCenter defaultCenter] postNotificationName:NIAnnotationChangeNotification object:self userInfo:@{ NIAnnotationChangeNotificationChangesKey: changes }];
 }
 
 - (BOOL)annotation {
@@ -179,8 +166,49 @@ static NSString* const NIAnnotationLockedKey = @"locked";
     return [NSSet set];
 }
 
+static NSColor* NIAnnotationDefaultColor = nil;
+static NSString* const NIANnotationDefaultColorKey = @"NIAnnotationDefaultColor";
+
++ (NSColor*)defaultColor {
+    if (NIAnnotationDefaultColor == nil)
+        return [NSColor greenColor];
+    return NIAnnotationDefaultColor;
+}
+
++ (void)setDefaultColor:(NSColor*)color {
+    if (color != NIAnnotationDefaultColor) {
+        NIAnnotationDefaultColor = [self.class retain:color forKey:NIANnotationDefaultColorKey];
+    }
+}
+
++ (NSColor*)color:(NIAnnotation*)annotation {
+    NSColor* color = annotation.color;
+    if (color)
+        return color;
+    return [annotation.class defaultColor];
+}
+
++ (NSString*)name:(NIAnnotation*)annotation {
+    NSString* name = annotation.name;
+    if (name)
+        return name;
+    
+    name = annotation.className;
+    if ([name hasPrefix:@"NI"])
+        name = [name substringFromIndex:2];
+    if ([name hasSuffix:@"Annotation"])
+        name = [name substringToIndex:name.length-10];
+    
+    return name;
+}
+
 - (void)translate:(NIVector)translation {
     NSLog(@"Warning: -[%@ translate:] is missing", self.className);
+}
+
+- (NIMask*)maskForVolume:(NIVolumeData*)volume {
+    NSLog(@"Warning: -[%@ maskForVolume:] is missing", self.className);
+    return nil;
 }
 
 - (void)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache {
@@ -204,49 +232,13 @@ static NSString* const NIAnnotationLockedKey = @"locked";
 //}
 
 - (CGFloat)distanceToSlicePoint:(NSPoint)point cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view closestPoint:(NSPoint*)rpoint {
-    NSLog(@"Warning: -[%@ distanceToSlicePoint:view:closestPoint:] is missing", self.className);
+    NSLog(@"Warning: -[%@ distanceToSlicePoint:cache:view:closestPoint:] is missing", self.className);
     return CGFLOAT_MAX;
 }
 
 - (BOOL)intersectsSliceRect:(NSRect)rect cache:(NSMutableDictionary*)cache view:(NIAnnotatedGeneratorRequestView*)view {
-    NSLog(@"Warning: -[%@ intersectsSliceRect:view:] is missing", self.className);
+    NSLog(@"Warning: -[%@ intersectsSliceRect:cache:view:] is missing", self.className);
     return NO;
-}
-
-static NSColor* NIAnnotationDefaultColor = nil;
-
-+ (NSColor*)defaultColor {
-    if (NIAnnotationDefaultColor == nil)
-        return [NSColor greenColor];
-    return NIAnnotationDefaultColor;
-}
-
-+ (void)setDefaultColor:(NSColor*)color {
-    if (color != NIAnnotationDefaultColor) {
-        [NIAnnotationDefaultColor release];
-        NIAnnotationDefaultColor = [color retain];
-    }
-}
-
-+ (NSColor*)color:(NIAnnotation*)annotation {
-    NSColor* color = annotation.color;
-    if (color)
-        return color;
-    return [annotation.class defaultColor];
-}
-
-+ (NSString*)name:(NIAnnotation*)annotation {
-    NSString* name = annotation.name;
-    if (name)
-        return name;
-    
-    name = annotation.className;
-    if ([name hasPrefix:@"NI"])
-        name = [name substringFromIndex:2];
-    if ([name hasSuffix:@"Annotation"])
-        name = [name substringToIndex:name.length-10];
-    
-    return name;
 }
 
 - (NSSet*)handlesInView:(NIAnnotatedGeneratorRequestView*)view {

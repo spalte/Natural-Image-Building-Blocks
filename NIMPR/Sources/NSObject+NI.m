@@ -306,12 +306,12 @@
     return 0;
 }
 
-- (void)retain:(id)obj {
-    [self.retainer retain:obj];
+- (id)retain:(id)obj {
+    return [self.retainer retain:obj];
 }
 
-- (void)retain:(id)obj forKey:(id)key{
-    [self.retainer retain:obj forKey:key];
+- (id)retain:(id)obj forKey:(id)key{
+    return [self.retainer retain:obj forKey:key];
 }
 
 - (NIRetainer*)retainer {
@@ -319,6 +319,14 @@
     if (!r)
         objc_setAssociatedObject(self, @selector(retainer), (r = [[NIRetainer alloc] init]), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     return r;
+}
+
++ (id)retain:(id)obj {
+    return [[NSBundle bundleForClass:self.class] retain:obj];
+}
+
++ (id)retain:(id)obj forKey:(id)key {
+    return [[NSBundle bundleForClass:self.class] retain:obj forKey:key];
 }
 
 @end
@@ -346,14 +354,15 @@
     [super dealloc];
 }
 
-- (void)retain:(id)obj {
-    [self retain:obj forKey:[NSValue valueWithPointer:obj]];
+- (id)retain:(id)obj {
+    return [self retain:obj forKey:[NSValue valueWithPointer:obj]];
 }
 
-- (void)retain:(id)obj forKey:(id)key {
+- (id)retain:(id)obj forKey:(id)key {
     if (obj)
         self.retains[key] = obj;
     else [self.retains removeObjectForKey:key];
+    return obj;
 }
 
 @end

@@ -8,8 +8,22 @@
 
 #import "NIBezierPathAnnotation.h"
 #import "NSBezierPath+NIMPR.h"
-
+#import <objc/runtime.h>
 @implementation NIBezierPathAnnotation
+
++ (void)load {
+    [self.class retain:[NSBundle observeNotification:NSBundleDidLoadNotification block:^(NSNotification* n) {
+        for (NSString* className in n.userInfo[NSLoadedClasses]) {
+            Class class = [n.object classNamed:className];
+            if (class_getClassMethod(class, @selector(isAbstract)) == class_getClassMethod(class_getSuperclass(class), @selector(isAbstract)) || !class.isAbstract)
+                for (Class sc = class_getSuperclass(class); sc; sc = class_getSuperclass(sc))
+                    if (sc == NIBezierPathAnnotation.class) {
+                        if (class_getMethodImplementation(object_getClass(class), @selector(keyPathsForValuesAffectingNIBezierPath)) == class_getMethodImplementation(object_getClass(NIBezierPathAnnotation.class), @selector(keyPathsForValuesAffectingNIBezierPath)))
+                            NSLog(@"Warning: missing method implementation +[%@ keyPathsForValuesAffectingNIBezierPath]", className);
+                    }
+        }
+    }]];
+}
 
 + (NSSet*)keyPathsForValuesAffectingAnnotation {
     return [[super keyPathsForValuesAffectingAnnotation] setByAddingObject:@"NIBezierPath"];
@@ -34,7 +48,6 @@
 }
 
 + (NSSet*)keyPathsForValuesAffectingNIBezierPath {
-    [NSException raise:NSInvalidArgumentException format:@"Method +[%@ keyPathsForValuesAffectingNIBezierPath] must be implemented for all NIBezierPathAnnotation subclasses", self.className];
     return [NSSet set];
 }
 
@@ -176,6 +189,20 @@ static NSString* const NINSBezierPathAnnotationTransform = @"transform";
 
 @implementation NINSBezierPathAnnotation
 
++ (void)load {
+    [self.class retain:[NSBundle observeNotification:NSBundleDidLoadNotification block:^(NSNotification* n) {
+        for (NSString* className in n.userInfo[NSLoadedClasses]) {
+            Class class = [n.object classNamed:className];
+            if (class_getClassMethod(class, @selector(isAbstract)) == class_getClassMethod(class_getSuperclass(class), @selector(isAbstract)) || !class.isAbstract)
+                for (Class sc = class_getSuperclass(class); sc; sc = class_getSuperclass(sc))
+                    if (sc == NINSBezierPathAnnotation.class) {
+                        if (class_getMethodImplementation(object_getClass(class), @selector(keyPathsForValuesAffectingNSBezierPath)) == class_getMethodImplementation(object_getClass(NINSBezierPathAnnotation.class), @selector(keyPathsForValuesAffectingNSBezierPath)))
+                            NSLog(@"Warning: missing method implementation +[%@ keyPathsForValuesAffectingNSBezierPath]", className);
+                    }
+        }
+    }]];
+}
+
 @synthesize modelToDicomTransform = _modelToDicomTransform;
 
 - (instancetype)init {
@@ -222,11 +249,10 @@ static NSString* const NINSBezierPathAnnotationTransform = @"transform";
 }
 
 + (NSSet*)keyPathsForValuesAffectingNIBezierPath {
-    return [NSSet setWithObjects: @"NSBezierPath", @"modelToDicomTransform", nil];
+    return [[super keyPathsForValuesAffectingNIBezierPath] setByAddingObjects: @"NSBezierPath", @"modelToDicomTransform", nil];
 }
 
 + (NSSet*)keyPathsForValuesAffectingNSBezierPath {
-    [NSException raise:NSInvalidArgumentException format:@"Method +[%@ keyPathsForValuesAffectingNSBezierPath] must be implemented for all NINSBezierPathAnnotation subclasses", self.className];
     return [NSSet set];
 }
 

@@ -68,23 +68,25 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
 + (NSArray*)navigationTools {
     static NSArray* tools = nil;
     if (!tools)
-        tools = [@[[NIMPRToolRecord recordWithLabel:NSLocalizedString(@"WL/WW", nil) image:[NIMPR image:@"Tool-WLWW"] tag:NIMPRToolWLWW handler:NIMPRWLWWTool.class],
+        tools = [self.class retain:
+                 @[[NIMPRToolRecord recordWithLabel:NSLocalizedString(@"WL/WW", nil) image:[NIMPR image:@"Tool-WLWW"] tag:NIMPRToolWLWW handler:NIMPRWLWWTool.class],
                    [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Move", nil) image:[NIMPR image:@"Tool-Move"] tag:NIMPRToolMove handler:NIMPRMoveTool.class],
                    [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Zoom", nil) image:[NIMPR image:@"Tool-Zoom"] tag:NIMPRToolZoom handler:NIMPRZoomTool.class],
                    [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Rotate", nil) image:[NIMPR image:@"Tool-Rotate"] tag:NIMPRToolRotate handler:NIMPRRotateTool.class],
-                   [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Interact", nil) image:[NSCursor.pointingHandCursor image] tag:NIMPRToolInteract handler:NIMPRAnnotationSelectionTool.class]] retain];
+                   [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Interact", nil) image:[NSCursor.pointingHandCursor image] tag:NIMPRToolInteract handler:NIMPRAnnotationSelectionTool.class]]];
     return tools;
 }
 
 + (NSArray*)annotationTools {
     static NSArray* tools = nil;
     if (!tools)
-        tools = [@[[NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Point", nil) image:[NIMPR image:@"Tool-Annotate-Point"] tag:NIMPRToolAnnotatePoint handler:NIMPRAnnotatePointTool.class],
+        tools = [self.class retain:
+                 @[[NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Point", nil) image:[NIMPR image:@"Tool-Annotate-Point"] tag:NIMPRToolAnnotatePoint handler:NIMPRAnnotatePointTool.class],
                    [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Segment", nil) image:[NIMPR image:@"Tool-Annotate-Segment"] tag:NIMPRToolAnnotateSegment handler:NIMPRAnnotateSegmentTool.class],
                    [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Poly", nil) image:[NIMPR image:@"Tool-Annotate-Poly"] tag:NIMPRToolAnnotatePoly handler:NIMPRAnnotatePolyTool.class],
                    [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Rectangle", nil) image:[NIMPR image:@"Tool-Annotate-Rectangle"] tag:NIMPRToolAnnotateRectangle handler:NIMPRAnnotateRectangleTool.class],
                    [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Ellipse", nil) image:[NIMPR image:@"Tool-Annotate-Ellipse"] tag:NIMPRToolAnnotateEllipse handler:NIMPRAnnotateEllipseTool.class],
-                   [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Region Growing", nil) image:[NIMPR image:@"Tool-Annotate-RegionGrowing"] tag:NIMPRToolRegionGrowing handler:NIMPRRegionGrowingTool.class]] retain];
+                   [NIMPRToolRecord recordWithLabel:NSLocalizedString(@"Region Growing", nil) image:[NIMPR image:@"Tool-Annotate-RegionGrowing"] tag:NIMPRToolRegionGrowing handler:NIMPRRegionGrowingTool.class]]];
     return tools;
 }
 
@@ -95,9 +97,10 @@ NSString* const NIMPRControllerToolbarItemIdentifierProjection = @"NIProjection"
 + (NSArray*)layouts {
     static NSArray* modes = nil;
     if (!modes)
-        modes = [@[[NIMPRLayoutRecord recordWithLabel:NSLocalizedString(@"Classic", nil) image:[NIMPR image:@"Layout-Classic"] tag:NIMPRLayoutClassic],
+        modes = [self.class retain:
+                 @[[NIMPRLayoutRecord recordWithLabel:NSLocalizedString(@"Classic", nil) image:[NIMPR image:@"Layout-Classic"] tag:NIMPRLayoutClassic],
                    [NIMPRLayoutRecord recordWithLabel:NSLocalizedString(@"Vertical", nil) image:[NIMPR image:@"Layout-Vertical"] tag:NIMPRLayoutVertical],
-                   [NIMPRLayoutRecord recordWithLabel:NSLocalizedString(@"Horizontal", nil) image:[NIMPR image:@"Layout-Horizontal"] tag:NIMPRLayoutHorizontal]] retain];
+                   [NIMPRLayoutRecord recordWithLabel:NSLocalizedString(@"Horizontal", nil) image:[NIMPR image:@"Layout-Horizontal"] tag:NIMPRLayoutHorizontal]]];
     return modes;
 }
 

@@ -55,7 +55,7 @@
 }
 
 + (NSSet*)keyPathsForValuesAffectingNIBezierPath {
-    return [NSSet setWithObjects: @"vectors", @"smooth", @"closed", nil];
+    return [[super keyPathsForValuesAffectingNIBezierPath] setByAddingObjects: @"vectors", @"smooth", @"closed", nil];
 }
 
 - (NIBezierPath*)NIBezierPath {

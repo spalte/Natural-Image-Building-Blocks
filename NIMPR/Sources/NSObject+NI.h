@@ -12,8 +12,8 @@
     NSMutableDictionary* _retains;
 }
 
-- (void)retain:(id)obj;
-- (void)retain:(id)obj forKey:(id)key;
+- (id)retain:(id)obj;
+- (id)retain:(id)obj forKey:(id)key;
 
 @end
 
@@ -61,9 +61,13 @@ typedef NS_OPTIONS(NSUInteger, NINotificationObservingOptions) {
 + (id)observeNotification:(NSString*)name block:(void (^)(NSNotification* notification))block;
 + (id)observeNotification:(NSString*)name options:(NINotificationObservingOptions)options block:(void (^)(NSNotification* notification))block;
 
-- (void)retain:(id)obj;
-- (void)retain:(id)obj forKey:(id)key;
+- (id)retain:(id)obj;
+- (id)retain:(id)obj forKey:(id)key;
 - (NIRetainer*)retainer;
+
+// class retain calls result in class' bundle -[retain:], so objects are released when the bundle is unloaded
++ (id)retain:(id)obj;
++ (id)retain:(id)obj forKey:(id)key;
 
 @end
 

@@ -13,7 +13,7 @@
 @synthesize p = _p, q = _q;
 
 + (NSSet*)keyPathsForValuesAffectingNIBezierPath {
-    return [NSSet setWithObjects: @"p", @"q", nil];
+    return [[super keyPathsForValuesAffectingNIBezierPath] setByAddingObjects: @"p", @"q", nil];
 }
 
 + (id)segmentWithPoints:(NIVector)p :(NIVector)q {

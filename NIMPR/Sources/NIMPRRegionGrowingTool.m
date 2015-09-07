@@ -245,8 +245,9 @@
 - (NSArray*)algorithms {
     static NSArray* sas = nil;
     if (!sas)
-        sas = [@[ [[[NIThresholdIntervalSegmentation alloc] init] autorelease],
-                  [[[NIThresholdSegmentation alloc] init] autorelease] ] retain];
+        sas = [self.class retain:
+               @[[[[NIThresholdIntervalSegmentation alloc] init] autorelease],
+                 [[[NIThresholdSegmentation alloc] init] autorelease]]];
     return sas;
 }
 
@@ -359,7 +360,7 @@
             [algorithm addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(view)]];
             view.needsUpdateConstraints = YES;
         }]];
-        [r retain:[self observeKeyPaths:@[@"annotation", ] options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld block:^(NSDictionary *change) {
+        [r retain:[self observeKeyPath:@"annotation" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld block:^(NSDictionary *change) {
             view.needsUpdateConstraints = YES;
             [r retain:[[change[NSKeyValueChangeNewKey] if:NIAnnotation.class] observeNotification:NIAnnotationRemovedNotification block:^(NSNotification *notification) {
                 [self cancel];

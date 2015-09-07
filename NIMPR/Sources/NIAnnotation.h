@@ -41,12 +41,14 @@ extern CGFloat const NIAnnotationDistant;
 
 - (void)encodeWithCoder:(NSCoder*)coder NS_REQUIRES_SUPER;
 
+@property(readonly) BOOL annotation; // the value of this property is always NO, but you can observe it in order to observe changes in the annotation's properties
++ (NSSet*)keyPathsForValuesAffectingAnnotation NS_REQUIRES_SUPER; // subclasses are supposed to overload this in order to declare what properties of the subclass affect the instances
+
 + (NSColor*)defaultColor;
 + (void)setDefaultColor:(NSColor*)color;
 - (NSColor*)color;
 
-@property(readonly) BOOL annotation; // the value of this property is always YES, but you can observe it in order to observe changes in the annotation's properties
-+ (NSSet*)keyPathsForValuesAffectingAnnotation NS_REQUIRES_SUPER;
+- (NIMask*)maskForVolume:(NIVolumeData*)volume; // subclasses must overload this
 
 - (void)translate:(NIVector)translation;
 

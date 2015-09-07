@@ -170,6 +170,9 @@ static NSString* const NIMaskAnnotationMask = @"mask";
     }
 }
 
+//- (NIMask*)maskForVolume:(NIVolumeData *)volume {
+//    return [_mask ];
+//}
 
 - (void)translate:(NIVector)translation {
     NIAffineTransform transform = NIAffineTransformMakeTranslationWithVector(translation);

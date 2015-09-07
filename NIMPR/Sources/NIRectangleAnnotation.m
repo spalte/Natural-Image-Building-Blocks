@@ -16,7 +16,7 @@ static NSString* const NIRectangleAnnotationBounds = @"bounds";
 @synthesize bounds = _bounds;
 
 + (NSSet*)keyPathsForValuesAffectingNSBezierPath {
-    return [NSSet setWithObject:@"bounds"];
+    return [[super keyPathsForValuesAffectingNSBezierPath] setByAddingObject:@"bounds"];
 }
 
 + (id)rectangleWithBounds:(NSRect)bounds transform:(NIAffineTransform)modelToDicomTransform {
