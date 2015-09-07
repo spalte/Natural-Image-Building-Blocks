@@ -182,7 +182,7 @@
                     NSError* err = nil;
                     
                     if ([sp.URL.pathExtension.lowercaseString isEqualToString:NIJSONDeflatedAnnotationsFileType])
-                        data = [data zlibDeflate:&err];
+                        data = [data zlibDeflatedDataWithError:&err];
                     if (err) return [[NSAlert alertWithError:err] beginSheetModalForWindow:self.window completionHandler:nil];
                     
                     [data writeToURL:sp.URL options:NSDataWritingAtomic error:&err];
@@ -204,7 +204,7 @@
                     NSData* data = [NSData dataWithContentsOfURL:op.URL];
                     @try {
                         NSError* err = nil;
-                        NSData* idata = [data zlibInflate:&err];
+                        NSData* idata = [data zlibInflatedDataWithError:&err];
                         if (!err && idata) data = idata;
                     } @catch (...) {
                     }

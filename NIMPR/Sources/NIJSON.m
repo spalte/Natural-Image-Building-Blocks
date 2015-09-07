@@ -111,14 +111,14 @@ typedef id (^NIJSONUnarchiverBlock)(NIJSONUnarchiver* unarchiver);
     
     [self setName:@"data" forClass:NSData.class // TODO: zlib!
           encoder:^(NIJSONArchiver *archiver, NSData* obj) { // we could encode using base85, but that would make thigs harder for other people trying to read our blobs... so, base64
-              NSData* odef = [obj zlibDeflate:NULL];
+              NSData* odef = [obj zlibDeflatedData];
               if ([odef length] < .9*[obj length])
-                  [archiver encodeObject:[[odef base64EncodedStringWithOptions:NSDataBase64Encoding76CharacterLineLength|NSDataBase64EncodingEndLineWithLineFeed] stringByReplacingOccurrencesOfString:@"\n" withString:@" "] forKey:@"base64-gzip"];
+                  [archiver encodeObject:[[odef base64EncodedStringWithOptions:NSDataBase64Encoding76CharacterLineLength|NSDataBase64EncodingEndLineWithLineFeed] stringByReplacingOccurrencesOfString:@"\n" withString:@" "] forKey:@"base64-deflated"];
               else [archiver encodeObject:[[obj base64EncodedStringWithOptions:NSDataBase64Encoding76CharacterLineLength|NSDataBase64EncodingEndLineWithLineFeed] stringByReplacingOccurrencesOfString:@"\n" withString:@" "] forKey:@"base64"];
           }
           decoder:^id(NIJSONUnarchiver *unarchiver) {
-              if ([unarchiver containsValueForKey:@"base64-gzip"])
-                  return [[[[NSData alloc] initWithBase64EncodedString:[unarchiver decodeObjectForKey:@"base64-gzip"] options:NSDataBase64DecodingIgnoreUnknownCharacters] autorelease] zlibInflate:NULL];
+              if ([unarchiver containsValueForKey:@"base64-deflated"])
+                  return [[[[NSData alloc] initWithBase64EncodedString:[unarchiver decodeObjectForKey:@"base64-deflated"] options:NSDataBase64DecodingIgnoreUnknownCharacters] autorelease] zlibInflatedData];
               return [[[NSData alloc] initWithBase64EncodedString:[unarchiver decodeObjectForKey:@"base64"] options:NSDataBase64DecodingIgnoreUnknownCharacters] autorelease];
           }];
     

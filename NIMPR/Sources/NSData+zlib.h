@@ -20,11 +20,11 @@ typedef enum : NSUInteger {
 + (NIZlibCompressionLevel)defaultCompressionLevel;
 + (void)setDefaultCompressionLevel:(NIZlibCompressionLevel)compressionLevel;
 
-- (NSData*)zlibDeflate;
-- (NSData*)zlibDeflate:(NSError**)err;
-- (NSData*)zlibDeflate:(NSError**)err level:(NIZlibCompressionLevel)compressionLevel;
+- (NSData*)zlibDeflatedData;
+- (NSData*)zlibDeflatedDataWithError:(NSError**)err;
+- (NSData*)zlibDeflatedDataWithLevel:(NIZlibCompressionLevel)compressionLevel error:(NSError**)err;
 
-- (NSData*)zlibInflate;
-- (NSData*)zlibInflate:(NSError**)err;
+- (NSData*)zlibInflatedData;
+- (NSData*)zlibInflatedDataWithError:(NSError**)err;
 
 @end

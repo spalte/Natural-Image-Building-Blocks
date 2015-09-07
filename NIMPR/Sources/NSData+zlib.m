@@ -23,15 +23,15 @@ static NIZlibCompressionLevel defaultCompressionLevel = NIZlibDefaultCompression
     defaultCompressionLevel = compressionLevel;
 }
 
-- (NSData*)zlibDeflate {
-    return [self zlibDeflate:NULL];
+- (NSData*)zlibDeflatedData {
+    return [self zlibDeflatedDataWithError:NULL];
 }
 
-- (NSData*)zlibDeflate:(NSError**)err {
-    return [self zlibDeflate:err level:defaultCompressionLevel];
+- (NSData*)zlibDeflatedDataWithError:(NSError**)err {
+    return [self zlibDeflatedDataWithLevel:defaultCompressionLevel error:err];
 }
 
-- (NSData*)zlibDeflate:(NSError**)err level:(NIZlibCompressionLevel)compressionLevel {
+- (NSData*)zlibDeflatedDataWithLevel:(NIZlibCompressionLevel)compressionLevel error:(NSError**)err {
     if (self.length == 0)
         return self;
     
@@ -100,11 +100,11 @@ static NIZlibCompressionLevel defaultCompressionLevel = NIZlibDefaultCompression
     return rd;
 }
 
-- (NSData*)zlibInflate {
-    return [self zlibDeflate:NULL];
+- (NSData*)zlibInflatedData {
+    return [self zlibDeflatedDataWithError:NULL];
 }
 
-- (NSData*)zlibInflate:(NSError**)err {
+- (NSData*)zlibInflatedDataWithError:(NSError **)err {
     if (self.length == 0)
         return self;
     
