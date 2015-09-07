@@ -22,6 +22,8 @@ extern NSString* const NIJSONDeflatedAnnotationsFileType;
 
 + (NSArray*)fileTypes:(NSDictionary**)descriptions;
 
++ (NSColorList*)colorList;
+
 @end
 
 @protocol NIJSONArchiverDelegate, NIJSONUnarchiverDelegate;

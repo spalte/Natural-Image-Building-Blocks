@@ -74,6 +74,29 @@ typedef id (^NIJSONUnarchiverBlock)(NIJSONUnarchiver* unarchiver);
 
 @implementation NIJSON
 
++ (NSColorList*)colorList {
+    static NSColorList* cl = nil;
+    if (!cl) {
+        cl = [[NSColorList alloc] init];
+        [cl setColor:[NSColor blackColor] forKey:@"black"]; // 0.0 white
+        [cl setColor:[NSColor darkGrayColor] forKey:@"darkgray"]; // 0.333 white
+        [cl setColor:[NSColor lightGrayColor] forKey:@"lightgray"]; // 0.667 white
+        [cl setColor:[NSColor whiteColor] forKey:@"white"]; // 1.0 white
+        [cl setColor:[NSColor grayColor] forKey:@"gray"]; // 0.5 white
+        [cl setColor:[NSColor redColor] forKey:@"red"]; // 1.0, 0.0, 0.0 RGB
+        [cl setColor:[NSColor greenColor] forKey:@"green"]; // 0.0, 1.0, 0.0 RGB
+        [cl setColor:[NSColor blueColor] forKey:@"blue"]; // 0.0, 0.0, 1.0 RGB
+        [cl setColor:[NSColor cyanColor] forKey:@"cyan"]; // 0.0, 1.0, 1.0 RGB
+        [cl setColor:[NSColor yellowColor] forKey:@"yellow"]; // 1.0, 1.0, 0.0 RGB
+        [cl setColor:[NSColor magentaColor] forKey:@"magenta"]; // 1.0, 0.0, 1.0 RGB
+        [cl setColor:[NSColor orangeColor] forKey:@"orange"]; // 1.0, 0.5, 0.0 RGB
+        [cl setColor:[NSColor purpleColor] forKey:@"purple"]; // 0.5, 0.0, 0.5 RGB
+        [cl setColor:[NSColor brownColor] forKey:@"brown"]; // 0.6, 0.4, 0.2 RGB
+    }
+    
+    return cl;
+}
+
 + (void)load {
     [self setName:@"rect" forValueObjCType:@encode(NSRect)
           encoder:^(NIJSONArchiver *archiver, NSValue *val) {
@@ -122,30 +145,11 @@ typedef id (^NIJSONUnarchiverBlock)(NIJSONUnarchiver* unarchiver);
               return [[[NSData alloc] initWithBase64EncodedString:[unarchiver decodeObjectForKey:@"base64"] options:NSDataBase64DecodingIgnoreUnknownCharacters] autorelease];
           }];
     
-    static NSColorList* colorlist = nil;
-    if (!colorlist) {
-        colorlist = [[NSColorList alloc] init];
-        [colorlist setColor:[NSColor blackColor] forKey:@"black"]; // 0.0 white
-        [colorlist setColor:[NSColor darkGrayColor] forKey:@"darkgray"]; // 0.333 white
-        [colorlist setColor:[NSColor lightGrayColor] forKey:@"lightgray"]; // 0.667 white
-        [colorlist setColor:[NSColor whiteColor] forKey:@"white"]; // 1.0 white
-        [colorlist setColor:[NSColor grayColor] forKey:@"gray"]; // 0.5 white
-        [colorlist setColor:[NSColor redColor] forKey:@"red"]; // 1.0, 0.0, 0.0 RGB
-        [colorlist setColor:[NSColor greenColor] forKey:@"green"]; // 0.0, 1.0, 0.0 RGB
-        [colorlist setColor:[NSColor blueColor] forKey:@"blue"]; // 0.0, 0.0, 1.0 RGB
-        [colorlist setColor:[NSColor cyanColor] forKey:@"cyan"]; // 0.0, 1.0, 1.0 RGB
-        [colorlist setColor:[NSColor yellowColor] forKey:@"yellow"]; // 1.0, 1.0, 0.0 RGB
-        [colorlist setColor:[NSColor magentaColor] forKey:@"magenta"]; // 1.0, 0.0, 1.0 RGB
-        [colorlist setColor:[NSColor orangeColor] forKey:@"orange"]; // 1.0, 0.5, 0.0 RGB
-        [colorlist setColor:[NSColor purpleColor] forKey:@"purple"]; // 0.5, 0.0, 0.5 RGB
-        [colorlist setColor:[NSColor brownColor] forKey:@"brown"]; // 0.6, 0.4, 0.2 RGB
-    }
-    
     [self setName:@"color" forClass:NSColor.class
           encoder:^(NIJSONArchiver *archiver, NSColor *color) {
               NSColor* color1 = color.alphaComponent != 1 ? [color colorWithAlphaComponent:1] : color;
-              NSString* key = [[colorlist.allKeys filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSString* key, NSDictionary *bindings) {
-                  return [[colorlist colorWithKey:key] isEqual:color1];
+              NSString* key = [[self.colorList.allKeys filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSString* key, NSDictionary *bindings) {
+                  return [[self.colorList colorWithKey:key] isEqual:color1];
               }]] lastObject];
               if (key) {
                   [archiver encodeObject:key forKey:@"name"];
@@ -163,13 +167,13 @@ typedef id (^NIJSONUnarchiverBlock)(NIJSONUnarchiver* unarchiver);
                   alpha = [unarchiver decodeCGFloatForKey:@"alpha"];
               
               if ([unarchiver containsValueForKey:@"name"]) {
-                  NSColor* color = [colorlist colorWithKey:[unarchiver decodeObjectForKey:@"name"]];
+                  NSColor* color = [self.colorList colorWithKey:[[unarchiver decodeObjectForKey:@"name"] requireKindOfClass:NSString.class]];
                   if (alpha != 1)
                       color = [color colorWithAlphaComponent:alpha];
                   return color;
               }
               
-              NSArray* rgb = [unarchiver decodeObjectForKey:@"rgb"];
+              NSArray* rgb = [[unarchiver decodeObjectForKey:@"rgb"] requireArrayOfInstancesOfClass:NSNumber.class];
               return [NSColor colorWithCalibratedRed:[rgb[0] CGFloatValue] green:[rgb[1] CGFloatValue] blue:[rgb[2] CGFloatValue] alpha:([[rgb objectAtIndex:3 or:@1] CGFloatValue]*alpha)];
           }];
     
