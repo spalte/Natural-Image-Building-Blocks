@@ -97,7 +97,23 @@ typedef id (^NIJSONUnarchiverBlock)(NIJSONUnarchiver* unarchiver);
     return cl;
 }
 
++ (_NIJSONRecord*)testCoder {
+    return nil;
+}
+
+
+
 + (void)load {
+//    // dynamically load coders
+//    unsigned int count;
+//    Method* methods = class_copyMethodList(object_getClass(self.class), &count);
+//    for (unsigned int i = 0; i < count; ++i)
+//        if ([NSStringFromSelector(method_getName(methods[i])) hasSuffix:@"Coder"]) {
+//            char mrt[10];
+//            method_getReturnType(methods[i], mrt, 10);
+//            NSLog(@"Hey, %@ %s", NSStringFromSelector(method_getName(methods[i])), mrt);
+//        }
+    
     [self setName:@"rect" forValueObjCType:@encode(NSRect)
           encoder:^(NIJSONArchiver *archiver, NSValue *val) {
               NSRect rect = val.rectValue;
@@ -174,7 +190,7 @@ typedef id (^NIJSONUnarchiverBlock)(NIJSONUnarchiver* unarchiver);
               }
               
               NSArray* rgb = [[unarchiver decodeObjectForKey:@"rgb"] requireArrayOfInstancesOfClass:NSNumber.class];
-              return [NSColor colorWithCalibratedRed:[rgb[0] CGFloatValue] green:[rgb[1] CGFloatValue] blue:[rgb[2] CGFloatValue] alpha:([[rgb objectAtIndex:3 or:@1] CGFloatValue]*alpha)];
+              return [NSColor colorWithCalibratedRed:[rgb[0] CGFloatValue] green:[rgb[1] CGFloatValue] blue:[rgb[2] CGFloatValue] alpha:[[rgb objectAtIndex:3 or:@(alpha)] CGFloatValue]];
           }];
     
     [self setName:@"mask" forClass:NIMask.class
