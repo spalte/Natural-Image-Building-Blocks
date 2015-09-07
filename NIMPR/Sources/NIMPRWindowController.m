@@ -10,6 +10,7 @@
 #import "NIMPRWindowController+Toolbar.h"
 #import <NIBuildingBlocks/NIIntersection.h>
 #import <NIBuildingBlocks/NIVolumeData.h>
+#import <NIBuildingBlocks/NIMaskData.h>
 #import <objc/runtime.h>
 #import "NIMPRWindow.h"
 #import "NIMPRView.h"
@@ -237,6 +238,7 @@
     [self removeObserver:self forKeyPath:@"viewsLayout" context:NIMPRWindowController.class];
     [self removeObserver:self forKeyPath:@"selectedAnnotations" context:NIMPRWindowController.class];
     [self removeObserver:self forKeyPath:@"highlightedAnnotations" context:NIMPRWindowController.class];
+    [self observeValueForKeyPath:@"annotations" ofObject:self change:@{ NSKeyValueChangeOldKey: self.annotations } context:NIMPRWindowController.class];
     [self removeObserver:self forKeyPath:@"annotations" context:NIMPRWindowController.class];
     [self removeObserver:self forKeyPath:@"rtoolTag" context:NIMPRWindowController.class];
     [self removeObserver:self forKeyPath:@"ltoolTag" context:NIMPRWindowController.class];
@@ -292,6 +294,10 @@
     }
     
     if ([keyPath isEqualToString:@"annotations"]) {
+        for (NIAnnotation* a in change[NSKeyValueChangeOldKey])
+            [a removeObserver:self forKeyPath:@"annotation" context:NIMPRWindowController.class];
+        for (NIAnnotation* a in change[NSKeyValueChangeNewKey])
+            [a addObserver:self forKeyPath:@"annotation" options:NSKeyValueObservingOptionInitial context:NIMPRWindowController.class];
         for (id collector in [self.mprViews arrayByAddingObject:self]) {
             NSMutableSet* set = [collector mutableAnnotations];
             for (NIAnnotation* a in change[NSKeyValueChangeOldKey])
@@ -319,6 +325,12 @@
             for (NIAnnotation* a in change[NSKeyValueChangeNewKey])
                 [set addObject:a];
         }
+    }
+    
+    if ([keyPath isEqualTo:@"annotation"]) {
+        NIMask* mask = [object maskForVolume:self.data];
+        NIMaskData* md = [[[NIMaskData alloc] initWithMask:[mask maskCroppedToWidth:self.data.pixelsWide height:self.data.pixelsHigh depth:self.data.pixelsDeep] volumeData:self.data] autorelease];
+        NSLog(@"%@ mask: %@ --- %@", object, mask, md);
     }
     
     if ([keyPath isEqualToString:@"viewsLayout"]) {

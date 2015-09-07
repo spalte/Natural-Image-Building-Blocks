@@ -52,7 +52,8 @@ static NSString* const NIPointAnnotationCoordsKey = @"coords";
 }
 
 - (NIMask*)maskForVolume:(NIVolumeData *)volume {
-    return [[NIMask maskWithCubeSize:1] maskByResamplingFromVolumeTransform:NIAffineTransformMakeTranslationWithVector(self.vector) toVolumeTransform:volume.volumeTransform interpolationMode:NIInterpolationModeNone]; // TODO: none?
+    NIVector vv = [volume convertVolumeVectorFromDICOMVector:self.vector];
+    return [[NIMask maskWithCubeSize:1] maskByTranslatingByX:vv.x Y:vv.y Z:vv.z];
 }
 
 - (void)translate:(NIVector)translation {

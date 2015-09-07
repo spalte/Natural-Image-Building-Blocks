@@ -13,6 +13,7 @@
 #import "NIMPRQuaternion.h"
 #import <NIBuildingBlocks/NIVolumeDataProperties.h>
 #import <NIBuildingBlocks/NIGeneratorRequest.h>
+#import <NIBuildingBlocks/NIAnnotationTextLayer.h>
 #import "NIImageAnnotation.h"
 
 @implementation NIMPRView

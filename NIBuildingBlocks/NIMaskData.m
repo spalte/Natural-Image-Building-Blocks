@@ -25,13 +25,13 @@
 
 @implementation NIMaskData
 
-@synthesize ROIMask = _ROIMask;
-@synthesize floatVolumeData = _volumeData;
+@synthesize mask = _mask;
+@synthesize volumeData = _volumeData;
 
-- (id)initWithROIMask:(NIMask *)roiMask floatVolumeData:(NIVolumeData *)volumeData
+- (id)initWithMask:(NIMask *)mask volumeData:(NIVolumeData *)volumeData
 {
 	if ( (self = [super init]) ) {
-		_ROIMask = [roiMask retain];
+		_mask = [mask retain];
 		_volumeData = [volumeData retain];
         _valueCache = [[NSMutableDictionary alloc] init];
 	}
@@ -40,8 +40,8 @@
 
 - (void)dealloc
 {
-	[_ROIMask release];
-	_ROIMask = nil;
+	[_mask release];
+	_mask = nil;
 	[_volumeData release];
 	_volumeData = nil;
 	[_floatData release];
@@ -296,11 +296,11 @@
             return [_floatData length] / sizeof(float);
         }
 
-        NIMaskRun *maskRuns = (NIMaskRun *)[[_ROIMask maskRunsData] bytes];
+        NIMaskRun *maskRuns = (NIMaskRun *)[[_mask maskRunsData] bytes];
         NSInteger i;
 
         floatCount = 0;
-        for (i = 0; i < [_ROIMask maskRunCount]; i++) {
+        for (i = 0; i < [_mask maskRunCount]; i++) {
             floatCount += maskRuns[i].widthRange.length;
         }
     }
@@ -331,7 +331,7 @@
             return _floatData;
         }
         
-        NIMaskRun *maskRuns = (NIMaskRun *)[[_ROIMask maskRunsData] bytes];
+        NIMaskRun *maskRuns = (NIMaskRun *)[[_mask maskRunsData] bytes];
         NSInteger i;
 //        float *buffer;
         float *runBuffer;
@@ -341,7 +341,7 @@
         memset(floatBuffer, 0, floatCount * sizeof(float));
 
         runBuffer = floatBuffer;
-        for (i = 0; i < [_ROIMask maskRunCount]; i++) {
+        for (i = 0; i < [_mask maskRunCount]; i++) {
             [_volumeData getFloatRun:runBuffer atPixelCoordinateX:maskRuns[i].widthRange.location y:maskRuns[i].heightIndex z:maskRuns[i].depthIndex length:maskRuns[i].widthRange.length];
             runBuffer += maskRuns[i].widthRange.length;
         }
@@ -351,12 +351,10 @@
     return _floatData;
 }
 
-
-			
-			
-			
-		 
-		 
-
+- (NSString*)description {
+    float min, max, mean = [self intensityMean], sd = [self intensityStandardDeviation], median = [self intensityMedian];
+    [self getIntensityMinimum:&min firstQuartile:NULL secondQuartile:NULL thirdQuartile:NULL maximum:&max];
+    return [NSString stringWithFormat:@"<%@: 0x%lX min: %@, max: %@, mean: %@, sd: %@, median: %@>", self.className, (unsigned long)self, @(min), @(max), @(mean), @(sd), @(median)];
+}
 
 @end

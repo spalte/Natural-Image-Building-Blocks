@@ -48,7 +48,7 @@ static const NSInteger NITextLabelLocationCount = 6;
 
 - (NSUInteger)countOfTextLabels;
 - (NSString *)objectInTextLabelsAtIndex:(NSUInteger)index;
-- (void)insertObject:(NSString *)textLanel inTextLabelsAtIndex:(NSUInteger)index;
+- (void)insertObject:(NSString *)textLabel inTextLabelsAtIndex:(NSUInteger)index;
 - (void)removeObjectFromTextLabelsAtIndex:(NSUInteger)index;
 - (void)replaceObjectInTextLabelsAtIndex:(NSUInteger)index withObject:(NSString *)object;
 

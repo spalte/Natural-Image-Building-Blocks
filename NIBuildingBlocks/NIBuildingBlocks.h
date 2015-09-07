@@ -35,6 +35,7 @@ FOUNDATION_EXPORT const unsigned char NIBuildingBlocksVersionString[];
 #import <NIBuildingBlocks/NIVolumeData.h>
 #import <NIBuildingBlocks/NIMask.h>
 #import <NIBuildingBlocks/NIMaskRunStack.h>
+#import <NIBuildingBlocks/NIMaskData.h>
 #import <NIBuildingBlocks/NISprite.h>
 #import <NIBuildingBlocks/NIIntersection.h>
 #import <NIBuildingBlocks/NIFloatImageRep.h>

@@ -33,7 +33,7 @@
     NIProjectionMode _projectionMode;
     CGFloat _slabWidth;
     BOOL _mouseDown, _displayOverlays;
-    CALayer* _toolsLayer;
+    CALayer *_toolsLayer;
 }
 
 @property(retain) NIVolumeData* data;
@@ -53,7 +53,7 @@
 
 @property NIMPRFlags flags;
 
-@property (readonly, retain) CALayer* toolsLayer;
+@property (readonly, retain) CALayer *toolsLayer;
 
 - (void)setNormal:(NIMPRQuaternion*)normal :(NIMPRQuaternion*)xdir :(NIMPRQuaternion*)ydir reference:(NIMPRQuaternion*)reference;
 

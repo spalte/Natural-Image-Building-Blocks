@@ -85,7 +85,7 @@
 		710684441B678FD30078903A /* NIMaskRunStack.h in Headers */ = {isa = PBXBuildFile; fileRef = 710684421B678FD30078903A /* NIMaskRunStack.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		710684451B678FD30078903A /* NIMaskRunStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 710684431B678FD30078903A /* NIMaskRunStack.m */; };
 		719473721B1DA0F1009363AE /* NIOrientationTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 719473711B1DA0F1009363AE /* NIOrientationTextLayer.m */; };
-		71DFA2CA1B6FC77E008AB997 /* NIMaskData.h in Headers */ = {isa = PBXBuildFile; fileRef = 71DFA2C81B6FC77E008AB997 /* NIMaskData.h */; };
+		71DFA2CA1B6FC77E008AB997 /* NIMaskData.h in Headers */ = {isa = PBXBuildFile; fileRef = 71DFA2C81B6FC77E008AB997 /* NIMaskData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71DFA2CB1B6FC77E008AB997 /* NIMaskData.m in Sources */ = {isa = PBXBuildFile; fileRef = 71DFA2C91B6FC77E008AB997 /* NIMaskData.m */; };
 /* End PBXBuildFile section */
 
@@ -401,8 +401,8 @@
 				4F4409B61B21A0F6006AC3B6 /* NIWindowingView.h in Headers */,
 				7106843F1B678D800078903A /* NIMask.h in Headers */,
 				710684441B678FD30078903A /* NIMaskRunStack.h in Headers */,
-				4F0727E11B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.h in Headers */,
 				71DFA2CA1B6FC77E008AB997 /* NIMaskData.h in Headers */,
+				4F0727E11B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.h in Headers */,
 				4F151F071B1CCA1400C8F767 /* NIGeneratorRequestLayer.h in Headers */,
 				4F151F0F1B1CCA1400C8F767 /* NIScaleBarLayer.h in Headers */,
 				4F151F141B1CCA1400C8F767 /* NISpritePrivate.h in Headers */,

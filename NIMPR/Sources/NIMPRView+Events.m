@@ -129,6 +129,7 @@
 }
 
 - (void)mouseDragged:(NSEvent*)event {
+    [self updateMouseLocationInfo:event];
     [self tools:self.ltools sel:_cmd event:event otherwise:nil];
     [super mouseDragged:event];
 }
@@ -152,6 +153,7 @@
 }
 
 - (void)mouseExited:(NSEvent*)event {
+    [self updateMouseLocationInfo:nil];
     [self tools:self.ltools sel:_cmd event:event otherwise:^{
         [self hover:event];
     }];
@@ -229,6 +231,8 @@
     if ([self.window.windowController displayAnnotations] != displayAnnotations)
         [self.window.windowController setDisplayAnnotations:displayAnnotations];
     
+    [self updateMouseLocationInfo:event];
+    
     if (self.mouseDown)
         return;
 
@@ -261,6 +265,34 @@
     
     [self tools:self.ltools sel:@selector(hover:) event:event otherwise:nil];
     [self tools:self.rtools sel:@selector(hover:) event:event otherwise:nil];
+}
+
+- (void)updateMouseLocationInfo:(NSEvent*)event {
+    if (event && event.type != NSMouseExited) {
+        NSPoint location = [event locationInView:self];
+        NIVector locationVector = [self convertPointToDICOMVector:location];
+        
+        static NSNumberFormatter* f = nil;
+        if (!f) {
+            f = [self.class retain:[[[NSNumberFormatter alloc] init] autorelease]];
+            f.minimumIntegerDigits = 1;
+            f.minimumFractionDigits = 2;
+        }
+        
+        NSMutableArray* locationTextParts = [NSMutableArray array];
+        for (NSInteger i = 0; i < self.volumeDataCount; ++i) {
+            NIVolumeData* volume = [self volumeDataAtIndex:i];
+            NIVector vlv = [volume convertVolumeVectorFromDICOMVector:locationVector];
+            CGFloat v = [volume floatAtPixelCoordinateX:vlv.x y:vlv.y z:vlv.z];
+            if (v != volume.outOfBoundsValue)
+                [locationTextParts addObject:[NSString stringWithFormat:@"[%d,%d,%d] Value: %@", (int)vlv.x, (int)vlv.y, (int)vlv.z, [f stringFromNumber:@(v)]]];
+            else [locationTextParts addObject:[NSString stringWithFormat:@"[%d,%d,%d]", (int)vlv.x, (int)vlv.y, (int)vlv.z]];
+        }
+        
+        self.topLeftLabels = @[ [locationTextParts componentsJoinedByString:@" | "] ];
+    } else {
+        self.topLeftLabels = @[];
+    }
 }
 
 - (Class)toolForLocation:(NSPoint)location event:(NSEvent*)event {

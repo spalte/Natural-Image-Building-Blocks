@@ -21,7 +21,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "NIMask.h"
-// this is the representation of the data within the generic ROI
+// this is the representation of the data within the generic annotation
 
 /**  
  
@@ -36,25 +36,25 @@
 @interface NIMaskData : NSObject {
     NSMutableDictionary *_valueCache;
     NSData *_floatData;
-	NIMask *_ROIMask;
+	NIMask *_mask;
 	NIVolumeData *_volumeData;
 }
 
 ///-----------------------------------
-/// @name Creating ROI Float Pixel Data Objects
+/// @name Creating annotation Float Pixel Data Objects
 ///-----------------------------------
 
-/** Initializes and returns a newly created ROI Float Pixel Data Object.
+/** Initializes and returns a newly created annotation Float Pixel Data Object.
  
  Creates a Float Pixel Data instance to access pixels covered by the given mask in the given Float Volume Data
 	
- @return The initialized ROI Float Pixel Data object or `nil` if there was a problem initializing the object.
+ @return The initialized annotation Float Pixel Data object or `nil` if there was a problem initializing the object.
  
- @param roiMask the ROI Mask under which the receiver will access pixels.
+ @param mask the mask under which the receiver will access pixels.
  @param volumeData The Float Volume Data the receiver will use to access pixels.
  */
 
-- (id)initWithROIMask:(NIMask *)roiMask floatVolumeData:(NIVolumeData *)volumeData;
+- (id)initWithMask:(NIMask *)mask volumeData:(NIVolumeData *)volumeData;
 
 ///-----------------------------------
 /// @name Accessing Properties
@@ -62,10 +62,10 @@
 
 /** The receiver’s mask.
  */
-@property (nonatomic, readonly, retain) NIMask *ROIMask;
+@property (nonatomic, readonly, retain) NIMask *mask;
 /** The receiver’s Float Volume Data.
  */
-@property (nonatomic, readonly, retain) NIVolumeData *floatVolumeData;
+@property (nonatomic, readonly, retain) NIVolumeData *volumeData;
 
 ///-----------------------------------
 /// @name Accessing Standard Metrics
