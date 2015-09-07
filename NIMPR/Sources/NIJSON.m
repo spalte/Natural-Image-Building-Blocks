@@ -154,19 +154,23 @@ typedef id (^NIJSONUnarchiverBlock)(NIJSONUnarchiver* unarchiver);
               } else {
                   CGFloat components[4]; [[color colorUsingColorSpace:NSColorSpace.genericRGBColorSpace] getComponents:components];
                   NSArray* rgba = (components[3] != 1 ? @[ @(components[0]), @(components[1]), @(components[2]), @(components[3]) ] : @[ @(components[0]), @(components[1]), @(components[2]) ]);
-                  [archiver encodeObject:rgba forKey:@"rgba"];
+                  [archiver encodeObject:rgba forKey:@"rgb"];
               }
           }
           decoder:^NSColor *(NIJSONUnarchiver *unarchiver) {
+              CGFloat alpha = 1;
+              if ([unarchiver containsValueForKey:@"alpha"])
+                  alpha = [unarchiver decodeCGFloatForKey:@"alpha"];
+              
               if ([unarchiver containsValueForKey:@"name"]) {
                   NSColor* color = [colorlist colorWithKey:[unarchiver decodeObjectForKey:@"name"]];
-                  if ([unarchiver containsValueForKey:@"alpha"])
-                      color = [color colorWithAlphaComponent:[unarchiver decodeCGFloatForKey:@"alpha"]];
+                  if (alpha != 1)
+                      color = [color colorWithAlphaComponent:alpha];
                   return color;
               }
               
-              NSArray* rgba = [unarchiver decodeObjectForKey:@"rgba"];
-              return [NSColor colorWithCalibratedRed:[rgba[0] CGFloatValue] green:[rgba[1] CGFloatValue] blue:[rgba[2] CGFloatValue] alpha:[[rgba objectAtIndex:3 or:@1] CGFloatValue]];
+              NSArray* rgb = [unarchiver decodeObjectForKey:@"rgb"];
+              return [NSColor colorWithCalibratedRed:[rgb[0] CGFloatValue] green:[rgb[1] CGFloatValue] blue:[rgb[2] CGFloatValue] alpha:([[rgb objectAtIndex:3 or:@1] CGFloatValue]*alpha)];
           }];
     
     [self setName:@"mask" forClass:NIMask.class
