@@ -210,8 +210,8 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     NSUInteger i = 0;
     NSUInteger j = 0;
     
-    NIMaskRun *maskRuns = malloc(width * height * sizeof(NIMaskRun));
-    memset(maskRuns, 0, width * height * sizeof(NIMaskRun));
+    NIMaskRun *maskRuns = malloc(depth * height * sizeof(NIMaskRun));
+    memset(maskRuns, 0, depth * height * sizeof(NIMaskRun));
     
     for (j = 0; j < height; j++) {
         for (i = 0; i < depth; i++) {
@@ -219,7 +219,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
         }
     }
     
-    return [[[NIMask alloc] initWithSortedMaskRunData:[NSData dataWithBytesNoCopy:maskRuns length:width * height * sizeof(NIMaskRun) freeWhenDone:YES]] autorelease];
+    return [[[NIMask alloc] initWithSortedMaskRunData:[NSData dataWithBytesNoCopy:maskRuns length:depth * height * sizeof(NIMaskRun) freeWhenDone:YES]] autorelease];
 }
 
 + (instancetype)maskWithEllipsoidWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth
