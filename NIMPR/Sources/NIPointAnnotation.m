@@ -51,13 +51,13 @@ static NSString* const NIPointAnnotationCoordsKey = @"coords";
     [coder encodeObject:[NSValue valueWithNIVector:self.vector] forKey:NIPointAnnotationCoordsKey];
 }
 
+- (void)translate:(NIVector)translation {
+    self.vector = NIVectorAdd(self.vector, translation);
+}
+
 - (NIMask*)maskForVolume:(NIVolumeData *)volume {
     NIVector vv = [volume convertVolumeVectorFromDICOMVector:self.vector];
     return [[NIMask maskWithCubeSize:1] maskByTranslatingByX:vv.x Y:vv.y Z:vv.z];
-}
-
-- (void)translate:(NIVector)translation {
-    self.vector = NIVectorAdd(self.vector, translation);
 }
 
 - (void)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache {

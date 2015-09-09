@@ -443,4 +443,5 @@ CF_EXTERN_C_END
 - (NIMaskIndex)NIMaskIndexValue;
 @end
 
+NSString *NSStringFromNIMaskRun(NIMaskRun run);
 

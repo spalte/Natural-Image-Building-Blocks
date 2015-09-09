@@ -330,7 +330,7 @@
     if ([keyPath isEqualTo:@"annotation"]) {
         NIMask* mask = [object maskForVolume:self.data];
         NIMaskData* md = [[[NIMaskData alloc] initWithMask:[mask maskCroppedToWidth:self.data.pixelsWide height:self.data.pixelsHigh depth:self.data.pixelsDeep] volumeData:self.data] autorelease];
-        NSLog(@"%@ mask: %@ --- %@", object, mask, md);
+        NSLog(@"%@ mask: %X --- %@", object, mask, md);
     }
     
     if ([keyPath isEqualToString:@"viewsLayout"]) {

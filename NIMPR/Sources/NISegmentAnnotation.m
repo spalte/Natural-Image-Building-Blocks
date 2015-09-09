@@ -61,6 +61,29 @@
     self.q = NIVectorAdd(self.q, translation);
 }
 
+- (NIMask*)maskForVolume:(NIVolumeData*)volume {
+    NIVector vp = [volume convertVolumeVectorFromDICOMVector:self.p], vq = [volume convertVolumeVectorFromDICOMVector:self.q];
+    NSUInteger d = CGFloatMax(CGFloatRound(NIVectorDistance(vp, vq)), 1);
+    
+    NIVector pq = NIVectorSubtract(self.q, self.p);
+    NIVector m = NIVectorMake(1, 0, 0);
+    
+    NIAffineTransform destTransform = NIAffineTransformIdentity;
+    
+    NIVector cp = NIVectorCrossProduct(pq, m);
+    if (!NIVectorIsZero(cp)) {
+        CGFloat angle = NIVectorAngleBetweenVectorsAroundVector(m, pq, cp);
+        destTransform = NIAffineTransformMakeRotationAroundVector(angle, cp);
+    }
+    
+    destTransform = NIAffineTransformConcat(destTransform, NIAffineTransformMakeTranslationWithVector(vp));
+    
+    NIMask* mask = [NIMask maskWithBoxWidth:d height:1 depth:1];
+    mask = [mask maskByResamplingFromVolumeTransform:NIAffineTransformMakeTranslation(.5, .5, .5) toVolumeTransform:destTransform interpolationMode:NIInterpolationModeNone];
+    
+    return mask;
+}
+
 - (NIBezierPath*)NIBezierPath {
     NIMutableBezierPath* path = [NIMutableBezierPath bezierPath];
     

@@ -158,6 +158,14 @@ typedef NS_OPTIONS(NSUInteger, NINotificationObservingOptions) {
 #endif
 #endif
 
+#ifndef CGFloatRound
+#if CGFLOAT_IS_DOUBLE
+#define CGFloatRound nearbyint
+#else
+#define CGFloatRound nearbyintf
+#endif
+#endif
+
 #define CGFloatAbs NIMPR_CGFloatAbs
 extern CGFloat NIMPR_CGFloatAbs(CGFloat f);
 #define CGFloatSign NIMPR_CGFloatSign

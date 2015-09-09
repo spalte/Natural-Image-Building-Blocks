@@ -87,7 +87,19 @@
 		719473721B1DA0F1009363AE /* NIOrientationTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 719473711B1DA0F1009363AE /* NIOrientationTextLayer.m */; };
 		71DFA2CA1B6FC77E008AB997 /* NIMaskData.h in Headers */ = {isa = PBXBuildFile; fileRef = 71DFA2C81B6FC77E008AB997 /* NIMaskData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71DFA2CB1B6FC77E008AB997 /* NIMaskData.m in Sources */ = {isa = PBXBuildFile; fileRef = 71DFA2C91B6FC77E008AB997 /* NIMaskData.m */; };
+		71F51E521BA00C2E00DF26AC /* NIMask_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F51E511BA00C2E00DF26AC /* NIMask_Tests.m */; };
+		71F51E531BA00C2E00DF26AC /* NIBuildingBlocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F151EDB1B1CC8D000C8F767 /* NIBuildingBlocks.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		71F51E541BA00C2E00DF26AC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4F151ED21B1CC8D000C8F767 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4F151EDA1B1CC8D000C8F767;
+			remoteInfo = NIBuildingBlocks;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		4F0727DF1B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIWindowLevelWindowWidthToolbarItem.h; sourceTree = "<group>"; };
@@ -172,6 +184,9 @@
 		719473711B1DA0F1009363AE /* NIOrientationTextLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIOrientationTextLayer.m; sourceTree = "<group>"; };
 		71DFA2C81B6FC77E008AB997 /* NIMaskData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMaskData.h; sourceTree = "<group>"; };
 		71DFA2C91B6FC77E008AB997 /* NIMaskData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMaskData.m; sourceTree = "<group>"; };
+		71F51E4D1BA00C2E00DF26AC /* NIBuildingBlocks Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "NIBuildingBlocks Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		71F51E501BA00C2E00DF26AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		71F51E511BA00C2E00DF26AC /* NIMask_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NIMask_Tests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +202,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		71F51E4A1BA00C2E00DF26AC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				71F51E531BA00C2E00DF26AC /* NIBuildingBlocks.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -195,6 +218,7 @@
 			children = (
 				4F151EE01B1CC8D000C8F767 /* NIBuildingBlocks.h */,
 				4F151EDD1B1CC8D000C8F767 /* NIBuildingBlocks */,
+				71F51E4E1BA00C2E00DF26AC /* NIBuildingBlocks Tests */,
 				4F151EDC1B1CC8D000C8F767 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -203,6 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				4F151EDB1B1CC8D000C8F767 /* NIBuildingBlocks.framework */,
+				71F51E4D1BA00C2E00DF26AC /* NIBuildingBlocks Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -374,6 +399,23 @@
 			name = Goodies;
 			sourceTree = "<group>";
 		};
+		71F51E4E1BA00C2E00DF26AC /* NIBuildingBlocks Tests */ = {
+			isa = PBXGroup;
+			children = (
+				71F51E511BA00C2E00DF26AC /* NIMask_Tests.m */,
+				71F51E4F1BA00C2E00DF26AC /* Supporting Files */,
+			);
+			path = "NIBuildingBlocks Tests";
+			sourceTree = "<group>";
+		};
+		71F51E4F1BA00C2E00DF26AC /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				71F51E501BA00C2E00DF26AC /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -443,6 +485,24 @@
 			productReference = 4F151EDB1B1CC8D000C8F767 /* NIBuildingBlocks.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		71F51E4C1BA00C2E00DF26AC /* NIBuildingBlocks Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 71F51E561BA00C2E00DF26AC /* Build configuration list for PBXNativeTarget "NIBuildingBlocks Tests" */;
+			buildPhases = (
+				71F51E491BA00C2E00DF26AC /* Sources */,
+				71F51E4A1BA00C2E00DF26AC /* Frameworks */,
+				71F51E4B1BA00C2E00DF26AC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				71F51E551BA00C2E00DF26AC /* PBXTargetDependency */,
+			);
+			name = "NIBuildingBlocks Tests";
+			productName = "NIBuildingBlocks Tests";
+			productReference = 71F51E4D1BA00C2E00DF26AC /* NIBuildingBlocks Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -454,6 +514,9 @@
 				TargetAttributes = {
 					4F151EDA1B1CC8D000C8F767 = {
 						CreatedOnToolsVersion = 6.3.1;
+					};
+					71F51E4C1BA00C2E00DF26AC = {
+						CreatedOnToolsVersion = 6.4;
 					};
 				};
 			};
@@ -470,6 +533,7 @@
 			projectRoot = "";
 			targets = (
 				4F151EDA1B1CC8D000C8F767 /* NIBuildingBlocks */,
+				71F51E4C1BA00C2E00DF26AC /* NIBuildingBlocks Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -482,6 +546,13 @@
 				4F1E60981B20D54F0053A79F /* NIWindowLevelWindowWidthToolbarItem.xib in Resources */,
 				4F094E741B24578D0009297A /* ContrastTemplate.tiff in Resources */,
 				4F094E721B2455C20009297A /* ContrastTemplate@2x.tiff in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		71F51E4B1BA00C2E00DF26AC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -529,7 +600,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		71F51E491BA00C2E00DF26AC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				71F51E521BA00C2E00DF26AC /* NIMask_Tests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		71F51E551BA00C2E00DF26AC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4F151EDA1B1CC8D000C8F767 /* NIBuildingBlocks */;
+			targetProxy = 71F51E541BA00C2E00DF26AC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		4F151EEF1B1CC8D000C8F767 /* Debug */ = {
@@ -664,6 +751,43 @@
 			};
 			name = Release;
 		};
+		71F51E571BA00C2E00DF26AC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "NIBuildingBlocks Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		71F51E581BA00C2E00DF26AC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				INFOPLIST_FILE = "NIBuildingBlocks Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -684,6 +808,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		71F51E561BA00C2E00DF26AC /* Build configuration list for PBXNativeTarget "NIBuildingBlocks Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				71F51E571BA00C2E00DF26AC /* Debug */,
+				71F51E581BA00C2E00DF26AC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

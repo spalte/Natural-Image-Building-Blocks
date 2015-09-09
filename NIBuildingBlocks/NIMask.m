@@ -549,6 +549,9 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
         }
     }
     
+    if (newMaskRunsIndex < maskRunCount)
+        newMaskRuns = realloc(newMaskRuns, newMaskRunsIndex * sizeof(NIMaskRun));
+    
     return [[[NIMask alloc] initWithSortedMaskRunData:[NSData dataWithBytesNoCopy:newMaskRuns length:newMaskRunsIndex * sizeof(NIMaskRun) freeWhenDone:YES]] autorelease];
 }
 
@@ -1148,7 +1151,10 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     NSUInteger i;
     
     for (i = 0; i < maskRunsCount; i++) {
-        [desc appendFormat:@"X:%4ld...%-4ld Y:%-4ld Z:%-4ld\n", (long)NIMaskRunFirstWidthIndex(maskRuns[i]), (long)NIMaskRunLastWidthIndex(maskRuns[i]), (long)maskRuns[i].heightIndex, (long)maskRuns[i].depthIndex];
+        NSString* intensity = (maskRuns[i].intensity != 1? [NSString stringWithFormat:@" (%.2f)", maskRuns[i].intensity] : @"");
+        if (maskRuns[i].widthRange.length != 1)
+            [desc appendFormat:@"X:%4ld...%-4ld Y:%-4ld Z:%-4ld%@\n", (long)NIMaskRunFirstWidthIndex(maskRuns[i]), (long)NIMaskRunLastWidthIndex(maskRuns[i]), (long)maskRuns[i].heightIndex, (long)maskRuns[i].depthIndex, intensity];
+        else [desc appendFormat:@"X:%-4ld Y:%-4ld Z:%-4ld%@\n", (long)NIMaskRunFirstWidthIndex(maskRuns[i]), (long)maskRuns[i].heightIndex, (long)maskRuns[i].depthIndex, intensity];
     }
     
     [desc appendString:@"}"];
@@ -1221,6 +1227,19 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
 
 @end
 
+
+
+NSString *NSStringFromNIMaskRun(NIMaskRun run)
+{
+    NSMutableString* str = [NSMutableString stringWithFormat:@"{%lu", (unsigned long)run.widthRange.location];
+    if (run.widthRange.length != 1)
+        [str appendFormat:@"..%lu, ", (unsigned long)run.widthRange.location+run.widthRange.length];
+    [str appendFormat:@", %lu, %lu", (unsigned long)run.heightIndex, (unsigned long)run.depthIndex];
+    if (run.intensity != 1)
+        [str appendFormat:@": %f", run.intensity];
+    [str appendFormat:@"}"];
+    return str;
+}
 
 
 
