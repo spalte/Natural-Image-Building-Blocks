@@ -40,19 +40,31 @@
 //    [super tearDown];
 //}
 
+- (void)testResamplingWithInterpolationModeNearestNeighbor {
+    [self subtestResamplingWithInterpolationMode:NIInterpolationModeNearestNeighbor];
+}
+
+- (void)testResamplingWithInterpolationModeLinear {
+    [self subtestResamplingWithInterpolationMode:NIInterpolationModeLinear];
+}
+
 - (void)testResamplingWithInterpolationModeCubic {
+    [self subtestResamplingWithInterpolationMode:NIInterpolationModeCubic];
+}
+
+- (void)subtestResamplingWithInterpolationMode:(NIInterpolationMode)im {
     NIMask* mask = [NIMask maskWithBoxWidth:10 height:1 depth:1];
     
     NIAffineTransform t = NIAffineTransformMakeRotation(M_PI/4, 0, 0, 1);
     
-    NIMask* tmask = [mask maskByResamplingFromVolumeTransform:NIAffineTransformIdentity toVolumeTransform:t interpolationMode:NIInterpolationModeCubic];
+    NIMask* tmask = [mask maskByResamplingFromVolumeTransform:NIAffineTransformIdentity toVolumeTransform:t interpolationMode:im];
     
     XCTAssert(tmask.maskRunCount > 0, @"Mask resampling result must not be empty");
     
     for (NSValue* mr in tmask.maskRuns)
         XCTAssert(mr.NIMaskRunValue.intensity >= 0 && mr.NIMaskRunValue.intensity <= 1, @"Invalid intensity for mark run %@", NSStringFromNIMaskRun(mr.NIMaskRunValue));
 }
-//
+
 //- (void)testPerformanceExample {
 //    // This is an example of a performance test case.
 //    [self measureBlock:^{
