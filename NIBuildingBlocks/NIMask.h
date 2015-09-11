@@ -318,6 +318,16 @@ CF_EXTERN_C_END
  */
 - (NIMask *)maskCroppedToWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth;
 
+/** Returns -[NIMask binaryMaskWithThreshold:0.5]
+ 
+ */
+- (NIMask*)binaryMask;
+
+/** Returns a mask by filtering out all mask runs with intensity lower than the thresold, and changing kept mask run intensities to 1.
+ 
+ */
+- (NIMask*)binaryMaskWithThreashold:(CGFloat)threshold;
+
 /** Returns YES if the two masks intersect.
  
  */

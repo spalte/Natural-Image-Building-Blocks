@@ -79,7 +79,8 @@
     destTransform = NIAffineTransformConcat(destTransform, NIAffineTransformMakeTranslationWithVector(vp));
     
     NIMask* mask = [NIMask maskWithBoxWidth:d height:1 depth:1];
-    mask = [mask maskByResamplingFromVolumeTransform:NIAffineTransformMakeTranslation(.5, .5, .5) toVolumeTransform:destTransform interpolationMode:NIInterpolationModeNone];
+    mask = [mask maskByResamplingFromVolumeTransform:NIAffineTransformIdentity toVolumeTransform:destTransform interpolationMode:NIInterpolationModeCubic];
+    mask = [mask binaryMask];
     
     return mask;
 }

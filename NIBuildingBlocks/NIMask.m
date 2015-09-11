@@ -785,6 +785,28 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return [[[NIMask alloc] initWithSortedMaskRunData:[NSData dataWithBytesNoCopy:newMaskRuns length:newMaskRunsCount * sizeof(NIMaskRun) freeWhenDone:YES]] autorelease];
 }
 
+- (NIMask*)binaryMask
+{
+    return [self binaryMaskWithThreashold:0.5];
+}
+
+- (NIMask*)binaryMaskWithThreashold:(CGFloat)threshold
+{
+    NSMutableArray *newMaskArray = [NSMutableArray array];
+    
+    for (NSValue *maskRunValue in [self maskRuns]) {
+        NIMaskRun maskRun = [maskRunValue NIMaskRunValue];
+        if (maskRun.intensity >= threshold) {
+            maskRun.intensity = 1;
+            [newMaskArray addObject:[NSValue valueWithNIMaskRun:maskRun]];
+        }
+    }
+    
+    NIMask *filteredMask = [[[NIMask alloc] initWithSortedMaskRuns:newMaskArray] autorelease];
+    [filteredMask checkdebug];
+    return filteredMask;
+}
+
 - (BOOL)intersectsMask:(NIMask *)otherMask // probably could use a faster implementation...
 {
     NIMask *intersection = [self maskByIntersectingWithMask:otherMask];
@@ -799,7 +821,6 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     
     return [subMask1 maskRunCount] == 0 && [subMask2 maskRunCount] == 0;
 }
-
 
 - (NIMask *)filteredMaskUsingPredicate:(NSPredicate *)predicate volumeData:(NIVolumeData *)volumeData
 {

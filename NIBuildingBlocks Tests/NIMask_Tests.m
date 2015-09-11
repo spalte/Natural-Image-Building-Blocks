@@ -58,6 +58,7 @@
     NIAffineTransform t = NIAffineTransformMakeRotation(M_PI/4, 0, 0, 1);
     
     NIMask* tmask = [mask maskByResamplingFromVolumeTransform:NIAffineTransformIdentity toVolumeTransform:t interpolationMode:im];
+    NSLog(@"Transformed mask: %@", tmask);
     
     XCTAssert(tmask.maskRunCount > 0, @"Mask resampling result must not be empty");
     
