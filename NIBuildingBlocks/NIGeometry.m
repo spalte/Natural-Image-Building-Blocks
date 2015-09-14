@@ -1248,6 +1248,24 @@ NIAffineTransform NIAffineTransformMakeFromOpenGLMatrixf(float *f) // f better b
     return transform;
 }
 
+@implementation NSAffineTransform (NIGeometry)
+
++ (instancetype)transformWithNIAffineTransform:(NIAffineTransform)t {
+    return [[[self.class alloc] initWithNIAffineTransform:t] autorelease];
+}
+
+- (id)initWithNIAffineTransform:(NIAffineTransform)t {
+    if ((self = [self init])) {
+        CGAffineTransform cgat = CATransform3DGetAffineTransform(t);
+        NSAffineTransformStruct ts = {cgat.a, cgat.b, cgat.c, cgat.d, cgat.tx, cgat.ty};
+        self.transformStruct = ts;
+    }
+    
+    return self;
+}
+
+@end
+
 @implementation NSValue (NIGeometryAdditions)
 
 + (NSValue *)valueWithNIVector:(NIVector)vector

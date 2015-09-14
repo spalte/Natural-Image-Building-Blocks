@@ -56,6 +56,32 @@
     return nil;
 }
 
+- (NIMask*)maskForVolume:(NIVolumeData*)volume {
+    NIMutableBezierPath* path = [[self.NIBezierPath mutableCopy] autorelease];
+    [path applyAffineTransform:volume.volumeTransform];
+    
+    const NSUInteger xb = CGFloatFloor([path bottomBoundingPlaneForNormal:NIVectorXBasis].point.x), xt = CGFloatCeil([path topBoundingPlaneForNormal:NIVectorXBasis].point.x);
+    const NSUInteger yb = CGFloatFloor([path bottomBoundingPlaneForNormal:NIVectorYBasis].point.y), yt = CGFloatCeil([path topBoundingPlaneForNormal:NIVectorYBasis].point.y);
+    const NSUInteger zb = CGFloatFloor([path bottomBoundingPlaneForNormal:NIVectorZBasis].point.z), zt = CGFloatCeil([path topBoundingPlaneForNormal:NIVectorZBasis].point.z);
+    const NSUInteger width = xt-xb+1, height = yt-yb+1, depth = zt-zb+1, count = width*height*depth;
+    [path applyAffineTransform:NIAffineTransformMakeTranslation(-1.*xb, -1.*yb, -1.*zb)];
+
+    float* floatBytes = calloc(count, sizeof(float));
+    NIVolumeData* mdata = [[[NIVolumeData alloc] initWithData:[NSData dataWithBytesNoCopy:floatBytes length:sizeof(float)*count] pixelsWide:width pixelsHigh:height pixelsDeep:depth volumeTransform:volume.volumeTransform outOfBoundsValue:0] autorelease];
+
+    [path subdivide:.1];
+    for (NSInteger i = 0; i < path.elementCount; ++i) {
+        NIVector ep;
+        /*NSBezierPathElement e = */[path elementAtIndex:i control1:NULL control2:NULL endpoint:&ep];
+//        NSLog(@"--- [%d,%d,%d]", (int)CGFloatRound(ep.x), (int)CGFloatRound(ep.y), (int)CGFloatRound(ep.z));
+        NSInteger x = CGFloatRound(ep.x), y = CGFloatRound(ep.y), z = CGFloatRound(ep.z);
+        if (x >= 0 && y >= 0 && z >= 0 && x < width && y < height && z < depth)
+            floatBytes[x+y*width+z*height*width] = 1;
+    }
+
+    return [[NIMask maskFromVolumeData:mdata volumeTransform:NULL] maskByTranslatingByX:xb Y:yb Z:zb];
+}
+
 + (NIBezierPath*)bezierPath:(NIBezierPath*)path minmax:(CGFloat)mm complete:(BOOL)complete {
     NIMutableBezierPath* mpath = [[path mutableCopy] autorelease];
     [mpath addEndpointsAtIntersectionsWithPlane:NIPlaneMake(NIVectorMake(0, 0, mm), NIVectorZBasis)];

@@ -112,10 +112,7 @@ typedef struct {
         NIBezierPath* ipath = [self NIBezierPathForSlabView:view complete:YES];
         NIBezierPath* pipath = [[ipath bezierPathByApplyingTransform:sliceToDicomTransform] bezierPathByApplyingTransform:NIAffineTransformInvert(self.modelToDicomTransform)];
         
-        CGAffineTransform cgat = CATransform3DGetAffineTransform(NIAffineTransformConcat(self.modelToDicomTransform, dicomToSliceTransform));
-        NSAffineTransformStruct nsatts = {cgat.a, cgat.b, cgat.c, cgat.d, cgat.tx, cgat.ty};
-        NSAffineTransform* nsat = [NSAffineTransform transform];
-        nsat.transformStruct = nsatts;
+        NSAffineTransform* nsat = [NSAffineTransform transformWithNIAffineTransform:NIAffineTransformConcat(self.modelToDicomTransform, dicomToSliceTransform)];
         
         NSImageRep* irep = [[self.image.representations.lastObject copy] autorelease];
 

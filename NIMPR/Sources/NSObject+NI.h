@@ -166,6 +166,22 @@ typedef NS_OPTIONS(NSUInteger, NINotificationObservingOptions) {
 #endif
 #endif
 
+#ifndef CGFloatFloor
+#if CGFLOAT_IS_DOUBLE
+#define CGFloatFloor floor
+#else
+#define CGFloatFloor floorf
+#endif
+#endif
+
+#ifndef CGFloatCeil
+#if CGFLOAT_IS_DOUBLE
+#define CGFloatCeil ceil
+#else
+#define CGFloatCeil ceilf
+#endif
+#endif
+
 #define CGFloatAbs NIMPR_CGFloatAbs
 extern CGFloat NIMPR_CGFloatAbs(CGFloat f);
 #define CGFloatSign NIMPR_CGFloatSign

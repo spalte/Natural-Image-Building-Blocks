@@ -226,6 +226,13 @@ NSString *NSStringFromNILine(NILine line);
 NSString *NSStringFromNIPlane(NIPlane plane);
 NSString *NIVectorCArmOrientationString(NIVector vector);
 
+@interface NSAffineTransform (NIGeometry)
+
++ (instancetype)transformWithNIAffineTransform:(NIAffineTransform)t;
+- (id)initWithNIAffineTransform:(NIAffineTransform)t;
+
+@end
+
 /** NSValue support. **/
 
 @interface NSValue (NIGeometryAdditions)
