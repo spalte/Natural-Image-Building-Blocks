@@ -9,6 +9,7 @@
 #import "NIAnnotation.h"
 #import <objc/runtime.h>
 #import "NIJSON.h"
+#import "NSMenu+NIMPR.h"
 
 // NIAnnotationRequestCache dictionary keys
 NSString* const NIAnnotationRequest = @"NIAnnotationRequest"; // NIGeneratorRequest
@@ -69,35 +70,37 @@ NSString* const NIAnnotationTransformKey = @"transform";
 @synthesize locked = _locked;
 @synthesize changes = _changes;
 
-- (void)initNIAnnotation {
-    self.locked = [self.class lockedDefault];
-    self.changes = [NSMutableDictionary dictionary];
-    [self enableChangeObservers:YES];
-    [self addObserver:self forKeyPath:@"annotation" options:0 context:NIAnnotation.class];
-}
-
 - (instancetype)init {
     if ((self = [super init])) {
-        [self initNIAnnotation];
+        self.changes = [NSMutableDictionary dictionary];
+        self.locked = [self.class defaultLocked];
+        [self enableChangeObservers:YES];
     }
     
     return self;
 }
 
-static NSString* const NIAnnotationNameKey = @"name";
-static NSString* const NIAnnotationColorKey = @"color";
-static NSString* const NIAnnotationLockedKey = @"locked";
+static NSString* const NIAnnotationName = @"name";
+static NSString* const NIAnnotationColor = @"color";
+static NSString* const NIAnnotationLocked = @"locked";
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-designated-initializers"
 
 - (instancetype)initWithCoder:(NSCoder*)coder {
-    if ((self = [super init])) {
-        [self initNIAnnotation];
-        self.name = [coder decodeObjectForKey:NIAnnotationNameKey];
-        self.color = [coder decodeObjectForKey:NIAnnotationColorKey];
-        self.locked = ([coder containsValueForKey:NIAnnotationLockedKey]? [coder decodeBoolForKey:NIAnnotationLockedKey] : [self.class lockedDefault]);
+    if ((self = [self init])) {
+        if ([coder containsValueForKey:NIAnnotationName])
+            self.name = [coder decodeObjectForKey:NIAnnotationName];
+        if ([coder containsValueForKey:NIAnnotationColor])
+            self.color = [coder decodeObjectForKey:NIAnnotationColor];
+        if ([coder containsValueForKey:NIAnnotationLocked])
+            self.locked = [coder decodeBoolForKey:NIAnnotationLocked];
     }
     
     return self;
 }
+
+#pragma clang diagnostic pop
 
 //- (id)awakeAfterUsingCoder:(NSCoder*)decoder {
 //    
@@ -106,19 +109,16 @@ static NSString* const NIAnnotationLockedKey = @"locked";
 - (void)encodeWithCoder:(NSCoder*)coder {
     if (!coder.allowsKeyedCoding)
         [NSException raise:NSGenericException format:@"Annotation storage requires keyed coding support"];
-
-    if (self.name.length) [coder encodeObject:self.name forKey:NIAnnotationNameKey];
-    if (self.color) [coder encodeObject:self.color forKey:NIAnnotationColorKey];
-    if (self.locked != [self.class lockedDefault]) [coder encodeBool:self.locked forKey:NIAnnotationLockedKey];
-}
-
-+ (BOOL)lockedDefault {
-    return NO;
+    if (self.name.length)
+        [coder encodeObject:self.name forKey:NIAnnotationName];
+    if (self.color)
+        [coder encodeObject:self.color forKey:NIAnnotationColor];
+    if (self.locked != [self.class defaultLocked])
+        [coder encodeBool:self.locked forKey:NIAnnotationLocked];
 }
 
 - (void)dealloc {
     [self.class cancelPreviousPerformRequestsWithTarget:self];
-    [self removeObserver:self forKeyPath:@"annotation" context:NIAnnotation.class];
     [self enableChangeObservers:NO];
     self.changes = nil;
     [_color release];
@@ -130,8 +130,12 @@ static NSString* const NIAnnotationLockedKey = @"locked";
     return YES;
 }
 
++ (BOOL)defaultLocked {
+    return NO;
+}
+
 - (void)enableChangeObservers:(BOOL)flag {
-    NSMutableSet* kps = [[[self.class keyPathsForValuesAffectingAnnotation] mutableCopy] autorelease];
+    NSMutableSet* kps = [NSMutableSet setWithObject:@"annotation"];
     while (kps.count) {
         NSString* kp = kps.anyObject;
         [kps removeObject:kp];
@@ -209,6 +213,16 @@ static NSString* const NIANnotationDefaultColorKey = @"NIAnnotationDefaultColor"
 - (NIMask*)maskForVolume:(NIVolumeData*)volume {
     NSLog(@"Warning: -[%@ maskForVolume:] is missing", self.className);
     return nil;
+}
+
+- (void)populateContextualMenu:(NSMenu*)menu forView:(NIAnnotatedGeneratorRequestView*)view {
+    if (menu.itemArray.count)
+        [menu addItem:[NSMenuItem separatorItem]];
+    
+    [menu addItemWithTitle:NSLocalizedString(@"Delete", nil) block:^{
+        [view.mutableAnnotations removeObject:self];
+    }];
+
 }
 
 - (void)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache {

@@ -11,9 +11,6 @@
 
 @interface NIBezierPathAnnotation : NIAnnotation
 
-- (instancetype)init NS_DESIGNATED_INITIALIZER;
-- (instancetype)initWithCoder:(NSCoder*)coder NS_DESIGNATED_INITIALIZER;
-
 + (NSSet*)keyPathsForValuesAffectingNIBezierPath NS_REQUIRES_SUPER; // subclasses are supposed to overload this in order to declare what properties of the subclass affect the instances
 - (NIBezierPath*)NIBezierPath;
 - (NIBezierPath*)NIBezierPathForSlabView:(NIAnnotatedGeneratorRequestView*)view;
@@ -28,9 +25,6 @@
 }
 
 @property NIAffineTransform modelToDicomTransform;
-
-- (instancetype)init NS_DESIGNATED_INITIALIZER; // inits transform to NIAffineTransformIdentity
-- (instancetype)initWithCoder:(NSCoder*)coder NS_DESIGNATED_INITIALIZER;
 
 - (instancetype)initWithTransform:(NIAffineTransform)modelToDicomTransform;
 

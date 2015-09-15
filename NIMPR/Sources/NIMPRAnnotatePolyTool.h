@@ -11,7 +11,7 @@
 @class NIPolyAnnotation;
 
 @interface NIMPRAnnotatePolyTool : NIMPRAnnotateTool {
-    BOOL _closedPreview;
+    BOOL _closePreview;
 }
 
 @property(retain) NIPolyAnnotation* annotation;

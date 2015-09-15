@@ -10,15 +10,12 @@
 
 @interface NIPolyAnnotation : NIBezierPathAnnotation {
     NSMutableArray* _vectors;
-    BOOL _smooth, _closed;
+    BOOL _smooth, _close, _fill;
 }
 
 @property(readonly) NSArray* vectors;
 - (NSMutableArray*)mutableVectors;
 
-@property BOOL smooth, closed;
-
-- (instancetype)init NS_DESIGNATED_INITIALIZER;
-- (instancetype)initWithCoder:(NSCoder*)coder NS_DESIGNATED_INITIALIZER;
+@property BOOL smooth, close, fill;
 
 @end

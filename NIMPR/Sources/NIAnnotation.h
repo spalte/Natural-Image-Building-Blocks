@@ -33,11 +33,10 @@ extern CGFloat const NIAnnotationDistant;
 + (NSColor*)color:(NIAnnotation*)annotation;
 @property BOOL locked;
 
-+ (BOOL)lockedDefault; // default is NO, some subclasses may want YES (like NIMaskAnnotation)
++ (BOOL)defaultLocked; // default is NO, some subclasses may want YES (like NIMaskAnnotation)
 
-- (instancetype)init NS_DESIGNATED_INITIALIZER;
-- (instancetype)initWithCoder:(NSCoder*)aDecoder NS_DESIGNATED_INITIALIZER;
-- (void)initNIAnnotation NS_REQUIRES_SUPER;
+- (instancetype)init NS_DESIGNATED_INITIALIZER NS_REQUIRES_SUPER;
+- (instancetype)initWithCoder:(NSCoder*)aDecoder NS_DESIGNATED_INITIALIZER NS_REQUIRES_SUPER; // -[NIAnnotation initWithCoder:] calls -[NIAnnotation init]
 
 - (void)encodeWithCoder:(NSCoder*)coder NS_REQUIRES_SUPER;
 
@@ -51,6 +50,8 @@ extern CGFloat const NIAnnotationDistant;
 - (NIMask*)maskForVolume:(NIVolumeData*)volume; // subclasses must overload this
 
 - (void)translate:(NIVector)translation;
+
+- (void)populateContextualMenu:(NSMenu*)menu forView:(NIAnnotatedGeneratorRequestView*)view NS_REQUIRES_SUPER;
 
 - (void)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache;
 

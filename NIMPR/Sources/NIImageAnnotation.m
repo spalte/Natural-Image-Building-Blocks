@@ -32,13 +32,9 @@ typedef struct {
 //    return self;
 //}
 
-- (void)initNIAnnotation {
-    [super initNIAnnotation];
-    [self addObserver:self forKeyPath:@"data" options:NSKeyValueObservingOptionNew context:NIImageAnnotation.class];
-}
-
 - (instancetype)init {
     if ((self = [super init])) {
+        [self addObserver:self forKeyPath:@"data" options:NSKeyValueObservingOptionNew context:NIImageAnnotation.class];
     }
     
     return self;

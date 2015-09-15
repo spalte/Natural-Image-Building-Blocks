@@ -13,6 +13,33 @@
 
 @synthesize annotation = _annotation;
 
+- (instancetype)initWithViewer:(NIMPRWindowController*)viewer {
+    if ((self = [super initWithViewer:viewer])) {
+        [self addObserver:self forKeyPath:@"annotation" options:NSKeyValueObservingOptionNew+NSKeyValueObservingOptionOld context:NIMPRAnnotateTool.class];
+    }
+    
+    return self;
+}
+
+- (void)dealloc {
+    self.annotation = nil;
+    [self removeObserver:self forKeyPath:@"annotation" context:NIMPRAnnotateTool.class];
+    [super dealloc];
+}
+
+static NSString* const NIMPRAnnotateToolAnnotationRemovalKey = @"NIMPRAnnotateToolAnnotationRemoval";
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if (context != NIMPRAnnotateTool.class)
+        return [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    
+    if ([keyPath isEqualToString:@"annotation"]) {
+        [self retain:[[change[NSKeyValueChangeNewKey] if:NIAnnotation.class] observeNotification:NIAnnotationRemovedNotification block:^(NSNotification* n) {
+            self.annotation = nil;
+        }] forKey:NIMPRAnnotateToolAnnotationRemovalKey];
+    }
+}
+
 - (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())otherwise confirm:(void(^)())confirm {
     return [super view:view mouseDown:event otherwise:otherwise confirm:^{
         if (confirm)

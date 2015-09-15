@@ -14,20 +14,6 @@
     return [[[self.class alloc] initWithBounds:bounds transform:sliceToDicomTransform] autorelease];
 }
 
-- (instancetype)init {
-    if ((self = [super init])) {
-    }
-    
-    return self;
-}
-
-- (instancetype)initWithCoder:(NSCoder*)coder {
-    if ((self = [super initWithCoder:coder])) {
-    }
-    
-    return self;
-}
-
 - (void)encodeWithCoder:(NSCoder *)coder {
     [super encodeWithCoder:coder];
 }

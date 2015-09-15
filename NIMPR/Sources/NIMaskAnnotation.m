@@ -28,16 +28,12 @@ static NSString* const NIMaskAnnotationMask = @"mask";
     return [[super keyPathsForValuesAffectingAnnotation] setByAddingObjects: @"mask", @"modelToDicomTransform", @"volume", nil ];
 }
 
-- (void)initNIAnnotation {
-    [super initNIAnnotation];
-//    self.volumeLock = [[[NSRecursiveLock alloc] init] autorelease];
-    [self addObserver:self forKeyPath:@"mask" options:NSKeyValueObservingOptionNew context:NIMaskAnnotation.class];
-//    [self addObserver:self forKeyPath:@"modelToDicomTransform" options:NSKeyValueObservingOptionNew context:NIMaskAnnotation.class];
-    [self addObserver:self forKeyPath:@"volume" options:0 context:NIMaskAnnotation.class];
-}
-
 - (instancetype)init {
     if ((self = [super init])) {
+//        self.volumeLock = [[[NSRecursiveLock alloc] init] autorelease];
+        [self addObserver:self forKeyPath:@"mask" options:NSKeyValueObservingOptionNew context:NIMaskAnnotation.class];
+//        [self addObserver:self forKeyPath:@"modelToDicomTransform" options:NSKeyValueObservingOptionNew context:NIMaskAnnotation.class];
+        [self addObserver:self forKeyPath:@"volume" options:0 context:NIMaskAnnotation.class];
     }
     
     return self;
@@ -112,7 +108,7 @@ static NSString* const NIMaskAnnotationMask = @"mask";
     }
 }
 
-+ (BOOL)lockedDefault {
++ (BOOL)defaultLocked {
     return YES;
 }
 

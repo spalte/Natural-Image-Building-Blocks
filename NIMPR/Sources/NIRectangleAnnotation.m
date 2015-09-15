@@ -23,13 +23,6 @@ static NSString* const NIRectangleAnnotationBounds = @"bounds";
     return [[[self.class alloc] initWithBounds:bounds transform:modelToDicomTransform] autorelease];
 }
 
-- (instancetype)init {
-    if ((self = [super init])) {
-    }
-    
-    return self;
-}
-
 - (instancetype)initWithBounds:(NSRect)bounds transform:(NIAffineTransform)modelToDicomTransform {
     if ((self = [self init])) {
         self.modelToDicomTransform = modelToDicomTransform;

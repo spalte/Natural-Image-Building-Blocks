@@ -330,7 +330,7 @@
     if ([keyPath isEqualTo:@"annotation"]) {
         NIMask* mask = [object maskForVolume:self.data];
         NIMaskData* md = [[[NIMaskData alloc] initWithMask:[mask maskCroppedToWidth:self.data.pixelsWide height:self.data.pixelsHigh depth:self.data.pixelsDeep] volumeData:self.data] autorelease];
-        NSLog(@"%@ mask: %X (%d indexes) --- %@", object, mask, mask.maskIndexCount, md);
+        NSLog(@"%@ mask: %lX (%lu indexes) --- %@", object, (unsigned long)mask, (unsigned long)mask.maskIndexCount, md);
     }
     
     if ([keyPath isEqualToString:@"viewsLayout"]) {
@@ -489,20 +489,8 @@ static NSString* const NIMPRControllerMenuAnnotationsDelimiter = @"NIMPRControll
         [menu removeItem:delimiter];
 }
 
-- (void)menu:(NSMenu*)menu populateForAnnotation:(id)a {
-    [menu addItemWithTitle:NSLocalizedString(@"Delete", nil) block:^{
-        [self.mutableAnnotations removeObject:a];
-    }];
-    if ([a isKindOfClass:NIPolyAnnotation.class]) {
-        NSUInteger i = 0;
-        [[menu insertItemWithTitle:NSLocalizedString(@"Smoothen", nil) block:^{
-            [a setSmooth:![a smooth]];
-        } atIndex:i++] bind:@"state" toObject:a withKeyPath:@"smooth" options:nil];
-        [[menu insertItemWithTitle:NSLocalizedString(@"Close", nil) block:^{
-            [a setClosed:![a closed]];
-        } atIndex:i++] bind:@"state" toObject:a withKeyPath:@"closed" options:nil];
-        [menu insertItem:[NSMenuItem separatorItem] atIndex:i++];
-    }
+- (void)menu:(NSMenu*)menu populateForAnnotation:(NIAnnotation*)a {
+    [a populateContextualMenu:menu forView:[[self.window.contentView hitTest:[self.window.contentView convertPoint:[[NSApp currentEvent] locationInWindow] fromView:nil]] if:NIAnnotatedGeneratorRequestView.class]];
 }
 
 - (NSMutableSet*)mutableAnnotations {

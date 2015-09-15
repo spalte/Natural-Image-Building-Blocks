@@ -13,14 +13,14 @@
 
 @interface NIMPRAnnotatePolyTool ()
 
-@property BOOL closedPreview;
+@property BOOL closePreview;
 
 @end
 
 @implementation NIMPRAnnotatePolyTool
 
 @dynamic annotation;
-@synthesize closedPreview = _closedPreview;
+@synthesize closePreview = _closePreview;
 
 - (BOOL)view:(NIMPRView *)view mouseMoved:(NSEvent *)event {
     self.currentLocation = [view convertPoint:[view.window convertPointFromScreen:[NSEvent mouseLocation]] fromView:nil];
@@ -49,7 +49,7 @@
 
 - (BOOL)view:(NIMPRView*)view mouseDown:(NSEvent*)event otherwise:(void(^)())otherwise {
     return [super view:view mouseDown:event otherwise:otherwise confirm:^{
-        [self view:view flagsChanged:event];
+//        [self view:view flagsChanged:event];
         
         if (event.clickCount > 1 || (self.annotation.vectors.count > 0 && NIVectorEqualToVector(self.mouseDownLocationVector, [self.annotation.vectors.lastObject NIVectorValue]))) {
             self.annotation = nil;
@@ -72,7 +72,7 @@
 }
 
 - (void)view:(NIMPRView*)view handled:(NSEvent*)event {
-    self.closedPreview = NO;
+    self.closePreview = NO;
     
     [self view:view mouseMoved:event];
     
@@ -84,13 +84,13 @@
                 self.annotation = nil;
             h = [view.class NSBezierPathForHandle:[view handleForSlicePoint:NSPointFromNIVector(NIVectorApplyTransform([self.annotation.vectors[0] NIVectorValue], NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)))]];
             if ([h containsPoint:[event locationInView:view]]) {
-                self.annotation.closed = YES;
+                self.annotation.close = YES;
                 self.annotation = nil;
             }
         } else if (event.type == NSMouseMoved) {
             h = [view.class NSBezierPathForHandle:[view handleForSlicePoint:NSPointFromNIVector(NIVectorApplyTransform([self.annotation.vectors[0] NIVectorValue], NIAffineTransformInvert(view.presentedGeneratorRequest.sliceToDicomTransform)))]];
             if ([h containsPoint:[event locationInView:view]]) {
-                self.closedPreview = YES;
+                self.closePreview = YES;
             }
         }
     }
@@ -107,12 +107,12 @@
         NIPolyAnnotation* stroke = [[[NIPolyAnnotation alloc] init] autorelease];
         [stroke.mutableVectors addObjectsFromArray:self.annotation.vectors];
         
-        if (!self.closedPreview && ![hl containsPoint:self.currentLocation])
+        if (!self.closePreview && ![hl containsPoint:self.currentLocation])
             [stroke.mutableVectors addObject:[NSValue valueWithNIVector:self.currentLocationVector]];
         if (self.annotation.smooth)
             stroke.smooth = YES;
-        if (self.annotation.closed || self.closedPreview)
-            stroke.closed = YES;
+        if (self.annotation.close || self.closePreview)
+            stroke.close = YES;
         
         NSColor* color = [self.annotation.class color:self.annotation];
         stroke.color = [color colorWithAlphaComponent:color.alphaComponent/2];

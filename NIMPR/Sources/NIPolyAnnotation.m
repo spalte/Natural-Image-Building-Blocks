@@ -7,30 +7,40 @@
 //
 
 #import "NIPolyAnnotation.h"
+#import "NSMenu+NIMPR.h"
 
 @implementation NIPolyAnnotation
 
 @synthesize vectors = _vectors;
-@synthesize smooth = _smooth, closed = _closed;
-
-- (void)initNIAnnotation {
-    [super initNIAnnotation];
-    _vectors = [[NSMutableArray alloc] init];
-}
+@synthesize smooth = _smooth, close = _close, fill = _fill;
 
 - (instancetype)init {
     if ((self = [super init])) {
+        _vectors = [[NSMutableArray alloc] init];
+        self.smooth = [self.class defaultSmooth];
+        self.close = [self.class defaultClose];
+        self.smooth = [self.class defaultSmooth];
+        self.fill = [self.class defaultFill];
     }
     
     return self;
 }
 
+static NSString* const NIPolyAnnotationPoints = @"points";
+static NSString* const NIPolyAnnotationSmooth = @"smooth";
+static NSString* const NIPolyAnnotationClose = @"close";
+static NSString* const NIPolyAnnotationFill = @"fill";
+
 - (instancetype)initWithCoder:(NSCoder*)coder {
     if ((self = [super initWithCoder:coder])) {
-        for (NSValue* point in [[coder decodeObjectForKey:@"points"] requireArrayOfValuesWithObjCType:@encode(NIVector)])
+        for (NSValue* point in [[coder decodeObjectForKey:NIPolyAnnotationPoints] requireArrayOfValuesWithObjCType:@encode(NIVector)])
             [self.mutableVectors addObject:point];
-        self.smooth = [coder decodeBoolForKey:@"smooth"];
-        self.closed = [coder decodeBoolForKey:@"closed"];
+        if ([coder containsValueForKey:NIPolyAnnotationSmooth])
+            self.smooth = [coder decodeBoolForKey:NIPolyAnnotationSmooth];
+        if ([coder containsValueForKey:NIPolyAnnotationClose])
+            self.close = [coder decodeBoolForKey:NIPolyAnnotationClose];
+        if ([coder containsValueForKey:NIPolyAnnotationFill])
+            self.fill = [coder decodeBoolForKey:NIPolyAnnotationFill];
     }
     
     return self;
@@ -38,14 +48,30 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder {
     [super encodeWithCoder:coder];
-    [coder encodeObject:self.vectors forKey:@"points"];
-    [coder encodeBool:self.smooth forKey:@"smooth"];
-    [coder encodeBool:self.closed forKey:@"closed"];
+    [coder encodeObject:self.vectors forKey:NIPolyAnnotationPoints];
+    if (self.smooth != [self.class defaultSmooth])
+        [coder encodeBool:self.smooth forKey:NIPolyAnnotationSmooth];
+    if (self.close != [self.class defaultClose])
+        [coder encodeBool:self.close forKey:NIPolyAnnotationClose];
+    if (self.fill != [self.class defaultFill])
+        [coder encodeBool:self.fill forKey:NIPolyAnnotationFill];
 }
 
 - (void)dealloc {
     [_vectors release];
     [super dealloc];
+}
+
++ (BOOL)defaultSmooth {
+    return NO;
+}
+
++ (BOOL)defaultClose {
+    return NO;
+}
+
++ (BOOL)defaultFill {
+    return YES;
 }
 
 - (void)translate:(NIVector)translation {
@@ -55,12 +81,12 @@
 }
 
 + (NSSet*)keyPathsForValuesAffectingNIBezierPath {
-    return [[super keyPathsForValuesAffectingNIBezierPath] setByAddingObjects: @"vectors", @"smooth", @"closed", nil];
+    return [[super keyPathsForValuesAffectingNIBezierPath] setByAddingObjects: @"vectors", @"smooth", @"close", nil];
 }
 
 - (NIBezierPath*)NIBezierPath {
     if (self.smooth) {
-        if (!self.closed)
+        if (!self.close)
             return [[[NIBezierPath alloc] initWithNodeArray:self.vectors style:NIBezierNodeOpenEndsStyle] autorelease];
         else {
             NSMutableArray* vectors = [[self.vectors mutableCopy] autorelease];
@@ -76,7 +102,7 @@
             [path moveToVector:vv.NIVectorValue];
         else [path lineToVector:vv.NIVectorValue];
     
-    if (self.closed)
+    if (self.close)
         [path close];
     
     return path;
@@ -100,6 +126,27 @@
 
 - (void)removeObjectFromVectorsAtIndex:(NSUInteger)index {
     [_vectors removeObjectAtIndex:index];
+}
+
+- (void)populateContextualMenu:(NSMenu*)menu forView:(NIAnnotatedGeneratorRequestView*)view {
+    NSMenuItem* mi;
+    
+    [[menu addItemWithTitle:NSLocalizedString(@"Smooth", nil) block:^{
+        self.smooth = !self.smooth;
+    }] bind:@"state" toObject:self withKeyPath:@"smooth" options:nil];
+    
+    [[menu addItemWithTitle:NSLocalizedString(@"Close", nil) block:^{
+        self.close = !self.close;
+    }] bind:@"state" toObject:self withKeyPath:@"close" options:nil];
+    
+    if (self.close && [self.NIBezierPath isPlanar]) {
+        mi = [menu addItemWithTitle:NSLocalizedString(@"Fill", nil) block:^{
+            self.fill = !self.fill;
+        }];
+        [mi bind:@"state" toObject:self withKeyPath:@"fill" options:nil];
+    }
+    
+    [super populateContextualMenu:menu forView:view];
 }
 
 - (NSSet*)handlesInView:(NIAnnotatedGeneratorRequestView*)view {

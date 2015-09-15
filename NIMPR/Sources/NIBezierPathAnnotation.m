@@ -29,13 +29,6 @@
     return [[super keyPathsForValuesAffectingAnnotation] setByAddingObject:@"NIBezierPath"];
 }
 
-- (instancetype)init {
-    if ((self = [super init])) {
-    }
-    
-    return self;
-}
-
 - (instancetype)initWithCoder:(NSCoder *)coder {
     if ((self = [super initWithCoder:coder])) {
     }

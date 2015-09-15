@@ -23,13 +23,6 @@ static NSString* const NIPointAnnotationCoordsKey = @"coords";
     return [[[self.class alloc] initWithVector:vector] autorelease];
 }
 
-- (instancetype)init {
-    if ((self = [super init])) {
-    }
-    
-    return self;
-}
-
 - (instancetype)initWithVector:(NIVector)vector {
     if ((self = [self init])) {
         self.vector = vector;

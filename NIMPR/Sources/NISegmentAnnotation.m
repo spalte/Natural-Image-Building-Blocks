@@ -25,13 +25,6 @@
     return [self segmentWithPoints:pv:qv];
 }
 
-- (instancetype)init {
-    if ((self = [super init])) {
-    }
-    
-    return self;
-}
-
 - (instancetype)initWithPoints:(NIVector)p :(NIVector)q {
     if ((self = [self init])) {
         self.p = p;
