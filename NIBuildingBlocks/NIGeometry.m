@@ -1,5 +1,6 @@
 //  Copyright (c) 2015 OsiriX Foundation
 //  Copyright (c) 2015 Spaltenstein Natural Image
+//  Copyright (c) 2015 volz.io
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -639,22 +640,61 @@ bool NIPlaneIsValid(NIPlane plane)
     return NIVectorLength(plane.normal) > _NIGeometrySmallNumber;
 }
 
-NIPlane NIPlaneLeastSquaresPlaneFromPoints(NIVectorArray vectors, CFIndex numVectors) // BOGUS TODO not written yet, will give a plane, but it won't be the least squares plane
+NIPlane NIPlaneLeastSquaresPlaneFromPoints(NIVectorArray vectors, CFIndex numVectors)
 {
-    NIPlane plane;
-
-    if (numVectors <= 3) {
+#define N 3
+#define LDA N
+    
+    if (numVectors < 3)
         return NIPlaneInvalid;
+    
+    if (numVectors == 3)
+        return NIPlaneMake(vectors[0], NIVectorCrossProduct(NIVectorSubtract(vectors[0], vectors[1]), NIVectorSubtract(vectors[0], vectors[2])));
+    
+    // calculate center of mass
+    NIVector c = NIVectorZero;
+    for (CFIndex i = 0; i < numVectors; ++i)
+        c = NIVectorAdd(c, vectors[i]);
+    c = NIVectorScalarDivide(c, numVectors);
+    
+    // assemble covariance matrix - column-wise matrix indexes: [ 0 3 6 ]
+    //                                                          [ x 4 7 ]
+    //                                                          [ x x 8 ]
+    __CLPK_doublereal a[LDA*N] = {0,0,0,0,0,0,0,0,0}; // input covariance, output eigenvectors
+    for (CFIndex i = 0; i < numVectors; ++i) {
+        NIVector d = NIVectorSubtract(vectors[i], c);
+        a[0] += d.x*d.x;
+        a[3] += d.x*d.y;
+        a[4] += d.y*d.y;
+        a[6] += d.x*d.z;
+        a[7] += d.y*d.z;
+        a[8] += d.z*d.z;
     }
+    
+    // compute eigenvalues and eigenvectors
+    
+    __CLPK_integer n = N, lda = LDA, info = 0, lwork = -1, liwork = -1, iwkopt;
+    __CLPK_doublereal w[N]; // the output eigenvalues
+    __CLPK_doublereal wkopt;
+    
+    dsyevd("V", "U", &n, a, &lda, w, &wkopt, &lwork, &iwkopt, &liwork, &info);
+    
+    lwork = (int)wkopt;
+    __CLPK_doublereal* work = (__CLPK_doublereal*)calloc(lwork, sizeof(__CLPK_doublereal));
+    liwork = iwkopt;
+    __CLPK_integer* iwork = (__CLPK_integer*)calloc(liwork, sizeof(__CLPK_integer));
+    
+    dsyevd("V", "U", &n, a, &lda, w, work, &lwork, iwork, &liwork, &info);
+    
+    free(iwork);
+    free(work);
+    
+    if(w[0] == w[1] && w[1] == w[2]) // degenerate case - return a default horizontal plane that goes through the centroid
+        return NIPlaneMake(c, NIVectorZBasis);
 
-    plane.point = vectors[0];
-    plane.normal = NIVectorNormalize(NIVectorCrossProduct(NIVectorSubtract(vectors[1], vectors[0]), NIVectorSubtract(vectors[2], vectors[0])));
-
-    if (NIVectorIsZero(plane.normal)) {
-        return NIPlaneInvalid;
-    } else {
-        return plane;
-    }
+    return NIPlaneMake(c, NIVectorMake(a[6], a[7], a[8]));
+#undef N
+#undef LDA
 }
 
 
