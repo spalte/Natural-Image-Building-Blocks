@@ -652,23 +652,23 @@ NIPlane NIPlaneLeastSquaresPlaneFromPoints(NIVectorArray vectors, CFIndex numVec
         return NIPlaneMake(vectors[0], NIVectorCrossProduct(NIVectorSubtract(vectors[0], vectors[1]), NIVectorSubtract(vectors[0], vectors[2])));
     
     // calculate center of mass
-    NIVector c = NIVectorZero;
-    for (CFIndex i = 0; i < numVectors; ++i)
-        c = NIVectorAdd(c, vectors[i]);
-    c = NIVectorScalarDivide(c, numVectors);
+    __CLPK_doublereal c[3] = {0,0,0};
+    for (CFIndex i = 0; i < numVectors; ++i) {
+        c[0] += vectors[i].x; c[1] += vectors[i].y; c[2] += vectors[i].z; }
+    c[0] /= numVectors; c[1] /= numVectors; c[2] /= numVectors;
     
     // assemble covariance matrix - column-wise matrix indexes: [ 0 3 6 ]
     //                                                          [ x 4 7 ]
     //                                                          [ x x 8 ]
     __CLPK_doublereal a[LDA*N] = {0,0,0,0,0,0,0,0,0}; // input covariance, output eigenvectors
     for (CFIndex i = 0; i < numVectors; ++i) {
-        NIVector d = NIVectorSubtract(vectors[i], c);
-        a[0] += d.x*d.x;
-        a[3] += d.x*d.y;
-        a[4] += d.y*d.y;
-        a[6] += d.x*d.z;
-        a[7] += d.y*d.z;
-        a[8] += d.z*d.z;
+        __CLPK_doublereal d[3] = {vectors[i].x-c[0], vectors[i].y-c[1], vectors[i].z-c[2]};
+        a[0] += d[0]*d[0];
+        a[3] += d[0]*d[1];
+        a[4] += d[1]*d[1];
+        a[6] += d[0]*d[2];
+        a[7] += d[1]*d[2];
+        a[8] += d[2]*d[2];
     }
     
     // compute eigenvalues and eigenvectors
@@ -689,10 +689,16 @@ NIPlane NIPlaneLeastSquaresPlaneFromPoints(NIVectorArray vectors, CFIndex numVec
     free(iwork);
     free(work);
     
+    // return the plane
+    
+    if (info != 0 || (w[0] <= 0 && w[1] <= 0)) // lapack error OR points are aligned
+        return NIPlaneInvalid;
+    
     if(w[0] == w[1] && w[1] == w[2]) // degenerate case - return a default horizontal plane that goes through the centroid
-        return NIPlaneMake(c, NIVectorZBasis);
+        return NIPlaneMake(NIVectorMake(c[0], c[1], c[2]), NIVectorZBasis);
 
-    return NIPlaneMake(c, NIVectorMake(a[6], a[7], a[8]));
+    return NIPlaneMake(NIVectorMake(c[0], c[1], c[2]), NIVectorMake(a[6], a[7], a[8]));
+    
 #undef N
 #undef LDA
 }

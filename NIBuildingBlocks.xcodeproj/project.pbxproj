@@ -85,9 +85,10 @@
 		710684441B678FD30078903A /* NIMaskRunStack.h in Headers */ = {isa = PBXBuildFile; fileRef = 710684421B678FD30078903A /* NIMaskRunStack.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		710684451B678FD30078903A /* NIMaskRunStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 710684431B678FD30078903A /* NIMaskRunStack.m */; };
 		719473721B1DA0F1009363AE /* NIOrientationTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 719473711B1DA0F1009363AE /* NIOrientationTextLayer.m */; };
+		71A8B4691BA953DD0013D45E /* NIGeometryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71A8B4681BA953DD0013D45E /* NIGeometryTests.m */; };
 		71DFA2CA1B6FC77E008AB997 /* NIMaskData.h in Headers */ = {isa = PBXBuildFile; fileRef = 71DFA2C81B6FC77E008AB997 /* NIMaskData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71DFA2CB1B6FC77E008AB997 /* NIMaskData.m in Sources */ = {isa = PBXBuildFile; fileRef = 71DFA2C91B6FC77E008AB997 /* NIMaskData.m */; };
-		71F51E521BA00C2E00DF26AC /* NIMask_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F51E511BA00C2E00DF26AC /* NIMask_Tests.m */; };
+		71F51E521BA00C2E00DF26AC /* NIMaskTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F51E511BA00C2E00DF26AC /* NIMaskTests.m */; };
 		71F51E531BA00C2E00DF26AC /* NIBuildingBlocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F151EDB1B1CC8D000C8F767 /* NIBuildingBlocks.framework */; };
 /* End PBXBuildFile section */
 
@@ -182,11 +183,12 @@
 		710684421B678FD30078903A /* NIMaskRunStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMaskRunStack.h; sourceTree = "<group>"; };
 		710684431B678FD30078903A /* NIMaskRunStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMaskRunStack.m; sourceTree = "<group>"; };
 		719473711B1DA0F1009363AE /* NIOrientationTextLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIOrientationTextLayer.m; sourceTree = "<group>"; };
+		71A8B4681BA953DD0013D45E /* NIGeometryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIGeometryTests.m; sourceTree = "<group>"; };
 		71DFA2C81B6FC77E008AB997 /* NIMaskData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMaskData.h; sourceTree = "<group>"; };
 		71DFA2C91B6FC77E008AB997 /* NIMaskData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMaskData.m; sourceTree = "<group>"; };
 		71F51E4D1BA00C2E00DF26AC /* NIBuildingBlocks Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "NIBuildingBlocks Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		71F51E501BA00C2E00DF26AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		71F51E511BA00C2E00DF26AC /* NIMask_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NIMask_Tests.m; sourceTree = "<group>"; };
+		71F51E511BA00C2E00DF26AC /* NIMaskTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NIMaskTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -402,7 +404,8 @@
 		71F51E4E1BA00C2E00DF26AC /* NIBuildingBlocks Tests */ = {
 			isa = PBXGroup;
 			children = (
-				71F51E511BA00C2E00DF26AC /* NIMask_Tests.m */,
+				71F51E511BA00C2E00DF26AC /* NIMaskTests.m */,
+				71A8B4681BA953DD0013D45E /* NIGeometryTests.m */,
 				71F51E4F1BA00C2E00DF26AC /* Supporting Files */,
 			);
 			path = "NIBuildingBlocks Tests";
@@ -604,7 +607,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				71F51E521BA00C2E00DF26AC /* NIMask_Tests.m in Sources */,
+				71A8B4691BA953DD0013D45E /* NIGeometryTests.m in Sources */,
+				71F51E521BA00C2E00DF26AC /* NIMaskTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -816,6 +820,7 @@
 				71F51E581BA00C2E00DF26AC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
