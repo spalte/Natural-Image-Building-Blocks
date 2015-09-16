@@ -9,7 +9,11 @@
 #import "NIAnnotation.h"
 #import "NIAnnotationHandle.h"
 
-@interface NIBezierPathAnnotation : NIAnnotation
+@interface NIBezierPathAnnotation : NIAnnotation {
+    BOOL _fill;
+}
+
+@property BOOL fill;
 
 + (NSSet*)keyPathsForValuesAffectingNIBezierPath NS_REQUIRES_SUPER; // subclasses are supposed to overload this in order to declare what properties of the subclass affect the instances
 - (NIBezierPath*)NIBezierPath;

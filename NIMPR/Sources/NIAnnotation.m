@@ -11,6 +11,8 @@
 #import "NIJSON.h"
 #import "NSMenu+NIMPR.h"
 
+#import "NIMaskAnnotation.h"
+
 // NIAnnotationRequestCache dictionary keys
 NSString* const NIAnnotationRequest = @"NIAnnotationRequest"; // NIGeneratorRequest
 NSString* const NIAnnotationProjection = @"NIAnnotationProjection"; // NSImage
@@ -228,6 +230,12 @@ static NSString* const NIANnotationDefaultColorKey = @"NIAnnotationDefaultColor"
 }
 
 - (void)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache {
+    NIVolumeData* v = [view volumeDataAtIndex:0];
+    NIMask* mask = [self maskForVolume:v];
+    NIMaskAnnotation* ma = [[NIMaskAnnotation alloc] initWithMask:mask transform:NIAffineTransformInvert(v.volumeTransform)];
+    
+    [ma drawInView:view cache:[NSMutableDictionary dictionary]];
+    
     NSLog(@"Warning: -[%@ drawInView:cache:] is missing", self.className);
 }
 

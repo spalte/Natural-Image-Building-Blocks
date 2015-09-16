@@ -12,7 +12,7 @@
 @implementation NIPolyAnnotation
 
 @synthesize vectors = _vectors;
-@synthesize smooth = _smooth, close = _close, fill = _fill;
+@synthesize smooth = _smooth, close = _close;
 
 - (instancetype)init {
     if ((self = [super init])) {
@@ -20,7 +20,6 @@
         self.smooth = [self.class defaultSmooth];
         self.close = [self.class defaultClose];
         self.smooth = [self.class defaultSmooth];
-        self.fill = [self.class defaultFill];
     }
     
     return self;
@@ -29,7 +28,6 @@
 static NSString* const NIPolyAnnotationPoints = @"points";
 static NSString* const NIPolyAnnotationSmooth = @"smooth";
 static NSString* const NIPolyAnnotationClose = @"close";
-static NSString* const NIPolyAnnotationFill = @"fill";
 
 - (instancetype)initWithCoder:(NSCoder*)coder {
     if ((self = [super initWithCoder:coder])) {
@@ -39,8 +37,6 @@ static NSString* const NIPolyAnnotationFill = @"fill";
             self.smooth = [coder decodeBoolForKey:NIPolyAnnotationSmooth];
         if ([coder containsValueForKey:NIPolyAnnotationClose])
             self.close = [coder decodeBoolForKey:NIPolyAnnotationClose];
-        if ([coder containsValueForKey:NIPolyAnnotationFill])
-            self.fill = [coder decodeBoolForKey:NIPolyAnnotationFill];
     }
     
     return self;
@@ -53,8 +49,6 @@ static NSString* const NIPolyAnnotationFill = @"fill";
         [coder encodeBool:self.smooth forKey:NIPolyAnnotationSmooth];
     if (self.close != [self.class defaultClose])
         [coder encodeBool:self.close forKey:NIPolyAnnotationClose];
-    if (self.fill != [self.class defaultFill])
-        [coder encodeBool:self.fill forKey:NIPolyAnnotationFill];
 }
 
 - (void)dealloc {
@@ -70,8 +64,8 @@ static NSString* const NIPolyAnnotationFill = @"fill";
     return NO;
 }
 
-+ (BOOL)defaultFill {
-    return YES;
+- (BOOL)fill {
+    return super.fill && self.close;
 }
 
 - (void)translate:(NIVector)translation {

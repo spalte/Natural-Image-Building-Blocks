@@ -691,7 +691,7 @@ NIPlane NIPlaneLeastSquaresPlaneFromPoints(NIVectorArray vectors, CFIndex numVec
     
     // return the plane
     
-    if (info != 0 || (w[0] <= 0 && w[1] <= 0)) // lapack error OR points are aligned
+    if (info != 0 || (w[0] <= 0 && w[1] <= 0)) // lapack error OR points are aligned
         return NIPlaneInvalid;
     
     if(w[0] == w[1] && w[1] == w[2]) // degenerate case - return a default horizontal plane that goes through the centroid

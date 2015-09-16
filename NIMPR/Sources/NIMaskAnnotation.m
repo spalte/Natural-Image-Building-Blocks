@@ -209,7 +209,7 @@ static NSString* const NIMaskAnnotationMask = @"mask";
             NIVolumeData* vd = [NIGenerator synchronousRequestVolume:req volumeData:data];
             sib = [vd floatBufferForSliceAtIndex:0];
             unsigned char* bdp[1] = {sib.data};
-            si = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:bdp pixelsWide:sib.width pixelsHigh:sib.height bitsPerSample:sizeof(float)*8 samplesPerPixel:1
+            si = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:bdp pixelsWide:sib.width pixelsHigh:sib.height bitsPerSample:sizeof(float)*8 samplesPerPixel:1 // TODO: can we use NSFloatImageRep instead?
                                                             hasAlpha:NO isPlanar:NO colorSpaceName:NSDeviceWhiteColorSpace bitmapFormat:NSFloatingPointSamplesBitmapFormat bytesPerRow:sib.rowBytes bitsPerPixel:sizeof(float)*8] autorelease];
             
             // render border
