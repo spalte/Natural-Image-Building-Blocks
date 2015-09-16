@@ -34,6 +34,10 @@
     return self;
 }
 
+- (instancetype)init {
+    return [super init];
+}
+
 - (instancetype)initWithCoder:(NSCoder*)coder {
     if ((self = [super initWithCoder:coder])) {
         NSArray* points = [[coder decodeObjectForKey:@"points"] requireArrayOfValuesWithObjCType:@encode(NIVector)];
@@ -49,40 +53,45 @@
     [coder encodeObject:@[ [NSValue valueWithNIVector:self.p], [NSValue valueWithNIVector:self.q] ] forKey:@"points"];
 }
 
+- (BOOL)isPlanar {
+    return YES;
+}
+
 - (void)translate:(NIVector)translation {
     self.p = NIVectorAdd(self.p, translation);
     self.q = NIVectorAdd(self.q, translation);
 }
 
-//- (NIMask*)maskForVolume:(NIVolumeData*)volume {
-//    NIVector vp = [volume convertVolumeVectorFromDICOMVector:self.p], vq = [volume convertVolumeVectorFromDICOMVector:self.q];
-////    NSUInteger d = CGFloatMax(CGFloatRound(NIVectorDistance(vp, vq)), 1);
-////    
-////    NIVector pq = NIVectorSubtract(self.q, self.p);
-////    NIVector m = NIVectorMake(1, 0, 0);
-////    
-////    NIAffineTransform destTransform = NIAffineTransformIdentity;
-////    
-////    NIVector cp = NIVectorCrossProduct(pq, m);
-////    if (!NIVectorIsZero(cp)) {
-////        CGFloat angle = NIVectorAngleBetweenVectorsAroundVector(m, pq, cp);
-////        destTransform = NIAffineTransformMakeRotationAroundVector(angle, cp);
-////    }
-////    
-////    destTransform = NIAffineTransformConcat(destTransform, NIAffineTransformMakeTranslationWithVector(vp));
-////    
-////    NIMask* mask = [NIMask maskWithBoxWidth:d height:1 depth:1];
-////    mask = [mask maskByResamplingFromVolumeTransform:NIAffineTransformIdentity toVolumeTransform:destTransform interpolationMode:NIInterpolationModeCubic];
-////    mask = [mask binaryMask];
-////    
-//    NIMask* mask = [super maskForVolume:volume];
+- (NIMask*)maskForVolume:(NIVolumeData*)volume {
+    NIVector vp = [volume convertVolumeVectorFromDICOMVector:self.p], vq = [volume convertVolumeVectorFromDICOMVector:self.q];
+//    NSUInteger d = CGFloatMax(CGFloatRound(NIVectorDistance(vp, vq)), 1);
 //    
-//    NSLog(@"......................... Mask for %@... volume %@ to %@", self, NSStringFromNIVector(vp), NSStringFromNIVector(vq));
-////    NSLog(@"Segment mask: %@", mask);
-//    NSLog(@"%@", mask);
-////    
-//    return mask;
-//}
+//    NIVector pq = NIVectorSubtract(self.q, self.p);
+//    NIVector m = NIVectorMake(1, 0, 0);
+//    
+//    NIAffineTransform destTransform = NIAffineTransformIdentity;
+//    
+//    NIVector cp = NIVectorCrossProduct(pq, m);
+//    if (!NIVectorIsZero(cp)) {
+//        CGFloat angle = NIVectorAngleBetweenVectorsAroundVector(m, pq, cp);
+//        destTransform = NIAffineTransformMakeRotationAroundVector(angle, cp);
+//    }
+//    
+//    destTransform = NIAffineTransformConcat(destTransform, NIAffineTransformMakeTranslationWithVector(vp));
+//    
+//    NIMask* mask = [NIMask maskWithBoxWidth:d height:1 depth:1];
+//    mask = [mask maskByResamplingFromVolumeTransform:NIAffineTransformIdentity toVolumeTransform:destTransform interpolationMode:NIInterpolationModeCubic];
+//    mask = [mask binaryMask];
+//    
+    NSLog(@"......................... Mask for %@... \nvolume %@ to %@", self, NSStringFromNIVector(vp), NSStringFromNIVector(vq));
+
+    NIMask* mask = [super maskForVolume:volume];
+    
+//    NSLog(@"Segment mask: %@", mask);
+    NSLog(@"%@", mask);
+//    
+    return mask;
+}
 
 - (NSString*)description {
     return [NSString stringWithFormat:@"<%@ 0x%lx: from %@ to %@>", self.className, (unsigned long)self, NSStringFromNIVector(self.p), NSStringFromNIVector(self.q)];

@@ -39,7 +39,7 @@ extern NSString* const NIAnnotationRenderCache; // NSDictionary, cleaned when th
 @property(readonly, copy) NSSet* selectedAnnotations;
 - (NSMutableSet*)mutableSelectedAnnotations;
 
-- (CGFloat)maximumDistanceToPlane;
++ (CGFloat)maximumDistanceToPlaneForRequest:(NIObliqueSliceGeneratorRequest*)req;
 
 - (NIAnnotation*)annotationClosestToSlicePoint:(NSPoint)location closestPoint:(NSPoint*)closestPoint distance:(CGFloat*)distance;
 - (NIAnnotation*)annotationClosestToSlicePoint:(NSPoint)location closestPoint:(NSPoint*)closestPoint distance:(CGFloat*)distance filter:(BOOL (^)(NIAnnotation* annotation))filter;

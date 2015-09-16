@@ -31,6 +31,10 @@ static NSString* const NIPointAnnotationCoordsKey = @"coords";
     return self;
 }
 
+- (instancetype)init {
+    return [super init];
+}
+
 - (instancetype)initWithCoder:(NSCoder*)coder {
     if ((self = [super initWithCoder:coder])) {
         self.vector = [[[coder decodeObjectForKey:NIPointAnnotationCoordsKey] requireValueWithObjCType:@encode(NIVector)] NIVectorValue];
@@ -56,7 +60,7 @@ static NSString* const NIPointAnnotationCoordsKey = @"coords";
 - (void)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache {
     NIObliqueSliceGeneratorRequest* req = view.presentedGeneratorRequest;
 
-    CGFloat distanceToPlane = CGFloatMax(NIVectorDistanceToPlane(self.vector, req.plane) - req.slabWidth/2, 0), maximumDistanceToPlane = view.maximumDistanceToPlane;
+    CGFloat distanceToPlane = CGFloatMax(NIVectorDistanceToPlane(self.vector, req.plane) - req.slabWidth/2, 0), maximumDistanceToPlane = [NIAnnotatedGeneratorRequestView maximumDistanceToPlaneForRequest:view.presentedGeneratorRequest];
     
     NSPoint p = [view convertPointFromDICOMVector:self.vector];
     

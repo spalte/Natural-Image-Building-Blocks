@@ -16,6 +16,7 @@
 - (NIBezierPath*)NIBezierPathForSlabView:(NIAnnotatedGeneratorRequestView*)view;
 - (NIBezierPath*)NIBezierPathForSlabView:(NIAnnotatedGeneratorRequestView*)view complete:(BOOL)complete;
 
+- (BOOL)isPlanar;
 - (BOOL)isSolid;
 
 @end

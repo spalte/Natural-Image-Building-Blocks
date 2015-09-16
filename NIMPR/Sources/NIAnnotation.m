@@ -43,6 +43,8 @@ NSString* const NIAnnotationTransformKey = @"transform";
 
                         if (class_getMethodImplementation(class, @selector(initWithCoder:)) == class_getMethodImplementation(class_getSuperclass(class), @selector(initWithCoder:)))
                             NSLog(@"Warning: missing method implementation -[%@ initWithCoder:]", className);
+                        else if (class_getMethodImplementation(class, @selector(init)) == class_getMethodImplementation(class_getSuperclass(class), @selector(init)))
+                            NSLog(@"Warning: missing method implementation -[%@ init] while [%@ initWithCoder:] is provided", className, className);
                         if (class_getMethodImplementation(class, @selector(encodeWithCoder:)) == class_getMethodImplementation(class_getSuperclass(class), @selector(encodeWithCoder:)))
                             NSLog(@"Warning: missing method implementation -[%@ encodeWithCoder:]", className);
                         

@@ -32,6 +32,10 @@ static NSString* const NIRectangleAnnotationBounds = @"bounds";
     return self;
 }
 
+- (instancetype)init {
+    return [super init];
+}
+
 - (instancetype)initWithCoder:(NSCoder*)coder {
     if ((self = [super initWithCoder:coder])) {
         self.bounds = [[[coder decodeObjectForKey:NIRectangleAnnotationBounds] requireValueWithObjCType:@encode(NSRect)] rectValue];
@@ -47,6 +51,10 @@ static NSString* const NIRectangleAnnotationBounds = @"bounds";
 
 - (NSBezierPath*)NSBezierPath {
     return [NSBezierPath bezierPathWithRect:self.bounds];
+}
+
+- (BOOL)isPlanar {
+    return YES;
 }
 
 - (NSSet*)handlesInView:(NIAnnotatedGeneratorRequestView*)view {

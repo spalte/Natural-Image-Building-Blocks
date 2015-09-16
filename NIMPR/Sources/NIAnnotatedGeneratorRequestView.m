@@ -122,8 +122,7 @@ NSString* const NIAnnotationRenderCache = @"NIAnnotationRequestCache"; // NSDict
     [self.annotationsLayer setNeedsDisplay];
 }
 
-- (CGFloat)maximumDistanceToPlane {
-    NIObliqueSliceGeneratorRequest* req = (id)self.presentedGeneratorRequest;
++ (CGFloat)maximumDistanceToPlaneForRequest:(NIObliqueSliceGeneratorRequest*)req {
     return CGFloatMax((req.pixelSpacingX+req.pixelSpacingY+req.pixelSpacingZ)/3, CGFLOAT_EPSILON);
 }
 
