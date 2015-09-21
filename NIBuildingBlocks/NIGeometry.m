@@ -697,7 +697,7 @@ NIPlane NIPlaneLeastSquaresPlaneFromPoints(NIVectorArray vectors, CFIndex numVec
     if(w[0] == w[1] && w[1] == w[2]) // degenerate case - return a default horizontal plane that goes through the centroid
         return NIPlaneMake(NIVectorMake(c[0], c[1], c[2]), NIVectorZBasis);
 
-    return NIPlaneMake(NIVectorMake(c[0], c[1], c[2]), NIVectorMake(a[6], a[7], a[8]));
+    return NIPlaneMake(NIVectorMake(c[0], c[1], c[2]), NIVectorMake(a[0], a[1], a[2]));
     
 #undef N
 #undef LDA

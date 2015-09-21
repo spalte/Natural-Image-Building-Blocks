@@ -32,14 +32,14 @@
 
 - (void)testNIPlaneLeastSquaresPlaneFromPoints0 {
     NIVector vectors[] = {};
-    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:0 expect:NIPlaneInvalid];
+    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:0 expect:NIPlaneInvalid.normal];
 }
 
 - (void)testNIPlaneLeastSquaresPlaneFromPoints1 {
     NIVector vectors[] = {
         NIVectorMake(0, 0, 0)
     };
-    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:1 expect:NIPlaneInvalid];
+    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:1 expect:NIPlaneInvalid.normal];
 }
 
 - (void)testNIPlaneLeastSquaresPlaneFromPoints2 {
@@ -47,16 +47,16 @@
         NIVectorMake(0, 0, 0),
         NIVectorMake(1, 1, 1)
     };
-    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:2 expect:NIPlaneInvalid];
+    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:2 expect:NIPlaneInvalid.normal];
 }
 
 - (void)testNIPlaneLeastSquaresPlaneFromPoints3X {
     NIVector vectors[] = {
         NIVectorMake(0, 0, 0),
-        NIVectorMake(0, 2, 1),
-        NIVectorMake(0, 1, 1)
+        NIVectorMake(0, 1, 1),
+        NIVectorMake(0, 2, 1)
     };
-    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:3 expect:NIPlaneXZero];
+    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:3 expect:NIPlaneXZero.normal];
 }
 
 - (void)testNIPlaneLeastSquaresPlaneFromPoints3Y {
@@ -65,16 +65,16 @@
         NIVectorMake(1, 0, 1),
         NIVectorMake(2, 0, 1)
     };
-    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:3 expect:NIPlaneYZero];
+    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:3 expect:NIPlaneYZero.normal];
 }
 
 - (void)testNIPlaneLeastSquaresPlaneFromPoints3Z {
     NIVector vectors[] = {
         NIVectorMake(0, 0, 0),
-        NIVectorMake(2, 1, 0),
-        NIVectorMake(1, 1, 0)
+        NIVectorMake(1, 1, 0),
+        NIVectorMake(2, 1, 0)
     };
-    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:3 expect:NIPlaneZZero];
+    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:3 expect:NIPlaneZZero.normal];
 }
 
 - (void)testNIPlaneLeastSquaresPlaneFromPoints3N { // three nil (zero) points
@@ -83,7 +83,7 @@
         NIVectorMake(0, 0, 0),
         NIVectorMake(0, 0, 0)
     };
-    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:3 expect:NIPlaneInvalid];
+    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:3 expect:NIPlaneInvalid.normal];
 }
 
 - (void)testNIPlaneLeastSquaresPlaneFromPoints3A { // three aligned points
@@ -92,7 +92,7 @@
         NIVectorMake(1, 1, 1),
         NIVectorMake(2, 2, 2)
     };
-    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:3 expect:NIPlaneInvalid];
+    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:3 expect:NIPlaneInvalid.normal];
 }
 
 - (void)testNIPlaneLeastSquaresPlaneFromPoints4X {
@@ -102,17 +102,17 @@
         NIVectorMake(0, 1, 2),
         NIVectorMake(0, 2, 1)
     };
-    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:3 expect:NIPlaneXZero];
+    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:4 expect:NIPlaneXZero.normal];
 }
 
 - (void)testNIPlaneLeastSquaresPlaneFromPoints4Y {
     NIVector vectors[] = {
         NIVectorMake(0, 0, 0),
-        NIVectorMake(1, 0, 2),
         NIVectorMake(1, 0, 1),
+        NIVectorMake(1, 0, 2),
         NIVectorMake(2, 0, 1)
     };
-    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:3 expect:NIPlaneYZero];
+    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:4 expect:NIPlaneYZero.normal];
 }
 
 - (void)testNIPlaneLeastSquaresPlaneFromPoints4Z {
@@ -122,7 +122,7 @@
         NIVectorMake(1, 2, 0),
         NIVectorMake(2, 1, 0)
     };
-    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:3 expect:NIPlaneZZero];
+    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:4 expect:NIPlaneZZero.normal];
 }
 
 - (void)testNIPlaneLeastSquaresPlaneFromPoints4N { // four nil (zero) points
@@ -132,7 +132,7 @@
         NIVectorMake(0, 0, 0),
         NIVectorMake(0, 0, 0)
     };
-    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:4 expect:NIPlaneInvalid];
+    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:4 expect:NIPlaneInvalid.normal];
 }
 
 - (void)testNIPlaneLeastSquaresPlaneFromPoints4A { // four aligned points
@@ -142,12 +142,12 @@
         NIVectorMake(2, 2, 2),
         NIVectorMake(3, 3, 3)
     };
-    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:4 expect:NIPlaneInvalid];
+    [self subtestNIPlaneLeastSquaresPlaneFromPoints:vectors count:4 expect:NIPlaneInvalid.normal];
 }
 
-- (void)subtestNIPlaneLeastSquaresPlaneFromPoints:(NIVectorArray)points count:(NSUInteger)count expect:(NIPlane)ep {
+- (void)subtestNIPlaneLeastSquaresPlaneFromPoints:(NIVectorArray)points count:(NSUInteger)count expect:(NIVector)normal {
     NIPlane p = NIPlaneLeastSquaresPlaneFromPoints(points, count);
-    XCTAssert(NIPlaneEqualToPlane(p, ep), @"Returned least squares plane %@ is not equal to expected plane %@", NSStringFromNIPlane(p), NSStringFromNIPlane(ep));
+    XCTAssert(NIVectorEqualToVector(p.normal, normal) || NIVectorEqualToVector(p.normal, NIVectorInvert(normal)), @"Returned least squares plane normal %@ is not equal to expected plane normal %@", NSStringFromNIVector(p.normal), NSStringFromNIVector(normal));
 }
 
 @end
