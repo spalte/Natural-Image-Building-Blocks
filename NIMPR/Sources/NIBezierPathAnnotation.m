@@ -76,72 +76,130 @@ static NSString* const NIBezierPathAnnotationFill = @"fill";
 
 - (NIMask*)maskForVolume:(NIVolumeData*)volume {
     NIBezierPath* path = [self.NIBezierPath bezierPathByApplyingTransform:volume.volumeTransform];
-    NIMutableBezierPath* mpath = [[path mutableCopy] autorelease];
     
-    const CGFloat xbf = [mpath bottomBoundingPlaneForNormal:NIVectorXBasis].point.x, xtf = [mpath topBoundingPlaneForNormal:NIVectorXBasis].point.x;
-    const NSInteger xb = CGFloatFloor(xbf), xt = CGFloatCeil(xtf);
-    const CGFloat ybf = [mpath bottomBoundingPlaneForNormal:NIVectorYBasis].point.y, ytf = [mpath topBoundingPlaneForNormal:NIVectorYBasis].point.y;
-    const NSInteger yb = CGFloatFloor(ybf), yt = CGFloatCeil(ytf);
-    const CGFloat zbf = [mpath bottomBoundingPlaneForNormal:NIVectorZBasis].point.z, ztf = [mpath topBoundingPlaneForNormal:NIVectorZBasis].point.z;
-    const NSInteger zb = CGFloatFloor(zbf), zt = CGFloatCeil(ztf);
-    [mpath applyAffineTransform:NIAffineTransformMakeTranslation(-xb, -yb, -zb)];
+    NIMask* mask; {
+        NIMutableBezierPath* mpath = [[path mutableCopy] autorelease];
 
-    const NSUInteger mwidth = xt-xb+1, mheight = yt-yb+1, mdepth = zt-zb+1, mcount = mwidth*mheight*mdepth;
-    float* mfloats = calloc(mcount, sizeof(float));
-    NSData* mdata = [NSData dataWithBytesNoCopy:mfloats length:sizeof(float)*mcount];
-    
-    [mpath subdivide:.1];
-    for (NSInteger i = 0; i < mpath.elementCount; ++i) {
-        NIVector ep;
-        /*NSBezierPathElement e = */[mpath elementAtIndex:i control1:NULL control2:NULL endpoint:&ep];
-//        NSLog(@"--- [%d,%d,%d]", (int)CGFloatRound(ep.x), (int)CGFloatRound(ep.y), (int)CGFloatRound(ep.z));
-        NSInteger x = CGFloatRound(ep.x), y = CGFloatRound(ep.y), z = CGFloatRound(ep.z);
-//        NSLog(@"MASK! [%ld,%ld,%ld] (%f,%f,%f)", (long)x, (long)y, (long)z, ep.x, ep.y, ep.z);
-        if (x >= 0 && y >= 0 && z >= 0 && x < mwidth && y < mheight && z < mdepth)
-            mfloats[x+y*mwidth+z*mheight*mwidth] = 1;
+        const CGFloat xbf = [mpath bottomBoundingPlaneForNormal:NIVectorXBasis].point.x, xtf = [mpath topBoundingPlaneForNormal:NIVectorXBasis].point.x;
+        const NSInteger xb = CGFloatFloor(xbf), xt = CGFloatCeil(xtf);
+        const CGFloat ybf = [mpath bottomBoundingPlaneForNormal:NIVectorYBasis].point.y, ytf = [mpath topBoundingPlaneForNormal:NIVectorYBasis].point.y;
+        const NSInteger yb = CGFloatFloor(ybf), yt = CGFloatCeil(ytf);
+        const CGFloat zbf = [mpath bottomBoundingPlaneForNormal:NIVectorZBasis].point.z, ztf = [mpath topBoundingPlaneForNormal:NIVectorZBasis].point.z;
+        const NSInteger zb = CGFloatFloor(zbf), zt = CGFloatCeil(ztf);
+        if (xb != 0 && yb != 0 && zb != 0)
+            [mpath applyAffineTransform:NIAffineTransformMakeTranslation(-xb, -yb, -zb)];
+
+        const NSUInteger mwidth = xt-xb+1, mheight = yt-yb+1, mdepth = zt-zb+1, mcount = mwidth*mheight*mdepth;
+        float* mfloats = calloc(mcount, sizeof(float));
+        NSData* mdata = [NSData dataWithBytesNoCopy:mfloats length:sizeof(float)*mcount];
+        
+        [mpath subdivide:.1];
+        for (NSInteger i = 0; i < mpath.elementCount; ++i) {
+            NIVector ep;
+            /*NSBezierPathElement e = */[mpath elementAtIndex:i control1:NULL control2:NULL endpoint:&ep];
+    //        NSLog(@"--- [%d,%d,%d]", (int)CGFloatRound(ep.x), (int)CGFloatRound(ep.y), (int)CGFloatRound(ep.z));
+            NSInteger x = CGFloatRound(ep.x), y = CGFloatRound(ep.y), z = CGFloatRound(ep.z);
+    //        NSLog(@"MASK! [%ld,%ld,%ld] (%f,%f,%f)", (long)x, (long)y, (long)z, ep.x, ep.y, ep.z);
+            if (x >= 0 && y >= 0 && z >= 0 && x < mwidth && y < mheight && z < mdepth)
+                mfloats[x+y*mwidth+z*mheight*mwidth] = 1;
+        }
+        
+        mask = [[NIMask maskFromVolumeData:[[[NIVolumeData alloc] initWithData:mdata pixelsWide:mwidth pixelsHigh:mheight pixelsDeep:mdepth volumeTransform:NIAffineTransformConcat(volume.volumeTransform, NIAffineTransformMakeTranslation(-xb, -yb, -zb)) outOfBoundsValue:0] autorelease] volumeTransform:NULL] maskByTranslatingByX:xb Y:yb Z:zb];
     }
-    
-    NIMask* mask = [[NIMask maskFromVolumeData:[[[NIVolumeData alloc] initWithData:mdata pixelsWide:mwidth pixelsHigh:mheight pixelsDeep:mdepth volumeTransform:NIAffineTransformConcat(volume.volumeTransform, NIAffineTransformMakeTranslation(-xb, -yb, -zb)) outOfBoundsValue:0] autorelease] volumeTransform:NULL] maskByTranslatingByX:xb Y:yb Z:zb];
     
     if (self.isPlanar && path.elementCount > 2) {
         NIPlane plane = [path leastSquaresPlane];
         if (NIPlaneIsValid(plane)) {
-            NIAffineTransform pt = NIAffineTransformIdentity;//NIAffineTransformMakeTranslation(-xbf, -ybf, -zbf);//(-CGFloatFloor(xbf+(xtf-xbf)/2), -CGFloatFloor(ybf+(ytf-ybf)/2), -CGFloatFloor(zbf+(ztf-zbf)/2));
-            // rotate so the normal matches the Z axis
-            NIVector cp = NIVectorCrossProduct(plane.normal, NIVectorZBasis);
-            if (!NIVectorIsZero(cp)) {
-                CGFloat angle = NIVectorAngleBetweenVectorsAroundVector(NIVectorZBasis, plane.normal, cp);
-                if (angle)
-                    pt = NIAffineTransformConcat(pt, NIAffineTransformMakeRotationAroundVector(angle, cp));
+            NIMutableBezierPath* mpath = [[path mutableCopy] autorelease];
+            NIAffineTransform mtransform = NIAffineTransformIdentity;
+            
+            // if necessary, rotate so the normal matches the Z axis
+            NIVector raxis = NIVectorCrossProduct(plane.normal, NIVectorZBasis);
+            if (!NIVectorIsZero(raxis)) {
+                CGFloat rangle = NIVectorAngleBetweenVectorsAroundVector(plane.normal, NIVectorZBasis, raxis);
+                if (rangle) {
+                    NSLog(@"angle: %f around %@", rangle, NSStringFromNIVector(raxis));
+                    NIAffineTransform rt = NIAffineTransformMakeRotationAroundVector(rangle, raxis);
+                    mtransform = NIAffineTransformConcat(mtransform, rt);
+                    [mpath applyAffineTransform:rt];
+                }
             }
             
-            NIBezierPath* ppath = [path bezierPathByApplyingTransform:pt];
-            pt = NIAffineTransformConcat(pt, NIAffineTransformMakeTranslation(-CGFloatFloor([ppath bottomBoundingPlaneForNormal:NIVectorXBasis].point.x), -CGFloatFloor([ppath bottomBoundingPlaneForNormal:NIVectorYBasis].point.y), -CGFloatFloor([ppath bottomBoundingPlaneForNormal:NIVectorZBasis].point.z)));
-            ppath = [path bezierPathByApplyingTransform:pt];
+            { // translate to origin
+                const CGFloat xbf = [mpath bottomBoundingPlaneForNormal:NIVectorXBasis].point.x;//, xtf = [mpath topBoundingPlaneForNormal:NIVectorXBasis].point.x;
+                const CGFloat xb = /*((NSInteger)*/CGFloatFloor(xbf)/*)/2*2*/;//, xt = CGFloatCeil(xtf);
+                const CGFloat ybf = [mpath bottomBoundingPlaneForNormal:NIVectorYBasis].point.y;//, ytf = [mpath topBoundingPlaneForNormal:NIVectorYBasis].point.y;
+                const CGFloat yb = /*((NSInteger)*/CGFloatFloor(ybf)/*)/2*2*/;//, yt = CGFloatCeil(ytf);
+                const CGFloat zbf = [mpath bottomBoundingPlaneForNormal:NIVectorZBasis].point.z, ztf = [mpath topBoundingPlaneForNormal:NIVectorZBasis].point.z;
+//                const CGFloat zb = CGFloatFloor(zbf);//, zt = CGFloatCeil(ztf);
+                NIAffineTransform tt = NIAffineTransformMakeTranslation(-xb, -yb, -(zbf+ztf)/2);
+                mtransform = NIAffineTransformConcat(mtransform, tt);
+                [mpath applyAffineTransform:tt];
+            }
             
-            // get the paths plane projection
-            NSBezierPath* path = [ppath NSBezierPath];
+            const CGFloat mf = 2; // magnification factor
+            if (mf != 1) {
+                NIAffineTransform tt = NIAffineTransformMakeScale(mf, mf, 1);
+                mtransform = NIAffineTransformConcat(mtransform, tt);
+                [mpath applyAffineTransform:tt];
+            }
             
-            // draw the annotation path into a bitmap
-            NSRect pbounds = path.bounds;
-            const NSUInteger pwidth = CGFloatCeil(pbounds.size.width), pheight = CGFloatCeil(pbounds.size.height), pcount = pwidth*pheight;
-            NSBitmapImageRep* pimgref = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL pixelsWide:pwidth pixelsHigh:pheight bitsPerSample:sizeof(float)*8 samplesPerPixel:1 // TODO: can we use NSFloatImageRep instead?
-                                                                                   hasAlpha:NO isPlanar:NO colorSpaceName:NSDeviceWhiteColorSpace bitmapFormat:NSFloatingPointSamplesBitmapFormat bytesPerRow:sizeof(float)*pwidth bitsPerPixel:sizeof(float)*8] autorelease];
+            { // TODO: remove
+                NSLog(@"original: ");
+                for (NSUInteger i = 0; i < path.elementCount; ++i) {
+                    NIVector ep;
+                    [path elementAtIndex:i control1:NULL control2:NULL endpoint:&ep];
+                    NSLog(@"  %ld: %@", (unsigned long)i, NSStringFromNIVector(ep));
+                }
+            }
+            
+            mtransform = NIAffineTransformConcat(mtransform, NIAffineTransformMakeTranslation(1, 1, 0.5));
+            NSBezierPath* path = [[mpath bezierPathByApplyingTransform:NIAffineTransformMakeTranslation(1.5,1.5,0)] NSBezierPath];
+
+            const NSUInteger mwidth = CGFloatCeil([mpath topBoundingPlaneForNormal:NIVectorXBasis].point.x/*+dd.x*/)+2, mheight = CGFloatCeil([mpath topBoundingPlaneForNormal:NIVectorYBasis].point.y/*+dd.y*/)+2, mcount = mwidth*mheight;
+            
+//            {
+//                NSLog(@"size: %ld, %ld", (unsigned long)mwidth, (unsigned long)mheight);
+//                NSLog(@"endpoints: %ld", (unsigned long)path.elementCount);
+//                for (NSUInteger i = 0; i < path.elementCount; ++i) {
+//                    NSPoint p[3];
+//                    NSBezierPathElement e = [path elementAtIndex:i associatedPoints:p];
+//                    size_t ei = 0;
+//                    if (e == NSCurveToBezierPathElement)
+//                        ei = 2;
+//                    NSLog(@"  %ld: %@", (unsigned long)i, NSStringFromPoint(p[ei]));
+//                }
+//            }
+            
+            NSBitmapImageRep* pimgref = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL pixelsWide:mwidth pixelsHigh:mheight bitsPerSample:sizeof(float)*8 samplesPerPixel:1
+                                                                                   hasAlpha:NO isPlanar:NO colorSpaceName:NSDeviceWhiteColorSpace bitmapFormat:NSFloatingPointSamplesBitmapFormat bytesPerRow:sizeof(float)*mwidth bitsPerPixel:sizeof(float)*8] autorelease];
             NSGraphicsContext* pctx = [NSGraphicsContext graphicsContextWithBitmapImageRep:pimgref];
             [NSGraphicsContext saveGraphicsState];
             [NSGraphicsContext setCurrentContext:pctx];
+            NSAffineTransform* flip = [NSAffineTransform transform];
+            [flip translateXBy:0 yBy:mheight];
+            [flip scaleXBy:1 yBy:-1];
+//            [flip translateXBy:0 yBy:amheight-mheight]; NSLog(@"translation: %d", amheight-mheight);
+            [flip set];
             [[NSColor whiteColor] set];
+//            [[NSBezierPath bezierPathWithRect:path.bounds] fill];
             if (self.fill)
                 [path fill];
             else [path stroke];
             [NSGraphicsContext restoreGraphicsState];
             
+//            {
+//                NSImage* img = [[NSImage alloc] initWithSize:NSMakeSize(mwidth, mheight)];
+//                [img addRepresentation:pimgref];
+//                [[img TIFFRepresentation] writeToFile:[NSString stringWithFormat:@"/Users/ale/test/test-%f.tif", [NSDate timeIntervalSinceReferenceDate]] atomically:YES];
+//            }
+            
             // use the bitmap for a flat volume and resample it
-            NIVolumeData* pvol = [[[NIVolumeData alloc] initWithData:[NSData dataWithBytesNoCopy:pimgref.bitmapData length:pcount*sizeof(float) freeWhenDone:NO] pixelsWide:pwidth pixelsHigh:pheight pixelsDeep:1 volumeTransform:pt outOfBoundsValue:0] autorelease];
+            NIVolumeData* pvol = [[[NIVolumeData alloc] initWithData:[NSData dataWithBytesNoCopy:pimgref.bitmapData length:mcount*sizeof(float) freeWhenDone:NO] pixelsWide:mwidth pixelsHigh:mheight pixelsDeep:1 volumeTransform:mtransform outOfBoundsValue:0] autorelease];
             pvol = [pvol volumeDataResampledWithVolumeTransform:NIAffineTransformIdentity interpolationMode:NIInterpolationModeCubic];
-            NIMask* pmask = [NIMask maskFromVolumeData:pvol volumeTransform:&pt];
-            pmask = [pmask maskByTranslatingByX:-pt.m41 Y:-pt.m42 Z:-pt.m43];
-            pmask = [pmask binaryMask];
+            NIMask* pmask = [NIMask maskFromVolumeData:pvol volumeTransform:&mtransform];
+            pmask = [pmask maskByTranslatingByX:-mtransform.m41 Y:-mtransform.m42 Z:-mtransform.m43];
+//            pmask = [pmask binaryMaskWithThreashold:0];
             
             return pmask;
         }

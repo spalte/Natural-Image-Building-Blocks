@@ -105,7 +105,7 @@
         if (o) [self removeVolumeDataAtIndex:0];
         if (n) [self insertVolumeData:n atIndex:0];
         self.dataProperties = (n? [self volumeDataPropertiesAtIndex:0] : nil);
-        self.dataProperties.preferredInterpolationMode = NIInterpolationModeCubic;
+        self.dataProperties.preferredInterpolationMode = NIInterpolationModeNearestNeighbor; // NIInterpolationModeCubic
     }
     
     if ([keyPath isEqualToString:@"point"] || [keyPath isEqualToString:@"normal"] || [keyPath isEqualToString:@"xdir"] || [keyPath isEqualToString:@"ydir"] || [keyPath isEqualToString:@"pixelSpacing"] || [keyPath isEqualToString:@"projectionFlag"] || [keyPath isEqualToString:@"projectionMode"] || [keyPath isEqualToString:@"slabWidth"]) {
@@ -134,7 +134,7 @@
     }
     
     if ([keyPath isEqualToString:@"window.windowController.spacebarDown"] || [keyPath isEqualToString:@"window.windowController.ltool"]) {
-        [self flagsChanged:nil];
+        [self flagsChanged:[NSApp currentEvent]];
     }
     
     if ([keyPath isEqualToString:@"annotations"] || [keyPath isEqualToString:@"selectedAnnotations"]) {
@@ -178,6 +178,8 @@
         if (req.slabWidth)
             req.interpolationMode = NIInterpolationModeNone; // the superposition of many slices should result in a smooth render anyway...
     }
+    
+    req.interpolationMode = NIInterpolationModeNearestNeighbor; // TODO: remove
     
     if (![req isEqual:self.generatorRequest])
         self.generatorRequest = req;

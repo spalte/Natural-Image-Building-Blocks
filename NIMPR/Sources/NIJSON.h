@@ -71,7 +71,7 @@ extern NSString* const NIJSONDeflatedAnnotationsFileType;
 + (id)unarchiveObjectWithString:(NSString*)string;
 
 - (instancetype)initForReadingWithString:(NSString *)string;
-- (instancetype)initForReadingWithData:(NSData*)data NS_DESIGNATED_INITIALIZER;
+- (instancetype)initForReadingWithData:(NSData*)data;
 
 - (NSNumber*)decodeNumberForKey:(NSString *)key;
 - (CGFloat)decodeCGFloatForKey:(NSString*)key;

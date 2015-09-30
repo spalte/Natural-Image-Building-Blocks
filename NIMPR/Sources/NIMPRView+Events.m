@@ -285,8 +285,8 @@
             NIVector vlv = [volume convertVolumeVectorFromDICOMVector:locationVector];
             CGFloat v = [volume floatAtPixelCoordinateX:vlv.x y:vlv.y z:vlv.z];
             if (v != volume.outOfBoundsValue)
-                [locationTextParts addObject:[NSString stringWithFormat:@"[%d,%d,%d] Value: %@", (int)vlv.x, (int)vlv.y, (int)vlv.z, [f stringFromNumber:@(v)]]];
-            else [locationTextParts addObject:[NSString stringWithFormat:@"[%d,%d,%d]", (int)vlv.x, (int)vlv.y, (int)vlv.z]];
+                [locationTextParts addObject:[NSString stringWithFormat:@"[%.2f,%.2f,%.2f] Value: %@", vlv.x, vlv.y, vlv.z, [f stringFromNumber:@(v)]]];
+            else [locationTextParts addObject:[NSString stringWithFormat:@"[%.2f,%.2f,%.2f]", vlv.x, vlv.y, vlv.z]];
         }
         
         self.topLeftLabels = @[ [locationTextParts componentsJoinedByString:@" | "] ];

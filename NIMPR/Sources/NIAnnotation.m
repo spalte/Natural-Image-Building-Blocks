@@ -231,12 +231,15 @@ static NSString* const NIANnotationDefaultColorKey = @"NIAnnotationDefaultColor"
 
 - (void)drawInView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache {
     NIVolumeData* v = [view volumeDataAtIndex:0];
+    
     NIMask* mask = [self maskForVolume:v];
-    NIMaskAnnotation* ma = [[NIMaskAnnotation alloc] initWithMask:mask transform:NIAffineTransformInvert(v.volumeTransform)];
+    if (mask) {
+        NIMaskAnnotation* ma = [[NIMaskAnnotation alloc] initWithMask:mask transform:NIAffineTransformInvert(v.volumeTransform)];
+        ma.color = [NSColor redColor];
+        [ma drawInView:view cache:[NSMutableDictionary dictionary]];
+    }
     
-    [ma drawInView:view cache:[NSMutableDictionary dictionary]];
-    
-    NSLog(@"Warning: -[%@ drawInView:cache:] is missing", self.className);
+    //NSLog(@"Warning: -[%@ drawInView:cache:] is missing", self.className);
 }
 
 //- (void)highlightWithColor:(NSColor*)color inView:(NIAnnotatedGeneratorRequestView*)view cache:(NSMutableDictionary*)cache {

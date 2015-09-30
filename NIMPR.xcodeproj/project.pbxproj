@@ -139,6 +139,13 @@
 			remoteGlobalIDString = 4F151EDB1B1CC8D000C8F767;
 			remoteInfo = NIBuildingBlocks;
 		};
+		7169898D1BAB010A00FF4D16 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7194736B1B1D9CA5009363AE /* NIBuildingBlocks.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 71F51E4D1BA00C2E00DF26AC;
+			remoteInfo = "NIBuildingBlocks Tests";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -417,6 +424,7 @@
 			isa = PBXGroup;
 			children = (
 				7136DDE21B44388800D866E8 /* NIBuildingBlocks.framework */,
+				7169898E1BAB010A00FF4D16 /* NIBuildingBlocks Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -657,7 +665,7 @@
 		719D02961AC1CB25002F76C1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = volz.io;
 				TargetAttributes = {
 					710683381B6627DC0078903A = {
@@ -698,6 +706,13 @@
 			fileType = wrapper.framework;
 			path = NIBuildingBlocks.framework;
 			remoteRef = 7136DDE11B44388800D866E8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7169898E1BAB010A00FF4D16 /* NIBuildingBlocks Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "NIBuildingBlocks Tests.xctest";
+			remoteRef = 7169898D1BAB010A00FF4D16 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -859,7 +874,7 @@
 				INFOPLIST_FILE = NIMPR/Resources/Info.framework.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.volz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = NIMPR;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -884,7 +899,7 @@
 				INFOPLIST_FILE = NIMPR/Resources/Info.framework.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.volz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = NIMPR;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -912,6 +927,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -928,8 +944,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.10;
 			};
 			name = Debug;
 		};
@@ -964,8 +981,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.10;
 			};
 			name = Release;
 		};
@@ -982,6 +1000,7 @@
 					"-undefined",
 					dynamic_lookup,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "io.volz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = NIMPR;
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = osirixplugin;
@@ -1001,6 +1020,7 @@
 					"-undefined",
 					dynamic_lookup,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "io.volz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = NIMPR;
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = osirixplugin;

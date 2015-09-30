@@ -330,8 +330,15 @@ NSString* const NIJSONDeflatedAnnotationsFileType = @"ojaz";
 }
 
 - (instancetype)initForWritingWithMutableString:(NSMutableString*)string {
-    if ((self = [super init])) {
+    if ((self = [self init])) {
         self.json = string;
+    }
+    
+    return self;
+}
+
+- (instancetype)init {
+    if ((self = [super init])) {
         self.stack = [NSMutableArray array];
         self.replacements = [NSMutableDictionary dictionary];
     }
@@ -566,9 +573,8 @@ NSString* const NIJSONDeflatedAnnotationsFileType = @"ojaz";
 }
 
 - (instancetype)initForReadingWithData:(NSData*)data {
-    if ((self = [super init])) {
+    if ((self = [self init])) {
         NSError* err = nil;
-        self.stack = [NSMutableArray array];
         self.json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&err];
         if (!self.json)
             [NSException raise:NSInvalidUnarchiveOperationException format:@"NSJSONSerialization error: %@", err.localizedDescription];
@@ -578,8 +584,17 @@ NSString* const NIJSONDeflatedAnnotationsFileType = @"ojaz";
     return self;
 }
 
+- (instancetype)init {
+    if ((self = [super init])) {
+        self.stack = [NSMutableArray array];
+    }
+    
+    return self;
+}
+
 - (void)dealloc {
     self.json = nil;
+    self.stack = nil;
     [super dealloc];
 }
 

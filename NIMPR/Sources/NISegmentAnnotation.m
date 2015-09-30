@@ -63,7 +63,7 @@
 }
 
 - (NIMask*)maskForVolume:(NIVolumeData*)volume {
-    NIVector vp = [volume convertVolumeVectorFromDICOMVector:self.p], vq = [volume convertVolumeVectorFromDICOMVector:self.q];
+//    NIVector vp = [volume convertVolumeVectorFromDICOMVector:self.p], vq = [volume convertVolumeVectorFromDICOMVector:self.q];
 //    NSUInteger d = CGFloatMax(CGFloatRound(NIVectorDistance(vp, vq)), 1);
 //    
 //    NIVector pq = NIVectorSubtract(self.q, self.p);
@@ -83,13 +83,13 @@
 //    mask = [mask maskByResamplingFromVolumeTransform:NIAffineTransformIdentity toVolumeTransform:destTransform interpolationMode:NIInterpolationModeCubic];
 //    mask = [mask binaryMask];
 //    
-    NSLog(@"......................... Mask for %@... \nvolume %@ to %@", self, NSStringFromNIVector(vp), NSStringFromNIVector(vq));
+//    NSLog(@"......................... Mask for %@... \nvolume %@ to %@", self, NSStringFromNIVector(vp), NSStringFromNIVector(vq));
 
     NIMask* mask = [super maskForVolume:volume];
     
 //    NSLog(@"Segment mask: %@", mask);
-    NSLog(@"%@", mask);
-//    
+//    NSLog(@"%@", mask);
+//
     return mask;
 }
 

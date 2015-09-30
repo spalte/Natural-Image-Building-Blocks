@@ -205,8 +205,12 @@
     
     NSPopover* po = _popover = [[[NSPopover alloc] init] autorelease];
     po.delegate = self;
-    po.appearance = [NSAppearance appearanceNamed:NSAppearanceNameVibrantDark];
     po.contentViewController = [self popoverViewController];
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_10
+    po.appearance = [NSAppearance appearanceNamed:NSAppearanceNameVibrantDark];
+#else
+    po.appearance = NSPopoverAppearanceHUD;
+#endif
     
     return po;
 }

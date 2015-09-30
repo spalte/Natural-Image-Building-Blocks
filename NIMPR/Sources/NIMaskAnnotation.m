@@ -128,7 +128,7 @@ static NSString* const NIMaskAnnotationMask = @"mask";
         if (!_volume) {
             NIVolumeData* volume = [self.mask volumeDataRepresentationWithVolumeTransform:NIAffineTransformInvert(self.modelToDicomTransform)];
             self.mask = nil;
-            self.modelToDicomTransform = NIAffineTransformIdentity;
+            self.modelToDicomTransform = NIAffineTransformIdentity; // NIAffineTransformMakeTranslation(-0.5, -0.5, -0.5);
             _volume = [volume retain];
         }
         return _volume;
@@ -196,12 +196,14 @@ static NSString* const NIMaskAnnotationMask = @"mask";
         [flip scaleXBy:1 yBy:-1];
         
         NIVolumeData* data = [self volume];
+//        data = [data volumeDataByApplyingTransform:NIAffineTransformMakeTranslationWithVector(NIVectorApplyTransformToDirectionalVector(NIVectorMake(-.5, -.5, -.5), NIAffineTransformInvert(data.volumeTransform)))];
         
         vImage_Buffer sib, sibd;//, wib;
         NSBitmapImageRep *si, *sid;//, *wi;
 
         NIObliqueSliceGeneratorRequest* req = [[view.presentedGeneratorRequest copy] autorelease];
         req.interpolationMode = NIInterpolationModeNearestNeighbor;
+//        req.origin = NIVectorSubtract(req.origin, NIVectorApplyTransformToDirectionalVector(NIVectorMake(.5, .5, .5), NIAffineTransformInvert(data.volumeTransform)));
         
 //        [self.volumeLock lock];
         @synchronized (self) {
@@ -209,7 +211,7 @@ static NSString* const NIMaskAnnotationMask = @"mask";
             NIVolumeData* vd = [NIGenerator synchronousRequestVolume:req volumeData:data];
             sib = [vd floatBufferForSliceAtIndex:0];
             unsigned char* bdp[1] = {sib.data};
-            si = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:bdp pixelsWide:sib.width pixelsHigh:sib.height bitsPerSample:sizeof(float)*8 samplesPerPixel:1 // TODO: can we use NSFloatImageRep instead?
+            si = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:bdp pixelsWide:sib.width pixelsHigh:sib.height bitsPerSample:sizeof(float)*8 samplesPerPixel:1
                                                             hasAlpha:NO isPlanar:NO colorSpaceName:NSDeviceWhiteColorSpace bitmapFormat:NSFloatingPointSamplesBitmapFormat bytesPerRow:sib.rowBytes bitsPerPixel:sizeof(float)*8] autorelease];
             
             // render border
