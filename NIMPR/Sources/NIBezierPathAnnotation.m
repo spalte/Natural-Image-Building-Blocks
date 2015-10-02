@@ -125,6 +125,16 @@ static NSString* const NIBezierPathAnnotationFill = @"fill";
                 }
             }
             
+            // save this transform
+            NIAffineTransform ttransform = mtransform;
+            
+            const CGFloat mf = 1; // magnification factor
+            if (mf != 1) {
+                NIAffineTransform tt = NIAffineTransformMakeScale(mf, mf, 1);
+                mtransform = NIAffineTransformConcat(mtransform, tt);
+                [mpath applyAffineTransform:tt];
+            }
+            
             { // translate to origin
                 const CGFloat xbf = [mpath bottomBoundingPlaneForNormal:NIVectorXBasis].point.x;//, xtf = [mpath topBoundingPlaneForNormal:NIVectorXBasis].point.x;
                 const CGFloat xb = /*((NSInteger)*/CGFloatFloor(xbf)/*)/2*2*/;//, xt = CGFloatCeil(xtf);
@@ -137,29 +147,22 @@ static NSString* const NIBezierPathAnnotationFill = @"fill";
                 [mpath applyAffineTransform:tt];
             }
             
-            const CGFloat mf = 2; // magnification factor
-            if (mf != 1) {
-                NIAffineTransform tt = NIAffineTransformMakeScale(mf, mf, 1);
-                mtransform = NIAffineTransformConcat(mtransform, tt);
-                [mpath applyAffineTransform:tt];
-            }
+//            { // TODO: remove
+//                NSLog(@"original: ");
+//                for (NSUInteger i = 0; i < path.elementCount; ++i) {
+//                    NIVector ep;
+//                    [path elementAtIndex:i control1:NULL control2:NULL endpoint:&ep];
+//                    NSLog(@"  %ld: %@", (unsigned long)i, NSStringFromNIVector(ep));
+//                }
+//            }
             
-            { // TODO: remove
-                NSLog(@"original: ");
-                for (NSUInteger i = 0; i < path.elementCount; ++i) {
-                    NIVector ep;
-                    [path elementAtIndex:i control1:NULL control2:NULL endpoint:&ep];
-                    NSLog(@"  %ld: %@", (unsigned long)i, NSStringFromNIVector(ep));
-                }
-            }
+            NSBezierPath* path = [mpath NSBezierPath];
+//            const NSUInteger mwidth = CGFloatCeil([mpath topBoundingPlaneForNormal:NIVectorXBasis].point.x/*+dd.x*/)+2, mheight = CGFloatCeil([mpath topBoundingPlaneForNormal:NIVectorYBasis].point.y/*+dd.y*/)+2, mcount = mwidth*mheight;
+            NSRect pbounds = [path bounds];
+            const NSUInteger pwidth = CGFloatCeil(NSMaxX(pbounds)), pheight = CGFloatCeil(NSMaxY(pbounds)), mb = 1, mwidth = pwidth+mb*2, mheight = pheight+mb*2, mcount = mwidth*mheight;
             
-            mtransform = NIAffineTransformConcat(mtransform, NIAffineTransformMakeTranslation(1, 1, 0.5));
-            NSBezierPath* path = [[mpath bezierPathByApplyingTransform:NIAffineTransformMakeTranslation(1.5,1.5,0)] NSBezierPath];
-
-            const NSUInteger mwidth = CGFloatCeil([mpath topBoundingPlaneForNormal:NIVectorXBasis].point.x/*+dd.x*/)+2, mheight = CGFloatCeil([mpath topBoundingPlaneForNormal:NIVectorYBasis].point.y/*+dd.y*/)+2, mcount = mwidth*mheight;
-            
-//            {
-//                NSLog(@"size: %ld, %ld", (unsigned long)mwidth, (unsigned long)mheight);
+            {
+                NSLog(@"size: %ld, %ld", (unsigned long)mwidth, (unsigned long)mheight);
 //                NSLog(@"endpoints: %ld", (unsigned long)path.elementCount);
 //                for (NSUInteger i = 0; i < path.elementCount; ++i) {
 //                    NSPoint p[3];
@@ -169,18 +172,22 @@ static NSString* const NIBezierPathAnnotationFill = @"fill";
 //                        ei = 2;
 //                    NSLog(@"  %ld: %@", (unsigned long)i, NSStringFromPoint(p[ei]));
 //                }
-//            }
+            }
             
             NSBitmapImageRep* pimgref = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL pixelsWide:mwidth pixelsHigh:mheight bitsPerSample:sizeof(float)*8 samplesPerPixel:1
                                                                                    hasAlpha:NO isPlanar:NO colorSpaceName:NSDeviceWhiteColorSpace bitmapFormat:NSFloatingPointSamplesBitmapFormat bytesPerRow:sizeof(float)*mwidth bitsPerPixel:sizeof(float)*8] autorelease];
             NSGraphicsContext* pctx = [NSGraphicsContext graphicsContextWithBitmapImageRep:pimgref];
             [NSGraphicsContext saveGraphicsState];
             [NSGraphicsContext setCurrentContext:pctx];
+
+            mtransform = NIAffineTransformConcat(mtransform, NIAffineTransformMakeTranslation(mb, mb, 0));
             NSAffineTransform* flip = [NSAffineTransform transform];
-            [flip translateXBy:0 yBy:mheight];
+            const CGFloat madj = .5;
+            [flip translateXBy:mb+madj yBy:mheight-mb-madj];
             [flip scaleXBy:1 yBy:-1];
 //            [flip translateXBy:0 yBy:amheight-mheight]; NSLog(@"translation: %d", amheight-mheight);
             [flip set];
+            
             [[NSColor whiteColor] set];
 //            [[NSBezierPath bezierPathWithRect:path.bounds] fill];
             if (self.fill)
@@ -188,20 +195,25 @@ static NSString* const NIBezierPathAnnotationFill = @"fill";
             else [path stroke];
             [NSGraphicsContext restoreGraphicsState];
             
-//            {
-//                NSImage* img = [[NSImage alloc] initWithSize:NSMakeSize(mwidth, mheight)];
-//                [img addRepresentation:pimgref];
-//                [[img TIFFRepresentation] writeToFile:[NSString stringWithFormat:@"/Users/ale/test/test-%f.tif", [NSDate timeIntervalSinceReferenceDate]] atomically:YES];
-//            }
+            if (/* DISABLES CODE */ (NO)) {
+                NSImage* img = [[[NSImage alloc] initWithSize:NSMakeSize(mwidth, mheight)] autorelease];
+                [img addRepresentation:pimgref];
+                [[img TIFFRepresentation] writeToFile:[NSString stringWithFormat:@"/Users/ale/test/test-%f.tif", [NSDate timeIntervalSinceReferenceDate]] atomically:YES];
+            }
             
             // use the bitmap for a flat volume and resample it
             NIVolumeData* pvol = [[[NIVolumeData alloc] initWithData:[NSData dataWithBytesNoCopy:pimgref.bitmapData length:mcount*sizeof(float) freeWhenDone:NO] pixelsWide:mwidth pixelsHigh:mheight pixelsDeep:1 volumeTransform:mtransform outOfBoundsValue:0] autorelease];
-            pvol = [pvol volumeDataResampledWithVolumeTransform:NIAffineTransformIdentity interpolationMode:NIInterpolationModeCubic];
-            NIMask* pmask = [NIMask maskFromVolumeData:pvol volumeTransform:&mtransform];
-            pmask = [pmask maskByTranslatingByX:-mtransform.m41 Y:-mtransform.m42 Z:-mtransform.m43];
-//            pmask = [pmask binaryMaskWithThreashold:0];
+            NIVolumeData* mvol = [pvol volumeDataResampledWithVolumeTransform:NIAffineTransformIdentity interpolationMode:NIInterpolationModeCubic];
+//            if (CGFloatAbs(CGFloatMod(mvol.volumeTransform.m43, 1)) == .5) {
+//                mvol = [pvol volumeDataResampledWithVolumeTransform:NIAffineTransformMakeTranslationWithVector(NIVectorApplyTransformToDirectionalVector(NIVectorMake(0, 0, -.5), NIAffineTransformInvert(ttransform))) interpolationMode:NIInterpolationModeCubic];
+//            }
             
-            return pmask;
+            NIMask* mask = [NIMask maskFromVolumeData:mvol volumeTransform:&mtransform];
+            NSLog(@"trans: %@ %@", NSStringFromNIVector(NIVectorMake(mtransform.m41, mtransform.m42, mtransform.m43)), (CGFloatMod(mvol.volumeTransform.m43, 1) != 0 ? @"WARNING...." : @""));
+            mask = [mask maskByTranslatingByX:-mtransform.m41 Y:-mtransform.m42 Z:-mtransform.m43];
+          // mask = [mask binaryMaskWithThreashold:0];
+            
+            return mask;
         }
     }
     
