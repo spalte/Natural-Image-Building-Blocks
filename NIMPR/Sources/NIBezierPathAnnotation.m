@@ -204,6 +204,7 @@ static NSString* const NIBezierPathAnnotationFill = @"fill";
             // use the bitmap for a flat volume and resample it
             NIVolumeData* pvol = [[[NIVolumeData alloc] initWithData:[NSData dataWithBytesNoCopy:pimgref.bitmapData length:mcount*sizeof(float) freeWhenDone:NO] pixelsWide:mwidth pixelsHigh:mheight pixelsDeep:1 volumeTransform:mtransform outOfBoundsValue:0] autorelease];
             NIVolumeData* mvol = [pvol volumeDataResampledWithVolumeTransform:NIAffineTransformIdentity interpolationMode:NIInterpolationModeCubic];
+//            NIVolumeData* mvol = [pvol volumeDataResampledWithVolumeTransform:volume.volumeTransform pixelsWide:volume.pixelsWide pixelsHigh:volume.pixelsHigh pixelsDeep:volume.pixelsDeep interpolationMode:NIInterpolationModeCubic];
 //            if (CGFloatAbs(CGFloatMod(mvol.volumeTransform.m43, 1)) == .5) {
 //                mvol = [pvol volumeDataResampledWithVolumeTransform:NIAffineTransformMakeTranslationWithVector(NIVectorApplyTransformToDirectionalVector(NIVectorMake(0, 0, -.5), NIAffineTransformInvert(ttransform))) interpolationMode:NIInterpolationModeCubic];
 //            }
