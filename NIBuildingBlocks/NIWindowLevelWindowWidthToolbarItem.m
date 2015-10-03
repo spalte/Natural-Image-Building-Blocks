@@ -57,7 +57,6 @@
 
 - (void)dealloc
 {
-    _popover.contentViewController.view = nil;
     [_popover release];
     _popover = nil;
 
