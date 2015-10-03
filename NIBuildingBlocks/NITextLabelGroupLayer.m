@@ -140,8 +140,8 @@
     }
 
     for (i = 1; i < [[self sublayers] count]; i++) {
-        NIAnnotationTextLayer *prevTextLayer = self.sublayers[i-1];
-        NIAnnotationTextLayer *textLayer = self.sublayers[i];
+        NIAnnotationTextLayer *prevTextLayer = (NIAnnotationTextLayer *)self.sublayers[i-1];
+        NIAnnotationTextLayer *textLayer = (NIAnnotationTextLayer *)self.sublayers[i];
 
         [textLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:prevTextLayer.name attribute:kCAConstraintMinY]];
 

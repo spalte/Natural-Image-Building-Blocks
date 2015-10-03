@@ -732,7 +732,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
 
 - (NIVolumeData *)volumeDataAtIndex:(NSUInteger)index
 {
-    return [[_volumeDataComposingLayer sublayers][index] volumeData];
+    return [(NIGeneratorRequestLayer *)[_volumeDataComposingLayer sublayers][index] volumeData];
 }
 
 - (NSMutableDictionary *)volumeDataPropertiesAtIndex:(NSUInteger)index

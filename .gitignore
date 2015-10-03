@@ -2,5 +2,8 @@ NIBuildingBlocks/NIBuildingBlocks-Info.h
 xcuserdata
 *.DS_Store
 *.xccheckout
+*.moved-aside
+*.xcuserstate
+*.xcscmblueprint
 __MACOSX/
 build/
