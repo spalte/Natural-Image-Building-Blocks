@@ -61,9 +61,12 @@
     NSLog(@"Transformed mask: %@", tmask);
     
     XCTAssert(tmask.maskRunCount > 0, @"Mask resampling result must not be empty");
-    
-    for (NSValue* mr in tmask.maskRuns)
-        XCTAssert(mr.NIMaskRunValue.intensity >= 0 && mr.NIMaskRunValue.intensity <= 1, @"Invalid intensity for mark run %@", NSStringFromNIMaskRun(mr.NIMaskRunValue));
+
+    if (im != NIInterpolationModeCubic) { // cubic interpolation of positive valies can give negative numbers
+        for (NSValue* mr in tmask.maskRuns) {
+            XCTAssert(mr.NIMaskRunValue.intensity >= 0 && mr.NIMaskRunValue.intensity <= 1, @"Invalid intensity for mark run %@", NSStringFromNIMaskRun(mr.NIMaskRunValue));
+        }
+    }
 }
 
 //- (void)testPerformanceExample {

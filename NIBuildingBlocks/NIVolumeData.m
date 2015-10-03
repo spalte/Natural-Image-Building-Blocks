@@ -398,7 +398,7 @@
     NIVector yBasis = NIVectorApplyTransformToDirectionalVector(NIVectorYBasis, newVoxelToDicomTransform);
     NIVector zBasis = NIVectorApplyTransformToDirectionalVector(NIVectorZBasis, newVoxelToDicomTransform);
 
-    request.origin = NIVectorApplyTransform(NIVectorMake(0, 0, floor((CGFloat)pixelsDeep) / 2.0), newVoxelToDicomTransform);
+    request.origin = NIVectorApplyTransform(NIVectorMake(0, 0, floor(((CGFloat)pixelsDeep) / 2.0)), newVoxelToDicomTransform);
     request.directionX = NIVectorNormalize(xBasis);
     request.directionY = NIVectorNormalize(yBasis);
     request.directionZ = NIVectorNormalize(zBasis);
@@ -409,7 +409,6 @@
 
     request.pixelsWide = pixelsWide;
     request.pixelsHigh = pixelsHigh;
-    request.slabWidth = NIVectorLength(zBasis) * ((CGFloat)pixelsDeep - 1);
 
     if (pixelsDeep % 2) {
         request.slabWidth = NIVectorLength(zBasis) * ((CGFloat)pixelsDeep - 1);

@@ -184,91 +184,78 @@ CF_INLINE float NIVolumeDataGetFloatAtPixelCoordinate(NIVolumeDataInlineBuffer *
     }
 }
 
+CF_INLINE NSInteger NIVolumeDataIndexAtCoordinate(NSInteger x, NSInteger y, NSInteger z, NSUInteger pixelsWide, NSInteger pixelsHigh, NSInteger pixelsDeep, NSInteger outOfBoundsIndex)
+{
+    if (x < 0 || x >= pixelsWide ||
+        y < 0 || y >= pixelsHigh ||
+        z < 0 || z >= pixelsDeep) {
+        return outOfBoundsIndex;
+    }
+    return x + pixelsWide*(y + pixelsHigh*z);
+}
+
+CF_INLINE NSInteger NIVolumeDataUncheckedIndexAtCoordinate(NSInteger x, NSInteger y, NSInteger z, NSUInteger pixelsWide, NSInteger pixelsHigh, NSInteger pixelsDeep)
+{
+    return x + pixelsWide*(y + pixelsHigh*z);
+}
+
+CF_INLINE void NIVolumeDataGetLinearIndexes(NSInteger linearIndexes[8], NSInteger x, NSInteger y, NSInteger z, NSUInteger pixelsWide, NSInteger pixelsHigh, NSInteger pixelsDeep, NSInteger outOfBoundsIndex)
+{
+    if (x < 0 || y < 0 || z < 0 || x >= pixelsWide-1 || y >= pixelsHigh-1 || z >= pixelsDeep-1) {
+        for (int i = 0; i < 2; ++i) {
+            for (int j = 0; j < 2; ++j) {
+                for (int k = 0; k < 2; ++k) {
+                    linearIndexes[i+2*(j+2*k)] = NIVolumeDataIndexAtCoordinate(x+i, y+j, z+k, pixelsWide, pixelsHigh, pixelsDeep, outOfBoundsIndex);
+                }
+            }
+        }
+    } else {
+        for (int i = 0; i < 2; ++i) {
+            for (int j = 0; j < 2; ++j) {
+                for (int k = 0; k < 2; ++k) {
+                    linearIndexes[i+2*(j+2*k)] = NIVolumeDataUncheckedIndexAtCoordinate(x+i, y+j, z+k, pixelsWide, pixelsHigh, pixelsDeep);
+                }
+            }
+        }
+    }
+}
+
 CF_INLINE float NIVolumeDataLinearInterpolatedFloatAtVolumeCoordinate(NIVolumeDataInlineBuffer *inlineBuffer, CGFloat x, CGFloat y, CGFloat z) // coordinate in the pixel space
 {
-    float returnValue;
 
-    NSInteger floorX = (x);
-    NSInteger ceilX = floorX+1.0;
-    NSInteger floorY = (y);
-    NSInteger ceilY = floorY+1.0;
-    NSInteger floorZ = (z);
-    NSInteger ceilZ = floorZ+1.0;
+#if CGFLOAT_IS_DOUBLE
+    const CGFloat x_floor = floor(x);
+    const CGFloat y_floor = floor(y);
+    const CGFloat z_floor = floor(z);
+#else
+    const CGFloat x_floor = floorf(x);
+    const CGFloat y_floor = floorf(y);
+    const CGFloat z_floor = floorf(z);
+#endif
 
-    bool outside = false;
-    outside |= floorX < 0;
-    outside |= floorY < 0;
-    outside |= floorZ < 0;
-    outside |= ceilX >= inlineBuffer->pixelsWide;
-    outside |= ceilY >= inlineBuffer->pixelsHigh;
-    outside |= ceilZ >= inlineBuffer->pixelsDeep;
+    // this is a horible hack, but it works
+    // what I'm doing is looking at memory addresses to find an index into inlineBuffer->floatBytes that would jump out of
+    // the array and instead point to inlineBuffer->outOfBoundsValue which is on the stack
+    // This relies on both inlineBuffer->floatBytes and inlineBuffer->outOfBoundsValue being on a sizeof(float) boundry
+    NSInteger outOfBoundsIndex = (((NSInteger)&(inlineBuffer->outOfBoundsValue)) - ((NSInteger)inlineBuffer->floatBytes)) / sizeof(float);
 
-    if (outside || !inlineBuffer->floatBytes) {
-        returnValue = inlineBuffer->outOfBoundsValue;
-    } else {
-        float xd = x - floorX;
-        float yd = y - floorY;
-        float zd = z - floorZ;
-        //
-        //        float xda = 1.0f - xd;
-        //        float yda = 1.0f - yd;
-        //        float zda = 1.0f - zd;
-        //
-        //        float i1 = NIVolumeDataGetFloatAtPixelCoordinate(inlineBuffer, floorX, floorY, floorZ)*zda + NIVolumeDataGetFloatAtPixelCoordinate(inlineBuffer, floorX, floorY, ceilZ)*zd;
-        //        float i2 = NIVolumeDataGetFloatAtPixelCoordinate(inlineBuffer, floorX, ceilY, floorZ)*zda + NIVolumeDataGetFloatAtPixelCoordinate(inlineBuffer, floorX, ceilY, ceilZ)*zd;
-        //
-        //        float w1 = i1*yda + i2*yd;
-        //
-        //        float j1 = NIVolumeDataGetFloatAtPixelCoordinate(inlineBuffer, ceilX, floorY, floorZ)*zda + NIVolumeDataGetFloatAtPixelCoordinate(inlineBuffer, ceilX, floorY, ceilZ)*zd;
-        //        float j2 = NIVolumeDataGetFloatAtPixelCoordinate(inlineBuffer, ceilX, ceilY, floorZ)*zda + NIVolumeDataGetFloatAtPixelCoordinate(inlineBuffer, ceilX, ceilY, ceilZ)*zd;
-        //
-        //        float w2 = j1*yda + j2*yd;
-        //
-        //        returnValue = w1*xda + w2*xd;
+    NSInteger linearIndexes[8];
+    NIVolumeDataGetLinearIndexes(linearIndexes, x_floor, y_floor, z_floor, inlineBuffer->pixelsWide, inlineBuffer->pixelsHigh, inlineBuffer->pixelsDeep, outOfBoundsIndex);
 
+    const float *floatBytes = inlineBuffer->floatBytes;
 
-#define trilinFuncMacro(v,x,y,z,a,b,c,d,e,f,g,h)         \
-t00 =   a + (x)*(b-a);      \
-t01 =   c + (x)*(d-c);      \
-t10 =   e + (x)*(f-e);      \
-t11 =   g + (x)*(h-g);      \
-t0  = t00 + (y)*(t01-t00);  \
-t1  = t10 + (y)*(t11-t10);  \
-v   =  t0 + (z)*(t1-t0);
+    const CGFloat dx1 = x-x_floor;
+    const CGFloat dy1 = y-y_floor;
+    const CGFloat dz1 = z-z_floor;
 
-        float A, B, C, D, E, F, G, H;
-        float t00, t01, t10, t11, t0, t1;
-        int Binc, Cinc, Dinc, Einc, Finc, Ginc, Hinc;
-        int xinc, yinc, zinc;
+    const CGFloat dx0 = 1.0 - dx1;
+    const CGFloat dy0 = 1.0 - dy1;
+    const CGFloat dz0 = 1.0 - dz1;
 
-        xinc = 1;
-        yinc = (int)inlineBuffer->pixelsWide;
-        zinc = (int)inlineBuffer->pixelsWideTimesPixelsHigh;
-
-        // Compute the increments to get to the other 7 voxel vertices from A
-        Binc = xinc;
-        Cinc = yinc;
-        Dinc = xinc + yinc;
-        Einc = zinc;
-        Finc = zinc + xinc;
-        Ginc = zinc + yinc;
-        Hinc = zinc + xinc + yinc;
-
-        // Set values for the first pass through the loop
-        const float *dptr = inlineBuffer->floatBytes + floorZ * zinc + floorY * yinc + floorX;
-        A = *(dptr);
-        B = *(dptr + Binc);
-        C = *(dptr + Cinc);
-        D = *(dptr + Dinc);
-        E = *(dptr + Einc);
-        F = *(dptr + Finc);
-        G = *(dptr + Ginc);
-        H = *(dptr + Hinc);
-
-        trilinFuncMacro( returnValue, xd, yd, zd, A, B, C, D, E, F, G, H );
-    }
-
-    return returnValue;
+    return (dz0*(dy0*(dx0*floatBytes[linearIndexes[0+2*(0+2*0)]] + dx1*floatBytes[linearIndexes[1+2*(0+2*0)]]) +
+                 dy1*(dx0*floatBytes[linearIndexes[0+2*(1+2*0)]] + dx1*floatBytes[linearIndexes[1+2*(1+2*0)]]))) +
+           (dz1*(dy0*(dx0*floatBytes[linearIndexes[0+2*(0+2*1)]] + dx1*floatBytes[linearIndexes[1+2*(0+2*1)]]) +
+                 dy1*(dx0*floatBytes[linearIndexes[0+2*(1+2*1)]] + dx1*floatBytes[linearIndexes[1+2*(1+2*1)]])));
 }
 
 CF_INLINE float NIVolumeDataNearestNeighborInterpolatedFloatAtVolumeCoordinate(NIVolumeDataInlineBuffer *inlineBuffer, CGFloat x, CGFloat y, CGFloat z) // coordinate in the pixel space
@@ -286,24 +273,9 @@ CF_INLINE float NIVolumeDataNearestNeighborInterpolatedFloatAtVolumeCoordinate(N
     return NIVolumeDataGetFloatAtPixelCoordinate(inlineBuffer, roundX, roundY, roundZ);
 }
 
-CF_INLINE NSInteger NIVolumeDataIndexAtCoordinate(NSInteger x, NSInteger y, NSInteger z, NSUInteger pixelsWide, NSInteger pixelsHigh, NSInteger pixelsDeep, NSInteger outOfBoundsIndex)
-{
-    if (x < 0 || x >= pixelsWide ||
-        y < 0 || y >= pixelsHigh ||
-        z < 0 || z >= pixelsDeep) {
-        return outOfBoundsIndex;
-    }
-    return x + pixelsWide*(y + pixelsHigh*z);
-}
-
-CF_INLINE NSInteger NIVolumeDataUncheckedIndexAtCoordinate(NSInteger x, NSInteger y, NSInteger z, NSUInteger pixelsWide, NSInteger pixelsHigh, NSInteger pixelsDeep)
-{
-    return x + pixelsWide*(y + pixelsHigh*z);
-}
-
 CF_INLINE void NIVolumeDataGetCubicIndexes(NSInteger cubicIndexes[64], NSInteger x, NSInteger y, NSInteger z, NSUInteger pixelsWide, NSInteger pixelsHigh, NSInteger pixelsDeep, NSInteger outOfBoundsIndex)
 {
-    if (x <= 2 || y <= 2 || z <= 2 || x >= pixelsWide-3 || y >= pixelsHigh-3 || z >= pixelsDeep-3) {
+    if (x <= 0 || y <= 0 || z <= 0 || x >= pixelsWide-2 || y >= pixelsHigh-2 || z >= pixelsDeep-2) {
         for (int i = 0; i < 4; ++i) {
             for (int j = 0; j < 4; ++j) {
                 for (int k = 0; k < 4; ++k) {
