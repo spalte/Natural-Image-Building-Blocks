@@ -126,7 +126,7 @@ static NSString* const NIBezierPathAnnotationFill = @"fill";
             }
             
             // save this transform
-            NIAffineTransform ttransform = mtransform;
+//            NIAffineTransform ttransform = mtransform;
             
             const CGFloat mf = 1; // magnification factor
             if (mf != 1) {

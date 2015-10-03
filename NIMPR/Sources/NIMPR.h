@@ -12,7 +12,7 @@
     NSBundle* _bundle;
 }
 
-@property(retain,readonly) NSBundle* bundle;
+@property(assign,readonly) NSBundle* bundle;
 
 + (NIMPR*)instance;
 + (NSBundle*)bundle;

@@ -12,6 +12,6 @@
 
 @interface NIMPR ()
 
-@property(retain,readwrite) NSBundle* bundle;
+@property(assign,readwrite) NSBundle* bundle;
 
 @end
