@@ -1,3 +1,4 @@
+
 //  Copyright (c) 2015 OsiriX Foundation
 //  Copyright (c) 2015 Spaltenstein Natural Image
 //
@@ -992,28 +993,19 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return NO;
 }
 
-- (instancetype)maskByResamplingFromVolumeTransform:(NIAffineTransform)fromTransform toVolumeTransform:(NIAffineTransform)toTransform interpolationMode:(NIInterpolationMode)interpolationsMode
++ (instancetype)maskByResamplingFromVolumeData:(NIVolumeData *)volumeData toVolumeTransform:(NIAffineTransform)toTransform interpolationMode:(NIInterpolationMode)interpolationsMode
 {
-    if (NIAffineTransformEqualToTransform(fromTransform, toTransform)) {
-        return self;
-    }
-    
-    if ([self maskRunCount] == 0) {
-        return self;
-    }
-    
-    // The implementation of this function can be made a lot less memory demanding my only sampling one slice at a time instead of the whole volume
     NIMask *resampledMask = nil;
     NIAffineTransform toVolumeTransform = NIAffineTransformIdentity;
     NIVector shift = NIVectorZero;
+
     @autoreleasepool {
-        NIVolumeData *fromVolumeData = [self volumeDataRepresentationWithVolumeTransform:fromTransform];
-        NIVolumeData *toVolumeData = [fromVolumeData volumeDataResampledWithVolumeTransform:toTransform interpolationMode:interpolationsMode];
+        NIVolumeData *toVolumeData = [volumeData volumeDataResampledWithVolumeTransform:toTransform interpolationMode:interpolationsMode];
         resampledMask = [NIMask maskFromVolumeData:toVolumeData volumeTransform:&toVolumeTransform];
-        
+
         // volumeDataResampledWithVolumeTransform can shift the data so that it doesn't store more than it needs to, so figure out how much the shift was, and translate the mask so that is is at the right place
         shift = NIVectorApplyTransform(NIVectorZero, NIAffineTransformConcat(NIAffineTransformInvert(toTransform), toVolumeTransform));
-        
+
 #if CGFLOAT_IS_DOUBLE
         shift.x = round(shift.x);
         shift.y = round(shift.y);
@@ -1023,10 +1015,32 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
         shift.y = roundf(shift.y);
         shift.z = roundf(shift.z);
 #endif
-        
+
         resampledMask = [[resampledMask maskByTranslatingByX:(NSInteger)-shift.x Y:(NSInteger)-shift.y Z:(NSInteger)-shift.z] retain];
     }
+
+    return [resampledMask autorelease];
+
+}
+
+- (instancetype)maskByResamplingFromVolumeTransform:(NIAffineTransform)fromTransform toVolumeTransform:(NIAffineTransform)toTransform interpolationMode:(NIInterpolationMode)interpolationsMode
+{
+    if (NIAffineTransformEqualToTransform(fromTransform, toTransform)) {
+        return self;
+    }
     
+    if ([self maskRunCount] == 0) {
+        return self;
+    }
+
+    NIMask *resampledMask = nil;
+
+    // The implementation of this function can be made a lot less memory demanding my only sampling one slice at a time instead of the whole volume
+    @autoreleasepool {
+        NIVolumeData *fromVolumeData = [self volumeDataRepresentationWithVolumeTransform:fromTransform];
+        resampledMask = [[NIMask maskByResamplingFromVolumeData:fromVolumeData toVolumeTransform:toTransform interpolationMode:interpolationsMode] retain];
+    }
+
     return [resampledMask autorelease];
 }
 

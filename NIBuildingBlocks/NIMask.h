@@ -390,8 +390,13 @@ CF_EXTERN_C_END
 - (BOOL)containsIndex:(NIMaskIndex)index;
 - (BOOL)indexInMask:(NIMaskIndex)index __deprecated;
 
+/** Returns a mask that has been resampled from the volume to coordinates specified by toTransform.
+
+ */
++ (instancetype)maskByResamplingFromVolumeData:(NIVolumeData *)volumeData toVolumeTransform:(NIAffineTransform)toTransform interpolationMode:(NIInterpolationMode)interpolationsMode;
+
 /** Returns a mask that has been resampled from being in the volume as the position fromTransform to a mask that is in the volume at position toTransform.
- 
+
  */
 - (instancetype)maskByResamplingFromVolumeTransform:(NIAffineTransform)fromTransform toVolumeTransform:(NIAffineTransform)toTransform interpolationMode:(NIInterpolationMode)interpolationsMode;
 
@@ -415,10 +420,10 @@ CF_EXTERN_C_END
 
 @end
 
+
 /** NSValue methods to handle Mask types.
  
  */
-
 
 @interface NSValue (NIMaskRun)
 
