@@ -648,8 +648,12 @@ NIPlane NIPlaneLeastSquaresPlaneFromPoints(NIVectorArray vectors, CFIndex numVec
     if (numVectors < 3)
         return NIPlaneInvalid;
     
-    if (numVectors == 3)
-        return NIPlaneMake(vectors[0], NIVectorCrossProduct(NIVectorSubtract(vectors[0], vectors[1]), NIVectorSubtract(vectors[0], vectors[2])));
+    if (numVectors == 3) {
+        NIVector cp = NIVectorCrossProduct(NIVectorSubtract(vectors[0], vectors[1]), NIVectorSubtract(vectors[0], vectors[2]));
+        if (NIVectorLength(cp) == 0)
+            return NIPlaneInvalid;
+        return NIPlaneMake(vectors[0], NIVectorNormalize(cp));
+    }
     
     // calculate center of mass
     __CLPK_doublereal c[3] = {0,0,0};
@@ -697,7 +701,7 @@ NIPlane NIPlaneLeastSquaresPlaneFromPoints(NIVectorArray vectors, CFIndex numVec
     if(w[0] == w[1] && w[1] == w[2]) // degenerate case - return a default horizontal plane that goes through the centroid
         return NIPlaneMake(NIVectorMake(c[0], c[1], c[2]), NIVectorZBasis);
 
-    return NIPlaneMake(NIVectorMake(c[0], c[1], c[2]), NIVectorMake(a[0], a[1], a[2]));
+    return NIPlaneMake(NIVectorMake(c[0], c[1], c[2]), NIVectorNormalize(NIVectorMake(a[0], a[1], a[2])));
     
 #undef N
 #undef LDA
