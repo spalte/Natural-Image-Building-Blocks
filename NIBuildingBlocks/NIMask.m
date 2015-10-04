@@ -328,6 +328,93 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return [[[[self class] alloc] initWithMaskRuns:maskRuns] autorelease];
 }
 
++ (instancetype)maskWithLineFrom:(NIVector)start to:(NIVector)end
+{
+    // return points on a line inspired by Bresenham's line algorithm
+    // This function needs to be optimized and not mak tons and tons of NSValue objects
+
+    NIVector direction;
+    NIVector absDirection;
+    NIVector principleDirection;
+    NIVector secondaryDirection;
+    NIVector tertiaryDirection;
+
+    direction = NIVectorSubtract(end, start);
+    absDirection.x = ABS(direction.x);
+    absDirection.y = ABS(direction.y);
+    absDirection.z = ABS(direction.z);
+
+    principleDirection = NIVectorZero;
+    secondaryDirection = NIVectorZero;
+    tertiaryDirection = NIVectorZero;
+
+    if (absDirection.x > absDirection.y && absDirection.x > absDirection.z) {
+        principleDirection.x = 1;
+        secondaryDirection.y = 1;
+        tertiaryDirection.z = 1;
+    } else if (absDirection.y > absDirection.x && absDirection.y > absDirection.z) {
+        principleDirection.y = 1;
+        secondaryDirection.x = 1;
+        tertiaryDirection.z = 1;
+    } else {
+        principleDirection.z = 1;
+        secondaryDirection.x = 1;
+        tertiaryDirection.y = 1;
+    }
+
+    if (NIVectorComponentsSum(NIVectorMultiply(direction, principleDirection)) == 0) {
+        if (start.x >= 0 && start.y >= 0 && start.z >= 0) {
+            NIMaskIndex maskIndex;
+            maskIndex.x = round((double)start.x);
+            maskIndex.y = round((double)start.y);
+            maskIndex.z = round((double)start.z);
+
+            return [[[NIMask alloc] initWithIndexes:[NSArray arrayWithObject:[NSValue valueWithNIMaskIndex:maskIndex]]] autorelease];
+        } else {
+            return [NIMask mask];
+        }
+    }
+
+    NIVector secondarySlope = NIVectorScalarMultiply(secondaryDirection, NIVectorComponentsSum(NIVectorMultiply(direction, secondaryDirection)) /
+                                                     ABS(NIVectorComponentsSum(NIVectorMultiply(direction, principleDirection))));
+    NIVector tertiarySlope = NIVectorScalarMultiply(tertiaryDirection, NIVectorComponentsSum(NIVectorMultiply(direction, tertiaryDirection)) /
+                                                    ABS(NIVectorComponentsSum(NIVectorMultiply(direction, principleDirection))));
+
+    NSInteger endIndex = round((double)NIVectorComponentsSum(NIVectorMultiply(end, principleDirection)));
+    NSInteger currentIndex = round((double)NIVectorComponentsSum(NIVectorMultiply(start, principleDirection)));
+    BOOL goingForward = (NIVectorComponentsSum(NIVectorMultiply(direction, principleDirection)) > 0);
+
+    NSUInteger i;
+    NSMutableArray *maskIndexArray = [NSMutableArray array];
+    for (i = 0; goingForward ? currentIndex < endIndex : currentIndex > endIndex; i++) {
+        NIVector maskVector = start;
+        if (goingForward) {
+            maskVector = NIVectorAdd(maskVector, NIVectorScalarMultiply(principleDirection, (CGFloat)i));
+        } else {
+            maskVector = NIVectorAdd(maskVector, NIVectorScalarMultiply(principleDirection, -(CGFloat)i));
+        }
+        maskVector = NIVectorAdd(maskVector, NIVectorScalarMultiply(secondarySlope, (CGFloat)i));
+        maskVector = NIVectorAdd(maskVector, NIVectorScalarMultiply(tertiarySlope, (CGFloat)i));
+
+        maskVector.x = round((double)maskVector.x);
+        maskVector.y = round((double)maskVector.y);
+        maskVector.z = round((double)maskVector.z);
+
+        currentIndex = round((double)NIVectorComponentsSum(NIVectorMultiply(maskVector, principleDirection)));
+
+        if (maskVector.x >= 0 && maskVector.y >= 0 && maskVector.z >= 0) {
+            NIMaskIndex maskIndex;
+            maskIndex.x = maskVector.x;
+            maskIndex.y = maskVector.y;
+            maskIndex.z = maskVector.z;
+
+            [maskIndexArray addObject:[NSValue valueWithNIMaskIndex:maskIndex]];
+        }
+    }
+
+    return [[[NIMask alloc] initWithIndexes:maskIndexArray] autorelease];
+}
+
 - (instancetype)init
 {
     if ( (self = [super init]) ) {

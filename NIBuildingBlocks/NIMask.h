@@ -191,6 +191,11 @@ CF_EXTERN_C_END
  */
 + (instancetype)maskWithEllipsoidWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth;
 
+/** Returns a mask formed by drawing the line from start to end.
+
+ */
++ (instancetype)maskWithLineFrom:(NIVector)start to:(NIVector)end;
+
 /** Returns a newly created mask based on the intesities of the volumeData.
  
  The returned mask  is a mask on the volumeData with the intensities of the volumeData.
@@ -314,7 +319,7 @@ CF_EXTERN_C_END
 - (NIVolumeData *)volumeDataRepresentationWithVolumeTransform:(NIAffineTransform)volumeTransform;
 
 /** Returns a mask formed by cropping any indexes that are further out than the bounds specified from the receiver.
- 
+
  */
 - (NIMask *)maskCroppedToWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth;
 

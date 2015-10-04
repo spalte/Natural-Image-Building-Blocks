@@ -129,6 +129,16 @@ NIVector NIVectorZeroZ(NIVector vector)
     return vector;
 }
 
+CGFloat NIVectorComponentsSum(NIVector vector)
+{
+    return vector.x + vector.y + vector.z;
+}
+
+CGFloat NIVectorComponentsProduct(NIVector vector)
+{
+    return vector.x * vector.y * vector.z;
+}
+
 NIVector NIVectorANormalVector(NIVector vector) // returns a vector that is normal to the given vector
 {
     NIVector normal1;
