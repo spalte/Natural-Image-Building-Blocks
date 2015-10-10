@@ -75,6 +75,8 @@
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     double threadPriority;
 
+    NSAssert([_volumeData isCurved] == NO, @"NIHorizontalFillOperation only works with volumes that are not curved");
+
     @try {
         if ([self isCancelled]) {
             return;

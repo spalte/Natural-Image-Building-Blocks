@@ -371,18 +371,21 @@ CF_INLINE float NIVolumeDataCubicInterpolatedFloatAtVolumeCoordinate(NIVolumeDat
          );
 }
 
+__attribute__((deprecated("convert the vector using [-[NIVolumeData convertVolumeVectorFromDICOMVector:] first")))
 CF_INLINE float NIVolumeDataLinearInterpolatedFloatAtDicomVector(NIVolumeDataInlineBuffer *inlineBuffer, NIVector vector) // coordinate in mm dicom space
 {
     vector = NIVectorApplyTransform(vector, inlineBuffer->volumeTransform);
     return NIVolumeDataLinearInterpolatedFloatAtVolumeCoordinate(inlineBuffer, vector.x, vector.y, vector.z);
 }
 
+__attribute__((deprecated("convert the vector using [-[NIVolumeData convertVolumeVectorFromDICOMVector:] first")))
 CF_INLINE float NIVolumeDataNearestNeighborInterpolatedFloatAtDicomVector(NIVolumeDataInlineBuffer *inlineBuffer, NIVector vector) // coordinate in mm dicom space
 {
     vector = NIVectorApplyTransform(vector, inlineBuffer->volumeTransform);
     return NIVolumeDataNearestNeighborInterpolatedFloatAtVolumeCoordinate(inlineBuffer, vector.x, vector.y, vector.z);
 }
 
+__attribute__((deprecated("convert the vector using [-[NIVolumeData convertVolumeVectorFromDICOMVector:] first")))
 CF_INLINE float NIVolumeDataCubicInterpolatedFloatAtDicomVector(NIVolumeDataInlineBuffer *inlineBuffer, NIVector vector) // coordinate in mm dicom space
 {
     vector = NIVectorApplyTransform(vector, inlineBuffer->volumeTransform);
