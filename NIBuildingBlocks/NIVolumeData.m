@@ -306,27 +306,30 @@
 
 - (CGFloat)linearInterpolatedFloatAtDicomVector:(NIVector)vector
 {
+    NIVector volumeVector = [self convertVolumeVectorFromDICOMVector:vector];
     NIVolumeDataInlineBuffer inlineBuffer;
+
     [self aquireInlineBuffer:&inlineBuffer];
-    return NIVolumeDataLinearInterpolatedFloatAtDicomVector(&inlineBuffer, vector);
+    return NIVolumeDataLinearInterpolatedFloatAtVolumeVector(&inlineBuffer, volumeVector);
 }
 
 - (CGFloat)nearestNeighborInterpolatedFloatAtDicomVector:(NIVector)vector
 {
+    NIVector volumeVector = [self convertVolumeVectorFromDICOMVector:vector];
     NIVolumeDataInlineBuffer inlineBuffer;
 
     [self aquireInlineBuffer:&inlineBuffer];
-    return NIVolumeDataNearestNeighborInterpolatedFloatAtDicomVector(&inlineBuffer, vector);
+    return NIVolumeDataNearestNeighborInterpolatedFloatAtVolumeVector(&inlineBuffer, volumeVector);
 }
 
 - (CGFloat)cubicInterpolatedFloatAtDicomVector:(NIVector)vector
 {
+    NIVector volumeVector = [self convertVolumeVectorFromDICOMVector:vector];
     NIVolumeDataInlineBuffer inlineBuffer;
 
     [self aquireInlineBuffer:&inlineBuffer];
-    return NIVolumeDataCubicInterpolatedFloatAtDicomVector(&inlineBuffer, vector);
+    return NIVolumeDataCubicInterpolatedFloatAtVolumeVector(&inlineBuffer, volumeVector);
 }
-
 
 - (instancetype)volumeDataByApplyingTransform:(NIAffineTransform)transform;
 {

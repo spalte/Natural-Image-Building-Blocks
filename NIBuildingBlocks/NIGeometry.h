@@ -105,6 +105,8 @@ NIVector NIVectorDivide(NIVector vector1, NIVector vector2);
 NIVector NIVectorScalarMultiply(NIVector vector1, CGFloat scalar);
 NIVector NIVectorScalarDivide(NIVector vector1, CGFloat scalar);
 NIVector NIVectorZeroZ(NIVector vector);
+CGFloat NIVectorComponentsSum(NIVector vector);
+CGFloat NIVectorComponentsProduct(NIVector vector);
 
 NIVector NIVectorANormalVector(NIVector vector); // returns a vector that is normal to the given vector
 
