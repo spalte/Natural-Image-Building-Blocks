@@ -306,6 +306,13 @@
     return newBezierPath;
 }
 
+- (NIBezierPath *)bezierPathByApplyingConverter:(NIVector (^)(NIVector))converter {
+    NIMutableBezierPath *newBezierPath;
+    newBezierPath = [[self mutableCopy] autorelease];
+    [newBezierPath applyConverter:converter];
+    return newBezierPath;
+}
+
 - (NIBezierPath *)bezierPathByAddingEndpointsAtIntersectionsWithPlane:(NIPlane)plane // will flatten the path if it is not already flattened
 {
     NIMutableBezierPath *newBezierPath;
@@ -757,6 +764,11 @@
 {
     [self _clearRandomAccessor];
     NIBezierCoreApplyTransform(_bezierCore, transform);
+}
+
+- (void)applyConverter:(NIVector (^)(NIVector))converter {
+    [self _clearRandomAccessor];
+    NIBezierCoreApplyConverter(_bezierCore, converter);
 }
 
 - (void)projectToPlane:(NIPlane)plane

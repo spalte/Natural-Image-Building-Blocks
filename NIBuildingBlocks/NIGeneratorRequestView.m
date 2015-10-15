@@ -1013,78 +1013,34 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     }
 }
 
+- (NIAffineTransform)presentedViewToSliceTransform
+{
+    NIGeneratorRequest* generatorRequest = [self presentedGeneratorRequest];
+    
+    NIAffineTransform transform = NIAffineTransformMakeScale(generatorRequest.pixelsWide / self.bounds.size.width, generatorRequest.pixelsHigh / self.bounds.size.height, 1);
+    transform = NIAffineTransformConcat(transform, NIAffineTransformMakeTranslation(-.5, -.5, 0));
+    
+    return transform;
+}
+
 - (NSPoint)convertPointFromDICOMVector:(NIVector)vector
 {
-    NIGeneratorRequest *presentedGeneratorRequest = [self presentedGeneratorRequest];
-    if (presentedGeneratorRequest == nil) {
-        return NSZeroPoint;
-    }
-
-    NIVector requestVector = [presentedGeneratorRequest convertVolumeVectorFromDICOMVector:vector];
-
-    requestVector.x += 0.5;
-    requestVector.y += 0.5;
-
-    requestVector.x *= self.bounds.size.width / presentedGeneratorRequest.pixelsWide;
-    requestVector.y *= self.bounds.size.height / presentedGeneratorRequest.pixelsHigh;
-
-    return NSPointFromNIVector(requestVector);
+    return NSPointFromNIVector(NIVectorApplyTransform([self.presentedGeneratorRequest convertVolumeVectorFromDICOMVector:vector], NIAffineTransformInvert([self presentedViewToSliceTransform])));
 }
 
 - (NIVector)convertPointToDICOMVector:(NSPoint)point
 {
-    NIGeneratorRequest *presentedGeneratorRequest = [self presentedGeneratorRequest];
-    if (presentedGeneratorRequest == nil) {
-        return NIVectorZero;
-    }
-
-    point.x *= presentedGeneratorRequest.pixelsWide / self.bounds.size.width;
-    point.y *= presentedGeneratorRequest.pixelsHigh / self.bounds.size.height;
-
-    point.x -= .5;
-    point.y -= .5;
-
-    return [presentedGeneratorRequest convertVolumeVectorToDICOMVector:NIVectorMakeFromNSPoint(point)];
+    return [self.presentedGeneratorRequest convertVolumeVectorToDICOMVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(point), self.presentedViewToSliceTransform)];
 }
 
 - (NSBezierPath *)convertBezierPathFromDICOM:(NIBezierPath *)bezierPath
 {
-    NSBezierPath *newBezierPath = [NSBezierPath bezierPath];
-    NSUInteger elementCount = [bezierPath elementCount];
-    NSUInteger i;
-    NIBezierPathElement pathElement;
-    NIVector control1;
-    NIVector control2;
-    NIVector endPoint;
-
-    for (i = 0; i < elementCount; i++) {
-        pathElement = [bezierPath elementAtIndex:i control1:&control1 control2:&control2 endpoint:&endPoint];
-
-        switch (pathElement) {
-            case NIMoveToBezierPathElement:
-                [newBezierPath moveToPoint:[self convertPointFromDICOMVector:endPoint]];
-                break;
-            case NILineToBezierPathElement:
-                 [newBezierPath lineToPoint:[self convertPointFromDICOMVector:endPoint]];
-                break;
-            case NICurveToBezierPathElement:
-                 [newBezierPath curveToPoint:[self convertPointFromDICOMVector:endPoint]
-                               controlPoint1:[self convertPointFromDICOMVector:control1]
-                               controlPoint2:[self convertPointFromDICOMVector:control2]];
-                break;
-            case NICloseBezierPathElement:
-                [newBezierPath closePath];
-                break;
-        }
-    }
-
-    return newBezierPath;
+    return [[[bezierPath bezierPathByApplyingTransform:self.presentedViewToSliceTransform] bezierPathByApplyingConverter:self.presentedGeneratorRequest.convertVolumeVectorFromDICOMVectorBlock] NSBezierPath];
 }
 
 - (NIBezierPath *)convertBezierPathToDICOM:(NSBezierPath *)bezierPath
 {
-    NSAssert(NO, @"Implement me");
-    return nil;
+    return [[NIBezierPath bezierPathWithNSBezierPath:bezierPath] bezierPathByApplyingConverter:self.presentedGeneratorRequest.convertVolumeVectorToDICOMVectorBlock];
 }
 
 - (void)_updateLabelContraints

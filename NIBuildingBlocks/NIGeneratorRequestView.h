@@ -90,6 +90,8 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
 @property (nonatomic, readonly, copy) NIGeneratorRequest *presentedGeneratorRequest; // this is the generator request that is currently drawn. Continuously updates during animations
 @property (nonatomic, readonly, assign) NIVector mousePosition; // the current mouse location, the mouseLocation is equal to NIGeneratorRequestViewMouseOutside if it is outside the view
 
+@property(readonly) NIAffineTransform presentedViewToSliceTransform;
+
 - (void)initNIGeneratorRequestView NS_REQUIRES_SUPER;
 
 - (NSInteger)volumeDataCount;

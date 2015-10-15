@@ -797,7 +797,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     
     for (NSValue *maskRunValue in [self maskRuns]) {
         NIMaskRun maskRun = [maskRunValue NIMaskRunValue];
-        if (maskRun.intensity > threshold) {
+        if (maskRun.intensity >= threshold) {
             maskRun.intensity = 1;
             [newMaskArray addObject:[NSValue valueWithNIMaskRun:maskRun]];
         }

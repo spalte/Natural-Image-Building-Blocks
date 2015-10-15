@@ -72,6 +72,8 @@ void NIBezierCoreSetVectorsForSegmentAtIndex(NIMutableBezierCoreRef bezierCore, 
 void NIBezierCoreFlatten(NIMutableBezierCoreRef bezierCore, CGFloat flatness);
 void NIBezierCoreSubdivide(NIMutableBezierCoreRef bezierCore, CGFloat maxSegementLength);
 void NIBezierCoreApplyTransform(NIMutableBezierCoreRef bezierCore, NIAffineTransform transform);
+void NIBezierCoreApplyConverter(NIMutableBezierCoreRef bezierCore, NIVector(^converter)(NIVector));
+    
 void NIBezierCoreAppendBezierCore(NIMutableBezierCoreRef bezierCore, NIBezierCoreRef appenedBezier, bool connectPaths);
 
 NIBezierCoreRef NIBezierCoreCreateFlattenedCopy(NIBezierCoreRef bezierCore, CGFloat flatness);

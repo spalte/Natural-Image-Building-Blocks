@@ -540,6 +540,24 @@ void NIBezierCoreApplyTransform(NIMutableBezierCoreRef bezierCore, NIAffineTrans
     NIBezierCoreCheckDebug(bezierCore);
 }
 
+void NIBezierCoreApplyConverter(NIMutableBezierCoreRef bezierCore, NIVector(^converter)(NIVector)) {
+    NIBezierCoreElementRef element;
+    
+    element = bezierCore->elementList;
+    
+    while (element) {
+        element->endpoint = converter(element->endpoint);
+        
+        if (element->segmentType == NICurveToBezierCoreSegmentType) {
+            element->control1 = converter(element->control1);
+            element->control2 = converter(element->control2);
+        }
+        element = element->next;
+    }
+    
+    NIBezierCoreCheckDebug(bezierCore);
+}
+
 void NIBezierCoreAppendBezierCore(NIMutableBezierCoreRef bezierCore, NIBezierCoreRef appenedBezier, bool connectPaths)
 {
     NIBezierCoreElementRef element;
