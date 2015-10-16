@@ -102,6 +102,9 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
 
 - (NIVolumeDataProperties *)volumeDataPropertiesAtIndex:(NSUInteger)index;
 
+- (NIVector (^)(NIVector))convertPointFromDICOMVectorBlock;
+- (NIVector (^)(NIVector))convertPointToDICOMVectorBlock;
+
 - (NSPoint)convertPointFromDICOMVector:(NIVector)vector;
 - (NIVector)convertPointToDICOMVector:(NSPoint)point;
 

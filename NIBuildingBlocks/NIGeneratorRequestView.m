@@ -1023,24 +1023,42 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     return transform;
 }
 
+- (NIVector (^)(NIVector))convertPointFromDICOMVectorBlock {
+    NIAffineTransform sliceToViewTransform = NIAffineTransformInvert(self.presentedViewToSliceTransform);
+    NIGeneratorRequest* generatorRequest = [[self.presentedGeneratorRequest copy] autorelease];
+    
+    return [[^NIVector(NIVector vector) {
+        return NIVectorApplyTransform([generatorRequest convertVolumeVectorFromDICOMVector:vector], sliceToViewTransform);
+    } copy] autorelease];
+}
+
+- (NIVector (^)(NIVector))convertPointToDICOMVectorBlock {
+    NIAffineTransform viewToSliceTransform = self.presentedViewToSliceTransform;
+    NIGeneratorRequest* generatorRequest = [[self.presentedGeneratorRequest copy] autorelease];
+    
+    return [[^NIVector(NIVector point) {
+        return [generatorRequest convertVolumeVectorToDICOMVector:NIVectorApplyTransform(point, viewToSliceTransform)];
+    } copy] autorelease];
+}
+
 - (NSPoint)convertPointFromDICOMVector:(NIVector)vector
 {
-    return NSPointFromNIVector(NIVectorApplyTransform([self.presentedGeneratorRequest convertVolumeVectorFromDICOMVector:vector], NIAffineTransformInvert([self presentedViewToSliceTransform])));
+    return NSPointFromNIVector(self.convertPointFromDICOMVectorBlock(vector));
 }
 
 - (NIVector)convertPointToDICOMVector:(NSPoint)point
 {
-    return [self.presentedGeneratorRequest convertVolumeVectorToDICOMVector:NIVectorApplyTransform(NIVectorMakeFromNSPoint(point), self.presentedViewToSliceTransform)];
+    return self.convertPointToDICOMVectorBlock(NIVectorMakeFromNSPoint(point));
 }
 
 - (NSBezierPath *)convertBezierPathFromDICOM:(NIBezierPath *)bezierPath
 {
-    return [[[bezierPath bezierPathByApplyingTransform:self.presentedViewToSliceTransform] bezierPathByApplyingConverter:self.presentedGeneratorRequest.convertVolumeVectorFromDICOMVectorBlock] NSBezierPath];
+    return [[bezierPath bezierPathByApplyingConverter:self.convertPointFromDICOMVectorBlock] NSBezierPath];
 }
 
 - (NIBezierPath *)convertBezierPathToDICOM:(NSBezierPath *)bezierPath
 {
-    return [[NIBezierPath bezierPathWithNSBezierPath:bezierPath] bezierPathByApplyingConverter:self.presentedGeneratorRequest.convertVolumeVectorToDICOMVectorBlock];
+    return [[NIBezierPath bezierPathWithNSBezierPath:bezierPath] bezierPathByApplyingConverter:self.convertPointToDICOMVectorBlock];
 }
 
 - (void)_updateLabelContraints
