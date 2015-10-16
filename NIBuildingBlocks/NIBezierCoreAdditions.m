@@ -1856,6 +1856,27 @@ CGFloat NIBezierCoreSignedAreaUsingNormal(NIBezierCoreRef bezierCore, NIVector n
     return signedArea*0.5;
 }
 
+void NIBezierCoreApplyConverter(NIMutableBezierCoreRef bezierCore, NIVector(^converter)(NIVector)) {
+    NIBezierCoreRandomAccessorRef bezierAccessor = NIBezierCoreRandomAccessorCreateWithMutableBezierCore(bezierCore);
+    
+    CFIndex count = NIBezierCoreRandomAccessorSegmentCount(bezierAccessor);
+    for (CFIndex i = 0; i < count; ++i) {
+        NIVector control1, control2, endpoint;
+        
+        NIBezierCoreSegmentType segmentType = NIBezierCoreRandomAccessorGetSegmentAtIndex(bezierAccessor, i, &control1, &control2, &endpoint);
+        
+        endpoint = converter(endpoint);
+        if (segmentType == NICurveToBezierCoreSegmentType) {
+            control1 = converter(control1);
+            control2 = converter(control2);
+        }
+        
+        NIBezierCoreRandomAccessorSetVectorsForSegementAtIndex(bezierAccessor, i, control1, control2, endpoint);
+    }
+    
+    NIBezierCoreRandomAccessorRelease(bezierAccessor);
+}
+
 
 
 

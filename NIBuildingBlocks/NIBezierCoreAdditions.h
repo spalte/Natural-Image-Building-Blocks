@@ -86,6 +86,8 @@ NIBezierCoreRef NIBezierCoreCreateCopyByClipping(NIBezierCoreRef bezierCore, CGF
 NIMutableBezierCoreRef NIBezierCoreCreateMutableCopyByClipping(NIBezierCoreRef bezierCore, CGFloat startRelativePosition, CGFloat endRelativePosition);
 CGFloat NIBezierCoreSignedAreaUsingNormal(NIBezierCoreRef bezierCore, NIVector normal);
 
+void NIBezierCoreApplyConverter(NIMutableBezierCoreRef bezierCore, NIVector(^converter)(NIVector vector));
+
 CF_EXTERN_C_END
 
 #endif // _NIBEZIERCORE_ADDITIONS_H_

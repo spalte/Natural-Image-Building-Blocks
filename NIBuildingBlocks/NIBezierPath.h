@@ -64,7 +64,7 @@ typedef NSInteger NIBezierPathElement;
 - (NIBezierPath *)bezierPathByFlattening:(CGFloat)flatness;
 - (NIBezierPath *)bezierPathBySubdividing:(CGFloat)maxSegmentLength;
 - (NIBezierPath *)bezierPathByApplyingTransform:(NIAffineTransform)transform;
-- (NIBezierPath *)bezierPathByApplyingConverter:(NIVector (^)(NIVector))converter;
+- (NIBezierPath *)bezierPathByApplyingConverter:(NIVector (^)(NIVector vector))converter;
 - (NIBezierPath *)bezierPathByAppendingBezierPath:(NIBezierPath *)bezierPath connectPaths:(BOOL)connectPaths;
 - (NIBezierPath *)bezierPathByAddingEndpointsAtIntersectionsWithPlane:(NIPlane)plane; // will  flatten the path if it is not already flattened
 - (NIBezierPath *)bezierPathByProjectingToPlane:(NIPlane)plane;
