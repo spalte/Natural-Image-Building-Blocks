@@ -383,13 +383,22 @@ NIMutableBezierCoreRef NIBezierCoreCreateMutableWithDictionaryRepresentation(CFD
 	return mutableBezierCore;
 }
 
-NIMutableBezierCoreRef NIBezierCoreCreateMutableWithNSBezierPath(NSBezierPath* path) {
+NIMutableBezierCoreRef NIBezierCoreCreateMutableWithNSBezierPath(NSBezierPath* path)
+{
     NIMutableBezierCoreRef mutableBezierCore = NIBezierCoreCreateMutable();
 
     NSPoint ps[3];
     NSInteger elementCount = path.elementCount;
-    for (NSInteger i = 0; i < elementCount; ++i)
-        switch ([path elementAtIndex:i associatedPoints:ps]) {
+
+    NSBezierPathElement pathElement = NSMoveToBezierPathElement;
+
+    for (NSInteger i = 0; i < elementCount; i++) {
+        if (i == elementCount - 1 && pathElement == NSClosePathBezierPathElement && [path elementAtIndex:i associatedPoints:ps] == NSMoveToBezierPathElement) {
+            break;
+        }
+
+        pathElement = [path elementAtIndex:i associatedPoints:ps];
+        switch (pathElement) {
             case NSMoveToBezierPathElement: {
                 NIBezierCoreAddSegment(mutableBezierCore, NIMoveToBezierCoreSegmentType, NIVectorZero, NIVectorZero, NIVectorMakeFromNSPoint(ps[0]));
             } break;
@@ -403,6 +412,7 @@ NIMutableBezierCoreRef NIBezierCoreCreateMutableWithNSBezierPath(NSBezierPath* p
                 NIBezierCoreAddSegment(mutableBezierCore, NICloseBezierCoreSegmentType, NIVectorZero, NIVectorZero, NIVectorMakeFromNSPoint(ps[0]));
             } break;
         }
+    }
     
     NIBezierCoreCheckDebug(mutableBezierCore);
     
