@@ -88,6 +88,7 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
 
 @property (nonatomic, readwrite, retain) NIGeneratorRequest *generatorRequest; // this is the generator request that will be drawn.  Animatable
 @property (nonatomic, readonly, copy) NIGeneratorRequest *presentedGeneratorRequest; // this is the generator request that is currently drawn. Continuously updates during animations
+@property (nonatomic, readonly, assign) NIVector mousePosition; // the current mouse location, the mouseLocation is equal to NIGeneratorRequestViewMouseOutside if it is outside the view
 
 - (void)initNIGeneratorRequestView NS_REQUIRES_SUPER;
 
@@ -101,6 +102,9 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
 
 - (NSPoint)convertPointFromDICOMVector:(NIVector)vector;
 - (NIVector)convertPointToDICOMVector:(NSPoint)point;
+
+- (NSBezierPath *)convertBezierPathFromDICOM:(NIBezierPath *)bezierPath;
+- (NIBezierPath *)convertBezierPathToDICOM:(NSBezierPath *)bezierPath;
 
 @property (nonatomic, readonly, retain) CALayer *frameLayer; // the layer into which subclasses can add layers, this layer lays out sublayers using the CAConstraintLayoutManager
                                                              // Use NIGeneratorRequestViewRequestLayerZPosition, etc to specify the depth of the layer you want to add.

@@ -1019,15 +1019,15 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     if (presentedGeneratorRequest == nil) {
         return NSZeroPoint;
     }
-    
+
     NIVector requestVector = [presentedGeneratorRequest convertVolumeVectorFromDICOMVector:vector];
-    
+
     requestVector.x += 0.5;
     requestVector.y += 0.5;
-    
+
     requestVector.x *= self.bounds.size.width / presentedGeneratorRequest.pixelsWide;
     requestVector.y *= self.bounds.size.height / presentedGeneratorRequest.pixelsHigh;
-    
+
     return NSPointFromNIVector(requestVector);
 }
 
@@ -1037,14 +1037,54 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     if (presentedGeneratorRequest == nil) {
         return NIVectorZero;
     }
-    
+
     point.x *= presentedGeneratorRequest.pixelsWide / self.bounds.size.width;
     point.y *= presentedGeneratorRequest.pixelsHigh / self.bounds.size.height;
-    
+
     point.x -= .5;
     point.y -= .5;
-    
+
     return [presentedGeneratorRequest convertVolumeVectorToDICOMVector:NIVectorMakeFromNSPoint(point)];
+}
+
+- (NSBezierPath *)convertBezierPathFromDICOM:(NIBezierPath *)bezierPath
+{
+    NSBezierPath *newBezierPath = [NSBezierPath bezierPath];
+    NSUInteger elementCount = [bezierPath elementCount];
+    NSUInteger i;
+    NIBezierPathElement pathElement;
+    NIVector control1;
+    NIVector control2;
+    NIVector endPoint;
+
+    for (i = 0; i < elementCount; i++) {
+        pathElement = [bezierPath elementAtIndex:i control1:&control1 control2:&control2 endpoint:&endPoint];
+
+        switch (pathElement) {
+            case NIMoveToBezierPathElement:
+                [newBezierPath moveToPoint:[self convertPointFromDICOMVector:endPoint]];
+                break;
+            case NILineToBezierPathElement:
+                 [newBezierPath lineToPoint:[self convertPointFromDICOMVector:endPoint]];
+                break;
+            case NICurveToBezierPathElement:
+                 [newBezierPath curveToPoint:[self convertPointFromDICOMVector:endPoint]
+                               controlPoint1:[self convertPointFromDICOMVector:control1]
+                               controlPoint2:[self convertPointFromDICOMVector:control2]];
+                break;
+            case NICloseBezierPathElement:
+                [newBezierPath closePath];
+                break;
+        }
+    }
+
+    return newBezierPath;
+}
+
+- (NIBezierPath *)convertBezierPathToDICOM:(NSBezierPath *)bezierPath
+{
+    NSAssert(NO, @"Implement me");
+    return nil;
 }
 
 - (void)_updateLabelContraints
