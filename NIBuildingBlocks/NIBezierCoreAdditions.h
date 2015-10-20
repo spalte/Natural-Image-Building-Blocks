@@ -86,6 +86,7 @@ NIBezierCoreRef NIBezierCoreCreateCopyByClipping(NIBezierCoreRef bezierCore, CGF
 NIMutableBezierCoreRef NIBezierCoreCreateMutableCopyByClipping(NIBezierCoreRef bezierCore, CGFloat startRelativePosition, CGFloat endRelativePosition);
 CGFloat NIBezierCoreSignedAreaUsingNormal(NIBezierCoreRef bezierCore, NIVector normal);
 
+__attribute__((deprecated("Converter only makes sense with affine transforms. If the transform is affine, use NIBezierCoreApplyTransform")))
 void NIBezierCoreApplyConverter(NIMutableBezierCoreRef bezierCore, NIVector(^converter)(NIVector vector));
 
 CF_EXTERN_C_END

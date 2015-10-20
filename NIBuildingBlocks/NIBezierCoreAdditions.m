@@ -1856,6 +1856,7 @@ CGFloat NIBezierCoreSignedAreaUsingNormal(NIBezierCoreRef bezierCore, NIVector n
     return signedArea*0.5;
 }
 
+__attribute__((deprecated("Converter only makes sense with affine transforms. If the transform is affine, use NIBezierCoreApplyTransform")))
 void NIBezierCoreApplyConverter(NIMutableBezierCoreRef bezierCore, NIVector(^converter)(NIVector)) {
     NIBezierCoreRandomAccessorRef bezierAccessor = NIBezierCoreRandomAccessorCreateWithMutableBezierCore(bezierCore);
     

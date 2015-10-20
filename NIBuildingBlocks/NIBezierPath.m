@@ -306,7 +306,7 @@
     return newBezierPath;
 }
 
-- (NIBezierPath *)bezierPathByApplyingConverter:(NIVector (^)(NIVector))converter {
+- (NIBezierPath *)bezierPathByApplyingConverter:(NIVector (^)(NIVector))converter __deprecated {
     NIMutableBezierPath *newBezierPath;
     newBezierPath = [[self mutableCopy] autorelease];
     [newBezierPath applyConverter:converter];
@@ -766,7 +766,7 @@
     NIBezierCoreApplyTransform(_bezierCore, transform);
 }
 
-- (void)applyConverter:(NIVector (^)(NIVector))converter {
+- (void)applyConverter:(NIVector (^)(NIVector))converter __deprecated {
     [self _clearRandomAccessor];
     NIBezierCoreApplyConverter(_bezierCore, converter);
 }

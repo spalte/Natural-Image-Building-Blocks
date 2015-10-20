@@ -64,7 +64,7 @@ typedef NSInteger NIBezierPathElement;
 - (NIBezierPath *)bezierPathByFlattening:(CGFloat)flatness;
 - (NIBezierPath *)bezierPathBySubdividing:(CGFloat)maxSegmentLength;
 - (NIBezierPath *)bezierPathByApplyingTransform:(NIAffineTransform)transform;
-- (NIBezierPath *)bezierPathByApplyingConverter:(NIVector (^)(NIVector vector))converter;
+- (NIBezierPath *)bezierPathByApplyingConverter:(NIVector (^)(NIVector vector))converter __deprecated;
 - (NIBezierPath *)bezierPathByAppendingBezierPath:(NIBezierPath *)bezierPath connectPaths:(BOOL)connectPaths;
 - (NIBezierPath *)bezierPathByAddingEndpointsAtIntersectionsWithPlane:(NIPlane)plane; // will  flatten the path if it is not already flattened
 - (NIBezierPath *)bezierPathByProjectingToPlane:(NIPlane)plane;
@@ -124,7 +124,7 @@ typedef NSInteger NIBezierPathElement;
 - (void)flatten:(CGFloat)flatness;
 - (void)subdivide:(CGFloat)maxSegmentLength;
 - (void)applyAffineTransform:(NIAffineTransform)transform;
-- (void)applyConverter:(NIVector (^)(NIVector))converter;
+- (void)applyConverter:(NIVector (^)(NIVector))converter __deprecated;
 - (void)projectToPlane:(NIPlane)plane;
 - (void)appendBezierPath:(NIBezierPath *)bezierPath connectPaths:(BOOL)connectPaths;
 - (void)addEndpointsAtIntersectionsWithPlane:(NIPlane)plane; // will  flatten the path if it is not already flattened
