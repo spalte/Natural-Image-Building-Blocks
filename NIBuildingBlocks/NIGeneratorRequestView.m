@@ -46,6 +46,8 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
 @property (nonatomic, readwrite, copy) NIGeneratorRequest *presentedGeneratorRequest;
 @property (nonatomic, readwrite, assign) NIVector mousePosition;
 
+- (void)_initNIGeneratorRequestView;
+
 // not sure if these should be public or not
 - (NSMutableArray *)mutableTextLabelsForLocation:(NITextLabelLocation)labelLocation;
 + (NSString *)keyForTextLabelLocation:(NITextLabelLocation)labelLocation;
@@ -158,7 +160,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self initNIGeneratorRequestView];
+        [self _initNIGeneratorRequestView];
     }
     return self;
 }
@@ -167,12 +169,17 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        [self initNIGeneratorRequestView];
+        [self _initNIGeneratorRequestView];
     }
     return self;
 }
 
-- (void)initNIGeneratorRequestView
+- (void)initNIGeneratorRequestView DEPRECATED_MSG_ATTRIBUTE("WTF")
+{
+    [self _initNIGeneratorRequestView];
+}
+
+- (void)_initNIGeneratorRequestView
 {
     [self setWantsLayer:YES];
     [self setLayerContentsRedrawPolicy:NSViewLayerContentsRedrawOnSetNeedsDisplay];
