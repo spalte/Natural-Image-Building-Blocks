@@ -1049,42 +1049,71 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
 
 - (NSBezierPath *)convertBezierPathFromDICOM:(NIBezierPath *)bezierPath
 {
-    NSBezierPath *newBezierPath = [NSBezierPath bezierPath];
-    NSUInteger elementCount = [bezierPath elementCount];
-    NSUInteger i;
-    NIBezierPathElement pathElement;
-    NIVector control1;
-    NIVector control2;
-    NIVector endPoint;
-
-    for (i = 0; i < elementCount; i++) {
-        pathElement = [bezierPath elementAtIndex:i control1:&control1 control2:&control2 endpoint:&endPoint];
-
-        switch (pathElement) {
-            case NIMoveToBezierPathElement:
-                [newBezierPath moveToPoint:[self convertPointFromDICOMVector:endPoint]];
-                break;
-            case NILineToBezierPathElement:
-                 [newBezierPath lineToPoint:[self convertPointFromDICOMVector:endPoint]];
-                break;
-            case NICurveToBezierPathElement:
-                 [newBezierPath curveToPoint:[self convertPointFromDICOMVector:endPoint]
-                               controlPoint1:[self convertPointFromDICOMVector:control1]
-                               controlPoint2:[self convertPointFromDICOMVector:control2]];
-                break;
-            case NICloseBezierPathElement:
-                [newBezierPath closePath];
-                break;
-        }
+    // we don't know how to convert beziers when the transformation is not affine.
+    if ([self.presentedGeneratorRequest isKindOfClass:[NIObliqueSliceGeneratorRequest class]] == NO) {
+        return nil;
     }
 
-    return newBezierPath;
+    NIAffineTransform fromDicomTransform = NIAffineTransformIdentity;
+    NSPoint *xBasisPtr = (NSPoint *)&(fromDicomTransform.m11);
+    NSPoint *yBasisPtr = (NSPoint *)&(fromDicomTransform.m21);
+    NSPoint *zBasisPtr = (NSPoint *)&(fromDicomTransform.m31);
+    NSPoint *originPtr = (NSPoint *)&(fromDicomTransform.m41);
+
+    *originPtr = [self convertPointFromDICOMVector:NIVectorZero];
+    *xBasisPtr = [self convertPointFromDICOMVector:NIVectorXBasis];
+    *yBasisPtr = [self convertPointFromDICOMVector:NIVectorYBasis];
+    *zBasisPtr = [self convertPointFromDICOMVector:NIVectorZBasis];
+
+    fromDicomTransform.m11 -= fromDicomTransform.m41;
+    fromDicomTransform.m21 -= fromDicomTransform.m41;
+    fromDicomTransform.m31 -= fromDicomTransform.m41;
+    fromDicomTransform.m12 -= fromDicomTransform.m42;
+    fromDicomTransform.m22 -= fromDicomTransform.m42;
+    fromDicomTransform.m32 -= fromDicomTransform.m42;
+
+    // at this point fromDicomTransform applies the correct transform, put it is not guaranteed to not be a degenerate matrix
+    // so we will fill out m13...m33 with values that make sure that is not the case
+    NIVector yColumn = NIVectorCrossProduct(NIVectorMake(fromDicomTransform.m11, fromDicomTransform.m21, fromDicomTransform.m31),
+                                            NIVectorMake(fromDicomTransform.m12, fromDicomTransform.m22, fromDicomTransform.m32));
+    fromDicomTransform.m13 = yColumn.x;
+    fromDicomTransform.m23 = yColumn.y;
+    fromDicomTransform.m33 = yColumn.z;
+
+    NSLog(@"originalPath\n%@", bezierPath);
+    NSBezierPath *convertedPath = [[bezierPath bezierPathByApplyingTransform:fromDicomTransform] NSBezierPath];
+    NSLog(@"convertedPath\n%@", convertedPath);
+    NIBezierPath *unconvertedPath = [self convertBezierPathToDICOM:convertedPath];
+    NSLog(@"unConvertedPath\n%@", unconvertedPath);
+
+    return convertedPath;
 }
 
 - (NIBezierPath *)convertBezierPathToDICOM:(NSBezierPath *)bezierPath
 {
-    NSAssert(NO, @"Implement me");
-    return nil;
+    // we don't know how to convert beziers when the transformation is not affine.
+    if ([self.presentedGeneratorRequest isKindOfClass:[NIObliqueSliceGeneratorRequest class]] == NO) {
+        return nil;
+    }
+
+    NIAffineTransform toDicomTransform = NIAffineTransformIdentity;
+    *(NIVector *)&(toDicomTransform.m41) = [self convertPointToDICOMVector:NSMakePoint(0, 0)];
+    *(NIVector *)&(toDicomTransform.m11) = [self convertPointToDICOMVector:NSMakePoint(1, 0)];
+    *(NIVector *)&(toDicomTransform.m21) = [self convertPointToDICOMVector:NSMakePoint(0, 1)];
+
+    toDicomTransform.m11 -= toDicomTransform.m41;
+    toDicomTransform.m21 -= toDicomTransform.m41;
+    toDicomTransform.m12 -= toDicomTransform.m42;
+    toDicomTransform.m22 -= toDicomTransform.m42;
+    toDicomTransform.m13 -= toDicomTransform.m43;
+    toDicomTransform.m23 -= toDicomTransform.m43;
+
+    // make sure that the transform is not degenerate
+    *(NIVector *)&(toDicomTransform.m31) = NIVectorCrossProduct(*(NIVector *)&(toDicomTransform.m11), *(NIVector *)&(toDicomTransform.m21));
+
+    NIMutableBezierPath *convertedBezierPath = [NIMutableBezierPath bezierPathWithNSBezierPath:bezierPath];
+    [convertedBezierPath applyAffineTransform:toDicomTransform];
+    return convertedBezierPath;
 }
 
 - (void)_updateLabelContraints
