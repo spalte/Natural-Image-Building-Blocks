@@ -1055,15 +1055,11 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     }
 
     NIAffineTransform fromDicomTransform = NIAffineTransformIdentity;
-    NSPoint *xBasisPtr = (NSPoint *)&(fromDicomTransform.m11);
-    NSPoint *yBasisPtr = (NSPoint *)&(fromDicomTransform.m21);
-    NSPoint *zBasisPtr = (NSPoint *)&(fromDicomTransform.m31);
-    NSPoint *originPtr = (NSPoint *)&(fromDicomTransform.m41);
 
-    *originPtr = [self convertPointFromDICOMVector:NIVectorZero];
-    *xBasisPtr = [self convertPointFromDICOMVector:NIVectorXBasis];
-    *yBasisPtr = [self convertPointFromDICOMVector:NIVectorYBasis];
-    *zBasisPtr = [self convertPointFromDICOMVector:NIVectorZBasis];
+    *(NSPoint *)&(fromDicomTransform.m41) = [self convertPointFromDICOMVector:NIVectorZero];
+    *(NSPoint *)&(fromDicomTransform.m11) = [self convertPointFromDICOMVector:NIVectorXBasis];
+    *(NSPoint *)&(fromDicomTransform.m21) = [self convertPointFromDICOMVector:NIVectorYBasis];
+    *(NSPoint *)&(fromDicomTransform.m31) = [self convertPointFromDICOMVector:NIVectorZBasis];
 
     *(NIVector *)&(fromDicomTransform.m11) = NIVectorSubtract(*(NIVector *)&(fromDicomTransform.m11), *(NIVector *)&(fromDicomTransform.m41));
     *(NIVector *)&(fromDicomTransform.m21) = NIVectorSubtract(*(NIVector *)&(fromDicomTransform.m21), *(NIVector *)&(fromDicomTransform.m41));
