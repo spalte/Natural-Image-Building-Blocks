@@ -1080,13 +1080,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     fromDicomTransform.m23 = yColumn.y;
     fromDicomTransform.m33 = yColumn.z;
 
-    NSLog(@"originalPath\n%@", bezierPath);
-    NSBezierPath *convertedPath = [[bezierPath bezierPathByApplyingTransform:fromDicomTransform] NSBezierPath];
-    NSLog(@"convertedPath\n%@", convertedPath);
-    NIBezierPath *unconvertedPath = [self convertBezierPathToDICOM:convertedPath];
-    NSLog(@"unConvertedPath\n%@", unconvertedPath);
-
-    return convertedPath;
+    return [[bezierPath bezierPathByApplyingTransform:fromDicomTransform] NSBezierPath];
 }
 
 - (NIBezierPath *)convertBezierPathToDICOM:(NSBezierPath *)bezierPath
