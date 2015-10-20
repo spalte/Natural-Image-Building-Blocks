@@ -1065,12 +1065,9 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     *yBasisPtr = [self convertPointFromDICOMVector:NIVectorYBasis];
     *zBasisPtr = [self convertPointFromDICOMVector:NIVectorZBasis];
 
-    fromDicomTransform.m11 -= fromDicomTransform.m41;
-    fromDicomTransform.m21 -= fromDicomTransform.m41;
-    fromDicomTransform.m31 -= fromDicomTransform.m41;
-    fromDicomTransform.m12 -= fromDicomTransform.m42;
-    fromDicomTransform.m22 -= fromDicomTransform.m42;
-    fromDicomTransform.m32 -= fromDicomTransform.m42;
+    *(NIVector *)&(fromDicomTransform.m11) = NIVectorSubtract(*(NIVector *)&(fromDicomTransform.m11), *(NIVector *)&(fromDicomTransform.m41));
+    *(NIVector *)&(fromDicomTransform.m21) = NIVectorSubtract(*(NIVector *)&(fromDicomTransform.m21), *(NIVector *)&(fromDicomTransform.m41));
+    *(NIVector *)&(fromDicomTransform.m31) = NIVectorSubtract(*(NIVector *)&(fromDicomTransform.m31), *(NIVector *)&(fromDicomTransform.m41));
 
     // at this point fromDicomTransform applies the correct transform, put it is not guaranteed to not be a degenerate matrix
     // so we will fill out m13...m33 with values that make sure that is not the case
@@ -1095,12 +1092,8 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     *(NIVector *)&(toDicomTransform.m11) = [self convertPointToDICOMVector:NSMakePoint(1, 0)];
     *(NIVector *)&(toDicomTransform.m21) = [self convertPointToDICOMVector:NSMakePoint(0, 1)];
 
-    toDicomTransform.m11 -= toDicomTransform.m41;
-    toDicomTransform.m21 -= toDicomTransform.m41;
-    toDicomTransform.m12 -= toDicomTransform.m42;
-    toDicomTransform.m22 -= toDicomTransform.m42;
-    toDicomTransform.m13 -= toDicomTransform.m43;
-    toDicomTransform.m23 -= toDicomTransform.m43;
+    *(NIVector *)&(toDicomTransform.m11) = NIVectorSubtract(*(NIVector *)&(toDicomTransform.m11), *(NIVector *)&(toDicomTransform.m41));
+    *(NIVector *)&(toDicomTransform.m21) = NIVectorSubtract(*(NIVector *)&(toDicomTransform.m21), *(NIVector *)&(toDicomTransform.m41));
 
     // make sure that the transform is not degenerate
     *(NIVector *)&(toDicomTransform.m31) = NIVectorCrossProduct(*(NIVector *)&(toDicomTransform.m11), *(NIVector *)&(toDicomTransform.m21));
