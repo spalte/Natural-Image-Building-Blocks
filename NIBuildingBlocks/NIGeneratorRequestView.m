@@ -1056,14 +1056,14 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
 
     NIAffineTransform fromDicomTransform = NIAffineTransformIdentity;
 
-    *(NSPoint *)&(fromDicomTransform.m41) = [self convertPointFromDICOMVector:NIVectorZero];
-    *(NSPoint *)&(fromDicomTransform.m11) = [self convertPointFromDICOMVector:NIVectorXBasis];
-    *(NSPoint *)&(fromDicomTransform.m21) = [self convertPointFromDICOMVector:NIVectorYBasis];
-    *(NSPoint *)&(fromDicomTransform.m31) = [self convertPointFromDICOMVector:NIVectorZBasis];
+    *(NSPoint *)&fromDicomTransform.m41 = [self convertPointFromDICOMVector:NIVectorZero];
+    *(NSPoint *)&fromDicomTransform.m11 = [self convertPointFromDICOMVector:NIVectorXBasis];
+    *(NSPoint *)&fromDicomTransform.m21 = [self convertPointFromDICOMVector:NIVectorYBasis];
+    *(NSPoint *)&fromDicomTransform.m31 = [self convertPointFromDICOMVector:NIVectorZBasis];
 
-    *(NIVector *)&(fromDicomTransform.m11) = NIVectorSubtract(*(NIVector *)&(fromDicomTransform.m11), *(NIVector *)&(fromDicomTransform.m41));
-    *(NIVector *)&(fromDicomTransform.m21) = NIVectorSubtract(*(NIVector *)&(fromDicomTransform.m21), *(NIVector *)&(fromDicomTransform.m41));
-    *(NIVector *)&(fromDicomTransform.m31) = NIVectorSubtract(*(NIVector *)&(fromDicomTransform.m31), *(NIVector *)&(fromDicomTransform.m41));
+    *(NIVector *)&fromDicomTransform.m11 = NIVectorSubtract(*(NIVector *)&fromDicomTransform.m11, *(NIVector *)&fromDicomTransform.m41);
+    *(NIVector *)&fromDicomTransform.m21 = NIVectorSubtract(*(NIVector *)&fromDicomTransform.m21, *(NIVector *)&fromDicomTransform.m41);
+    *(NIVector *)&fromDicomTransform.m31 = NIVectorSubtract(*(NIVector *)&fromDicomTransform.m31, *(NIVector *)&fromDicomTransform.m41);
 
     // at this point fromDicomTransform applies the correct transform, put it is not guaranteed to not be a degenerate matrix
     // so we will fill out m13...m33 with values that make sure that is not the case
@@ -1084,15 +1084,15 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     }
 
     NIAffineTransform toDicomTransform = NIAffineTransformIdentity;
-    *(NIVector *)&(toDicomTransform.m41) = [self convertPointToDICOMVector:NSMakePoint(0, 0)];
-    *(NIVector *)&(toDicomTransform.m11) = [self convertPointToDICOMVector:NSMakePoint(1, 0)];
-    *(NIVector *)&(toDicomTransform.m21) = [self convertPointToDICOMVector:NSMakePoint(0, 1)];
+    *(NIVector *)&toDicomTransform.m41 = [self convertPointToDICOMVector:NSMakePoint(0, 0)];
+    *(NIVector *)&toDicomTransform.m11 = [self convertPointToDICOMVector:NSMakePoint(1, 0)];
+    *(NIVector *)&toDicomTransform.m21 = [self convertPointToDICOMVector:NSMakePoint(0, 1)];
 
-    *(NIVector *)&(toDicomTransform.m11) = NIVectorSubtract(*(NIVector *)&(toDicomTransform.m11), *(NIVector *)&(toDicomTransform.m41));
-    *(NIVector *)&(toDicomTransform.m21) = NIVectorSubtract(*(NIVector *)&(toDicomTransform.m21), *(NIVector *)&(toDicomTransform.m41));
+    *(NIVector *)&toDicomTransform.m11 = NIVectorSubtract(*(NIVector *)&toDicomTransform.m11, *(NIVector *)&toDicomTransform.m41);
+    *(NIVector *)&toDicomTransform.m21 = NIVectorSubtract(*(NIVector *)&toDicomTransform.m21, *(NIVector *)&toDicomTransform.m41);
 
     // make sure that the transform is not degenerate
-    *(NIVector *)&(toDicomTransform.m31) = NIVectorCrossProduct(*(NIVector *)&(toDicomTransform.m11), *(NIVector *)&(toDicomTransform.m21));
+    *(NIVector *)&toDicomTransform.m31 = NIVectorCrossProduct(*(NIVector *)&toDicomTransform.m11, *(NIVector *)&toDicomTransform.m21);
 
     NIMutableBezierPath *convertedBezierPath = [NIMutableBezierPath bezierPathWithNSBezierPath:bezierPath];
     [convertedBezierPath applyAffineTransform:toDicomTransform];
