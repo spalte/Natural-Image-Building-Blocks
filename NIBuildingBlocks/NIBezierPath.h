@@ -46,18 +46,18 @@ typedef NSInteger NIBezierPathElement;
     NIBezierCoreRandomAccessorRef _bezierCoreRandomAccessor;
 }
 
-- (id)init;
-- (id)initWithBezierPath:(NIBezierPath *)bezierPath;
-- (id)initWithNSBezierPath:(NSBezierPath *)bezierPath;
-- (id)initWithDictionaryRepresentation:(NSDictionary *)dict;
-- (id)initWithNIBezierCore:(NIBezierCoreRef)bezierCore;
-- (id)initWithNodeArray:(NSArray *)nodes style:(NIBezierNodeStyle)style; // array of NIVectors in NSValues;
+- (instancetype)init;
+- (instancetype)initWithBezierPath:(NIBezierPath *)bezierPath;
+- (instancetype)initWithNSBezierPath:(NSBezierPath *)bezierPath;
+- (instancetype)initWithDictionaryRepresentation:(NSDictionary *)dict;
+- (instancetype)initWithNIBezierCore:(NIBezierCoreRef)bezierCore;
+- (instancetype)initWithNodeArray:(NSArray *)nodes style:(NIBezierNodeStyle)style; // array of NIVectors in NSValues;
 
-+ (id)bezierPath;
-+ (id)bezierPathWithBezierPath:(NIBezierPath *)bezierPath;
-+ (id)bezierPathWithNSBezierPath:(NSBezierPath *)bezierPath;
-+ (id)bezierPathNIBezierCore:(NIBezierCoreRef)bezierCore;
-+ (id)bezierPathCircleWithCenter:(NIVector)center radius:(CGFloat)radius normal:(NIVector)normal;
++ (instancetype)bezierPath;
++ (instancetype)bezierPathWithBezierPath:(NIBezierPath *)bezierPath;
++ (instancetype)bezierPathWithNSBezierPath:(NSBezierPath *)bezierPath;
++ (instancetype)bezierPathNIBezierCore:(NIBezierCoreRef)bezierCore;
++ (instancetype)bezierPathCircleWithCenter:(NIVector)center radius:(CGFloat)radius normal:(NIVector)normal;
 
 - (BOOL)isEqualToBezierPath:(NIBezierPath *)bezierPath;
 

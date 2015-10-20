@@ -29,14 +29,14 @@
 	NIBezierCoreRef _bezierCore;
 }
 
-- (id)initWithNIBezierCore:(NIBezierCoreRef)bezierCore;
+- (instancetype)initWithNIBezierCore:(NIBezierCoreRef)bezierCore;
 - (NIBezierCoreRef)NIBezierCore;
 
 @end
 
 @implementation _NIBezierCoreSteward
 
-- (id)initWithNIBezierCore:(NIBezierCoreRef)bezierCore
+- (instancetype)initWithNIBezierCore:(NIBezierCoreRef)bezierCore
 {
 	if ( (self = [super init]) ) {
 		_bezierCore	= NIBezierCoreRetain(bezierCore);
@@ -62,7 +62,7 @@
 
 @implementation NIBezierPath
 
-- (id)init
+- (instancetype)init
 {
     if ( (self = [super init]) ) {
         _bezierCore = NIBezierCoreCreateMutable();
@@ -70,7 +70,7 @@
     return self;
 }
 
-- (id)initWithBezierPath:(NIBezierPath *)bezierPath
+- (instancetype)initWithBezierPath:(NIBezierPath *)bezierPath
 {
     if ( (self = [super init]) ) {
         _bezierCore = NIBezierCoreCreateMutableCopy([bezierPath NIBezierCore]);
@@ -81,7 +81,7 @@
     return self;
 }
 
-- (id)initWithNSBezierPath:(NSBezierPath *)bezierPath
+- (instancetype)initWithNSBezierPath:(NSBezierPath *)bezierPath
 {
     if ( (self = [super init]) ) {
         _bezierCore = NIBezierCoreCreateMutableWithNSBezierPath(bezierPath);
@@ -89,7 +89,7 @@
     return self;
 }
 
-- (id)initWithDictionaryRepresentation:(NSDictionary *)dict
+- (instancetype)initWithDictionaryRepresentation:(NSDictionary *)dict
 {
 	if ( (self = [super init]) ) {
 		_bezierCore = NIBezierCoreCreateMutableWithDictionaryRepresentation((CFDictionaryRef)dict);
@@ -101,7 +101,7 @@
 	return self;
 }
 
-- (id)initWithNIBezierCore:(NIBezierCoreRef)bezierCore
+- (instancetype)initWithNIBezierCore:(NIBezierCoreRef)bezierCore
 {
     if ( (self = [super init]) ) {
         _bezierCore = NIBezierCoreCreateMutableCopy(bezierCore);
@@ -109,7 +109,7 @@
     return self;
 }
 
-- (id)initWithNodeArray:(NSArray *)nodes style:(NIBezierNodeStyle)style // array of NIVectors in NSValues;
+- (instancetype)initWithNodeArray:(NSArray *)nodes style:(NIBezierNodeStyle)style // array of NIVectors in NSValues;
 {
     NIVectorArray vectorArray;
     NSInteger i;
@@ -144,7 +144,7 @@
     return self;
 }
 
-- (id)initWithCoder:(NSCoder *)decoder
+- (instancetype)initWithCoder:(NSCoder *)decoder
 {
 	NSDictionary *bezierDict;
 	
@@ -155,7 +155,7 @@
 	return self;
 }
 
-- (id)copyWithZone:(NSZone *)zone
+- (instancetype)copyWithZone:(NSZone *)zone
 {
     NIMutableBezierPath *bezierPath;
     
@@ -163,7 +163,7 @@
     return bezierPath;
 }
 
-- (id)mutableCopyWithZone:(NSZone *)zone
+- (instancetype)mutableCopyWithZone:(NSZone *)zone
 {
     NIMutableBezierPath *bezierPath;
     
@@ -171,27 +171,27 @@
     return bezierPath;
 }
 
-+ (id)bezierPath
++ (instancetype)bezierPath
 {
     return [[[[self class] alloc] init] autorelease];
 }
 
-+ (id)bezierPathWithBezierPath:(NIBezierPath *)bezierPath
++ (instancetype)bezierPathWithBezierPath:(NIBezierPath *)bezierPath
 {
     return [[[[self class] alloc] initWithBezierPath:bezierPath] autorelease];
 }
 
-+ (id)bezierPathWithNSBezierPath:(NSBezierPath *)bezierPath
++ (instancetype)bezierPathWithNSBezierPath:(NSBezierPath *)bezierPath
 {
     return [[[[self class] alloc] initWithNSBezierPath:bezierPath] autorelease];
 }
 
-+ (id)bezierPathNIBezierCore:(NIBezierCoreRef)bezierCore
++ (instancetype)bezierPathNIBezierCore:(NIBezierCoreRef)bezierCore
 {
     return [[[[self class] alloc] initWithNIBezierCore:bezierCore] autorelease];
 }
 
-+ (id)bezierPathCircleWithCenter:(NIVector)center radius:(CGFloat)radius normal:(NIVector)normal
++ (instancetype)bezierPathCircleWithCenter:(NIVector)center radius:(CGFloat)radius normal:(NIVector)normal
 {
     NIVector planeVector = NIVectorANormalVector(normal);
     NIVector planeVector2 = NIVectorCrossProduct(normal, planeVector);
