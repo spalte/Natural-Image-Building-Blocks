@@ -39,6 +39,7 @@
 @synthesize pixelsDeep = _pixelsDeep;
 @synthesize volumeTransform = _volumeTransform;
 @synthesize floatData = _floatData;
+@synthesize curved = _curved;
 
 + (NIAffineTransform)volumeTransformForOrigin:(NIVector)origin directionX:(NIVector)directionX pixelSpacingX:(CGFloat)pixelSpacingX directionY:(NIVector)directionY pixelSpacingY:(CGFloat)pixelSpacingY
                                      directionZ:(NIVector)directionZ pixelSpacingZ:(CGFloat)pixelSpacingZ
@@ -85,6 +86,24 @@
     return self;
 }
 
+- (instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
+      volumeToDicomConverter:(NIVector (^)(NIVector volumeVector))volumeToDicomConverter dicomToVolumeConverter:(NIVector (^)(NIVector dicomVector))dicomToVolumeConverter
+            outOfBoundsValue:(float)outOfBoundsValue
+{
+    if ( (self = [super init]) ) {
+        _floatData = [data retain];
+        _outOfBoundsValue = outOfBoundsValue;
+        _pixelsWide = pixelsWide;
+        _pixelsHigh = pixelsHigh;
+        _pixelsDeep = pixelsDeep;
+        _volumeTransform = NIAffineTransformIdentity;
+        _curved = YES;
+        _convertVolumeVectorToDICOMVectorBlock = [volumeToDicomConverter copy];
+        _convertVolumeVectorFromDICOMVectorBlock = [dicomToVolumeConverter copy];
+    }
+    return self;
+}
+
 - (instancetype)initWithVolumeData:(NIVolumeData *)volumeData
 {
     if ( (self = [super init]) ) {
@@ -107,6 +126,11 @@
 {
     [_floatData release];
     _floatData = nil;
+    [_convertVolumeVectorToDICOMVectorBlock release];
+    _convertVolumeVectorToDICOMVectorBlock = nil;
+    [_convertVolumeVectorFromDICOMVectorBlock release];
+    _convertVolumeVectorFromDICOMVectorBlock = nil;
+
     [super dealloc];
 }
 
@@ -221,37 +245,50 @@
     return YES;
 }
 
-- (BOOL)isCurved
-{
-    return NO;
-}
-
 - (NIVector (^)(NIVector))convertVolumeVectorToDICOMVectorBlock
 {
-    NIAffineTransform inverseVolumeTransform = NIAffineTransformInvert([self volumeTransform]);
+    if (_curved == NO) {
+        NIAffineTransform inverseVolumeTransform = NIAffineTransformInvert([self volumeTransform]);
 
-    return [[^NIVector(NIVector vector) {
-        return NIVectorApplyTransform(vector, inverseVolumeTransform);
-    } copy] autorelease];
+        return [[^NIVector(NIVector vector) {
+            return NIVectorApplyTransform(vector, inverseVolumeTransform);
+        } copy] autorelease];
+    } else {
+        return _convertVolumeVectorToDICOMVectorBlock;
+    }
 }
 
 - (NIVector (^)(NIVector))convertVolumeVectorFromDICOMVectorBlock
 {
-    NIAffineTransform volumeTransform = [self volumeTransform];
+    if (_curved == NO) {
+        NIAffineTransform volumeTransform = [self volumeTransform];
 
-    return [[^NIVector(NIVector vector) {
-        return NIVectorApplyTransform(vector, volumeTransform);
-    } copy] autorelease];
+        return [[^NIVector(NIVector vector) {
+            return NIVectorApplyTransform(vector, volumeTransform);
+        } copy] autorelease];
+    } else {
+        return _convertVolumeVectorFromDICOMVectorBlock;
+    }
 }
 
 - (NIVector)convertVolumeVectorToDICOMVector:(NIVector)vector
 {
-    return [self convertVolumeVectorToDICOMVectorBlock](vector);
+    if (_curved) {
+        return _convertVolumeVectorToDICOMVectorBlock(vector);
+    }
+    else {
+        return NIVectorApplyTransform(vector, NIAffineTransformInvert([self volumeTransform]));
+    }
 }
 
 - (NIVector)convertVolumeVectorFromDICOMVector:(NIVector)vector
 {
-    return [self convertVolumeVectorFromDICOMVectorBlock](vector);
+    if (_curved) {
+        return _convertVolumeVectorFromDICOMVectorBlock(vector);
+    }
+    else {
+        return NIVectorApplyTransform(vector, [self volumeTransform]);
+    }
 }
 
 - (vImage_Buffer)floatBufferForSliceAtIndex:(NSUInteger)z {

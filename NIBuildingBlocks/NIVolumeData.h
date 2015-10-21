@@ -60,7 +60,7 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 
     NIAffineTransform _volumeTransform; // volumeTransform is the transform from Dicom (patient) space to pixel data
 
-    BOOL _curved; // Not fully implemented yet. There are no setters, but the getters return hard-coded valid results
+    BOOL _curved;
     NIVector (^_convertVolumeVectorToDICOMVectorBlock)(NIVector);
     NIVector (^_convertVolumeVectorFromDICOMVectorBlock)(NIVector);
 }
@@ -76,6 +76,10 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 
 - (instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
              volumeTransform:(NIAffineTransform)volumeTransform outOfBoundsValue:(float)outOfBoundsValue NS_DESIGNATED_INITIALIZER; // volumeTransform is the transform from Dicom (patient) space to pixel data
+
+- (instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
+      volumeToDicomConverter:(NIVector (^)(NIVector volumeVector))volumeToDicomConverter dicomToVolumeConverter:(NIVector (^)(NIVector dicomVector))dicomToVolumeConverter
+            outOfBoundsValue:(float)outOfBoundsValue NS_DESIGNATED_INITIALIZER;
 
 - (instancetype)initWithVolumeData:(NIVolumeData *)volumeData NS_DESIGNATED_INITIALIZER;
 
