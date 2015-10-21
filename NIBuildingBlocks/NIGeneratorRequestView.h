@@ -90,10 +90,6 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
 @property (nonatomic, readonly, copy) NIGeneratorRequest *presentedGeneratorRequest; // this is the generator request that is currently drawn. Continuously updates during animations
 @property (nonatomic, readonly, assign) NIVector mousePosition; // the current mouse location, the mouseLocation is equal to NIGeneratorRequestViewMouseOutside if it is outside the view
 
-// The way you are using this calls this routine once in the superclass init, and then you call it again, leading to a leak of ton of stuff
-// I would call this an anti-pattern, but it is not at all a pattern in Obj-C
-- (void)initNIGeneratorRequestView DEPRECATED_MSG_ATTRIBUTE("WTF!!!!");
-
 - (NSInteger)volumeDataCount;
 - (NIVolumeDataProperties *)addVolumeData:(NIVolumeData *)volumeData;
 - (NIVolumeDataProperties *)insertVolumeData:(NIVolumeData *)volumeData atIndex:(NSUInteger)index;
