@@ -98,6 +98,11 @@
     return self;
 }
 
+- (instancetype)copyWithZone:(NSZone *)zone
+{
+    return [[[[self class] allocWithZone:zone] initWithVolumeData:self] autorelease];
+}
+
 - (void)dealloc
 {
     [_floatData release];

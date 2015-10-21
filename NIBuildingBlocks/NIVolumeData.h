@@ -50,7 +50,7 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 } NIVolumeDataInlineBuffer;
 
 // Interface to the data
-@interface NIVolumeData : NSObject {
+@interface NIVolumeData : NSObject <NSCopying> {
     NSData *_floatData;
     float _outOfBoundsValue;
 
@@ -69,13 +69,15 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 + (NIAffineTransform)volumeTransformForOrigin:(NIVector)origin directionX:(NIVector)directionX pixelSpacingX:(CGFloat)pixelSpacingX directionY:(NIVector)directionY pixelSpacingY:(CGFloat)pixelSpacingY
                                      directionZ:(NIVector)directionZ pixelSpacingZ:(CGFloat)pixelSpacingZ;
 
+- (instancetype)init NS_UNAVAILABLE;
+
 - (instancetype)initWithBytesNoCopy:(const float *)floatBytes pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
                     volumeTransform:(NIAffineTransform)volumeTransform outOfBoundsValue:(float)outOfBoundsValue freeWhenDone:(BOOL)freeWhenDone; // volumeTransform is the transform from Dicom (patient) space to pixel data
 
 - (instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
-             volumeTransform:(NIAffineTransform)volumeTransform outOfBoundsValue:(float)outOfBoundsValue; // volumeTransform is the transform from Dicom (patient) space to pixel data
+             volumeTransform:(NIAffineTransform)volumeTransform outOfBoundsValue:(float)outOfBoundsValue NS_DESIGNATED_INITIALIZER; // volumeTransform is the transform from Dicom (patient) space to pixel data
 
-- (instancetype)initWithVolumeData:(NIVolumeData *)volumeData;
+- (instancetype)initWithVolumeData:(NIVolumeData *)volumeData NS_DESIGNATED_INITIALIZER;
 
 @property (readonly) NSUInteger pixelsWide;
 @property (readonly) NSUInteger pixelsHigh;
