@@ -79,7 +79,7 @@
 		4F4409B61B21A0F6006AC3B6 /* NIWindowingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4409B41B21A0F6006AC3B6 /* NIWindowingView.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4F4409B71B21A0F6006AC3B6 /* NIWindowingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4409B51B21A0F6006AC3B6 /* NIWindowingView.m */; };
 		4F4B28381BD022560033906D /* NIAgeFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4B28361BD022560033906D /* NIAgeFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4F4B28391BD022560033906D /* NIAgeFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4B28371BD022560033906D /* NIAgeFormatter.m */; settings = {ASSET_TAGS = (); }; };
+		4F4B28391BD022560033906D /* NIAgeFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4B28371BD022560033906D /* NIAgeFormatter.m */; };
 		4FF07D901B24C30D00380630 /* NITextLabelGroupLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF07D8E1B24C30D00380630 /* NITextLabelGroupLayer.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4FF07D911B24C30D00380630 /* NITextLabelGroupLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D8F1B24C30D00380630 /* NITextLabelGroupLayer.m */; };
 		7106843F1B678D800078903A /* NIMask.h in Headers */ = {isa = PBXBuildFile; fileRef = 7106843D1B678D800078903A /* NIMask.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -519,7 +519,7 @@
 		4F151ED21B1CC8D000C8F767 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Spaltenstein Natural Image";
 				TargetAttributes = {
 					4F151EDA1B1CC8D000C8F767 = {
