@@ -632,27 +632,6 @@
     return YES;
 }
 
-#ifndef CGFloatMax
-#if CGFLOAT_IS_DOUBLE
-#define CGFloatMax fmax
-#else
-#define CGFloatMax fmaxf
-#endif
-#endif
-
-- (CGFloat)maximumDiagonal __deprecated
-{
-    NIVector edges[] = {{0,0,0},{1,1,1},{1,0,0},{0,1,1},{0,1,0},{1,0,1},{1,1,0},{0,0,1}}; // these 8 points define the 4 volume diagonals (1-2, 3-4, 5-6, 7-8)
-    NIVectorApplyTransformToVectors(NIAffineTransformMakeScale(self.pixelsWide*self.pixelSpacingX, self.pixelsHigh*self.pixelSpacingY, self.pixelsDeep*self.pixelSpacingZ), edges, 8);
-    NIVectorApplyTransformToVectors(self.volumeTransform, edges, 8);
-    
-    CGFloat maxd = 0;
-    for (size_t i = 0; i < 4; ++i)
-        maxd = CGFloatMax(maxd, NIVectorDistance(edges[i*2], edges[i*2+1]));
-    
-    return maxd;
-}
-
 - (NSString *)description
 {
     NSMutableString *description = [NSMutableString string];

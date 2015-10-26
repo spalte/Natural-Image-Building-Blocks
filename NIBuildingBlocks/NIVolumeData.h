@@ -135,10 +135,6 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 
 - (BOOL)aquireInlineBuffer:(NIVolumeDataInlineBuffer *)inlineBuffer; // always return YES
 
-// if you need to calculate a width to use for thick slab that covers the entire volume, calculate the minumum width for a given slice
-// don't just give this likely-to-be-larger-than-needed value.
-- (CGFloat)maximumDiagonal __deprecated;
-
 // not done yet, will crash if given vectors that are outside of the volume
 - (NSUInteger)tempBufferSizeForNumVectors:(NSUInteger)numVectors;
 - (void)linearInterpolateVolumeVectors:(NIVectorArray)volumeVectors outputValues:(float *)outputValues numVectors:(NSUInteger)numVectors tempBuffer:(void *)tempBuffer;
