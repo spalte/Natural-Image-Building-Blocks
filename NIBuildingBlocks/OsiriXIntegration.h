@@ -20,8 +20,15 @@
 //  THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "NIStorage.h"
 
 @class NIVolumeData;
+
+@interface OsiriX_NI : NSObject<NIStorageLocator>
+
++ (BOOL)inOsiriX;
+
+@end
 
 // call this function to add the methods below to OsiriX, returns 0 on success
 // NIBuildingBlocksInstallOsiriXCategories is now called automatically when the framework loads

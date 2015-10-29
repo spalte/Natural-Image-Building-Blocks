@@ -87,6 +87,8 @@
 		710684441B678FD30078903A /* NIMaskRunStack.h in Headers */ = {isa = PBXBuildFile; fileRef = 710684421B678FD30078903A /* NIMaskRunStack.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		710684451B678FD30078903A /* NIMaskRunStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 710684431B678FD30078903A /* NIMaskRunStack.m */; };
 		719473721B1DA0F1009363AE /* NIOrientationTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 719473711B1DA0F1009363AE /* NIOrientationTextLayer.m */; };
+		7194D0871BE0EE3A00563DEC /* NIStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 7194D0851BE0EE3A00563DEC /* NIStorage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7194D0881BE0EE3A00563DEC /* NIStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 7194D0861BE0EE3A00563DEC /* NIStorage.m */; };
 		71A8B4691BA953DD0013D45E /* NIGeometryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71A8B4681BA953DD0013D45E /* NIGeometryTests.m */; };
 		71DFA2CA1B6FC77E008AB997 /* NIMaskData.h in Headers */ = {isa = PBXBuildFile; fileRef = 71DFA2C81B6FC77E008AB997 /* NIMaskData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71DFA2CB1B6FC77E008AB997 /* NIMaskData.m in Sources */ = {isa = PBXBuildFile; fileRef = 71DFA2C91B6FC77E008AB997 /* NIMaskData.m */; };
@@ -187,6 +189,8 @@
 		710684421B678FD30078903A /* NIMaskRunStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMaskRunStack.h; sourceTree = "<group>"; };
 		710684431B678FD30078903A /* NIMaskRunStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMaskRunStack.m; sourceTree = "<group>"; };
 		719473711B1DA0F1009363AE /* NIOrientationTextLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIOrientationTextLayer.m; sourceTree = "<group>"; };
+		7194D0851BE0EE3A00563DEC /* NIStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIStorage.h; sourceTree = "<group>"; };
+		7194D0861BE0EE3A00563DEC /* NIStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIStorage.m; sourceTree = "<group>"; };
 		71A8B4681BA953DD0013D45E /* NIGeometryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIGeometryTests.m; sourceTree = "<group>"; };
 		71DFA2C81B6FC77E008AB997 /* NIMaskData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMaskData.h; sourceTree = "<group>"; };
 		71DFA2C91B6FC77E008AB997 /* NIMaskData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMaskData.m; sourceTree = "<group>"; };
@@ -403,6 +407,8 @@
 				4F4B28371BD022560033906D /* NIAgeFormatter.m */,
 				4F151F921B1CFB3700C8F767 /* NIAnnularPath.h */,
 				4F151F931B1CFB3700C8F767 /* NIAnnularPath.m */,
+				7194D0851BE0EE3A00563DEC /* NIStorage.h */,
+				7194D0861BE0EE3A00563DEC /* NIStorage.m */,
 			);
 			name = Goodies;
 			sourceTree = "<group>";
@@ -454,6 +460,7 @@
 				71DFA2CA1B6FC77E008AB997 /* NIMaskData.h in Headers */,
 				4F4B28381BD022560033906D /* NIAgeFormatter.h in Headers */,
 				4F0727E11B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.h in Headers */,
+				7194D0871BE0EE3A00563DEC /* NIStorage.h in Headers */,
 				4F151F071B1CCA1400C8F767 /* NIGeneratorRequestLayer.h in Headers */,
 				4F151F0F1B1CCA1400C8F767 /* NIScaleBarLayer.h in Headers */,
 				4F151F141B1CCA1400C8F767 /* NISpritePrivate.h in Headers */,
@@ -583,6 +590,7 @@
 				710684451B678FD30078903A /* NIMaskRunStack.m in Sources */,
 				4F151F951B1CFB3700C8F767 /* NIAnnularPath.m in Sources */,
 				4F151F701B1CCFDA00C8F767 /* NIBezierCore.m in Sources */,
+				7194D0881BE0EE3A00563DEC /* NIStorage.m in Sources */,
 				4F4B28391BD022560033906D /* NIAgeFormatter.m in Sources */,
 				4F4409B71B21A0F6006AC3B6 /* NIWindowingView.m in Sources */,
 				4F151F081B1CCA1400C8F767 /* NIGeneratorRequestLayer.m in Sources */,

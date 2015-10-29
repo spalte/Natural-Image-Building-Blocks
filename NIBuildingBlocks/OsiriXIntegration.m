@@ -21,10 +21,49 @@
 
 #import "OsiriXIntegration.h"
 #import "NIVolumeData.h"
+#import "NIStorage.h"
 
 #import <objc/runtime.h>
 
 int NIBuildingBlocksInstallOsiriXCategories();
+
+@implementation OsiriX_NI
+
+static NSString* const BrowserControllerClassName = @"BrowserController";
+
++ (id)CurrentBrowserController {
+    @try {
+        Class BrowserControllerClass = NSClassFromString(BrowserControllerClassName);
+        if (!BrowserControllerClass)
+            return nil;
+        
+        return [BrowserControllerClass valueForKey:@"currentBrowser"];
+        
+    } @catch (...) {
+        // do nothing
+    }
+    
+    return nil;
+}
+
++ (BOOL)inOsiriX {
+    return [[[self.class CurrentBrowserController] className] isEqualToString:BrowserControllerClassName];
+}
+
++ (NSURL*)NIStorageDefaultLocationForBundle:(NSBundle*)bundle {
+    id bc = [self.class CurrentBrowserController];
+    if (!bc) {
+        NSAssert(NO, @"NIStorage is being initialized too soon to properly work inside OsiriX - Try wrapping the initialization code within a [self performBlock:^{ ... } afterDelay:0]");
+        return nil;
+    }
+    
+    if ([NSBundle bundleForClass:[bc class]] == bundle)
+        return [NSURL fileURLWithPath:[bc valueForKeyPath:@"database.dataBaseDirPath"]];
+    
+    return nil;
+}
+
+@end
 
 @interface ViewerController_NI : NSObject
 
