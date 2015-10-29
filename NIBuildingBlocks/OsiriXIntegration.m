@@ -29,15 +29,15 @@ int NIBuildingBlocksInstallOsiriXCategories();
 
 @implementation OsiriX_NI
 
-static NSString* const BrowserControllerClassName = @"BrowserController";
+static NSString* const DicomDatabaseClassName = @"DicomDatabase";
 
-+ (id)CurrentBrowserController {
++ (id)DefaultDicomDatabase {
     @try {
-        Class BrowserControllerClass = NSClassFromString(BrowserControllerClassName);
-        if (!BrowserControllerClass)
+        Class DicomDatabaseClass = NSClassFromString(DicomDatabaseClassName);
+        if (!DicomDatabaseClass)
             return nil;
         
-        return [BrowserControllerClass valueForKey:@"currentBrowser"];
+        return [DicomDatabaseClass valueForKey:@"defaultDatabase"];
         
     } @catch (...) {
         // do nothing
@@ -47,18 +47,31 @@ static NSString* const BrowserControllerClassName = @"BrowserController";
 }
 
 + (BOOL)inOsiriX {
-    return [[[self.class CurrentBrowserController] className] isEqualToString:BrowserControllerClassName];
+    Class DicomDatabaseClass = NSClassFromString(DicomDatabaseClassName);
+    if (!DicomDatabaseClass)
+        return NO;
+    
+    NSBundle* bundle = [NSBundle bundleForClass:DicomDatabaseClass];
+    if ([[bundle.infoDictionary[@"CFBundleDocumentTypes"] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSDictionary* entry, NSDictionary<NSString *,id>* _Nullable bindings) {
+        return ([entry[@"CFBundleTypeExtensions"] isEqual:@[@"osirixplugin"]]);
+    }]] count] == 1)
+        return YES;
+    
+    return NO;
 }
 
 + (NSURL*)NIStorageDefaultLocationForBundle:(NSBundle*)bundle {
-    id bc = [self.class CurrentBrowserController];
-    if (!bc) {
+    if (![self.class inOsiriX])
+        return nil;
+    
+    id ddd = [self.class DefaultDicomDatabase];
+    if (!ddd) {
         NSAssert(NO, @"NIStorage is being initialized too soon to properly work inside OsiriX - Try wrapping the initialization code within a [self performBlock:^{ ... } afterDelay:0]");
         return nil;
     }
     
-    if ([NSBundle bundleForClass:[bc class]] == bundle)
-        return [NSURL fileURLWithPath:[bc valueForKeyPath:@"database.dataBaseDirPath"]];
+    if ([NSBundle bundleForClass:[ddd class]] == bundle)
+        return [NSURL fileURLWithPath:[ddd valueForKeyPath:@"dataBaseDirPath"]];
     
     return nil;
 }
