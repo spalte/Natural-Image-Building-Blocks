@@ -51,6 +51,7 @@ static NSString* const DicomDatabaseClassName = @"DicomDatabase";
     if (!DicomDatabaseClass)
         return NO;
     
+    // TODO: I'm not convinced this is the best way to see if we're inside OsiriX...
     NSBundle* bundle = [NSBundle bundleForClass:DicomDatabaseClass];
     if ([[bundle.infoDictionary[@"CFBundleDocumentTypes"] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSDictionary* entry, NSDictionary<NSString *,id>* _Nullable bindings) {
         return ([entry[@"CFBundleTypeExtensions"] isEqual:@[@"osirixplugin"]]);

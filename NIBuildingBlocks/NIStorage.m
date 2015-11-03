@@ -9,7 +9,30 @@
 #import "NIStorage.h"
 #import <objc/runtime.h>
 
+@interface NIStorage ()
+
+@property(retain, readwrite) NSURL* location;
+
+@end
+
 @implementation NIStorage
+
+@synthesize location = _location;
+
+- (instancetype)initWithLocation:(NSURL*)location {
+    if ((self = [super init])) {
+        self.location = location;
+    }
+    
+    return self;
+}
+
+- (void)dealloc {
+    self.location = nil;
+    [super dealloc];
+}
+
+
 
 + (NSURL*)defaultLocationForBundle:(NSBundle*)bundle {
     // find the NIStorageLocators
@@ -21,6 +44,10 @@
         if (class_conformsToProtocol(c[i], storageLocatorProtocol))
             [NIStorageLocators addObject:c[i]];
     }
+    
+//    [NIStorageLocators sortUsingComparator:^NSComparisonResult(id sl1, id sl2) { // TODO: prioritize classes inside the bundle argument
+//        
+//    }];
     
     NSMutableArray<NSBundle*>* bundles = [NSMutableArray arrayWithObject:NSBundle.mainBundle];
     if (bundle && ![bundles containsObject:bundle])

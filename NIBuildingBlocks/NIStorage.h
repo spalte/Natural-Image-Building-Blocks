@@ -8,9 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NIStorage : NSObject
+@interface NIStorage : NSObject {
+    NSURL* _location;
+}
 
 + (NSURL*)defaultLocationForBundle:(NSBundle*)bundle;
+
+@property(retain, readonly) NSURL* location;
+
+- (instancetype)initWithLocation:(NSURL*)location;
 
 @end
 
