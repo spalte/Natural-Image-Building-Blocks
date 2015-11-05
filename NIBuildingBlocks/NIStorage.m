@@ -19,6 +19,10 @@
 
 @synthesize location = _location;
 
+- (instancetype)initWithBundle:(NSBundle*)bundle {
+    return [self initWithLocation:[self.class defaultLocationForBundle:bundle]];
+}
+
 - (instancetype)initWithLocation:(NSURL*)location {
     if ((self = [super init])) {
         self.location = location;
@@ -32,7 +36,33 @@
     [super dealloc];
 }
 
++ (id)_validateKey:(id)key {
+    if (![key isKindOfClass:NSArray.class])
+        key = @[key];
+    for (id skey in key)
+        if (![skey isKindOfClass:NSString.class])
+            [NSException raise:NSInvalidArgumentException format:@"NIStorage keys must be either NSString* or NSArray<NSString*>*"];
+    return key;
+}
 
+- (NSURL*)directoryForKey:(id)key {
+    return [self directoryForKey:key create:YES];
+}
+
+- (NSURL*)directoryForKey:(id)key create:(BOOL)create {
+    if (!key)
+        return nil;
+    key = [self.class _validateKey:key];
+    
+    NSURL* url = self.location;
+    for (NSString* skey in key)
+        url = [url URLByAppendingPathComponent:skey isDirectory:YES];
+    
+    if (create)
+        [[NSFileManager defaultManager] createDirectoryAtURL:url withIntermediateDirectories:YES attributes:nil error:NULL];
+    
+    return url;
+}
 
 + (NSURL*)defaultLocationForBundle:(NSBundle*)bundle {
     // find the NIStorageLocators

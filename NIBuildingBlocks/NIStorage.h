@@ -16,7 +16,11 @@
 
 @property(retain, readonly) NSURL* location;
 
+- (instancetype)initWithBundle:(NSBundle*)bundle; // determines the location through +[NIStorage defaultLocationForBundle:bundle]
 - (instancetype)initWithLocation:(NSURL*)location;
+
+- (NSURL*)directoryForKey:(id)key; // key must be either NSString* or NSArray<NSString*>, in which case the resulting directoy will have a subdirectory for every element in the array
+- (NSURL*)directoryForKey:(id)key create:(BOOL)create; // by default, create is YES
 
 @end
 
