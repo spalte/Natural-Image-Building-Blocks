@@ -49,6 +49,9 @@ FOUNDATION_EXPORT const unsigned char NIBuildingBlocksVersionString[];
 #import <NIBuildingBlocks/NIAnnularPath.h>
 #import <NIBuildingBlocks/NIWindowLevelWindowWidthToolbarItem.h>
 #import <NIBuildingBlocks/NIStorage.h>
+#import <NIBuildingBlocks/NIDatabase.h>
+#import <NIBuildingBlocks/NIManagedObject.h>
+#import <NIBuildingBlocks/NIManagedObjectContext.h>
 #import <NIBuildingBlocks/OsiriXIntegration.h>
 
 
