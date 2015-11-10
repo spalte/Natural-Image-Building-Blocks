@@ -36,27 +36,18 @@
     [super dealloc];
 }
 
-+ (id)_validateKey:(id)key {
-    if (![key isKindOfClass:NSArray.class])
-        key = @[key];
-    for (id skey in key)
-        if (![skey isKindOfClass:NSString.class])
-            [NSException raise:NSInvalidArgumentException format:@"NIStorage keys must be either NSString* or NSArray<NSString*>*"];
-    return key;
+- (NSURL*)directoryForKey:(NSString*)keyPath {
+    return [self directoryForKey:keyPath create:YES];
 }
 
-- (NSURL*)directoryForKey:(id)key {
-    return [self directoryForKey:key create:YES];
-}
-
-- (NSURL*)directoryForKey:(id)key create:(BOOL)create {
-    if (!key)
+- (NSURL*)directoryForKey:(NSString*)keyPath create:(BOOL)create {
+    if (!keyPath)
         return nil;
-    key = [self.class _validateKey:key];
+    NSArray* keyComponents = [keyPath componentsSeparatedByString:@"."];
     
     NSURL* url = self.location;
-    for (NSString* skey in key)
-        url = [url URLByAppendingPathComponent:skey isDirectory:YES];
+    for (NSString* keyComponent in keyComponents)
+        url = [url URLByAppendingPathComponent:keyComponent isDirectory:YES];
     
     if (create)
         [[NSFileManager defaultManager] createDirectoryAtURL:url withIntermediateDirectories:YES attributes:nil error:NULL];
