@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+/* NIRecursiveLock requires unlocks to come from the same thread as the corresponding locks, throws a NSGenericException when not.
+ */
 @interface NIRecursiveLock : NSRecursiveLock {
     NSMutableArray* _lockers;
 }

@@ -85,14 +85,12 @@
             [[NSFileManager defaultManager] createDirectoryAtURL:containingDirURL withIntermediateDirectories:YES attributes:nil error:NULL];
         
         self.managedObjectContext = [[NIManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType database:self];
+        self.managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
+        
         [self performBlockAndWait:^{
             NSError* error = nil;
 
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeManagedObjectContextDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:self.managedObjectContext];
-            
-            self.managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
-            if (self.managedObjectContext.parentContext)
-                self.managedObjectContext.parentContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
             
             self.managedObjectContext.undoManager = nil;
             NSManagedObjectModel* mom = [[[NSManagedObjectModel alloc] initWithContentsOfURL:murl] autorelease];
@@ -116,13 +114,13 @@
         self.familyData = parent.familyData;
 
         self.managedObjectContext = [[NIManagedObjectContext alloc] initWithConcurrencyType:type database:self];
+        self.managedObjectContext.parentContext = parent.managedObjectContext;
+        self.managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
+        self.managedObjectContext.undoManager = nil;
+
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeManagedObjectContextDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:self.managedObjectContext];
 
-        self.managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
-        if (self.managedObjectContext.parentContext)
-            self.managedObjectContext.parentContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
-
-        [self.managedObjectContext setPersistentStoreCoordinator:parent.managedObjectContext.persistentStoreCoordinator];
+//        [self.managedObjectContext setPersistentStoreCoordinator:parent.managedObjectContext.persistentStoreCoordinator];
         
         [[NSNotificationCenter defaultCenter] addObserver:self.managedObjectContext selector:@selector(mergeChangesFromContextDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:parent.managedObjectContext];
     }
