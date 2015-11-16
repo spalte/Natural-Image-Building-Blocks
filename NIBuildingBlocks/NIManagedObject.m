@@ -72,7 +72,7 @@
 //}
 
 //- (void)dealloc {
-////    DebugLog(@"deallocating %@ %lx (%@)", self.objectID.entity.name, (unsigned long)self, self.objectID.URIRepresentation);
+////    DebugLog(@"deallocating %@ 0x%lx (%@)", self.objectID.entity.name, (unsigned long)self, self.objectID.URIRepresentation);
 //    [super dealloc];
 //}
 
@@ -229,7 +229,7 @@
 //}
 //
 //- (void)dealloc {
-//    //    DebugLog(@"deallocating %@ controller %lx (%@)", self.objectID.entity.name, (unsigned long)self, self.objectID.URIRepresentation);
+//    //    DebugLog(@"deallocating %@ controller 0x%lx (%@)", self.objectID.entity.name, (unsigned long)self, self.objectID.URIRepresentation);
 //    [[NSNotificationCenter defaultCenter] removeObserver:self];
 //    [self.factory removeContollerForKey:self.key];
 //    self.database = nil;
