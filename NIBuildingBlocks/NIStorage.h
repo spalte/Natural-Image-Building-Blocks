@@ -14,7 +14,7 @@
 
 + (NSURL*)defaultLocationForBundle:(NSBundle*)bundle;
 
-@property(retain, readonly) NSURL* location;
+@property (retain, readonly) NSURL* location;
 
 - (instancetype)initWithBundle:(NSBundle*)bundle; // determines the location through +[NIStorage defaultLocationForBundle:bundle]
 - (instancetype)initWithLocation:(NSURL*)location;

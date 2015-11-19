@@ -17,16 +17,16 @@
 
 @interface NIDatabase ()
 
-@property(readwrite, strong, nonatomic) NSManagedObjectContext* managedObjectContext;
+@property (readwrite, strong, nonatomic) NSManagedObjectContext* managedObjectContext;
 
-@property(retain) __kindof NIDatabase* parent;
-@property(retain) __kindof NIDatabaseFamilyData* familyData;
+@property (retain) __kindof NIDatabase* parent;
+@property (retain) __kindof NIDatabaseFamilyData* familyData;
 
 @end
 
 @interface NIDatabaseFamilyData ()
 
-@property(retain) NSURL *URL, *momURL;
+@property (retain) NSURL *URL, *momURL;
 @property BOOL momSaved;
 
 @end

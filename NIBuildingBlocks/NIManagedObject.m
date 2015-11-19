@@ -19,9 +19,9 @@
 //    NIRecursiveLock* _lock;
 //}
 //
-//@property(assign) Class class;
-//@property(retain) NSMutableDictionary* instances;
-//@property(retain) NIRecursiveLock* lock;
+//@property (assign) Class class;
+//@property (retain) NSMutableDictionary* instances;
+//@property (retain) NIRecursiveLock* lock;
 //
 //- (id)initWithClass:(Class)class;
 //- (id)controllerForObject:(NIManagedObject*)item;
@@ -31,12 +31,12 @@
 //
 //@interface NIManagedObjectController ()
 //
-//@property(retain) NIDatabase* database;
-//@property(retain) NSManagedObjectID* objectID;
-//@property(retain) NSMutableDictionary* instances;
-//@property(retain) id key;
-//@property(assign) NIManagedObjectControllerFactory* factory;
-//@property(retain) NIRecursiveLock* lock;
+//@property (retain) NIDatabase* database;
+//@property (retain) NSManagedObjectID* objectID;
+//@property (retain) NSMutableDictionary* instances;
+//@property (retain) id key;
+//@property (assign) NIManagedObjectControllerFactory* factory;
+//@property (retain) NIRecursiveLock* lock;
 //
 //@end
 

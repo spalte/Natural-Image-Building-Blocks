@@ -14,7 +14,7 @@
     NIDatabase* _database;
 }
 
-@property(assign, readonly) NIDatabase* database;
+@property (assign, readonly) NIDatabase* database;
 
 - (id)initWithConcurrencyType:(NSManagedObjectContextConcurrencyType)type database:(NIDatabase*)database;
 

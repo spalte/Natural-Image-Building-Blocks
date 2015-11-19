@@ -12,7 +12,7 @@
 
 @interface NIManagedObjectContext ()
 
-@property(assign, readwrite) NIDatabase* database;
+@property (assign, readwrite) NIDatabase* database;
 
 @end
 

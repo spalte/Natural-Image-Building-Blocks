@@ -11,7 +11,7 @@
 
 @interface NIStorage ()
 
-@property(retain, readwrite) NSURL* location;
+@property (retain, readwrite) NSURL* location;
 
 @end
 

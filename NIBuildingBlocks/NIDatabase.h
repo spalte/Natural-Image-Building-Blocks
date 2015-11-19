@@ -16,9 +16,9 @@
     __kindof NIDatabaseFamilyData* _familyData;
 }
 
-@property(readonly, strong, nonatomic) NSManagedObjectContext* managedObjectContext; // access to the context is discouraged
-@property(readonly, retain) NIDatabase* parent;
-@property(readonly, retain) NIDatabaseFamilyData* familyData;
+@property (readonly, strong, nonatomic) NSManagedObjectContext* managedObjectContext; // access to the context is discouraged
+@property (readonly, retain) NIDatabase* parent;
+@property (readonly, retain) NIDatabaseFamilyData* familyData;
 
 + (Class)NIDatabaseFamilyDataClass;
 
@@ -70,7 +70,7 @@
     BOOL _momSaved;
 }
 
-@property(readonly, retain) NSURL *URL, *momURL;
-@property(readonly) BOOL momSaved;
+@property (readonly, retain) NSURL *URL, *momURL;
+@property (readonly) BOOL momSaved;
 
 @end
