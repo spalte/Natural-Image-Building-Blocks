@@ -23,7 +23,6 @@
 - (id)initWithConcurrencyType:(NSManagedObjectContextConcurrencyType)type database:(NIDatabase*)database {
     if ((self = [super initWithConcurrencyType:type])) {
         self.database = database;
-//        self.thread = thread;
 //        DebugLog(@"allocating context %lx for %lx", (unsigned long)self, (unsigned long)self.thread);
     }
     
@@ -38,24 +37,22 @@
 
 - (BOOL)save:(NSError**)error {
 //    DebugLog(@"saving context %lx for %lx", (unsigned long)self, (unsigned long)self.thread);
-//    @synchronized (self.persistentStoreCoordinator) {
-        __autoreleasing NSError* lerror = nil;
-        if (!error) error = &lerror;
-        *error = nil;
-        
-        BOOL r =  [super save:error];
-        if (*error)
-            switch ([*error code]) {
-                case 133020: {
-                    NSLog(@"Warning: save error, merge conflicts - %@", [*error userInfo][@"conflictList"]);
-                } break;
-                default: {
-                    NSLog(@"Warning: save error - %@", [*error localizedDescription]);
-                } break;
-            }
-        
-        return r;
-//    }
+    __autoreleasing NSError* lerror = nil;
+    if (!error) error = &lerror;
+    *error = nil;
+    
+    BOOL r =  [super save:error];
+    if (*error)
+        switch ([*error code]) {
+            case 133020: {
+                NSLog(@"Warning: save error, merge conflicts - %@", [*error userInfo][@"conflictList"]);
+            } break;
+            default: {
+                NSLog(@"Warning: save error - %@", [*error localizedDescription]);
+            } break;
+        }
+    
+    return r;
 }
 
 - (void)mergeChangesFromContextDidSaveNotification:(NSNotification*)n {
@@ -70,20 +67,4 @@
     }];
 }
 
-//-(void)refreshChildContextWithObjectDidChangeNotification:(NSNotification *)notification {
-//    NSManagedObjectContext* changedContext = notification.object;
-//    NSManagedObjectContext* childContext = self;
-//    
-//    NSMutableSet* objectIDs = [NSMutableSet set];
-//    [objectIDs unionSet:[notification.userInfo[NSUpdatedObjectsKey] valueForKey:@"objectID"]];
-//    [objectIDs unionSet:[notification.userInfo[NSInsertedObjectsKey] valueForKey:@"objectID"]];
-//    [objectIDs unionSet:[notification.userInfo[NSDeletedObjectsKey] valueForKey:@"objectID"]];
-//    
-//    for (NSManagedObjectID* objectID in objectIDs) {
-//        NSManagedObject* object = [childContext registeredObjectWithID:objectID];
-//        [childContext refreshObject:object mergeChanges:YES];
-//    }  
-//}
-
 @end
-

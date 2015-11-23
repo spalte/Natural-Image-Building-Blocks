@@ -84,7 +84,7 @@
         if (![containingDirURL checkPromisedItemIsReachableAndReturnError:NULL])
             [[NSFileManager defaultManager] createDirectoryAtURL:containingDirURL withIntermediateDirectories:YES attributes:nil error:NULL];
         
-        self.managedObjectContext = [[NIManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType database:self];
+        self.managedObjectContext = [[[NIManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType database:self] autorelease];
         self.managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
         
         [self performBlockAndWait:^{
@@ -94,7 +94,7 @@
             
             self.managedObjectContext.undoManager = nil;
             NSManagedObjectModel* mom = [[[NSManagedObjectModel alloc] initWithContentsOfURL:murl] autorelease];
-            self.managedObjectContext.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
+            self.managedObjectContext.persistentStoreCoordinator = [[[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom] autorelease];
             
             NSURL* urlm = [url URLByAppendingPathExtension:@"mom"]; // mom used when last saving persistent storage
             
@@ -113,7 +113,7 @@
         self.parent = parent;
         self.familyData = parent.familyData;
 
-        self.managedObjectContext = [[NIManagedObjectContext alloc] initWithConcurrencyType:type database:self];
+        self.managedObjectContext = [[[NIManagedObjectContext alloc] initWithConcurrencyType:type database:self] autorelease];
         self.managedObjectContext.parentContext = parent.managedObjectContext;
         self.managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
         self.managedObjectContext.undoManager = nil;
@@ -222,7 +222,7 @@
 - (NSFetchedResultsController*)resultsControllerWithFetchRequest:(NSFetchRequest*)fetchRequest sectionNameKeyPath:(NSString*)sectionNameKeyPath cacheName:(NSString*)name {
     __block NSFetchedResultsController* r = nil;
     [self performBlockAndWait:^{
-        r = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:sectionNameKeyPath cacheName:name];
+        r = [[[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:sectionNameKeyPath cacheName:name] autorelease];
     }];
     return r;
 }
@@ -245,7 +245,7 @@
 }
 
 - (NSUInteger)countObjectsForEntity:(NSEntityDescription*)entity predicate:(NSPredicate*)predicate error:(NSError**)error {
-    NSFetchRequest* fr = [[NSFetchRequest alloc] init];
+    NSFetchRequest* fr = [[[NSFetchRequest alloc] init] autorelease];
     fr.entity = entity;
     fr.predicate = predicate;
     
@@ -273,7 +273,7 @@
 }
 
 - (NSArray*)objectsForEntity:(NSEntityDescription*)entity predicate:(NSPredicate*)predicate error:(NSError**)error {
-    NSFetchRequest* fr = [[NSFetchRequest alloc] init];
+    NSFetchRequest* fr = [[[NSFetchRequest alloc] init] autorelease];
     fr.entity = entity;
     fr.predicate = predicate;
 
@@ -325,7 +325,7 @@
     @autoreleasepool {
         NSError* error;
         
-        NSManagedObjectModel* omom = [[NSManagedObjectModel alloc] initWithContentsOfURL:murl];
+        NSManagedObjectModel* omom = [[[NSManagedObjectModel alloc] initWithContentsOfURL:murl] autorelease];
         
         NSURL* ourl = [url URLByAppendingPathExtension:@"old"];
         NSURL* omurl = [murl URLByAppendingPathExtension:@"old"];
@@ -345,7 +345,7 @@
                     if (!mm)
                         [NSException raise:NSGenericException format:@"%@", error.localizedDescription];
 
-                    NSMigrationManager* manager = [[NSMigrationManager alloc] initWithSourceModel:omom destinationModel:nmoc.persistentStoreCoordinator.managedObjectModel];
+                    NSMigrationManager* manager = [[[NSMigrationManager alloc] initWithSourceModel:omom destinationModel:nmoc.persistentStoreCoordinator.managedObjectModel] autorelease];
                     if (![manager migrateStoreFromURL:url type:NSSQLiteStoreType options:nil withMappingModel:mm toDestinationURL:nurl destinationType:NSSQLiteStoreType destinationOptions:nil error:&error])
                         [NSException raise:NSGenericException format:@"%@", error.localizedDescription];
                 }
