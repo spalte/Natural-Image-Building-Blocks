@@ -24,9 +24,10 @@
 }
 
 - (instancetype)initWithLocation:(NSURL*)location {
-    if ((self = [super init])) {
-        self.location = location;
-    }
+    if (!(self = [super init]))
+        return nil;
+    
+    self.location = location;
     
     return self;
 }
@@ -66,9 +67,13 @@
             [NIStorageLocators addObject:c[i]];
     }
     
-//    [NIStorageLocators sortUsingComparator:^NSComparisonResult(id sl1, id sl2) { // TODO: prioritize classes inside the bundle argument
-//        
-//    }];
+    [NIStorageLocators sortUsingComparator:^NSComparisonResult(Class c1, Class c2) { // prioritize classes inside the bundle argument
+        NSBundle *b1 = [NSBundle bundleForClass:c1], *b2 = [NSBundle bundleForClass:c2];
+        if (b1 == b2) return NSOrderedSame;
+        if (b1 == bundle) return NSOrderedAscending;
+        if (b2 == bundle) return NSOrderedDescending;
+        return NSOrderedSame;
+    }];
     
     NSMutableArray<NSBundle*>* bundles = [NSMutableArray arrayWithObject:NSBundle.mainBundle];
     if (bundle && ![bundles containsObject:bundle])

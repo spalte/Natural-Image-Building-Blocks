@@ -20,9 +20,10 @@
 @synthesize lockers = _lockers;
 
 - (id)init {
-    if ((self = [super init])) {
-       self.lockers = [NSMutableArray array];
-    }
+    if (!(self = [super init]))
+        return nil;
+    
+    self.lockers = [NSMutableArray array];
     
     return self;
 }

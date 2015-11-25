@@ -57,73 +57,75 @@
 }
 
 - (id)initWithURL:(NSURL*)url model:(NSURL*)murl {
-    if ((self = [super init])) {
-        self.familyData = [[[NIDatabaseFamilyData alloc] init] autorelease];
-        
-        if (!murl)
-            for (Class class = self.class; class; class = class.superclass)
-                if (class_getClassMethod(class, @selector(model)))
-                    if ((murl = [class model]))
-                        break;
-        
-        NSNumber* isDir;
-        if ([murl getResourceValue:&isDir forKey:NSURLIsDirectoryKey error:NULL]) {
-            if (isDir.boolValue) {
-                NSDictionary* versionInfo = [NSDictionary dictionaryWithContentsOfURL:[murl URLByAppendingPathComponent:@"VersionInfo.plist"]];
-                NSString* currentVersionName = versionInfo[@"NSManagedObjectModel_CurrentVersionName"];
-                if (!currentVersionName.length)
-                    currentVersionName = [murl.lastPathComponent stringByDeletingPathExtension];
-                murl = [murl URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.mom", currentVersionName]];
-            }
-        }
-       
-        self.familyData.URL = url;
-        self.familyData.momURL = murl;
-        
-        NSURL* containingDirURL = [url URLByDeletingLastPathComponent];
-        if (![containingDirURL checkPromisedItemIsReachableAndReturnError:NULL])
-            [[NSFileManager defaultManager] createDirectoryAtURL:containingDirURL withIntermediateDirectories:YES attributes:nil error:NULL];
-        
-        self.managedObjectContext = [[[NIManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType database:self] autorelease];
-        self.managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
-        
-        [self performBlockAndWait:^{
-            NSError* error = nil;
+    if (!(self = [super init]))
+        return nil;
 
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeManagedObjectContextDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:self.managedObjectContext];
-            
-            self.managedObjectContext.undoManager = nil;
-            NSManagedObjectModel* mom = [[[NSManagedObjectModel alloc] initWithContentsOfURL:murl] autorelease];
-            self.managedObjectContext.persistentStoreCoordinator = [[[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom] autorelease];
-            
-            NSURL* urlm = [url URLByAppendingPathExtension:@"mom"]; // mom used when last saving persistent storage
-            
-            if (![self.managedObjectContext.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:url options:@{ NSMigratePersistentStoresAutomaticallyOption: @YES, NSInferMappingModelAutomaticallyOption: @YES } error:&error]) {
-                if (![[NSData dataWithContentsOfURL:urlm] isEqualToData:[NSData dataWithContentsOfURL:murl]]) // exists, != murl
-                    [self.class migrate:url from:urlm into:self.managedObjectContext];
-            }
-        }];
+    self.familyData = [[[NIDatabaseFamilyData alloc] init] autorelease];
+    
+    if (!murl)
+        for (Class class = self.class; class; class = class.superclass)
+            if (class_getClassMethod(class, @selector(model)))
+                if ((murl = [class model]))
+                    break;
+    
+    NSNumber* isDir;
+    if ([murl getResourceValue:&isDir forKey:NSURLIsDirectoryKey error:NULL]) {
+        if (isDir.boolValue) {
+            NSDictionary* versionInfo = [NSDictionary dictionaryWithContentsOfURL:[murl URLByAppendingPathComponent:@"VersionInfo.plist"]];
+            NSString* currentVersionName = versionInfo[@"NSManagedObjectModel_CurrentVersionName"];
+            if (!currentVersionName.length)
+                currentVersionName = [murl.lastPathComponent stringByDeletingPathExtension];
+            murl = [murl URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.mom", currentVersionName]];
+        }
     }
+   
+    self.familyData.URL = url;
+    self.familyData.momURL = murl;
+    
+    NSURL* containingDirURL = [url URLByDeletingLastPathComponent];
+    if (![containingDirURL checkPromisedItemIsReachableAndReturnError:NULL])
+        [[NSFileManager defaultManager] createDirectoryAtURL:containingDirURL withIntermediateDirectories:YES attributes:nil error:NULL];
+    
+    self.managedObjectContext = [[[NIManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType database:self] autorelease];
+    self.managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
+    
+    [self performBlockAndWait:^{
+        NSError* error = nil;
+
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeManagedObjectContextDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:self.managedObjectContext];
+        
+        self.managedObjectContext.undoManager = nil;
+        NSManagedObjectModel* mom = [[[NSManagedObjectModel alloc] initWithContentsOfURL:murl] autorelease];
+        self.managedObjectContext.persistentStoreCoordinator = [[[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom] autorelease];
+        
+        NSURL* urlm = [url URLByAppendingPathExtension:@"mom"]; // mom used when last saving persistent storage
+        
+        if (![self.managedObjectContext.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:url options:@{ NSMigratePersistentStoresAutomaticallyOption: @YES, NSInferMappingModelAutomaticallyOption: @YES } error:&error]) {
+            if (![[NSData dataWithContentsOfURL:urlm] isEqualToData:[NSData dataWithContentsOfURL:murl]]) // exists, != murl
+                [self.class migrate:url from:urlm into:self.managedObjectContext];
+        }
+    }];
     
     return self;
 }
 
 - (id)initWithConcurrencyType:(NSManagedObjectContextConcurrencyType)type parent:(__kindof NIDatabase*)parent {
-    if ((self = [super init])) {
-        self.parent = parent;
-        self.familyData = parent.familyData;
+    if (!(self = [super init]))
+        return nil;
+    
+    self.parent = parent;
+    self.familyData = parent.familyData;
 
-        self.managedObjectContext = [[[NIManagedObjectContext alloc] initWithConcurrencyType:type database:self] autorelease];
-        self.managedObjectContext.parentContext = parent.managedObjectContext;
-        self.managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
-        self.managedObjectContext.undoManager = nil;
+    self.managedObjectContext = [[[NIManagedObjectContext alloc] initWithConcurrencyType:type database:self] autorelease];
+    self.managedObjectContext.parentContext = parent.managedObjectContext;
+    self.managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
+    self.managedObjectContext.undoManager = nil;
 
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeManagedObjectContextDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:self.managedObjectContext];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeManagedObjectContextDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:self.managedObjectContext];
 
-//        [self.managedObjectContext setPersistentStoreCoordinator:parent.managedObjectContext.persistentStoreCoordinator];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self.managedObjectContext selector:@selector(mergeChangesFromContextDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:parent.managedObjectContext];
-    }
+//    [self.managedObjectContext setPersistentStoreCoordinator:parent.managedObjectContext.persistentStoreCoordinator];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self.managedObjectContext selector:@selector(mergeChangesFromContextDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:parent.managedObjectContext];
     
     return self;
 }

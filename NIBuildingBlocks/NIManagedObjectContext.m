@@ -21,10 +21,11 @@
 @synthesize database = _database;
 
 - (id)initWithConcurrencyType:(NSManagedObjectContextConcurrencyType)type database:(NIDatabase*)database {
-    if ((self = [super initWithConcurrencyType:type])) {
-        self.database = database;
-//        DebugLog(@"allocating context %lx for %lx", (unsigned long)self, (unsigned long)self.thread);
-    }
+    if (!(self = [super initWithConcurrencyType:type]))
+        return nil;
+    
+    self.database = database;
+//    DebugLog(@"allocating context %lx for %lx", (unsigned long)self, (unsigned long)self.thread);
     
     return self;
 }
