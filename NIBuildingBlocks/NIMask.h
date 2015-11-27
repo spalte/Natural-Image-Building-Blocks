@@ -461,6 +461,12 @@ CF_EXTERN_C_END
  @return An NIMaskIndex structure representation of the receiver.
  */
 - (NIMaskIndex)NIMaskIndexValue;
+
+#if __has_attribute(objc_boxable)
+typedef struct __attribute__((objc_boxable)) NIMaskRun NIMaskRun;
+typedef struct __attribute__((objc_boxable)) NIMaskIndex NIMaskIndex;
+#endif
+
 @end
 
 NSString *NSStringFromNIMaskRun(NIMaskRun run);

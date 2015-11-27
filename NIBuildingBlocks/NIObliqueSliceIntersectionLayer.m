@@ -31,6 +31,9 @@ struct NIIntersectionSegment {
     NIVector end;
 };
 typedef struct NIIntersectionSegment NIIntersectionSegment;
+#if __has_attribute(objc_boxable)
+typedef struct __attribute__((objc_boxable)) NIIntersectionSegment NIIntersectionSegment;
+#endif
 typedef NIIntersectionSegment *NIIntersectionSegmentPointer;
 
 @interface NSValue (NIIntersectionSegmentAdditions)

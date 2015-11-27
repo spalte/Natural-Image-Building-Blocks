@@ -37,9 +37,6 @@ struct NIVector {
     CGFloat z;
 };
 typedef struct NIVector NIVector;
-//#if __has_attribute(objc_boxable) // TODO: I don't think this is compatible with the current NIBB practice of encoding NIVector into NSValue by using a dictionary... TO BE TESTED
-//typedef struct __attribute__((objc_boxable)) NIVector NIVector;
-//#endif
 
 // A NILine is an infinite line throught space
 struct NILine {
@@ -47,9 +44,6 @@ struct NILine {
     NIVector vector; // this is the direction of the line, the line is not valid if this is NIVectorZero, try to keep this of unit length... I wish I would have called this direction...
 };
 typedef struct NILine NILine;
-//#if __has_attribute(objc_boxable)
-//typedef struct __attribute__((objc_boxable)) NILine NILine;
-//#endif
 
 extern const NILine NILineXAxis;
 extern const NILine NILineYAxis;
@@ -61,9 +55,6 @@ struct NIPlane {
     NIVector normal;
 };
 typedef struct NIPlane NIPlane;
-//#if __has_attribute(objc_boxable)
-//typedef struct __attribute__((objc_boxable)) NIPlane NIPlane;
-//#endif
 
 extern const NIPlane NIPlaneXZero;
 extern const NIPlane NIPlaneYZero;
@@ -266,6 +257,13 @@ NSString *NIVectorCArmOrientationString(NIVector vector);
 - (NIVector)decodeNIVectorForKey:(NSString *)key;
 - (NILine)decodeNILineForKey:(NSString *)key;
 - (NIPlane)decodeNIPlaneForKey:(NSString *)key;
+
+#if __has_attribute(objc_boxable)
+typedef struct __attribute__((objc_boxable)) NIAffineTransform NIAffineTransform;
+typedef struct __attribute__((objc_boxable)) NIVector NIVector;
+typedef struct __attribute__((objc_boxable)) NILine NILine;
+typedef struct __attribute__((objc_boxable)) NIPlane NIPlane;
+#endif
 
 @end
 
