@@ -447,7 +447,7 @@ CF_EXTERN_C_END
  
  @return An NIMaskRun structure representation of the receiver.
  */
-- (NIMaskRun)NIMaskRunValue;
+@property (readonly) NIMaskRun NIMaskRunValue;
 
 /** Creates and returns an NSValue object that contains a given NIMaskIndex structure.
  
@@ -460,7 +460,7 @@ CF_EXTERN_C_END
  
  @return An NIMaskIndex structure representation of the receiver.
  */
-- (NIMaskIndex)NIMaskIndexValue;
+@property (readonly) NIMaskIndex NIMaskIndexValue;
 
 #if __has_attribute(objc_boxable)
 typedef struct __attribute__((objc_boxable)) NIMaskRun NIMaskRun;

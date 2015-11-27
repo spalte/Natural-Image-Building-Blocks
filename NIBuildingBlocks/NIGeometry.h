@@ -231,16 +231,23 @@ NSString *NIVectorCArmOrientationString(NIVector vector);
 @interface NSValue (NIGeometryAdditions)
 
 + (NSValue *)valueWithNIVector:(NIVector)vector;
-- (NIVector)NIVectorValue;
+@property (readonly) NIVector NIVectorValue;
 
 + (NSValue *)valueWithNILine:(NILine)line;
-- (NILine)NILineValue;
+@property (readonly) NILine NILineValue;
 
 + (NSValue *)valueWithNIPlane:(NIPlane)plane;
-- (NIPlane)NIPlaneValue;
+@property (readonly) NIPlane NIPlaneValue;
 
 + (NSValue *)valueWithNIAffineTransform:(NIAffineTransform)transform;
-- (NIAffineTransform)NIAffineTransformValue;
+@property (readonly) NIAffineTransform NIAffineTransformValue;
+
+#if __has_attribute(objc_boxable)
+typedef struct __attribute__((objc_boxable)) NIAffineTransform NIAffineTransform;
+typedef struct __attribute__((objc_boxable)) NIVector NIVector;
+typedef struct __attribute__((objc_boxable)) NILine NILine;
+typedef struct __attribute__((objc_boxable)) NIPlane NIPlane;
+#endif
 
 @end
 
@@ -257,13 +264,6 @@ NSString *NIVectorCArmOrientationString(NIVector vector);
 - (NIVector)decodeNIVectorForKey:(NSString *)key;
 - (NILine)decodeNILineForKey:(NSString *)key;
 - (NIPlane)decodeNIPlaneForKey:(NSString *)key;
-
-#if __has_attribute(objc_boxable)
-typedef struct __attribute__((objc_boxable)) NIAffineTransform NIAffineTransform;
-typedef struct __attribute__((objc_boxable)) NIVector NIVector;
-typedef struct __attribute__((objc_boxable)) NILine NILine;
-typedef struct __attribute__((objc_boxable)) NIPlane NIPlane;
-#endif
 
 @end
 
