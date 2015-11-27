@@ -405,7 +405,7 @@
     [self setNeedsDisplay];
 }
 
-- (CGPoint)convertPointFromDICOMVector:(NIVector)vector
+- (CGPoint)convertPointFromModelVector:(NIVector)vector
 {
     NIGeneratorRequest *generatorRequest = [(NIGeneratorRequestLayer *)self.modelLayer presentedGeneratorRequest];;
 
@@ -413,7 +413,7 @@
         return CGPointZero;
     }
 
-    CGPoint point = NSPointToCGPoint(NSPointFromNIVector([generatorRequest convertVolumeVectorFromDICOMVector:vector]));
+    CGPoint point = NSPointToCGPoint(NSPointFromNIVector([generatorRequest convertVolumeVectorFromModelVector:vector]));
 
     point.x += 0.5;
     point.y += 0.5;
@@ -424,7 +424,7 @@
     return point;
 }
 
-- (NIVector)convertPointToDICOMVector:(CGPoint)point
+- (NIVector)convertPointToModelVector:(CGPoint)point
 {
     NIGeneratorRequest *generatorRequest = [(NIGeneratorRequestLayer *)self.modelLayer presentedGeneratorRequest];;
 
@@ -438,7 +438,7 @@
     point.x -= .5;
     point.y -= .5;
 
-    return [generatorRequest convertVolumeVectorToDICOMVector:NIVectorMake(point.x, point.y, 0)];
+    return [generatorRequest convertVolumeVectorToModelVector:NIVectorMake(point.x, point.y, 0)];
 }
 
 

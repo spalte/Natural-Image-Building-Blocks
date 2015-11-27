@@ -32,7 +32,7 @@
 @synthesize pixelSpacingX = _pixelSpacingX;
 @synthesize pixelSpacingY = _pixelSpacingY;
 @synthesize sliceThickness = _sliceThickness;
-@synthesize imageToDicomTransform = _imageToDicomTransform;
+@synthesize imageToModelTransform = _imageToModelTransform;
 
 - (id)initWithData:(uint16_t *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh
 {
@@ -53,7 +53,7 @@
         [self setSize:NSMakeSize(pixelsWide, pixelsHigh)];
         _offset = 0;
         _slope = 1;
-        _imageToDicomTransform = NIAffineTransformIdentity;
+        _imageToModelTransform = NIAffineTransformIdentity;
     }
     
     return self;
@@ -105,8 +105,8 @@
     NIVector xBasis;
     NIVector yBasis;
         
-    xBasis = NIVectorNormalize(NIVectorMake(_imageToDicomTransform.m11, _imageToDicomTransform.m12, _imageToDicomTransform.m13));
-    yBasis = NIVectorNormalize(NIVectorMake(_imageToDicomTransform.m21, _imageToDicomTransform.m22, _imageToDicomTransform.m23));
+    xBasis = NIVectorNormalize(NIVectorMake(_imageToModelTransform.m11, _imageToModelTransform.m12, _imageToModelTransform.m13));
+    yBasis = NIVectorNormalize(NIVectorMake(_imageToModelTransform.m21, _imageToModelTransform.m22, _imageToModelTransform.m23));
     
     orientation[0] = xBasis.x; orientation[1] = xBasis.y; orientation[2] = xBasis.z;
     orientation[3] = yBasis.x; orientation[4] = yBasis.y; orientation[5] = yBasis.z; 
@@ -114,17 +114,17 @@
 
 - (float)originX
 {
-    return _imageToDicomTransform.m41;
+    return _imageToModelTransform.m41;
 }
 
 - (float)originY
 {    
-    return _imageToDicomTransform.m42;
+    return _imageToModelTransform.m42;
 }
 
 - (float)originZ
 {
-    return _imageToDicomTransform.m43;
+    return _imageToModelTransform.m43;
 }
 
 @end

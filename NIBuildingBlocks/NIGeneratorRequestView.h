@@ -98,11 +98,11 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
 
 - (NIVolumeDataProperties *)volumeDataPropertiesAtIndex:(NSUInteger)index;
 
-- (NSPoint)convertPointFromDICOMVector:(NIVector)vector;
-- (NIVector)convertPointToDICOMVector:(NSPoint)point;
+- (NSPoint)convertPointFromModelVector:(NIVector)vector;
+- (NIVector)convertPointToModelVector:(NSPoint)point;
 
-- (NSBezierPath *)convertBezierPathFromDICOM:(NIBezierPath *)bezierPath;
-- (NIBezierPath *)convertBezierPathToDICOM:(NSBezierPath *)bezierPath;
+- (NSBezierPath *)convertBezierPathFromModel:(NIBezierPath *)bezierPath;
+- (NIBezierPath *)convertBezierPathToModel:(NSBezierPath *)bezierPath;
 
 @property (nonatomic, readonly, retain) CALayer *frameLayer; // the layer into which subclasses can add layers, this layer lays out sublayers using the CAConstraintLayoutManager
                                                              // Use NIGeneratorRequestViewRequestLayerZPosition, etc to specify the depth of the layer you want to add.

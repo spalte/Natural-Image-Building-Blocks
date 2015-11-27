@@ -42,10 +42,10 @@
     NSMutableData *_cachedCLUTData; // array of bytes in premultiplied ARGB8888
 
     BOOL _curved;
-    NSPoint (^_convertPointFromDICOMVectorBlock)(NIVector);
-    NIVector (^_convertPointToDICOMVectorBlock)(NSPoint);
+    NSPoint (^_convertPointFromModelVectorBlock)(NIVector);
+    NIVector (^_convertPointToModelVectorBlock)(NSPoint);
 
-    NIAffineTransform _imageToDicomTransform;
+    NIAffineTransform _imageToModelTransform;
 }
 
 @property (nonatomic, readwrite, assign) CGFloat windowWidth; // these will affect how this rep will draw when part of an NSImage
@@ -67,14 +67,14 @@
 
 @property (nonatomic, readwrite, assign) CGFloat sliceThickness;
 
-@property (nonatomic, readwrite, assign) NIAffineTransform imageToDicomTransform;
+@property (nonatomic, readwrite, assign) NIAffineTransform imageToModelTransform;
 @property (nonatomic, readwrite, getter = isCurved) BOOL curved;
 
-@property (nonatomic, readwrite, copy) NSPoint (^convertPointFromDICOMVectorBlock)(NIVector);
-@property (nonatomic, readwrite, copy) NIVector (^convertPointToDICOMVectorBlock)(NSPoint);
+@property (nonatomic, readwrite, copy) NSPoint (^convertPointFromModelVectorBlock)(NIVector);
+@property (nonatomic, readwrite, copy) NIVector (^convertPointToModelVectorBlock)(NSPoint);
 
-- (NSPoint)convertPointFromDICOMVector:(NIVector)vector;
-- (NIVector)convertPointToDICOMVector:(NSPoint)point;
+- (NSPoint)convertPointFromModelVector:(NIVector)vector;
+- (NIVector)convertPointToModelVector:(NSPoint)point;
 
 @end
 

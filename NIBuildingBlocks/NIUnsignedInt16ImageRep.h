@@ -34,7 +34,7 @@
     CGFloat _pixelSpacingY;
     CGFloat _sliceThickness;
     
-    NIAffineTransform _imageToDicomTransform;
+    NIAffineTransform _imageToModelTransform;
     
     BOOL _freeWhenDone;
 }
@@ -51,7 +51,7 @@
 @property (nonatomic, readwrite, assign) CGFloat pixelSpacingY;
 @property (nonatomic, readwrite, assign) CGFloat sliceThickness;
 
-@property (nonatomic, readwrite, assign) NIAffineTransform imageToDicomTransform;
+@property (nonatomic, readwrite, assign) NIAffineTransform imageToModelTransform;
 
 @end
 

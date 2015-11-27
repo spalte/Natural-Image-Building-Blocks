@@ -189,7 +189,7 @@ CF_EXTERN_C_END
 @synthesize gapAroundMouse = _gapAroundMouse;
 @synthesize gapAroundPosition = _gapAroundPosition;
 
-@dynamic sliceToDicomTransform;
+@dynamic sliceToModelTransform;
 @dynamic mouseGapPosition;
 @dynamic mouseGapRadius;
 @dynamic gapPosition;
@@ -197,7 +197,7 @@ CF_EXTERN_C_END
 
 + (id)defaultValueForKey:(NSString *)key
 {
-    if ([key isEqualToString:@"sliceToDicomTransform"]) {
+    if ([key isEqualToString:@"sliceToModelTransform"]) {
         return [NSValue valueWithNIAffineTransform:NIAffineTransformIdentity];
     } else {
         return [super defaultValueForKey:key];
@@ -206,7 +206,7 @@ CF_EXTERN_C_END
 
 + (BOOL)needsDisplayForKey:(NSString *)key
 {
-    if ([key isEqualToString:@"sliceToDicomTransform"]) {
+    if ([key isEqualToString:@"sliceToModelTransform"]) {
         return YES;
     } else if ([key isEqualToString:@"mouseGapPosition"]) {
         return YES;
@@ -290,95 +290,95 @@ CF_EXTERN_C_END
 
 - (NIVector)origin
 {
-    NIAffineTransform sliceToDicomTransform = self.sliceToDicomTransform;
-    return NIVectorMake(sliceToDicomTransform.m41, sliceToDicomTransform.m42, sliceToDicomTransform.m43);
+    NIAffineTransform sliceToModelTransform = self.sliceToModelTransform;
+    return NIVectorMake(sliceToModelTransform.m41, sliceToModelTransform.m42, sliceToModelTransform.m43);
 }
 
 - (void)setOrigin:(NIVector)origin
 {
-    NIAffineTransform sliceToDicomTransform = self.sliceToDicomTransform;
-    sliceToDicomTransform.m41 = origin.x;
-    sliceToDicomTransform.m42 = origin.y;
-    sliceToDicomTransform.m43 = origin.z;
-    self.sliceToDicomTransform = sliceToDicomTransform;
+    NIAffineTransform sliceToModelTransform = self.sliceToModelTransform;
+    sliceToModelTransform.m41 = origin.x;
+    sliceToModelTransform.m42 = origin.y;
+    sliceToModelTransform.m43 = origin.z;
+    self.sliceToModelTransform = sliceToModelTransform;
 }
 
 - (NIVector)directionX
 {
-    NIAffineTransform sliceToDicomTransform = self.sliceToDicomTransform;
-    return NIVectorNormalize(NIVectorMake(sliceToDicomTransform.m11, sliceToDicomTransform.m12, sliceToDicomTransform.m13));
+    NIAffineTransform sliceToModelTransform = self.sliceToModelTransform;
+    return NIVectorNormalize(NIVectorMake(sliceToModelTransform.m11, sliceToModelTransform.m12, sliceToModelTransform.m13));
 }
 
 - (void)setDirectionX:(NIVector)directionX
 {
     directionX = NIVectorScalarMultiply(NIVectorNormalize(directionX), self.pointSpacingX);
-    NIAffineTransform sliceToDicomTransform = self.sliceToDicomTransform;
-    sliceToDicomTransform.m11 = directionX.x;
-    sliceToDicomTransform.m11 = directionX.y;
-    sliceToDicomTransform.m11 = directionX.z;
+    NIAffineTransform sliceToModelTransform = self.sliceToModelTransform;
+    sliceToModelTransform.m11 = directionX.x;
+    sliceToModelTransform.m11 = directionX.y;
+    sliceToModelTransform.m11 = directionX.z;
 
     NIVector directionZ = NIVectorNormalize(NIVectorCrossProduct(directionX, self.directionY));
-    sliceToDicomTransform.m31 = directionZ.x;
-    sliceToDicomTransform.m31 = directionZ.y;
-    sliceToDicomTransform.m31 = directionZ.z;
+    sliceToModelTransform.m31 = directionZ.x;
+    sliceToModelTransform.m31 = directionZ.y;
+    sliceToModelTransform.m31 = directionZ.z;
 
-    self.sliceToDicomTransform = sliceToDicomTransform;
+    self.sliceToModelTransform = sliceToModelTransform;
 }
 
 - (NIVector)directionY
 {
-    NIAffineTransform sliceToDicomTransform = self.sliceToDicomTransform;
-    return NIVectorNormalize(NIVectorMake(sliceToDicomTransform.m21, sliceToDicomTransform.m22, sliceToDicomTransform.m23));
+    NIAffineTransform sliceToModelTransform = self.sliceToModelTransform;
+    return NIVectorNormalize(NIVectorMake(sliceToModelTransform.m21, sliceToModelTransform.m22, sliceToModelTransform.m23));
 }
 
 - (void)setDirectionY:(NIVector)directionY
 {
     directionY = NIVectorScalarMultiply(NIVectorNormalize(directionY), self.pointSpacingY);
-    NIAffineTransform sliceToDicomTransform = self.sliceToDicomTransform;
-    sliceToDicomTransform.m21 = directionY.x;
-    sliceToDicomTransform.m21 = directionY.y;
-    sliceToDicomTransform.m21 = directionY.z;
+    NIAffineTransform sliceToModelTransform = self.sliceToModelTransform;
+    sliceToModelTransform.m21 = directionY.x;
+    sliceToModelTransform.m21 = directionY.y;
+    sliceToModelTransform.m21 = directionY.z;
 
     NIVector directionZ = NIVectorNormalize(NIVectorCrossProduct(self.directionX, directionY));
-    sliceToDicomTransform.m31 = directionZ.x;
-    sliceToDicomTransform.m31 = directionZ.y;
-    sliceToDicomTransform.m31 = directionZ.z;
+    sliceToModelTransform.m31 = directionZ.x;
+    sliceToModelTransform.m31 = directionZ.y;
+    sliceToModelTransform.m31 = directionZ.z;
 
-    self.sliceToDicomTransform = sliceToDicomTransform;
+    self.sliceToModelTransform = sliceToModelTransform;
 }
 
 - (CGFloat)pointSpacingX
 {
-    NIAffineTransform sliceToDicomTransform = self.sliceToDicomTransform;
-    return NIVectorLength(NIVectorMake(sliceToDicomTransform.m11, sliceToDicomTransform.m12, sliceToDicomTransform.m13));
+    NIAffineTransform sliceToModelTransform = self.sliceToModelTransform;
+    return NIVectorLength(NIVectorMake(sliceToModelTransform.m11, sliceToModelTransform.m12, sliceToModelTransform.m13));
 }
 
 - (void)setPointSpacingX:(CGFloat)pointSpacingX
 {
     NIVector basisX = NIVectorScalarMultiply(self.directionX, pointSpacingX);
-    NIAffineTransform sliceToDicomTransform = self.sliceToDicomTransform;
-    sliceToDicomTransform.m11 = basisX.x;
-    sliceToDicomTransform.m11 = basisX.y;
-    sliceToDicomTransform.m11 = basisX.z;
+    NIAffineTransform sliceToModelTransform = self.sliceToModelTransform;
+    sliceToModelTransform.m11 = basisX.x;
+    sliceToModelTransform.m11 = basisX.y;
+    sliceToModelTransform.m11 = basisX.z;
 
-    self.sliceToDicomTransform = sliceToDicomTransform;
+    self.sliceToModelTransform = sliceToModelTransform;
 }
 
 - (CGFloat)pointSpacingY
 {
-    NIAffineTransform sliceToDicomTransform = self.sliceToDicomTransform;
-    return NIVectorLength(NIVectorMake(sliceToDicomTransform.m21, sliceToDicomTransform.m22, sliceToDicomTransform.m23));
+    NIAffineTransform sliceToModelTransform = self.sliceToModelTransform;
+    return NIVectorLength(NIVectorMake(sliceToModelTransform.m21, sliceToModelTransform.m22, sliceToModelTransform.m23));
 }
 
 - (void)setPointSpacingY:(CGFloat)pointSpacingY
 {
     NIVector basisY = NIVectorScalarMultiply(self.directionY, pointSpacingY);
-    NIAffineTransform sliceToDicomTransform = self.sliceToDicomTransform;
-    sliceToDicomTransform.m21 = basisY.x;
-    sliceToDicomTransform.m21 = basisY.y;
-    sliceToDicomTransform.m21 = basisY.z;
+    NIAffineTransform sliceToModelTransform = self.sliceToModelTransform;
+    sliceToModelTransform.m21 = basisY.x;
+    sliceToModelTransform.m21 = basisY.y;
+    sliceToModelTransform.m21 = basisY.z;
 
-    self.sliceToDicomTransform = sliceToDicomTransform;
+    self.sliceToModelTransform = sliceToModelTransform;
 }
 
 - (void)display
@@ -395,11 +395,11 @@ CF_EXTERN_C_END
 
     NSMutableArray *segments = [NSMutableArray array];
     NIIntersectionSegment segment;
-    NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(self.sliceToDicomTransform);
+    NIAffineTransform modelToSliceTransform = NIAffineTransformInvert(self.sliceToModelTransform);
     for (i = 0; i < [intersections count]; i++) {
         if (i % 2) {
             segment.end = [intersections[i] NIVectorValue];
-            segment = NIIntersectionSegmentApplyTransform(segment, dicomToSliceTransform); // transform the intersection into points within the layer
+            segment = NIIntersectionSegmentApplyTransform(segment, modelToSliceTransform); // transform the intersection into points within the layer
             segment.start.z = 0;
             segment.end.z = 0;
             [segments addObject:[NSValue valueWithNIIntersectionSegment:segment]];

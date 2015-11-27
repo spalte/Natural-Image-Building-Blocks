@@ -202,7 +202,7 @@ CF_EXTERN_C_END
  
  @return The newly crated and initialized mask object or `nil` if there was a problem initializing the object.
  @param volumeData The NIVolumeData on which to build and base the mask.
- @param volumeTransformPtr Returns the transform needed to go from DICOM space to the mask
+ @param volumeTransformPtr Returns the transform needed to go from model space to the mask
  */
 + (instancetype)maskFromVolumeData:(NIVolumeData *)volumeData volumeTransform:(NIAffineTransformPointer)volumeTransformPtr;
 + (instancetype)maskFromVolumeData:(NIVolumeData *)volumeData __deprecated;

@@ -200,15 +200,15 @@
 
 - (void)drawForGeneratorRequest:(NIObliqueSliceGeneratorRequest *)generatorRequest
 {
-    NIAffineTransform sliceToDicomTransform = generatorRequest.sliceToDicomTransform;
-    NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(sliceToDicomTransform);
+    NIAffineTransform sliceToModelTransform = generatorRequest.sliceToModelTransform;
+    NIAffineTransform modelToSliceTransform = NIAffineTransformInvert(sliceToModelTransform);
 
-    NIBezierPath *bezierPath = [[self bezierpath] bezierPathByApplyingTransform:dicomToSliceTransform];
+    NIBezierPath *bezierPath = [[self bezierpath] bezierPathByApplyingTransform:modelToSliceTransform];
     NSBezierPath *nsBezierPath = [bezierPath NSBezierPath];
     [nsBezierPath stroke];
 
     for (NSValue *value in _controlPoints) {
-        NSPoint controlPoint = NSPointFromNIVector(NIVectorApplyTransform([value NIVectorValue], dicomToSliceTransform));
+        NSPoint controlPoint = NSPointFromNIVector(NIVectorApplyTransform([value NIVectorValue], modelToSliceTransform));
         [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(controlPoint.x - 3, controlPoint.y - 3, 6, 6)] fill];
     }
 }

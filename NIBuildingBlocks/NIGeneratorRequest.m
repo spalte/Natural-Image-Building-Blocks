@@ -102,7 +102,7 @@
     return request;
 }
 
-- (NIVector (^)(NIVector))convertVolumeVectorToDICOMVectorBlock
+- (NIVector (^)(NIVector))convertVolumeVectorToModelVectorBlock
 {
     NSAssert(NO, @"Not Implemented");
     return [[^NIVector(NIVector vector) {
@@ -110,7 +110,7 @@
     } copy] autorelease];
 }
 
-- (NIVector (^)(NIVector))convertVolumeVectorFromDICOMVectorBlock
+- (NIVector (^)(NIVector))convertVolumeVectorFromModelVectorBlock
 {
     NSAssert(NO, @"Not Implemented");
     return [[^NIVector(NIVector vector) {
@@ -118,14 +118,14 @@
     } copy] autorelease];
 }
 
-- (NIVector)convertVolumeVectorToDICOMVector:(NIVector)vector
+- (NIVector)convertVolumeVectorToModelVector:(NIVector)vector
 {
-    return [self convertVolumeVectorToDICOMVectorBlock](vector);
+    return [self convertVolumeVectorToModelVectorBlock](vector);
 }
 
-- (NIVector)convertVolumeVectorFromDICOMVector:(NIVector)vector
+- (NIVector)convertVolumeVectorFromModelVector:(NIVector)vector
 {
-    return [self convertVolumeVectorFromDICOMVectorBlock](vector);
+    return [self convertVolumeVectorFromModelVectorBlock](vector);
 }
 
 - (NIBezierPath *)rimPath
@@ -288,8 +288,8 @@
         [key isEqualToString:@"pixelSpacingX"] ||
         [key isEqualToString:@"pixelSpacingY"] ||
         [key isEqualToString:@"slabSampleDistance"]) {
-        return [keyPaths setByAddingObjectsFromSet:[NSSet setWithObject:@"sliceToDicomTransform"]];
-    } else if ([key isEqualToString:@"sliceToDicomTransform"]) {
+        return [keyPaths setByAddingObjectsFromSet:[NSSet setWithObject:@"sliceToModelTransform"]];
+    } else if ([key isEqualToString:@"sliceToModelTransform"]) {
         return [keyPaths setByAddingObjectsFromSet:[NSSet setWithObjects:@"origin", @"directionX", @"directionY", @"directionZ", @"pixelSpacingX", @"pixelSpacingY", @"slabSampleDistance", nil]];
     } else {
         return keyPaths;
@@ -481,21 +481,21 @@
     }
 }
 
-- (NIVector (^)(NIVector))convertVolumeVectorToDICOMVectorBlock
+- (NIVector (^)(NIVector))convertVolumeVectorToModelVectorBlock
 {
-    NIAffineTransform sliceToDicomTransform = self.sliceToDicomTransform;
+    NIAffineTransform sliceToModelTransform = self.sliceToModelTransform;
 
     return [[^NIVector(NIVector vector) {
-        return NIVectorApplyTransform(vector, sliceToDicomTransform);
+        return NIVectorApplyTransform(vector, sliceToModelTransform);
     } copy] autorelease];
 }
 
-- (NIVector (^)(NIVector))convertVolumeVectorFromDICOMVectorBlock
+- (NIVector (^)(NIVector))convertVolumeVectorFromModelVectorBlock
 {
-    NIAffineTransform dicomToSliceTransform = NIAffineTransformInvert(self.sliceToDicomTransform);
+    NIAffineTransform modelToSliceTransform = NIAffineTransformInvert(self.sliceToModelTransform);
 
     return [[^NIVector(NIVector vector) {
-        return NIVectorApplyTransform(vector, dicomToSliceTransform);
+        return NIVectorApplyTransform(vector, modelToSliceTransform);
     } copy] autorelease];
 }
 
@@ -523,23 +523,23 @@
     return rimPath;
 }
 
-- (void)setSliceToDicomTransform:(NIAffineTransform)sliceToDicomTransform
+- (void)setSliceToModelTransform:(NIAffineTransform)sliceToModelTransform
 {
 // FIXME: this is WRONG for origin.z
-    _directionX = NIVectorMake(sliceToDicomTransform.m11, sliceToDicomTransform.m12, sliceToDicomTransform.m13);
+    _directionX = NIVectorMake(sliceToModelTransform.m11, sliceToModelTransform.m12, sliceToModelTransform.m13);
     _pixelSpacingX = NIVectorLength(_directionX);
     _directionX = NIVectorNormalize(_directionX);
 
-    _directionY = NIVectorMake(sliceToDicomTransform.m21, sliceToDicomTransform.m22, sliceToDicomTransform.m23);
+    _directionY = NIVectorMake(sliceToModelTransform.m21, sliceToModelTransform.m22, sliceToModelTransform.m23);
     _pixelSpacingY = NIVectorLength(_directionY);
     _directionY = NIVectorNormalize(_directionY);
 
-    _origin = NIVectorMake(sliceToDicomTransform.m41, sliceToDicomTransform.m42, sliceToDicomTransform.m43);
+    _origin = NIVectorMake(sliceToModelTransform.m41, sliceToModelTransform.m42, sliceToModelTransform.m43);
 }
 
-- (NIAffineTransform)sliceToDicomTransform
+- (NIAffineTransform)sliceToModelTransform
 {
-    NIAffineTransform sliceToDicomTransform;
+    NIAffineTransform sliceToModelTransform;
 
 
     CGFloat slabSampleDistance = 0;
@@ -547,7 +547,7 @@
         slabSampleDistance = _slabSampleDistance;
     } else {
         if (self.slabWidth != 0) {
-            NSLog(@"NIObliqueSliceGeneratorRequest with non-zero slab width is trying to build a sliceToDicomTransform when the slabSampleDistance is 0");
+            NSLog(@"NIObliqueSliceGeneratorRequest with non-zero slab width is trying to build a sliceToModelTransform when the slabSampleDistance is 0");
         }
         slabSampleDistance = 1; //
     }
@@ -570,25 +570,25 @@
 
     NIVector origin = NIVectorAdd(_origin, NIVectorScalarMultiply(NIVectorInvert(zDirection), (CGFloat)(pixelsDeep - 1)/2.0));
 
-    sliceToDicomTransform = NIAffineTransformIdentity;
+    sliceToModelTransform = NIAffineTransformIdentity;
 
-    sliceToDicomTransform.m11 = _directionX.x * _pixelSpacingX;
-    sliceToDicomTransform.m12 = _directionX.y * _pixelSpacingX;
-    sliceToDicomTransform.m13 = _directionX.z * _pixelSpacingX;
+    sliceToModelTransform.m11 = _directionX.x * _pixelSpacingX;
+    sliceToModelTransform.m12 = _directionX.y * _pixelSpacingX;
+    sliceToModelTransform.m13 = _directionX.z * _pixelSpacingX;
 
-    sliceToDicomTransform.m21 = _directionY.x * _pixelSpacingY;
-    sliceToDicomTransform.m22 = _directionY.y * _pixelSpacingY;
-    sliceToDicomTransform.m23 = _directionY.z * _pixelSpacingY;
+    sliceToModelTransform.m21 = _directionY.x * _pixelSpacingY;
+    sliceToModelTransform.m22 = _directionY.y * _pixelSpacingY;
+    sliceToModelTransform.m23 = _directionY.z * _pixelSpacingY;
 
-    sliceToDicomTransform.m31 = zDirection.x;
-    sliceToDicomTransform.m32 = zDirection.y;
-    sliceToDicomTransform.m33 = zDirection.z;
+    sliceToModelTransform.m31 = zDirection.x;
+    sliceToModelTransform.m32 = zDirection.y;
+    sliceToModelTransform.m33 = zDirection.z;
 
-    sliceToDicomTransform.m41 = origin.x;
-    sliceToDicomTransform.m42 = origin.y;
-    sliceToDicomTransform.m43 = origin.z;
+    sliceToModelTransform.m41 = origin.x;
+    sliceToModelTransform.m42 = origin.y;
+    sliceToModelTransform.m43 = origin.z;
 
-    return sliceToDicomTransform;
+    return sliceToModelTransform;
 }
 
 @end

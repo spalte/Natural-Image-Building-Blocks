@@ -197,8 +197,8 @@
     }
 
     NIMutableBezierPath *intersectionPath = [NIMutableBezierPath bezierPath];
-    [intersectionPath moveToVector:NIVectorMakeFromNSPoint([_generatorRequestView convertPointFromDICOMVector:[intersections[0] NIVectorValue]])];
-    [intersectionPath lineToVector:NIVectorMakeFromNSPoint([_generatorRequestView convertPointFromDICOMVector:[intersections[1] NIVectorValue]])];
+    [intersectionPath moveToVector:NIVectorMakeFromNSPoint([_generatorRequestView convertPointFromModelVector:[intersections[0] NIVectorValue]])];
+    [intersectionPath lineToVector:NIVectorMakeFromNSPoint([_generatorRequestView convertPointFromModelVector:[intersections[1] NIVectorValue]])];
 
     NIVector closestPoint = [intersectionPath vectorAtRelativePosition:[intersectionPath relativePositionClosestToVector:NIVectorMakeFromNSPoint(point)]];
     

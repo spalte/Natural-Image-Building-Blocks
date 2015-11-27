@@ -51,7 +51,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
 + (NSString *)keyForTextLabelLocation:(NITextLabelLocation)labelLocation;
 + (NITextLabelLocation)textLabelLocationForKey:(NSString *)key;
 
-- (NIAffineTransform)_sliceToDicomTransform;
+- (NIAffineTransform)_sliceToModelTransform;
 - (void)_updateLabelContraints;
 
 @end
@@ -129,7 +129,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
 - (void)mouseEntered:(NSEvent *)theEvent
 {
     NSPoint pointInView = [_view convertPoint:theEvent.locationInWindow fromView:nil];
-    _view.mousePosition = [_view convertPointToDICOMVector:pointInView];
+    _view.mousePosition = [_view convertPointToModelVector:pointInView];
 }
 
 - (void)mouseExited:(NSEvent *)theEvent
@@ -140,7 +140,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
 - (void)mouseMoved:(NSEvent *)theEvent
 {
     NSPoint pointInView = [_view convertPoint:theEvent.locationInWindow fromView:nil];
-    _view.mousePosition = [_view convertPointToDICOMVector:pointInView];
+    _view.mousePosition = [_view convertPointToModelVector:pointInView];
 }
 @end
 
@@ -756,13 +756,13 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     }
 }
 
-- (NIAffineTransform)_sliceToDicomTransform // this is not smart enough yet to handle curved slices
+- (NIAffineTransform)_sliceToModelTransform // this is not smart enough yet to handle curved slices
 {
     NIGeneratorRequest *generatorRequest = self.presentedGeneratorRequest;
 
     if ([generatorRequest isKindOfClass:[NIObliqueSliceGeneratorRequest class]]) {
         NIObliqueSliceGeneratorRequest *obliqueGeneratorRequest = (NIObliqueSliceGeneratorRequest *)generatorRequest;
-        NIAffineTransform sliceTransform = obliqueGeneratorRequest.sliceToDicomTransform;
+        NIAffineTransform sliceTransform = obliqueGeneratorRequest.sliceToModelTransform;
         sliceTransform = NIAffineTransformConcat(NIAffineTransformMakeScale((CGFloat)generatorRequest.pixelsWide / _volumeDataComposingLayer.bounds.size.width,
                                                                             (CGFloat)generatorRequest.pixelsHigh / _volumeDataComposingLayer.bounds.size.height, 1), sliceTransform);
         return sliceTransform;
@@ -780,7 +780,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     newLayer.contentsScale = self.layer.contentsScale;
     newLayer.zPosition = NIGeneratorRequestViewIntersectionZPosition;
     newLayer.name = [NSString stringWithFormat:@"IntersectionLayer: %@", key];
-    newLayer.sliceToDicomTransform = [self _sliceToDicomTransform];
+    newLayer.sliceToModelTransform = [self _sliceToModelTransform];
     [newLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX]];
     [newLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth]];
     [newLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY]];
@@ -978,7 +978,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
         if ([self inLiveResize] == NO) {
             NSPoint pointInView = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
             if (NSPointInRect(pointInView, self.bounds)) {
-                self.mousePosition = [self convertPointToDICOMVector:pointInView];
+                self.mousePosition = [self convertPointToModelVector:pointInView];
             } else {
                 self.mousePosition = NIGeneratorRequestViewMouseOutside;
             }
@@ -993,12 +993,12 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
             _leftOrientationTextLayer.orientationVector = NIVectorInvert(obliqueRequest.directionX);
             _rightOrientationTextLayer.orientationVector = obliqueRequest.directionX;
 
-            _horizontalScaleBar.pointSpacing = NIVectorDistance([self convertPointToDICOMVector:NSZeroPoint], [self convertPointToDICOMVector:NSMakePoint(0, 1)]);
-            _verticalScaleBar.pointSpacing = NIVectorDistance([self convertPointToDICOMVector:NSZeroPoint], [self convertPointToDICOMVector:NSMakePoint(0, 1)]);
+            _horizontalScaleBar.pointSpacing = NIVectorDistance([self convertPointToModelVector:NSZeroPoint], [self convertPointToModelVector:NSMakePoint(0, 1)]);
+            _verticalScaleBar.pointSpacing = NIVectorDistance([self convertPointToModelVector:NSZeroPoint], [self convertPointToModelVector:NSMakePoint(0, 1)]);
 
-            NIAffineTransform sliceToDicomTransfrom = [self _sliceToDicomTransform];
+            NIAffineTransform sliceToModelTransfrom = [self _sliceToModelTransform];
             for (NIIntersection *intersection in [_intersections allValues]) {
-                [(NIObliqueSliceIntersectionLayer *)intersection.intersectionLayer setSliceToDicomTransform:sliceToDicomTransfrom];
+                [(NIObliqueSliceIntersectionLayer *)intersection.intersectionLayer setSliceToModelTransform:sliceToModelTransfrom];
             }
         } else {
             _bottomOrientationTextLayer.orientationVector = NIVectorZero;
@@ -1013,14 +1013,14 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     }
 }
 
-- (NSPoint)convertPointFromDICOMVector:(NIVector)vector
+- (NSPoint)convertPointFromModelVector:(NIVector)vector
 {
     NIGeneratorRequest *presentedGeneratorRequest = [self presentedGeneratorRequest];
     if (presentedGeneratorRequest == nil) {
         return NSZeroPoint;
     }
 
-    NIVector requestVector = [presentedGeneratorRequest convertVolumeVectorFromDICOMVector:vector];
+    NIVector requestVector = [presentedGeneratorRequest convertVolumeVectorFromModelVector:vector];
 
     requestVector.x += 0.5;
     requestVector.y += 0.5;
@@ -1031,7 +1031,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     return NSPointFromNIVector(requestVector);
 }
 
-- (NIVector)convertPointToDICOMVector:(NSPoint)point
+- (NIVector)convertPointToModelVector:(NSPoint)point
 {
     NIGeneratorRequest *presentedGeneratorRequest = [self presentedGeneratorRequest];
     if (presentedGeneratorRequest == nil) {
@@ -1044,58 +1044,58 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     point.x -= .5;
     point.y -= .5;
 
-    return [presentedGeneratorRequest convertVolumeVectorToDICOMVector:NIVectorMakeFromNSPoint(point)];
+    return [presentedGeneratorRequest convertVolumeVectorToModelVector:NIVectorMakeFromNSPoint(point)];
 }
 
-- (NSBezierPath *)convertBezierPathFromDICOM:(NIBezierPath *)bezierPath
+- (NSBezierPath *)convertBezierPathFromModel:(NIBezierPath *)bezierPath
 {
     // we don't know how to convert beziers when the transformation is not affine.
     if ([self.presentedGeneratorRequest isKindOfClass:[NIObliqueSliceGeneratorRequest class]] == NO) {
         return nil;
     }
 
-    NIAffineTransform fromDicomTransform = NIAffineTransformIdentity;
+    NIAffineTransform fromModelTransform = NIAffineTransformIdentity;
 
-    *(NSPoint *)&fromDicomTransform.m41 = [self convertPointFromDICOMVector:NIVectorZero];
-    *(NSPoint *)&fromDicomTransform.m11 = [self convertPointFromDICOMVector:NIVectorXBasis];
-    *(NSPoint *)&fromDicomTransform.m21 = [self convertPointFromDICOMVector:NIVectorYBasis];
-    *(NSPoint *)&fromDicomTransform.m31 = [self convertPointFromDICOMVector:NIVectorZBasis];
+    *(NSPoint *)&fromModelTransform.m41 = [self convertPointFromModelVector:NIVectorZero];
+    *(NSPoint *)&fromModelTransform.m11 = [self convertPointFromModelVector:NIVectorXBasis];
+    *(NSPoint *)&fromModelTransform.m21 = [self convertPointFromModelVector:NIVectorYBasis];
+    *(NSPoint *)&fromModelTransform.m31 = [self convertPointFromModelVector:NIVectorZBasis];
 
-    *(NIVector *)&fromDicomTransform.m11 = NIVectorSubtract(*(NIVector *)&fromDicomTransform.m11, *(NIVector *)&fromDicomTransform.m41);
-    *(NIVector *)&fromDicomTransform.m21 = NIVectorSubtract(*(NIVector *)&fromDicomTransform.m21, *(NIVector *)&fromDicomTransform.m41);
-    *(NIVector *)&fromDicomTransform.m31 = NIVectorSubtract(*(NIVector *)&fromDicomTransform.m31, *(NIVector *)&fromDicomTransform.m41);
+    *(NIVector *)&fromModelTransform.m11 = NIVectorSubtract(*(NIVector *)&fromModelTransform.m11, *(NIVector *)&fromModelTransform.m41);
+    *(NIVector *)&fromModelTransform.m21 = NIVectorSubtract(*(NIVector *)&fromModelTransform.m21, *(NIVector *)&fromModelTransform.m41);
+    *(NIVector *)&fromModelTransform.m31 = NIVectorSubtract(*(NIVector *)&fromModelTransform.m31, *(NIVector *)&fromModelTransform.m41);
 
-    // at this point fromDicomTransform applies the correct transform, put it is not guaranteed to not be a degenerate matrix
+    // at this point fromModelTransform applies the correct transform, put it is not guaranteed to not be a degenerate matrix
     // so we will fill out m13...m33 with values that make sure that is not the case
-    NIVector yColumn = NIVectorCrossProduct(NIVectorMake(fromDicomTransform.m11, fromDicomTransform.m21, fromDicomTransform.m31),
-                                            NIVectorMake(fromDicomTransform.m12, fromDicomTransform.m22, fromDicomTransform.m32));
-    fromDicomTransform.m13 = yColumn.x;
-    fromDicomTransform.m23 = yColumn.y;
-    fromDicomTransform.m33 = yColumn.z;
+    NIVector yColumn = NIVectorCrossProduct(NIVectorMake(fromModelTransform.m11, fromModelTransform.m21, fromModelTransform.m31),
+                                            NIVectorMake(fromModelTransform.m12, fromModelTransform.m22, fromModelTransform.m32));
+    fromModelTransform.m13 = yColumn.x;
+    fromModelTransform.m23 = yColumn.y;
+    fromModelTransform.m33 = yColumn.z;
 
-    return [[bezierPath bezierPathByApplyingTransform:fromDicomTransform] NSBezierPath];
+    return [[bezierPath bezierPathByApplyingTransform:fromModelTransform] NSBezierPath];
 }
 
-- (NIBezierPath *)convertBezierPathToDICOM:(NSBezierPath *)bezierPath
+- (NIBezierPath *)convertBezierPathToModel:(NSBezierPath *)bezierPath
 {
     // we don't know how to convert beziers when the transformation is not affine.
     if ([self.presentedGeneratorRequest isKindOfClass:[NIObliqueSliceGeneratorRequest class]] == NO) {
         return nil;
     }
 
-    NIAffineTransform toDicomTransform = NIAffineTransformIdentity;
-    *(NIVector *)&toDicomTransform.m41 = [self convertPointToDICOMVector:NSMakePoint(0, 0)];
-    *(NIVector *)&toDicomTransform.m11 = [self convertPointToDICOMVector:NSMakePoint(1, 0)];
-    *(NIVector *)&toDicomTransform.m21 = [self convertPointToDICOMVector:NSMakePoint(0, 1)];
+    NIAffineTransform toModelTransform = NIAffineTransformIdentity;
+    *(NIVector *)&toModelTransform.m41 = [self convertPointToModelVector:NSMakePoint(0, 0)];
+    *(NIVector *)&toModelTransform.m11 = [self convertPointToModelVector:NSMakePoint(1, 0)];
+    *(NIVector *)&toModelTransform.m21 = [self convertPointToModelVector:NSMakePoint(0, 1)];
 
-    *(NIVector *)&toDicomTransform.m11 = NIVectorSubtract(*(NIVector *)&toDicomTransform.m11, *(NIVector *)&toDicomTransform.m41);
-    *(NIVector *)&toDicomTransform.m21 = NIVectorSubtract(*(NIVector *)&toDicomTransform.m21, *(NIVector *)&toDicomTransform.m41);
+    *(NIVector *)&toModelTransform.m11 = NIVectorSubtract(*(NIVector *)&toModelTransform.m11, *(NIVector *)&toModelTransform.m41);
+    *(NIVector *)&toModelTransform.m21 = NIVectorSubtract(*(NIVector *)&toModelTransform.m21, *(NIVector *)&toModelTransform.m41);
 
     // make sure that the transform is not degenerate
-    *(NIVector *)&toDicomTransform.m31 = NIVectorCrossProduct(*(NIVector *)&toDicomTransform.m11, *(NIVector *)&toDicomTransform.m21);
+    *(NIVector *)&toModelTransform.m31 = NIVectorCrossProduct(*(NIVector *)&toModelTransform.m11, *(NIVector *)&toModelTransform.m21);
 
     NIMutableBezierPath *convertedBezierPath = [NIMutableBezierPath bezierPathWithNSBezierPath:bezierPath];
-    [convertedBezierPath applyAffineTransform:toDicomTransform];
+    [convertedBezierPath applyAffineTransform:toModelTransform];
     return convertedBezierPath;
 }
 

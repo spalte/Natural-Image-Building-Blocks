@@ -58,11 +58,11 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
     NSUInteger _pixelsHigh;
     NSUInteger _pixelsDeep;
 
-    NIAffineTransform _volumeTransform; // volumeTransform is the transform from Dicom (patient) space to pixel data
+    NIAffineTransform _volumeTransform; // volumeTransform is the transform from Model (patient) space to pixel data
 
     BOOL _curved;
-    NIVector (^_convertVolumeVectorToDICOMVectorBlock)(NIVector);
-    NIVector (^_convertVolumeVectorFromDICOMVectorBlock)(NIVector);
+    NIVector (^_convertVolumeVectorToModelVectorBlock)(NIVector);
+    NIVector (^_convertVolumeVectorFromModelVectorBlock)(NIVector);
 }
 
 // This is a utility function to help build an NIAffineTransform that places a volume in space
@@ -72,13 +72,13 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 - (instancetype)init NS_UNAVAILABLE;
 
 - (instancetype)initWithBytesNoCopy:(const float *)floatBytes pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
-                    volumeTransform:(NIAffineTransform)volumeTransform outOfBoundsValue:(float)outOfBoundsValue freeWhenDone:(BOOL)freeWhenDone; // volumeTransform is the transform from Dicom (patient) space to pixel data
+                    volumeTransform:(NIAffineTransform)volumeTransform outOfBoundsValue:(float)outOfBoundsValue freeWhenDone:(BOOL)freeWhenDone; // volumeTransform is the transform from Model (patient) space to pixel data
 
 - (instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
-             volumeTransform:(NIAffineTransform)volumeTransform outOfBoundsValue:(float)outOfBoundsValue NS_DESIGNATED_INITIALIZER; // volumeTransform is the transform from Dicom (patient) space to pixel data
+             volumeTransform:(NIAffineTransform)volumeTransform outOfBoundsValue:(float)outOfBoundsValue NS_DESIGNATED_INITIALIZER; // volumeTransform is the transform from Model (patient) space to pixel data
 
 - (instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
-      volumeToDicomConverter:(NIVector (^)(NIVector volumeVector))volumeToDicomConverter dicomToVolumeConverter:(NIVector (^)(NIVector dicomVector))dicomToVolumeConverter
+      volumeToModelConverter:(NIVector (^)(NIVector volumeVector))volumeToModelConverter modelToVolumeConverter:(NIVector (^)(NIVector modelVector))modelToVolumeConverter
             outOfBoundsValue:(float)outOfBoundsValue NS_DESIGNATED_INITIALIZER;
 
 - (instancetype)initWithVolumeData:(NIVolumeData *)volumeData NS_DESIGNATED_INITIALIZER;
@@ -101,14 +101,14 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 
 @property (readonly) float outOfBoundsValue;
 
-@property (readonly) NIAffineTransform volumeTransform; // volumeTransform is the transform from Dicom (patient) space to pixel data
+@property (readonly) NIAffineTransform volumeTransform; // volumeTransform is the transform from Model (patient) space to pixel data
 
 @property (readonly, getter = isCurved) BOOL curved; // if the volume is curved the volumeTransform will be bogus, but the following properties will still work
-@property (readonly, copy) NIVector (^convertVolumeVectorToDICOMVectorBlock)(NIVector);
-@property (readonly, copy) NIVector (^convertVolumeVectorFromDICOMVectorBlock)(NIVector);
+@property (readonly, copy) NIVector (^convertVolumeVectorToModelVectorBlock)(NIVector);
+@property (readonly, copy) NIVector (^convertVolumeVectorFromModelVectorBlock)(NIVector);
 
-- (NIVector)convertVolumeVectorToDICOMVector:(NIVector)vector;
-- (NIVector)convertVolumeVectorFromDICOMVector:(NIVector)vector;
+- (NIVector)convertVolumeVectorToModelVector:(NIVector)vector;
+- (NIVector)convertVolumeVectorFromModelVector:(NIVector)vector;
 @property (readonly, retain) NSData *floatData;
 
 // will copy fill length*sizeof(float) bytes, the coordinates better be within the volume!!!
@@ -129,9 +129,9 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
                                      interpolationMode:(NIInterpolationMode)interpolationsMode;
 
 - (CGFloat)floatAtPixelCoordinateX:(NSUInteger)x y:(NSUInteger)y z:(NSUInteger)z;
-- (CGFloat)linearInterpolatedFloatAtDicomVector:(NIVector)vector; // these are slower, use the inline buffer if you care about speed
-- (CGFloat)nearestNeighborInterpolatedFloatAtDicomVector:(NIVector)vector; // these are slower, use the inline buffer if you care about speed
-- (CGFloat)cubicInterpolatedFloatAtDicomVector:(NIVector)vector; // these are slower, use the inline buffer if you care about speed
+- (CGFloat)linearInterpolatedFloatAtModelVector:(NIVector)vector; // these are slower, use the inline buffer if you care about speed
+- (CGFloat)nearestNeighborInterpolatedFloatAtModelVector:(NIVector)vector; // these are slower, use the inline buffer if you care about speed
+- (CGFloat)cubicInterpolatedFloatAtModelVector:(NIVector)vector; // these are slower, use the inline buffer if you care about speed
 
 - (BOOL)aquireInlineBuffer:(NIVolumeDataInlineBuffer *)inlineBuffer; // always return YES
 
@@ -375,22 +375,22 @@ CF_INLINE float NIVolumeDataCubicInterpolatedFloatAtVolumeCoordinate(NIVolumeDat
          );
 }
 
-__attribute__((deprecated("convert the vector using [-[NIVolumeData convertVolumeVectorFromDICOMVector:] first")))
-CF_INLINE float NIVolumeDataLinearInterpolatedFloatAtDicomVector(NIVolumeDataInlineBuffer *inlineBuffer, NIVector vector) // coordinate in mm dicom space
+__attribute__((deprecated("convert the vector using [-[NIVolumeData convertVolumeVectorFromModelVector:] first")))
+CF_INLINE float NIVolumeDataLinearInterpolatedFloatAtModelVector(NIVolumeDataInlineBuffer *inlineBuffer, NIVector vector) // coordinate in mm model space
 {
     vector = NIVectorApplyTransform(vector, inlineBuffer->volumeTransform);
     return NIVolumeDataLinearInterpolatedFloatAtVolumeCoordinate(inlineBuffer, vector.x, vector.y, vector.z);
 }
 
-__attribute__((deprecated("convert the vector using [-[NIVolumeData convertVolumeVectorFromDICOMVector:] first")))
-CF_INLINE float NIVolumeDataNearestNeighborInterpolatedFloatAtDicomVector(NIVolumeDataInlineBuffer *inlineBuffer, NIVector vector) // coordinate in mm dicom space
+__attribute__((deprecated("convert the vector using [-[NIVolumeData convertVolumeVectorFromModelVector:] first")))
+CF_INLINE float NIVolumeDataNearestNeighborInterpolatedFloatAtModelVector(NIVolumeDataInlineBuffer *inlineBuffer, NIVector vector) // coordinate in mm model space
 {
     vector = NIVectorApplyTransform(vector, inlineBuffer->volumeTransform);
     return NIVolumeDataNearestNeighborInterpolatedFloatAtVolumeCoordinate(inlineBuffer, vector.x, vector.y, vector.z);
 }
 
-__attribute__((deprecated("convert the vector using [-[NIVolumeData convertVolumeVectorFromDICOMVector:] first")))
-CF_INLINE float NIVolumeDataCubicInterpolatedFloatAtDicomVector(NIVolumeDataInlineBuffer *inlineBuffer, NIVector vector) // coordinate in mm dicom space
+__attribute__((deprecated("convert the vector using [-[NIVolumeData convertVolumeVectorFromModelVector:] first")))
+CF_INLINE float NIVolumeDataCubicInterpolatedFloatAtModelVector(NIVolumeDataInlineBuffer *inlineBuffer, NIVector vector) // coordinate in mm model space
 {
     vector = NIVectorApplyTransform(vector, inlineBuffer->volumeTransform);
     return NIVolumeDataCubicInterpolatedFloatAtVolumeCoordinate(inlineBuffer, vector.x, vector.y, vector.z);

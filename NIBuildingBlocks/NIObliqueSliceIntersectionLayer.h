@@ -54,7 +54,7 @@
 @property (nonatomic, readwrite, assign) CGFloat pointSpacingX;
 @property (nonatomic, readwrite, assign) CGFloat pointSpacingY;
 
-@property (nonatomic, readwrite, assign) NIAffineTransform sliceToDicomTransform;
+@property (nonatomic, readwrite, assign) NIAffineTransform sliceToModelTransform;
 
 @property (nonatomic, readwrite, retain) NSColor *intersectionColor; // animatable
 @property (nonatomic, readwrite, assign) CGFloat intersectionThickness; // animatable

@@ -66,11 +66,11 @@ typedef NS_ENUM(NSInteger, NIProjectionMode)
 
 - (BOOL)isEqual:(id)object;
 
-- (NIVector (^)(NIVector))convertVolumeVectorToDICOMVectorBlock;
-- (NIVector (^)(NIVector))convertVolumeVectorFromDICOMVectorBlock;
+- (NIVector (^)(NIVector))convertVolumeVectorToModelVectorBlock;
+- (NIVector (^)(NIVector))convertVolumeVectorFromModelVectorBlock;
 
-- (NIVector)convertVolumeVectorToDICOMVector:(NIVector)vector;
-- (NIVector)convertVolumeVectorFromDICOMVector:(NIVector)vector;
+- (NIVector)convertVolumeVectorToModelVector:(NIVector)vector;
+- (NIVector)convertVolumeVectorFromModelVector:(NIVector)vector;
 
 @property (nonatomic, readonly, retain) NIBezierPath *rimPath;
 
@@ -145,7 +145,7 @@ typedef NS_ENUM(NSInteger, NIProjectionMode)
 
 @property (nonatomic, readwrite, assign) NIProjectionMode projectionMode;
 
-@property (nonatomic, readwrite, assign) NIAffineTransform sliceToDicomTransform;
+@property (nonatomic, readwrite, assign) NIAffineTransform sliceToModelTransform;
 @property (nonatomic, readonly, assign) NIPlane plane;
 @property (nonatomic, readonly, assign) NIVector center;
 

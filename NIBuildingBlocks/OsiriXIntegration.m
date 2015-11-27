@@ -29,15 +29,15 @@ int NIBuildingBlocksInstallOsiriXCategories();
 
 @implementation OsiriX_NI
 
-static NSString* const DicomDatabaseClassName = @"DicomDatabase";
+static NSString* const ModelDatabaseClassName = @"ModelDatabase";
 
-+ (id)DefaultDicomDatabase {
++ (id)DefaultModelDatabase {
     @try {
-        Class DicomDatabaseClass = NSClassFromString(DicomDatabaseClassName);
-        if (!DicomDatabaseClass)
+        Class ModelDatabaseClass = NSClassFromString(ModelDatabaseClassName);
+        if (!ModelDatabaseClass)
             return nil;
         
-        return [DicomDatabaseClass valueForKey:@"defaultDatabase"];
+        return [ModelDatabaseClass valueForKey:@"defaultDatabase"];
         
     } @catch (...) {
         // do nothing
@@ -47,12 +47,12 @@ static NSString* const DicomDatabaseClassName = @"DicomDatabase";
 }
 
 + (BOOL)inOsiriX {
-    Class DicomDatabaseClass = NSClassFromString(DicomDatabaseClassName);
-    if (!DicomDatabaseClass)
+    Class ModelDatabaseClass = NSClassFromString(ModelDatabaseClassName);
+    if (!ModelDatabaseClass)
         return NO;
     
     // TODO: I'm not convinced this is the best way to see if we're inside OsiriX...
-    NSBundle* bundle = [NSBundle bundleForClass:DicomDatabaseClass];
+    NSBundle* bundle = [NSBundle bundleForClass:ModelDatabaseClass];
     if ([[bundle.infoDictionary[@"CFBundleDocumentTypes"] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSDictionary* entry, NSDictionary<NSString *,id>* _Nullable bindings) {
         return ([entry[@"CFBundleTypeExtensions"] isEqual:@[@"osirixplugin"]]);
     }]] count] == 1)
@@ -65,7 +65,7 @@ static NSString* const DicomDatabaseClassName = @"DicomDatabase";
     if (![self.class inOsiriX])
         return nil;
     
-    id ddd = [self.class DefaultDicomDatabase];
+    id ddd = [self.class DefaultModelDatabase];
     if (!ddd) {
         NSAssert(NO, @"NIStorage is being initialized too soon to properly work inside OsiriX - Try wrapping the initialization code within a [self performBlock:^{ ... } afterDelay:0]");
         return nil;
@@ -140,7 +140,7 @@ int NIBuildingBlocksInstallOsiriXCategories()
 
     DCMPix_NI *firstPix;
     float sliceThickness;
-    NIAffineTransform pixToDicomTransform;
+    NIAffineTransform pixToModelTransform;
     double spacingX;
     double spacingY;
     double spacingZ;
@@ -182,22 +182,22 @@ int NIBuildingBlocksInstallOsiriXCategories()
         orientation[0] = orientation[4] = orientation[8] = 1;
     }
 
-    pixToDicomTransform = NIAffineTransformIdentity;
-    pixToDicomTransform.m41 = firstPix.originX;
-    pixToDicomTransform.m42 = firstPix.originY;
-    pixToDicomTransform.m43 = firstPix.originZ;
-    pixToDicomTransform.m11 = orientation[0]*spacingX;
-    pixToDicomTransform.m12 = orientation[1]*spacingX;
-    pixToDicomTransform.m13 = orientation[2]*spacingX;
-    pixToDicomTransform.m21 = orientation[3]*spacingY;
-    pixToDicomTransform.m22 = orientation[4]*spacingY;
-    pixToDicomTransform.m23 = orientation[5]*spacingY;
-    pixToDicomTransform.m31 = orientation[6]*spacingZ;
-    pixToDicomTransform.m32 = orientation[7]*spacingZ;
-    pixToDicomTransform.m33 = orientation[8]*spacingZ;
+    pixToModelTransform = NIAffineTransformIdentity;
+    pixToModelTransform.m41 = firstPix.originX;
+    pixToModelTransform.m42 = firstPix.originY;
+    pixToModelTransform.m43 = firstPix.originZ;
+    pixToModelTransform.m11 = orientation[0]*spacingX;
+    pixToModelTransform.m12 = orientation[1]*spacingX;
+    pixToModelTransform.m13 = orientation[2]*spacingX;
+    pixToModelTransform.m21 = orientation[3]*spacingY;
+    pixToModelTransform.m22 = orientation[4]*spacingY;
+    pixToModelTransform.m23 = orientation[5]*spacingY;
+    pixToModelTransform.m31 = orientation[6]*spacingZ;
+    pixToModelTransform.m32 = orientation[7]*spacingZ;
+    pixToModelTransform.m33 = orientation[8]*spacingZ;
 
     return [[[NIVolumeData alloc] initWithData:volume pixelsWide:[firstPix pwidth] pixelsHigh:[firstPix pheight] pixelsDeep:[pixListForMovieIndex count]
-                                volumeTransform:NIAffineTransformInvert(pixToDicomTransform) outOfBoundsValue:-1000] autorelease];
+                                volumeTransform:NIAffineTransformInvert(pixToModelTransform) outOfBoundsValue:-1000] autorelease];
 }
 
 @end

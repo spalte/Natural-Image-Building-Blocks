@@ -40,11 +40,11 @@
 @synthesize CLUT = _CLUT;
 
 @synthesize sliceThickness = _sliceThickness;
-@synthesize imageToDicomTransform = _imageToDicomTransform;
+@synthesize imageToModelTransform = _imageToModelTransform;
 
 @synthesize curved = _curved;
-@synthesize convertPointFromDICOMVectorBlock = _convertPointFromDICOMVectorBlock;
-@synthesize convertPointToDICOMVectorBlock = _convertPointToDICOMVectorBlock;
+@synthesize convertPointFromModelVectorBlock = _convertPointFromModelVectorBlock;
+@synthesize convertPointToModelVectorBlock = _convertPointToModelVectorBlock;
 
 - (instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh
 {
@@ -61,10 +61,10 @@
         [self setPixelsWide:pixelsWide];
         [self setPixelsHigh:pixelsHigh];
         [self setSize:NSMakeSize(pixelsWide, pixelsHigh)];
-        _imageToDicomTransform = NIAffineTransformIdentity;
+        _imageToModelTransform = NIAffineTransformIdentity;
 
-        self.convertPointFromDICOMVectorBlock = ^NSPoint(NIVector vector){return NSPointFromNIVector(NIVectorApplyTransform(vector, NIAffineTransformInvert(NIAffineTransformIdentity)));};
-        self.convertPointToDICOMVectorBlock = ^NIVector(NSPoint point){return NIVectorApplyTransform(NIVectorMakeFromNSPoint(point), NIAffineTransformIdentity);};
+        self.convertPointFromModelVectorBlock = ^NSPoint(NIVector vector){return NSPointFromNIVector(NIVectorApplyTransform(vector, NIAffineTransformInvert(NIAffineTransformIdentity)));};
+        self.convertPointToModelVectorBlock = ^NIVector(NSPoint point){return NIVectorApplyTransform(NIVectorMakeFromNSPoint(point), NIAffineTransformIdentity);};
     }
 
     return self;
@@ -84,10 +84,10 @@
         [self setPixelsWide:pixelsWide];
         [self setPixelsHigh:pixelsHigh];
         [self setSize:NSMakeSize(pixelsWide, pixelsHigh)];
-        _imageToDicomTransform = NIAffineTransformIdentity;
+        _imageToModelTransform = NIAffineTransformIdentity;
 
-        self.convertPointFromDICOMVectorBlock = ^NSPoint(NIVector vector){return NSPointFromNIVector(NIVectorApplyTransform(vector, NIAffineTransformInvert(NIAffineTransformIdentity)));};
-        self.convertPointToDICOMVectorBlock = ^NIVector(NSPoint point){return NIVectorApplyTransform(NIVectorMakeFromNSPoint(point), NIAffineTransformIdentity);};
+        self.convertPointFromModelVectorBlock = ^NSPoint(NIVector vector){return NSPointFromNIVector(NIVectorApplyTransform(vector, NIAffineTransformInvert(NIAffineTransformIdentity)));};
+        self.convertPointToModelVectorBlock = ^NIVector(NSPoint point){return NIVectorApplyTransform(NIVectorMakeFromNSPoint(point), NIAffineTransformIdentity);};
     }
 
     return self;
@@ -107,11 +107,11 @@
         [self setPixelsWide:pixelsWide];
         [self setPixelsHigh:pixelsHigh];
         [self setSize:NSMakeSize(pixelsWide, pixelsHigh)];
-        _imageToDicomTransform = NIAffineTransformIdentity;
+        _imageToModelTransform = NIAffineTransformIdentity;
 
 
-        self.convertPointFromDICOMVectorBlock = ^NSPoint(NIVector vector){return NSPointFromNIVector(NIVectorApplyTransform(vector, NIAffineTransformInvert(NIAffineTransformIdentity)));};
-        self.convertPointToDICOMVectorBlock = ^NIVector(NSPoint point){return NIVectorApplyTransform(NIVectorMakeFromNSPoint(point), NIAffineTransformIdentity);};
+        self.convertPointFromModelVectorBlock = ^NSPoint(NIVector vector){return NSPointFromNIVector(NIVectorApplyTransform(vector, NIAffineTransformInvert(NIAffineTransformIdentity)));};
+        self.convertPointToModelVectorBlock = ^NIVector(NSPoint point){return NIVectorApplyTransform(NIVectorMakeFromNSPoint(point), NIAffineTransformIdentity);};
     }
 
     return self;
@@ -128,10 +128,10 @@
     [_CLUT release];
     _CLUT = nil;
 
-    [_convertPointFromDICOMVectorBlock release];
-    _convertPointFromDICOMVectorBlock = nil;
-    [_convertPointToDICOMVectorBlock release];
-    _convertPointToDICOMVectorBlock = nil;
+    [_convertPointFromModelVectorBlock release];
+    _convertPointFromModelVectorBlock = nil;
+    [_convertPointToModelVectorBlock release];
+    _convertPointToModelVectorBlock = nil;
 
     [super dealloc];
 }
@@ -141,12 +141,12 @@
     return [[self bitmapImageRep] draw];
 }
 
-- (void)setImageToDicomTransform:(NIAffineTransform)imageToDicomTransform
+- (void)setImageToModelTransform:(NIAffineTransform)imageToModelTransform
 {
-    _imageToDicomTransform = imageToDicomTransform;
+    _imageToModelTransform = imageToModelTransform;
 
-    self.convertPointFromDICOMVectorBlock = ^NSPoint(NIVector vector){return NSPointFromNIVector(NIVectorApplyTransform(vector, NIAffineTransformInvert(imageToDicomTransform)));};
-    self.convertPointToDICOMVectorBlock = ^NIVector(NSPoint point){return NIVectorApplyTransform(NIVectorMakeFromNSPoint(point), imageToDicomTransform);};
+    self.convertPointFromModelVectorBlock = ^NSPoint(NIVector vector){return NSPointFromNIVector(NIVectorApplyTransform(vector, NIAffineTransformInvert(imageToModelTransform)));};
+    self.convertPointToModelVectorBlock = ^NIVector(NSPoint point){return NIVectorApplyTransform(NIVectorMakeFromNSPoint(point), imageToModelTransform);};
 }
 
 - (void)setWindowLevel:(CGFloat)windowLevel
@@ -281,7 +281,7 @@
         float twoFiftyFive = 255.0;
         float negOne = -1.0;
 
-        // adjust the window level and width according to the dicom docs (Part 3 C.11.2.1.2)
+        // adjust the window level and width according to the DICOM docs (Part 3 C.11.2.1.2)
         if (_windowWidth > 1) { // regular case
             float float1 = 255.0/(_windowWidth - 1.0);
             float float2 = 127.5 - (((255.0 * _windowLevel) - 127.5) / (_windowWidth - 1.0));
@@ -466,14 +466,14 @@
     free(workingFloats);
 }
 
-- (NSPoint)convertPointFromDICOMVector:(NIVector)vector
+- (NSPoint)convertPointFromModelVector:(NIVector)vector
 {
-    return self.convertPointFromDICOMVectorBlock(vector);
+    return self.convertPointFromModelVectorBlock(vector);
 }
 
-- (NIVector)convertPointToDICOMVector:(NSPoint)point
+- (NIVector)convertPointToModelVector:(NSPoint)point
 {
-    return self.convertPointToDICOMVectorBlock(point);
+    return self.convertPointToModelVectorBlock(point);
 }
 
 
@@ -499,8 +499,8 @@
     NIVector xBasis;
     NIVector yBasis;
 
-    xBasis = NIVectorNormalize(NIVectorMake(_imageToDicomTransform.m11, _imageToDicomTransform.m12, _imageToDicomTransform.m13));
-    yBasis = NIVectorNormalize(NIVectorMake(_imageToDicomTransform.m21, _imageToDicomTransform.m22, _imageToDicomTransform.m23));
+    xBasis = NIVectorNormalize(NIVectorMake(_imageToModelTransform.m11, _imageToModelTransform.m12, _imageToModelTransform.m13));
+    yBasis = NIVectorNormalize(NIVectorMake(_imageToModelTransform.m21, _imageToModelTransform.m22, _imageToModelTransform.m23));
 
     orientation[0] = xBasis.x; orientation[1] = xBasis.y; orientation[2] = xBasis.z;
     orientation[3] = yBasis.x; orientation[4] = yBasis.y; orientation[5] = yBasis.z;
@@ -508,17 +508,17 @@
 
 - (float)originX
 {
-    return _imageToDicomTransform.m41;
+    return _imageToModelTransform.m41;
 }
 
 - (float)originY
 {
-    return _imageToDicomTransform.m42;
+    return _imageToModelTransform.m42;
 }
 
 - (float)originZ
 {
-    return _imageToDicomTransform.m43;
+    return _imageToModelTransform.m43;
 }
 
 @end
@@ -545,14 +545,14 @@
     }
     sliceImageRep = [[NIFloatImageRep alloc] initWithData:sliceData pixelsWide:self.pixelsWide pixelsHigh:self.pixelsHigh];
     sliceImageRep.sliceThickness = self.pixelSpacingZ;
-    sliceImageRep.imageToDicomTransform = NIAffineTransformConcat(NIAffineTransformMakeTranslation(0.0, 0.0, (CGFloat)z), NIAffineTransformInvert(_volumeTransform));
+    sliceImageRep.imageToModelTransform = NIAffineTransformConcat(NIAffineTransformMakeTranslation(0.0, 0.0, (CGFloat)z), NIAffineTransformInvert(_volumeTransform));
 
     if (self.curved) {
-        NIVector (^convertVolumeVectorFromDICOMVectorBlock)(NIVector) = self.convertVolumeVectorFromDICOMVectorBlock;
-        NIVector (^convertVolumeVectorToDICOMVectorBlock)(NIVector) = self.convertVolumeVectorToDICOMVectorBlock;
+        NIVector (^convertVolumeVectorFromModelVectorBlock)(NIVector) = self.convertVolumeVectorFromModelVectorBlock;
+        NIVector (^convertVolumeVectorToModelVectorBlock)(NIVector) = self.convertVolumeVectorToModelVectorBlock;
 
-        sliceImageRep.convertPointFromDICOMVectorBlock = ^NSPoint(NIVector vector) {return NSPointFromNIVector(convertVolumeVectorFromDICOMVectorBlock(vector));};
-        sliceImageRep.convertPointToDICOMVectorBlock = ^NIVector(NSPoint point) {return convertVolumeVectorToDICOMVectorBlock(NIVectorMake(point.x, point.y, z));};
+        sliceImageRep.convertPointFromModelVectorBlock = ^NSPoint(NIVector vector) {return NSPointFromNIVector(convertVolumeVectorFromModelVectorBlock(vector));};
+        sliceImageRep.convertPointToModelVectorBlock = ^NIVector(NSPoint point) {return convertVolumeVectorToModelVectorBlock(NIVectorMake(point.x, point.y, z));};
         sliceImageRep.curved = YES;
     }
 

@@ -62,7 +62,7 @@
 
 @property (nonatomic, readonly, retain) NIGeneratorRequest *presentedGeneratorRequest; // observable
 
-- (CGPoint)convertPointFromDICOMVector:(NIVector)vector;
-- (NIVector)convertPointToDICOMVector:(CGPoint)point;
+- (CGPoint)convertPointFromModelVector:(NIVector)vector;
+- (NIVector)convertPointToModelVector:(CGPoint)point;
 
 @end
