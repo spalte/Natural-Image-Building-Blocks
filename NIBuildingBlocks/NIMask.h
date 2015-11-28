@@ -202,9 +202,9 @@ CF_EXTERN_C_END
  
  @return The newly crated and initialized mask object or `nil` if there was a problem initializing the object.
  @param volumeData The NIVolumeData on which to build and base the mask.
- @param volumeTransformPtr Returns the transform needed to go from model space to the mask
+ @param modelToVoxelTransformPtr Returns the transform needed to go from model space to the mask
  */
-+ (instancetype)maskFromVolumeData:(NIVolumeData *)volumeData volumeTransform:(NIAffineTransformPointer)volumeTransformPtr;
++ (instancetype)maskFromVolumeData:(NIVolumeData *)volumeData modelToVoxelTransform:(NIAffineTransformPointer)modelToVoxelTransformPtr;
 + (instancetype)maskFromVolumeData:(NIVolumeData *)volumeData __deprecated;
 
 /** Initializes and returns a newly created empty mask.
@@ -316,7 +316,7 @@ CF_EXTERN_C_END
 /** Returns a NIVolumeData filled with the intensities of the mask.
  
  */
-- (NIVolumeData *)volumeDataRepresentationWithVolumeTransform:(NIAffineTransform)volumeTransform;
+- (NIVolumeData *)volumeDataRepresentationWithModelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform;
 
 /** Returns a mask formed by cropping any indexes that are further out than the bounds specified from the receiver.
 
@@ -398,12 +398,12 @@ CF_EXTERN_C_END
 /** Returns a mask that has been resampled from the volume to coordinates specified by toTransform.
 
  */
-+ (instancetype)maskByResamplingFromVolumeData:(NIVolumeData *)volumeData toVolumeTransform:(NIAffineTransform)toTransform interpolationMode:(NIInterpolationMode)interpolationsMode;
++ (instancetype)maskByResamplingFromVolumeData:(NIVolumeData *)volumeData toModelToVoxelTransform:(NIAffineTransform)toModelToVoxelTransform interpolationMode:(NIInterpolationMode)interpolationsMode;
 
 /** Returns a mask that has been resampled from being in the volume as the position fromTransform to a mask that is in the volume at position toTransform.
 
  */
-- (instancetype)maskByResamplingFromVolumeTransform:(NIAffineTransform)fromTransform toVolumeTransform:(NIAffineTransform)toTransform interpolationMode:(NIInterpolationMode)interpolationsMode;
+- (instancetype)maskByResamplingFromModelToVoxelTransform:(NIAffineTransform)fromModelToVoxelTransform toModelToVoxelTransform:(NIAffineTransform)toModelToVoxelTransform interpolationMode:(NIInterpolationMode)interpolationsMode;
 
 /** Returns the extent of the receiver. All values are inclusive.
  

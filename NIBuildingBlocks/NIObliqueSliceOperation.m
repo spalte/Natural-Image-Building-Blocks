@@ -35,7 +35,7 @@ static NSOperationQueue *_obliqueSliceOperationFillQueue = nil;
 + (NSOperationQueue *) _fillQueue;
 - (CGFloat)_slabSampleDistance;
 - (NSUInteger)_pixelsDeep;
-- (NIAffineTransform)_generatedVolumeTransform;
+- (NIAffineTransform)_generatedModelToVoxelTransform;
 
 @end
 
@@ -247,7 +247,7 @@ static NSOperationQueue *_obliqueSliceOperationFillQueue = nil;
 {
     NSOperation *operation;
     NIVolumeData *generatedVolume;
-    NIAffineTransform volumeTransform;
+    NIAffineTransform modelToVoxelTransform;
     NIProjectionOperation *projectionOperation;
     int32_t oustandingFillOperationCount;
 
@@ -261,9 +261,9 @@ static NSOperationQueue *_obliqueSliceOperationFillQueue = nil;
                 [self autorelease]; // to balance the retain when we observe operations
                 oustandingFillOperationCount = OSAtomicDecrement32Barrier(&_oustandingFillOperationCount);
                 if (oustandingFillOperationCount == 0) { // done with the fill operations, now do the projection
-                    volumeTransform = [self _generatedVolumeTransform];
+                    modelToVoxelTransform = [self _generatedModelToVoxelTransform];
                     generatedVolume = [[NIVolumeData alloc] initWithBytesNoCopy:_floatBytes pixelsWide:self.request.pixelsWide pixelsHigh:self.request.pixelsHigh pixelsDeep:[self _pixelsDeep]
-                                                                volumeTransform:volumeTransform outOfBoundsValue:_volumeData.outOfBoundsValue freeWhenDone:YES];
+                                                                modelToVoxelTransform:modelToVoxelTransform outOfBoundsValue:_volumeData.outOfBoundsValue freeWhenDone:YES];
                     _floatBytes = NULL;
                     projectionOperation = [[NIProjectionOperation alloc] init];
                     [projectionOperation setQueuePriority:[self queuePriority]];
@@ -329,9 +329,9 @@ static NSOperationQueue *_obliqueSliceOperationFillQueue = nil;
 #endif
 }
 
-- (NIAffineTransform)_generatedVolumeTransform
+- (NIAffineTransform)_generatedModelToVoxelTransform
 {
-    NIAffineTransform volumeTransform;
+    NIAffineTransform modelToVoxelTransform;
     NIVector leftDirection;
     NIVector downDirection;
     NIVector inSlabNormal;
@@ -347,22 +347,22 @@ static NSOperationQueue *_obliqueSliceOperationFillQueue = nil;
 
     volumeOrigin = NIVectorAdd(self.request.origin, NIVectorScalarMultiply(inSlabNormal, (CGFloat)([self _pixelsDeep] - 1)/-2.0));
 
-    volumeTransform = NIAffineTransformIdentity;
-    volumeTransform.m41 = volumeOrigin.x;
-    volumeTransform.m42 = volumeOrigin.y;
-    volumeTransform.m43 = volumeOrigin.z;
-    volumeTransform.m11 = leftDirection.x;
-    volumeTransform.m12 = leftDirection.y;
-    volumeTransform.m13 = leftDirection.z;
-    volumeTransform.m21 = downDirection.x;
-    volumeTransform.m22 = downDirection.y;
-    volumeTransform.m23 = downDirection.z;
-    volumeTransform.m31 = inSlabNormal.x;
-    volumeTransform.m32 = inSlabNormal.y;
-    volumeTransform.m33 = inSlabNormal.z;
+    modelToVoxelTransform = NIAffineTransformIdentity;
+    modelToVoxelTransform.m41 = volumeOrigin.x;
+    modelToVoxelTransform.m42 = volumeOrigin.y;
+    modelToVoxelTransform.m43 = volumeOrigin.z;
+    modelToVoxelTransform.m11 = leftDirection.x;
+    modelToVoxelTransform.m12 = leftDirection.y;
+    modelToVoxelTransform.m13 = leftDirection.z;
+    modelToVoxelTransform.m21 = downDirection.x;
+    modelToVoxelTransform.m22 = downDirection.y;
+    modelToVoxelTransform.m23 = downDirection.z;
+    modelToVoxelTransform.m31 = inSlabNormal.x;
+    modelToVoxelTransform.m32 = inSlabNormal.y;
+    modelToVoxelTransform.m33 = inSlabNormal.z;
+    modelToVoxelTransform = NIAffineTransformInvert(modelToVoxelTransform);
     
-    volumeTransform = NIAffineTransformInvert(volumeTransform);
-    return volumeTransform;
+    return modelToVoxelTransform;
 }
 
 @end

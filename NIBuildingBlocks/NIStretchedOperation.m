@@ -294,7 +294,7 @@ static NSOperationQueue *_stretchedOperationFillQueue = nil;
 {
     NSOperation *operation;
     NIVolumeData *generatedVolume;
-    NIAffineTransform volumeTransform;
+    NIAffineTransform modelToVoxelTransform;
     NIProjectionOperation *projectionOperation;
     int32_t oustandingFillOperationCount;
     
@@ -308,9 +308,9 @@ static NSOperationQueue *_stretchedOperationFillQueue = nil;
                 [self autorelease]; // to balance the retain when we observe operations
                 oustandingFillOperationCount = OSAtomicDecrement32Barrier(&_outstandingFillOperationCount);
                 if (oustandingFillOperationCount == 0) { // done with the fill operations, now do the projection
-                    volumeTransform = NIAffineTransformMakeScale(1.0/_sampleSpacing, 1.0/_sampleSpacing, 1.0/[self _slabSampleDistance]);
+                    modelToVoxelTransform = NIAffineTransformMakeScale(1.0/_sampleSpacing, 1.0/_sampleSpacing, 1.0/[self _slabSampleDistance]);
                     generatedVolume = [[NIVolumeData alloc] initWithBytesNoCopy:_floatBytes pixelsWide:self.request.pixelsWide pixelsHigh:self.request.pixelsHigh pixelsDeep:[self _pixelsDeep]
-                                                                  volumeTransform:volumeTransform outOfBoundsValue:_volumeData.outOfBoundsValue freeWhenDone:YES];
+                                                                  modelToVoxelTransform:modelToVoxelTransform outOfBoundsValue:_volumeData.outOfBoundsValue freeWhenDone:YES];
                     _floatBytes = NULL;
                     projectionOperation = [[NIProjectionOperation alloc] init];
 					[projectionOperation setQueuePriority:[self queuePriority]];

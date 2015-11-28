@@ -545,7 +545,7 @@
     }
     sliceImageRep = [[NIFloatImageRep alloc] initWithData:sliceData pixelsWide:self.pixelsWide pixelsHigh:self.pixelsHigh];
     sliceImageRep.sliceThickness = self.pixelSpacingZ;
-    sliceImageRep.imageToModelTransform = NIAffineTransformConcat(NIAffineTransformMakeTranslation(0.0, 0.0, (CGFloat)z), NIAffineTransformInvert(_volumeTransform));
+    sliceImageRep.imageToModelTransform = NIAffineTransformConcat(NIAffineTransformMakeTranslation(0.0, 0.0, (CGFloat)z), NIAffineTransformInvert(_modelToVoxelTransform));
 
     if (self.curved) {
         NIVector (^convertVolumeVectorFromModelVectorBlock)(NIVector) = self.convertVolumeVectorFromModelVectorBlock;

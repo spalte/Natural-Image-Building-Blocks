@@ -268,11 +268,11 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
 
 + (instancetype)maskFromVolumeData:(NIVolumeData *)volumeData __deprecated
 {
-    return [self maskFromVolumeData:volumeData volumeTransform:NULL];
+    return [self maskFromVolumeData:volumeData modelToVoxelTransform:NULL];
 }
 
 
-+ (id)maskFromVolumeData:(NIVolumeData *)volumeData volumeTransform:(NIAffineTransformPointer)volumeTransformPtr
++ (id)maskFromVolumeData:(NIVolumeData *)volumeData modelToVoxelTransform:(NIAffineTransformPointer)modelToVoxelTransformPtr
 {
     NSInteger i;
     NSInteger j;
@@ -321,8 +321,8 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
         }
     }
     
-    if (volumeTransformPtr) {
-        *volumeTransformPtr = volumeData.volumeTransform;
+    if (modelToVoxelTransformPtr) {
+        *modelToVoxelTransformPtr = volumeData.modelToVoxelTransform;
     }
     
     return [[[[self class] alloc] initWithMaskRuns:maskRuns] autorelease];
@@ -704,7 +704,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return [[[NIMask alloc] initWithSortedMaskRunData:resultMaskRuns] autorelease];
 }
 
-- (NIVolumeData *)volumeDataRepresentationWithVolumeTransform:(NIAffineTransform)volumeTransform;
+- (NIVolumeData *)volumeDataRepresentationWithModelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform;
 {
     NSUInteger maxHeight = NSIntegerMin;
     NSUInteger minHeight = NSIntegerMax;
@@ -739,10 +739,10 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     }
     NSData *floatData = [NSData dataWithBytesNoCopy:floatBytes length:width * height * depth * sizeof(float)];
     
-    // since we shifted the data, we need to shift the volumeTransform as well.
-    NIAffineTransform shiftedVolumeTransform = NIAffineTransformConcat(volumeTransform, NIAffineTransformMakeTranslation(-1.0*(CGFloat)minWidth, -1.0*(CGFloat)minHeight, -1.0*(CGFloat)minDepth));
+    // since we shifted the data, we need to shift the modelToVoxelTransform as well.
+    NIAffineTransform shiftedTransform = NIAffineTransformConcat(modelToVoxelTransform, NIAffineTransformMakeTranslation(-1.0*(CGFloat)minWidth, -1.0*(CGFloat)minHeight, -1.0*(CGFloat)minDepth));
     
-    return [[[NIVolumeData alloc] initWithData:floatData pixelsWide:width pixelsHigh:height pixelsDeep:depth volumeTransform:shiftedVolumeTransform outOfBoundsValue:0] autorelease];
+    return [[[NIVolumeData alloc] initWithData:floatData pixelsWide:width pixelsHigh:height pixelsDeep:depth modelToVoxelTransform:shiftedTransform outOfBoundsValue:0] autorelease];
 }
 
 - (NIMask *)maskBySubtractingMask:(NIMask *)subtractMask
@@ -1080,18 +1080,18 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return NO;
 }
 
-+ (instancetype)maskByResamplingFromVolumeData:(NIVolumeData *)volumeData toVolumeTransform:(NIAffineTransform)toTransform interpolationMode:(NIInterpolationMode)interpolationsMode
++ (instancetype)maskByResamplingFromVolumeData:(NIVolumeData *)volumeData toModelToVoxelTransform:(NIAffineTransform)toModelToVoxelTransform interpolationMode:(NIInterpolationMode)interpolationsMode
 {
     NIMask *resampledMask = nil;
-    NIAffineTransform toVolumeTransform = NIAffineTransformIdentity;
+    NIAffineTransform toMaskTransform = NIAffineTransformIdentity;
     NIVector shift = NIVectorZero;
 
     @autoreleasepool {
-        NIVolumeData *toVolumeData = [volumeData volumeDataResampledWithVolumeTransform:toTransform interpolationMode:interpolationsMode];
-        resampledMask = [NIMask maskFromVolumeData:toVolumeData volumeTransform:&toVolumeTransform];
+        NIVolumeData *toVolumeData = [volumeData volumeDataResampledWithModelToVoxelTransform:toModelToVoxelTransform interpolationMode:interpolationsMode];
+        resampledMask = [NIMask maskFromVolumeData:toVolumeData modelToVoxelTransform:&toMaskTransform];
 
-        // volumeDataResampledWithVolumeTransform can shift the data so that it doesn't store more than it needs to, so figure out how much the shift was, and translate the mask so that is is at the right place
-        shift = NIVectorApplyTransform(NIVectorZero, NIAffineTransformConcat(NIAffineTransformInvert(toTransform), toVolumeTransform));
+        // volumeDataResampledWithModelToVoxelTransform can shift the data so that it doesn't store more than it needs to, so figure out how much the shift was, and translate the mask so that is is at the right place
+        shift = NIVectorApplyTransform(NIVectorZero, NIAffineTransformConcat(NIAffineTransformInvert(toModelToVoxelTransform), toMaskTransform));
 
 #if CGFLOAT_IS_DOUBLE
         shift.x = round(shift.x);
@@ -1110,9 +1110,9 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
 
 }
 
-- (instancetype)maskByResamplingFromVolumeTransform:(NIAffineTransform)fromTransform toVolumeTransform:(NIAffineTransform)toTransform interpolationMode:(NIInterpolationMode)interpolationsMode
+- (instancetype)maskByResamplingFromModelToVoxelTransform:(NIAffineTransform)fromTransform toModelToVoxelTransform:(NIAffineTransform)toModelToVoxelTransform interpolationMode:(NIInterpolationMode)interpolationsMode
 {
-    if (NIAffineTransformEqualToTransform(fromTransform, toTransform)) {
+    if (NIAffineTransformEqualToTransform(fromTransform, toModelToVoxelTransform)) {
         return self;
     }
     
@@ -1124,8 +1124,8 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
 
     // The implementation of this function can be made a lot less memory demanding my only sampling one slice at a time instead of the whole volume
     @autoreleasepool {
-        NIVolumeData *fromVolumeData = [self volumeDataRepresentationWithVolumeTransform:fromTransform];
-        resampledMask = [[NIMask maskByResamplingFromVolumeData:fromVolumeData toVolumeTransform:toTransform interpolationMode:interpolationsMode] retain];
+        NIVolumeData *fromVolumeData = [self volumeDataRepresentationWithModelToVoxelTransform:fromTransform];
+        resampledMask = [[NIMask maskByResamplingFromVolumeData:fromVolumeData toModelToVoxelTransform:toModelToVoxelTransform interpolationMode:interpolationsMode] retain];
     }
 
     return [resampledMask autorelease];

@@ -197,7 +197,7 @@ int NIBuildingBlocksInstallOsiriXCategories()
     pixToModelTransform.m33 = orientation[8]*spacingZ;
 
     return [[[NIVolumeData alloc] initWithData:volume pixelsWide:[firstPix pwidth] pixelsHigh:[firstPix pheight] pixelsDeep:[pixListForMovieIndex count]
-                                volumeTransform:NIAffineTransformInvert(pixToModelTransform) outOfBoundsValue:-1000] autorelease];
+                                modelToVoxelTransform:NIAffineTransformInvert(pixToModelTransform) outOfBoundsValue:-1000] autorelease];
 }
 
 @end

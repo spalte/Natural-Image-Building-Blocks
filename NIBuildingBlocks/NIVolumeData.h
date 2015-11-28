@@ -46,7 +46,7 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 
     NSUInteger pixelsWideTimesPixelsHigh; // just in the interest of not calculating this a million times...
 
-    NIAffineTransform volumeTransform;
+    NIAffineTransform modelToVoxelTransform;
 } NIVolumeDataInlineBuffer;
 
 // Interface to the data
@@ -58,7 +58,7 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
     NSUInteger _pixelsHigh;
     NSUInteger _pixelsDeep;
 
-    NIAffineTransform _volumeTransform; // volumeTransform is the transform from Model (patient) space to pixel data
+    NIAffineTransform _modelToVoxelTransform; // modelToVoxelTransform is the transform from Model (patient) space to pixel data
 
     BOOL _curved;
     NIVector (^_convertVolumeVectorToModelVectorBlock)(NIVector);
@@ -66,16 +66,16 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 }
 
 // This is a utility function to help build an NIAffineTransform that places a volume in space
-+ (NIAffineTransform)volumeTransformForOrigin:(NIVector)origin directionX:(NIVector)directionX pixelSpacingX:(CGFloat)pixelSpacingX directionY:(NIVector)directionY pixelSpacingY:(CGFloat)pixelSpacingY
++ (NIAffineTransform)modelToVoxelTransformForOrigin:(NIVector)origin directionX:(NIVector)directionX pixelSpacingX:(CGFloat)pixelSpacingX directionY:(NIVector)directionY pixelSpacingY:(CGFloat)pixelSpacingY
                                      directionZ:(NIVector)directionZ pixelSpacingZ:(CGFloat)pixelSpacingZ;
 
 - (instancetype)init NS_UNAVAILABLE;
 
 - (instancetype)initWithBytesNoCopy:(const float *)floatBytes pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
-                    volumeTransform:(NIAffineTransform)volumeTransform outOfBoundsValue:(float)outOfBoundsValue freeWhenDone:(BOOL)freeWhenDone; // volumeTransform is the transform from Model (patient) space to pixel data
+                    modelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform outOfBoundsValue:(float)outOfBoundsValue freeWhenDone:(BOOL)freeWhenDone; // modelToVoxelTransform is the transform from Model (patient) space to pixel data
 
 - (instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
-             volumeTransform:(NIAffineTransform)volumeTransform outOfBoundsValue:(float)outOfBoundsValue NS_DESIGNATED_INITIALIZER; // volumeTransform is the transform from Model (patient) space to pixel data
+             modelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform outOfBoundsValue:(float)outOfBoundsValue NS_DESIGNATED_INITIALIZER; // modelToVoxelTransform is the transform from Model (patient) space to pixel data
 
 - (instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
       volumeToModelConverter:(NIVector (^)(NIVector volumeVector))volumeToModelConverter modelToVolumeConverter:(NIVector (^)(NIVector modelVector))modelToVolumeConverter
@@ -101,9 +101,9 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 
 @property (readonly) float outOfBoundsValue;
 
-@property (readonly) NIAffineTransform volumeTransform; // volumeTransform is the transform from Model (patient) space to pixel data
+@property (readonly) NIAffineTransform modelToVoxelTransform; // modelToVoxelTransform is the transform from model (patient) space to pixel data
 
-@property (readonly, getter = isCurved) BOOL curved; // if the volume is curved the volumeTransform will be bogus, but the following properties will still work
+@property (readonly, getter = isCurved) BOOL curved; // if the volume is curved the modelToVoxelTransform will be bogus, but the following properties will still work
 @property (readonly, copy) NIVector (^convertVolumeVectorToModelVectorBlock)(NIVector);
 @property (readonly, copy) NIVector (^convertVolumeVectorFromModelVectorBlock)(NIVector);
 
@@ -122,10 +122,10 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 - (NIVolumeData *)volumeDataByApplyingTransform:(NIAffineTransform)transform;
 
 // the first version of this function figures out the dimensions needed to fit the whole volume. Note that with the first version of this function the passed in transform may not
-// be equal to the volumeTransform of the returned volumeData because a minimum cube of data needed to fit the was calculated. Any shift in the data is guaranteed to be a multiple
+// be equal to the modelToVoxelTransform of the returned volumeData because a minimum cube of data needed to fit the was calculated. Any shift in the data is guaranteed to be a multiple
 // of the basis vectors of the transform though.
-- (instancetype)volumeDataResampledWithVolumeTransform:(NIAffineTransform)transform interpolationMode:(NIInterpolationMode)interpolationsMode;
-- (instancetype)volumeDataResampledWithVolumeTransform:(NIAffineTransform)transform pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
+- (instancetype)volumeDataResampledWithModelToVoxelTransform:(NIAffineTransform)transform interpolationMode:(NIInterpolationMode)interpolationsMode;
+- (instancetype)volumeDataResampledWithModelToVoxelTransform:(NIAffineTransform)transform pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
                                      interpolationMode:(NIInterpolationMode)interpolationsMode;
 
 - (CGFloat)floatAtPixelCoordinateX:(NSUInteger)x y:(NSUInteger)y z:(NSUInteger)z;
@@ -378,21 +378,21 @@ CF_INLINE float NIVolumeDataCubicInterpolatedFloatAtVolumeCoordinate(NIVolumeDat
 __attribute__((deprecated("convert the vector using [-[NIVolumeData convertVolumeVectorFromModelVector:] first")))
 CF_INLINE float NIVolumeDataLinearInterpolatedFloatAtModelVector(NIVolumeDataInlineBuffer *inlineBuffer, NIVector vector) // coordinate in mm model space
 {
-    vector = NIVectorApplyTransform(vector, inlineBuffer->volumeTransform);
+    vector = NIVectorApplyTransform(vector, inlineBuffer->modelToVoxelTransform);
     return NIVolumeDataLinearInterpolatedFloatAtVolumeCoordinate(inlineBuffer, vector.x, vector.y, vector.z);
 }
 
 __attribute__((deprecated("convert the vector using [-[NIVolumeData convertVolumeVectorFromModelVector:] first")))
 CF_INLINE float NIVolumeDataNearestNeighborInterpolatedFloatAtModelVector(NIVolumeDataInlineBuffer *inlineBuffer, NIVector vector) // coordinate in mm model space
 {
-    vector = NIVectorApplyTransform(vector, inlineBuffer->volumeTransform);
+    vector = NIVectorApplyTransform(vector, inlineBuffer->modelToVoxelTransform);
     return NIVolumeDataNearestNeighborInterpolatedFloatAtVolumeCoordinate(inlineBuffer, vector.x, vector.y, vector.z);
 }
 
 __attribute__((deprecated("convert the vector using [-[NIVolumeData convertVolumeVectorFromModelVector:] first")))
 CF_INLINE float NIVolumeDataCubicInterpolatedFloatAtModelVector(NIVolumeDataInlineBuffer *inlineBuffer, NIVector vector) // coordinate in mm model space
 {
-    vector = NIVectorApplyTransform(vector, inlineBuffer->volumeTransform);
+    vector = NIVectorApplyTransform(vector, inlineBuffer->modelToVoxelTransform);
     return NIVolumeDataCubicInterpolatedFloatAtVolumeCoordinate(inlineBuffer, vector.x, vector.y, vector.z);
 }
 

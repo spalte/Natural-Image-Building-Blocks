@@ -37,11 +37,11 @@
 @synthesize pixelsWide = _pixelsWide;
 @synthesize pixelsHigh = _pixelsHigh;
 @synthesize pixelsDeep = _pixelsDeep;
-@synthesize volumeTransform = _volumeTransform;
+@synthesize modelToVoxelTransform = _modelToVoxelTransform;
 @synthesize floatData = _floatData;
 @synthesize curved = _curved;
 
-+ (NIAffineTransform)volumeTransformForOrigin:(NIVector)origin directionX:(NIVector)directionX pixelSpacingX:(CGFloat)pixelSpacingX directionY:(NIVector)directionY pixelSpacingY:(CGFloat)pixelSpacingY
++ (NIAffineTransform)modelToVoxelTransformForOrigin:(NIVector)origin directionX:(NIVector)directionX pixelSpacingX:(CGFloat)pixelSpacingX directionY:(NIVector)directionY pixelSpacingY:(CGFloat)pixelSpacingY
                                      directionZ:(NIVector)directionZ pixelSpacingZ:(CGFloat)pixelSpacingZ
 {
     directionX = NIVectorNormalize(directionX);
@@ -66,14 +66,14 @@
 }
 
 - (instancetype)initWithBytesNoCopy:(const float *)floatBytes pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
-                    volumeTransform:(NIAffineTransform)volumeTransform outOfBoundsValue:(float)outOfBoundsValue freeWhenDone:(BOOL)freeWhenDone // volumeTransform is the transform from Model (patient) space to pixel data
+                    modelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform outOfBoundsValue:(float)outOfBoundsValue freeWhenDone:(BOOL)freeWhenDone // modelToVoxelTransform is the transform from Model (patient) space to pixel data
 {
     return [self initWithData:[NSData dataWithBytesNoCopy:(void *)floatBytes length:sizeof(float) * pixelsWide * pixelsHigh * pixelsDeep freeWhenDone:freeWhenDone]
-                   pixelsWide:pixelsWide pixelsHigh:pixelsHigh pixelsDeep:pixelsDeep volumeTransform:volumeTransform outOfBoundsValue:outOfBoundsValue];
+                   pixelsWide:pixelsWide pixelsHigh:pixelsHigh pixelsDeep:pixelsDeep modelToVoxelTransform:modelToVoxelTransform outOfBoundsValue:outOfBoundsValue];
 }
 
 - (instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
-             volumeTransform:(NIAffineTransform)volumeTransform outOfBoundsValue:(float)outOfBoundsValue // volumeTransform is the transform from Model (patient) space to pixel data
+             modelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform outOfBoundsValue:(float)outOfBoundsValue // modelToVoxelTransform is the transform from Model (patient) space to pixel data
 {
     if ( (self = [super init]) ) {
         _floatData = [data retain];
@@ -81,7 +81,7 @@
         _pixelsWide = pixelsWide;
         _pixelsHigh = pixelsHigh;
         _pixelsDeep = pixelsDeep;
-        _volumeTransform = volumeTransform;
+        _modelToVoxelTransform = modelToVoxelTransform;
     }
     return self;
 }
@@ -96,7 +96,7 @@
         _pixelsWide = pixelsWide;
         _pixelsHigh = pixelsHigh;
         _pixelsDeep = pixelsDeep;
-        _volumeTransform = NIAffineTransformIdentity;
+        _modelToVoxelTransform = NIAffineTransformIdentity;
         _curved = YES;
         _convertVolumeVectorToModelVectorBlock = [volumeToModelConverter copy];
         _convertVolumeVectorFromModelVectorBlock = [modelToVolumeConverter copy];
@@ -112,7 +112,7 @@
         _pixelsWide = volumeData->_pixelsWide;
         _pixelsHigh = volumeData->_pixelsHigh;
         _pixelsDeep = volumeData->_pixelsDeep;
-        _volumeTransform = volumeData->_volumeTransform;
+        _modelToVoxelTransform = volumeData->_modelToVoxelTransform;
     }
     return self;
 }
@@ -136,7 +136,7 @@
 
 - (BOOL)isRectilinear
 {
-    return NIAffineTransformIsRectilinear(_volumeTransform);
+    return NIAffineTransformIsRectilinear(_modelToVoxelTransform);
 }
 
 - (CGFloat)minPixelSpacing
@@ -150,9 +150,9 @@
     NIAffineTransform inverseTransform;
 
     if (self.rectilinear) {
-        return 1.0/_volumeTransform.m11;
+        return 1.0/_modelToVoxelTransform.m11;
     } else {
-        inverseTransform = NIAffineTransformInvert(_volumeTransform);
+        inverseTransform = NIAffineTransformInvert(_modelToVoxelTransform);
         zero = NIVectorApplyTransform(NIVectorZero, inverseTransform);
         return NIVectorDistance(zero, NIVectorApplyTransform(NIVectorMake(1.0, 0.0, 0.0), inverseTransform));
     }
@@ -164,9 +164,9 @@
     NIAffineTransform inverseTransform;
 
     if (self.rectilinear) {
-        return 1.0/_volumeTransform.m22;
+        return 1.0/_modelToVoxelTransform.m22;
     } else {
-        inverseTransform = NIAffineTransformInvert(_volumeTransform);
+        inverseTransform = NIAffineTransformInvert(_modelToVoxelTransform);
         zero = NIVectorApplyTransform(NIVectorZero, inverseTransform);
         return NIVectorDistance(zero, NIVectorApplyTransform(NIVectorMake(0.0, 1.0, 0.0), inverseTransform));
     }
@@ -178,9 +178,9 @@
     NIAffineTransform inverseTransform;
 
     if (self.rectilinear) {
-        return 1.0/_volumeTransform.m33;
+        return 1.0/_modelToVoxelTransform.m33;
     } else {
-        inverseTransform = NIAffineTransformInvert(_volumeTransform);
+        inverseTransform = NIAffineTransformInvert(_modelToVoxelTransform);
         zero = NIVectorApplyTransform(NIVectorZero, inverseTransform);
         return NIVectorDistance(zero, NIVectorApplyTransform(NIVectorMake(0.0, 0.0, 1.0), inverseTransform));
     }
@@ -188,7 +188,7 @@
 
 - (NIVector)origin
 {
-    NIAffineTransform inverseTransform = NIAffineTransformInvert(_volumeTransform);
+    NIAffineTransform inverseTransform = NIAffineTransformInvert(_modelToVoxelTransform);
     return NIVectorMake(inverseTransform.m41, inverseTransform.m42, inverseTransform.m43);
 }
 
@@ -199,7 +199,7 @@
     if (self.rectilinear) {
         return NIVectorXBasis;
     } else {
-        inverseTransform = NIAffineTransformInvert(_volumeTransform);
+        inverseTransform = NIAffineTransformInvert(_modelToVoxelTransform);
         return NIVectorNormalize(NIVectorMake(inverseTransform.m11, inverseTransform.m12, inverseTransform.m13));
     }
 }
@@ -211,7 +211,7 @@
     if (self.rectilinear) {
         return NIVectorYBasis;
     } else {
-        inverseTransform = NIAffineTransformInvert(_volumeTransform);
+        inverseTransform = NIAffineTransformInvert(_modelToVoxelTransform);
         return NIVectorNormalize(NIVectorMake(inverseTransform.m21, inverseTransform.m22, inverseTransform.m23));
     }
 }
@@ -223,7 +223,7 @@
     if (self.rectilinear) {
         return NIVectorZBasis;
     } else {
-        inverseTransform = NIAffineTransformInvert(_volumeTransform);
+        inverseTransform = NIAffineTransformInvert(_modelToVoxelTransform);
         return NIVectorNormalize(NIVectorMake(inverseTransform.m31, inverseTransform.m32, inverseTransform.m33));
     }
 }
@@ -248,10 +248,10 @@
 - (NIVector (^)(NIVector))convertVolumeVectorToModelVectorBlock
 {
     if (_curved == NO) {
-        NIAffineTransform inverseVolumeTransform = NIAffineTransformInvert([self volumeTransform]);
+        NIAffineTransform voxelToModelTransform = NIAffineTransformInvert([self modelToVoxelTransform]);
 
         return [[^NIVector(NIVector vector) {
-            return NIVectorApplyTransform(vector, inverseVolumeTransform);
+            return NIVectorApplyTransform(vector, voxelToModelTransform);
         } copy] autorelease];
     } else {
         return _convertVolumeVectorToModelVectorBlock;
@@ -261,10 +261,10 @@
 - (NIVector (^)(NIVector))convertVolumeVectorFromModelVectorBlock
 {
     if (_curved == NO) {
-        NIAffineTransform volumeTransform = [self volumeTransform];
+        NIAffineTransform modelToVoxelTransform = [self modelToVoxelTransform];
 
         return [[^NIVector(NIVector vector) {
-            return NIVectorApplyTransform(vector, volumeTransform);
+            return NIVectorApplyTransform(vector, modelToVoxelTransform);
         } copy] autorelease];
     } else {
         return _convertVolumeVectorFromModelVectorBlock;
@@ -277,7 +277,7 @@
         return _convertVolumeVectorToModelVectorBlock(vector);
     }
     else {
-        return NIVectorApplyTransform(vector, NIAffineTransformInvert([self volumeTransform]));
+        return NIVectorApplyTransform(vector, NIAffineTransformInvert([self modelToVoxelTransform]));
     }
 }
 
@@ -287,7 +287,7 @@
         return _convertVolumeVectorFromModelVectorBlock(vector);
     }
     else {
-        return NIVectorApplyTransform(vector, [self volumeTransform]);
+        return NIVectorApplyTransform(vector, [self modelToVoxelTransform]);
     }
 }
 
@@ -310,7 +310,7 @@
     imageRep.pixelSpacingX = [self pixelSpacingX];
     imageRep.pixelSpacingY = [self pixelSpacingY];
     imageRep.sliceThickness = [self pixelSpacingZ];
-    imageRep.imageToModelTransform = NIAffineTransformConcat(NIAffineTransformMakeTranslation(0.0, 0.0, (CGFloat)z), NIAffineTransformInvert(_volumeTransform));
+    imageRep.imageToModelTransform = NIAffineTransformConcat(NIAffineTransformMakeTranslation(0.0, 0.0, (CGFloat)z), NIAffineTransformInvert(_modelToVoxelTransform));
 
     unsignedInt16Buffer.data = [imageRep unsignedInt16Data];
     unsignedInt16Buffer.height = _pixelsHigh;
@@ -327,13 +327,13 @@
 - (NIVolumeData *)volumeDataForSliceAtIndex:(NSUInteger)z
 {
     NIVolumeData *sliceVolume;
-    NIAffineTransform sliceVolumeTransform;
+    NIAffineTransform sliceTransform;
     NSData *sliceData;
 
-    sliceVolumeTransform = NIAffineTransformConcat(_volumeTransform, NIAffineTransformMakeTranslation(0, 0, -z));
+    sliceTransform = NIAffineTransformConcat(_modelToVoxelTransform, NIAffineTransformMakeTranslation(0, 0, -z));
 
     sliceData = [NSData dataWithBytes:self.floatBytes + (_pixelsWide*_pixelsHigh*z) length:_pixelsWide * _pixelsHigh * sizeof(float)];
-    sliceVolume = [[[self class] alloc] initWithData:sliceData pixelsWide:_pixelsWide pixelsHigh:_pixelsHigh pixelsDeep:1 volumeTransform:sliceVolumeTransform outOfBoundsValue:_outOfBoundsValue];
+    sliceVolume = [[[self class] alloc] initWithData:sliceData pixelsWide:_pixelsWide pixelsHigh:_pixelsHigh pixelsDeep:1 modelToVoxelTransform:sliceTransform outOfBoundsValue:_outOfBoundsValue];
 
     return [sliceVolume autorelease];
 }
@@ -376,17 +376,17 @@
 - (instancetype)volumeDataByApplyingTransform:(NIAffineTransform)transform;
 {
     return [[[NIVolumeData alloc] initWithData:_floatData pixelsWide:_pixelsWide pixelsHigh:_pixelsHigh pixelsDeep:_pixelsDeep
-                                volumeTransform:NIAffineTransformConcat(_volumeTransform, transform) outOfBoundsValue:_outOfBoundsValue] autorelease];
+                                modelToVoxelTransform:NIAffineTransformConcat(_modelToVoxelTransform, transform) outOfBoundsValue:_outOfBoundsValue] autorelease];
 }
 
-- (instancetype)volumeDataResampledWithVolumeTransform:(NIAffineTransform)transform interpolationMode:(NIInterpolationMode)interpolationsMode
+- (instancetype)volumeDataResampledWithModelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform interpolationMode:(NIInterpolationMode)interpolationsMode
 {
-    if (NIAffineTransformEqualToTransform(self.volumeTransform, transform)) {
+    if (NIAffineTransformEqualToTransform(self.modelToVoxelTransform, modelToVoxelTransform)) {
         return self;
     }
 
-    NIAffineTransform oringinalVoxelToModelTransform = NIAffineTransformInvert(self.volumeTransform);
-    NIAffineTransform originalVoxelToNewVoxelTransform = NIAffineTransformConcat(oringinalVoxelToModelTransform, transform);
+    NIAffineTransform oringinalVoxelToModelTransform = NIAffineTransformInvert(self.modelToVoxelTransform);
+    NIAffineTransform originalVoxelToNewVoxelTransform = NIAffineTransformConcat(oringinalVoxelToModelTransform, modelToVoxelTransform);
 
     NIVector minCorner = NIVectorZero;
     NIVector maxCorner = NIVectorZero;
@@ -427,12 +427,12 @@
     NSUInteger height = (NSUInteger)(maxCorner.y - minCorner.y) + 1;
     NSUInteger depth = (NSUInteger)(maxCorner.z - minCorner.z) + 1;
 
-    NIAffineTransform shiftedTransform = NIAffineTransformConcat(transform, NIAffineTransformMakeTranslation(-1.0*(CGFloat)minCorner.x, -1.0*(CGFloat)minCorner.y, -1.0*(CGFloat)minCorner.z));
+    NIAffineTransform shiftedTransform = NIAffineTransformConcat(modelToVoxelTransform, NIAffineTransformMakeTranslation(-1.0*(CGFloat)minCorner.x, -1.0*(CGFloat)minCorner.y, -1.0*(CGFloat)minCorner.z));
 
-    return [self volumeDataResampledWithVolumeTransform:shiftedTransform pixelsWide:width pixelsHigh:height pixelsDeep:depth interpolationMode:interpolationsMode];
+    return [self volumeDataResampledWithModelToVoxelTransform:shiftedTransform pixelsWide:width pixelsHigh:height pixelsDeep:depth interpolationMode:interpolationsMode];
 }
 
-- (instancetype)volumeDataResampledWithVolumeTransform:(NIAffineTransform)transform pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
+- (instancetype)volumeDataResampledWithModelToVoxelTransform:(NIAffineTransform)transform pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
                                      interpolationMode:(NIInterpolationMode)interpolationsMode
 {
     NIAffineTransform newVoxelToModelTransform = NIAffineTransformInvert(transform);
@@ -466,7 +466,7 @@
     NIVolumeData *newVolumeData = [NIGenerator synchronousRequestVolume:request volumeData:self];
 
     return [[[[self class] alloc] initWithData:[newVolumeData floatData] pixelsWide:newVolumeData.pixelsWide pixelsHigh:newVolumeData.pixelsHigh pixelsDeep:pixelsDeep
-                               volumeTransform:newVolumeData.volumeTransform outOfBoundsValue:newVolumeData.outOfBoundsValue] autorelease];
+                               modelToVoxelTransform:newVolumeData.modelToVoxelTransform outOfBoundsValue:newVolumeData.outOfBoundsValue] autorelease];
 }
 
 - (NSUInteger)tempBufferSizeForNumVectors:(NSUInteger)numVectors
@@ -490,7 +490,7 @@
             inlineBuffer1.pixelsWide == inlineBuffer2.pixelsWide &&
             inlineBuffer1.pixelsHigh == inlineBuffer2.pixelsHigh &&
             inlineBuffer1.pixelsDeep == inlineBuffer2.pixelsDeep &&
-            NIAffineTransformEqualToTransform(inlineBuffer1.volumeTransform, inlineBuffer2.volumeTransform)) {
+            NIAffineTransformEqualToTransform(inlineBuffer1.modelToVoxelTransform, inlineBuffer2.modelToVoxelTransform)) {
             isEqual = YES;
         }
     }
@@ -628,7 +628,7 @@
     inlineBuffer->pixelsHigh = _pixelsHigh;
     inlineBuffer->pixelsDeep = _pixelsDeep;
     inlineBuffer->pixelsWideTimesPixelsHigh = _pixelsWide*_pixelsHigh;
-    inlineBuffer->volumeTransform = _volumeTransform;
+    inlineBuffer->modelToVoxelTransform = _modelToVoxelTransform;
     return YES;
 }
 
@@ -640,7 +640,7 @@
     [description appendString:[NSString stringWithFormat: @"Pixels High: %lld\n", (long long)_pixelsHigh]];
     [description appendString:[NSString stringWithFormat: @"Pixels Deep: %lld\n", (long long)_pixelsDeep]];
     [description appendString:[NSString stringWithFormat: @"Out of Bounds Value: %f\n", _outOfBoundsValue]];
-    [description appendString:[NSString stringWithFormat: @"Volume Transform:\n%@\n", NSStringFromNIAffineTransform(_volumeTransform)]];
+    [description appendString:[NSString stringWithFormat: @"Volume Transform:\n%@\n", NSStringFromNIAffineTransform(_modelToVoxelTransform)]];
 
     return description;
 }
@@ -701,7 +701,7 @@
 //    pixToModelTransform.m33 = orientation[8]*spacingZ;
 //
 //    self = [self initWithData:volume pixelsWide:[firstPix pwidth] pixelsHigh:[firstPix pheight] pixelsDeep:[pixList count]
-//              volumeTransform:NIAffineTransformInvert(pixToModelTransform) outOfBoundsValue:-1000];
+//              modelToVoxelTransform:NIAffineTransformInvert(pixToModelTransform) outOfBoundsValue:-1000];
 //    return self;
 //}
 //
@@ -723,7 +723,7 @@
 //    NIVector xBasis;
 //    NIVector yBasis;
 //
-//    pixelToModelTransform = NIAffineTransformInvert(_volumeTransform);
+//    pixelToModelTransform = NIAffineTransformInvert(_modelToVoxelTransform);
 //
 //    xBasis = NIVectorNormalize(NIVectorMake(pixelToModelTransform.m11, pixelToModelTransform.m12, pixelToModelTransform.m13));
 //    yBasis = NIVectorNormalize(NIVectorMake(pixelToModelTransform.m21, pixelToModelTransform.m22, pixelToModelTransform.m23));
@@ -736,7 +736,7 @@
 //{
 //    NIAffineTransform pixelToModelTransform;
 //
-//    pixelToModelTransform = NIAffineTransformInvert(_volumeTransform);
+//    pixelToModelTransform = NIAffineTransformInvert(_modelToVoxelTransform);
 //
 //    return pixelToModelTransform.m41;
 //}
@@ -745,7 +745,7 @@
 //{
 //    NIAffineTransform pixelToModelTransform;
 //
-//    pixelToModelTransform = NIAffineTransformInvert(_volumeTransform);
+//    pixelToModelTransform = NIAffineTransformInvert(_modelToVoxelTransform);
 //
 //    return pixelToModelTransform.m42;
 //}
@@ -754,7 +754,7 @@
 //{
 //    NIAffineTransform pixelToModelTransform;
 //
-//    pixelToModelTransform = NIAffineTransformInvert(_volumeTransform);
+//    pixelToModelTransform = NIAffineTransformInvert(_modelToVoxelTransform);
 //    
 //    return pixelToModelTransform.m43;
 //}

@@ -115,11 +115,11 @@
 
     volumeVectors = malloc(_width * sizeof(NIVector));
     memcpy(volumeVectors, _vectors, _width * sizeof(NIVector));
-    NIVectorApplyTransformToVectors(_volumeData.volumeTransform, volumeVectors, _width);
+    NIVectorApplyTransformToVectors(_volumeData.modelToVoxelTransform, volumeVectors, _width);
 
     volumeNormals = malloc(_width * sizeof(NIVector));
     memcpy(volumeNormals, _normals, _width * sizeof(NIVector));
-    vectorTransform = _volumeData.volumeTransform;
+    vectorTransform = _volumeData.modelToVoxelTransform;
     vectorTransform.m41 = vectorTransform.m42 = vectorTransform.m43 = 0.0;
     NIVectorApplyTransformToVectors(vectorTransform, volumeNormals, _width);
 
@@ -151,11 +151,11 @@
 
     volumeVectors = malloc(_width * sizeof(NIVector));
     memcpy(volumeVectors, _vectors, _width * sizeof(NIVector));
-    NIVectorApplyTransformToVectors(_volumeData.volumeTransform, volumeVectors, _width);
+    NIVectorApplyTransformToVectors(_volumeData.modelToVoxelTransform, volumeVectors, _width);
 
     volumeNormals = malloc(_width * sizeof(NIVector));
     memcpy(volumeNormals, _normals, _width * sizeof(NIVector));
-    vectorTransform = _volumeData.volumeTransform;
+    vectorTransform = _volumeData.modelToVoxelTransform;
     vectorTransform.m41 = vectorTransform.m42 = vectorTransform.m43 = 0.0;
     NIVectorApplyTransformToVectors(vectorTransform, volumeNormals, _width);
 
@@ -187,11 +187,11 @@
 
     volumeVectors = malloc(_width * sizeof(NIVector));
     memcpy(volumeVectors, _vectors, _width * sizeof(NIVector));
-    NIVectorApplyTransformToVectors(_volumeData.volumeTransform, volumeVectors, _width);
+    NIVectorApplyTransformToVectors(_volumeData.modelToVoxelTransform, volumeVectors, _width);
 
     volumeNormals = malloc(_width * sizeof(NIVector));
     memcpy(volumeNormals, _normals, _width * sizeof(NIVector));
-    vectorTransform = _volumeData.volumeTransform;
+    vectorTransform = _volumeData.modelToVoxelTransform;
     vectorTransform.m41 = vectorTransform.m42 = vectorTransform.m43 = 0.0;
     NIVectorApplyTransformToVectors(vectorTransform, volumeNormals, _width);
 

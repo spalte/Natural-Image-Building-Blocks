@@ -52,7 +52,7 @@
     NSInteger i;
     float floati;
     NSInteger pixelsPerPlane;
-    NIAffineTransform volumeTransform;
+    NIAffineTransform modelToVoxelTransform;
     NIVolumeDataInlineBuffer inlineBuffer;
 
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -102,9 +102,9 @@
                 break;
         }
 
-        volumeTransform = NIAffineTransformConcat(_volumeData.volumeTransform, NIAffineTransformMakeScale(1.0, 1.0, 1.0/(CGFloat)_volumeData.pixelsDeep));
+        modelToVoxelTransform = NIAffineTransformConcat(_volumeData.modelToVoxelTransform, NIAffineTransformMakeScale(1.0, 1.0, 1.0/(CGFloat)_volumeData.pixelsDeep));
         _generatedVolume = [[NIVolumeData alloc] initWithBytesNoCopy:floatBytes pixelsWide:_volumeData.pixelsWide pixelsHigh:_volumeData.pixelsHigh pixelsDeep:1
-                                                       volumeTransform:volumeTransform outOfBoundsValue:_volumeData.outOfBoundsValue freeWhenDone:YES];
+                                                       modelToVoxelTransform:modelToVoxelTransform outOfBoundsValue:_volumeData.outOfBoundsValue freeWhenDone:YES];
     }
     @catch (...) {
     }
