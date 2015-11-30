@@ -71,6 +71,7 @@ void NIBezierCoreAddSegment(NIMutableBezierCoreRef bezierCore, NIBezierCoreSegme
 void NIBezierCoreSetVectorsForSegmentAtIndex(NIMutableBezierCoreRef bezierCore, CFIndex index, NIVector control1, NIVector control2, NIVector endpoint);
 void NIBezierCoreFlatten(NIMutableBezierCoreRef bezierCore, CGFloat flatness);
 void NIBezierCoreSubdivide(NIMutableBezierCoreRef bezierCore, CGFloat maxSegementLength);
+void NIBezierCoreSanitize(NIMutableBezierCoreRef bezierCore, CGFloat minSegmentLength); // removes segments that are shorter than minSegmentLength
 void NIBezierCoreApplyTransform(NIMutableBezierCoreRef bezierCore, NIAffineTransform transform);
     
 void NIBezierCoreAppendBezierCore(NIMutableBezierCoreRef bezierCore, NIBezierCoreRef appenedBezier, bool connectPaths);
@@ -79,6 +80,8 @@ NIBezierCoreRef NIBezierCoreCreateFlattenedCopy(NIBezierCoreRef bezierCore, CGFl
 NIMutableBezierCoreRef NIBezierCoreCreateFlattenedMutableCopy(NIBezierCoreRef bezierCore, CGFloat flatness);
 NIBezierCoreRef NIBezierCoreCreateSubdividedCopy(NIBezierCoreRef bezierCore, CGFloat maxSegementLength);
 NIMutableBezierCoreRef NIBezierCoreCreateSubdividedMutableCopy(NIBezierCoreRef bezierCore, CGFloat maxSegementLength);
+NIBezierCoreRef NIBezierCoreCreateSanitizedCopy(NIBezierCoreRef bezierCore, CGFloat minSegementLength); // removes segments that are shorter than minSegmentLength
+NIBezierCoreRef NIBezierCoreCreateSanitizedMutableCopy(NIBezierCoreRef bezierCore, CGFloat minSegementLength); // removes segments that are shorter than minSegmentLength
 NIBezierCoreRef NIBezierCoreCreateTransformedCopy(NIBezierCoreRef bezierCore, NIAffineTransform transform);
 NIMutableBezierCoreRef NIBezierCoreCreateTransformedMutableCopy(NIBezierCoreRef bezierCore, NIAffineTransform transform);
 

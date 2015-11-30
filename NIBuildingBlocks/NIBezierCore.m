@@ -531,6 +531,60 @@ void NIBezierCoreFlatten(NIMutableBezierCoreRef bezierCore, CGFloat flatness)
     NIBezierCoreCheckDebug(bezierCore);
 }
 
+void NIBezierCoreSanitize(NIMutableBezierCoreRef bezierCore, CGFloat minSegmentLength) // removes segments that are shorter than minSegmentLength
+{
+    // iterate over the line segments, and make sure each has a reason for being
+    // segments that need to go are: (for this discussion, same position means a distance smaller than minSegmentLength
+    // 1. MoveTo that is followed by another MoveTo
+    // 2. MoveTo that goes to the same position as the current position
+    // 3. CurveTo that goes to the same position as the the current point and distance to the control points is smaller than minSegmentLength
+    // 4. MoveTo right before a Close that goes to the same position as the close
+    NIBezierCoreElementRef element;
+    NIBezierCoreElementRef prevElement;
+
+    if (bezierCore->elementCount < 2) {
+        return;
+    }
+
+    prevElement = bezierCore->elementList;
+    element = prevElement->next;
+
+    while (element) {
+        // if we need to remove the segment
+        if ((element->segmentType == NIMoveToBezierCoreSegmentType && element->next != NULL && element->next->segmentType == NIMoveToBezierCoreSegmentType) || // 1.
+            (element->segmentType == NILineToBezierCoreSegmentType && NIVectorDistance(prevElement->endpoint, element->endpoint) < minSegmentLength) || // 2.
+            (element->segmentType == NICurveToBezierCoreSegmentType && NIVectorDistance(prevElement->endpoint, element->endpoint) < minSegmentLength // 3.
+                                                                    && NIVectorDistance(element->endpoint, element->control1) < minSegmentLength
+                                                                    && NIVectorDistance(element->endpoint, element->control2) < minSegmentLength)) {
+
+            prevElement->next = element->next;
+
+            if (element->next) {
+                element->next->previous = prevElement;
+            } else {
+                bezierCore->lastElement = prevElement;
+            }
+
+            free(element);
+            bezierCore->elementCount--;
+            element = prevElement->next;
+        } else if (element->segmentType == NILineToBezierCoreSegmentType && element->next != NULL && element->next->segmentType == NICloseBezierCoreSegmentType && NIVectorDistance(element->endpoint, element->next->endpoint) < minSegmentLength) { // 4.
+            prevElement->next = element->next;
+            element->next->previous = prevElement;
+            free(element);
+            bezierCore->elementCount--;
+
+            element = prevElement;
+            prevElement = prevElement->previous;
+        } else {
+            element = element->next;
+            prevElement = prevElement->next;
+        }
+    }
+
+    NIBezierCoreCheckDebug(bezierCore);
+}
+
 void NIBezierCoreApplyTransform(NIMutableBezierCoreRef bezierCore, NIAffineTransform transform)
 {
     NIBezierCoreElementRef element;
@@ -605,11 +659,24 @@ NIMutableBezierCoreRef NIBezierCoreCreateSubdividedMutableCopy(NIBezierCoreRef b
     
     newBezierCore = NIBezierCoreCreateMutableCopy(bezierCore);
     NIBezierCoreSubdivide(newBezierCore, maxSegementLength);
-    
-    NIBezierCoreCheckDebug(newBezierCore);
-    
+
     return newBezierCore;    
-}    
+}
+
+NIBezierCoreRef NIBezierCoreCreateSanitizedCopy(NIBezierCoreRef bezierCore, CGFloat minSegementLength) // removes segments that are shorter than minSegmentLength
+{
+    return NIBezierCoreCreateSanitizedMutableCopy(bezierCore, minSegementLength);
+}
+
+NIBezierCoreRef NIBezierCoreCreateSanitizedMutableCopy(NIBezierCoreRef bezierCore, CGFloat minSegementLength) // removes segments that are shorter than minSegmentLength
+{
+    NIMutableBezierCoreRef newBezierCore;
+
+    newBezierCore = NIBezierCoreCreateMutableCopy(bezierCore);
+    NIBezierCoreSanitize(newBezierCore, minSegementLength);
+
+    return newBezierCore;
+}
 
 NIBezierCoreRef NIBezierCoreCreateTransformedCopy(NIBezierCoreRef bezierCore, NIAffineTransform transform)
 {
