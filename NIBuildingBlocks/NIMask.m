@@ -638,7 +638,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     }
     
     if (newMaskRunsIndex < maskRunCount)
-        newMaskRuns = realloc(newMaskRuns, newMaskRunsIndex * sizeof(NIMaskRun));
+        newMaskRuns = realloc(newMaskRuns, MAX(newMaskRunsIndex, 1) * sizeof(NIMaskRun)); // the MAX bit avoids an Analyze warning: Call to 'realloc' has an allocation size of 0 bytes
     
     return [[[NIMask alloc] initWithSortedMaskRunData:[NSData dataWithBytesNoCopy:newMaskRuns length:newMaskRunsIndex * sizeof(NIMaskRun) freeWhenDone:YES]] autorelease];
 }

@@ -119,7 +119,7 @@
 
 - (instancetype)copyWithZone:(NSZone *)zone
 {
-    return [[[[self class] allocWithZone:zone] initWithVolumeData:self] autorelease];
+    return [[[self class] allocWithZone:zone] initWithVolumeData:self];
 }
 
 - (void)dealloc
