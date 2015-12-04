@@ -5,47 +5,47 @@
 #ifndef NIBuildingBlocks_pch
 #define NIBuildingBlocks_pch
 
-#ifdef __OBJC__ // SDK warnings, inspired by http://lapcatsoftware.com/articles/sdkvsdeploymenttarget.html
-
-#import <Foundation/NSObjCRuntime.h>
-
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
-#undef  AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
-#define AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER __attribute__((weak_import,deprecated("API is newer than Deployment Target")))
-#endif
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 1080
-#undef  AVAILABLE_MAC_OS_X_VERSION_10_8_AND_LATER
-#define AVAILABLE_MAC_OS_X_VERSION_10_8_AND_LATER __attribute__((weak_import,deprecated("API is newer than Deployment Target")))
-#endif
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 1090
-#undef  AVAILABLE_MAC_OS_X_VERSION_10_9_AND_LATER
-#define AVAILABLE_MAC_OS_X_VERSION_10_9_AND_LATER __attribute__((weak_import,deprecated("API is newer than Deployment Target")))
-#endif
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 101000
-#undef  AVAILABLE_MAC_OS_X_VERSION_10_10_AND_LATER
-#define AVAILABLE_MAC_OS_X_VERSION_10_10_AND_LATER __attribute__((weak_import,deprecated("API is newer than Deployment Target")))
-#endif
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 101100
-#undef  AVAILABLE_MAC_OS_X_VERSION_10_11_AND_LATER
-#define AVAILABLE_MAC_OS_X_VERSION_10_11_AND_LATER __attribute__((weak_import,deprecated("API is newer than Deployment Target")))
-#endif
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED != MAC_OS_X_VERSION_10_11
-// if you're seeing the next line's error, add the necessary MAC_OS_X_VERSION_MIN_REQUIRED lines and edit the previous line to match the current BASE_SDK
-#error update the SDK availability macros in the precompiled header to match MAC_OS_X_VERSION_MAX_ALLOWED (the Base SDK project setting)
-#endif
-
-#define AVAILABLE_MAC_OS_X_VERSION_NSURLSESSION_AVAILABLE_AND_LATER AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
-#define AVAILABLE_MAC_OS_X_VERSION_NA_AND_LATER __attribute__((weak_import,deprecated("API unavailable.")))
-
-#undef  NS_CLASS_AVAILABLE
-#define NS_CLASS_AVAILABLE(_mac, _ios) AVAILABLE_MAC_OS_X_VERSION_##_mac##_AND_LATER
-#undef NS_AVAILABLE_MAC
-#define NS_AVAILABLE_MAC(_mac) AVAILABLE_MAC_OS_X_VERSION_##_mac##_AND_LATER
-#undef NS_AVAILABLE
-#define NS_AVAILABLE(_mac, ...) AVAILABLE_MAC_OS_X_VERSION_##_mac##_AND_LATER
-
-#endif
+//#ifdef __OBJC__ // SDK warnings, inspired by http://lapcatsoftware.com/articles/sdkvsdeploymenttarget.html
+//
+//#import <Foundation/NSObjCRuntime.h>
+//
+//#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_7
+//#undef  AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
+//#define AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER __attribute__((weak_import,deprecated("API is newer than Deployment Target")))
+//#endif
+//#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_8
+//#undef  AVAILABLE_MAC_OS_X_VERSION_10_8_AND_LATER
+//#define AVAILABLE_MAC_OS_X_VERSION_10_8_AND_LATER __attribute__((weak_import,deprecated("API is newer than Deployment Target")))
+//#endif
+//#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_9
+//#undef  AVAILABLE_MAC_OS_X_VERSION_10_9_AND_LATER
+//#define AVAILABLE_MAC_OS_X_VERSION_10_9_AND_LATER __attribute__((weak_import,deprecated("API is newer than Deployment Target")))
+//#endif
+//#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_10
+//#undef  AVAILABLE_MAC_OS_X_VERSION_10_10_AND_LATER
+//#define AVAILABLE_MAC_OS_X_VERSION_10_10_AND_LATER __attribute__((weak_import,deprecated("API is newer than Deployment Target")))
+//#endif
+//#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_11
+//#undef  AVAILABLE_MAC_OS_X_VERSION_10_11_AND_LATER
+//#define AVAILABLE_MAC_OS_X_VERSION_10_11_AND_LATER __attribute__((weak_import,deprecated("API is newer than Deployment Target")))
+//#endif
+//
+//#if MAC_OS_X_VERSION_MAX_ALLOWED != MAC_OS_X_VERSION_10_11
+//// if you're seeing the next line's error, add the necessary MAC_OS_X_VERSION_MIN_REQUIRED lines and edit the previous line to match the current MAC_OS_X_VERSION_MAX_ALLOWED
+//#error update the SDK availability macros in the precompiled header to match MAC_OS_X_VERSION_MAX_ALLOWED (the Base SDK project setting)
+//#endif
+//
+//#define AVAILABLE_MAC_OS_X_VERSION_NSURLSESSION_AVAILABLE_AND_LATER AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
+//#define AVAILABLE_MAC_OS_X_VERSION_NA_AND_LATER __attribute__((weak_import,deprecated("API unavailable.")))
+//
+//#undef  NS_CLASS_AVAILABLE
+//#define NS_CLASS_AVAILABLE(_mac, _ios) AVAILABLE_MAC_OS_X_VERSION_##_mac##_AND_LATER
+//#undef NS_AVAILABLE_MAC
+//#define NS_AVAILABLE_MAC(_mac) AVAILABLE_MAC_OS_X_VERSION_##_mac##_AND_LATER
+//#undef NS_AVAILABLE
+//#define NS_AVAILABLE(_mac, ...) AVAILABLE_MAC_OS_X_VERSION_##_mac##_AND_LATER
+//
+//#endif
 
 #ifdef __OBJC__ // actual NIBuildingBlocks includes
 
