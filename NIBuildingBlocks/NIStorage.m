@@ -107,8 +107,9 @@
         if (!bundleDir) {
             NSMutableArray<NSString*>* sdirs = [NSMutableArray array]; // regarding Library/Application Support, Apple switched their recommendation to BundleIdentifier instead of the application name a while ago. According to them all new apps should use the bundle identifier.
             [sdirs addObject:bundle.bundleIdentifier];
-            if ([bundle.infoDictionary[CFBundleName] length])
-                [sdirs addObject:bundle.infoDictionary[CFBundleName]];
+            NSString* bundleName = bundle.infoDictionary[CFBundleName];
+            if (bundleName.length)
+                [sdirs addObject:bundleName];
             else [sdirs addObject:[[bundle.bundleURL lastPathComponent] stringByDeletingPathExtension]];
 
             for (NSString* sdir in sdirs) {

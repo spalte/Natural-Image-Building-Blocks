@@ -196,6 +196,7 @@
 		7106843E1B678D800078903A /* NIMask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMask.m; sourceTree = "<group>"; };
 		710684421B678FD30078903A /* NIMaskRunStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMaskRunStack.h; sourceTree = "<group>"; };
 		710684431B678FD30078903A /* NIMaskRunStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMaskRunStack.m; sourceTree = "<group>"; };
+		716428AA1C11990F0056E466 /* NIBuildingBlocks.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NIBuildingBlocks.pch; path = NIBuildingBlocks/NIBuildingBlocks.pch; sourceTree = "<group>"; };
 		719473711B1DA0F1009363AE /* NIOrientationTextLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIOrientationTextLayer.m; sourceTree = "<group>"; };
 		7194D0851BE0EE3A00563DEC /* NIStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIStorage.h; sourceTree = "<group>"; };
 		7194D0861BE0EE3A00563DEC /* NIStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIStorage.m; sourceTree = "<group>"; };
@@ -242,6 +243,7 @@
 		4F151ED11B1CC8D000C8F767 = {
 			isa = PBXGroup;
 			children = (
+				716428AA1C11990F0056E466 /* NIBuildingBlocks.pch */,
 				4F151EE01B1CC8D000C8F767 /* NIBuildingBlocks.h */,
 				4F151EDD1B1CC8D000C8F767 /* NIBuildingBlocks */,
 				71F51E4E1BA00C2E00DF26AC /* NIBuildingBlocks Tests */,
@@ -707,6 +709,8 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = NIBuildingBlocks/NIBuildingBlocks.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -755,6 +759,8 @@
 				GCC_C_LANGUAGE_STANDARD = gnu89;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = fast;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = NIBuildingBlocks/NIBuildingBlocks.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "NDEBUG=1";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;

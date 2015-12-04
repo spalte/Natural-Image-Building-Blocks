@@ -22,7 +22,7 @@
 
 + (Class)NIDatabaseFamilyDataClass;
 
-- (id)initWithURL:(NSURL*)url model:(NSURL*)murl;
+- (id)initWithURL:(NSURL*)url model:(NSURL*)murl error:(NSError**)error;
 - (id)initWithConcurrencyType:(NSManagedObjectContextConcurrencyType)type parent:(__kindof NIDatabase*)parent; // this initializer is declared strictly for subclassing!! you shouldn't call this directly
 - (__kindof NIDatabase*)ancestor;
 
@@ -30,7 +30,7 @@
 - (__kindof NIDatabase*)childDatabaseForMainThread;
 
 + (NSURL*)model; // your subclass can implement a +model method in order to provide a model without passing it to the -initWithUrl:model: method
-- (id)initWithURL:(NSURL*)url;
+- (id)initWithURL:(NSURL*)url error:(NSError**)error;
 
 - (BOOL)hasChanges;
 - (void)saveIfChanged;

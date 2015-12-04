@@ -52,11 +52,11 @@
     [self.managedObjectContext performBlockAndWait:block];
 }
 
-- (id)initWithURL:(NSURL*)url {
-    return [self initWithURL:url model:nil];
+- (id)initWithURL:(NSURL*)url error:(NSError**)error {
+    return [self initWithURL:url model:nil error:error];
 }
 
-- (id)initWithURL:(NSURL*)url model:(NSURL*)murl {
+- (id)initWithURL:(NSURL*)url model:(NSURL*)murl error:(NSError**)error {
     if (!(self = [super init]))
         return nil;
 
@@ -69,7 +69,7 @@
                     break;
     
     NSNumber* isDir;
-    if ([murl getResourceValue:&isDir forKey:NSURLIsDirectoryKey error:NULL]) {
+    if ([murl getResourceValue:&isDir forKey:NSURLIsDirectoryKey error:error]) {
         if (isDir.boolValue) {
             NSDictionary* versionInfo = [NSDictionary dictionaryWithContentsOfURL:[murl URLByAppendingPathComponent:@"VersionInfo.plist"]];
             NSString* currentVersionName = versionInfo[@"NSManagedObjectModel_CurrentVersionName"];
@@ -77,16 +77,24 @@
                 currentVersionName = [murl.lastPathComponent stringByDeletingPathExtension];
             murl = [murl URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.mom", currentVersionName]];
         }
-    }
+    } else { [self release]; return nil; }
    
     self.familyData.URL = url;
     self.familyData.momURL = murl;
     
     NSURL* containingDirURL = [url URLByDeletingLastPathComponent];
-    if (![containingDirURL checkPromisedItemIsReachableAndReturnError:NULL])
-        [[NSFileManager defaultManager] createDirectoryAtURL:containingDirURL withIntermediateDirectories:YES attributes:nil error:NULL];
+    BOOL isDirectoryAtContainingDirURL, fileExistsAtContainingDirURL = [[NSFileManager defaultManager] fileExistsAtPath:containingDirURL.path isDirectory:&isDirectoryAtContainingDirURL];
+    if (!fileExistsAtContainingDirURL || !isDirectoryAtContainingDirURL) {
+        if (fileExistsAtContainingDirURL && !isDirectoryAtContainingDirURL) {
+            if (![[NSFileManager defaultManager] moveItemAtURL:containingDirURL toURL:[containingDirURL URLByAppendingPathExtension:@"notadirectory"] error:error]) { [self release]; return nil; }
+            fileExistsAtContainingDirURL = NO;
+        }
+        if (!fileExistsAtContainingDirURL)
+            if (![[NSFileManager defaultManager] createDirectoryAtURL:containingDirURL withIntermediateDirectories:YES attributes:nil error:error]) { [self release]; return nil; }
+    }
     
     self.managedObjectContext = [[[NIManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType database:self] autorelease];
+    if (!self.managedObjectContext) { [self release]; return nil; }
     self.managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
     
     [self performBlockAndWait:^{
@@ -117,6 +125,8 @@
     self.familyData = parent.familyData;
 
     self.managedObjectContext = [[[NIManagedObjectContext alloc] initWithConcurrencyType:type database:self] autorelease];
+    if (!self.managedObjectContext) { [self release]; return nil; }
+    
     self.managedObjectContext.parentContext = parent.managedObjectContext;
     self.managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
     self.managedObjectContext.undoManager = nil;
