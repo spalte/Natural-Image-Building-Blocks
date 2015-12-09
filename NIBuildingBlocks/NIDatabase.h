@@ -22,12 +22,12 @@
 
 + (Class)NIDatabaseFamilyDataClass;
 
-- (id)initWithURL:(NSURL*)url model:(NSURL*)murl error:(NSError**)error;
-- (id)initWithConcurrencyType:(NSManagedObjectContextConcurrencyType)type parent:(__kindof NIDatabase*)parent; // this initializer is declared strictly for subclassing!! you shouldn't call this directly
-- (__kindof NIDatabase*)ancestor;
+- (instancetype)initWithURL:(NSURL*)url model:(NSURL*)murl error:(NSError**)error;
+- (instancetype)initWithConcurrencyType:(NSManagedObjectContextConcurrencyType)type parent:(__kindof NIDatabase*)parent; // this initializer is declared strictly for subclassing!! you shouldn't call this directly
+- (instancetype)ancestor;
 
-- (__kindof NIDatabase*)childDatabase;
-- (__kindof NIDatabase*)childDatabaseForMainThread;
+- (instancetype)childDatabase;
+- (instancetype)mainChildDatabase; // only for the main thread!
 
 + (NSURL*)model; // your subclass can implement a +model method in order to provide a model without passing it to the -initWithUrl:model: method
 - (id)initWithURL:(NSURL*)url error:(NSError**)error;
@@ -41,17 +41,17 @@
 
 - (NSEntityDescription*)entityForName:(NSString*)name;
 
-- (id)insertNewObjectForEntity:(NSEntityDescription*)entity;
+- (__kindof NSManagedObject*)insertNewObjectForEntity:(NSEntityDescription*)entity;
 
 - (NSUInteger)countObjectsForEntity:(NSEntityDescription*)entity predicate:(NSPredicate*)predicate;
 - (NSUInteger)countObjectsForEntity:(NSEntityDescription*)entity predicateFormat:(NSString*)predicateFormat, ...;
 - (NSUInteger)countObjectsForEntity:(NSEntityDescription*)entity predicate:(NSPredicate*)predicate error:(NSError**)error;
 
-- (NSArray*)objectsForEntity:(NSEntityDescription*)entity predicate:(NSPredicate*)predicate;
-- (NSArray*)objectsForEntity:(NSEntityDescription*)entity predicateFormat:(NSString*)predicateFormat, ...;
-- (NSArray*)objectsForEntity:(NSEntityDescription*)entity predicate:(NSPredicate*)predicate error:(NSError**)error;
+- (NSArray<__kindof NSManagedObject*>*)objectsForEntity:(NSEntityDescription*)entity predicate:(NSPredicate*)predicate;
+- (NSArray<__kindof NSManagedObject*>*)objectsForEntity:(NSEntityDescription*)entity predicateFormat:(NSString*)predicateFormat, ...;
+- (NSArray<__kindof NSManagedObject*>*)objectsForEntity:(NSEntityDescription*)entity predicate:(NSPredicate*)predicate error:(NSError**)error;
 
-- (id)objectWithID:(NSManagedObjectID*)objectID;
+- (__kindof NSManagedObject*)objectWithID:(NSManagedObjectID*)objectID;
 
 - (void)deleteObject:(NSManagedObject*)obj;
 

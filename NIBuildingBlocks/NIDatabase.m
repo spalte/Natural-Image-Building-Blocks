@@ -206,7 +206,9 @@
     return [self childDatabaseWithConcurrencyType:NSPrivateQueueConcurrencyType];
 }
 
-- (NIDatabase*)childDatabaseForMainThread {
+- (NIDatabase*)mainChildDatabase {
+    if (![NSThread isMainThread])
+        NSLog(@"Warning: accessing main child database from a background thread");
     return [self childDatabaseWithConcurrencyType:NSMainQueueConcurrencyType];
 }
 
