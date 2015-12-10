@@ -44,11 +44,20 @@
 - (NSURL*)directoryForKey:(NSString*)keyPath create:(BOOL)create {
     if (!keyPath)
         return nil;
-    NSArray* keyComponents = [keyPath componentsSeparatedByString:@"."];
+    
+    NSMutableArray* keyComponents = [NSMutableArray array];
+    size_t ib = 0;
+    for (size_t i = 1; i < keyPath.length; ++i)
+        if ([keyPath characterAtIndex:i] == '.' && [keyPath characterAtIndex:i-1] != '\\') {
+            [keyComponents addObject:[keyPath substringWithRange:NSMakeRange(ib, i-ib)]];
+            ib = i+1;
+        }
+    if (ib != keyPath.length)
+        [keyComponents addObject:[keyPath substringWithRange:NSMakeRange(ib, keyPath.length-ib)]];
     
     NSURL* url = self.location;
     for (NSString* keyComponent in keyComponents)
-        url = [url URLByAppendingPathComponent:keyComponent isDirectory:YES];
+        url = [url URLByAppendingPathComponent:[keyComponent stringByReplacingOccurrencesOfString:@"\\." withString:@"."] isDirectory:YES];
     
     if (create)
         [[NSFileManager defaultManager] createDirectoryAtURL:url withIntermediateDirectories:YES attributes:nil error:NULL];
