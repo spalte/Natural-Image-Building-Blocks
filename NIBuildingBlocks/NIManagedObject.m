@@ -11,13 +11,28 @@
 #import "NIDatabase.h"
 #import "NIRecursiveLock.h"
 
+@interface NIManagedObject ()
+
+@property (retain) __kindof NIDatabase* database;
+
+@end
+
 @implementation NIManagedObject
 
-- (__kindof NIDatabase*)database {
-    id context = [self managedObjectContext];
-    if ([context isKindOfClass:NIManagedObjectContext.class])
-        return [(NIManagedObjectContext*)context database];
-    return nil;
+@synthesize database = _database;
+
+- (__kindof NIManagedObject*)initWithEntity:(NSEntityDescription *)entity insertIntoManagedObjectContext:(nullable NIManagedObjectContext *)context {
+    if (!(self = [super initWithEntity:entity insertIntoManagedObjectContext:context]))
+        return nil;
+    
+    self.database = context.database;
+    
+    return self;
+}
+
+- (void)dealloc {
+    self.database = nil;
+    [super dealloc];
 }
 
 - (NSString*)objectId {

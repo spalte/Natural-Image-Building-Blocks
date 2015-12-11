@@ -10,11 +10,14 @@
 
 @class NIDatabase, NIRecursiveLock, NIManagedObjectContext;
 
-@interface NIManagedObject : NSManagedObject
+@interface NIManagedObject : NSManagedObject {
+    NIDatabase* _database;
+}
 
-- (__kindof NIDatabase*)database;
+@property (retain, readonly) __kindof NIDatabase* database;
+@property (readonly) NSString* objectId;
 
-- (NSString*)objectId;
+- (__kindof NIManagedObject*)initWithEntity:(NSEntityDescription *)entity insertIntoManagedObjectContext:(NIManagedObjectContext *)context NS_DESIGNATED_INITIALIZER;
 
 - (BOOL)hasValueForRelationshipNamed:(NSString*)key;
 

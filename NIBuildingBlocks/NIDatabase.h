@@ -6,17 +6,17 @@
 //  Copyright (c) 2015 volz.io. All rights reserved.
 //
 
-#import <CoreData/CoreData.h>
+#import "NIManagedObjectContext.h"
 
 @class NIDatabaseFamilyData;
 
 @interface NIDatabase : NSObject {
-    NSManagedObjectContext* _managedObjectContext;
+    NIManagedObjectContext* _managedObjectContext;
     __kindof NIDatabase* _parent;
     __kindof NIDatabaseFamilyData* _familyData;
 }
 
-@property (readonly, strong, nonatomic) NSManagedObjectContext* managedObjectContext; // access to the context is discouraged
+@property (readonly, strong, nonatomic) NIManagedObjectContext* managedObjectContext; // access to the context is discouraged
 @property (readonly, retain) NIDatabase* parent;
 @property (readonly, retain) NIDatabaseFamilyData* familyData;
 
@@ -33,8 +33,8 @@
 - (id)initWithURL:(NSURL*)url error:(NSError**)error;
 
 - (BOOL)hasChanges;
-- (void)saveIfChanged;
-- (void)save;
+- (BOOL)saveIfChanged;
+- (BOOL)save;
 
 - (void)performBlock:(void (^)())block;
 - (void)performBlockAndWait:(void (^)())block;

@@ -17,7 +17,7 @@
 
 @interface NIDatabase ()
 
-@property (readwrite, strong, nonatomic) NSManagedObjectContext* managedObjectContext;
+@property (readwrite, strong, nonatomic) NIManagedObjectContext* managedObjectContext;
 
 @property (retain) __kindof NIDatabase* parent;
 @property (retain) __kindof NIDatabaseFamilyData* familyData;
@@ -50,6 +50,12 @@
 
 - (void)performBlockAndWait:(void (^)())block {
     [self.managedObjectContext performBlockAndWait:block];
+}
+
+- (void)performBlock:(void (^)())block wait:(BOOL)wait {
+    if (wait)
+        [self performBlockAndWait:block];
+    else [self performBlock:block];
 }
 
 - (id)initWithURL:(NSURL*)url error:(NSError**)error {
@@ -96,11 +102,12 @@
     self.managedObjectContext = [[[NIManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType database:self] autorelease];
     if (!self.managedObjectContext) { [self release]; return nil; }
     self.managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
-    
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeAncestorContextObjectsDidChangeNotification:) name:NSManagedObjectContextObjectsDidChangeNotification object:self.managedObjectContext];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeAncestorContextDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:self.managedObjectContext];
+
     [self performBlockAndWait:^{
         NSError* error = nil;
-
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeManagedObjectContextDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:self.managedObjectContext];
         
         self.managedObjectContext.undoManager = nil;
         NSManagedObjectModel* mom = [[[NSManagedObjectModel alloc] initWithContentsOfURL:murl] autorelease];
@@ -131,12 +138,13 @@
     self.managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
     self.managedObjectContext.undoManager = nil;
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeManagedObjectContextDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:self.managedObjectContext];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeManagedObjectContextDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:self.managedObjectContext];
 
 //    [self.managedObjectContext setPersistentStoreCoordinator:parent.managedObjectContext.persistentStoreCoordinator];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self.managedObjectContext selector:@selector(mergeChangesFromContextDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:parent.managedObjectContext];
-    
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mergeChangesFromContextDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:self.parent.managedObjectContext];
+//    [[NSNotificationCenter defaultCenter] addObserver:self.parent selector:@selector(mergeChangesFromContextDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:self.managedObjectContext];
+
     return self;
 }
 
@@ -153,10 +161,12 @@
     [self saveIfChanged];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:self.managedObjectContext];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextObjectsDidChangeNotification object:self.managedObjectContext];
     self.managedObjectContext = nil;
     
     if (self.parent) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:self.parent.managedObjectContext];
+//        [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:self.parent.managedObjectContext];
+//        [[NSNotificationCenter defaultCenter] removeObserver:self.parent name:NSManagedObjectContextDidSaveNotification object:self.managedObjectContext];
         self.parent = nil;
     }
     
@@ -164,6 +174,12 @@
     
     [super dealloc];
 }
+
+//- (void)mergeChangesFromContextDidSaveNotification:(NSNotification*)notification {
+//    [self performBlockAndWait:^{
+//        [self.managedObjectContext mergeChangesFromContextDidSaveNotification:notification];
+//    }];
+//}
 
 - (BOOL)hasChanges {
     __block BOOL r = NO;
@@ -173,21 +189,30 @@
     return r;
 }
 
-- (void)saveIfChanged {
+- (BOOL)saveIfChanged {
     if (self.hasChanges)
-        [self save];
+        return [self save];
+    return NO;
 }
 
-- (void)save {
-    [self performBlockAndWait:^{
+- (BOOL)save {
+    return [self saveAndWait:YES];
+}
+
+- (BOOL)saveAndWait:(BOOL)wait {
+    __block BOOL saved = NO;
+    
+    [self performBlock:^{
         @try {
             NSError* error = nil;
-            if (![self.managedObjectContext save:&error])
+            if (!(saved = [self.managedObjectContext save:&error]))
                 NSLog(@"Error: save error - %@", error.localizedDescription);
         } @catch(NSException* e) {
             NSLog(@"%@", e);
         }
-    }];
+    } wait:wait];
+    
+    return (wait? saved : YES);
 }
 
 - (NSPersistentStoreCoordinator*)persistentStoreCoordinator {
@@ -324,7 +349,11 @@
     }];
 }
 
-- (void)observeManagedObjectContextDidSaveNotification:(NSNotification*)n {
+- (void)observeAncestorContextObjectsDidChangeNotification:(NSNotification*)n {
+    [self saveAndWait:NO];
+}
+
+- (void)observeAncestorContextDidSaveNotification:(NSNotification*)n {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         @synchronized(self.familyData) {
             if (!self.familyData.momSaved) {
