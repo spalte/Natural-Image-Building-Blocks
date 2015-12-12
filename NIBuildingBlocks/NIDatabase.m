@@ -160,16 +160,13 @@
 - (void)dealloc {
     [self saveIfChanged];
     
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:self.managedObjectContext];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextObjectsDidChangeNotification object:self.managedObjectContext];
-    self.managedObjectContext = nil;
-    
-    if (self.parent) {
-//        [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:self.parent.managedObjectContext];
-//        [[NSNotificationCenter defaultCenter] removeObserver:self.parent name:NSManagedObjectContextDidSaveNotification object:self.managedObjectContext];
+    if (!self.parent) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:self.managedObjectContext];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextObjectsDidChangeNotification object:self.managedObjectContext];
+    } else
         self.parent = nil;
-    }
-    
+
+    self.managedObjectContext = nil;
     self.familyData = nil;
     
     [super dealloc];
