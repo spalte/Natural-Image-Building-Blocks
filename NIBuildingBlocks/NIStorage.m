@@ -70,7 +70,7 @@
     Protocol* storageLocatorProtocol = NSProtocolFromString(@"NIStorageLocator"); // TODO: Is there a better way to obtain this Protocol*?
     int count = objc_getClassList(NULL, 0);
     Class c[count]; objc_getClassList(c, count);
-    NSMutableArray<Class>* NIStorageLocators = [NSMutableArray array];
+    __GENERIC(NSMutableArray, Class)* NIStorageLocators = [NSMutableArray array];
     for (int i = 0; i < count; ++i) {
         if (class_conformsToProtocol(c[i], storageLocatorProtocol))
             [NIStorageLocators addObject:c[i]];
@@ -84,7 +84,7 @@
         return NSOrderedSame;
     }];
     
-    NSMutableArray<NSBundle*>* bundles = [NSMutableArray arrayWithObject:NSBundle.mainBundle];
+    __GENERIC(NSMutableArray, NSBundle*)* bundles = [NSMutableArray arrayWithObject:NSBundle.mainBundle];
     if (bundle && ![bundles containsObject:bundle])
         [bundles addObject:bundle];
     
@@ -114,7 +114,7 @@
         // default method
         
         if (!bundleDir) {
-            NSMutableArray<NSString*>* sdirs = [NSMutableArray array]; // regarding Library/Application Support, Apple switched their recommendation to BundleIdentifier instead of the application name a while ago. According to them all new apps should use the bundle identifier.
+            __GENERIC(NSMutableArray, NSString*)* sdirs = [NSMutableArray array]; // regarding Library/Application Support, Apple switched their recommendation to BundleIdentifier instead of the application name a while ago. According to them all new apps should use the bundle identifier.
             [sdirs addObject:bundle.bundleIdentifier];
             NSString* bundleName = bundle.infoDictionary[CFBundleName];
             if (bundleName.length)

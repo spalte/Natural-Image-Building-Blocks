@@ -7,13 +7,14 @@
 //
 
 #import "NIManagedObjectContext.h"
+#import "Macros.h"
 
 @class NIDatabaseFamilyData;
 
 @interface NIDatabase : NSObject {
     NIManagedObjectContext* _managedObjectContext;
-    __kindof NIDatabase* _parent;
-    __kindof NIDatabaseFamilyData* _familyData;
+    NIDatabase* _parent;
+    NIDatabaseFamilyData* _familyData;
 }
 
 @property (readonly, strong, nonatomic) NIManagedObjectContext* managedObjectContext; // access to the context is discouraged
@@ -23,7 +24,7 @@
 + (Class)NIDatabaseFamilyDataClass;
 
 - (instancetype)initWithURL:(NSURL*)url model:(NSURL*)murl error:(NSError**)error;
-- (instancetype)initWithConcurrencyType:(NSManagedObjectContextConcurrencyType)type parent:(__kindof NIDatabase*)parent; // this initializer is declared strictly for subclassing!! you shouldn't call this directly
+- (instancetype)initWithConcurrencyType:(NSManagedObjectContextConcurrencyType)type parent:(NIDatabase*)parent; // this initializer is declared strictly for subclassing!! you shouldn't call this directly
 - (instancetype)ancestor;
 
 - (instancetype)childDatabase;
@@ -41,17 +42,17 @@
 
 - (NSEntityDescription*)entityForName:(NSString*)name;
 
-- (__kindof NSManagedObject*)insertNewObjectForEntity:(NSEntityDescription*)entity;
+- (id)insertNewObjectForEntity:(NSEntityDescription*)entity;
 
 - (NSUInteger)countObjectsForEntity:(NSEntityDescription*)entity predicate:(NSPredicate*)predicate;
 - (NSUInteger)countObjectsForEntity:(NSEntityDescription*)entity predicateFormat:(NSString*)predicateFormat, ...;
 - (NSUInteger)countObjectsForEntity:(NSEntityDescription*)entity predicate:(NSPredicate*)predicate error:(NSError**)error;
 
-- (NSArray<__kindof NSManagedObject*>*)objectsForEntity:(NSEntityDescription*)entity predicate:(NSPredicate*)predicate;
-- (NSArray<__kindof NSManagedObject*>*)objectsForEntity:(NSEntityDescription*)entity predicateFormat:(NSString*)predicateFormat, ...;
-- (NSArray<__kindof NSManagedObject*>*)objectsForEntity:(NSEntityDescription*)entity predicate:(NSPredicate*)predicate error:(NSError**)error;
+- (__GENERIC(NSArray, NSManagedObject*)*)objectsForEntity:(NSEntityDescription*)entity predicate:(NSPredicate*)predicate;
+- (__GENERIC(NSArray, NSManagedObject*)*)objectsForEntity:(NSEntityDescription*)entity predicateFormat:(NSString*)predicateFormat, ...;
+- (__GENERIC(NSArray, NSManagedObject*)*)objectsForEntity:(NSEntityDescription*)entity predicate:(NSPredicate*)predicate error:(NSError**)error;
 
-- (__kindof NSManagedObject*)objectWithID:(NSManagedObjectID*)objectID;
+- (id)objectWithID:(NSManagedObjectID*)objectID;
 
 - (void)deleteObject:(NSManagedObject*)obj;
 

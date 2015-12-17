@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		31B35D8E1C22FDEF0067DA37 /* Macros.h in Headers */ = {isa = PBXBuildFile; fileRef = 31B35D8D1C22FBAC0067DA37 /* Macros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F0727E11B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F0727DF1B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F0727E21B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0727E01B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.m */; };
 		4F094E721B2455C20009297A /* ContrastTemplate@2x.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 4F094E711B2455C20009297A /* ContrastTemplate@2x.tiff */; };
@@ -115,6 +116,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		31B35D8D1C22FBAC0067DA37 /* Macros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Macros.h; path = NIBuildingBlocks/Macros.h; sourceTree = "<group>"; };
 		4F0727DF1B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIWindowLevelWindowWidthToolbarItem.h; sourceTree = "<group>"; };
 		4F0727E01B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIWindowLevelWindowWidthToolbarItem.m; sourceTree = "<group>"; };
 		4F094E711B2455C20009297A /* ContrastTemplate@2x.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "ContrastTemplate@2x.tiff"; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 			children = (
 				716428AA1C11990F0056E466 /* NIBuildingBlocks.pch */,
 				4F151EE01B1CC8D000C8F767 /* NIBuildingBlocks.h */,
+				31B35D8D1C22FBAC0067DA37 /* Macros.h */,
 				4F151EDD1B1CC8D000C8F767 /* NIBuildingBlocks */,
 				71F51E4E1BA00C2E00DF26AC /* NIBuildingBlocks Tests */,
 				4F151EDC1B1CC8D000C8F767 /* Products */,
@@ -484,6 +487,7 @@
 				4F151F291B1CCA8D00C8F767 /* NIFloatImageRep.h in Headers */,
 				4F151F781B1CD35600C8F767 /* NIUnsignedInt16ImageRep.h in Headers */,
 				4F151F361B1CCB6900C8F767 /* NIGeometry.h in Headers */,
+				31B35D8E1C22FDEF0067DA37 /* Macros.h in Headers */,
 				4F151F711B1CCFDA00C8F767 /* NIBezierCoreAdditions.h in Headers */,
 				4F151F731B1CCFDA00C8F767 /* NIBezierPath.h in Headers */,
 				4F151F211B1CCA6200C8F767 /* NIVolumeDataProperties.h in Headers */,

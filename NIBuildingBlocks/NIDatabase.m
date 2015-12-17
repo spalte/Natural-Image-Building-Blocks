@@ -19,8 +19,8 @@
 
 @property (readwrite, strong, nonatomic) NIManagedObjectContext* managedObjectContext;
 
-@property (retain) __kindof NIDatabase* parent;
-@property (retain) __kindof NIDatabaseFamilyData* familyData;
+@property (retain) NIDatabase* parent;
+@property (retain) NIDatabaseFamilyData* familyData;
 
 @end
 
@@ -124,7 +124,7 @@
     return self;
 }
 
-- (id)initWithConcurrencyType:(NSManagedObjectContextConcurrencyType)type parent:(__kindof NIDatabase*)parent {
+- (id)initWithConcurrencyType:(NSManagedObjectContextConcurrencyType)type parent:(NIDatabase*)parent {
     if (!(self = [super init]))
         return nil;
     
@@ -148,8 +148,8 @@
     return self;
 }
 
-- (__kindof NIDatabase*)ancestor {
-    __kindof NIDatabase* db = self;
+- (NIDatabase*)ancestor {
+    NIDatabase* db = self;
 
     while (db.parent)
         db = db.parent;

@@ -14,10 +14,10 @@
     NIDatabase* _database;
 }
 
-@property (retain, readonly) __kindof NIDatabase* database;
+@property (retain, readonly) NIDatabase* database;
 @property (readonly) NSString* objectId;
 
-- (__kindof NIManagedObject*)initWithEntity:(NSEntityDescription *)entity insertIntoManagedObjectContext:(NIManagedObjectContext *)context NS_DESIGNATED_INITIALIZER;
+- (NIManagedObject*)initWithEntity:(NSEntityDescription *)entity insertIntoManagedObjectContext:(NIManagedObjectContext *)context NS_DESIGNATED_INITIALIZER;
 
 - (BOOL)hasValueForRelationshipNamed:(NSString*)key;
 

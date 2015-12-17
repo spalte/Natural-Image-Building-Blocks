@@ -49,7 +49,8 @@
 
 #ifdef __OBJC__ // actual NIBuildingBlocks includes
 
-#include <Cocoa/Cocoa.h>
+#import <Cocoa/Cocoa.h>
+#import "Macros.h"
 
 #endif
 

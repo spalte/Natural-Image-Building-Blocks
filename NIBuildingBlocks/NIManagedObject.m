@@ -13,7 +13,7 @@
 
 @interface NIManagedObject ()
 
-@property (retain) __kindof NIDatabase* database;
+@property (retain) NIDatabase* database;
 
 @end
 
@@ -21,7 +21,7 @@
 
 @synthesize database = _database;
 
-- (__kindof NIManagedObject*)initWithEntity:(NSEntityDescription *)entity insertIntoManagedObjectContext:(nullable NIManagedObjectContext *)context {
+- (NIManagedObject*)initWithEntity:(NSEntityDescription *)entity insertIntoManagedObjectContext:(nullable NIManagedObjectContext *)context {
     if (!(self = [super initWithEntity:entity insertIntoManagedObjectContext:context]))
         return nil;
     

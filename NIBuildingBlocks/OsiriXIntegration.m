@@ -53,7 +53,7 @@ static NSString* const ModelDatabaseClassName = @"ModelDatabase";
     
     // TODO: I'm not convinced this is the best way to see if we're inside OsiriX...
     NSBundle* bundle = [NSBundle bundleForClass:ModelDatabaseClass];
-    if ([[bundle.infoDictionary[@"CFBundleDocumentTypes"] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSDictionary* entry, NSDictionary<NSString *,id>* _Nullable bindings) {
+    if ([[bundle.infoDictionary[@"CFBundleDocumentTypes"] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSDictionary* entry, NSDictionary* bindings) {
         return ([entry[@"CFBundleTypeExtensions"] isEqual:@[@"osirixplugin"]]);
     }]] count] == 1)
         return YES;
