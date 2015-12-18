@@ -23,10 +23,12 @@
 #   define __GENERIC(class, ...)                class<__VA_ARGS__>
 #   define __GENERIC_TYPE(type)                 type
 #   define __GENERIC_CAST(type, expression)     expression
+#   define __KINDOF(type)                       __kindof type
 #else
 #   define __GENERIC(class, ...)                class
 #   define __GENERIC_TYPE(type)                 id
 #   define __GENERIC_CAST(type, expression)     ((type)expression)
+#   define __KINDOF(type)                       id
 #endif
 
 #endif
