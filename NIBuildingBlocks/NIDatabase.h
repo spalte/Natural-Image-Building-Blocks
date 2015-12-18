@@ -48,9 +48,9 @@
 - (NSUInteger)countObjectsForEntity:(NSEntityDescription*)entity predicateFormat:(NSString*)predicateFormat, ...;
 - (NSUInteger)countObjectsForEntity:(NSEntityDescription*)entity predicate:(NSPredicate*)predicate error:(NSError**)error;
 
-- (__GENERIC(NSArray, NSManagedObject*)*)objectsForEntity:(NSEntityDescription*)entity predicate:(NSPredicate*)predicate;
-- (__GENERIC(NSArray, NSManagedObject*)*)objectsForEntity:(NSEntityDescription*)entity predicateFormat:(NSString*)predicateFormat, ...;
-- (__GENERIC(NSArray, NSManagedObject*)*)objectsForEntity:(NSEntityDescription*)entity predicate:(NSPredicate*)predicate error:(NSError**)error;
+- (__GENERIC(NSArray, __KINDOF(NSManagedObject) *)*)objectsForEntity:(NSEntityDescription*)entity predicate:(NSPredicate*)predicate;
+- (__GENERIC(NSArray, __KINDOF(NSManagedObject) *)*)objectsForEntity:(NSEntityDescription*)entity predicateFormat:(NSString*)predicateFormat, ...;
+- (__GENERIC(NSArray, __KINDOF(NSManagedObject) *)*)objectsForEntity:(NSEntityDescription*)entity predicate:(NSPredicate*)predicate error:(NSError**)error;
 
 - (id)objectWithID:(NSManagedObjectID*)objectID;
 
