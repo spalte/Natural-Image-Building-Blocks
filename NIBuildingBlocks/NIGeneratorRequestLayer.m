@@ -231,7 +231,7 @@
             animation.toValue = @(1.0);
             [self addAnimation:animation forKey:@"generatorRequestInterpolator"];
         } else {
-            self.toGeneratorRequest = generatorRequest; // this is not typical behavior for core animation, but in this case the result if better
+            self.toGeneratorRequest = generatorRequest; // this is not typical behavior for core animation, but in this case the result is better
                                                         // this will make it so that if an animation is ongoing, the animation will be updated to
                                                         // go to the right place
             [self setNeedsDisplay];
