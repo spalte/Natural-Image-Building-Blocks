@@ -43,6 +43,7 @@
 - (NSEntityDescription*)entityForName:(NSString*)name;
 
 - (id)insertNewObjectForEntity:(NSEntityDescription*)entity;
+- (BOOL)obtainPermanentIDsForObjects:(NSArray<NSManagedObject *> *)objects error:(NSError**)error;
 
 - (NSUInteger)countObjectsForEntity:(NSEntityDescription*)entity predicate:(NSPredicate*)predicate;
 - (NSUInteger)countObjectsForEntity:(NSEntityDescription*)entity predicateFormat:(NSString*)predicateFormat, ...;

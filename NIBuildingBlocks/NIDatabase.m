@@ -254,6 +254,14 @@
     return r;
 }
 
+- (BOOL)obtainPermanentIDsForObjects:(NSArray<NSManagedObject *> *)objects error:(NSError**)error {
+    __block BOOL r;
+    [self performBlockAndWait:^{
+        r = [self.managedObjectContext obtainPermanentIDsForObjects:objects error:error];
+    }];
+    return r;
+}
+
 #if TARGET_OS_IPHONE
 - (NSFetchedResultsController*)resultsControllerWithFetchRequest:(NSFetchRequest*)fetchRequest sectionNameKeyPath:(NSString*)sectionNameKeyPath cacheName:(NSString*)name {
     __block NSFetchedResultsController* r = nil;
