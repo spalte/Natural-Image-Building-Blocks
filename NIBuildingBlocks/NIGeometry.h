@@ -106,6 +106,7 @@ CGFloat NIVectorDistance(NIVector vector1, NIVector vector2);
 CGFloat NIVectorDotProduct(NIVector vector1, NIVector vector2);
 NIVector NIVectorCrossProduct(NIVector vector1, NIVector vector2);
 NIVector NIVectorLerp(NIVector vector1, NIVector vector2, CGFloat t); // when t == 0.0 the result is vector 1, when t == 1.0 the result is vector2
+CGFloat NIVectorAngleBetweenVectors(NIVector vector1, NIVector vector2);
 CGFloat NIVectorAngleBetweenVectorsAroundVector(NIVector vector1, NIVector vector2, NIVector aroundVector); // returns [0, 2*M_PI)
 
 CGFloat NIVectorLength(NIVector vector);
