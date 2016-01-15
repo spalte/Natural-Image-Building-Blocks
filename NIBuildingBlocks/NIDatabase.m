@@ -104,7 +104,6 @@
     self.managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeAncestorContextObjectsDidChangeNotification:) name:NSManagedObjectContextObjectsDidChangeNotification object:self.managedObjectContext];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeAncestorContextDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:self.managedObjectContext];
 
     [self performBlockAndWait:^{
         NSError* error = nil;
@@ -119,6 +118,8 @@
             if (![[NSData dataWithContentsOfURL:urlm] isEqualToData:[NSData dataWithContentsOfURL:murl]]) // exists, != murl
                 [self.class migrate:url from:urlm into:self.managedObjectContext];
         }
+        
+        [[NSFileManager defaultManager] copyItemAtURL:self.familyData.momURL toURL:[self.familyData.URL URLByAppendingPathExtension:@"mom"] error:NULL];
     }];
     
     return self;
@@ -137,13 +138,6 @@
     self.managedObjectContext.parentContext = parent.managedObjectContext;
     self.managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
     self.managedObjectContext.undoManager = nil;
-
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeManagedObjectContextDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:self.managedObjectContext];
-
-//    [self.managedObjectContext setPersistentStoreCoordinator:parent.managedObjectContext.persistentStoreCoordinator];
-    
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mergeChangesFromContextDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:self.parent.managedObjectContext];
-//    [[NSNotificationCenter defaultCenter] addObserver:self.parent selector:@selector(mergeChangesFromContextDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:self.managedObjectContext];
 
     return self;
 }
@@ -171,12 +165,6 @@
     
     [super dealloc];
 }
-
-//- (void)mergeChangesFromContextDidSaveNotification:(NSNotification*)notification {
-//    [self performBlockAndWait:^{
-//        [self.managedObjectContext mergeChangesFromContextDidSaveNotification:notification];
-//    }];
-//}
 
 - (BOOL)hasChanges {
     __block BOOL r = NO;
@@ -356,17 +344,6 @@
 
 - (void)observeAncestorContextObjectsDidChangeNotification:(NSNotification*)n {
     [self saveAndWait:NO];
-}
-
-- (void)observeAncestorContextDidSaveNotification:(NSNotification*)n {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        @synchronized(self.familyData) {
-            if (!self.familyData.momSaved) {
-                [[NSFileManager defaultManager] copyItemAtURL:self.familyData.momURL toURL:[self.familyData.URL URLByAppendingPathExtension:@"mom"] error:NULL];
-                self.familyData.momSaved = YES;
-            }
-        }
-    });
 }
 
 + (void)migrate:(NSURL*)url from:(NSURL*)murl into:(NSManagedObjectContext*)nmoc {

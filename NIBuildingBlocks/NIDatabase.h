@@ -14,7 +14,7 @@
 @interface NIDatabase : NSObject {
     NIManagedObjectContext* _managedObjectContext;
     NIDatabase* _parent;
-    NIDatabaseFamilyData* _familyData;
+    NIDatabaseFamilyData* _familyData; // was used for saving the model when intercepting a save; now the model is saved on init, but I'm leaving this here just in case it becomes useful again...
 }
 
 @property (readonly, strong, nonatomic) NIManagedObjectContext* managedObjectContext; // access to the context is discouraged
