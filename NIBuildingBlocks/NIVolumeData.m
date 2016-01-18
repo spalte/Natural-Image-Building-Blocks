@@ -376,7 +376,7 @@
 - (instancetype)volumeDataByApplyingTransform:(NIAffineTransform)transform;
 {
     return [[[NIVolumeData alloc] initWithData:_floatData pixelsWide:_pixelsWide pixelsHigh:_pixelsHigh pixelsDeep:_pixelsDeep
-                                modelToVoxelTransform:NIAffineTransformConcat(_modelToVoxelTransform, transform) outOfBoundsValue:_outOfBoundsValue] autorelease];
+                                modelToVoxelTransform:NIAffineTransformConcat(transform, _modelToVoxelTransform) outOfBoundsValue:_outOfBoundsValue] autorelease];
 }
 
 - (instancetype)volumeDataResampledWithModelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform interpolationMode:(NIInterpolationMode)interpolationsMode
