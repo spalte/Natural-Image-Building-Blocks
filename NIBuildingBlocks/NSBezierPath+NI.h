@@ -28,4 +28,13 @@
 - (NSBezierPath *)convexHull;
 - (void)diameterMinStart:(NSPointPointer)minStart minEnd:(NSPointPointer)minEnd maxStart:(NSPointPointer)maxStart maxEnd:(NSPointPointer)maxEnd;
 
+/**
+ Returns a bitmap representation of this bezier path.
+ The NSBitmapImageRep represents pixels as floats, one per pixel.
+ @param scaling the scaling factor
+ @param fill flag to determine if the path shall be rendered through a stroke or a fill operation
+ @returns the bitmap
+ */
+- (NSBitmapImageRep*)bitmapWithScaling:(CGFloat)scaling fill:(BOOL)fill;
+
 @end

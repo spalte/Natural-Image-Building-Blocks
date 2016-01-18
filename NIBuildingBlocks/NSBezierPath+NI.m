@@ -318,6 +318,50 @@ CGFloat NIAdditionsNSPointVectorsDotProduct(NSPoint p1, NSPoint p2)
     free(points);
 }
 
+- (NSBitmapImageRep*)bitmapWithScaling:(CGFloat)scaling fill:(BOOL)fill {
+#ifndef CGFloatCeil
+#if CGFLOAT_IS_DOUBLE
+#define CGFloatCeil ceil
+#else
+#define CGFloatCeil ceilf
+#endif
+#endif
+    
+    // TODO the width and the bounds need to be widened just a bit more if the scale is larger
+    NSRect pbounds = [self bounds];
+    const NSUInteger pwidth = CGFloatCeil(NSMaxX(pbounds)) + 1, pheight = CGFloatCeil(NSMaxY(pbounds)) + 1;
+    
+    NSBitmapImageRep* pimgref = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL pixelsWide:pwidth pixelsHigh:pheight bitsPerSample:sizeof(float)*8 samplesPerPixel:1
+                                                                           hasAlpha:NO isPlanar:NO colorSpaceName:NSDeviceWhiteColorSpace bitmapFormat:NSFloatingPointSamplesBitmapFormat bytesPerRow:sizeof(float)*pwidth bitsPerPixel:sizeof(float)*8] autorelease];
+    
+    NSGraphicsContext* pctx = [NSGraphicsContext graphicsContextWithBitmapImageRep:pimgref];
+    [NSGraphicsContext saveGraphicsState];
+    [NSGraphicsContext setCurrentContext:pctx];
+    [pctx setShouldAntialias:NO];
+    
+    NSAffineTransform* flip = [NSAffineTransform transform];
+    [flip translateXBy:0 yBy:pheight];
+    [flip scaleXBy:1 yBy:-1];
+    // the coordinates in the path are coordinates on the mask, which have the origin in the center of the pixel,
+    // Quartz think of the origin in the corner of the pixel, so we need to shift by half a pixel
+    [flip translateXBy:0.5 yBy:0.5];
+    [flip set];
+    
+    [[NSColor whiteColor] set];
+    
+    CGFloat savedLineWidth = self.lineWidth;
+    
+    self.lineWidth = scaling;
+    if (fill)
+        [self fill];
+    else [self stroke];
+    
+    self.lineWidth = savedLineWidth;
+    
+    [NSGraphicsContext restoreGraphicsState];
+    
+    return pimgref;
+}
 
 @end
 
