@@ -119,7 +119,8 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 - (NIUnsignedInt16ImageRep *)unsignedInt16ImageRepForSliceAtIndex:(NSUInteger)z;
 - (NIVolumeData *)volumeDataForSliceAtIndex:(NSUInteger)z;
 
-- (NIVolumeData *)volumeDataByApplyingTransform:(NIAffineTransform)transform;
+- (NIVolumeData *)volumeDataByConcatenatingTransform:(NIAffineTransform)transform;
+- (NIVolumeData *)volumeDataByPreconcatenatingTransform:(NIAffineTransform)transform;
 
 // the first version of this function figures out the dimensions needed to fit the whole volume. Note that with the first version of this function the passed in transform may not
 // be equal to the modelToVoxelTransform of the returned volumeData because a minimum cube of data needed to fit the was calculated. Any shift in the data is guaranteed to be a multiple
