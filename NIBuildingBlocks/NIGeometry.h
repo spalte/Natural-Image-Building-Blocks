@@ -75,8 +75,13 @@ typedef CATransform3D NIAffineTransform;
 typedef NIAffineTransform *NIAffineTransformPointer;
 typedef NIAffineTransform *NIAffineTransformArray;
 
+extern const NSPoint NIPointInvalid; // NAN,NAN
+
+bool NIPointIsInvalid(NSPoint point);
+
 extern const NIVector NIVectorZero;
-extern const NIVector NIVectorOne; // TODO: should we name this NIVectorBasis?
+extern const NIVector NIVectorOne; // TODO: should we name this NIVectorBasis? NIVectorUnit?
+extern const NIVector NIVectorInvalid; // NAN,NAN,NAN
 
 extern const NIVector NIVectorXBasis;
 extern const NIVector NIVectorYBasis;
@@ -88,6 +93,7 @@ bool NIVectorEqualToVector(NIVector vector1, NIVector vector2);
 bool NIVectorIsCoincidentToVector(NIVector vector1, NIVector vector2); // coincident to an arbitratry tolerance
 bool NIVectorIsZero(NIVector vector);
 bool NIVectorIsUnit(NIVector vector);
+bool NIVectorIsInvalid(NIVector vector);
 
 NIVector NIVectorAdd(NIVector vector1, NIVector vector2);
 NIVector NIVectorSubtract(NIVector vector1, NIVector vector2);
