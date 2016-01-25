@@ -32,7 +32,7 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-//    DebugLog(@"deallocating context 0x%lx for 0x%lx", (unsigned long)self, (unsigned long)self.thread);
+//    DebugLog(@"Info: deallocating context 0x%lx for 0x%lx", (unsigned long)self, (unsigned long)self.thread);
     [super dealloc];
 }
 
