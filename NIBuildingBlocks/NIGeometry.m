@@ -27,11 +27,8 @@
 
 static const CGFloat _NIGeometrySmallNumber = (CGFLOAT_MIN * 1E5);
 
-const NSPoint NIPointInvalid = {NAN, NAN};
-
 const NIVector NIVectorZero = {0.0, 0.0, 0.0};
 const NIVector NIVectorOne = {1.0, 1.0, 1.0};
-const NIVector NIVectorInvalid = {NAN, NAN, NAN};
 const NIVector NIVectorXBasis = {1.0, 0.0, 0.0};
 const NIVector NIVectorYBasis = {0.0, 1.0, 0.0};
 const NIVector NIVectorZBasis = {0.0, 0.0, 1.0};
@@ -45,10 +42,6 @@ const NIPlane NIPlaneXZero = {{0.0, 0.0, 0.0}, {1.0, 0.0, 0.0}};
 const NIPlane NIPlaneYZero = {{0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}};
 const NIPlane NIPlaneZZero = {{0.0, 0.0, 0.0}, {0.0, 0.0, 1.0}};
 const NIPlane NIPlaneInvalid = {{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
-
-bool NIPointIsInvalid(NSPoint point) {
-    return isnan(point.x) && isnan(point.y);
-}
 
 NIVector NIVectorMake(CGFloat x, CGFloat y, CGFloat z)
 {
@@ -78,10 +71,6 @@ bool NIVectorIsUnit(NIVector vector)
 {
     CGFloat length = NIVectorLength(vector);
     return (length > 0.99999999 && length < 1.000001);
-}
-
-bool NIVectorIsInvalid(NIVector vector) {
-    return isnan(vector.x) && isnan(vector.y) && isnan(vector.z);
 }
 
 NIVector NIVectorAdd(NIVector vector1, NIVector vector2)
