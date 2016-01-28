@@ -113,8 +113,10 @@
         applicationStorageURL = [applicationSupportURL URLByAppendingPathComponent:[[NSBundle mainBundle] bundleIdentifier] isDirectory:YES];
     }
 
+    NSURL *storageURL = [applicationStorageURL URLByAppendingPathComponent:@"ch.naturalimage.storage"];
+
     NSString *bundleIdentifier = [bundle bundleIdentifier];
-    NSURL *bundleStorageURL = [applicationStorageURL URLByAppendingPathComponent:bundleIdentifier isDirectory:YES];
+    NSURL *bundleStorageURL = [storageURL URLByAppendingPathComponent:bundleIdentifier isDirectory:YES];
 
     return bundleStorageURL;
 }
