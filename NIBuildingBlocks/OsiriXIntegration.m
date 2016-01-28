@@ -27,57 +27,57 @@
 
 int NIBuildingBlocksInstallOsiriXCategories();
 
-@implementation OsiriX_NI
-
-static NSString* const ModelDatabaseClassName = @"ModelDatabase";
-
-+ (id)DefaultModelDatabase {
-    @try {
-        Class ModelDatabaseClass = NSClassFromString(ModelDatabaseClassName);
-        if (!ModelDatabaseClass)
-            return nil;
-        
-        return [ModelDatabaseClass valueForKey:@"defaultDatabase"];
-        
-    } @catch (...) {
-        // do nothing
-    }
-    
-    return nil;
-}
-
-+ (BOOL)inOsiriX {
-    Class ModelDatabaseClass = NSClassFromString(ModelDatabaseClassName);
-    if (!ModelDatabaseClass)
-        return NO;
-    
-    // TODO: I'm not convinced this is the best way to see if we're inside OsiriX...
-    NSBundle* bundle = [NSBundle bundleForClass:ModelDatabaseClass];
-    if ([[bundle.infoDictionary[@"CFBundleDocumentTypes"] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSDictionary* entry, NSDictionary* bindings) {
-        return ([entry[@"CFBundleTypeExtensions"] isEqual:@[@"osirixplugin"]]);
-    }]] count] == 1)
-        return YES;
-    
-    return NO;
-}
-
-+ (NSURL*)NIStorageDefaultLocationForBundle:(NSBundle*)bundle {
-    if (![self.class inOsiriX])
-        return nil;
-    
-    id ddd = [self.class DefaultModelDatabase];
-    if (!ddd) {
-        NSAssert(NO, @"NIStorage is being initialized too soon to properly work inside OsiriX - Try wrapping the initialization code within a [self performBlock:^{ ... } afterDelay:0]");
-        return nil;
-    }
-    
-    if ([NSBundle bundleForClass:[ddd class]] == bundle)
-        return [NSURL fileURLWithPath:[ddd valueForKeyPath:@"dataBaseDirPath"]];
-    
-    return nil;
-}
-
-@end
+//@implementation OsiriX_NI
+//
+//static NSString* const ModelDatabaseClassName = @"ModelDatabase";
+//
+//+ (id)DefaultModelDatabase {
+//    @try {
+//        Class ModelDatabaseClass = NSClassFromString(ModelDatabaseClassName);
+//        if (!ModelDatabaseClass)
+//            return nil;
+//        
+//        return [ModelDatabaseClass valueForKey:@"defaultDatabase"];
+//        
+//    } @catch (...) {
+//        // do nothing
+//    }
+//    
+//    return nil;
+//}
+//
+//+ (BOOL)inOsiriX {
+//    Class ModelDatabaseClass = NSClassFromString(ModelDatabaseClassName);
+//    if (!ModelDatabaseClass)
+//        return NO;
+//    
+//    // TODO: I'm not convinced this is the best way to see if we're inside OsiriX...
+//    NSBundle* bundle = [NSBundle bundleForClass:ModelDatabaseClass];
+//    if ([[bundle.infoDictionary[@"CFBundleDocumentTypes"] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSDictionary* entry, NSDictionary* bindings) {
+//        return ([entry[@"CFBundleTypeExtensions"] isEqual:@[@"osirixplugin"]]);
+//    }]] count] == 1)
+//        return YES;
+//    
+//    return NO;
+//}
+//
+//+ (NSURL*)NIStorageDefaultLocationForBundle:(NSBundle*)bundle {
+//    if (![self.class inOsiriX])
+//        return nil;
+//    
+//    id ddd = [self.class DefaultModelDatabase];
+//    if (!ddd) {
+//        NSAssert(NO, @"NIStorage is being initialized too soon to properly work inside OsiriX - Try wrapping the initialization code within a [self performBlock:^{ ... } afterDelay:0]");
+//        return nil;
+//    }
+//    
+//    if ([NSBundle bundleForClass:[ddd class]] == bundle)
+//        return [NSURL fileURLWithPath:[ddd valueForKeyPath:@"dataBaseDirPath"]];
+//    
+//    return nil;
+//}
+//
+//@end
 
 @interface ViewerController_NI : NSObject
 

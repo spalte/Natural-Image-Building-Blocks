@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15C50" minimumToolsVersion="Xcode 7.0">
+    <entity name="NIStorageDoubleEntity" representedClassName="NIStorageDoubleEntity" parentEntity="NIStorageEntity" syncable="YES">
+        <attribute name="realv" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="NIStorageEntity" representedClassName="NIStorageEntity" isAbstract="YES" syncable="YES">
+        <attribute name="key" attributeType="String" indexed="YES" syncable="YES"/>
+    </entity>
+    <entity name="NIStorageInt64Entity" representedClassName="NIStorageInt64Entity" parentEntity="NIStorageEntity" syncable="YES">
+        <attribute name="int64" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="NIStorageLargeDataEntity" representedClassName="NIStorageLargeDataEntity" syncable="YES">
+        <attribute name="relativeURL" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="NIStorageObjectEntity" representedClassName="NIStorageObjectEntity" parentEntity="NIStorageEntity" syncable="YES">
+        <attribute name="encodedObject" attributeType="Binary" syncable="YES"/>
+    </entity>
+    <entity name="NIStorageSmallDataEntity" representedClassName="NIStorageSmallDataEntity" syncable="YES">
+        <attribute name="data" attributeType="Binary" syncable="YES"/>
+    </entity>
+    <entity name="NIStorageStringEntity" representedClassName="NIStorageStringEntity" parentEntity="NIStorageEntity" syncable="YES">
+        <attribute name="string" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="NIStorageDoubleEntity" positionX="0" positionY="54" width="128" height="60"/>
+        <element name="NIStorageEntity" positionX="-54" positionY="-9" width="128" height="60"/>
+        <element name="NIStorageInt64Entity" positionX="-18" positionY="27" width="128" height="60"/>
+        <element name="NIStorageLargeDataEntity" positionX="-9" positionY="45" width="128" height="60"/>
+        <element name="NIStorageObjectEntity" positionX="18" positionY="72" width="128" height="60"/>
+        <element name="NIStorageSmallDataEntity" positionX="36" positionY="90" width="128" height="60"/>
+        <element name="NIStorageStringEntity" positionX="-36" positionY="9" width="128" height="60"/>
+    </elements>
+</model>

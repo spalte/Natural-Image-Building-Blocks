@@ -1,5 +1,4 @@
-//  Created by Joël Spaltenstein on 6/1/15.
-//  Copyright (c) 2015 Spaltenstein Natural Image
+//  Copyright (c) 2016 Spaltenstein Natural Image
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -19,16 +18,10 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
 #import "NIStorage.h"
 
-@class NIVolumeData;
+@interface NIStorage (Private)
 
-// call this function to add the methods below to OsiriX, returns 0 on success
-// NIBuildingBlocksInstallOsiriXCategories is now called automatically when the framework loads
-//int NIBuildingBlocksInstallOsiriXCategories();
+- (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)moc;
 
-// These methods will be added to OsiriX's ViewerController
-@interface NSObject (NIBuildingBlocksViewerControllerAdditions)
-- (NIVolumeData *)NIVolumeDataForMovieIndex:(NSUInteger)movieIndex;
 @end
