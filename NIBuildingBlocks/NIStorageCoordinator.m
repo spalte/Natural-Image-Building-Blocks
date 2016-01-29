@@ -84,14 +84,16 @@
 
     NSURL *storeURL = [url URLByAppendingPathComponent:@"storage.sqlite"];
 
-    NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    NSManagedObjectContext *moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+    NSPersistentStoreCoordinator *psc = [[[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]] autorelease];
+    NSManagedObjectContext *moc = [[[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType] autorelease];
     [moc setPersistentStoreCoordinator:psc];
 
     NSPersistentStore *store = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:0 error:&err];
-    NSAssert2(store != nil, @"Error initializing PSC: %@\n%@", [err localizedDescription], [err userInfo]);
+    if (store == nil) {
+        NSLog(@"Error initializing PSC: %@\n%@", [err localizedDescription], [err userInfo]);
+    }
 
-    storage = [[NIStorage alloc] initWithManagedObjectContext:moc];
+    storage = [[[NIStorage alloc] initWithManagedObjectContext:moc] autorelease];
     [_storages setObject:storage forKey:url];
     return storage;
 }

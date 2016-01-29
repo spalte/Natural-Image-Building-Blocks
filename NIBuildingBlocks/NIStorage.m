@@ -135,7 +135,7 @@
         [_managedObjectContext deleteObject:prevEntity];
     }
 
-    NIStorageEntity *newEntity = [[NIStorageEntity alloc] initWithData:data insertIntoManagedObjectContext:_managedObjectContext];
+    NIStorageEntity *newEntity = [[[NIStorageEntity alloc] initWithData:data insertIntoManagedObjectContext:_managedObjectContext] autorelease];
     newEntity.key = key;
     [_managedObjectContext save:&err];
 }
@@ -152,7 +152,7 @@
         [_managedObjectContext deleteObject:prevEntity];
     }
 
-    NIStorageEntity *newEntity = [[NIStorageEntity alloc] initWithString:string insertIntoManagedObjectContext:_managedObjectContext];
+    NIStorageEntity *newEntity = [[[NIStorageEntity alloc] initWithString:string insertIntoManagedObjectContext:_managedObjectContext] autorelease];
     newEntity.key = key;
     [_managedObjectContext save:&err];
 }
@@ -169,7 +169,7 @@
         [_managedObjectContext deleteObject:prevEntity];
     }
 
-    NIStorageEntity *newEntity = [[NIStorageEntity alloc] initWithObject:object insertIntoManagedObjectContext:_managedObjectContext];
+    NIStorageEntity *newEntity = [[[NIStorageEntity alloc] initWithObject:object insertIntoManagedObjectContext:_managedObjectContext] autorelease];
     newEntity.key = key;
     [_managedObjectContext save:&err];
 }
@@ -186,7 +186,7 @@
         [_managedObjectContext deleteObject:prevEntity];
     }
 
-    NIStorageEntity *newEntity = [[NIStorageEntity alloc] initWithLongLong:number insertIntoManagedObjectContext:_managedObjectContext];
+    NIStorageEntity *newEntity = [[[NIStorageEntity alloc] initWithLongLong:number insertIntoManagedObjectContext:_managedObjectContext] autorelease];
     newEntity.key = key;
     [_managedObjectContext save:&err];
 }
@@ -208,7 +208,7 @@
         [_managedObjectContext deleteObject:prevEntity];
     }
 
-    NIStorageEntity *newEntity = [[NIStorageEntity alloc] initWithDouble:realv insertIntoManagedObjectContext:_managedObjectContext];
+    NIStorageEntity *newEntity = [[[NIStorageEntity alloc] initWithDouble:realv insertIntoManagedObjectContext:_managedObjectContext] autorelease];
     newEntity.key = key;
     [_managedObjectContext save:&err];
 }
