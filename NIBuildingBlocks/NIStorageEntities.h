@@ -25,11 +25,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NIStorageEntity : NSManagedObject
 
-- (__kindof NIStorageEntity *)initWithString:(NSString *)string insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context;
-- (__kindof NIStorageEntity *)initWithData:(NSData *)data insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context;
-- (__kindof NIStorageEntity *)initWithObject:(id<NSSecureCoding>)object insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context;
-- (__kindof NIStorageEntity *)initWithDouble:(double)doubleValue insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context;
-- (__kindof NIStorageEntity *)initWithLongLong:(long long)longLongValue insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context;
+- (NIStorageEntity *)initWithString:(NSString *)string insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context;
+- (NIStorageEntity *)initWithData:(NSData *)data insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context;
+- (NIStorageEntity *)initWithObject:(id<NSSecureCoding>)object insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context;
+- (NIStorageEntity *)initWithDouble:(double)doubleValue insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context;
+- (NIStorageEntity *)initWithLongLong:(long long)longLongValue insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context;
 
 
 @property (nonnull, nonatomic, retain) NSString *key;
