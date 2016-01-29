@@ -30,11 +30,11 @@
 
 typedef NSInteger NIAnnularPathControlPointID;
 
-@interface NIAnnularPath : NSObject <NSCopying>
+@interface NIAnnularPath : NSObject <NSCopying, NSSecureCoding>
 {
     NIVector _annularOrigin;
     NIVector _axialDirection;
-    NSMutableDictionary *_controlPoints;
+    NSMutableDictionary<NSNumber*, NSValue*> *_controlPoints;
     NIAnnularPathControlPointID _idCounter;
 }
 

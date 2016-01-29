@@ -35,12 +35,37 @@
 @synthesize annularOrigin = _annularOrigin;
 @synthesize axialDirection = _axialDirection;
 
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
+
 - (instancetype)initWithAnnularOrigin:(NIVector)annularOrigin axialDirection:(NIVector)axialDirection;
 {
     if ( (self = [super init]) ) {
         _annularOrigin = annularOrigin;
         _axialDirection = axialDirection;
         _controlPoints = [[NSMutableDictionary alloc] init];
+    }
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if ( (self = [super init]) ) {
+        _annularOrigin = [aDecoder decodeNIVectorForKey:@"annularOrigin"];
+        _axialDirection = [aDecoder decodeNIVectorForKey:@"axialDirection"];
+        _idCounter = [aDecoder decodeIntegerForKey:@"idCounter"];
+
+
+        NSDictionary<NSNumber*, NSDictionary*> *encodingControlPoints = [aDecoder decodeObjectOfClass:[NSDictionary class] forKey:@"controlPoints"];
+        _controlPoints = [[NSMutableDictionary alloc] init];
+
+        [encodingControlPoints enumerateKeysAndObjectsUsingBlock:^(NSNumber *key, NSDictionary *dictionaryRep, BOOL *stop) {
+            NIVector vector = NIVectorZero;
+            NIVectorMakeWithDictionaryRepresentation((CFDictionaryRef) dictionaryRep, &vector);
+            [_controlPoints setObject:[NSValue valueWithNIVector:vector] forKey:key];
+        }];
     }
     return self;
 }
@@ -60,6 +85,21 @@
         [copy addControlPointAtPosition:[value NIVectorValue]];
     }
     return copy;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeNIVector:_annularOrigin forKey:@"annularOrigin"];
+    [aCoder encodeNIVector:_axialDirection forKey:@"axialDirection"];
+    [aCoder encodeInteger:_idCounter forKey:@"idCounter"];
+
+    NSMutableDictionary<NSNumber*, NSDictionary*> *encodingControlPoints = [NSMutableDictionary dictionary];
+    [_controlPoints enumerateKeysAndObjectsUsingBlock:^(NSNumber *key, NSValue *vectorValue, BOOL *stop) {
+        CFDictionaryRef vectorDictionary = NIVectorCreateDictionaryRepresentation([vectorValue NIVectorValue]);
+        [encodingControlPoints setObject:(NSDictionary *)vectorDictionary forKey:key];
+        CFRelease(vectorDictionary);
+    }];
+    [aCoder encodeObject:encodingControlPoints forKey:@"controlPoints"];
 }
 
 - (NIPlane)plane
