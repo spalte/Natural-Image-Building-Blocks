@@ -144,11 +144,16 @@
     return self;
 }
 
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
+
 - (instancetype)initWithCoder:(NSCoder *)decoder
 {
 	NSDictionary *bezierDict;
 	
-	bezierDict = [decoder decodeObjectForKey:@"bezierPathDictionaryRepresentation"];
+	bezierDict = [decoder decodeObjectOfClass:[NSDictionary class] forKey:@"bezierPathDictionaryRepresentation"];
 	
 	if ( (self = [self initWithDictionaryRepresentation:bezierDict]) ) {
 	}
