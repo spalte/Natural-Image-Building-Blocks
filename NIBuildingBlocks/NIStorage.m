@@ -21,6 +21,7 @@
 #import "NIStorage.h"
 #import "NIStorageCoordinator.h"
 #import "NIStorageEntities.h"
+#import "NIStorageBox.h"
 
 @interface NIStorage ()
 
@@ -70,6 +71,51 @@
         [_managedObjectContext deleteObject:prevEntity];
     }
 }
+
+- (nullable id)valueForKey:(NSString *)key
+{
+    NSError *err;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
+
+    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+
+    for (NIStorageEntity *prevEntity in results) {
+        id object = [prevEntity objectValueOfClasses:[NSSet setWithObjects:[NSValue class], [NSString class], [NIStorageBox class], nil]];
+
+        if ([object isKindOfClass:[NSValue class]] ||
+            [object isKindOfClass:[NSString class]]) {
+
+            return object;
+        } else if ([object isKindOfClass:[NIStorageBox class]]) {
+            return [(NIStorageBox *)object value];
+        }
+    }
+
+    return nil;;
+}
+
+- (void)setValue:(nullable id)value forKey:(NSString *)key
+{
+    if (value == nil) {
+        [self removeValueForKey:key];
+    } else if ([value isKindOfClass:[NSString class]]) {
+        [self setString:value forKey:key];
+    } else if ([value isKindOfClass:[NSNumber class]]) { // should check different types, but this is good enough for all integers of reasonable size
+        [self setDouble:[value doubleValue] forKey:key];
+    } else if ([value isKindOfClass:[NSValue class]]) {
+        if (strcmp([value objCType], @encode(NIVector)) == 0) {
+            [self setNIVector:[(NSValue *)value NIVectorValue] forKey:key];
+        } else if (strcmp([value objCType], @encode(NIAffineTransform)) == 0) {
+            [self setNIAffineTransform:[(NSValue *)value NIAffineTransformValue] forKey:key];
+        } else if (strcmp([value objCType], @encode(NIPlane)) == 0) {
+            [self setNIPlane:[(NSValue *)value NIPlaneValue] forKey:key];
+        } else if (strcmp([value objCType], @encode(NILine)) == 0) {
+            [self setNILine:[(NSValue *)value NILineValue] forKey:key];
+        }
+    }
+}
+
 
 - (void)setData:(NSData *)data forKey:(NSString *)key
 {
@@ -156,6 +202,26 @@
     [_managedObjectContext save:&err];
 }
 
+- (void)setNIVector:(NIVector)vector forKey:(NSString *)key
+{
+    [self setObject:[NIStorageBox storageBoxWithVector:vector] forKey:key];
+}
+
+- (void)setNIAffineTransform:(NIAffineTransform)transform forKey:(NSString *)key
+{
+    [self setObject:[NIStorageBox storageBoxWithAffineTransform:transform] forKey:key];
+}
+
+- (void)setNIPlane:(NIPlane)plane forKey:(NSString *)key
+{
+    [self setObject:[NIStorageBox storageBoxWithPlane:plane] forKey:key];
+}
+
+- (void)setNILine:(NILine)line forKey:(NSString *)key
+{
+    [self setObject:[NIStorageBox storageBoxWithLine:line] forKey:key];
+}
+
 - (NSData *)dataForKey:(NSString *)key
 {
     NSError *err;
@@ -194,9 +260,9 @@
     NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
     for (NIStorageEntity *prevEntity in results) {
-        id object = [prevEntity objectValue];
-        if ([object isKindOfClass:aClass]) {
-            return [prevEntity objectValue];
+        id object = [prevEntity objectValueOfClass:aClass];
+        if (object) {
+            return object;
         }
     }
 
@@ -233,132 +299,76 @@
     return 0;
 }
 
+- (NIVector)NIVectorForKey:(NSString *)key
+{
+    NSError *err;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
+    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
-//
-//@synthesize location = _location;
-//
-//- (instancetype)initWithBundle:(NSBundle*)bundle {
-//    return [self initWithLocation:[self.class defaultLocationForBundle:bundle]];
-//}
-//
-//- (instancetype)initWithLocation:(NSURL*)location {
-//    if (!(self = [super init]))
-//        return nil;
-//    
-//    self.location = location;
-//    
-//    return self;
-//}
-//
-//- (void)dealloc {
-//    self.location = nil;
-//    [super dealloc];
-//}
-//
-//- (NSURL*)directoryForKey:(NSString*)keyPath {
-//    return [self directoryForKey:keyPath create:YES];
-//}
-//
-//- (NSURL*)directoryForKey:(NSString*)keyPath create:(BOOL)create {
-//    if (!keyPath)
-//        return nil;
-//    
-//    NSMutableArray* keyComponents = [NSMutableArray array];
-//    size_t ib = 0;
-//    for (size_t i = 1; i < keyPath.length; ++i)
-//        if ([keyPath characterAtIndex:i] == '.' && [keyPath characterAtIndex:i-1] != '\\') {
-//            [keyComponents addObject:[keyPath substringWithRange:NSMakeRange(ib, i-ib)]];
-//            ib = i+1;
-//        }
-//    if (ib != keyPath.length)
-//        [keyComponents addObject:[keyPath substringWithRange:NSMakeRange(ib, keyPath.length-ib)]];
-//    
-//    NSURL* url = self.location;
-//    for (NSString* keyComponent in keyComponents)
-//        url = [url URLByAppendingPathComponent:[keyComponent stringByReplacingOccurrencesOfString:@"\\." withString:@"."] isDirectory:YES];
-//    
-//    if (create)
-//        [[NSFileManager defaultManager] createDirectoryAtURL:url withIntermediateDirectories:YES attributes:nil error:NULL];
-//    
-//    return url;
-//}
-//
-//+ (NSURL*)defaultLocationForBundle:(NSBundle*)bundle {
-//    // find the NIStorageLocators
-//    Protocol* storageLocatorProtocol = NSProtocolFromString(@"NIStorageLocator"); // TODO: Is there a better way to obtain this Protocol*?
-//    int count = objc_getClassList(NULL, 0);
-//    Class c[count]; objc_getClassList(c, count);
-//    __GENERIC(NSMutableArray, Class)* NIStorageLocators = [NSMutableArray array];
-//    for (int i = 0; i < count; ++i) {
-//        if (class_conformsToProtocol(c[i], storageLocatorProtocol))
-//            [NIStorageLocators addObject:c[i]];
-//    }
-//    
-//    [NIStorageLocators sortUsingComparator:^NSComparisonResult(Class c1, Class c2) { // prioritize classes inside the bundle argument
-//        NSBundle *b1 = [NSBundle bundleForClass:c1], *b2 = [NSBundle bundleForClass:c2];
-//        if (b1 == b2) return NSOrderedSame;
-//        if (b1 == bundle) return NSOrderedAscending;
-//        if (b2 == bundle) return NSOrderedDescending;
-//        return NSOrderedSame;
-//    }];
-//    
-//    __GENERIC(NSMutableArray, NSBundle*)* bundles = [NSMutableArray arrayWithObject:NSBundle.mainBundle];
-//    if (bundle && ![bundles containsObject:bundle])
-//        [bundles addObject:bundle];
-//    
-//    static NSString* const CFBundleName = @"CFBundleName";
-//    NSError* err = nil;
-//    
-//    NSURL* dir = [[NSFileManager defaultManager] URLForDirectory:NSApplicationSupportDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:&err];
-//    if (err)
-//        @throw [NSException exceptionWithName:NSGenericException reason:@"Couldn't determine Application Support directory location" userInfo:@{ NSUnderlyingErrorKey: err }];
-//    
-//    for (NSBundle* bundle in bundles) {
-//        NSURL* bundleDir = nil;
-//        
-//        // locators method
-//        
-//        for (Class c in NIStorageLocators)
-//            @try {
-//                NSURL* ldir = [c NIStorageDefaultLocationForBundle:bundle];
-//                if (ldir) {
-//                    bundleDir = ldir;
-//                    break;
-//                }
-//            } @catch (...) {
-//                // do nothing
-//            }
-//        
-//        // default method
-//        
-//        if (!bundleDir) {
-//            __GENERIC(NSMutableArray, NSString*)* sdirs = [NSMutableArray array]; // regarding Library/Application Support, Apple switched their recommendation to BundleIdentifier instead of the application name a while ago. According to them all new apps should use the bundle identifier.
-//            [sdirs addObject:bundle.bundleIdentifier];
-//            NSString* bundleName = bundle.infoDictionary[CFBundleName];
-//            if (bundleName.length)
-//                [sdirs addObject:bundleName];
-//            else [sdirs addObject:[[bundle.bundleURL lastPathComponent] stringByDeletingPathExtension]];
-//
-//            for (NSString* sdir in sdirs) {
-//                NSURL* sdirDir = [dir URLByAppendingPathComponent:sdir isDirectory:YES];
-//                if ([sdirDir checkPromisedItemIsReachableAndReturnError:NULL]) {
-//                    bundleDir = sdirDir;
-//                    break;
-//                }
-//            }
-//            
-//            if (!bundleDir) {
-//                [NSFileManager.defaultManager createDirectoryAtURL:(bundleDir = [dir URLByAppendingPathComponent:sdirs[0] isDirectory:YES]) withIntermediateDirectories:YES attributes:nil error:&err];
-//                if (err)
-//                    @throw [NSException exceptionWithName:NSGenericException reason:@"Couldn't create Application Support directory" userInfo:@{ NSUnderlyingErrorKey: err }];
-//            }
-//        }
-//
-//        dir = bundleDir;
-//    }
-//    
-//    return dir;
-//}
+    for (NIStorageEntity *prevEntity in results) {
+        NIStorageBox *object = [prevEntity objectValueOfClass:[NIStorageBox class]];
+        if (object) {
+            return [object vector];
+        }
+    }
+
+    return NIVectorZero;
+}
+
+- (NIAffineTransform)NIAffineTransformForKey:(NSString *)key
+{
+    NSError *err;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
+
+    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+
+    for (NIStorageEntity *prevEntity in results) {
+        NIStorageBox *object = [prevEntity objectValueOfClass:[NIStorageBox class]];
+        if (object) {
+            return [object transform];
+        }
+    }
+
+    return NIAffineTransformIdentity;
+}
+
+- (NIPlane)NIPlaneForKey:(NSString *)key
+{
+    NSError *err;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
+
+    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+
+    for (NIStorageEntity *prevEntity in results) {
+        NIStorageBox *object = [prevEntity objectValueOfClass:[NIStorageBox class]];
+        if (object) {
+            return [object plane];
+        }
+    }
+
+    return NIPlaneInvalid;
+}
+
+- (NILine)NILineForKey:(NSString *)key
+{
+    NSError *err;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
+
+    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+
+    for (NIStorageEntity *prevEntity in results) {
+        NIStorageBox *object = [prevEntity objectValueOfClass:[NIStorageBox class]];
+        if (object) {
+            return [object line];
+        }
+    }
+
+    return NILineInvalid;
+}
 
 @end

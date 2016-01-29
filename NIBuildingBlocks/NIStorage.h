@@ -20,7 +20,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "NIGenerator.h"
+#import "NIGeometry.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -35,8 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)containsValueForKey:(NSString *)key;
 - (void)removeValueForKey:(NSString *)key;
 
-//- (nullable id)valueForKey:(NSString *)key;
-//- (void)setValue:(nullable id)value forKey:(NSString *)key;
+- (nullable id)valueForKey:(NSString *)key;
+- (void)setValue:(nullable id)value forKey:(NSString *)key;
 
 - (void)setData:(NSData *)data forKey:(NSString *)key;
 - (void)setString:(NSString *)string forKey:(NSString *)key;
@@ -44,12 +44,21 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setLongLong:(long long)number forKey:(NSString *)key;
 - (void)setDouble:(double)realv forKey:(NSString *)key;
 
+- (void)setNIVector:(NIVector)vector forKey:(NSString *)key;
+- (void)setNIAffineTransform:(NIAffineTransform)transform forKey:(NSString *)key;
+- (void)setNIPlane:(NIPlane)plane forKey:(NSString *)key;
+- (void)setNILine:(NILine)line forKey:(NSString *)key;
+
 - (nullable NSData *)dataForKey:(NSString *)key;
 - (nullable NSString *)stringForKey:(NSString *)key;
 - (nullable id)objectOfClass:(Class)aClass forKey:(NSString *)key;
 - (long long)longLongForKey:(NSString *)key;
 - (double)doubleForKey:(NSString *)key;
 
+- (NIVector)NIVectorForKey:(NSString *)key;
+- (NIAffineTransform)NIAffineTransformForKey:(NSString *)key;
+- (NIPlane)NIPlaneForKey:(NSString *)key;
+- (NILine)NILineForKey:(NSString *)key;
 
 // working with subdirectories
 //- (NIStorage *)storageForKeyPath:(NSString *)keyPath;

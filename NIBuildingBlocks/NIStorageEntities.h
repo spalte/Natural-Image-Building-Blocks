@@ -38,7 +38,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, readonly, retain) NSString* stringValue;
 @property (nullable, readonly, retain) NSData* dataValue;
-@property (nullable, readonly, retain) id<NSSecureCoding> objectValue;
+
+- (id)objectValueOfClass:(Class)objectClass;
+- (id)objectValueOfClasses:(NSSet<Class> *)classes;
+
 @property (readonly, assign) double doubleValue;
 @property (readonly, assign) long long longLongValue;
 

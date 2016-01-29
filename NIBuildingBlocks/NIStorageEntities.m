@@ -51,7 +51,6 @@
 
 @dynamic stringValue;
 @dynamic dataValue;
-@dynamic objectValue;
 @dynamic doubleValue;
 @dynamic longLongValue;
 
@@ -90,6 +89,7 @@
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:encodedObject];
     [archiver setRequiresSecureCoding:YES];
     [archiver encodeObject:object forKey:@"rootObject"];
+    [archiver finishEncoding];
 
     entity.encodedObject = encodedObject;
 
@@ -121,7 +121,6 @@
     return entity;
 }
 
-
 - (NSString *)stringValue
 {
     NSAssert(NO, @"NIStorageEntity is an abstract class");
@@ -129,12 +128,6 @@
 }
 
 - (NSData *)dataValue
-{
-    NSAssert(NO, @"NIStorageEntity is an abstract class");
-    return nil;
-}
-
-- (id<NSSecureCoding>)objectValue
 {
     NSAssert(NO, @"NIStorageEntity is an abstract class");
     return nil;
@@ -152,9 +145,15 @@
     return 0;
 }
 
+- (id)objectValueOfClass:(Class)objectClass
+{
+    return [self objectValueOfClasses:[NSSet setWithObject:objectClass]];
+}
 
-
-
+- (id)objectValueOfClasses:(NSSet<Class> *)classes
+{
+    return nil;
+}
 
 @end
 
@@ -173,11 +172,6 @@
     return nil;
 }
 
-- (id<NSSecureCoding>)objectValue
-{
-    return @(self.int64);
-}
-
 - (double)doubleValue
 {
     return (double)self.int64;
@@ -186,6 +180,17 @@
 - (long long)longLongValue
 {
     return (long long)self.int64;
+}
+
+- (id)objectValueOfClasses:(NSSet<Class> *)classes
+{
+    if ([classes containsObject:[NSNumber class]]) {
+        return @(self.int64);
+    } else if ([classes containsObject:[NSString class]]) {
+        return [@(self.int64) stringValue];
+    }
+
+    return nil;
 }
 
 @end
@@ -203,11 +208,6 @@
     return nil;
 }
 
-- (id<NSSecureCoding>)objectValue
-{
-    return @(self.realv);
-}
-
 - (double)doubleValue
 {
     return self.realv;
@@ -216,6 +216,17 @@
 - (long long)longLongValue
 {
     return (long long)self.realv;
+}
+
+- (id)objectValueOfClasses:(NSSet<Class> *)classes
+{
+    if ([classes containsObject:[NSNumber class]]) {
+        return @(self.realv);
+    } else if ([classes containsObject:[NSString class]]) {
+        return [@(self.realv) stringValue];
+    }
+
+    return nil;
 }
 
 @end
@@ -233,11 +244,6 @@
     return nil;
 }
 
-- (id<NSSecureCoding>)objectValue
-{
-    return self.string;
-}
-
 - (double)doubleValue
 {
     return [self.string doubleValue];
@@ -246,6 +252,19 @@
 - (long long)longLongValue
 {
     return [self.string longLongValue];
+}
+
+- (id)objectValueOfClasses:(NSSet<Class> *)classes
+{
+    if ([classes containsObject:[NSString class]]) {
+        return self.string;
+    } else if ([classes containsObject:[NSNumber class]]) {
+        NSNumberFormatter *formatter = [[[NSNumberFormatter alloc] init] autorelease];
+        formatter.numberStyle = NSNumberFormatterDecimalStyle;
+        return [formatter numberFromString:self.string];
+    }
+
+    return nil;
 }
 
 @end
@@ -263,11 +282,6 @@
     return self.data;
 }
 
-- (id<NSSecureCoding>)objectValue
-{
-    return self.data;
-}
-
 - (double)doubleValue
 {
     return 0;
@@ -276,6 +290,15 @@
 - (long long)longLongValue
 {
     return 0;
+}
+
+- (id)objectValueOfClasses:(NSSet<Class> *)classes
+{
+    if ([classes containsObject:[NSData class]]) {
+        return self.data;
+    }
+
+    return nil;
 }
 
 
@@ -290,11 +313,6 @@
 }
 
 - (NSData *)dataValue
-{
-    return nil;
-}
-
-- (id<NSSecureCoding>)objectValue
 {
     return nil;
 }
@@ -316,7 +334,7 @@
 
 - (NSString *)stringValue
 {
-    NSObject* objectValue = (NSObject*)self.objectValue;
+    id objectValue = [self objectValueOfClasses:[NSSet setWithObjects:[NSString class], [NSValue class], nil]];
 
     if ([objectValue isKindOfClass:[NSString class]]) {
         return (NSString *)objectValue;
@@ -329,7 +347,7 @@
 
 - (NSData *)dataValue
 {
-    NSObject* objectValue = (NSObject*)self.objectValue;
+    NSData* objectValue = [self objectValueOfClass:[NSData class]];
 
     if ([objectValue isKindOfClass:[NSData class]]) {
         return (NSData *)objectValue;
@@ -338,19 +356,41 @@
     return nil;
 }
 
-- (id<NSSecureCoding>)objectValue
+- (id)objectValueOfClass:(Class)objectClass
 {
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:self.encodedObject];
     [unarchiver setRequiresSecureCoding:YES];
 
-    id<NSSecureCoding>objectValue = [unarchiver decodeObjectForKey:@"rootObject"];
+    id<NSSecureCoding>objectValue = nil;
+    @try {
+        objectValue = [unarchiver decodeObjectOfClass:objectClass forKey:@"rootObject"];
+    }
+    @catch (NSException *exception) {
+    }
+
+    [unarchiver release];
+    return objectValue;
+}
+
+- (id)objectValueOfClasses:(NSSet<Class> *)classes;
+{
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:self.encodedObject];
+    [unarchiver setRequiresSecureCoding:YES];
+
+    id<NSSecureCoding>objectValue = nil;
+    @try {
+        objectValue = [unarchiver decodeObjectOfClasses:classes forKey:@"rootObject"];
+    }
+    @catch (NSException *exception) {
+    }
+
     [unarchiver release];
     return objectValue;
 }
 
 - (double)doubleValue
 {
-    NSObject* objectValue = (NSObject*)self.objectValue;
+    id objectValue = [self objectValueOfClasses:[NSSet setWithObjects:[NSString class], [NSValue class], nil]];
 
     if ([objectValue respondsToSelector:@selector(doubleValue)]) {
         NSInvocation *doubleValueInvocation = [NSInvocation invocationWithMethodSignature:[NSNumber methodSignatureForSelector:@selector(doubleValue)]];
@@ -366,7 +406,7 @@
 
 - (long long)longLongValue
 {
-    NSObject* objectValue = (NSObject*)self.objectValue;
+    id objectValue = [self objectValueOfClasses:[NSSet setWithObjects:[NSString class], [NSValue class], nil]];
 
     if ([objectValue respondsToSelector:@selector(longLongValue)]) {
         NSInvocation *longLongValueInvocation = [NSInvocation invocationWithMethodSignature:[NSNumber methodSignatureForSelector:@selector(longLongValue)]];

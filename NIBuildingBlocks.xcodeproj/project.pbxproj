@@ -81,6 +81,8 @@
 		4F4409B71B21A0F6006AC3B6 /* NIWindowingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4409B51B21A0F6006AC3B6 /* NIWindowingView.m */; };
 		4F4B28381BD022560033906D /* NIAgeFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4B28361BD022560033906D /* NIAgeFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F4B28391BD022560033906D /* NIAgeFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4B28371BD022560033906D /* NIAgeFormatter.m */; };
+		4F74037B1C5A87D9009C40D2 /* NIStorageBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F7403791C5A87D9009C40D2 /* NIStorageBox.h */; };
+		4F74037C1C5A87D9009C40D2 /* NIStorageBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F74037A1C5A87D9009C40D2 /* NIStorageBox.m */; };
 		4FCB58191C551C5E00718CCF /* NIStorageModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4FCB58171C551C5E00718CCF /* NIStorageModel.xcdatamodeld */; };
 		4FCB58AB1C5523F700718CCF /* NIStorageEntities.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FCB588F1C5523F700718CCF /* NIStorageEntities.h */; };
 		4FCB58AC1C5523F700718CCF /* NIStorageEntities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FCB58901C5523F700718CCF /* NIStorageEntities.m */; };
@@ -189,6 +191,8 @@
 		4F4409B51B21A0F6006AC3B6 /* NIWindowingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIWindowingView.m; sourceTree = "<group>"; };
 		4F4B28361BD022560033906D /* NIAgeFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIAgeFormatter.h; sourceTree = "<group>"; };
 		4F4B28371BD022560033906D /* NIAgeFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIAgeFormatter.m; sourceTree = "<group>"; };
+		4F7403791C5A87D9009C40D2 /* NIStorageBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIStorageBox.h; sourceTree = "<group>"; };
+		4F74037A1C5A87D9009C40D2 /* NIStorageBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIStorageBox.m; sourceTree = "<group>"; };
 		4FCB58181C551C5E00718CCF /* NIStorageModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NIStorageModel.xcdatamodel; sourceTree = "<group>"; };
 		4FCB588F1C5523F700718CCF /* NIStorageEntities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIStorageEntities.h; sourceTree = "<group>"; };
 		4FCB58901C5523F700718CCF /* NIStorageEntities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIStorageEntities.m; sourceTree = "<group>"; };
@@ -432,6 +436,8 @@
 			isa = PBXGroup;
 			children = (
 				4FCB58BA1C57D37900718CCF /* NIStorage+Private.h */,
+				4F7403791C5A87D9009C40D2 /* NIStorageBox.h */,
+				4F74037A1C5A87D9009C40D2 /* NIStorageBox.m */,
 				4FCB58171C551C5E00718CCF /* NIStorageModel.xcdatamodeld */,
 				4FCB588F1C5523F700718CCF /* NIStorageEntities.h */,
 				4FCB58901C5523F700718CCF /* NIStorageEntities.m */,
@@ -477,6 +483,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F151EE11B1CC8D000C8F767 /* NIBuildingBlocks.h in Headers */,
+				4F74037B1C5A87D9009C40D2 /* NIStorageBox.h in Headers */,
 				4F151F3E1B1CCB8E00C8F767 /* NIGenerator.h in Headers */,
 				4F151F181B1CCA2600C8F767 /* NIGeneratorRequestView.h in Headers */,
 				4F151F421B1CCB8E00C8F767 /* NIGeneratorRequest.h in Headers */,
@@ -635,6 +642,7 @@
 				4F4B28391BD022560033906D /* NIAgeFormatter.m in Sources */,
 				4F4409B71B21A0F6006AC3B6 /* NIWindowingView.m in Sources */,
 				4F151F081B1CCA1400C8F767 /* NIGeneratorRequestLayer.m in Sources */,
+				4F74037C1C5A87D9009C40D2 /* NIStorageBox.m in Sources */,
 				4F151F571B1CCC0100C8F767 /* NIStretchedOperation.m in Sources */,
 				4F151F431B1CCB8E00C8F767 /* NIGeneratorRequest.m in Sources */,
 				4F151F0C1B1CCA1400C8F767 /* NIAnnotationTextLayer.m in Sources */,
