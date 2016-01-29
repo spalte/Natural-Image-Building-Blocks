@@ -26,7 +26,10 @@ typedef NS_ENUM(NSUInteger, NIStorageBoxType) {
     NIStorageBoxVector = 0,
     NIStorageBoxAffineTransform,
     NIStorageBoxPlane,
-    NIStorageBoxLine
+    NIStorageBoxLine,
+    NIStorageBoxPoint,
+    NIStorageBoxSize,
+    NIStorageBoxRect
 };
 
 
@@ -37,19 +40,29 @@ typedef NS_ENUM(NSUInteger, NIStorageBoxType) {
     NIAffineTransform _transform;
     NIPlane _plane;
     NILine _line;
+    NSPoint _point;
+    NSSize _size;
+    NSRect _rect;
 }
 
 + (instancetype)storageBoxWithVector:(NIVector)vector;
 + (instancetype)storageBoxWithAffineTransform:(NIAffineTransform)transform;
 + (instancetype)storageBoxWithPlane:(NIPlane)plane;
 + (instancetype)storageBoxWithLine:(NILine)line;
++ (instancetype)storageBoxWithPoint:(NSPoint)point;
++ (instancetype)storageBoxWithSize:(NSSize)size;
++ (instancetype)storageBoxWithRect:(NSRect)rect;
 
 @property (nonatomic, readonly, assign) NIStorageBoxType type;
 @property (nonatomic, readonly, assign) NIVector vector;
 @property (nonatomic, readonly, assign) NIAffineTransform transform;
 @property (nonatomic, readonly, assign) NIPlane plane;
 @property (nonatomic, readonly, assign) NILine line;
+@property (nonatomic, readonly, assign) NSPoint point;
+@property (nonatomic, readonly, assign) NSSize size;
+@property (nonatomic, readonly, assign) NSRect rect;
 
 - (id)value;
+- (NSString *)stringValue;
 
 @end

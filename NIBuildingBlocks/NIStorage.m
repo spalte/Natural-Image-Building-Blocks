@@ -112,6 +112,12 @@
             [self setNIPlane:[(NSValue *)value NIPlaneValue] forKey:key];
         } else if (strcmp([value objCType], @encode(NILine)) == 0) {
             [self setNILine:[(NSValue *)value NILineValue] forKey:key];
+        } else if (strcmp([value objCType], @encode(NSPoint)) == 0) {
+            [self setPoint:[(NSValue *)value pointValue] forKey:key];
+        } else if (strcmp([value objCType], @encode(NSSize)) == 0) {
+            [self setSize:[(NSValue *)value sizeValue] forKey:key];
+        } else if (strcmp([value objCType], @encode(NSRect)) == 0) {
+            [self setRect:[(NSValue *)value rectValue] forKey:key];
         }
     }
 }
@@ -185,6 +191,11 @@
     [_managedObjectContext save:&err];
 }
 
+- (void)setInteger:(NSInteger)integer forKey:(NSString *)key
+{
+    [self setLongLong:(long long)integer forKey:key];
+}
+
 - (void)setDouble:(double)realv forKey:(NSString *)key
 {
     NSError *err;
@@ -220,6 +231,21 @@
 - (void)setNILine:(NILine)line forKey:(NSString *)key
 {
     [self setObject:[NIStorageBox storageBoxWithLine:line] forKey:key];
+}
+
+- (void)setPoint:(NSPoint)point forKey:(NSString *)key
+{
+    [self setObject:[NIStorageBox storageBoxWithPoint:point] forKey:key];
+}
+
+- (void)setSize:(NSSize)size forKey:(NSString *)key
+{
+    [self setObject:[NIStorageBox storageBoxWithSize:size] forKey:key];
+}
+
+- (void)setRect:(NSRect)rect forKey:(NSString *)key
+{
+    [self setObject:[NIStorageBox storageBoxWithRect:rect] forKey:key];
 }
 
 - (NSData *)dataForKey:(NSString *)key
@@ -282,6 +308,11 @@
     }
 
     return 0;
+}
+
+- (NSInteger)integerForKey:(NSString *)key
+{
+    return (NSInteger)[self longLongForKey:key];
 }
 
 - (double)doubleForKey:(NSString *)key
@@ -370,5 +401,60 @@
 
     return NILineInvalid;
 }
+
+- (NSPoint)pointForKey:(NSString *)key
+{
+    NSError *err;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
+
+    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+
+    for (NIStorageEntity *prevEntity in results) {
+        NIStorageBox *object = [prevEntity objectValueOfClass:[NIStorageBox class]];
+        if (object) {
+            return [object point];
+        }
+    }
+
+    return NSZeroPoint;
+}
+
+- (NSSize)sizeForKey:(NSString *)key
+{
+    NSError *err;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
+
+    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+
+    for (NIStorageEntity *prevEntity in results) {
+        NIStorageBox *object = [prevEntity objectValueOfClass:[NIStorageBox class]];
+        if (object) {
+            return [object size];
+        }
+    }
+
+    return NSZeroSize;
+}
+
+- (NSRect)rectForKey:(NSString *)key
+{
+    NSError *err;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
+
+    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+
+    for (NIStorageEntity *prevEntity in results) {
+        NIStorageBox *object = [prevEntity objectValueOfClass:[NIStorageBox class]];
+        if (object) {
+            return [object rect];
+        }
+    }
+
+    return NSZeroRect;
+}
+
 
 @end

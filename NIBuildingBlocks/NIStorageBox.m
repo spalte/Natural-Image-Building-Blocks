@@ -28,6 +28,10 @@
 @property (nonatomic, readwrite, assign) NIAffineTransform transform;
 @property (nonatomic, readwrite, assign) NIPlane plane;
 @property (nonatomic, readwrite, assign) NILine line;
+@property (nonatomic, readwrite, assign) NSPoint point;
+@property (nonatomic, readwrite, assign) NSSize size;
+@property (nonatomic, readwrite, assign) NSRect rect;
+
 @end
 
 
@@ -37,6 +41,9 @@
 @synthesize transform = _transform;
 @synthesize plane = _plane;
 @synthesize line = _line;
+@synthesize point = _point;
+@synthesize size = _size;
+@synthesize rect = _rect;
 
 + (BOOL)supportsSecureCoding
 {
@@ -75,6 +82,30 @@
     return box;
 }
 
++ (instancetype)storageBoxWithPoint:(NSPoint)point
+{
+    NIStorageBox *box = [[[NIStorageBox alloc] init] autorelease];
+    box.type = NIStorageBoxPoint;
+    box.point = point;
+    return box;
+}
+
++ (instancetype)storageBoxWithSize:(NSSize)size
+{
+    NIStorageBox *box = [[[NIStorageBox alloc] init] autorelease];
+    box.type = NIStorageBoxSize;
+    box.size = size;
+    return box;
+}
+
++ (instancetype)storageBoxWithRect:(NSRect)rect
+{
+    NIStorageBox *box = [[[NIStorageBox alloc] init] autorelease];
+    box.type = NIStorageBoxRect;
+    box.rect = rect;
+    return box;
+}
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     if ( (self = [super init]) ) {
@@ -99,6 +130,21 @@
             case NIStorageBoxLine:
             {
                 self.line = [aDecoder decodeNILineForKey:@"line"];
+                break;
+            }
+            case NIStorageBoxPoint:
+            {
+                self.point = [aDecoder decodePointForKey:@"point"];
+                break;
+            }
+            case NIStorageBoxSize:
+            {
+                self.size = [aDecoder decodeSizeForKey:@"size"];
+                break;
+            }
+            case NIStorageBoxRect:
+            {
+                self.rect = [aDecoder decodeRectForKey:@"rect"];
                 break;
             }
         }
@@ -132,12 +178,26 @@
             [aCoder encodeNILine:self.line forKey:@"line"];
             break;
         }
+        case NIStorageBoxPoint:
+        {
+            [aCoder encodePoint:self.point forKey:@"point"];
+            break;
+        }
+        case NIStorageBoxSize:
+        {
+            [aCoder encodeSize:self.size forKey:@"size"];
+            break;
+        }
+        case NIStorageBoxRect:
+        {
+            [aCoder encodeRect:self.rect forKey:@"rect"];
+            break;
+        }
     }
 }
 
 - (id)value
 {
-
     switch (self.type) {
         case NIStorageBoxVector:
             return [NSValue valueWithNIVector:self.vector];
@@ -147,7 +207,35 @@
             return [NSValue valueWithNIPlane:self.plane];
         case NIStorageBoxLine:
             return [NSValue valueWithNILine:self.line];
+        case NIStorageBoxPoint:
+            return [NSValue valueWithPoint:self.point];
+        case NIStorageBoxSize:
+            return [NSValue valueWithSize:self.size];
+        case NIStorageBoxRect:
+            return [NSValue valueWithRect:self.rect];
     }
+    return nil;
+}
+
+- (NSString *)stringValue
+{
+    switch (self.type) {
+        case NIStorageBoxVector:
+            return NSStringFromNIVector(self.vector);
+        case NIStorageBoxAffineTransform:
+            return NSStringFromNIAffineTransform(self.transform);
+        case NIStorageBoxPlane:
+            return NSStringFromNIPlane(self.plane);
+        case NIStorageBoxLine:
+            return NSStringFromNILine(self.line);
+        case NIStorageBoxPoint:
+            return NSStringFromPoint(self.point);
+        case NIStorageBoxSize:
+            return NSStringFromSize(self.size);
+        case NIStorageBoxRect:
+            return NSStringFromRect(self.rect);
+    }
+    return nil;
 }
 
 @end

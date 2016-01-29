@@ -123,25 +123,21 @@
 
 - (NSString *)stringValue
 {
-    NSAssert(NO, @"NIStorageEntity is an abstract class");
     return nil;
 }
 
 - (NSData *)dataValue
 {
-    NSAssert(NO, @"NIStorageEntity is an abstract class");
     return nil;
 }
 
 - (double)doubleValue
 {
-    NSAssert(NO, @"NIStorageEntity is an abstract class");
     return 0;
 }
 
 - (long long)longLongValue
 {
-    NSAssert(NO, @"NIStorageEntity is an abstract class");
     return 0;
 }
 
@@ -165,11 +161,6 @@
 - (NSString *)stringValue
 {
     return [@(self.int64) stringValue];
-}
-
-- (NSData *)dataValue
-{
-    return nil;
 }
 
 - (double)doubleValue
@@ -203,11 +194,6 @@
     return [@(self.realv) stringValue];
 }
 
-- (NSData *)dataValue
-{
-    return nil;
-}
-
 - (double)doubleValue
 {
     return self.realv;
@@ -239,11 +225,6 @@
     return self.string;
 }
 
-- (NSData *)dataValue
-{
-    return nil;
-}
-
 - (double)doubleValue
 {
     return [self.string doubleValue];
@@ -271,11 +252,6 @@
 
 @implementation NIStorageSmallDataEntity
 @dynamic data;
-
-- (NSString *)stringValue
-{
-    return nil;
-}
 
 - (NSData *)dataValue
 {
@@ -361,7 +337,7 @@
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:self.encodedObject];
     [unarchiver setRequiresSecureCoding:YES];
 
-    id<NSSecureCoding>objectValue = nil;
+    id objectValue = nil;
     @try {
         objectValue = [unarchiver decodeObjectOfClass:objectClass forKey:@"rootObject"];
     }
@@ -377,7 +353,7 @@
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:self.encodedObject];
     [unarchiver setRequiresSecureCoding:YES];
 
-    id<NSSecureCoding>objectValue = nil;
+    id objectValue = nil;
     @try {
         objectValue = [unarchiver decodeObjectOfClasses:classes forKey:@"rootObject"];
     }

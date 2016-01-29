@@ -41,6 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setData:(NSData *)data forKey:(NSString *)key;
 - (void)setString:(NSString *)string forKey:(NSString *)key;
 - (void)setObject:(id<NSSecureCoding>)object forKey:(NSString *)aKey;
+- (void)setInteger:(NSInteger)integer forKey:(NSString *)key;
 - (void)setLongLong:(long long)number forKey:(NSString *)key;
 - (void)setDouble:(double)realv forKey:(NSString *)key;
 
@@ -49,16 +50,26 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setNIPlane:(NIPlane)plane forKey:(NSString *)key;
 - (void)setNILine:(NILine)line forKey:(NSString *)key;
 
+- (void)setPoint:(NSPoint)point forKey:(NSString *)key;
+- (void)setSize:(NSSize)size forKey:(NSString *)key;
+- (void)setRect:(NSRect)rect forKey:(NSString *)key;
+
 - (nullable NSData *)dataForKey:(NSString *)key;
 - (nullable NSString *)stringForKey:(NSString *)key;
 - (nullable id)objectOfClass:(Class)aClass forKey:(NSString *)key;
 - (long long)longLongForKey:(NSString *)key;
+- (NSInteger)integerForKey:(NSString *)key;
 - (double)doubleForKey:(NSString *)key;
 
 - (NIVector)NIVectorForKey:(NSString *)key;
 - (NIAffineTransform)NIAffineTransformForKey:(NSString *)key;
 - (NIPlane)NIPlaneForKey:(NSString *)key;
 - (NILine)NILineForKey:(NSString *)key;
+
+- (NSPoint)pointForKey:(NSString *)key;
+- (NSSize)sizeForKey:(NSString *)key;
+- (NSRect)rectForKey:(NSString *)key;
+
 
 // working with subdirectories
 //- (NIStorage *)storageForKeyPath:(NSString *)keyPath;
