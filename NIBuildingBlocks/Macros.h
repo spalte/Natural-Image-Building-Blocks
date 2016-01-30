@@ -3,7 +3,7 @@
 //  NIBuildingBlocks
 //
 //  Created by Alessandro Volz on 17/12/15.
-//  Copyright (c) 2015 volz.io. All rights reserved.
+//  Copyright (c) 2016 volz.io. All rights reserved.
 //
 
 #ifndef NIMPR_Macros_h

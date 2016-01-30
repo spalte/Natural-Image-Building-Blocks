@@ -1,6 +1,6 @@
-//  Copyright (c) 2015 OsiriX Foundation
-//  Copyright (c) 2015 Spaltenstein Natural Image
-//  Copyright (c) 2015 volz.io
+//  Copyright (c) 2016 OsiriX Foundation
+//  Copyright (c) 2016 Spaltenstein Natural Image
+//  Copyright (c) 2016 volz.io
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
