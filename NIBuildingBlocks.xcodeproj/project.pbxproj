@@ -7,26 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		31B35D8E1C22FDEF0067DA37 /* Macros.h in Headers */ = {isa = PBXBuildFile; fileRef = 31B35D8D1C22FBAC0067DA37 /* Macros.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		31B35D8E1C22FDEF0067DA37 /* Macros.h in Headers */ = {isa = PBXBuildFile; fileRef = 31B35D8D1C22FBAC0067DA37 /* Macros.h */; };
 		4F0727E11B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F0727DF1B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F0727E21B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0727E01B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.m */; };
 		4F094E721B2455C20009297A /* ContrastTemplate@2x.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 4F094E711B2455C20009297A /* ContrastTemplate@2x.tiff */; };
 		4F094E741B24578D0009297A /* ContrastTemplate.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 4F094E731B24578D0009297A /* ContrastTemplate.tiff */; };
 		4F151EE11B1CC8D000C8F767 /* NIBuildingBlocks.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151EE01B1CC8D000C8F767 /* NIBuildingBlocks.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4F151F071B1CCA1400C8F767 /* NIGeneratorRequestLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151EF81B1CCA1400C8F767 /* NIGeneratorRequestLayer.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F071B1CCA1400C8F767 /* NIGeneratorRequestLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151EF81B1CCA1400C8F767 /* NIGeneratorRequestLayer.h */; };
 		4F151F081B1CCA1400C8F767 /* NIGeneratorRequestLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151EF91B1CCA1400C8F767 /* NIGeneratorRequestLayer.m */; };
-		4F151F091B1CCA1400C8F767 /* NIOrientationTextLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151EFA1B1CCA1400C8F767 /* NIOrientationTextLayer.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		4F151F0B1B1CCA1400C8F767 /* NIAnnotationTextLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151EFC1B1CCA1400C8F767 /* NIAnnotationTextLayer.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F091B1CCA1400C8F767 /* NIOrientationTextLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151EFA1B1CCA1400C8F767 /* NIOrientationTextLayer.h */; };
+		4F151F0B1B1CCA1400C8F767 /* NIAnnotationTextLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151EFC1B1CCA1400C8F767 /* NIAnnotationTextLayer.h */; };
 		4F151F0C1B1CCA1400C8F767 /* NIAnnotationTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151EFD1B1CCA1400C8F767 /* NIAnnotationTextLayer.m */; };
-		4F151F0D1B1CCA1400C8F767 /* NIObliqueSliceIntersectionLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151EFE1B1CCA1400C8F767 /* NIObliqueSliceIntersectionLayer.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F0D1B1CCA1400C8F767 /* NIObliqueSliceIntersectionLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151EFE1B1CCA1400C8F767 /* NIObliqueSliceIntersectionLayer.h */; };
 		4F151F0E1B1CCA1400C8F767 /* NIObliqueSliceIntersectionLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151EFF1B1CCA1400C8F767 /* NIObliqueSliceIntersectionLayer.m */; };
-		4F151F0F1B1CCA1400C8F767 /* NIScaleBarLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F001B1CCA1400C8F767 /* NIScaleBarLayer.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F0F1B1CCA1400C8F767 /* NIScaleBarLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F001B1CCA1400C8F767 /* NIScaleBarLayer.h */; };
 		4F151F101B1CCA1400C8F767 /* NIScaleBarLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F011B1CCA1400C8F767 /* NIScaleBarLayer.m */; };
-		4F151F111B1CCA1400C8F767 /* NIMouseBullseyeLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F021B1CCA1400C8F767 /* NIMouseBullseyeLayer.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F111B1CCA1400C8F767 /* NIMouseBullseyeLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F021B1CCA1400C8F767 /* NIMouseBullseyeLayer.h */; };
 		4F151F121B1CCA1400C8F767 /* NIMouseBullseyeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F031B1CCA1400C8F767 /* NIMouseBullseyeLayer.m */; };
-		4F151F131B1CCA1400C8F767 /* NIIntersectionPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F041B1CCA1400C8F767 /* NIIntersectionPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		4F151F141B1CCA1400C8F767 /* NISpritePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F051B1CCA1400C8F767 /* NISpritePrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		4F151F151B1CCA1400C8F767 /* NIVolumeDataPropertiesPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F061B1CCA1400C8F767 /* NIVolumeDataPropertiesPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F131B1CCA1400C8F767 /* NIIntersectionPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F041B1CCA1400C8F767 /* NIIntersectionPrivate.h */; };
+		4F151F141B1CCA1400C8F767 /* NISpritePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F051B1CCA1400C8F767 /* NISpritePrivate.h */; };
+		4F151F151B1CCA1400C8F767 /* NIVolumeDataPropertiesPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F061B1CCA1400C8F767 /* NIVolumeDataPropertiesPrivate.h */; };
 		4F151F181B1CCA2600C8F767 /* NIGeneratorRequestView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F161B1CCA2600C8F767 /* NIGeneratorRequestView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F191B1CCA2600C8F767 /* NIGeneratorRequestView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F171B1CCA2600C8F767 /* NIGeneratorRequestView.m */; };
 		4F151F211B1CCA6200C8F767 /* NIVolumeDataProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F1B1B1CCA6200C8F767 /* NIVolumeDataProperties.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -43,19 +43,19 @@
 		4F151F371B1CCB6900C8F767 /* NIGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F351B1CCB6900C8F767 /* NIGeometry.m */; };
 		4F151F3E1B1CCB8E00C8F767 /* NIGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F381B1CCB8E00C8F767 /* NIGenerator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F3F1B1CCB8E00C8F767 /* NIGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F391B1CCB8E00C8F767 /* NIGenerator.m */; };
-		4F151F401B1CCB8E00C8F767 /* NIGeneratorOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F3A1B1CCB8E00C8F767 /* NIGeneratorOperation.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F401B1CCB8E00C8F767 /* NIGeneratorOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F3A1B1CCB8E00C8F767 /* NIGeneratorOperation.h */; };
 		4F151F411B1CCB8E00C8F767 /* NIGeneratorOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F3B1B1CCB8E00C8F767 /* NIGeneratorOperation.m */; };
 		4F151F421B1CCB8E00C8F767 /* NIGeneratorRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F3C1B1CCB8E00C8F767 /* NIGeneratorRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F431B1CCB8E00C8F767 /* NIGeneratorRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F3D1B1CCB8E00C8F767 /* NIGeneratorRequest.m */; };
-		4F151F4E1B1CCC0100C8F767 /* NIHorizontalFillOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F441B1CCC0100C8F767 /* NIHorizontalFillOperation.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F4E1B1CCC0100C8F767 /* NIHorizontalFillOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F441B1CCC0100C8F767 /* NIHorizontalFillOperation.h */; };
 		4F151F4F1B1CCC0100C8F767 /* NIHorizontalFillOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F451B1CCC0100C8F767 /* NIHorizontalFillOperation.m */; };
-		4F151F501B1CCC0100C8F767 /* NIObliqueSliceOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F461B1CCC0100C8F767 /* NIObliqueSliceOperation.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F501B1CCC0100C8F767 /* NIObliqueSliceOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F461B1CCC0100C8F767 /* NIObliqueSliceOperation.h */; };
 		4F151F511B1CCC0100C8F767 /* NIObliqueSliceOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F471B1CCC0100C8F767 /* NIObliqueSliceOperation.m */; };
-		4F151F521B1CCC0100C8F767 /* NIProjectionOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F481B1CCC0100C8F767 /* NIProjectionOperation.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F521B1CCC0100C8F767 /* NIProjectionOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F481B1CCC0100C8F767 /* NIProjectionOperation.h */; };
 		4F151F531B1CCC0100C8F767 /* NIProjectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F491B1CCC0100C8F767 /* NIProjectionOperation.m */; };
-		4F151F541B1CCC0100C8F767 /* NIStraightenedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F4A1B1CCC0100C8F767 /* NIStraightenedOperation.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F541B1CCC0100C8F767 /* NIStraightenedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F4A1B1CCC0100C8F767 /* NIStraightenedOperation.h */; };
 		4F151F551B1CCC0100C8F767 /* NIStraightenedOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F4B1B1CCC0100C8F767 /* NIStraightenedOperation.m */; };
-		4F151F561B1CCC0100C8F767 /* NIStretchedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F4C1B1CCC0100C8F767 /* NIStretchedOperation.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F151F561B1CCC0100C8F767 /* NIStretchedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F4C1B1CCC0100C8F767 /* NIStretchedOperation.h */; };
 		4F151F571B1CCC0100C8F767 /* NIStretchedOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F4D1B1CCC0100C8F767 /* NIStretchedOperation.m */; };
 		4F151F5A1B1CCC6D00C8F767 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F151F591B1CCC6D00C8F767 /* OpenGL.framework */; };
 		4F151F5C1B1CCC7600C8F767 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F151F5B1B1CCC7600C8F767 /* QuartzCore.framework */; };
@@ -77,7 +77,8 @@
 		4F151F941B1CFB3700C8F767 /* NIAnnularPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F921B1CFB3700C8F767 /* NIAnnularPath.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F951B1CFB3700C8F767 /* NIAnnularPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F931B1CFB3700C8F767 /* NIAnnularPath.m */; };
 		4F1E60981B20D54F0053A79F /* NIWindowLevelWindowWidthToolbarItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F1E60971B20D54F0053A79F /* NIWindowLevelWindowWidthToolbarItem.xib */; };
-		4F4409B61B21A0F6006AC3B6 /* NIWindowingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4409B41B21A0F6006AC3B6 /* NIWindowingView.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F2EEA611C5C348200DF2227 /* NIStorage+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FCB58BA1C57D37900718CCF /* NIStorage+Private.h */; };
+		4F4409B61B21A0F6006AC3B6 /* NIWindowingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4409B41B21A0F6006AC3B6 /* NIWindowingView.h */; };
 		4F4409B71B21A0F6006AC3B6 /* NIWindowingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4409B51B21A0F6006AC3B6 /* NIWindowingView.m */; };
 		4F4B28381BD022560033906D /* NIAgeFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4B28361BD022560033906D /* NIAgeFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F4B28391BD022560033906D /* NIAgeFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4B28371BD022560033906D /* NIAgeFormatter.m */; };
@@ -88,7 +89,7 @@
 		4FCB58AC1C5523F700718CCF /* NIStorageEntities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FCB58901C5523F700718CCF /* NIStorageEntities.m */; };
 		4FCB58B71C568F8000718CCF /* NIStorageCoordinator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FCB58B51C568F8000718CCF /* NIStorageCoordinator.h */; };
 		4FCB58B81C568F8000718CCF /* NIStorageCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FCB58B61C568F8000718CCF /* NIStorageCoordinator.m */; };
-		4FF07D901B24C30D00380630 /* NITextLabelGroupLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF07D8E1B24C30D00380630 /* NITextLabelGroupLayer.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4FF07D901B24C30D00380630 /* NITextLabelGroupLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF07D8E1B24C30D00380630 /* NITextLabelGroupLayer.h */; };
 		4FF07D911B24C30D00380630 /* NITextLabelGroupLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D8F1B24C30D00380630 /* NITextLabelGroupLayer.m */; };
 		7106843F1B678D800078903A /* NIMask.h in Headers */ = {isa = PBXBuildFile; fileRef = 7106843D1B678D800078903A /* NIMask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		710684401B678D800078903A /* NIMask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7106843E1B678D800078903A /* NIMask.m */; };
@@ -495,7 +496,6 @@
 				4F151F291B1CCA8D00C8F767 /* NIFloatImageRep.h in Headers */,
 				4F151F781B1CD35600C8F767 /* NIUnsignedInt16ImageRep.h in Headers */,
 				4F151F361B1CCB6900C8F767 /* NIGeometry.h in Headers */,
-				31B35D8E1C22FDEF0067DA37 /* Macros.h in Headers */,
 				4F151F711B1CCFDA00C8F767 /* NIBezierCoreAdditions.h in Headers */,
 				4F151F731B1CCFDA00C8F767 /* NIBezierPath.h in Headers */,
 				4F151F211B1CCA6200C8F767 /* NIVolumeDataProperties.h in Headers */,
@@ -506,26 +506,28 @@
 				71DFA2CA1B6FC77E008AB997 /* NIMaskData.h in Headers */,
 				4F4B28381BD022560033906D /* NIAgeFormatter.h in Headers */,
 				4FCB58AB1C5523F700718CCF /* NIStorageEntities.h in Headers */,
-				4F0727E11B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.h in Headers */,
-				7194D0871BE0EE3A00563DEC /* NIStorage.h in Headers */,
 				4F151F071B1CCA1400C8F767 /* NIGeneratorRequestLayer.h in Headers */,
-				4F151F0F1B1CCA1400C8F767 /* NIScaleBarLayer.h in Headers */,
-				4F151F141B1CCA1400C8F767 /* NISpritePrivate.h in Headers */,
-				4F151F0B1B1CCA1400C8F767 /* NIAnnotationTextLayer.h in Headers */,
-				4F151F091B1CCA1400C8F767 /* NIOrientationTextLayer.h in Headers */,
+				4F0727E11B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.h in Headers */,
+				4FF07D901B24C30D00380630 /* NITextLabelGroupLayer.h in Headers */,
+				7194D0871BE0EE3A00563DEC /* NIStorage.h in Headers */,
 				4F151F0D1B1CCA1400C8F767 /* NIObliqueSliceIntersectionLayer.h in Headers */,
-				4F151F151B1CCA1400C8F767 /* NIVolumeDataPropertiesPrivate.h in Headers */,
+				4F151F091B1CCA1400C8F767 /* NIOrientationTextLayer.h in Headers */,
+				4F151F0B1B1CCA1400C8F767 /* NIAnnotationTextLayer.h in Headers */,
+				4F151F0F1B1CCA1400C8F767 /* NIScaleBarLayer.h in Headers */,
 				4F151F111B1CCA1400C8F767 /* NIMouseBullseyeLayer.h in Headers */,
 				4F151F501B1CCC0100C8F767 /* NIObliqueSliceOperation.h in Headers */,
+				4F151F401B1CCB8E00C8F767 /* NIGeneratorOperation.h in Headers */,
+				4FCB58B71C568F8000718CCF /* NIStorageCoordinator.h in Headers */,
+				4F151F561B1CCC0100C8F767 /* NIStretchedOperation.h in Headers */,
+				4F2EEA611C5C348200DF2227 /* NIStorage+Private.h in Headers */,
+				4F151F141B1CCA1400C8F767 /* NISpritePrivate.h in Headers */,
+				4F151F151B1CCA1400C8F767 /* NIVolumeDataPropertiesPrivate.h in Headers */,
+				4F151F131B1CCA1400C8F767 /* NIIntersectionPrivate.h in Headers */,
+				31B35D8E1C22FDEF0067DA37 /* Macros.h in Headers */,
 				4F151F521B1CCC0100C8F767 /* NIProjectionOperation.h in Headers */,
 				4F151F541B1CCC0100C8F767 /* NIStraightenedOperation.h in Headers */,
-				4FCB58B71C568F8000718CCF /* NIStorageCoordinator.h in Headers */,
-				4F151F401B1CCB8E00C8F767 /* NIGeneratorOperation.h in Headers */,
 				4F151F4E1B1CCC0100C8F767 /* NIHorizontalFillOperation.h in Headers */,
 				4F4409B61B21A0F6006AC3B6 /* NIWindowingView.h in Headers */,
-				4F151F561B1CCC0100C8F767 /* NIStretchedOperation.h in Headers */,
-				4FF07D901B24C30D00380630 /* NITextLabelGroupLayer.h in Headers */,
-				4F151F131B1CCA1400C8F767 /* NIIntersectionPrivate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -733,7 +735,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
@@ -779,7 +781,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;

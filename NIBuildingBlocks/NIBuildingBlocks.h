@@ -28,7 +28,6 @@ FOUNDATION_EXPORT double NIBuildingBlocksVersionNumber;
 FOUNDATION_EXPORT const unsigned char NIBuildingBlocksVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <NIBuildingBlocks/PublicHeader.h>
-#import <NIBuildingBlocks/Macros.h>
 #import <NIBuildingBlocks/NIGenerator.h>
 #import <NIBuildingBlocks/NIGeneratorRequestView.h>
 #import <NIBuildingBlocks/NIGeneratorRequest.h>
