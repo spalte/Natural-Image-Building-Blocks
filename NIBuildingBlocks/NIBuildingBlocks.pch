@@ -50,7 +50,6 @@
 #ifdef __OBJC__ // actual NIBuildingBlocks includes
 
 #import <Cocoa/Cocoa.h>
-#import "Macros.h"
 
 #endif
 
