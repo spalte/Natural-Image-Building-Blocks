@@ -2,8 +2,8 @@
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="6300" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9531"/>
+        <capability name="box content view" minToolsVersion="7.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NIWindowLevelWindowWidthToolbarItem">
@@ -31,7 +31,7 @@
             <subviews>
                 <box autoresizesSubviews="NO" title="Box" boxType="secondary" borderType="line" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="OwY-pl-UUY">
                     <rect key="frame" x="9" y="8" width="202" height="202"/>
-                    <view key="contentView">
+                    <view key="contentView" id="NdS-W9-W39">
                         <rect key="frame" x="1" y="1" width="200" height="200"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -56,10 +56,10 @@
                         </subviews>
                     </view>
                     <constraints>
-                        <constraint firstItem="3Sw-3Y-n5T" firstAttribute="top" secondItem="OwY-pl-UUY" secondAttribute="top" id="MfA-1q-3fc"/>
-                        <constraint firstAttribute="bottom" secondItem="3Sw-3Y-n5T" secondAttribute="bottom" id="gKu-mj-IW1"/>
-                        <constraint firstAttribute="trailing" secondItem="3Sw-3Y-n5T" secondAttribute="trailing" id="u1p-Hy-zab"/>
-                        <constraint firstItem="3Sw-3Y-n5T" firstAttribute="leading" secondItem="OwY-pl-UUY" secondAttribute="leading" id="y3Z-8a-KjQ"/>
+                        <constraint firstAttribute="trailing" secondItem="3Sw-3Y-n5T" secondAttribute="trailing" id="7nW-PZ-xVk"/>
+                        <constraint firstItem="3Sw-3Y-n5T" firstAttribute="top" secondItem="OwY-pl-UUY" secondAttribute="top" id="OT2-1G-uRm"/>
+                        <constraint firstItem="3Sw-3Y-n5T" firstAttribute="leading" secondItem="OwY-pl-UUY" secondAttribute="leading" id="QNp-WX-PRT"/>
+                        <constraint firstAttribute="bottom" secondItem="3Sw-3Y-n5T" secondAttribute="bottom" id="rNI-3s-dNi"/>
                     </constraints>
                     <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
