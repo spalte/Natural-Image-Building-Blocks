@@ -52,6 +52,9 @@ NIGeometry.h defines 3D types such as NIVector, NILine, NIPlane, NIAffineTransfo
 **NIBezierPath**  
 NIBezierPath defines a 3D path made of piecewise line and cubic bezier segments. The API is meant to be similar to that of NSBezierPath.
 
+**NIStorage**
+NIStorage provides a simple mechanism to store small amounts of data locally using a key-value mechanism.
+
 **OsiriXIntegration**  
 OsiriXIntegration.h defines functions that are available when the Framework is loaded in the context of an OsiriX Plugin. Upon initialization, the plugin will determine if OsiriX classes exist in the Obj-C runtime, and if so, will install a handful of functions that will be useful to plugin authors. For example, getting a NIVolumeData that represents the data displayed by a ViewerController. 
 
