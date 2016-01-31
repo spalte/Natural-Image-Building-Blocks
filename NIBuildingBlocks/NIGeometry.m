@@ -1428,11 +1428,11 @@ NIAffineTransform NIAffineTransformMakeFromOpenGLMatrixf(float *f) // f better b
     NIAffineTransform transform = NIAffineTransformIdentity;
     NSDictionary *dict = [self decodeObjectOfClass:[NSDictionary class] forKey:key];
     if (dict == nil) {
-        [NSException raise:@"OSIDecode" format:@"No Dictionary when decoding NIAffineTranform"];
+        [NSException raise:@"NIDecode" format:@"No Dictionary when decoding NIAffineTranform"];
     }
 
     if (NIAffineTransformMakeWithDictionaryRepresentation((CFDictionaryRef)dict, &transform) == NO) {
-        [NSException raise:@"OSIDecode" format:@"Dictionary did not contain an NIAffineTranform"];
+        [NSException raise:@"NIDecode" format:@"Dictionary did not contain an NIAffineTranform"];
     }
     return transform;
 }
@@ -1442,11 +1442,11 @@ NIAffineTransform NIAffineTransformMakeFromOpenGLMatrixf(float *f) // f better b
     NIVector vector = NIVectorZero;
     NSDictionary *dict = [self decodeObjectOfClass:[NSDictionary class] forKey:key];
     if (dict == nil) {
-        [NSException raise:@"OSIDecode" format:@"No Dictionary when decoding NIVector"];
+        [NSException raise:@"NIDecode" format:@"No Dictionary when decoding NIVector"];
     }
 
     if (NIVectorMakeWithDictionaryRepresentation((CFDictionaryRef)dict, &vector) == NO) {
-        [NSException raise:@"OSIDecode" format:@"Dictionary did not contain an NIVector"];
+        [NSException raise:@"NIDecode" format:@"Dictionary did not contain an NIVector"];
     }
     return vector;
 }
@@ -1456,11 +1456,11 @@ NIAffineTransform NIAffineTransformMakeFromOpenGLMatrixf(float *f) // f better b
     NILine line = NILineInvalid;
     NSDictionary *dict = [self decodeObjectOfClass:[NSDictionary class] forKey:key];
     if (dict == nil) {
-        [NSException raise:@"OSIDecode" format:@"No Dictionary when decoding NILine"];
+        [NSException raise:@"NIDecode" format:@"No Dictionary when decoding NILine"];
     }
     
     if (NILineMakeWithDictionaryRepresentation((CFDictionaryRef)dict, &line) == NO) {
-        [NSException raise:@"OSIDecode" format:@"Dictionary did not contain an NILine"];
+        [NSException raise:@"NIDecode" format:@"Dictionary did not contain an NILine"];
     }
     return line;
 }
@@ -1471,11 +1471,11 @@ NIAffineTransform NIAffineTransformMakeFromOpenGLMatrixf(float *f) // f better b
     NIPlane plane = NIPlaneInvalid;
     NSDictionary *dict = [self decodeObjectOfClass:[NSDictionary class] forKey:key];
     if (dict == nil) {
-        [NSException raise:@"OSIDecode" format:@"No Dictionary when decoding NIPlane"];
+        [NSException raise:@"NIDecode" format:@"No Dictionary when decoding NIPlane"];
     }
     
     if (NIPlaneMakeWithDictionaryRepresentation((CFDictionaryRef)dict, &plane) == NO) {
-        [NSException raise:@"OSIDecode" format:@"Dictionary did not contain an NIPlane"];
+        [NSException raise:@"NIDecode" format:@"Dictionary did not contain an NIPlane"];
     }
     return plane;
 }
