@@ -32,7 +32,7 @@ BOOL NIMaskIndexEqualToMaskIndex(NIMaskIndex mi1, NIMaskIndex mi2) {
 
 NIMaskRun NIMaskRunMake(NSRange widthRange, NSUInteger heightIndex, NSUInteger depthIndex, float intensity)
 {
-    NIMaskRun maskRun = {widthRange, heightIndex, depthIndex, intensity};
+    NIMaskRun maskRun = {widthRange, heightIndex, depthIndex, intensity, 0};
     return maskRun;
 }
 
