@@ -52,7 +52,7 @@ NIGeometry.h defines 3D types such as NIVector, NILine, NIPlane, NIAffineTransfo
 **NIBezierPath**  
 NIBezierPath defines a 3D path made of piecewise line and cubic bezier segments. The API is meant to be similar to that of NSBezierPath.
 
-**NIStorage**
+**NIStorage**  
 NIStorage provides a simple mechanism to store small amounts of data locally using a key-value mechanism.
 
 **OsiriXIntegration**  
