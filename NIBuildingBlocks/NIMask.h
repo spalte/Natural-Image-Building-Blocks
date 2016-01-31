@@ -31,8 +31,10 @@ struct NIMaskRun {
     NSUInteger heightIndex;
     NSUInteger depthIndex;
     float intensity;
+    int32_t _padding; // so that this struct stays on a 8 byte boundary in 64bit
 };
 typedef struct NIMaskRun NIMaskRun;
+
 
 extern const NIMaskRun NIMaskRunZero;
 
@@ -149,7 +151,6 @@ CF_EXTERN_C_END
  
  
  */
-
 
 @interface NIMask : NSObject <NSCopying, NSSecureCoding> {
 @private

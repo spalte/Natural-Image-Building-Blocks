@@ -46,7 +46,7 @@ NSUInteger NIMaskRunLastWidthIndex(NIMaskRun maskRun)
     return NSMaxRange(maskRun.widthRange) - 1;
 }
 
-const NIMaskRun NIMaskRunZero = {{0.0, 0.0}, 0, 0, 1.0};
+const NIMaskRun NIMaskRunZero = {{0.0, 0.0}, 0, 0, 1.0, 0.0};
 
 @interface NIMaskIndexPredicateStandIn : NSObject
 {
@@ -186,6 +186,8 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
 
 @interface NIMask ()
 - (void)checkdebug;
++ (NSData *)storageDataFromMaskRunData:(NSData *)maskRunsData;
++ (NSData *)maskRunsDataFromStorageData:(NSData *)storageData;
 @end
 
 @implementation NIMask
@@ -582,13 +584,13 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-    NSData *maskRunsData = [aDecoder decodeObjectOfClass:[NSData class] forKey:@"maskRunsData"];
+    NSData *maskRunsData = [NIMask maskRunsDataFromStorageData:[aDecoder decodeObjectOfClass:[NSData class] forKey:@"maskRunsData"]];
     return [self initWithSortedMaskRunData:maskRunsData];
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeObject:[self maskRunsData] forKey:@"maskRunsData"];
+    [aCoder encodeObject:[NIMask storageDataFromMaskRunData:[self maskRunsData]] forKey:@"maskRunsData"];
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone
@@ -604,6 +606,87 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     _maskRuns = nil;
     
     [super dealloc];
+}
+
++ (NSData *)storageDataFromMaskRunData:(NSData *)maskRunsData
+{
+    if ([maskRunsData length] == 0) {
+        return maskRunsData;
+    }
+
+#if defined(__LITTLE_ENDIAN__)
+
+#if __LP64__
+    return maskRunsData;
+#else
+    NSUInteger maskRunCount = [maskRunsData length]/sizeof(NIMaskRun);
+    struct maskRun64bit {
+        unsigned long widthRangeLocation;
+        unsigned long widthRangeLength;
+        unsigned long heightIndex;
+        unsigned long depthIndex;
+        float intensity;
+        int32_t padding;
+    };
+    struct maskRun64bit *storedData = malloc(sizeof(struct maskRun64bit) * maskRunCount);
+    memset(storedData, 0, sizeof(struct maskRun64bit) * maskRunCount);
+    const NIMaskRun *maskRuns = [maskRunsData bytes];
+    NSUInteger i;
+    for (i = 0; i < maskRunCount; i++) {
+        storedData[i].widthRangeLocation = (unsigned long)maskRuns[i].widthRange.location;
+        storedData[i].widthRangeLength = (unsigned long)maskRuns[i].widthRange.length;
+        storedData[i].heightIndex = (unsigned long)maskRuns[i].heightIndex;
+        storedData[i].depthIndex = (unsigned long)maskRuns[i].depthIndex;
+        storedData[i].intensity = (float)maskRuns[i].intensity;
+    }
+
+    return [NSData dataWithBytesNoCopy:storedData length:sizeof(struct maskRun64bit) * maskRunCount freeWhenDone:YES];
+#endif
+
+#else
+#error "byte swapping for NIMaskRun not implemented for big endian"
+#endif
+}
+
++ (NSData *)maskRunsDataFromStorageData:(NSData *)storageData
+{
+    if ([storageData length] == 0) {
+        return storageData;
+    }
+
+#if defined(__LITTLE_ENDIAN__)
+
+#if __LP64__
+    return storageData;
+#else
+    struct maskRun64bit {
+        unsigned long widthRangeLocation;
+        unsigned long widthRangeLength;
+        unsigned long heightIndex;
+        unsigned long depthIndex;
+        float intensity;
+        int32_t padding;
+    };
+    NSUInteger maskRunCount = [storageData length]/sizeof(struct maskRun64bit);
+
+    const struct maskRun64bit *storedDataBytes = [storageData bytes];
+    NIMaskRun *maskRunDataBytes = malloc(sizeof(NIMaskRun) * maskRunCount);
+    memset(maskRunDataBytes, 0, sizeof(NIMaskRun) * maskRunCount);
+    NSUInteger i;
+    for (i = 0; i < maskRunCount; i++) {
+        maskRunDataBytes[i].widthRange.location = (NSUInteger)storedDataBytes[i].widthRangeLocation;
+        maskRunDataBytes[i].widthRange.length = (NSUInteger)storedDataBytes[i].widthRangeLength;
+        maskRunDataBytes[i].heightIndex = (NSUInteger)storedDataBytes[i].heightIndex;
+        maskRunDataBytes[i].depthIndex = (NSUInteger)storedDataBytes[i].depthIndex;
+        maskRunDataBytes[i].intensity = (float)storedDataBytes[i].intensity;
+    }
+
+    return [NSData dataWithBytesNoCopy:maskRunDataBytes length:sizeof(NIMaskRun) * maskRunCount freeWhenDone:YES];
+#endif
+
+#else
+#error "byte swapping for NIMaskRun not implemented for big endian"
+#endif
 }
 
 - (NIMask *)maskByTranslatingByX:(NSInteger)x Y:(NSInteger)y Z:(NSInteger)z

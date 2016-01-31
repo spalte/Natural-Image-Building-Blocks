@@ -31,7 +31,6 @@
 
 
 @class NIVolumeData;
-//@class OSIStudy;
 
 @interface NIMaskData : NSObject {
     NSMutableDictionary *_valueCache;
