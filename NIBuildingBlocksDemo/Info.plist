@@ -23,8 +23,6 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2015 Spaltenstein Natural Image. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
-	<string></string>
-	<key>NSPrincipalClass - 2</key>
 	<string>NIBuildingBlocksDemoPlugin</string>
 	<key>pluginType</key>
 	<string>other</string>

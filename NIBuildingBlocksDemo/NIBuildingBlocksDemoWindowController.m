@@ -92,7 +92,7 @@
         NIVolumeDataProperties *properties = [_rightView addVolumeData:_volumeData];
         properties.CLUT = [[[NSGradient alloc] initWithStartingColor:[NSColor blueColor] endingColor:[NSColor redColor]] autorelease];
 
-        NIAffineTransform inverseVolumeTransform = NIAffineTransformInvert(_volumeData.volumeTransform);
+        NIAffineTransform inverseVolumeTransform = NIAffineTransformInvert(_volumeData.modelToVoxelTransform);
         NIVector center = NIVectorApplyTransform(NIVectorMake(round(_volumeData.pixelsWide / 2.0), round(_volumeData.pixelsHigh / 2.0), round(_volumeData.pixelsDeep / 2.0)), inverseVolumeTransform);
         NIObliqueSliceGeneratorRequest *leftRequest = [[[NIObliqueSliceGeneratorRequest alloc] initWithCenter:center pixelsWide:200 pixelsHigh:200
                                                                                                        xBasis:_volumeData.directionX yBasis:NIVectorInvert(_volumeData.directionY)] autorelease];
