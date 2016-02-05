@@ -123,7 +123,7 @@
     vectorTransform.m41 = vectorTransform.m42 = vectorTransform.m43 = 0.0;
     NIVectorApplyTransformToVectors(vectorTransform, volumeNormals, _width);
 
-    [_volumeData aquireInlineBuffer:&inlineBuffer];
+    [_volumeData acquireInlineBuffer:&inlineBuffer];
     for (y = 0; y < _height; y++) {
         if ([self isCancelled]) {
             break;
@@ -159,7 +159,7 @@
     vectorTransform.m41 = vectorTransform.m42 = vectorTransform.m43 = 0.0;
     NIVectorApplyTransformToVectors(vectorTransform, volumeNormals, _width);
 
-    [_volumeData aquireInlineBuffer:&inlineBuffer];
+    [_volumeData acquireInlineBuffer:&inlineBuffer];
     for (y = 0; y < _height; y++) {
         if ([self isCancelled]) {
             break;
@@ -195,7 +195,7 @@
     vectorTransform.m41 = vectorTransform.m42 = vectorTransform.m43 = 0.0;
     NIVectorApplyTransformToVectors(vectorTransform, volumeNormals, _width);
 
-    [_volumeData aquireInlineBuffer:&inlineBuffer];
+    [_volumeData acquireInlineBuffer:&inlineBuffer];
     for (y = 0; y < _height; y++) {
         if ([self isCancelled]) {
             break;

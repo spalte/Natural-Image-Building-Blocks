@@ -342,7 +342,7 @@
 {
     NIVolumeDataInlineBuffer inlineBuffer;
 
-    [self aquireInlineBuffer:&inlineBuffer];
+    [self acquireInlineBuffer:&inlineBuffer];
     return NIVolumeDataGetFloatAtPixelCoordinate(&inlineBuffer, x, y, z);
 }
 
@@ -351,7 +351,7 @@
     NIVector volumeVector = [self convertVolumeVectorFromModelVector:vector];
     NIVolumeDataInlineBuffer inlineBuffer;
 
-    [self aquireInlineBuffer:&inlineBuffer];
+    [self acquireInlineBuffer:&inlineBuffer];
     return NIVolumeDataLinearInterpolatedFloatAtVolumeVector(&inlineBuffer, volumeVector);
 }
 
@@ -360,7 +360,7 @@
     NIVector volumeVector = [self convertVolumeVectorFromModelVector:vector];
     NIVolumeDataInlineBuffer inlineBuffer;
 
-    [self aquireInlineBuffer:&inlineBuffer];
+    [self acquireInlineBuffer:&inlineBuffer];
     return NIVolumeDataNearestNeighborInterpolatedFloatAtVolumeVector(&inlineBuffer, volumeVector);
 }
 
@@ -369,7 +369,7 @@
     NIVector volumeVector = [self convertVolumeVectorFromModelVector:vector];
     NIVolumeDataInlineBuffer inlineBuffer;
 
-    [self aquireInlineBuffer:&inlineBuffer];
+    [self acquireInlineBuffer:&inlineBuffer];
     return NIVolumeDataCubicInterpolatedFloatAtVolumeVector(&inlineBuffer, volumeVector);
 }
 
@@ -482,8 +482,8 @@
         NIVolumeDataInlineBuffer inlineBuffer2;
         NIVolumeData *otherVolumeData = (NIVolumeData *)object;
 
-        [self aquireInlineBuffer:&inlineBuffer1];
-        [otherVolumeData aquireInlineBuffer:&inlineBuffer2];
+        [self acquireInlineBuffer:&inlineBuffer1];
+        [otherVolumeData acquireInlineBuffer:&inlineBuffer2];
 
         if (inlineBuffer1.floatBytes == inlineBuffer2.floatBytes &&
             inlineBuffer1.outOfBoundsValue == inlineBuffer2.outOfBoundsValue &&
@@ -619,7 +619,7 @@
 
 
 
-- (BOOL)aquireInlineBuffer:(NIVolumeDataInlineBuffer *)inlineBuffer
+- (BOOL)acquireInlineBuffer:(NIVolumeDataInlineBuffer *)inlineBuffer
 {
     memset(inlineBuffer, 0, sizeof(NIVolumeDataInlineBuffer));
     inlineBuffer->floatBytes = self.floatBytes;

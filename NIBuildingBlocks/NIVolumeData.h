@@ -35,7 +35,7 @@ typedef NS_ENUM(NSInteger, NIInterpolationMode) {
     NIInterpolationModeNone = 0xFFFFFF,
 };
 
-typedef struct { // build one of these on the stack and then use -[NIVolumeData aquireInlineBuffer:] to initialize it.
+typedef struct { // build one of these on the stack and then use -[NIVolumeData acquireInlineBuffer:] to initialize it.
     const float *floatBytes;
 
     float outOfBoundsValue;
@@ -134,7 +134,7 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 - (CGFloat)nearestNeighborInterpolatedFloatAtModelVector:(NIVector)vector; // these are slower, use the inline buffer if you care about speed
 - (CGFloat)cubicInterpolatedFloatAtModelVector:(NIVector)vector; // these are slower, use the inline buffer if you care about speed
 
-- (BOOL)aquireInlineBuffer:(NIVolumeDataInlineBuffer *)inlineBuffer; // always return YES
+- (BOOL)acquireInlineBuffer:(NIVolumeDataInlineBuffer *)inlineBuffer; // always return YES
 
 // not done yet, will crash if given vectors that are outside of the volume
 - (NSUInteger)tempBufferSizeForNumVectors:(NSUInteger)numVectors;

@@ -535,7 +535,7 @@
 
     NIVolumeDataInlineBuffer inlineBuffer;
 
-    [self aquireInlineBuffer:&inlineBuffer];
+    [self acquireInlineBuffer:&inlineBuffer];
     const float *floatPtr = NIVolumeDataFloatBytes(&inlineBuffer);
 
     if (z == 0 && _pixelsDeep == 1) {

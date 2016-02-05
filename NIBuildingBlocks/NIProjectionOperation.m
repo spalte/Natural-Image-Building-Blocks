@@ -70,7 +70,7 @@
         pixelsPerPlane = _volumeData.pixelsWide * _volumeData.pixelsHigh;
         floatBytes = malloc(sizeof(float) * pixelsPerPlane);
 
-        [_volumeData aquireInlineBuffer:&inlineBuffer];
+        [_volumeData acquireInlineBuffer:&inlineBuffer];
         memcpy(floatBytes, NIVolumeDataFloatBytes(&inlineBuffer), sizeof(float) * pixelsPerPlane);
         switch (_projectionMode) {
             case NIProjectionModeMIP:

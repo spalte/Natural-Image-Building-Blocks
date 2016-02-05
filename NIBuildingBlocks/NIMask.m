@@ -288,7 +288,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     maskRun = NIMaskRunZero;
     maskRun.intensity = 0.0;
     
-    [volumeData aquireInlineBuffer:&inlineBuffer];
+    [volumeData acquireInlineBuffer:&inlineBuffer];
     for (k = 0; k < inlineBuffer.pixelsDeep; k++) {
         for (j = 0; j < inlineBuffer.pixelsHigh; j++) {
             for (i = 0; i < inlineBuffer.pixelsWide; i++) {
