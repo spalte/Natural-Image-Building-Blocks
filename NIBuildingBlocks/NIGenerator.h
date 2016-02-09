@@ -41,6 +41,7 @@
 @property (readonly) NIVolumeData *volumeData;
 
 + (NIVolumeData *)synchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData;
++ (NSOperation *)asynchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData queue:(NSOperationQueue *)queue handler:(void (^)(NIVolumeData* generatedVolume, NSOperation *operation))handler;
 
 - (id)initWithVolumeData:(NIVolumeData *)volumeData;
 
