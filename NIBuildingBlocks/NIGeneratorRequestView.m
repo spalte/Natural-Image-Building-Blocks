@@ -1013,53 +1013,51 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     }
 }
 
-- (NSPoint)convertPointFromModelVector:(NIVector)vector
+- (NSPoint)convertPointFromModelVector:(NIVector)vector forGeneratorRequest:(NIGeneratorRequest *)generatorRequest
 {
-    NIGeneratorRequest *presentedGeneratorRequest = [self presentedGeneratorRequest];
-    if (presentedGeneratorRequest == nil) {
+    if (generatorRequest == nil) {
         return NSZeroPoint;
     }
 
-    NIVector requestVector = [presentedGeneratorRequest convertVolumeVectorFromModelVector:vector];
+    NIVector requestVector = [generatorRequest convertVolumeVectorFromModelVector:vector];
 
     requestVector.x += 0.5;
     requestVector.y += 0.5;
 
-    requestVector.x *= self.bounds.size.width / presentedGeneratorRequest.pixelsWide;
-    requestVector.y *= self.bounds.size.height / presentedGeneratorRequest.pixelsHigh;
+    requestVector.x *= self.bounds.size.width / generatorRequest.pixelsWide;
+    requestVector.y *= self.bounds.size.height / generatorRequest.pixelsHigh;
 
     return NSPointFromNIVector(requestVector);
 }
 
-- (NIVector)convertPointToModelVector:(NSPoint)point
+- (NIVector)convertPointToModelVector:(NSPoint)point forGeneratorRequest:(NIGeneratorRequest *)generatorRequest
 {
-    NIGeneratorRequest *presentedGeneratorRequest = [self presentedGeneratorRequest];
-    if (presentedGeneratorRequest == nil) {
+    if (generatorRequest == nil) {
         return NIVectorZero;
     }
 
-    point.x *= presentedGeneratorRequest.pixelsWide / self.bounds.size.width;
-    point.y *= presentedGeneratorRequest.pixelsHigh / self.bounds.size.height;
+    point.x *= generatorRequest.pixelsWide / self.bounds.size.width;
+    point.y *= generatorRequest.pixelsHigh / self.bounds.size.height;
 
     point.x -= .5;
     point.y -= .5;
 
-    return [presentedGeneratorRequest convertVolumeVectorToModelVector:NIVectorMakeFromNSPoint(point)];
+    return [generatorRequest convertVolumeVectorToModelVector:NIVectorMakeFromNSPoint(point)];
 }
 
-- (NSBezierPath *)convertBezierPathFromModel:(NIBezierPath *)bezierPath
+- (NSBezierPath *)convertBezierPathFromModel:(NIBezierPath *)bezierPath forGeneratorRequest:(NIGeneratorRequest *)generatorRequest
 {
     // we don't know how to convert beziers when the transformation is not affine.
-    if ([self.presentedGeneratorRequest isKindOfClass:[NIObliqueSliceGeneratorRequest class]] == NO) {
+    if ([generatorRequest isKindOfClass:[NIObliqueSliceGeneratorRequest class]] == NO) {
         return nil;
     }
 
     NIAffineTransform fromModelTransform = NIAffineTransformIdentity;
 
-    *(NSPoint *)&fromModelTransform.m41 = [self convertPointFromModelVector:NIVectorZero];
-    *(NSPoint *)&fromModelTransform.m11 = [self convertPointFromModelVector:NIVectorXBasis];
-    *(NSPoint *)&fromModelTransform.m21 = [self convertPointFromModelVector:NIVectorYBasis];
-    *(NSPoint *)&fromModelTransform.m31 = [self convertPointFromModelVector:NIVectorZBasis];
+    *(NSPoint *)&fromModelTransform.m41 = [self convertPointFromModelVector:NIVectorZero forGeneratorRequest:generatorRequest];
+    *(NSPoint *)&fromModelTransform.m11 = [self convertPointFromModelVector:NIVectorXBasis forGeneratorRequest:generatorRequest];
+    *(NSPoint *)&fromModelTransform.m21 = [self convertPointFromModelVector:NIVectorYBasis forGeneratorRequest:generatorRequest];
+    *(NSPoint *)&fromModelTransform.m31 = [self convertPointFromModelVector:NIVectorZBasis forGeneratorRequest:generatorRequest];
 
     *(NIVector *)&fromModelTransform.m11 = NIVectorSubtract(*(NIVector *)&fromModelTransform.m11, *(NIVector *)&fromModelTransform.m41);
     *(NIVector *)&fromModelTransform.m21 = NIVectorSubtract(*(NIVector *)&fromModelTransform.m21, *(NIVector *)&fromModelTransform.m41);
@@ -1076,17 +1074,17 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     return [[bezierPath bezierPathByApplyingTransform:fromModelTransform] NSBezierPath];
 }
 
-- (NIBezierPath *)convertBezierPathToModel:(NSBezierPath *)bezierPath
+- (NIBezierPath *)convertBezierPathToModel:(NSBezierPath *)bezierPath forGeneratorRequest:(NIGeneratorRequest *)generatorRequest
 {
     // we don't know how to convert beziers when the transformation is not affine.
-    if ([self.presentedGeneratorRequest isKindOfClass:[NIObliqueSliceGeneratorRequest class]] == NO) {
+    if ([generatorRequest isKindOfClass:[NIObliqueSliceGeneratorRequest class]] == NO) {
         return nil;
     }
 
     NIAffineTransform toModelTransform = NIAffineTransformIdentity;
-    *(NIVector *)&toModelTransform.m41 = [self convertPointToModelVector:NSMakePoint(0, 0)];
-    *(NIVector *)&toModelTransform.m11 = [self convertPointToModelVector:NSMakePoint(1, 0)];
-    *(NIVector *)&toModelTransform.m21 = [self convertPointToModelVector:NSMakePoint(0, 1)];
+    *(NIVector *)&toModelTransform.m41 = [self convertPointToModelVector:NSMakePoint(0, 0) forGeneratorRequest:generatorRequest];
+    *(NIVector *)&toModelTransform.m11 = [self convertPointToModelVector:NSMakePoint(1, 0) forGeneratorRequest:generatorRequest];
+    *(NIVector *)&toModelTransform.m21 = [self convertPointToModelVector:NSMakePoint(0, 1) forGeneratorRequest:generatorRequest];
 
     *(NIVector *)&toModelTransform.m11 = NIVectorSubtract(*(NIVector *)&toModelTransform.m11, *(NIVector *)&toModelTransform.m41);
     *(NIVector *)&toModelTransform.m21 = NIVectorSubtract(*(NIVector *)&toModelTransform.m21, *(NIVector *)&toModelTransform.m41);
@@ -1098,6 +1096,23 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     [convertedBezierPath applyAffineTransform:toModelTransform];
     return convertedBezierPath;
 }
+
+- (NSPoint)convertPointFromModelVector:(NIVector)vector {
+    return [self convertPointFromModelVector:vector forGeneratorRequest:self.presentedGeneratorRequest];
+}
+
+- (NIVector)convertPointToModelVector:(NSPoint)point {
+    return [self convertPointToModelVector:point forGeneratorRequest:self.presentedGeneratorRequest];
+}
+
+- (NSBezierPath *)convertBezierPathFromModel:(NIBezierPath *)bezierPath {
+    return [self convertBezierPathFromModel:bezierPath forGeneratorRequest:self.presentedGeneratorRequest];
+}
+
+- (NIBezierPath *)convertBezierPathToModel:(NSBezierPath *)bezierPath {
+    return [self convertBezierPathToModel:bezierPath forGeneratorRequest:self.presentedGeneratorRequest];
+}
+
 
 - (void)_updateLabelContraints
 {

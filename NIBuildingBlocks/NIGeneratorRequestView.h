@@ -98,11 +98,21 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
 
 - (NIVolumeDataProperties *)volumeDataPropertiesAtIndex:(NSUInteger)index;
 
+// these conversion methods use the presentedGeneratorRequest
+
 - (NSPoint)convertPointFromModelVector:(NIVector)vector;
 - (NIVector)convertPointToModelVector:(NSPoint)point;
 
 - (NSBezierPath *)convertBezierPathFromModel:(NIBezierPath *)bezierPath;
 - (NIBezierPath *)convertBezierPathToModel:(NSBezierPath *)bezierPath;
+
+// these conversion methods allow you to provide the generator request (e.g. if you need to transform using a view's generatorRequest instead of its presentedGeneratorRequest)
+
+- (NSPoint)convertPointFromModelVector:(NIVector)vector forGeneratorRequest:(NIGeneratorRequest *)generatorRequest;
+- (NIVector)convertPointToModelVector:(NSPoint)point forGeneratorRequest:(NIGeneratorRequest *)generatorRequest;
+
+- (NSBezierPath *)convertBezierPathFromModel:(NIBezierPath *)bezierPath forGeneratorRequest:(NIGeneratorRequest *)generatorRequest;
+- (NIBezierPath *)convertBezierPathToModel:(NSBezierPath *)bezierPath forGeneratorRequest:(NIGeneratorRequest *)generatorRequest;
 
 @property (nonatomic, readonly, retain) CALayer *frameLayer; // the layer into which subclasses can add layers, this layer lays out sublayers using the CAConstraintLayoutManager
                                                              // Use NIGeneratorRequestViewRequestLayerZPosition, etc to specify the depth of the layer you want to add.
