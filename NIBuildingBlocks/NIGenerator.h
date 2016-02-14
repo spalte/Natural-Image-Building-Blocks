@@ -42,7 +42,7 @@
 
 + (NIVolumeData *)synchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData;
 
-+ (NSOperation *)asynchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData queue:(NSOperationQueue *)queue completionBlock:(void (^)(NIVolumeData* generatedVolume))completionBlock;
++ (NSOperation *)asynchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData completionBlock:(void (^)(NIVolumeData* generatedVolume))completionBlock;
 
 - (id)initWithVolumeData:(NIVolumeData *)volumeData;
 

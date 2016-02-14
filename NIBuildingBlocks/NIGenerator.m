@@ -37,6 +37,16 @@ NSString * const _NIGeneratorRunLoopMode = @"_NIGeneratorRunLoopMode";
 @end
 
 
+@interface NIGeneratorAsynchronousOperation : NSOperation {
+    NIGeneratorOperation * _operation;
+    void (^_completionBlock)(NIVolumeData *);
+}
+
+- (instancetype)initWithRequest:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData completionBlock:(void (^)(NIVolumeData *))completionBlock;
+
+@end
+
+
 @implementation NIGenerator
 
 @synthesize delegate = _delegate;
@@ -74,19 +84,6 @@ NSString * const _NIGeneratorRunLoopMode = @"_NIGeneratorRunLoopMode";
     [operation release];
     
     return generatedVolume;
-}
-
-+ (NSOperation *)asynchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData queue:(NSOperationQueue *)queue completionBlock:(void (^)(NIVolumeData *))completionBlock {
-    NSOperation * operation = [NSBlockOperation blockOperationWithBlock:^{
-        NIGeneratorOperation* generation = [[[[request operationClass] alloc] initWithRequest:request volumeData:volumeData] autorelease];
-        [queue addOperation:generation];
-        [generation waitUntilFinished];
-        completionBlock(generation.generatedVolume);
-    }];
-    
-    [queue addOperation:operation];
-    
-    return operation;
 }
 
 - (id)initWithVolumeData:(NIVolumeData *)volumeData
@@ -247,10 +244,55 @@ NSString * const _NIGeneratorRunLoopMode = @"_NIGeneratorRunLoopMode";
     NSLog(@"NIGenerator frame rate: %f", [self frameRate]);
 }
 
++ (NSOperation *)asynchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData completionBlock:(void (^)(NIVolumeData *))completionBlock {
+    NSOperation * operation = [[[NIGeneratorAsynchronousOperation alloc] initWithRequest:request volumeData:volumeData completionBlock:completionBlock] autorelease];
+    
+    NSOperationQueue* queue = [[[NSOperationQueue alloc] init] autorelease]; // TODO: use some shared queue
+    queue.qualityOfService = NSQualityOfServiceUserInteractive;
+    
+    [queue addOperation:operation];
+    
+    return operation;
+}
+
 @end
 
 
+@implementation NIGeneratorAsynchronousOperation
 
+- (instancetype)initWithRequest:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData completionBlock:(void (^)(NIVolumeData *))completionBlock {
+    if (!([super init]))
+        return nil;
+    
+    _completionBlock = [completionBlock copy];
+    _operation = [[[request operationClass] alloc] initWithRequest:request volumeData:volumeData];
+    
+    return self;
+}
+
+- (void)main {
+    NSOperationQueue* queue = [[[NSOperationQueue alloc] init] autorelease]; // TODO: use some shared queue
+    queue.qualityOfService = NSQualityOfServiceUserInteractive;
+
+    [queue addOperation:_operation];
+
+    [_operation waitUntilFinished];
+    
+    _completionBlock(_operation.generatedVolume);
+}
+
+- (void)cancel {
+    [_operation cancel];
+    [super cancel];
+}
+
+- (void)dealloc {
+    [_completionBlock release]; _completionBlock = nil;
+    [_operation release]; _operation = nil;
+    [super dealloc];
+}
+
+@end
 
 
 
