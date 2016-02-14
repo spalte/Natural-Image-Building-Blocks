@@ -76,12 +76,12 @@ NSString * const _NIGeneratorRunLoopMode = @"_NIGeneratorRunLoopMode";
     return generatedVolume;
 }
 
-+ (NSOperation *)asynchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData queue:(NSOperationQueue *)queue handler:(void (^)(NIVolumeData* generatedVolume, NSOperation *operation))handler {
++ (NSOperation *)asynchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData queue:(NSOperationQueue *)queue completionBlock:(void (^)(NIVolumeData *))completionBlock {
     NSOperation * operation = [NSBlockOperation blockOperationWithBlock:^{
         NIGeneratorOperation* generation = [[[[request operationClass] alloc] initWithRequest:request volumeData:volumeData] autorelease];
         [queue addOperation:generation];
         [generation waitUntilFinished];
-        handler(generation.generatedVolume, generation);
+        completionBlock(generation.generatedVolume);
     }];
     
     [queue addOperation:operation];
