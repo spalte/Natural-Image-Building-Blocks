@@ -247,10 +247,10 @@ NSString * const _NIGeneratorRunLoopMode = @"_NIGeneratorRunLoopMode";
 + (NSOperation *)asynchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData completionBlock:(void (^)(NIVolumeData *))completionBlock {
     NSOperation * operation = [[[NIGeneratorAsynchronousOperation alloc] initWithRequest:request volumeData:volumeData completionBlock:completionBlock] autorelease];
     
-    NSOperationQueue* queue = [[[NSOperationQueue alloc] init] autorelease]; // TODO: use some shared queue
-    queue.qualityOfService = NSQualityOfServiceUserInteractive;
-    
-    [queue addOperation:operation];
+//    NSOperationQueue* queue = [[[NSOperationQueue alloc] init] autorelease]; // TODO: use some shared queue
+//    queue.qualityOfService = NSQualityOfServiceUserInteractive;
+//    
+//    [queue addOperation:operation];
     
     return operation;
 }
@@ -264,20 +264,20 @@ NSString * const _NIGeneratorRunLoopMode = @"_NIGeneratorRunLoopMode";
     if (!([super init]))
         return nil;
     
-    _completionBlock = [completionBlock copy];
     _operation = [[[request operationClass] alloc] initWithRequest:request volumeData:volumeData];
+    [self addDependency:_operation];
+    _completionBlock = [completionBlock copy];
+
+    NSOperationQueue* queue = [[[NSOperationQueue alloc] init] autorelease]; // TODO: use some shared queue
+    queue.qualityOfService = NSQualityOfServiceUserInteractive;
+    
+    [queue addOperation:_operation];
+    [queue addOperation:self];
     
     return self;
 }
 
 - (void)main {
-    NSOperationQueue* queue = [[[NSOperationQueue alloc] init] autorelease]; // TODO: use some shared queue
-    queue.qualityOfService = NSQualityOfServiceUserInteractive;
-
-    [queue addOperation:_operation];
-
-    [_operation waitUntilFinished];
-    
     _completionBlock(_operation.generatedVolume);
 }
 
