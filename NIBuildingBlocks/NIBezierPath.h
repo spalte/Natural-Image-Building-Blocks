@@ -132,5 +132,11 @@ typedef NSInteger NIBezierPathElement;
 
 @end
 
+@interface NIBezierPath (MoveMe)
+
++ (instancetype)closedSplinePathWithNodes:(NSArray *)nodes; // an array of NIVector values (NSArray<NSValue<NIVector>>)
+
+@end
+
 
 

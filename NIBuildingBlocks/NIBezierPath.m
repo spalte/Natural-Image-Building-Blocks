@@ -817,7 +817,154 @@
 
 @end
 
+@implementation NIBezierPath (MoveMe)
 
+// http://www.codeproject.com/Articles/33776/Draw-Closed-Smooth-Curve-with-Bezier-Spline
++ (instancetype)closedSplinePathWithNodes:(NSArray *)ka {
+    size_t const n = ka.count;
+    
+    if (n <= 2)
+        return nil;
+    
+    NIVector k[n];
+    for (NSUInteger i = 0; i < n; ++i)
+        k[i] = [ka[i] NIVectorValue];
+    
+    NIVector a[n], b[n], c[n];
+    for (NSUInteger i = 0; i < n; ++i) {
+        a[i] = c[i] = NIVectorOne; b[i] = NIVectorMake(4, 4, 4);
+    }
+    
+    NIVector rhs[n]; // right hand side
+    for (size_t i = 0; i < n; ++i)
+        rhs[i] = NIVectorAdd(NIVectorScalarMultiply(k[i], 4), NIVectorScalarMultiply(k[(i+1)%n], 2));
+    
+    NIVector cp1[n];
+    cyclicSolve(n, a, b, c, NIVectorOne, NIVectorOne, rhs, cp1);
+    
+    NIMutableBezierPath *path = [NIMutableBezierPath bezierPath];
+    [path moveToVector:k[n-1]];
+    for (int i = 0; i < n; ++i)
+        [path curveToVector:k[i]
+             controlVector1:cp1[(i? i-1 : n-1)]
+             controlVector2:NIVectorSubtract(NIVectorScalarMultiply(k[i], 2), cp1[i])];
+    [path close];
+    
+    return path;
+}
+
+// solves the cyclic set of linear equations, of the form
+/// b0 c0  0 · · · · · · ß
+///	a1 b1 c1 · · · · · · ·
+///  · · · · · · · · · · ·
+///  · · · a[n-2] b[n-2] c[n-2]
+/// α  · · · · 0  a[n-1] b[n-1]
+// This is a tridiagonal system, except for the matrix elements a and ß in the corners
+static void cyclicSolve(const size_t n, const NIVector *a, const NIVector *b, const NIVector *c, const NIVector alpha, const NIVector beta, const NIVector *rhs, NIVector* x) {
+    NIVector gamma = NIVectorInvert(b[0]), bb[n];
+    
+    // set up the diagonal of the modified tridiagonal system
+    bb[0] = NIVectorSubtract(b[0], gamma);
+    for (size_t i = 1; i < n-1; ++i)
+        bb[i] = b[i];
+    bb[n-1] = NIVectorSubtract(b[n-1], NIVectorDivide(NIVectorMultiply(alpha, beta), gamma));
+    
+    // solve A·x = r
+    tridiagonalSolve(n, a, bb, c, rhs, x);
+    
+    // setup u
+    NIVector u[n];
+    u[0] = gamma;
+    for (size_t i = 1; i < n-1; ++i)
+        u[i] = NIVectorZero;
+    u[n-1] = alpha;
+    
+    // solve A·z = u
+    NIVector z[n];
+    tridiagonalSolve(n, a, bb, c, u, z);
+    
+    // form v·x/(1+v·z)
+    NIVector fact = NIVectorDivide(NIVectorAdd(x[0], NIVectorDivide(NIVectorMultiply(beta, x[n-1]), gamma)), NIVectorAdd(NIVectorOne, NIVectorAdd(z[0], NIVectorDivide(NIVectorMultiply(beta, z[n-1]), gamma))));
+    
+    // get the solution
+    for (size_t i = 0; i < n; ++i)
+        x[i] = NIVectorSubtract(x[i], NIVectorMultiply(fact, z[i]));
+}
+
+static void tridiagonalSolve(const size_t n, const NIVector *a, const NIVector *b, const NIVector *c, const NIVector *r, NIVector *u) {
+    assert(b[0].x != 0 && b[0].y != 0 && b[0].z != 0);
+    
+    NIVector gam[n]; // workspace
+    NIVector bet = b[0];
+    u[0] = NIVectorDivide(r[0], bet);
+    for (size_t i = 1; i < n; ++i) { // decomposition and forward substitution
+        gam[i] = NIVectorDivide(c[i-1], bet);
+        bet = NIVectorSubtract(b[i], NIVectorMultiply(a[i], gam[i]));
+        assert(bet.x != 0 && bet.y != 0 && bet.z != 0);
+        u[i] = NIVectorDivide(NIVectorSubtract(r[i], NIVectorMultiply(a[i], u[i-1])), bet);
+    }
+    
+    for (size_t i = 1; i < n; ++i)
+        u[n-i-1] = NIVectorSubtract(u[n-i-1], NIVectorMultiply(gam[n-i], u[n-i])); // backsubstitution
+}
+
+// this was my take on open splines...
+//+ (void)spline:(NSArray<NSValue/*NIVector*/ *> *)ksa :(NSArray<NSValue/*NIVector*/ *> **)rcp1s :(NSArray<NSValue/*NIVector*/ *> **)rcp2s { // this produces an open bezier spline, based on http://www.codeproject.com/Articles/31859/Draw-a-Smooth-Curve-through-a-Set-of-D-Points-wit - check http://www.codeproject.com/Articles/33776/Draw-Closed-Smooth-Curve-with-Bezier-Spline for closed version..
+//    assert(rcp1s != NULL && rcp2s != NULL);
+//
+//    if (ksa.count < 2) {
+//        *rcp1s = *rcp2s = nil;
+//        return;
+//    }
+//
+////if (n == 2) {
+////    [path moveToVector:k[0]];
+////    NIVector cp1 = NIVectorScalarDivide(NIVectorAdd(NIVectorScalarMultiply(k[0], 2), k[1]), 3); // 3*p1 = 2*p0 + p3
+////    [path curveToVector:k[1] controlVector1:cp1 controlVector2:NIVectorSubtract(NIVectorScalarMultiply(cp1, 2), k[0])]; // p2 = 2*p1 – p0
+////    [path close];
+////    return path;
+////}
+//
+//    NSUInteger n = ksa.count;
+//
+//    NIVector ks[n];
+//    for (NSUInteger i = 0; i < n; ++i)
+//        ks[i] = [ksa[i] NIVectorValue];
+//
+//    --n;
+//    NIVector t[n];
+//
+//    t[0] = NIVectorAdd(ks[0], NIVectorScalarMultiply(ks[1], 2));
+//    for (NSUInteger i = 1; i < n-1; ++i)
+//        t[i] = NIVectorAdd(NIVectorScalarMultiply(ks[i], 4), NIVectorScalarMultiply(ks[i+1], 2));
+//    t[n-1] = NIVectorScalarDivide(NIVectorAdd(NIVectorScalarMultiply(ks[n-1], 8), ks[n]), 2);
+//
+//    NIVector r[n], tmp[n], b = NIVectorMake(2, 2, 2);
+//
+//    r[0] = NIVectorDivide(t[0], b);
+//    for (NSUInteger i = 1; i < n; ++i) { // decomposition and forward substitution
+//        tmp[i] = NIVectorDivide(NIVectorOne, b);
+//        CGFloat bb = (i < n-1 ? 4.0 : 3.5);
+//        b = NIVectorMake(bb-tmp[i].x, bb-tmp[i].y, bb-tmp[i].z);
+//        r[i] = NIVectorDivide(NIVectorSubtract(t[i], r[i-1]), b);
+//    }
+//
+//    for (NSUInteger i = 1; i < n; ++i) // backsubstitution
+//        r[n-i-1] = NIVectorSubtract(r[n-i-1], NIVectorMultiply(tmp[n-i], r[n-i]));
+//
+//    NSMutableArray* cp1s = [NSMutableArray array];
+//    NSMutableArray* cp2s = [NSMutableArray array];
+//    *rcp1s = cp1s; *rcp2s = cp2s;
+//
+//    for (NSUInteger i = 0; i < n; ++i) {
+//        [cp1s addObject:[NSValue valueWithNIVector:r[i]]];
+//        if (i < n-1)
+//            [cp2s addObject:[NSValue valueWithNIVector:NIVectorSubtract(NIVectorScalarMultiply(ks[i+1], 2), r[i+1])]];
+//        else [cp2s addObject:[NSValue valueWithNIVector:NIVectorScalarMultiply(NIVectorAdd(ks[n], r[n-1]), .5)]];
+//    }
+//}
+
+@end
 
 
 
