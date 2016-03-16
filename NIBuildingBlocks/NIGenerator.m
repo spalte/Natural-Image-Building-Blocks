@@ -244,15 +244,8 @@ NSString * const _NIGeneratorRunLoopMode = @"_NIGeneratorRunLoopMode";
     NSLog(@"NIGenerator frame rate: %f", [self frameRate]);
 }
 
-+ (NSOperation *)asynchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData completionBlock:(void (^)(NIVolumeData *))completionBlock {
-    NSOperation * operation = [[[NIGeneratorAsynchronousOperation alloc] initWithRequest:request volumeData:volumeData completionBlock:completionBlock] autorelease];
-    
-//    NSOperationQueue* queue = [[[NSOperationQueue alloc] init] autorelease]; // TODO: use some shared queue
-//    queue.qualityOfService = NSQualityOfServiceUserInteractive;
-//    
-//    [queue addOperation:operation];
-    
-    return operation;
++ (NIGeneratorAsynchronousOperation *)asynchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData completionBlock:(void (^)(NIVolumeData *))completionBlock {
+    return [[[NIGeneratorAsynchronousOperation alloc] initWithRequest:request volumeData:volumeData completionBlock:completionBlock] autorelease];
 }
 
 @end
@@ -270,11 +263,16 @@ NSString * const _NIGeneratorRunLoopMode = @"_NIGeneratorRunLoopMode";
 
     NSOperationQueue* queue = [[[NSOperationQueue alloc] init] autorelease]; // TODO: use some shared queue
     queue.qualityOfService = NSQualityOfServiceUserInteractive;
-    
     [queue addOperation:_operation];
     [queue addOperation:self];
     
     return self;
+}
+
+- (void)dealloc {
+    [_completionBlock release]; _completionBlock = nil;
+    [_operation release]; _operation = nil;
+    [super dealloc];
 }
 
 - (void)main {
@@ -284,12 +282,6 @@ NSString * const _NIGeneratorRunLoopMode = @"_NIGeneratorRunLoopMode";
 - (void)cancel {
     [_operation cancel];
     [super cancel];
-}
-
-- (void)dealloc {
-    [_completionBlock release]; _completionBlock = nil;
-    [_operation release]; _operation = nil;
-    [super dealloc];
 }
 
 @end
