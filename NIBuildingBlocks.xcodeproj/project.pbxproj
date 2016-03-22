@@ -572,7 +572,7 @@
 		4F151ED21B1CC8D000C8F767 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = "Spaltenstein Natural Image";
 				TargetAttributes = {
 					4F151EDA1B1CC8D000C8F767 = {

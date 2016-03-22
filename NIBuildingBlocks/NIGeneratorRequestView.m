@@ -833,7 +833,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
 {
     NSString * closestKey = nil;
     CGFloat closestDistance = CGFLOAT_MAX;
-    NSPoint closestPoint;
+    NSPoint closestPoint = NSZeroPoint;
     
     for (NSString *iterKey in _intersections) {
         NSPoint iterClosestPoint;

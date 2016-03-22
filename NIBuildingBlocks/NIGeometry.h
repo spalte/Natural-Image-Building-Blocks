@@ -244,7 +244,7 @@ NSString *NIVectorCArmOrientationString(NIVector vector);
 @property (readonly) NIAffineTransform NIAffineTransformValue;
 
 #if __has_attribute(objc_boxable)
-typedef struct __attribute__((objc_boxable)) NIAffineTransform NIAffineTransform;
+//typedef struct __attribute__((objc_boxable)) NIAffineTransform NIAffineTransform;
 typedef struct __attribute__((objc_boxable)) NIVector NIVector;
 typedef struct __attribute__((objc_boxable)) NILine NILine;
 typedef struct __attribute__((objc_boxable)) NIPlane NIPlane;

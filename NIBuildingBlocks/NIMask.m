@@ -996,7 +996,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
 - (NIMask *)filteredMaskUsingPredicate:(NSPredicate *)predicate volumeData:(NIVolumeData *)volumeData
 {
     NSMutableArray *newMaskArray = [NSMutableArray array];
-    NIMaskRun activeMaskRun;
+    NIMaskRun activeMaskRun = NIMaskRunZero;
     BOOL isMaskRunActive = NO;
     float intensity;
     NIMaskIndexPredicateStandIn *standIn = [[[NIMaskIndexPredicateStandIn alloc] init] autorelease];

@@ -390,7 +390,7 @@ CGFloat NIBezierCoreRelativePositionClosestToVector(NIBezierCoreRef bezierCore, 
     NIVector segment;
     NIVector segmentDirection;
     NIVector translatedVector;
-    NIVector bestVector;
+    NIVector bestVector = NIVectorZero;
     NIBezierCoreSegmentType segmentType;
     CGFloat tempDistance;
     CGFloat bestRelativePosition;
@@ -579,7 +579,7 @@ CFIndex NIBezierCoreGetVectorInfo(NIBezierCoreRef bezierCore, CGFloat spacing, C
     NIVector startNormalVector;
     NIVector endNormalVector;
     NIVector segmentDirection;
-    NIVector nextSegmentDirection;
+    NIVector nextSegmentDirection = NIVectorZero;
     CGFloat segmentLength;
     CGFloat distanceTraveled;
     CGFloat extraDistance;
@@ -699,7 +699,7 @@ CFIndex NIBezierCoreGetProjectedVectorInfo(NIBezierCoreRef bezierCore, CGFloat s
     NIVector nextVector;
     NIVector startVector;
     NIVector endVector;
-    NIVector nextProjectedVector;
+    NIVector nextProjectedVector = NIVectorZero;
     NIVector startProjectedVector;
     NIVector endProjectedVector;
     NIVector previousTangentVector;
@@ -714,7 +714,7 @@ CFIndex NIBezierCoreGetProjectedVectorInfo(NIBezierCoreRef bezierCore, CGFloat s
     NIVector endNormalVector;
     NIVector segmentDirection;
     NIVector projectedSegmentDirection;
-    NIVector nextSegmentDirection;
+    NIVector nextSegmentDirection = NIVectorZero;
     NIVector nextProjectedSegmentDirection;
     CGFloat segmentLength;
     CGFloat projectedSegmentLength;
@@ -1690,7 +1690,7 @@ NIMutableBezierCoreRef NIBezierCoreCreateMutableCopyByClipping(NIBezierCoreRef b
     CGFloat startPosition;
     CGFloat endPosition;
     CGFloat length;
-    NIVector endpoint;
+    NIVector endpoint = NIVectorZero;
     NIVector prevEndpoint;
     NIVector lerpPoint;
     bool needsMoveto = false;

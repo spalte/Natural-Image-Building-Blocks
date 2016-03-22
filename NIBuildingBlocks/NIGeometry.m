@@ -1386,7 +1386,7 @@ NIAffineTransform NIAffineTransformMakeFromOpenGLMatrixf(float *f) // f better b
 - (NIAffineTransform)NIAffineTransformValue
 {
     NIAffineTransform transform;
-    assert(strcmp([self objCType], @encode(NIAffineTransform)) == 0);
+    assert(strcmp([self objCType], @encode(NIAffineTransform)) == 0 || strcmp([self objCType], @encode(CATransform3D)) == 0);
     [self getValue:&transform];
     return transform;
 }
