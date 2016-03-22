@@ -73,8 +73,6 @@
 		4F151F791B1CD35600C8F767 /* NIUnsignedInt16ImageRep.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F771B1CD35600C8F767 /* NIUnsignedInt16ImageRep.m */; };
 		4F151F901B1CFB2E00C8F767 /* NSBezierPath+NI.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F8E1B1CFB2E00C8F767 /* NSBezierPath+NI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F911B1CFB2E00C8F767 /* NSBezierPath+NI.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F8F1B1CFB2E00C8F767 /* NSBezierPath+NI.m */; };
-		4F151F941B1CFB3700C8F767 /* NIAnnularPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F921B1CFB3700C8F767 /* NIAnnularPath.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4F151F951B1CFB3700C8F767 /* NIAnnularPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F931B1CFB3700C8F767 /* NIAnnularPath.m */; };
 		4F1E60981B20D54F0053A79F /* NIWindowLevelWindowWidthToolbarItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F1E60971B20D54F0053A79F /* NIWindowLevelWindowWidthToolbarItem.xib */; };
 		4F2EEA611C5C348200DF2227 /* NIStorage+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FCB58BA1C57D37900718CCF /* NIStorage+Private.h */; };
 		4F4409B61B21A0F6006AC3B6 /* NIWindowingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4409B41B21A0F6006AC3B6 /* NIWindowingView.h */; };
@@ -183,8 +181,6 @@
 		4F151F771B1CD35600C8F767 /* NIUnsignedInt16ImageRep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIUnsignedInt16ImageRep.m; sourceTree = "<group>"; };
 		4F151F8E1B1CFB2E00C8F767 /* NSBezierPath+NI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+NI.h"; sourceTree = "<group>"; };
 		4F151F8F1B1CFB2E00C8F767 /* NSBezierPath+NI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+NI.m"; sourceTree = "<group>"; };
-		4F151F921B1CFB3700C8F767 /* NIAnnularPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIAnnularPath.h; sourceTree = "<group>"; };
-		4F151F931B1CFB3700C8F767 /* NIAnnularPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIAnnularPath.m; sourceTree = "<group>"; };
 		4F1E60971B20D54F0053A79F /* NIWindowLevelWindowWidthToolbarItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NIWindowLevelWindowWidthToolbarItem.xib; sourceTree = "<group>"; };
 		4F4409B41B21A0F6006AC3B6 /* NIWindowingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIWindowingView.h; sourceTree = "<group>"; };
 		4F4409B51B21A0F6006AC3B6 /* NIWindowingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIWindowingView.m; sourceTree = "<group>"; };
@@ -424,8 +420,6 @@
 				4F151F8F1B1CFB2E00C8F767 /* NSBezierPath+NI.m */,
 				4F4B28361BD022560033906D /* NIAgeFormatter.h */,
 				4F4B28371BD022560033906D /* NIAgeFormatter.m */,
-				4F151F921B1CFB3700C8F767 /* NIAnnularPath.h */,
-				4F151F931B1CFB3700C8F767 /* NIAnnularPath.m */,
 			);
 			name = Goodies;
 			sourceTree = "<group>";
@@ -496,7 +490,6 @@
 				4F151F711B1CCFDA00C8F767 /* NIBezierCoreAdditions.h in Headers */,
 				4F151F731B1CCFDA00C8F767 /* NIBezierPath.h in Headers */,
 				4F151F211B1CCA6200C8F767 /* NIVolumeDataProperties.h in Headers */,
-				4F151F941B1CFB3700C8F767 /* NIAnnularPath.h in Headers */,
 				4F151F901B1CFB2E00C8F767 /* NSBezierPath+NI.h in Headers */,
 				7106843F1B678D800078903A /* NIMask.h in Headers */,
 				710684441B678FD30078903A /* NIMaskRunStack.h in Headers */,
@@ -634,7 +627,6 @@
 				4F151F791B1CD35600C8F767 /* NIUnsignedInt16ImageRep.m in Sources */,
 				710684401B678D800078903A /* NIMask.m in Sources */,
 				710684451B678FD30078903A /* NIMaskRunStack.m in Sources */,
-				4F151F951B1CFB3700C8F767 /* NIAnnularPath.m in Sources */,
 				4F151F701B1CCFDA00C8F767 /* NIBezierCore.m in Sources */,
 				7194D0881BE0EE3A00563DEC /* NIStorage.m in Sources */,
 				4F4B28391BD022560033906D /* NIAgeFormatter.m in Sources */,
