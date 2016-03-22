@@ -26,6 +26,8 @@
 
 @protocol NIGeneratorDelegate;
 
+typedef int64_t NIGeneratorAsynchronousRequestID;
+
 @interface NIGenerator : NSObject {
     NSOperationQueue *_generatorQueue;
     NSMutableSet *_observedOperations;
@@ -43,7 +45,8 @@
 + (NIVolumeData *)synchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData;
 
 // The execution context for your completion block is not guaranteed
-+ (void)asynchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData completionBlock:(void (^)(NIVolumeData* generatedVolume))completionBlock;
++ (NIGeneratorAsynchronousRequestID)asynchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData completionBlock:(void (^)(NIVolumeData* generatedVolume))completionBlock;
++ (void)cancelAsynchronousRequest:(NIGeneratorAsynchronousRequestID)requestID;
 
 
 - (id)initWithVolumeData:(NIVolumeData *)volumeData;

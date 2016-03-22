@@ -24,12 +24,18 @@
 #import "NIGeneratorRequest.h"
 #import "NIGeneratorOperation.h"
 
-static NSOperationQueue *_asynchronousRequestQueue = nil;
 NSString * const _NIGeneratorRunLoopMode = @"_NIGeneratorRunLoopMode";
+
+static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
 
 @interface NIGenerator ()
 
 + (NSOperationQueue *)_asynchronousRequestQueue;
++ (NSMutableDictionary<NSNumber *, NSOperation *> *)_requestIDs;
++ (NIGeneratorAsynchronousRequestID)_generateRequestID;
++ (void)_setOperation:(NSOperation *)operation forRequestID:(NIGeneratorAsynchronousRequestID)requestID;
++ (NSOperation *)_operationForRequestID:(NIGeneratorAsynchronousRequestID)requestID;
++ (void)_removeOperationForRequestID:(NIGeneratorAsynchronousRequestID)requestID;
 - (void)_didFinishOperation;
 - (void)_cullGeneratedFrameTimes;
 - (void)_logFrameRate:(NSTimer *)timer;
@@ -43,16 +49,55 @@ NSString * const _NIGeneratorRunLoopMode = @"_NIGeneratorRunLoopMode";
 
 + (NSOperationQueue *)_asynchronousRequestQueue
 {
-    @synchronized (self) {
-        if (_asynchronousRequestQueue == nil) {
-            _asynchronousRequestQueue = [[NSOperationQueue alloc] init];
-            [_asynchronousRequestQueue setMaxConcurrentOperationCount:10];
-            [_asynchronousRequestQueue setName:@"NIGenerator Asynchronous Request Queue"];
-        }
-    }
-    
-    return _asynchronousRequestQueue;
+    static dispatch_once_t pred;
+    static NSOperationQueue *asynchronousRequestQueue = nil;
+    dispatch_once(&pred, ^{
+        asynchronousRequestQueue = [[NSOperationQueue alloc] init];
+        [asynchronousRequestQueue setMaxConcurrentOperationCount:10];
+        [asynchronousRequestQueue setName:@"NIGenerator Asynchronous Request Queue"];
+    });
+    return asynchronousRequestQueue;
 }
+
++ (NSMutableDictionary<NSNumber *, NSOperation *> *)_requestIDs
+{
+    static dispatch_once_t pred;
+    static NSMutableDictionary *requestIDs = nil;
+    dispatch_once(&pred, ^{
+        requestIDs = [[NSMutableDictionary alloc] init];
+    });
+    return requestIDs;
+}
+
++ (NIGeneratorAsynchronousRequestID)_generateRequestID
+{
+    return OSAtomicIncrement64Barrier(&requestIDCount);
+}
+
++ (void)_setOperation:(NSOperation *)operation forRequestID:(NIGeneratorAsynchronousRequestID)requestID
+{
+    NSMutableDictionary<NSNumber *, NSOperation *> *requestIDs = [self _requestIDs];
+    @synchronized(requestIDs) {
+        [requestIDs setObject:operation forKey:@(requestID)];
+    }
+}
+
++ (NSOperation *)_operationForRequestID:(NIGeneratorAsynchronousRequestID)requestID
+{
+    NSMutableDictionary<NSNumber *, NSOperation *> *requestIDs = [self _requestIDs];
+    @synchronized(requestIDs) {
+        return [[[requestIDs objectForKey:@(requestID)] retain] autorelease];
+    }
+}
+
++ (void)_removeOperationForRequestID:(NIGeneratorAsynchronousRequestID)requestID
+{
+    NSMutableDictionary<NSNumber *, NSOperation *> *requestIDs = [self _requestIDs];
+    @synchronized(requestIDs) {
+        [requestIDs removeObjectForKey:@(requestID)];
+    }
+}
+
 
 + (NIVolumeData *)synchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData
 {
@@ -71,14 +116,25 @@ NSString * const _NIGeneratorRunLoopMode = @"_NIGeneratorRunLoopMode";
     return generatedVolume;
 }
 
-+ (void)asynchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData completionBlock:(void (^)(NIVolumeData *))completionBlock
++ (NIGeneratorAsynchronousRequestID)asynchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData completionBlock:(void (^)(NIVolumeData *))completionBlock
 {
     NIGeneratorOperation * operation = [[[request operationClass] alloc] initWithRequest:request volumeData:volumeData];
     [operation setQualityOfService:NSQualityOfServiceUserInitiated];
+    NIGeneratorAsynchronousRequestID requestID = [self _generateRequestID];
+    [self _setOperation:operation forRequestID:requestID];
     [operation setCompletionBlock:^{
+        [self _removeOperationForRequestID:requestID];
         completionBlock(operation.generatedVolume);
     }];
     [[self _asynchronousRequestQueue] addOperation:operation];
+
+    return requestID;
+}
+
++ (void)cancelAsynchronousRequest:(NIGeneratorAsynchronousRequestID)requestID
+{
+    NSOperation *operation = [self _operationForRequestID:requestID];
+    [operation cancel];
 }
 
 - (id)initWithVolumeData:(NIVolumeData *)volumeData
