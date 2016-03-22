@@ -31,6 +31,7 @@ FOUNDATION_EXPORT const unsigned char NIBuildingBlocksVersionString[];
 #import <NIBuildingBlocks/NIGenerator.h>
 #import <NIBuildingBlocks/NIGeneratorRequestView.h>
 #import <NIBuildingBlocks/NIGeneratorRequest.h>
+#import <NIBuildingBlocks/NIGeneratorOperation.h>
 #import <NIBuildingBlocks/NIBezierCore.h>
 #import <NIBuildingBlocks/NIVolumeData.h>
 #import <NIBuildingBlocks/NIMask.h>

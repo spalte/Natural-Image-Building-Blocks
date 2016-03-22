@@ -42,7 +42,7 @@
 		4F151F371B1CCB6900C8F767 /* NIGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F351B1CCB6900C8F767 /* NIGeometry.m */; };
 		4F151F3E1B1CCB8E00C8F767 /* NIGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F381B1CCB8E00C8F767 /* NIGenerator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F3F1B1CCB8E00C8F767 /* NIGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F391B1CCB8E00C8F767 /* NIGenerator.m */; };
-		4F151F401B1CCB8E00C8F767 /* NIGeneratorOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F3A1B1CCB8E00C8F767 /* NIGeneratorOperation.h */; };
+		4F151F401B1CCB8E00C8F767 /* NIGeneratorOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F3A1B1CCB8E00C8F767 /* NIGeneratorOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F411B1CCB8E00C8F767 /* NIGeneratorOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F3B1B1CCB8E00C8F767 /* NIGeneratorOperation.m */; };
 		4F151F421B1CCB8E00C8F767 /* NIGeneratorRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F3C1B1CCB8E00C8F767 /* NIGeneratorRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F431B1CCB8E00C8F767 /* NIGeneratorRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F3D1B1CCB8E00C8F767 /* NIGeneratorRequest.m */; };
@@ -342,6 +342,8 @@
 				4F151F391B1CCB8E00C8F767 /* NIGenerator.m */,
 				4F151F3C1B1CCB8E00C8F767 /* NIGeneratorRequest.h */,
 				4F151F3D1B1CCB8E00C8F767 /* NIGeneratorRequest.m */,
+				4F151F3A1B1CCB8E00C8F767 /* NIGeneratorOperation.h */,
+				4F151F3B1B1CCB8E00C8F767 /* NIGeneratorOperation.m */,
 				4F151F581B1CCC1400C8F767 /* NIGeneratorPrivate */,
 			);
 			name = NIGenerator;
@@ -360,8 +362,6 @@
 				4F151F4B1B1CCC0100C8F767 /* NIStraightenedOperation.m */,
 				4F151F4C1B1CCC0100C8F767 /* NIStretchedOperation.h */,
 				4F151F4D1B1CCC0100C8F767 /* NIStretchedOperation.m */,
-				4F151F3A1B1CCB8E00C8F767 /* NIGeneratorOperation.h */,
-				4F151F3B1B1CCB8E00C8F767 /* NIGeneratorOperation.m */,
 			);
 			name = NIGeneratorPrivate;
 			sourceTree = "<group>";
@@ -476,6 +476,7 @@
 			files = (
 				4F151EE11B1CC8D000C8F767 /* NIBuildingBlocks.h in Headers */,
 				4F74037B1C5A87D9009C40D2 /* NIStorageBox.h in Headers */,
+				4F151F401B1CCB8E00C8F767 /* NIGeneratorOperation.h in Headers */,
 				4F151F3E1B1CCB8E00C8F767 /* NIGenerator.h in Headers */,
 				4F151F181B1CCA2600C8F767 /* NIGeneratorRequestView.h in Headers */,
 				4F151F421B1CCB8E00C8F767 /* NIGeneratorRequest.h in Headers */,
@@ -506,7 +507,6 @@
 				4F151F0F1B1CCA1400C8F767 /* NIScaleBarLayer.h in Headers */,
 				4F151F111B1CCA1400C8F767 /* NIMouseBullseyeLayer.h in Headers */,
 				4F151F501B1CCC0100C8F767 /* NIObliqueSliceOperation.h in Headers */,
-				4F151F401B1CCB8E00C8F767 /* NIGeneratorOperation.h in Headers */,
 				4FCB58B71C568F8000718CCF /* NIStorageCoordinator.h in Headers */,
 				4F151F561B1CCC0100C8F767 /* NIStretchedOperation.h in Headers */,
 				4F2EEA611C5C348200DF2227 /* NIStorage+Private.h in Headers */,
