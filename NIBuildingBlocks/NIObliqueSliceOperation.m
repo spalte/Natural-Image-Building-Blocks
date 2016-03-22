@@ -193,6 +193,7 @@ static NSOperationQueue *_obliqueSliceOperationFillQueue = nil;
                     horizontalFillOperation = [[NIHorizontalFillOperation alloc] initWithVolumeData:_volumeData interpolationMode:self.request.interpolationMode floatBytes:_floatBytes + (y*pixelsWide) + (z*pixelsWide*pixelsHigh) width:pixelsWide height:MIN(FILL_HEIGHT, pixelsHigh - y)
                                                                                              vectors:fillVectors normals:downVectors];
                     [horizontalFillOperation setQueuePriority:[self queuePriority]];
+                    [horizontalFillOperation setQualityOfService:[self qualityOfService]];
                     [fillOperations addObject:horizontalFillOperation];
                     [horizontalFillOperation addObserver:self forKeyPath:@"isFinished" options:0 context:&self->_fillOperations];
                     [self retain]; // so we don't get release while the operation is going
@@ -267,6 +268,7 @@ static NSOperationQueue *_obliqueSliceOperationFillQueue = nil;
                     _floatBytes = NULL;
                     projectionOperation = [[NIProjectionOperation alloc] init];
                     [projectionOperation setQueuePriority:[self queuePriority]];
+                    [projectionOperation setQualityOfService:[self qualityOfService]];
 
                     projectionOperation.volumeData = generatedVolume;
                     projectionOperation.projectionMode = self.request.projectionMode;
@@ -304,7 +306,7 @@ static NSOperationQueue *_obliqueSliceOperationFillQueue = nil;
     @synchronized (self) {
         if (_obliqueSliceOperationFillQueue == nil) {
             _obliqueSliceOperationFillQueue = [[NSOperationQueue alloc] init];
-            [_obliqueSliceOperationFillQueue setMaxConcurrentOperationCount:[[NSProcessInfo processInfo] processorCount]];
+            [_obliqueSliceOperationFillQueue setName:@"NIObliqueSliceOperation fill queue"];
         }
     }
 
