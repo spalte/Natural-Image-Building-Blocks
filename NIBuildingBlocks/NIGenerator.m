@@ -71,7 +71,7 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
 
 + (NIGeneratorAsynchronousRequestID)_generateRequestID
 {
-    return OSAtomicIncrement64Barrier(&requestIDCount);
+    return OSAtomicIncrement64(&requestIDCount);
 }
 
 + (void)_setOperation:(NSOperation *)operation forRequestID:(NIGeneratorAsynchronousRequestID)requestID
@@ -122,9 +122,10 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
     [operation setQualityOfService:NSQualityOfServiceUserInitiated];
     NIGeneratorAsynchronousRequestID requestID = [self _generateRequestID];
     [self _setOperation:operation forRequestID:requestID];
+    void (^completionBlockCopy)(NIVolumeData *) = [[completionBlock copy] autorelease];
     [operation setCompletionBlock:^{
         [self _removeOperationForRequestID:requestID];
-        completionBlock(operation.generatedVolume);
+        completionBlockCopy(operation.generatedVolume);
     }];
     [[self _asynchronousRequestQueue] addOperation:operation];
 
