@@ -192,12 +192,10 @@ NIVector NIVectorCrossProduct(NIVector vector1, NIVector vector2)
 }
 
 CGFloat NIVectorAngleBetweenVectors(NIVector vector1, NIVector vector2) {
-    CGFloat s = NIVectorLength(NIVectorCrossProduct(vector1, vector2));
-    CGFloat c = NIVectorDotProduct(vector1, vector2);
 #if CGFLOAT_IS_DOUBLE
-    return atan2(s, c);
+    return acos(NIVectorDotProduct(NIVectorNormalize(vector1), NIVectorNormalize(vector2)));
 #else
-    return atan2f(s, c);
+    return acosf(NIVectorDotProduct(NIVectorNormalize(vector1), NIVectorNormalize(vector2)));
 #endif
 }
 
