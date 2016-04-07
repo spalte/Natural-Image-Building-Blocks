@@ -52,6 +52,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)containsValueForKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
@@ -61,8 +65,12 @@ NS_ASSUME_NONNULL_BEGIN
     return [results count];
 }
 
-- (void)removeValueForKey:(nonnull NSString *)key
+- (void)removeValueForKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
@@ -88,6 +96,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSArray<NSString *> *)keysWithPrefix:(NSString *)prefix
 {
+    if (prefix == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: prefix is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key BEGINSWITH %@", prefix]];
@@ -102,6 +114,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable id)valueForKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
@@ -126,6 +142,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setValue:(nullable id)value forKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     if (value == nil) {
         [self removeValueForKey:key];
     } else if ([value isKindOfClass:[NSString class]]) {
@@ -156,6 +176,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setData:(NSData *)data forKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+    if (data == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: attempting to set nil object of key: %@", __PRETTY_FUNCTION__, key] userInfo:nil];
+    }
+
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
@@ -173,6 +200,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setString:(NSString *)string forKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+    if (string == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: attempting to set nil object of key: %@", __PRETTY_FUNCTION__, key] userInfo:nil];
+    }
+
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
@@ -190,11 +224,25 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setDate:(NSDate *)date forKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+    if (date == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: attempting to set nil object of key: %@", __PRETTY_FUNCTION__, key] userInfo:nil];
+    }
+
     [self setObject:date forKey:key];
 }
 
 - (void)setObject:(id<NSSecureCoding>)object forKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+    if (object == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: attempting to set nil object of key: %@", __PRETTY_FUNCTION__, key] userInfo:nil];
+    }
+
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
@@ -212,6 +260,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setLongLong:(long long)number forKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
@@ -229,11 +281,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setInteger:(NSInteger)integer forKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     [self setLongLong:(long long)integer forKey:key];
 }
 
 - (void)setDouble:(double)realv forKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
@@ -251,41 +311,73 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setNIVector:(NIVector)vector forKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     [self setObject:[NIStorageBox storageBoxWithVector:vector] forKey:key];
 }
 
 - (void)setNIAffineTransform:(NIAffineTransform)transform forKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     [self setObject:[NIStorageBox storageBoxWithAffineTransform:transform] forKey:key];
 }
 
 - (void)setNIPlane:(NIPlane)plane forKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     [self setObject:[NIStorageBox storageBoxWithPlane:plane] forKey:key];
 }
 
 - (void)setNILine:(NILine)line forKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     [self setObject:[NIStorageBox storageBoxWithLine:line] forKey:key];
 }
 
 - (void)setPoint:(NSPoint)point forKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     [self setObject:[NIStorageBox storageBoxWithPoint:point] forKey:key];
 }
 
 - (void)setSize:(NSSize)size forKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     [self setObject:[NIStorageBox storageBoxWithSize:size] forKey:key];
 }
 
 - (void)setRect:(NSRect)rect forKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     [self setObject:[NIStorageBox storageBoxWithRect:rect] forKey:key];
 }
 
 - (nullable NSData *)dataForKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
@@ -300,6 +392,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSString *)stringForKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
@@ -315,11 +411,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSDate *)dateForKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     return [self objectOfClass:[NSDate class] forKey:key];
 }
 
 - (nullable id)objectOfClass:(Class)aClass forKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
@@ -338,6 +442,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (long long)longLongForKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
@@ -353,11 +461,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSInteger)integerForKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     return (NSInteger)[self longLongForKey:key];
 }
 
 - (double)doubleForKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
@@ -373,6 +489,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NIVector)NIVectorForKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
@@ -391,6 +511,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NIAffineTransform)NIAffineTransformForKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
@@ -409,6 +533,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NIPlane)NIPlaneForKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
@@ -427,6 +555,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NILine)NILineForKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
@@ -445,6 +577,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSPoint)pointForKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
@@ -463,6 +599,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSSize)sizeForKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
@@ -481,6 +621,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSRect)rectForKey:(NSString *)key
 {
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
