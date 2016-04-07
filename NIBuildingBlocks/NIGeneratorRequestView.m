@@ -227,6 +227,9 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     [_overlayLayerDelegate release];
     _overlayLayerDelegate = nil;
 
+    [_textLabelLayers release];
+    _textLabelLayers = nil;
+
     NSInteger i = 0;
     for (i = 0; i < NITextLabelLocationCount; i++) {
         [_textLabelLayers[i] setLabelLocation:(NITextLabelLocation)i];
