@@ -180,7 +180,10 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
     if (data == nil) {
-        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: attempting to set nil object of key: %@", __PRETTY_FUNCTION__, key] userInfo:nil];
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: attempting to set nil object for key: %@", __PRETTY_FUNCTION__, key] userInfo:nil];
+    }
+    if ([data isKindOfClass:[NSData class]] == NO) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: attempting to set data that is not a kind of NSData class for key: %@", __PRETTY_FUNCTION__, key] userInfo:nil];
     }
 
     NSError *err;
@@ -204,7 +207,10 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
     if (string == nil) {
-        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: attempting to set nil object of key: %@", __PRETTY_FUNCTION__, key] userInfo:nil];
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: attempting to set nil object for key: %@", __PRETTY_FUNCTION__, key] userInfo:nil];
+    }
+    if ([string isKindOfClass:[NSString class]] == NO) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: attempting to set a string that is not a kind of NSString class for key: %@", __PRETTY_FUNCTION__, key] userInfo:nil];
     }
 
     NSError *err;
@@ -228,7 +234,10 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
     if (date == nil) {
-        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: attempting to set nil object of key: %@", __PRETTY_FUNCTION__, key] userInfo:nil];
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: attempting to set nil object for key: %@", __PRETTY_FUNCTION__, key] userInfo:nil];
+    }
+    if ([date isKindOfClass:[NSDate class]] == NO) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: attempting to set a date that is not a kind of NSDate class for key: %@", __PRETTY_FUNCTION__, key] userInfo:nil];
     }
 
     [self setObject:date forKey:key];
@@ -240,7 +249,7 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
     if (object == nil) {
-        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: attempting to set nil object of key: %@", __PRETTY_FUNCTION__, key] userInfo:nil];
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: attempting to set nil object for key: %@", __PRETTY_FUNCTION__, key] userInfo:nil];
     }
 
     NSError *err;
