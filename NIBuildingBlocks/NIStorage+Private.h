@@ -22,6 +22,6 @@
 
 @interface NIStorage (Private)
 
-- (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)moc;
+- (nullable instancetype)initWithManagedObjectContext:(nonnull NSManagedObjectContext *)moc;
 
 @end

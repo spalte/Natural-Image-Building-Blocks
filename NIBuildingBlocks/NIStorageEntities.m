@@ -277,7 +277,6 @@
     return nil;
 }
 
-
 @end
 
 @implementation NIStorageLargeDataEntity
@@ -395,7 +394,6 @@
 
     return 0;
 }
-
 
 @end
 

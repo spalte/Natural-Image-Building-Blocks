@@ -23,6 +23,8 @@
 #import "NIStorageEntities.h"
 #import "NIStorageBox.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface NIStorage ()
 
 @end
@@ -30,7 +32,7 @@
 @implementation NIStorage
 
 
-- (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)moc
+- (nullable instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)moc
 {
     if ( (self = [super init]) ) {
         _managedObjectContext = [moc retain];
@@ -38,12 +40,12 @@
     return self;
 }
 
-+ (instancetype)storageForBundle:(NSBundle *)bundle
++ (nullable instancetype)storageForBundle:(NSBundle *)bundle
 {
     return [[NIStorageCoordinator sharedStorageCoordinator] storageForBundle:bundle];
 }
 
-+ (instancetype)storageForURL:(NSURL *)url
++ (nullable instancetype)storageForURL:(NSURL *)url
 {
     return [[NIStorageCoordinator sharedStorageCoordinator] storageForURL:url];
 }
@@ -54,7 +56,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
     return [results count];
 }
@@ -65,11 +67,37 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
     for (NIStorageEntity *prevEntity in results) {
         [_managedObjectContext deleteObject:prevEntity];
     }
+}
+
+- (NSArray *)allKeys
+{
+    NSError *err;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
+    [fetchRequest setResultType:NSDictionaryResultType];
+    [fetchRequest setPropertiesToFetch:@[@"key"]];
+
+    NSArray<NSDictionary *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+
+    return [results valueForKey:@"key"];
+}
+
+- (NSArray<NSString *> *)keysWithPrefix:(NSString *)prefix
+{
+    NSError *err;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key BEGINSWITH %@", prefix]];
+
+    [fetchRequest setResultType:NSDictionaryResultType];
+    [fetchRequest setPropertiesToFetch:@[@"key"]];
+
+    NSArray<NSDictionary *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+
+    return [results valueForKey:@"key"];
 }
 
 - (nullable id)valueForKey:(NSString *)key
@@ -78,13 +106,14 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
     for (NIStorageEntity *prevEntity in results) {
-        id object = [prevEntity objectValueOfClasses:[NSSet setWithObjects:[NSValue class], [NSString class], [NIStorageBox class], nil]];
+        id object = [prevEntity objectValueOfClasses:[NSSet setWithObjects:[NSValue class], [NSString class], [NSDate class], [NIStorageBox class], nil]];
 
         if ([object isKindOfClass:[NSValue class]] ||
-            [object isKindOfClass:[NSString class]]) {
+            [object isKindOfClass:[NSString class]] ||
+            [object isKindOfClass:[NSDate class]]) {
 
             return object;
         } else if ([object isKindOfClass:[NIStorageBox class]]) {
@@ -103,6 +132,8 @@
         [self setString:value forKey:key];
     } else if ([value isKindOfClass:[NSNumber class]]) { // should check different types, but this is good enough for all integers of reasonable size
         [self setDouble:[value doubleValue] forKey:key];
+    } else if ([value isKindOfClass:[NSDate class]]) {
+        [self setObject:value forKey:key];
     } else if ([value isKindOfClass:[NSValue class]]) {
         if (strcmp([value objCType], @encode(NIVector)) == 0) {
             [self setNIVector:[(NSValue *)value NIVectorValue] forKey:key];
@@ -129,7 +160,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
     for (NIStorageEntity *prevEntity in results) {
         [_managedObjectContext deleteObject:prevEntity];
@@ -146,7 +177,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
     for (NIStorageEntity *prevEntity in results) {
         [_managedObjectContext deleteObject:prevEntity];
@@ -157,13 +188,18 @@
     [_managedObjectContext save:&err];
 }
 
+- (void)setDate:(NSDate *)date forKey:(NSString *)key
+{
+    [self setObject:date forKey:key];
+}
+
 - (void)setObject:(id<NSSecureCoding>)object forKey:(NSString *)key
 {
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
     for (NIStorageEntity *prevEntity in results) {
         [_managedObjectContext deleteObject:prevEntity];
@@ -180,7 +216,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
     for (NIStorageEntity *prevEntity in results) {
         [_managedObjectContext deleteObject:prevEntity];
@@ -202,7 +238,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
     for (NIStorageEntity *prevEntity in results) {
         [_managedObjectContext deleteObject:prevEntity];
@@ -248,13 +284,13 @@
     [self setObject:[NIStorageBox storageBoxWithRect:rect] forKey:key];
 }
 
-- (NSData *)dataForKey:(NSString *)key
+- (nullable NSData *)dataForKey:(NSString *)key
 {
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
     for (NIStorageEntity *prevEntity in results) {
         return [prevEntity dataValue];
@@ -262,13 +298,13 @@
     return nil;
 }
 
-- (NSString *)stringForKey:(NSString *)key
+- (nullable NSString *)stringForKey:(NSString *)key
 {
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
     for (NIStorageEntity *prevEntity in results) {
         return [prevEntity stringValue];
@@ -277,13 +313,18 @@
     return nil;
 }
 
-- (id)objectOfClass:(Class)aClass forKey:(NSString *)key
+- (nullable NSDate *)dateForKey:(NSString *)key
+{
+    return [self objectOfClass:[NSDate class] forKey:key];
+}
+
+- (nullable id)objectOfClass:(Class)aClass forKey:(NSString *)key
 {
     NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
     for (NIStorageEntity *prevEntity in results) {
         id object = [prevEntity objectValueOfClass:aClass];
@@ -301,7 +342,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
     for (NIStorageEntity *prevEntity in results) {
         return [prevEntity longLongValue];
@@ -321,7 +362,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
     for (NIStorageEntity *prevEntity in results) {
         return [prevEntity doubleValue];
@@ -336,7 +377,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
     for (NIStorageEntity *prevEntity in results) {
         NIStorageBox *object = [prevEntity objectValueOfClass:[NIStorageBox class]];
@@ -354,7 +395,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
     for (NIStorageEntity *prevEntity in results) {
         NIStorageBox *object = [prevEntity objectValueOfClass:[NIStorageBox class]];
@@ -372,7 +413,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
     for (NIStorageEntity *prevEntity in results) {
         NIStorageBox *object = [prevEntity objectValueOfClass:[NIStorageBox class]];
@@ -390,7 +431,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
     for (NIStorageEntity *prevEntity in results) {
         NIStorageBox *object = [prevEntity objectValueOfClass:[NIStorageBox class]];
@@ -408,7 +449,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
     for (NIStorageEntity *prevEntity in results) {
         NIStorageBox *object = [prevEntity objectValueOfClass:[NIStorageBox class]];
@@ -426,7 +467,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
     for (NIStorageEntity *prevEntity in results) {
         NIStorageBox *object = [prevEntity objectValueOfClass:[NIStorageBox class]];
@@ -444,7 +485,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
 
     for (NIStorageEntity *prevEntity in results) {
         NIStorageBox *object = [prevEntity objectValueOfClass:[NIStorageBox class]];
@@ -458,3 +499,5 @@
 
 
 @end
+
+NS_ASSUME_NONNULL_END

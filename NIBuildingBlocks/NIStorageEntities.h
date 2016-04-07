@@ -34,8 +34,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonnull, nonatomic, retain) NSString *key;
 
-
-
 @property (nullable, readonly, retain) NSString* stringValue;
 @property (nullable, readonly, retain) NSData* dataValue;
 

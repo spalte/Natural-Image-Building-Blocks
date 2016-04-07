@@ -35,11 +35,15 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)containsValueForKey:(NSString *)key;
 - (void)removeValueForKey:(NSString *)key;
 
+- (NSArray<NSString *> *)allKeys;
+- (NSArray<NSString *> *)keysWithPrefix:(NSString *)prefix;
+
 - (nullable id)valueForKey:(NSString *)key;
 - (void)setValue:(nullable id)value forKey:(NSString *)key;
 
 - (void)setData:(NSData *)data forKey:(NSString *)key;
 - (void)setString:(NSString *)string forKey:(NSString *)key;
+- (void)setDate:(NSDate *)date forKey:(NSString *)key;
 - (void)setObject:(id<NSSecureCoding>)object forKey:(NSString *)aKey;
 - (void)setInteger:(NSInteger)integer forKey:(NSString *)key;
 - (void)setLongLong:(long long)number forKey:(NSString *)key;
@@ -56,6 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSData *)dataForKey:(NSString *)key;
 - (nullable NSString *)stringForKey:(NSString *)key;
+- (nullable NSDate *)dateForKey:(NSString *)key;
 - (nullable id)objectOfClass:(Class)aClass forKey:(NSString *)key;
 - (long long)longLongForKey:(NSString *)key;
 - (NSInteger)integerForKey:(NSString *)key;
