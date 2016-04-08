@@ -196,6 +196,40 @@
     }
 }
 
+- (BOOL)isEqual:(id)object
+{
+    if ([object isKindOfClass:[NIStorageBox class]]) {
+        return [self isEqualToStorageBox:(NIStorageBox *)object];
+    } else {
+        return [super isEqual:object];
+    }
+}
+
+- (BOOL)isEqualToStorageBox:(NIStorageBox *)otherStorageBox
+{
+    if (self.type != otherStorageBox.type) {
+        return NO;
+    }
+
+    switch (self.type) {
+        case NIStorageBoxVector:
+            return NIVectorEqualToVector(self.vector, otherStorageBox.vector);
+        case NIStorageBoxAffineTransform:
+            return NIAffineTransformEqualToTransform(self.transform, otherStorageBox.transform);
+        case NIStorageBoxPlane:
+            return NIPlaneEqualToPlane(self.plane, otherStorageBox.plane);
+        case NIStorageBoxLine:
+            return NILineEqualToLine(self.line, otherStorageBox.line);
+        case NIStorageBoxPoint:
+            return NSEqualPoints(self.point, otherStorageBox.point);
+        case NIStorageBoxSize:
+            return NSEqualSizes(self.size, otherStorageBox.size);
+        case NIStorageBoxRect:
+            return NSEqualRects(self.rect, otherStorageBox.rect);
+    }
+    return NO;
+}
+
 - (id)value
 {
     switch (self.type) {
