@@ -56,13 +56,21 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
 
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    __block BOOL containsValue = NO;
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+        }
 
-    return [results count];
+        containsValue = [results count] > 0;
+    }];
+
+    return containsValue;
 }
 
 - (void)removeValueForKey:(NSString *)key
@@ -71,27 +79,40 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
 
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+        }
 
-    for (NIStorageEntity *prevEntity in results) {
-        [_managedObjectContext deleteObject:prevEntity];
-    }
+        for (NIStorageEntity *prevEntity in results) {
+            [_managedObjectContext deleteObject:prevEntity];
+        }
+    }];
 }
 
-- (NSArray *)allKeys
+- (NSArray<NSString *> *)allKeys
 {
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setResultType:NSDictionaryResultType];
     [fetchRequest setPropertiesToFetch:@[@"key"]];
 
-    NSArray<NSDictionary *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSMutableArray<NSString *>* allKeys = [NSMutableArray array];
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NSDictionary *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+        }
 
-    return [results valueForKey:@"key"];
+        [allKeys addObjectsFromArray:[results valueForKey:@"key"]];
+    }];
+
+    return allKeys;
 }
 
 - (NSArray<NSString *> *)keysWithPrefix:(NSString *)prefix
@@ -100,16 +121,24 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: prefix is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
 
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key BEGINSWITH %@", prefix]];
 
     [fetchRequest setResultType:NSDictionaryResultType];
     [fetchRequest setPropertiesToFetch:@[@"key"]];
 
-    NSArray<NSDictionary *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    NSMutableArray<NSString *>* prefixKeys = [NSMutableArray array];
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NSDictionary *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+        }
 
-    return [results valueForKey:@"key"];
+        [prefixKeys addObjectsFromArray:[results valueForKey:@"key"]];
+    }];
+
+    return prefixKeys;
 }
 
 - (nullable id)valueForKey:(NSString *)key
@@ -118,26 +147,34 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
 
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
-
-    for (NIStorageEntity *prevEntity in results) {
-        id object = [prevEntity objectValueOfClasses:[NSSet setWithObjects:[NSValue class], [NSString class], [NSDate class], [NIStorageBox class], nil]];
-
-        if ([object isKindOfClass:[NSValue class]] ||
-            [object isKindOfClass:[NSString class]] ||
-            [object isKindOfClass:[NSDate class]]) {
-
-            return object;
-        } else if ([object isKindOfClass:[NIStorageBox class]]) {
-            return [(NIStorageBox *)object value];
+    __block id value = nil;
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
         }
-    }
 
-    return nil;;
+        for (NIStorageEntity *prevEntity in results) {
+            id object = [prevEntity objectValueOfClasses:[NSSet setWithObjects:[NSValue class], [NSString class], [NSDate class], [NIStorageBox class], nil]];
+
+            if ([object isKindOfClass:[NSValue class]] ||
+                [object isKindOfClass:[NSString class]] ||
+                [object isKindOfClass:[NSDate class]]) {
+
+                value = object;
+                break;
+            } else if ([object isKindOfClass:[NIStorageBox class]]) {
+                value = [(NIStorageBox *)object value];
+                break;
+            }
+        }
+    }];
+
+    return value;
 }
 
 - (void)setValue:(nullable id)value forKey:(NSString *)key
@@ -186,19 +223,28 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: attempting to set data that is not a kind of NSData class for key: %@", __PRETTY_FUNCTION__, key] userInfo:nil];
     }
 
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+            err = nil;
+        }
 
-    for (NIStorageEntity *prevEntity in results) {
-        [_managedObjectContext deleteObject:prevEntity];
-    }
+        for (NIStorageEntity *prevEntity in results) {
+            [_managedObjectContext deleteObject:prevEntity];
+        }
 
-    NIStorageEntity *newEntity = [[[NIStorageEntity alloc] initWithData:data insertIntoManagedObjectContext:_managedObjectContext] autorelease];
-    newEntity.key = key;
-    [_managedObjectContext save:&err];
+        NIStorageEntity *newEntity = [[[NIStorageEntity alloc] initWithData:data insertIntoManagedObjectContext:_managedObjectContext] autorelease];
+        newEntity.key = key;
+        [_managedObjectContext save:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+        }
+    }];
 }
 
 - (void)setString:(NSString *)string forKey:(NSString *)key
@@ -213,19 +259,28 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: attempting to set a string that is not a kind of NSString class for key: %@", __PRETTY_FUNCTION__, key] userInfo:nil];
     }
 
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+            err = nil;
+        }
 
-    for (NIStorageEntity *prevEntity in results) {
-        [_managedObjectContext deleteObject:prevEntity];
-    }
+        for (NIStorageEntity *prevEntity in results) {
+            [_managedObjectContext deleteObject:prevEntity];
+        }
 
-    NIStorageEntity *newEntity = [[[NIStorageEntity alloc] initWithString:string insertIntoManagedObjectContext:_managedObjectContext] autorelease];
-    newEntity.key = key;
-    [_managedObjectContext save:&err];
+        NIStorageEntity *newEntity = [[[NIStorageEntity alloc] initWithString:string insertIntoManagedObjectContext:_managedObjectContext] autorelease];
+        newEntity.key = key;
+        [_managedObjectContext save:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+        }
+    }];
 }
 
 - (void)setDate:(NSDate *)date forKey:(NSString *)key
@@ -252,19 +307,28 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: attempting to set nil object for key: %@", __PRETTY_FUNCTION__, key] userInfo:nil];
     }
 
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+            err = nil;
+        }
 
-    for (NIStorageEntity *prevEntity in results) {
-        [_managedObjectContext deleteObject:prevEntity];
-    }
+        for (NIStorageEntity *prevEntity in results) {
+            [_managedObjectContext deleteObject:prevEntity];
+        }
 
-    NIStorageEntity *newEntity = [[[NIStorageEntity alloc] initWithObject:object insertIntoManagedObjectContext:_managedObjectContext] autorelease];
-    newEntity.key = key;
-    [_managedObjectContext save:&err];
+        NIStorageEntity *newEntity = [[[NIStorageEntity alloc] initWithObject:object insertIntoManagedObjectContext:_managedObjectContext] autorelease];
+        newEntity.key = key;
+        [_managedObjectContext save:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+        }
+    }];
 }
 
 - (void)setLongLong:(long long)number forKey:(NSString *)key
@@ -273,19 +337,28 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
 
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+            err = nil;
+        }
 
-    for (NIStorageEntity *prevEntity in results) {
-        [_managedObjectContext deleteObject:prevEntity];
-    }
+        for (NIStorageEntity *prevEntity in results) {
+            [_managedObjectContext deleteObject:prevEntity];
+        }
 
-    NIStorageEntity *newEntity = [[[NIStorageEntity alloc] initWithLongLong:number insertIntoManagedObjectContext:_managedObjectContext] autorelease];
-    newEntity.key = key;
-    [_managedObjectContext save:&err];
+        NIStorageEntity *newEntity = [[[NIStorageEntity alloc] initWithLongLong:number insertIntoManagedObjectContext:_managedObjectContext] autorelease];
+        newEntity.key = key;
+        [_managedObjectContext save:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+        }
+    }];
 }
 
 - (void)setInteger:(NSInteger)integer forKey:(NSString *)key
@@ -303,19 +376,28 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
 
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+            err = nil;
+        }
 
-    for (NIStorageEntity *prevEntity in results) {
-        [_managedObjectContext deleteObject:prevEntity];
-    }
+        for (NIStorageEntity *prevEntity in results) {
+            [_managedObjectContext deleteObject:prevEntity];
+        }
 
-    NIStorageEntity *newEntity = [[[NIStorageEntity alloc] initWithDouble:realv insertIntoManagedObjectContext:_managedObjectContext] autorelease];
-    newEntity.key = key;
-    [_managedObjectContext save:&err];
+        NIStorageEntity *newEntity = [[[NIStorageEntity alloc] initWithDouble:realv insertIntoManagedObjectContext:_managedObjectContext] autorelease];
+        newEntity.key = key;
+        [_managedObjectContext save:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+        }
+    }];
 }
 
 - (void)setNIVector:(NIVector)vector forKey:(NSString *)key
@@ -387,16 +469,23 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
 
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    __block NSData *data = nil;
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+        }
 
-    for (NIStorageEntity *prevEntity in results) {
-        return [prevEntity dataValue];
-    }
-    return nil;
+        if ([results count]) {
+            data = [results[0] dataValue];
+        }
+    }];
+
+    return data;
 }
 
 - (nullable NSString *)stringForKey:(NSString *)key
@@ -405,17 +494,23 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
 
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    __block NSString *string = nil;
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+        }
 
-    for (NIStorageEntity *prevEntity in results) {
-        return [prevEntity stringValue];
-    }
+        if ([results count]) {
+            string = [results[0] stringValue];
+        }
+    }];
 
-    return nil;
+    return string;
 }
 
 - (nullable NSDate *)dateForKey:(NSString *)key
@@ -433,20 +528,23 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
 
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
-
-    for (NIStorageEntity *prevEntity in results) {
-        id object = [prevEntity objectValueOfClass:aClass];
-        if (object) {
-            return object;
+    __block id object = nil;
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
         }
-    }
 
-    return nil;
+        if ([results count]) {
+            object = [results[0] objectValueOfClass:aClass];
+        }
+    }];
+
+    return object;
 }
 
 - (long long)longLongForKey:(NSString *)key
@@ -455,17 +553,23 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
 
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    __block long long value;
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+        }
 
-    for (NIStorageEntity *prevEntity in results) {
-        return [prevEntity longLongValue];
-    }
+        if ([results count]) {
+            value = [results[0] longLongValue];
+        }
+    }];
 
-    return 0;
+    return value;
 }
 
 - (NSInteger)integerForKey:(NSString *)key
@@ -483,17 +587,23 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
 
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+    __block double value;
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+        }
 
-    for (NIStorageEntity *prevEntity in results) {
-        return [prevEntity doubleValue];
-    }
+        if ([results count]) {
+            value = [results[0] doubleValue];
+        }
+    }];
 
-    return 0;
+    return value;
 }
 
 - (NIVector)NIVectorForKey:(NSString *)key
@@ -502,20 +612,26 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
 
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
-
-    for (NIStorageEntity *prevEntity in results) {
-        NIStorageBox *object = [prevEntity objectValueOfClass:[NIStorageBox class]];
-        if (object) {
-            return [object vector];
+    __block NIVector vector = NIVectorZero;
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
         }
-    }
 
-    return NIVectorZero;
+        if ([results count]) {
+            NIStorageBox *object = [results[0] objectValueOfClass:[NIStorageBox class]];
+            if (object) {
+                vector = [object vector];
+            }
+        }
+    }];
+
+    return vector;
 }
 
 - (NIAffineTransform)NIAffineTransformForKey:(NSString *)key
@@ -524,20 +640,26 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
 
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
-
-    for (NIStorageEntity *prevEntity in results) {
-        NIStorageBox *object = [prevEntity objectValueOfClass:[NIStorageBox class]];
-        if (object) {
-            return [object transform];
+    __block NIAffineTransform transform = NIAffineTransformIdentity;
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
         }
-    }
 
-    return NIAffineTransformIdentity;
+        if ([results count]) {
+            NIStorageBox *object = [results[0] objectValueOfClass:[NIStorageBox class]];
+            if (object) {
+                transform = [object transform];
+            }
+        }
+    }];
+
+    return transform;
 }
 
 - (NIPlane)NIPlaneForKey:(NSString *)key
@@ -546,20 +668,26 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
 
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
-
-    for (NIStorageEntity *prevEntity in results) {
-        NIStorageBox *object = [prevEntity objectValueOfClass:[NIStorageBox class]];
-        if (object) {
-            return [object plane];
+    __block NIPlane plane = NIPlaneInvalid;
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
         }
-    }
 
-    return NIPlaneInvalid;
+        if ([results count]) {
+            NIStorageBox *object = [results[0] objectValueOfClass:[NIStorageBox class]];
+            if (object) {
+                plane = [object plane];
+            }
+        }
+    }];
+
+    return plane;
 }
 
 - (NILine)NILineForKey:(NSString *)key
@@ -568,20 +696,26 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
 
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
-
-    for (NIStorageEntity *prevEntity in results) {
-        NIStorageBox *object = [prevEntity objectValueOfClass:[NIStorageBox class]];
-        if (object) {
-            return [object line];
+    __block NILine line = NILineInvalid;
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
         }
-    }
 
-    return NILineInvalid;
+        if ([results count]) {
+            NIStorageBox *object = [results[0] objectValueOfClass:[NIStorageBox class]];
+            if (object) {
+                line = [object line];
+            }
+        }
+    }];
+
+    return line;
 }
 
 - (NSPoint)pointForKey:(NSString *)key
@@ -590,20 +724,26 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
 
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
-
-    for (NIStorageEntity *prevEntity in results) {
-        NIStorageBox *object = [prevEntity objectValueOfClass:[NIStorageBox class]];
-        if (object) {
-            return [object point];
+    __block NSPoint point = NSZeroPoint;
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
         }
-    }
 
-    return NSZeroPoint;
+        if ([results count]) {
+            NIStorageBox *object = [results[0] objectValueOfClass:[NIStorageBox class]];
+            if (object) {
+                point = [object point];
+            }
+        }
+    }];
+
+    return point;
 }
 
 - (NSSize)sizeForKey:(NSString *)key
@@ -612,20 +752,26 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
 
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
-
-    for (NIStorageEntity *prevEntity in results) {
-        NIStorageBox *object = [prevEntity objectValueOfClass:[NIStorageBox class]];
-        if (object) {
-            return [object size];
+    __block NSSize size = NSZeroSize;
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
         }
-    }
 
-    return NSZeroSize;
+        if ([results count]) {
+            NIStorageBox *object = [results[0] objectValueOfClass:[NIStorageBox class]];
+            if (object) {
+                size = [object size];
+            }
+        }
+    }];
+
+    return size;
 }
 
 - (NSRect)rectForKey:(NSString *)key
@@ -634,20 +780,26 @@ NS_ASSUME_NONNULL_BEGIN
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
     }
 
-    NSError *err;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
-
-    for (NIStorageEntity *prevEntity in results) {
-        NIStorageBox *object = [prevEntity objectValueOfClass:[NIStorageBox class]];
-        if (object) {
-            return [object rect];
+    __block NSRect rect = NSZeroRect;
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
         }
-    }
 
-    return NSZeroRect;
+        if ([results count]) {
+            NIStorageBox *object = [results[0] objectValueOfClass:[NIStorageBox class]];
+            if (object) {
+                rect = [object rect];
+            }
+        }
+    }];
+
+    return rect;
 }
 
 

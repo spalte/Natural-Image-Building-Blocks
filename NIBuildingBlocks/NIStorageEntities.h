@@ -25,11 +25,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NIStorageEntity : NSManagedObject
 
-- (NIStorageEntity *)initWithString:(NSString *)string insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context;
-- (NIStorageEntity *)initWithData:(NSData *)data insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context;
-- (NIStorageEntity *)initWithObject:(id<NSSecureCoding>)object insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context;
-- (NIStorageEntity *)initWithDouble:(double)doubleValue insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context;
-- (NIStorageEntity *)initWithLongLong:(long long)longLongValue insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context;
+- (nullable __kindof NIStorageEntity *)initWithString:(NSString *)string insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context;
+- (nullable __kindof NIStorageEntity *)initWithData:(NSData *)data insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context;
+- (nullable __kindof NIStorageEntity *)initWithObject:(id<NSSecureCoding>)object insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context;
+- (nullable __kindof NIStorageEntity *)initWithDouble:(double)doubleValue insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context;
+- (nullable __kindof NIStorageEntity *)initWithLongLong:(long long)longLongValue insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context;
 
 
 @property (nonnull, nonatomic, retain) NSString *key;
@@ -37,8 +37,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, readonly, retain) NSString* stringValue;
 @property (nullable, readonly, retain) NSData* dataValue;
 
-- (id)objectValueOfClass:(Class)objectClass;
-- (id)objectValueOfClasses:(NSSet<Class> *)classes;
+- (nullable id)objectValueOfClass:(Class)objectClass;
+- (nullable id)objectValueOfClasses:(NSSet<Class> *)classes;
 
 @property (readonly, assign) double doubleValue;
 @property (readonly, assign) long long longLongValue;

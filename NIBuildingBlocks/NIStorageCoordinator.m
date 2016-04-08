@@ -29,7 +29,7 @@
 
 + (instancetype)sharedStorageCoordinator
 {
-    static dispatch_once_t pred;
+    static dispatch_once_t pred = 0;
     static id shared = nil;
     dispatch_once(&pred, ^{
         shared = [[super alloc] init];
@@ -65,38 +65,40 @@
 
 - (NIStorage *)storageForStorageURL:(NSURL *)url
 {
-    if (_storages == nil) {
-        _storages = [[NSMutableDictionary alloc] init];
-    }
+    @synchronized (self) {
+        if (_storages == nil) {
+            _storages = [[NSMutableDictionary alloc] init];
+        }
 
-    NIStorage *storage = [_storages objectForKey:url];
+        NIStorage *storage = [_storages objectForKey:url];
 
-    if (storage) {
+        if (storage) {
+            return storage;
+        }
+
+        // create the URL
+        NSError *err;
+
+        if ([NSFileManager.defaultManager createDirectoryAtURL:url withIntermediateDirectories:YES attributes:nil error:&err] == NO) {
+            NSAssert(0, @"couldn't create persistentStore directory");
+        }
+
+        NSURL *storeURL = [url URLByAppendingPathComponent:@"storage.sqlite"];
+
+        NSPersistentStoreCoordinator *psc = [[[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]] autorelease];
+        NSManagedObjectContext *moc = [[[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType] autorelease];
+        [moc setPersistentStoreCoordinator:psc];
+
+        NSPersistentStore *store = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:0 error:&err];
+        if (store == nil) {
+            NSLog(@"Error initializing PSC: %@\n%@", [err localizedDescription], [err userInfo]);
+        }
+
+        moc.undoManager = nil;
+        storage = [[[NIStorage alloc] initWithManagedObjectContext:moc] autorelease];
+        [_storages setObject:storage forKey:url];
         return storage;
     }
-
-    // create the URL
-    NSError *err;
-
-    if ([NSFileManager.defaultManager createDirectoryAtURL:url withIntermediateDirectories:YES attributes:nil error:&err] == NO) {
-        NSAssert(0, @"couldn't create persistentStore directory");
-    }
-
-    NSURL *storeURL = [url URLByAppendingPathComponent:@"storage.sqlite"];
-
-    NSPersistentStoreCoordinator *psc = [[[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]] autorelease];
-    NSManagedObjectContext *moc = [[[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType] autorelease];
-    [moc setPersistentStoreCoordinator:psc];
-
-    NSPersistentStore *store = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:0 error:&err];
-    if (store == nil) {
-        NSLog(@"Error initializing PSC: %@\n%@", [err localizedDescription], [err userInfo]);
-    }
-
-    moc.undoManager = nil;
-    storage = [[[NIStorage alloc] initWithManagedObjectContext:moc] autorelease];
-    [_storages setObject:storage forKey:url];
-    return storage;
 }
 
 

@@ -20,6 +20,9 @@
 
 #import "NIStorageEntities.h"
 #import "NIStorageCoordinator.h"
+#import "NIStorageBox.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface NIStorageInt64Entity : NIStorageEntity
 @property (nonatomic, assign) int64_t int64;
@@ -56,7 +59,7 @@
 
 
 
-- (__kindof NIStorageEntity *)initWithString:(nonnull NSString *)string insertIntoManagedObjectContext:(NSManagedObjectContext *)context
+- (nullable __kindof NIStorageEntity *)initWithString:(NSString *)string insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context
 {
     NSManagedObjectModel *mom = [NIStorageCoordinator managedObjectModel];
 
@@ -67,7 +70,7 @@
     return entity;
 }
 
-- (__kindof NIStorageEntity *)initWithData:(nonnull NSData *)data insertIntoManagedObjectContext:(NSManagedObjectContext *)context;
+- (nullable __kindof NIStorageEntity *)initWithData:(nonnull NSData *)data insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context;
 {
     NSManagedObjectModel *mom = [NIStorageCoordinator managedObjectModel];
 
@@ -78,7 +81,7 @@
     return entity;
 }
 
-- (__kindof NIStorageEntity *)initWithObject:(nonnull id<NSSecureCoding>)object insertIntoManagedObjectContext:(NSManagedObjectContext *)context
+- (nullable __kindof NIStorageEntity *)initWithObject:(nonnull id<NSSecureCoding>)object insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context
 {
     NSManagedObjectModel *mom = [NIStorageCoordinator managedObjectModel];
 
@@ -99,7 +102,7 @@
     return entity;
 }
 
-- (__kindof NIStorageEntity *)initWithDouble:(double)doubleValue insertIntoManagedObjectContext:(NSManagedObjectContext *)context
+- (nullable __kindof NIStorageEntity *)initWithDouble:(double)doubleValue insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context
 {
     NSManagedObjectModel *mom = [NIStorageCoordinator managedObjectModel];
 
@@ -110,7 +113,7 @@
     return entity;
 }
 
-- (__kindof NIStorageEntity *)initWithLongLong:(long long)longLongValue insertIntoManagedObjectContext:(NSManagedObjectContext *)context
+- (nullable __kindof NIStorageEntity *)initWithLongLong:(long long)longLongValue insertIntoManagedObjectContext:(nullable NSManagedObjectContext *)context
 {
     NSManagedObjectModel *mom = [NIStorageCoordinator managedObjectModel];
 
@@ -121,12 +124,12 @@
     return entity;
 }
 
-- (NSString *)stringValue
+- (nullable NSString *)stringValue
 {
     return nil;
 }
 
-- (NSData *)dataValue
+- (nullable NSData *)dataValue
 {
     return nil;
 }
@@ -141,12 +144,12 @@
     return 0;
 }
 
-- (id)objectValueOfClass:(Class)objectClass
+- (nullable id)objectValueOfClass:(Class)objectClass
 {
     return [self objectValueOfClasses:[NSSet setWithObject:objectClass]];
 }
 
-- (id)objectValueOfClasses:(NSSet<Class> *)classes
+- (nullable id)objectValueOfClasses:(NSSet<Class> *)classes
 {
     return nil;
 }
@@ -158,7 +161,7 @@
 @implementation NIStorageInt64Entity
 @dynamic int64;
 
-- (NSString *)stringValue
+- (nullable NSString *)stringValue
 {
     return [@(self.int64) stringValue];
 }
@@ -173,7 +176,7 @@
     return (long long)self.int64;
 }
 
-- (id)objectValueOfClasses:(NSSet<Class> *)classes
+- (nullable id)objectValueOfClasses:(NSSet<Class> *)classes
 {
     if ([classes containsObject:[NSNumber class]]) {
         return @(self.int64);
@@ -189,7 +192,7 @@
 @implementation NIStorageDoubleEntity
 @dynamic realv;
 
-- (NSString *)stringValue
+- (nullable NSString *)stringValue
 {
     return [@(self.realv) stringValue];
 }
@@ -204,7 +207,7 @@
     return (long long)self.realv;
 }
 
-- (id)objectValueOfClasses:(NSSet<Class> *)classes
+- (nullable id)objectValueOfClasses:(NSSet<Class> *)classes
 {
     if ([classes containsObject:[NSNumber class]]) {
         return @(self.realv);
@@ -220,7 +223,7 @@
 @implementation NIStorageStringEntity
 @dynamic string;
 
-- (NSString *)stringValue
+- (nullable NSString *)stringValue
 {
     return self.string;
 }
@@ -235,7 +238,7 @@
     return [self.string longLongValue];
 }
 
-- (id)objectValueOfClasses:(NSSet<Class> *)classes
+- (nullable id)objectValueOfClasses:(NSSet<Class> *)classes
 {
     if ([classes containsObject:[NSString class]]) {
         return self.string;
@@ -253,7 +256,7 @@
 @implementation NIStorageSmallDataEntity
 @dynamic data;
 
-- (NSData *)dataValue
+- (nullable NSData *)dataValue
 {
     return self.data;
 }
@@ -268,7 +271,7 @@
     return 0;
 }
 
-- (id)objectValueOfClasses:(NSSet<Class> *)classes
+- (nullable id)objectValueOfClasses:(NSSet<Class> *)classes
 {
     if ([classes containsObject:[NSData class]]) {
         return self.data;
@@ -282,12 +285,12 @@
 @implementation NIStorageLargeDataEntity
 @dynamic relativeURL;
 
-- (NSString *)stringValue
+- (nullable NSString *)stringValue
 {
     return nil;
 }
 
-- (NSData *)dataValue
+- (nullable NSData *)dataValue
 {
     return nil;
 }
@@ -307,12 +310,14 @@
 @implementation NIStorageObjectEntity
 @dynamic encodedObject;
 
-- (NSString *)stringValue
+- (nullable NSString *)stringValue
 {
-    id objectValue = [self objectValueOfClasses:[NSSet setWithObjects:[NSString class], [NSValue class], nil]];
+    id objectValue = [self objectValueOfClasses:[NSSet setWithObjects:[NSString class], [NIStorageBox class], [NSValue class], nil]];
 
     if ([objectValue isKindOfClass:[NSString class]]) {
         return (NSString *)objectValue;
+    } else if ([objectValue isKindOfClass:[NIStorageBox class]]) {
+        return [objectValue stringValue];
     } else if ([objectValue respondsToSelector:@selector(stringValue)]) {
         return [objectValue performSelector:@selector(stringValue)];
     }
@@ -320,7 +325,7 @@
     return nil;
 }
 
-- (NSData *)dataValue
+- (nullable NSData *)dataValue
 {
     NSData* objectValue = [self objectValueOfClass:[NSData class]];
 
@@ -331,7 +336,7 @@
     return nil;
 }
 
-- (id)objectValueOfClass:(Class)objectClass
+- (nullable id)objectValueOfClass:(Class)objectClass
 {
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:self.encodedObject];
     [unarchiver setRequiresSecureCoding:YES];
@@ -347,7 +352,7 @@
     return objectValue;
 }
 
-- (id)objectValueOfClasses:(NSSet<Class> *)classes;
+- (nullable id)objectValueOfClasses:(NSSet<Class> *)classes;
 {
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:self.encodedObject];
     [unarchiver setRequiresSecureCoding:YES];
@@ -398,7 +403,7 @@
 @end
 
 
-
+NS_ASSUME_NONNULL_END
 
 
 
