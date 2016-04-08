@@ -93,6 +93,7 @@
         NSLog(@"Error initializing PSC: %@\n%@", [err localizedDescription], [err userInfo]);
     }
 
+    moc.undoManager = nil;
     storage = [[[NIStorage alloc] initWithManagedObjectContext:moc] autorelease];
     [_storages setObject:storage forKey:url];
     return storage;

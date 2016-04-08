@@ -331,6 +331,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
 
 - (void)setupOverlayLayer
 {
+    NSAssert(_overlayLayer == nil, @"_overlayLayer already initialized");
     _overlayLayer = [[CALayer alloc] init];
     _overlayLayerDelegate = [[NIGeneratorRequestViewOverlayDelegate alloc] init];
     _overlayLayerDelegate.view = self;

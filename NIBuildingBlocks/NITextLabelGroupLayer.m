@@ -46,6 +46,16 @@
     return self;
 }
 
+- (void)dealloc
+{
+    [_textLabels release];
+    _textLabels = nil;
+    [_magicLabelValues release];
+    _magicLabelValues = nil;
+
+    [super dealloc];
+}
+
 - (NSUInteger)countOfTextLabels
 {
     return [_textLabels count];
