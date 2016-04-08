@@ -21,6 +21,9 @@
 
 #import <Cocoa/Cocoa.h>
 #import "NIGeometry.h"
+#import "NIVolumeData.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface NIUnsignedInt16ImageRep : NSImageRep {
     uint16_t *_unsignedInt16Data;
@@ -42,7 +45,9 @@
 @property (nonatomic, readwrite, assign) CGFloat windowWidth; // these will affect how this rep will draw when part of an NSImage
 @property (nonatomic, readwrite, assign) CGFloat windowLevel;
 
-- (id)initWithData:(uint16_t *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh;
+- (instancetype)init NS_UNAVAILABLE;
+- (nullable instancetype)initWithCoder:(NSCoder *)coder NS_UNAVAILABLE;
+- (nullable instancetype)initWithData:(nullable uint16_t *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh NS_DESIGNATED_INITIALIZER;
 
 - (uint16_t *)unsignedInt16Data;
 @property (nonatomic, readwrite, assign) CGFloat offset;
@@ -65,5 +70,11 @@
 @property (readonly) float originZ;
 
 @end
+
+@interface NIVolumeData (NIUnsignedInt16ImageRepAdditions)
+- (NIUnsignedInt16ImageRep *)unsignedInt16ImageRepForSliceAtIndex:(NSUInteger)z;
+@end
+
+NS_ASSUME_NONNULL_END
 
 

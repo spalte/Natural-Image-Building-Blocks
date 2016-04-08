@@ -21,6 +21,7 @@
 
 #import "NIUnsignedInt16ImageRep.h"
 
+NS_ASSUME_NONNULL_BEGIN
 
 @implementation NIUnsignedInt16ImageRep
 
@@ -34,7 +35,7 @@
 @synthesize sliceThickness = _sliceThickness;
 @synthesize imageToModelTransform = _imageToModelTransform;
 
-- (id)initWithData:(uint16_t *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh
+- (nullable instancetype)initWithData:(nullable uint16_t *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh
 {
     if ( (self = [super init]) ) {
         if (data == NULL) {
@@ -129,4 +130,33 @@
 
 @end
 
+@implementation NIVolumeData (NIUnsignedInt16ImageRepAdditions)
+
+- (NIUnsignedInt16ImageRep *)unsignedInt16ImageRepForSliceAtIndex:(NSUInteger)z
+{
+    NIUnsignedInt16ImageRep *imageRep;
+    vImage_Buffer floatBuffer = [self floatBufferForSliceAtIndex:z];
+    vImage_Buffer unsignedInt16Buffer;
+
+    imageRep = [[NIUnsignedInt16ImageRep alloc] initWithData:NULL pixelsWide:_pixelsWide pixelsHigh:_pixelsHigh];
+    imageRep.pixelSpacingX = [self pixelSpacingX];
+    imageRep.pixelSpacingY = [self pixelSpacingY];
+    imageRep.sliceThickness = [self pixelSpacingZ];
+    imageRep.imageToModelTransform = NIAffineTransformConcat(NIAffineTransformMakeTranslation(0.0, 0.0, (CGFloat)z), NIAffineTransformInvert(_modelToVoxelTransform));
+
+    unsignedInt16Buffer.data = [imageRep unsignedInt16Data];
+    unsignedInt16Buffer.height = _pixelsHigh;
+    unsignedInt16Buffer.width = _pixelsWide;
+    unsignedInt16Buffer.rowBytes = sizeof(uint16_t) * _pixelsWide;
+
+    vImageConvert_FTo16U(&floatBuffer, &unsignedInt16Buffer, -1024, 1, 0);
+    imageRep.slope = 1;
+    imageRep.offset = -1024;
+
+    return [imageRep autorelease];
+}
+
+@end
+
+NS_ASSUME_NONNULL_END
 

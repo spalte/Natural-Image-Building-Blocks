@@ -20,7 +20,6 @@
 //  THE SOFTWARE.
 
 #import "NIVolumeData.h"
-#import "NIUnsignedInt16ImageRep.h"
 #import "NIGenerator.h"
 #import "NIGeneratorRequest.h"
 
@@ -348,30 +347,6 @@ NS_ASSUME_NONNULL_BEGIN
     floatBuffer.width = _pixelsWide;
     floatBuffer.rowBytes = sizeof(float) * _pixelsWide;
     return floatBuffer;
-}
-
-- (NIUnsignedInt16ImageRep *)unsignedInt16ImageRepForSliceAtIndex:(NSUInteger)z
-{
-    NIUnsignedInt16ImageRep *imageRep;
-    vImage_Buffer floatBuffer = [self floatBufferForSliceAtIndex:z];
-    vImage_Buffer unsignedInt16Buffer;
-
-    imageRep = [[NIUnsignedInt16ImageRep alloc] initWithData:NULL pixelsWide:_pixelsWide pixelsHigh:_pixelsHigh];
-    imageRep.pixelSpacingX = [self pixelSpacingX];
-    imageRep.pixelSpacingY = [self pixelSpacingY];
-    imageRep.sliceThickness = [self pixelSpacingZ];
-    imageRep.imageToModelTransform = NIAffineTransformConcat(NIAffineTransformMakeTranslation(0.0, 0.0, (CGFloat)z), NIAffineTransformInvert(_modelToVoxelTransform));
-
-    unsignedInt16Buffer.data = [imageRep unsignedInt16Data];
-    unsignedInt16Buffer.height = _pixelsHigh;
-    unsignedInt16Buffer.width = _pixelsWide;
-    unsignedInt16Buffer.rowBytes = sizeof(uint16_t) * _pixelsWide;
-
-    vImageConvert_FTo16U(&floatBuffer, &unsignedInt16Buffer, -1024, 1, 0);
-    imageRep.slope = 1;
-    imageRep.offset = -1024;
-
-    return [imageRep autorelease];
 }
 
 - (NIVolumeData *)volumeDataForSliceAtIndex:(NSUInteger)z

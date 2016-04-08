@@ -48,7 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 @synthesize convertPointFromModelVectorBlock = _convertPointFromModelVectorBlock;
 @synthesize convertPointToModelVectorBlock = _convertPointToModelVectorBlock;
 
-- (instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh
+- (nullable instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh
 {
     if ( (self = [super init]) ) {
         [self setColorSpaceName:NSCustomColorSpace];
@@ -72,54 +72,27 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
-- (instancetype)initWithBytes:(float *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh;
+- (nullable instancetype)initWithBytes:(nullable float *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh;
 {
-    if ( (self = [super init]) ) {
-        [self setColorSpaceName:NSCustomColorSpace];
-
-        if (data == NULL) {
-            _floatData = [NSMutableData dataWithLength:pixelsWide * pixelsHigh * sizeof(float)];
-            memset([_floatData mutableBytes], 0, pixelsWide * pixelsHigh * sizeof(float));
-        } else {
-            _floatData = [NSMutableData dataWithBytes:data length:pixelsWide * pixelsHigh * sizeof(float)];
-        }
-        [self setPixelsWide:pixelsWide];
-        [self setPixelsHigh:pixelsHigh];
-        [self setSize:NSMakeSize(pixelsWide, pixelsHigh)];
-        _imageToModelTransform = NIAffineTransformIdentity;
-
-        self.convertPointFromModelVectorBlock = ^NSPoint(NIVector vector){return NSPointFromNIVector(NIVectorApplyTransform(vector, NIAffineTransformInvert(NIAffineTransformIdentity)));};
-        self.convertPointToModelVectorBlock = ^NIVector(NSPoint point){return NIVectorApplyTransform(NIVectorMakeFromNSPoint(point), NIAffineTransformIdentity);};
+    NSMutableData *mutableData = nil;
+    if (data == NULL) {
+        mutableData = [NSMutableData dataWithLength:pixelsWide * pixelsHigh * sizeof(float)];
+        memset([_floatData mutableBytes], 0, pixelsWide * pixelsHigh * sizeof(float));
+    } else {
+        mutableData = [NSMutableData dataWithBytes:data length:pixelsWide * pixelsHigh * sizeof(float)];
     }
 
-    return self;
+    return [self initWithData:mutableData pixelsWide:pixelsWide pixelsHigh:pixelsHigh];
 }
 
-- (instancetype)initWithBytesNoCopy:(float *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh freeWhenDone:(BOOL)freeWhenDone;
+- (nullable instancetype)initWithBytesNoCopy:(float *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh freeWhenDone:(BOOL)freeWhenDone;
 {
-    if ( (self = [super init]) ) {
-        [self setColorSpaceName:NSCustomColorSpace];
+    NSMutableData *mutableData = [NSMutableData dataWithBytesNoCopy:data length:pixelsWide * pixelsHigh * sizeof(float) freeWhenDone:freeWhenDone];
 
-        if (data == NULL) {
-            _floatData = [NSMutableData dataWithLength:pixelsWide * pixelsHigh * sizeof(float)];
-            memset([_floatData mutableBytes], 0, pixelsWide * pixelsHigh * sizeof(float));
-        } else {
-            _floatData = [NSMutableData dataWithBytesNoCopy:data length:pixelsWide * pixelsHigh * sizeof(float) freeWhenDone:freeWhenDone];
-        }
-        [self setPixelsWide:pixelsWide];
-        [self setPixelsHigh:pixelsHigh];
-        [self setSize:NSMakeSize(pixelsWide, pixelsHigh)];
-        _imageToModelTransform = NIAffineTransformIdentity;
-
-
-        self.convertPointFromModelVectorBlock = ^NSPoint(NIVector vector){return NSPointFromNIVector(NIVectorApplyTransform(vector, NIAffineTransformInvert(NIAffineTransformIdentity)));};
-        self.convertPointToModelVectorBlock = ^NIVector(NSPoint point){return NIVectorApplyTransform(NIVectorMakeFromNSPoint(point), NIAffineTransformIdentity);};
-    }
-
-    return self;
+    return [self initWithData:mutableData pixelsWide:pixelsWide pixelsHigh:pixelsHigh];
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder
+- (nullable instancetype)initWithCoder:(NSCoder *)coder
 {
     if ([coder allowsKeyedCoding]) {
         if ( (self = [super initWithCoder:coder]) ) {

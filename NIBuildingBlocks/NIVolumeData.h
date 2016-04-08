@@ -25,8 +25,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class NIUnsignedInt16ImageRep;
-
 CF_EXTERN_C_BEGIN
 
 typedef NS_ENUM(NSInteger, NIInterpolationMode) {
@@ -120,7 +118,6 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 - (BOOL)getFloatRun:(float *)buffer atPixelCoordinateX:(NSUInteger)x y:(NSUInteger)y z:(NSUInteger)z length:(NSUInteger)length;
 
 - (vImage_Buffer)floatBufferForSliceAtIndex:(NSUInteger)z;
-- (NIUnsignedInt16ImageRep *)unsignedInt16ImageRepForSliceAtIndex:(NSUInteger)z;
 - (NIVolumeData *)volumeDataForSliceAtIndex:(NSUInteger)z;
 
 // returns a volumeData with the same underlying data, but with the passed in modelToVoxelTransform
