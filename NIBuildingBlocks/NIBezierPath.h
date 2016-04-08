@@ -37,7 +37,7 @@ enum _NIBezierPathElement {
     NIMoveToBezierPathElement,
     NILineToBezierPathElement,
     NICurveToBezierPathElement,
-	NICloseBezierPathElement
+    NICloseBezierPathElement
 };
 typedef NSInteger NIBezierPathElement;
 

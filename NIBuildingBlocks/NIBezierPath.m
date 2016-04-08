@@ -40,24 +40,24 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithNIBezierCore:(NIBezierCoreRef)bezierCore
 {
-	if ( (self = [super init]) ) {
-		_bezierCore	= NIBezierCoreRetain(bezierCore);
-	}
-	return self;
+    if ( (self = [super init]) ) {
+        _bezierCore	= NIBezierCoreRetain(bezierCore);
+    }
+    return self;
 }
 
 - (NIBezierCoreRef)NIBezierCore
 {
-	return _bezierCore;
+    return _bezierCore;
 }
 
 - (void)dealloc
 {
-	NIBezierCoreRelease(_bezierCore);
-	_bezierCore = nil;
-	[super dealloc];
+    NIBezierCoreRelease(_bezierCore);
+    _bezierCore = nil;
+    [super dealloc];
 }
-				  
+
 @end
 
 
@@ -94,15 +94,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable instancetype)initWithDictionaryRepresentation:(NSDictionary *)dict
 {
-	if ( (self = [self init]) ) {
+    if ( (self = [self init]) ) {
         NIBezierCoreRelease(_bezierCore);
-		_bezierCore = NIBezierCoreCreateMutableWithDictionaryRepresentation((CFDictionaryRef)dict);
-		if (_bezierCore == nil) {
-			[self autorelease];
-			return nil;
-		}
-	}
-	return self;
+        _bezierCore = NIBezierCoreCreateMutableWithDictionaryRepresentation((CFDictionaryRef)dict);
+        if (_bezierCore == nil) {
+            [self autorelease];
+            return nil;
+        }
+    }
+    return self;
 }
 
 - (nullable instancetype)initWithNIBezierCore:(NIBezierCoreRef)bezierCore
@@ -118,31 +118,31 @@ NS_ASSUME_NONNULL_BEGIN
 {
     NIVectorArray vectorArray;
     NSInteger i;
-    
+
     if ( (self = [self init]) ) {
-		if ([nodes count] >= 2) {
-			vectorArray = malloc(sizeof(NIVector) * [nodes count]);
-			
-			for (i = 0; i < [nodes count]; i++) {
-				vectorArray[i] = [[nodes objectAtIndex:i] NIVectorValue];
-			}
-			
+        if ([nodes count] >= 2) {
+            vectorArray = malloc(sizeof(NIVector) * [nodes count]);
+
+            for (i = 0; i < [nodes count]; i++) {
+                vectorArray[i] = [[nodes objectAtIndex:i] NIVectorValue];
+            }
+
             NIBezierCoreRelease(_bezierCore);
             _bezierCore = NIBezierCoreCreateMutableCurveWithNodes(vectorArray, [nodes count], style);
-			
-			free(vectorArray);
-		} else if ([nodes count] == 0) {
+
+            free(vectorArray);
+        } else if ([nodes count] == 0) {
             NIBezierCoreRelease(_bezierCore);
-			_bezierCore = NIBezierCoreCreateMutable();
-		} else {
+            _bezierCore = NIBezierCoreCreateMutable();
+        } else {
             NIBezierCoreRelease(_bezierCore);
-			_bezierCore = NIBezierCoreCreateMutable();
-			NIBezierCoreAddSegment(_bezierCore, NIMoveToBezierCoreSegmentType, NIVectorZero, NIVectorZero, [[nodes objectAtIndex:0] NIVectorValue]);
-			if ([nodes count] > 1) {
-				NIBezierCoreAddSegment(_bezierCore, NILineToBezierCoreSegmentType, NIVectorZero, NIVectorZero, [[nodes objectAtIndex:1] NIVectorValue]);
-			}
-		}
-        
+            _bezierCore = NIBezierCoreCreateMutable();
+            NIBezierCoreAddSegment(_bezierCore, NIMoveToBezierCoreSegmentType, NIVectorZero, NIVectorZero, [[nodes objectAtIndex:0] NIVectorValue]);
+            if ([nodes count] > 1) {
+                NIBezierCoreAddSegment(_bezierCore, NILineToBezierCoreSegmentType, NIVectorZero, NIVectorZero, [[nodes objectAtIndex:1] NIVectorValue]);
+            }
+        }
+
         if (_bezierCore == NULL) {
             [self autorelease];
             self = nil;
@@ -174,7 +174,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)copyWithZone:(nullable NSZone *)zone
 {
     NIMutableBezierPath *bezierPath;
-    
+
     bezierPath = [[NIMutableBezierPath allocWithZone:zone] initWithBezierPath:self];
     return bezierPath;
 }
@@ -182,7 +182,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)mutableCopyWithZone:(nullable NSZone *)zone
 {
     NIMutableBezierPath *bezierPath;
-    
+
     bezierPath = [[NIMutableBezierPath allocWithZone:zone] initWithBezierPath:self];
     return bezierPath;
 }
@@ -212,12 +212,12 @@ NS_ASSUME_NONNULL_BEGIN
     NIVector planeVector = NIVectorANormalVector(normal);
     NIVector planeVector2 = NIVectorCrossProduct(normal, planeVector);
     NIMutableBezierPath *bezierPath = [NIMutableBezierPath bezierPath];
-    
+
     NIVector corner1 = NIVectorAdd(center, NIVectorScalarMultiply(planeVector, radius));
     NIVector corner2 = NIVectorAdd(center, NIVectorScalarMultiply(planeVector2, radius));
     NIVector corner3 = NIVectorAdd(center, NIVectorScalarMultiply(planeVector, -radius));
     NIVector corner4 = NIVectorAdd(center, NIVectorScalarMultiply(planeVector2, -radius));
-    
+
     [bezierPath moveToVector:corner1];
     [bezierPath curveToVector:corner2
                controlVector1:NIVectorAdd(corner1, NIVectorScalarMultiply(planeVector2, radius*0.551784))
@@ -241,7 +241,7 @@ NS_ASSUME_NONNULL_BEGIN
     _bezierCore = nil;
     NIBezierCoreRandomAccessorRelease(_bezierCoreRandomAccessor);
     _bezierCoreRandomAccessor = nil;
-    
+
     [super dealloc];
 }
 
@@ -250,7 +250,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (self == bezierPath) {
         return YES;
     }
-    
+
     return NIBezierCoreEqualToBezierCore(_bezierCore, [bezierPath NIBezierCore]);
 }
 
@@ -269,23 +269,23 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)description
 {
-	return [(NSString *)NIBezierCoreCopyDescription(_bezierCore) autorelease];
+    return [(NSString *)NIBezierCoreCopyDescription(_bezierCore) autorelease];
 }
 
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id *)stackbuf count:(NSUInteger)len
 {
-	NIVector endpoint;
+    NIVector endpoint;
     NSValue *endpointValue;
-	
+
     if(state->state == 0) {
         [self length];
         state->mutationsPtr = (unsigned long *)&(self->_length);
     }
-    
+
     if (state->state >= [self elementCount]) {
         return 0;
     }
-    
+
     [self elementAtIndex:state->state control1:NULL control2:NULL endpoint:&endpoint];
     endpointValue = [NSValue valueWithNIVector:endpoint];
     state->itemsPtr = &endpointValue;
@@ -339,7 +339,7 @@ NS_ASSUME_NONNULL_BEGIN
     newBezierPath = [[self mutableCopy] autorelease];
     [newBezierPath addEndpointsAtIntersectionsWithPlane:plane];
     return newBezierPath;
-}    
+}
 
 - (NIBezierPath *)bezierPathByAppendingBezierPath:(NIBezierPath *)bezierPath connectPaths:(BOOL)connectPaths;
 {
@@ -361,11 +361,11 @@ NS_ASSUME_NONNULL_BEGIN
 {
     NIBezierPath *outlinePath;
     NIBezierCoreRef outlineCore;
-    
-	if (NIBezierCoreSubpathCount(_bezierCore) != 1) {
-		return nil;
-	}
-	
+
+    if (NIBezierCoreSubpathCount(_bezierCore) != 1) {
+        return nil;
+    }
+
     outlineCore = NIBezierCoreCreateOutline(_bezierCore, distance, spacing, initalNormal);
     outlinePath = [[NIBezierPath alloc] initWithNIBezierCore:outlineCore];
     NIBezierCoreRelease(outlineCore);
@@ -376,11 +376,11 @@ NS_ASSUME_NONNULL_BEGIN
 {
     NIBezierPath *outlinePath;
     NIBezierCoreRef outlineCore;
-    
-	if (NIBezierCoreSubpathCount(_bezierCore) != 1) {
-		return nil;
-	}
-	
+
+    if (NIBezierCoreSubpathCount(_bezierCore) != 1) {
+        return nil;
+    }
+
     outlineCore = NIBezierCoreCreateOutlineWithNormal(_bezierCore, distance, spacing, projectionNormal);
     outlinePath = [[NIBezierPath alloc] initWithNIBezierCore:outlineCore];
     NIBezierCoreRelease(outlineCore);
@@ -395,12 +395,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (CGFloat)length
 {
-	@synchronized (self) {
-		if (_length	== 0.0) {
-			_length = NIBezierCoreLength(_bezierCore);
-		}
-	}
-	return _length;
+    @synchronized (self) {
+        if (_length	== 0.0) {
+            _length = NIBezierCoreLength(_bezierCore);
+        }
+    }
+    return _length;
 }
 
 - (CGFloat)lengthThroughElementAtIndex:(NSInteger)element
@@ -410,12 +410,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NIBezierCoreRef)NIBezierCore
 {
-	_NIBezierCoreSteward *bezierCoreSteward;
-	NIBezierCoreRef copy;
-	copy = NIBezierCoreCreateCopy(_bezierCore);
-	bezierCoreSteward = [[_NIBezierCoreSteward alloc] initWithNIBezierCore:copy];
-	NIBezierCoreRelease(copy);
-	[bezierCoreSteward autorelease];
+    _NIBezierCoreSteward *bezierCoreSteward;
+    NIBezierCoreRef copy;
+    copy = NIBezierCoreCreateCopy(_bezierCore);
+    bezierCoreSteward = [[_NIBezierCoreSteward alloc] initWithNIBezierCore:copy];
+    NIBezierCoreRelease(copy);
+    [bezierCoreSteward autorelease];
     return [bezierCoreSteward NIBezierCore];
 }
 
@@ -453,7 +453,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSDictionary *)dictionaryRepresentation
 {
-	return [(NSDictionary *)NIBezierCoreCreateDictionaryRepresentation(_bezierCore) autorelease];
+    return [(NSDictionary *)NIBezierCoreCreateDictionaryRepresentation(_bezierCore) autorelease];
 }
 
 - (NIVector)vectorAtStart
@@ -478,10 +478,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NIVector)normalAtEndWithInitialNormal:(NIVector)initialNormal
 {
-	if (NIBezierCoreSubpathCount(_bezierCore) != 1) {
-		return NIVectorZero;
-	}
-	
+    if (NIBezierCoreSubpathCount(_bezierCore) != 1) {
+        return NIVectorZero;
+    }
+
     return NIBezierCoreNormalAtEndWithInitialNormal(_bezierCore, initialNormal);
 }
 
@@ -502,13 +502,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NIPlane)leastSquaresPlane
 {
-	return NIBezierCoreLeastSquaresPlane(_bezierCore);
+    return NIBezierCoreLeastSquaresPlane(_bezierCore);
 }
 
 - (NIPlane)topBoundingPlaneForNormal:(NIVector)normal
 {
     NIPlane plane;
-    
+
     NIBezierCoreGetBoundingPlanesForNormal(_bezierCore, normal, &plane, NULL);
     return plane;
 }
@@ -516,7 +516,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NIPlane)bottomBoundingPlaneForNormal:(NIVector)normal
 {
     NIPlane plane;
-    
+
     NIBezierCoreGetBoundingPlanesForNormal(_bezierCore, normal, NULL, &plane);
     return plane;
 }
@@ -532,25 +532,25 @@ NS_ASSUME_NONNULL_BEGIN
     NIVector control1Vector;
     NIVector control2Vector;
     NIVector endpointVector;
-    
+
     @synchronized (self) {
         if (_bezierCoreRandomAccessor == NULL) {
             _bezierCoreRandomAccessor = NIBezierCoreRandomAccessorCreateWithMutableBezierCore(_bezierCore);
         }
     }
-    
+
     segmentType = NIBezierCoreRandomAccessorGetSegmentAtIndex(_bezierCoreRandomAccessor, index, &control1Vector,  &control2Vector, &endpointVector);
-    
+
     switch (segmentType) {
         case NIMoveToBezierCoreSegmentType:
             if (endpoint) {
                 *endpoint = endpointVector;
-            }            
+            }
             return NIMoveToBezierPathElement;
         case NILineToBezierCoreSegmentType:
             if (endpoint) {
                 *endpoint = endpointVector;
-            }            
+            }
             return NILineToBezierPathElement;
         case NICurveToBezierCoreSegmentType:
             if (control1) {
@@ -563,10 +563,10 @@ NS_ASSUME_NONNULL_BEGIN
                 *endpoint = endpointVector;
             }
             return NICurveToBezierPathElement;
-		case NICloseBezierCoreSegmentType:
+        case NICloseBezierCoreSegmentType:
             if (endpoint) {
                 *endpoint = endpointVector;
-            }            
+            }
             return NICloseBezierPathElement;
         default:
             assert(0);
@@ -577,7 +577,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NIVector)vectorAtRelativePosition:(CGFloat)relativePosition // RelativePosition is in [0, 1]
 {
     NIVector vector;
-    
+
     if (NIBezierCoreGetVectorInfo(_bezierCore, 0, relativePosition * [self length], NIVectorZero, &vector, NULL, NULL, 1)) {
         return vector;
     } else {
@@ -588,27 +588,27 @@ NS_ASSUME_NONNULL_BEGIN
 - (NIVector)tangentAtRelativePosition:(CGFloat)relativePosition
 {
     NIVector tangent;
-    
+
     if (NIBezierCoreGetVectorInfo(_bezierCore, 0, relativePosition * [self length], NIVectorZero, NULL, &tangent, NULL, 1)) {
         return tangent;
     } else {
         return [self tangentAtEnd];
-    }    
+    }
 }
 
 - (NIVector)normalAtRelativePosition:(CGFloat)relativePosition initialNormal:(NIVector)initialNormal
 {
     NIVector normal;
-    
-	if (NIBezierCoreSubpathCount(_bezierCore) != 1) {
-		return NIVectorZero;
-	}
-	
+
+    if (NIBezierCoreSubpathCount(_bezierCore) != 1) {
+        return NIVectorZero;
+    }
+
     if (NIBezierCoreGetVectorInfo(_bezierCore, 0, relativePosition * [self length], initialNormal, NULL, NULL, &normal, 1)) {
         return normal;
     } else {
         return [self normalAtEndWithInitialNormal:initialNormal];
-    }    
+    }
 }
 
 - (CGFloat)relativePositionClosestToVector:(NIVector)vector
@@ -630,14 +630,14 @@ NS_ASSUME_NONNULL_BEGIN
 {
     NIMutableBezierPath *collapsedBezierPath;
     NIAffineTransform collapseTransform;
-    
+
     collapsedBezierPath = [self mutableCopy];
-    
+
     collapseTransform = NIAffineTransformIdentity;
     collapseTransform.m33 = 0.0;
-    
+
     [collapsedBezierPath applyAffineTransform:collapseTransform];
-    
+
     return [collapsedBezierPath autorelease];
 }
 
@@ -645,7 +645,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
     NIBezierCoreRef reversedBezierCore;
     NIMutableBezierPath *reversedBezierPath;
-    
+
     reversedBezierCore = NIBezierCoreCreateCopyByReversing(_bezierCore);
     reversedBezierPath = [NIMutableBezierPath bezierPathNIBezierCore:reversedBezierCore];
     NIBezierCoreRelease(reversedBezierCore);
@@ -659,47 +659,47 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSArray*)intersectionsWithPlane:(NIPlane)plane relativePositions:(NSArray * __nonnull * __nullable)returnedRelativePositions;
 {
-	NIMutableBezierPath *flattenedPath;
-	NIBezierCoreRef bezierCore;
-	NSInteger intersectionCount;
-	NSInteger i;
-	NSMutableArray *intersectionArray;
-	NSMutableArray *relativePositionArray;
-	CGFloat *relativePositions;
-	NIVector *intersections;
-	
+    NIMutableBezierPath *flattenedPath;
+    NIBezierCoreRef bezierCore;
+    NSInteger intersectionCount;
+    NSInteger i;
+    NSMutableArray *intersectionArray;
+    NSMutableArray *relativePositionArray;
+    CGFloat *relativePositions;
+    NIVector *intersections;
+
     if (NIBezierCoreHasCurve(_bezierCore)) {
         flattenedPath = [self mutableCopy];
         [flattenedPath subdivide:NIBezierDefaultSubdivideSegmentLength];
         [flattenedPath flatten:NIBezierDefaultFlatness];
-        
+
         bezierCore = NIBezierCoreRetain([flattenedPath NIBezierCore]);
         [flattenedPath release];
     } else {
         bezierCore = NIBezierCoreRetain(_bezierCore);
     }
 
-	intersectionCount = NIBezierCoreCountIntersectionsWithPlane(bezierCore, plane);
-	intersections = malloc(intersectionCount * sizeof(NIVector));
-	relativePositions = malloc(intersectionCount * sizeof(CGFloat));
-	
-	intersectionCount = NIBezierCoreIntersectionsWithPlane(bezierCore, plane, intersections, relativePositions, intersectionCount);
-	
-	intersectionArray = [NSMutableArray arrayWithCapacity:intersectionCount];
-	relativePositionArray = [NSMutableArray arrayWithCapacity:intersectionCount];
-	for (i = 0; i < intersectionCount; i++) {
-		[intersectionArray addObject:[NSValue valueWithNIVector:intersections[i]]];
-		[relativePositionArray addObject:[NSNumber numberWithDouble:relativePositions[i]]];
-	}
-	
-	free(relativePositions);
-	free(intersections);
+    intersectionCount = NIBezierCoreCountIntersectionsWithPlane(bezierCore, plane);
+    intersections = malloc(intersectionCount * sizeof(NIVector));
+    relativePositions = malloc(intersectionCount * sizeof(CGFloat));
+
+    intersectionCount = NIBezierCoreIntersectionsWithPlane(bezierCore, plane, intersections, relativePositions, intersectionCount);
+
+    intersectionArray = [NSMutableArray arrayWithCapacity:intersectionCount];
+    relativePositionArray = [NSMutableArray arrayWithCapacity:intersectionCount];
+    for (i = 0; i < intersectionCount; i++) {
+        [intersectionArray addObject:[NSValue valueWithNIVector:intersections[i]]];
+        [relativePositionArray addObject:[NSNumber numberWithDouble:relativePositions[i]]];
+    }
+
+    free(relativePositions);
+    free(intersections);
     NIBezierCoreRelease(bezierCore);
-    
+
     if (returnedRelativePositions) {
         *returnedRelativePositions = relativePositionArray;
     }
-	return intersectionArray;
+    return intersectionArray;
 }
 
 - (NSArray *)subPaths
@@ -707,11 +707,11 @@ NS_ASSUME_NONNULL_BEGIN
     NSMutableArray *subPaths = [NSMutableArray array];
     CFArrayRef cfSubPaths = NIBezierCoreCopySubpaths(_bezierCore);
     NSUInteger i;
-    
+
     for (i = 0; i < CFArrayGetCount(cfSubPaths); i++) {
         [subPaths addObject:[NIBezierPath bezierPathNIBezierCore:CFArrayGetValueAtIndex(cfSubPaths, i)]];
     }
-    
+
     CFRelease(cfSubPaths);
     return subPaths;
 }
@@ -720,7 +720,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
     NIBezierCoreRef clippedBezierCore;
     NIMutableBezierPath *clippedBezierPath;
-    
+
     clippedBezierCore = NIBezierCoreCreateCopyByClipping(_bezierCore, startRelativePosition, endRelativePosition);
     clippedBezierPath = [NIMutableBezierPath bezierPathNIBezierCore:clippedBezierCore];
     NIBezierCoreRelease(clippedBezierCore);
@@ -764,7 +764,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)close
 {
-	[self _clearRandomAccessor];
+    [self _clearRandomAccessor];
     NIBezierCoreAddSegment(_bezierCore, NICloseBezierCoreSegmentType, NIVectorZero, NIVectorZero, NIVectorZero);
 }
 
@@ -794,7 +794,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)projectToPlane:(NIPlane)plane
 {
     NIMutableBezierCoreRef newBezierCore;
-    
+
     [self _clearRandomAccessor];
     newBezierCore = NIBezierCoreCreateMutableCopyProjectedToPlane(_bezierCore, plane);
     NIBezierCoreRelease(_bezierCore);
@@ -810,7 +810,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addEndpointsAtIntersectionsWithPlane:(NIPlane)plane // will flatten the path if it is not already flattened
 {
     NIMutableBezierCoreRef newBezierCore;
-    
+
     [self _clearRandomAccessor];
     newBezierCore = NIBezierCoreCreateMutableCopyWithEndpointsAtPlaneIntersections(_bezierCore, plane);
     NIBezierCoreRelease(_bezierCore);
@@ -821,13 +821,13 @@ NS_ASSUME_NONNULL_BEGIN
 {
     NIBezierCoreRandomAccessorRelease(_bezierCoreRandomAccessor);
     _bezierCoreRandomAccessor = NULL;
-	_length = 0.0;
+    _length = 0.0;
 }
 
 - (void)setVectorsForElementAtIndex:(NSInteger)index control1:(NIVector)control1 control2:(NIVector)control2 endpoint:(NIVector)endpoint
 {
-	[self elementAtIndex:index]; // just to make sure that the _bezierCoreRandomAccessor has been initialized
-	NIBezierCoreRandomAccessorSetVectorsForSegementAtIndex(_bezierCoreRandomAccessor, index, control1, control2, endpoint);
+    [self elementAtIndex:index]; // just to make sure that the _bezierCoreRandomAccessor has been initialized
+    NIBezierCoreRandomAccessorSetVectorsForSegementAtIndex(_bezierCoreRandomAccessor, index, control1, control2, endpoint);
 }
 
 @end
@@ -837,26 +837,26 @@ NS_ASSUME_NONNULL_BEGIN
 // http://www.codeproject.com/Articles/33776/Draw-Closed-Smooth-Curve-with-Bezier-Spline
 + (nullable instancetype)closedSplinePathWithNodes:(NSArray *)ka {
     size_t const n = ka.count;
-    
+
     if (n <= 2)
         return nil;
-    
+
     NIVector k[n];
     for (NSUInteger i = 0; i < n; ++i)
         k[i] = [ka[i] NIVectorValue];
-    
+
     NIVector a[n], b[n], c[n];
     for (NSUInteger i = 0; i < n; ++i) {
         a[i] = c[i] = NIVectorOne; b[i] = NIVectorMake(4, 4, 4);
     }
-    
+
     NIVector rhs[n]; // right hand side
     for (size_t i = 0; i < n; ++i)
         rhs[i] = NIVectorAdd(NIVectorScalarMultiply(k[i], 4), NIVectorScalarMultiply(k[(i+1)%n], 2));
-    
+
     NIVector cp1[n];
     cyclicSolve(n, a, b, c, NIVectorOne, NIVectorOne, rhs, cp1);
-    
+
     NIMutableBezierPath *path = [NIMutableBezierPath bezierPath];
     [path moveToVector:k[n-1]];
     for (int i = 0; i < n; ++i)
@@ -864,7 +864,7 @@ NS_ASSUME_NONNULL_BEGIN
              controlVector1:cp1[(i? i-1 : n-1)]
              controlVector2:NIVectorSubtract(NIVectorScalarMultiply(k[i], 2), cp1[i])];
     [path close];
-    
+
     return path;
 }
 
@@ -877,30 +877,30 @@ NS_ASSUME_NONNULL_BEGIN
 // This is a tridiagonal system, except for the matrix elements a and ß in the corners
 static void cyclicSolve(const size_t n, const NIVector *a, const NIVector *b, const NIVector *c, const NIVector alpha, const NIVector beta, const NIVector *rhs, NIVector* x) {
     NIVector gamma = NIVectorInvert(b[0]), bb[n];
-    
+
     // set up the diagonal of the modified tridiagonal system
     bb[0] = NIVectorSubtract(b[0], gamma);
     for (size_t i = 1; i < n-1; ++i)
         bb[i] = b[i];
     bb[n-1] = NIVectorSubtract(b[n-1], NIVectorDivide(NIVectorMultiply(alpha, beta), gamma));
-    
+
     // solve A·x = r
     tridiagonalSolve(n, a, bb, c, rhs, x);
-    
+
     // setup u
     NIVector u[n];
     u[0] = gamma;
     for (size_t i = 1; i < n-1; ++i)
         u[i] = NIVectorZero;
     u[n-1] = alpha;
-    
+
     // solve A·z = u
     NIVector z[n];
     tridiagonalSolve(n, a, bb, c, u, z);
-    
+
     // form v·x/(1+v·z)
     NIVector fact = NIVectorDivide(NIVectorAdd(x[0], NIVectorDivide(NIVectorMultiply(beta, x[n-1]), gamma)), NIVectorAdd(NIVectorOne, NIVectorAdd(z[0], NIVectorDivide(NIVectorMultiply(beta, z[n-1]), gamma))));
-    
+
     // get the solution
     for (size_t i = 0; i < n; ++i)
         x[i] = NIVectorSubtract(x[i], NIVectorMultiply(fact, z[i]));
@@ -908,7 +908,7 @@ static void cyclicSolve(const size_t n, const NIVector *a, const NIVector *b, co
 
 static void tridiagonalSolve(const size_t n, const NIVector *a, const NIVector *b, const NIVector *c, const NIVector *r, NIVector *u) {
     assert(b[0].x != 0 && b[0].y != 0 && b[0].z != 0);
-    
+
     NIVector gam[n]; // workspace
     NIVector bet = b[0];
     u[0] = NIVectorDivide(r[0], bet);
@@ -918,7 +918,7 @@ static void tridiagonalSolve(const size_t n, const NIVector *a, const NIVector *
         assert(bet.x != 0 && bet.y != 0 && bet.z != 0);
         u[i] = NIVectorDivide(NIVectorSubtract(r[i], NIVectorMultiply(a[i], u[i-1])), bet);
     }
-    
+
     for (size_t i = 1; i < n; ++i)
         u[n-i-1] = NIVectorSubtract(u[n-i-1], NIVectorMultiply(gam[n-i], u[n-i])); // backsubstitution
 }
