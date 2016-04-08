@@ -25,6 +25,8 @@
 #import "NIGeometry.h"
 #import "NIVolumeData.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class NIVolumeData;
 
 @interface NIFloatImageRep : NSImageRep
@@ -51,18 +53,21 @@
 @property (nonatomic, readwrite, assign) CGFloat windowWidth; // these will affect how this rep will draw when part of an NSImage
 @property (nonatomic, readwrite, assign) CGFloat windowLevel;
 @property (nonatomic, readwrite, assign) BOOL invert; // invert the intensity after applying the WW/WL
-@property (nonatomic, readwrite, retain) id CLUT; // Can be an NSColor or an NSGradient;
+@property (nullable, nonatomic, readwrite, retain) id CLUT; // Can be an NSColor or an NSGradient;
 
-- (instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh;
-- (instancetype)initWithBytes:(float *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh;
-- (instancetype)initWithBytesNoCopy:(float *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh freeWhenDone:(BOOL)freeWhenDone;
+- (instancetype)init NS_UNAVAILABLE;
+
+- (instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithBytes:(float *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithBytesNoCopy:(float *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh freeWhenDone:(BOOL)freeWhenDone NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithCoder:(NSCoder *)coder NS_DESIGNATED_INITIALIZER;
 
 - (float *)floatBytes;
 - (const unsigned char *)windowedBytes; // unsigned chars of intensity
 - (const unsigned char *)CLUTBytes; // RGBA unsigned chars
 - (NSData *)floatData;
 - (NSData *)windowedData; // unsigned chars of intensity
-- (NSData *)CLUTData; // RGBA unsigned chars premultiplied ARGB8888
+- (nullable NSData *)CLUTData; // RGBA unsigned chars premultiplied ARGB8888
 - (NSBitmapImageRep *)bitmapImageRep; // NSBitmapImageRep of the data after windowing, inverting, and applying the CLUT.
 
 @property (nonatomic, readwrite, assign) CGFloat sliceThickness;
@@ -70,8 +75,8 @@
 @property (nonatomic, readwrite, assign) NIAffineTransform imageToModelTransform;
 @property (nonatomic, readwrite, getter = isCurved) BOOL curved;
 
-@property (nonatomic, readwrite, copy) NSPoint (^convertPointFromModelVectorBlock)(NIVector);
-@property (nonatomic, readwrite, copy) NIVector (^convertPointToModelVectorBlock)(NSPoint);
+@property (nullable, nonatomic, readwrite, copy) NSPoint (^convertPointFromModelVectorBlock)(NIVector);
+@property (nullable, nonatomic, readwrite, copy) NIVector (^convertPointToModelVectorBlock)(NSPoint);
 
 - (NSPoint)convertPointFromModelVector:(NIVector)vector;
 - (NIVector)convertPointToModelVector:(NSPoint)point;
@@ -93,5 +98,7 @@
 @interface NIVolumeData(NIFloatImageRepAdditions)
 - (NIFloatImageRep *)floatImageRepForSliceAtIndex:(NSUInteger)z;
 @end
+
+NS_ASSUME_NONNULL_END
 
 

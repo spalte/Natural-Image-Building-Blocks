@@ -22,6 +22,7 @@
 #import "NIGeometry.h"
 #import "NIVolumeData.h"
 
+NS_ASSUME_NONNULL_BEGIN
 /** A structure used to describe a single run length of a mask.
  
  */
@@ -87,7 +88,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun); // should this be a function, or
 /** Returns NSOrderedAscending if `maskRun2` is larger than `maskRun1`.
  
  */
-NSComparisonResult NIMaskCompareRunValues(NSValue *maskRun1, NSValue *maskRun2, void *context);
+NSComparisonResult NIMaskCompareRunValues(NSValue *maskRun1, NSValue *maskRun2, void * _Nullable context);
 
 /** Returns a value larger than 0 if `maskRun2` is larger than `maskRun1`.
  
@@ -166,36 +167,36 @@ CF_EXTERN_C_END
  
  @return The newly crated and initialized mask object.
  */
-+ (instancetype)mask;
++ (nullable instancetype)mask;
 
 /** Returns a newly created mask that has the shape of a sphere with the specified diameter.
  
  @return The newly crated and initialized mask object.
  */
-+ (instancetype)maskWithSphereDiameter:(NSUInteger)diameter;
++ (nullable instancetype)maskWithSphereDiameter:(NSUInteger)diameter;
 
 /** Returns a newly created mask that has the shape of a cube with the specified size.
  
  @return The newly crated and initialized mask object.
  */
-+ (instancetype)maskWithCubeSize:(NSUInteger)size;
++ (nullable instancetype)maskWithCubeSize:(NSUInteger)size;
 
 /** Returns a newly created mask that has the shape of a box with the specified sizes.
  
  @return The newly crated and initialized mask object.
  */
-+ (instancetype)maskWithBoxWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth;
++ (nullable instancetype)maskWithBoxWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth;
 
 /** Returns a newly created mask that has the shape of an ellipsoid with the specified sizes.
  
  @return The newly crated and initialized mask object.
  */
-+ (instancetype)maskWithEllipsoidWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth;
++ (nullable instancetype)maskWithEllipsoidWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth;
 
 /** Returns a mask formed by drawing the line from start to end.
 
  */
-+ (instancetype)maskWithLineFrom:(NIVector)start to:(NIVector)end;
++ (nullable instancetype)maskWithLineFrom:(NIVector)start to:(NIVector)end;
 
 /** Returns a newly created mask based on the intesities of the volumeData.
  
@@ -205,8 +206,8 @@ CF_EXTERN_C_END
  @param volumeData The NIVolumeData on which to build and base the mask.
  @param modelToVoxelTransformPtr Returns the transform needed to go from model space to the mask
  */
-+ (instancetype)maskFromVolumeData:(NIVolumeData *)volumeData modelToVoxelTransform:(NIAffineTransformPointer)modelToVoxelTransformPtr;
-+ (instancetype)maskFromVolumeData:(NIVolumeData *)volumeData __deprecated;
++ (nullable instancetype)maskFromVolumeData:(NIVolumeData *)volumeData modelToVoxelTransform:(nullable NIAffineTransformPointer)modelToVoxelTransformPtr;
++ (nullable instancetype)maskFromVolumeData:(NIVolumeData *)volumeData __deprecated;
 
 /** Initializes and returns a newly created empty mask.
  
@@ -214,7 +215,7 @@ CF_EXTERN_C_END
  
  @return The initialized mask object.
  */
-- (instancetype)init;
+- (nullable instancetype)init NS_DESIGNATED_INITIALIZER;
 
 // create the thing, maybe we should really be working with C arrays.... or at least give the option
 /** Initializes and returns a newly created mask.
@@ -224,7 +225,7 @@ CF_EXTERN_C_END
  @return The initialized mask object or `nil` if there was a problem initializing the object.
  @param maskRuns An array of NIMaskRun structs in NSValues.
  */
-- (instancetype)initWithMaskRuns:(NSArray *)maskRuns;
+- (nullable instancetype)initWithMaskRuns:(NSArray *)maskRuns NS_DESIGNATED_INITIALIZER;
 
 /** Initializes and returns a newly created mask.
  
@@ -233,7 +234,7 @@ CF_EXTERN_C_END
  @return The initialized mask object or `nil` if there was a problem initializing the object.
  @param maskRunData is the serialized NIMaskRuns.
  */
-- (instancetype)initWithMaskRunData:(NSData *)maskRunData;
+- (nullable instancetype)initWithMaskRunData:(NSData *)maskRunData;
 
 /** Initializes and returns a newly created mask.
  
@@ -242,7 +243,7 @@ CF_EXTERN_C_END
  @return The initialized mask object or `nil` if there was a problem initializing the object.
  @param maskRunData is the serialized NIMaskRuns.
  */
-- (instancetype)initWithSortedMaskRunData:(NSData *)maskRunData;
+- (nullable instancetype)initWithSortedMaskRunData:(NSData *)maskRunData NS_DESIGNATED_INITIALIZER;
 
 // create the thing, maybe we should really be working with C arrays.... or at least give the option
 /** Initializes and returns a newly created mask.
@@ -252,7 +253,7 @@ CF_EXTERN_C_END
  @return The initialized mask object or `nil` if there was a problem initializing the object.
  @param maskRuns An array of NIMaskRun structs in NSValues.
  */
-- (instancetype)initWithSortedMaskRuns:(NSArray *)maskRuns;
+- (nullable instancetype)initWithSortedMaskRuns:(NSArray *)maskRuns NS_DESIGNATED_INITIALIZER;
 
 /** Initializes and returns a newly created mask.
  
@@ -261,7 +262,7 @@ CF_EXTERN_C_END
  @return The initialized mask object or `nil` if there was a problem initializing the object.
  @param maskRuns An array of NIMaskIndex structs in NSValues.
  */
-- (instancetype)initWithIndexes:(NSArray *)maskIndexes;
+- (nullable instancetype)initWithIndexes:(NSArray *)maskIndexes;
 
 /** Initializes and returns a newly created mask.
  
@@ -270,7 +271,7 @@ CF_EXTERN_C_END
  @return The initialized mask object or `nil` if there was a problem initializing the object.
  @param indexData is the serialized NIMaskIndexes.
  */
-- (instancetype)initWithIndexData:(NSData *)indexData;
+- (nullable instancetype)initWithIndexData:(NSData *)indexData NS_DESIGNATED_INITIALIZER;
 
 /** Initializes and returns a newly created mask.
  
@@ -279,7 +280,7 @@ CF_EXTERN_C_END
  @return The initialized mask object or `nil` if there was a problem initializing the object.
  @param maskRuns An array of NIMaskIndex structs in NSValues.
  */
-- (instancetype)initWithSortedIndexes:(NSArray *)maskIndexes;
+- (nullable instancetype)initWithSortedIndexes:(NSArray *)maskIndexes;
 
 /** Initializes and returns a newly created mask.
  
@@ -288,7 +289,7 @@ CF_EXTERN_C_END
  @return The initialized mask object or `nil` if there was a problem initializing the object.
  @param maskRuns An array of NIMaskIndex structs in NSValues.
  */
-- (instancetype)initWithSortedIndexData:(NSData *)indexData;
+- (nullable instancetype)initWithSortedIndexData:(NSData *)indexData NS_DESIGNATED_INITIALIZER;
 
 ///-----------------------------------
 /// @name Working with the Mask
@@ -317,7 +318,7 @@ CF_EXTERN_C_END
 /** Returns a NIVolumeData filled with the intensities of the mask.
  
  */
-- (NIVolumeData *)volumeDataRepresentationWithModelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform;
+- (nullable NIVolumeData *)volumeDataRepresentationWithModelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform;
 
 /** Returns a mask formed by cropping any indexes that are further out than the bounds specified from the receiver.
 
@@ -409,7 +410,7 @@ CF_EXTERN_C_END
 /** Returns the extent of the receiver. All values are inclusive.
  
  */
-- (void)extentMinWidth:(NSUInteger*)minWidthPtr maxWidth:(NSUInteger*)maxWidthPtr minHeight:(NSUInteger*)minHeightPtr maxHeight:(NSUInteger*)maxHeightPtr minDepth:(NSUInteger*)minDepthPtr maxDepth:(NSUInteger*)maxDepthPtr;
+- (void)extentMinWidth:(nullable NSUInteger*)minWidthPtr maxWidth:(nullable NSUInteger*)maxWidthPtr minHeight:(nullable NSUInteger*)minHeightPtr maxHeight:(nullable NSUInteger*)maxHeightPtr minDepth:(nullable NSUInteger*)minDepthPtr maxDepth:(nullable NSUInteger*)maxDepthPtr;
 
 /** Returns an array of points that represent the outside bounds of the mask.
  
@@ -471,4 +472,6 @@ typedef struct __attribute__((objc_boxable)) NIMaskIndex NIMaskIndex;
 @end
 
 NSString *NSStringFromNIMaskRun(NIMaskRun run);
+
+NS_ASSUME_NONNULL_END
 

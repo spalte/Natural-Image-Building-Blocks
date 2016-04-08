@@ -263,8 +263,6 @@
 				4F151F311B1CCB3F00C8F767 /* NIVolumeData.m */,
 				7106843D1B678D800078903A /* NIMask.h */,
 				7106843E1B678D800078903A /* NIMask.m */,
-				710684421B678FD30078903A /* NIMaskRunStack.h */,
-				710684431B678FD30078903A /* NIMaskRunStack.m */,
 				71DFA2C81B6FC77E008AB997 /* NIMaskData.h */,
 				71DFA2C91B6FC77E008AB997 /* NIMaskData.m */,
 				4F151F7A1B1CD35C00C8F767 /* NIImageReps */,
@@ -273,6 +271,7 @@
 				4F151F1A1B1CCA3000C8F767 /* NIGeneratorRequestView */,
 				71F45D191BF1E1B000CABED3 /* Storage */,
 				4F151F7B1B1CD3F800C8F767 /* Goodies */,
+				4FB4E3941CB83F7B003F082A /* Private */,
 				4F151F631B1CCEE100C8F767 /* OsiriX Integration */,
 				4F151EDE1B1CC8D000C8F767 /* Supporting Files */,
 			);
@@ -422,6 +421,15 @@
 				4F4B28371BD022560033906D /* NIAgeFormatter.m */,
 			);
 			name = Goodies;
+			sourceTree = "<group>";
+		};
+		4FB4E3941CB83F7B003F082A /* Private */ = {
+			isa = PBXGroup;
+			children = (
+				710684421B678FD30078903A /* NIMaskRunStack.h */,
+				710684431B678FD30078903A /* NIMaskRunStack.m */,
+			);
+			name = Private;
 			sourceTree = "<group>";
 		};
 		4FCB58B91C56990500718CCF /* StoragePrivate */ = {

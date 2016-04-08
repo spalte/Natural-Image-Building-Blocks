@@ -28,6 +28,8 @@
 #import "NIObliqueSliceIntersectionLayer.h"
 #import <QuartzCore/QuartzCore.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface NIIntersection ()
 
 - (void)updateLayer;
@@ -184,7 +186,7 @@
     }
 }
 
-- (CGFloat)distanceToPoint:(NSPoint)point closestPoint:(NSPoint *)rpoint
+- (CGFloat)distanceToPoint:(NSPoint)point closestPoint:(nullable NSPoint *)rpoint
 {
     if (_generatorRequestView == nil || _intersectingObject == nil || !_generatorRequestView.presentedGeneratorRequest) {;
         return CGFLOAT_MAX;
@@ -241,7 +243,7 @@
 
 
 
-
+NS_ASSUME_NONNULL_END
 
 
 

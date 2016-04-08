@@ -23,6 +23,8 @@
 #import <Accelerate/Accelerate.h>
 #import "NIGeometry.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class NIUnsignedInt16ImageRep;
 
 CF_EXTERN_C_BEGIN
@@ -50,7 +52,7 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 } NIVolumeDataInlineBuffer;
 
 // Interface to the data
-@interface NIVolumeData : NSObject <NSCopying> {
+@interface NIVolumeData : NSObject <NSCopying, NSSecureCoding> {
     NSData *_floatData;
     float _outOfBoundsValue;
 
@@ -69,19 +71,21 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 + (NIAffineTransform)modelToVoxelTransformForOrigin:(NIVector)origin directionX:(NIVector)directionX pixelSpacingX:(CGFloat)pixelSpacingX directionY:(NIVector)directionY pixelSpacingY:(CGFloat)pixelSpacingY
                                      directionZ:(NIVector)directionZ pixelSpacingZ:(CGFloat)pixelSpacingZ;
 
-- (instancetype)init NS_UNAVAILABLE;
+- (nullable instancetype)init NS_UNAVAILABLE;
 
-- (instancetype)initWithBytesNoCopy:(const float *)floatBytes pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
+- (nullable instancetype)initWithBytesNoCopy:(const float *)floatBytes pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
                     modelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform outOfBoundsValue:(float)outOfBoundsValue freeWhenDone:(BOOL)freeWhenDone; // modelToVoxelTransform is the transform from Model (patient) space to pixel data
 
-- (instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
+- (nullable instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
              modelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform outOfBoundsValue:(float)outOfBoundsValue NS_DESIGNATED_INITIALIZER; // modelToVoxelTransform is the transform from Model (patient) space to pixel data
 
-- (instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
+- (nullable instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
       volumeToModelConverter:(NIVector (^)(NIVector volumeVector))volumeToModelConverter modelToVolumeConverter:(NIVector (^)(NIVector modelVector))modelToVolumeConverter
             outOfBoundsValue:(float)outOfBoundsValue NS_DESIGNATED_INITIALIZER;
 
-- (instancetype)initWithVolumeData:(NIVolumeData *)volumeData NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder *)decoder NS_DESIGNATED_INITIALIZER;
+
+- (nullable instancetype)initWithVolumeData:(NIVolumeData *)volumeData;
 
 @property (readonly) NSUInteger pixelsWide;
 @property (readonly) NSUInteger pixelsHigh;
@@ -104,8 +108,8 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 @property (readonly) NIAffineTransform modelToVoxelTransform; // modelToVoxelTransform is the transform from model (patient) space to pixel data
 
 @property (readonly, getter = isCurved) BOOL curved; // if the volume is curved the modelToVoxelTransform will be bogus, but the following properties will still work
-@property (readonly, copy) NIVector (^convertVolumeVectorToModelVectorBlock)(NIVector);
-@property (readonly, copy) NIVector (^convertVolumeVectorFromModelVectorBlock)(NIVector);
+@property (nullable, readonly, copy) NIVector (^convertVolumeVectorToModelVectorBlock)(NIVector);
+@property (nullable, readonly, copy) NIVector (^convertVolumeVectorFromModelVectorBlock)(NIVector);
 
 - (NIVector)convertVolumeVectorToModelVector:(NIVector)vector;
 - (NIVector)convertVolumeVectorFromModelVector:(NIVector)vector;
@@ -414,3 +418,4 @@ CF_INLINE float NIVolumeDataCubicInterpolatedFloatAtVolumeVector(NIVolumeDataInl
 
 CF_EXTERN_C_END
 
+NS_ASSUME_NONNULL_END

@@ -24,6 +24,8 @@
 #import "NIBezierCore.h"
 #import "NIBezierCoreAdditions.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface _NIBezierCoreSteward : NSObject
 {
 	NIBezierCoreRef _bezierCore;
@@ -62,7 +64,7 @@
 
 @implementation NIBezierPath
 
-- (instancetype)init
+- (nullable instancetype)init
 {
     if ( (self = [super init]) ) {
         _bezierCore = NIBezierCoreCreateMutable();
@@ -70,7 +72,7 @@
     return self;
 }
 
-- (instancetype)initWithBezierPath:(NIBezierPath *)bezierPath
+- (nullable instancetype)initWithBezierPath:(NIBezierPath *)bezierPath
 {
     if ( (self = [super init]) ) {
         _bezierCore = NIBezierCoreCreateMutableCopy([bezierPath NIBezierCore]);
@@ -81,7 +83,7 @@
     return self;
 }
 
-- (instancetype)initWithNSBezierPath:(NSBezierPath *)bezierPath
+- (nullable instancetype)initWithNSBezierPath:(NSBezierPath *)bezierPath
 {
     if ( (self = [super init]) ) {
         _bezierCore = NIBezierCoreCreateMutableWithNSBezierPath(bezierPath);
@@ -89,7 +91,7 @@
     return self;
 }
 
-- (instancetype)initWithDictionaryRepresentation:(NSDictionary *)dict
+- (nullable instancetype)initWithDictionaryRepresentation:(NSDictionary *)dict
 {
 	if ( (self = [super init]) ) {
 		_bezierCore = NIBezierCoreCreateMutableWithDictionaryRepresentation((CFDictionaryRef)dict);
@@ -101,7 +103,7 @@
 	return self;
 }
 
-- (instancetype)initWithNIBezierCore:(NIBezierCoreRef)bezierCore
+- (nullable instancetype)initWithNIBezierCore:(NIBezierCoreRef)bezierCore
 {
     if ( (self = [super init]) ) {
         _bezierCore = NIBezierCoreCreateMutableCopy(bezierCore);
@@ -109,7 +111,7 @@
     return self;
 }
 
-- (instancetype)initWithNodeArray:(NSArray *)nodes style:(NIBezierNodeStyle)style // array of NIVectors in NSValues;
+- (nullable instancetype)initWithNodeArray:(NSArray *)nodes style:(NIBezierNodeStyle)style // array of NIVectors in NSValues;
 {
     NIVectorArray vectorArray;
     NSInteger i;
@@ -149,7 +151,7 @@
     return YES;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)decoder
+- (nullable instancetype)initWithCoder:(NSCoder *)decoder
 {
     if ([decoder allowsKeyedCoding]) {
         NSDictionary *bezierDict;
@@ -164,7 +166,7 @@
     return self;
 }
 
-- (instancetype)copyWithZone:(NSZone *)zone
+- (instancetype)copyWithZone:(nullable NSZone *)zone
 {
     NIMutableBezierPath *bezierPath;
     
@@ -172,7 +174,7 @@
     return bezierPath;
 }
 
-- (instancetype)mutableCopyWithZone:(NSZone *)zone
+- (instancetype)mutableCopyWithZone:(nullable NSZone *)zone
 {
     NIMutableBezierPath *bezierPath;
     
@@ -180,27 +182,27 @@
     return bezierPath;
 }
 
-+ (instancetype)bezierPath
++ (nullable instancetype)bezierPath
 {
     return [[[[self class] alloc] init] autorelease];
 }
 
-+ (instancetype)bezierPathWithBezierPath:(NIBezierPath *)bezierPath
++ (nullable instancetype)bezierPathWithBezierPath:(NIBezierPath *)bezierPath
 {
     return [[[[self class] alloc] initWithBezierPath:bezierPath] autorelease];
 }
 
-+ (instancetype)bezierPathWithNSBezierPath:(NSBezierPath *)bezierPath
++ (nullable instancetype)bezierPathWithNSBezierPath:(NSBezierPath *)bezierPath
 {
     return [[[[self class] alloc] initWithNSBezierPath:bezierPath] autorelease];
 }
 
-+ (instancetype)bezierPathNIBezierCore:(NIBezierCoreRef)bezierCore
++ (nullable instancetype)bezierPathNIBezierCore:(NIBezierCoreRef)bezierCore
 {
     return [[[[self class] alloc] initWithNIBezierCore:bezierCore] autorelease];
 }
 
-+ (instancetype)bezierPathCircleWithCenter:(NIVector)center radius:(CGFloat)radius normal:(NIVector)normal
++ (nullable instancetype)bezierPathCircleWithCenter:(NIVector)center radius:(CGFloat)radius normal:(NIVector)normal
 {
     NIVector planeVector = NIVectorANormalVector(normal);
     NIVector planeVector2 = NIVectorCrossProduct(normal, planeVector);
@@ -350,7 +352,7 @@
     return newBezierPath;
 }
 
-- (NIBezierPath *)outlineBezierPathAtDistance:(CGFloat)distance initialNormal:(NIVector)initalNormal spacing:(CGFloat)spacing;
+- (nullable NIBezierPath *)outlineBezierPathAtDistance:(CGFloat)distance initialNormal:(NIVector)initalNormal spacing:(CGFloat)spacing;
 {
     NIBezierPath *outlinePath;
     NIBezierCoreRef outlineCore;
@@ -365,7 +367,7 @@
     return [outlinePath autorelease];
 }
 
-- (NIBezierPath *)outlineBezierPathAtDistance:(CGFloat)distance projectionNormal:(NIVector)projectionNormal spacing:(CGFloat)spacing
+- (nullable NIBezierPath *)outlineBezierPathAtDistance:(CGFloat)distance projectionNormal:(NIVector)projectionNormal spacing:(CGFloat)spacing
 {
     NIBezierPath *outlinePath;
     NIBezierCoreRef outlineCore;
@@ -519,7 +521,7 @@
     return [self elementAtIndex:index control1:NULL control2:NULL endpoint:NULL];
 }
 
-- (NIBezierPathElement)elementAtIndex:(NSInteger)index control1:(NIVectorPointer)control1 control2:(NIVectorPointer)control2 endpoint:(NIVectorPointer)endpoint; // Warning: differs from NSBezierPath in that controlVector2 is always the end
+- (NIBezierPathElement)elementAtIndex:(NSInteger)index control1:(nullable NIVectorPointer)control1 control2:(nullable NIVectorPointer)control2 endpoint:(nullable NIVectorPointer)endpoint; // Warning: differs from NSBezierPath in that controlVector2 is always the end
 {
     NIBezierCoreSegmentType segmentType;
     NIVector control1Vector;
@@ -614,7 +616,7 @@
     return NIBezierCoreRelativePositionClosestToLine(_bezierCore, line, NULL, NULL);
 }
 
-- (CGFloat)relativePositionClosestToLine:(NILine)line closestVector:(NIVectorPointer)vectorPointer;
+- (CGFloat)relativePositionClosestToLine:(NILine)line closestVector:(nullable NIVectorPointer)vectorPointer;
 {
     return NIBezierCoreRelativePositionClosestToLine(_bezierCore, line, vectorPointer, NULL);
 }
@@ -650,7 +652,7 @@
     return [self intersectionsWithPlane:plane relativePositions:NULL];
 }
 
-- (NSArray*)intersectionsWithPlane:(NIPlane)plane relativePositions:(NSArray **)returnedRelativePositions;
+- (NSArray*)intersectionsWithPlane:(NIPlane)plane relativePositions:(NSArray * __nonnull * __nullable)returnedRelativePositions;
 {
 	NIMutableBezierPath *flattenedPath;
 	NIBezierCoreRef bezierCore;
@@ -828,7 +830,7 @@
 @implementation NIBezierPath (MoveMe)
 
 // http://www.codeproject.com/Articles/33776/Draw-Closed-Smooth-Curve-with-Bezier-Spline
-+ (instancetype)closedSplinePathWithNodes:(NSArray *)ka {
++ (nullable instancetype)closedSplinePathWithNodes:(NSArray *)ka {
     size_t const n = ka.count;
     
     if (n <= 2)
@@ -974,7 +976,7 @@ static void tridiagonalSolve(const size_t n, const NIVector *a, const NIVector *
 
 @end
 
-
+NS_ASSUME_NONNULL_END
 
 
 

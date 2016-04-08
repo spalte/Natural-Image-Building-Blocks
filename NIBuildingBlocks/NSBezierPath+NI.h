@@ -23,10 +23,12 @@
 
 #import <Cocoa/Cocoa.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface NSBezierPath (NIAdditions)
 
 - (NSBezierPath *)convexHull;
-- (void)diameterMinStart:(NSPointPointer)minStart minEnd:(NSPointPointer)minEnd maxStart:(NSPointPointer)maxStart maxEnd:(NSPointPointer)maxEnd;
+- (void)diameterMinStart:(nullable NSPointPointer)minStart minEnd:(nullable NSPointPointer)minEnd maxStart:(nullable NSPointPointer)maxStart maxEnd:(nullable NSPointPointer)maxEnd;
 
 /**
  Returns a bitmap representation of this bezier path.
@@ -38,3 +40,5 @@
 - (NSBitmapImageRep*)bitmapWithScaling:(CGFloat)scaling fill:(BOOL)fill;
 
 @end
+
+NS_ASSUME_NONNULL_END

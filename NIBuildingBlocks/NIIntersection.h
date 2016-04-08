@@ -25,6 +25,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import <Cocoa/Cocoa.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class NIGeneratorRequest;
 @class NIGeneratorRequestView;
 @class NIObliqueSliceIntersectionLayer;
@@ -67,6 +69,8 @@
 @property (nonatomic, readwrite, retain) NSColor *color;
 @property (nonatomic, readwrite, assign) CGFloat thickness;
 
-- (CGFloat)distanceToPoint:(NSPoint)point closestPoint:(NSPoint*)rpoint; // returns CGFLOAT_MAX if can't return an actual distance
+- (CGFloat)distanceToPoint:(NSPoint)point closestPoint:(nullable NSPoint*)rpoint; // returns CGFLOAT_MAX if can't return an actual distance
 
 @end
+
+NS_ASSUME_NONNULL_END

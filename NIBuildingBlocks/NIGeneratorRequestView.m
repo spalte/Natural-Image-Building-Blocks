@@ -40,6 +40,8 @@
 #import "NIGenerator.h"
 #import "NIGeneratorRequest.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotification = @"NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotification";
 
 @interface NIGeneratorRequestView ()
@@ -60,7 +62,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
 {
     NIGeneratorRequestView *_view; // not retained
 }
-@property (nonatomic, readwrite, assign) NIGeneratorRequestView *view;
+@property (nullable, nonatomic, readwrite, assign) NIGeneratorRequestView *view;
 - (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx;
 @end
 
@@ -75,7 +77,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     [NSGraphicsContext restoreGraphicsState];
 }
 
-- (id<CAAction>)actionForLayer:(CALayer *)layer forKey:(NSString *)key
+- (nullable id<CAAction>)actionForLayer:(CALayer *)layer forKey:(NSString *)key
 {
     if ([key isEqualToString:@"contents"]) {
         return (id<CAAction>)[NSNull null];
@@ -660,7 +662,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     return [_horizontalScaleBar superlayer] != 0;
 }
 
-- (void)setGeneratorRequest:(NIGeneratorRequest *)generatorRequest
+- (void)setGeneratorRequest:(nullable NIGeneratorRequest *)generatorRequest
 {
     if ([_generatorRequest isEqual:generatorRequest] == NO)
     {
@@ -833,7 +835,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     [_intersections enumerateKeysAndObjectsUsingBlock:block];
 }
 
-- (NSString *)intersectionClosestToPoint:(NSPoint)point closestPoint:(NSPoint *)rclosestPoint distance:(CGFloat *)rdistance
+- (nullable NSString *)intersectionClosestToPoint:(NSPoint)point closestPoint:(nullable NSPoint *)rclosestPoint distance:(CGFloat *)rdistance
 {
     NSString * closestKey = nil;
     CGFloat closestDistance = CGFLOAT_MAX;
@@ -974,7 +976,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     }
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+- (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary *)change context:(nullable void *)context
 {
     if ([keyPath isEqualToString:@"presentedGeneratorRequest"] && context == _volumeDataComposingLayer) {
         self.presentedGeneratorRequest = [(NIGeneratorRequestLayer *)object presentedGeneratorRequest];
@@ -1051,7 +1053,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     return [presentedGeneratorRequest convertVolumeVectorToModelVector:NIVectorMakeFromNSPoint(point)];
 }
 
-- (NSBezierPath *)convertBezierPathFromModel:(NIBezierPath *)bezierPath
+- (nullable NSBezierPath *)convertBezierPathFromModel:(NIBezierPath *)bezierPath
 {
     // we don't know how to convert beziers when the transformation is not affine.
     if ([self.presentedGeneratorRequest isKindOfClass:[NIObliqueSliceGeneratorRequest class]] == NO) {
@@ -1080,7 +1082,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     return [[bezierPath bezierPathByApplyingTransform:fromModelTransform] NSBezierPath];
 }
 
-- (NIBezierPath *)convertBezierPathToModel:(NSBezierPath *)bezierPath
+- (nullable NIBezierPath *)convertBezierPathToModel:(NSBezierPath *)bezierPath
 {
     // we don't know how to convert beziers when the transformation is not affine.
     if ([self.presentedGeneratorRequest isKindOfClass:[NIObliqueSliceGeneratorRequest class]] == NO) {
@@ -1166,3 +1168,5 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -26,6 +26,8 @@
 
 #import "NIFloatImageRep.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface NIFloatImageRep ()
 
 - (void)_buildCachedData;
@@ -117,6 +119,55 @@
     return self;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    if ([coder allowsKeyedCoding]) {
+        if ( (self = [super initWithCoder:coder]) ) {
+            _floatData = [[coder decodeObjectOfClass:[NSData class] forKey:@"floatData"] retain];
+
+            _windowLevel = [coder decodeDoubleForKey:@"windowLevel"];
+            _windowWidth = [coder decodeDoubleForKey:@"windowWidth"];
+
+            _invert = [coder decodeBoolForKey:@"invert"];
+            _CLUT = [coder decodeObjectOfClasses:[NSSet setWithObjects:[NSColor class], [NSGradient class], nil] forKey:@"CLUT"];
+
+            _sliceThickness = [coder decodeDoubleForKey:@"sliceThickness"];
+
+            _curved = NO; // we can't encode curved planes
+            _convertPointFromModelVectorBlock = NULL;
+            _convertPointToModelVectorBlock = NULL;
+
+            _imageToModelTransform = [coder decodeNIAffineTransformForKey:@"imageToModelTransform"];
+        }
+    } else {
+        [NSException raise:NSInvalidUnarchiveOperationException format:@"*** %s: only supports keyed coders", __PRETTY_FUNCTION__];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    if ([aCoder allowsKeyedCoding]) {
+        if (_curved) {
+            [NSException raise:NSInvalidArchiveOperationException format:@"*** %s: can't archive curved images", __PRETTY_FUNCTION__];
+        }
+
+        [aCoder encodeObject:_floatData forKey:@"floatData"];
+
+        [aCoder encodeDouble:_windowLevel forKey:@"windowLevel"];
+        [aCoder encodeDouble:_windowWidth forKey:@"windowWidth"];
+
+        [aCoder encodeBool:_invert forKey:@"invert"];
+        [aCoder encodeObject:_CLUT forKey:@"CLUT"];
+
+        [aCoder encodeDouble:_sliceThickness forKey:@"sliceThickness"];
+
+        [aCoder encodeNIAffineTransform:_imageToModelTransform forKey:@"imageToModelTransform"];
+    } else {
+        [NSException raise:NSInvalidArchiveOperationException format:@"*** %s: only supports keyed coders", __PRETTY_FUNCTION__];
+    }
+}
+
 - (void)dealloc
 {
     [_floatData release];
@@ -185,7 +236,7 @@
     }
 }
 
-- (void)setCLUT:(id)CLUT
+- (void)setCLUT:(nullable id)CLUT
 {
     if (CLUT != nil && [CLUT isKindOfClass:[NSColor class]] == NO &&  [CLUT isKindOfClass:[NSGradient class]] == NO) {
         NSAssert(NO, @"CLUT is not an NSColor or NSGradient");
@@ -240,7 +291,7 @@
     return _cachedWindowedData;
 }
 
-- (NSData *)CLUTData
+- (nullable NSData *)CLUTData
 {
     [self _buildCachedData];
 
@@ -560,4 +611,7 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END
+
 

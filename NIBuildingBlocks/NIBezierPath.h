@@ -26,6 +26,8 @@
 #import "NIBezierCore.h"
 #import "NIBezierCoreAdditions.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 // NIBezierDefaultFlatness and NIBezierDefaultSubdivideSegmentLength are defined in NIBezierCore.h
 // NIBezierNodeStyle is defined in NIBezierCoreAdditions.h
 
@@ -46,18 +48,18 @@ typedef NSInteger NIBezierPathElement;
     NIBezierCoreRandomAccessorRef _bezierCoreRandomAccessor;
 }
 
-- (instancetype)init;
-- (instancetype)initWithBezierPath:(NIBezierPath *)bezierPath;
-- (instancetype)initWithNSBezierPath:(NSBezierPath *)bezierPath;
-- (instancetype)initWithDictionaryRepresentation:(NSDictionary *)dict;
-- (instancetype)initWithNIBezierCore:(NIBezierCoreRef)bezierCore;
-- (instancetype)initWithNodeArray:(NSArray *)nodes style:(NIBezierNodeStyle)style; // array of NIVectors in NSValues;
+- (nullable instancetype)init NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithBezierPath:(NIBezierPath *)bezierPath NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithNSBezierPath:(NSBezierPath *)bezierPath NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithDictionaryRepresentation:(NSDictionary *)dict NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithNIBezierCore:(NIBezierCoreRef)bezierCore NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithNodeArray:(NSArray *)nodes style:(NIBezierNodeStyle)style NS_DESIGNATED_INITIALIZER; // array of NIVectors in NSValues;
 
-+ (instancetype)bezierPath;
-+ (instancetype)bezierPathWithBezierPath:(NIBezierPath *)bezierPath;
-+ (instancetype)bezierPathWithNSBezierPath:(NSBezierPath *)bezierPath;
-+ (instancetype)bezierPathNIBezierCore:(NIBezierCoreRef)bezierCore;
-+ (instancetype)bezierPathCircleWithCenter:(NIVector)center radius:(CGFloat)radius normal:(NIVector)normal;
++ (nullable instancetype)bezierPath;
++ (nullable instancetype)bezierPathWithBezierPath:(NIBezierPath *)bezierPath;
++ (nullable instancetype)bezierPathWithNSBezierPath:(NSBezierPath *)bezierPath;
++ (nullable instancetype)bezierPathNIBezierCore:(NIBezierCoreRef)bezierCore;
++ (nullable instancetype)bezierPathCircleWithCenter:(NIVector)center radius:(CGFloat)radius normal:(NIVector)normal;
 
 - (BOOL)isEqualToBezierPath:(NIBezierPath *)bezierPath;
 
@@ -68,8 +70,8 @@ typedef NSInteger NIBezierPathElement;
 - (NIBezierPath *)bezierPathByAppendingBezierPath:(NIBezierPath *)bezierPath connectPaths:(BOOL)connectPaths;
 - (NIBezierPath *)bezierPathByAddingEndpointsAtIntersectionsWithPlane:(NIPlane)plane; // will  flatten the path if it is not already flattened
 - (NIBezierPath *)bezierPathByProjectingToPlane:(NIPlane)plane;
-- (NIBezierPath *)outlineBezierPathAtDistance:(CGFloat)distance initialNormal:(NIVector)initalNormal spacing:(CGFloat)spacing;
-- (NIBezierPath *)outlineBezierPathAtDistance:(CGFloat)distance projectionNormal:(NIVector)projectionNormal spacing:(CGFloat)spacing;
+- (nullable NIBezierPath *)outlineBezierPathAtDistance:(CGFloat)distance initialNormal:(NIVector)initalNormal spacing:(CGFloat)spacing;
+- (nullable NIBezierPath *)outlineBezierPathAtDistance:(CGFloat)distance projectionNormal:(NIVector)projectionNormal spacing:(CGFloat)spacing;
 
 - (NSInteger)elementCount;
 - (CGFloat)length;
@@ -87,7 +89,7 @@ typedef NSInteger NIBezierPathElement;
 - (NIPlane)topBoundingPlaneForNormal:(NIVector)normal;
 - (NIPlane)bottomBoundingPlaneForNormal:(NIVector)normal;
 - (NIBezierPathElement)elementAtIndex:(NSInteger)index;
-- (NIBezierPathElement)elementAtIndex:(NSInteger)index control1:(NIVectorPointer)control1 control2:(NIVectorPointer)control2 endpoint:(NIVectorPointer)endpoint; // Warning: differs from NSBezierPath in that controlVector2 is is not always the end
+- (NIBezierPathElement)elementAtIndex:(NSInteger)index control1:(nullable NIVectorPointer)control1 control2:(nullable NIVectorPointer)control2 endpoint:(nullable NIVectorPointer)endpoint; // Warning: differs from NSBezierPath in that controlVector2 is is not always the end
 
 // extra functions to help with rendering and such
 - (NIVector)vectorAtRelativePosition:(CGFloat)relativePosition; // RelativePosition is in [0, 1]
@@ -96,13 +98,13 @@ typedef NSInteger NIBezierPathElement;
 
 - (CGFloat)relativePositionClosestToVector:(NIVector)vector;
 - (CGFloat)relativePositionClosestToLine:(NILine)line;
-- (CGFloat)relativePositionClosestToLine:(NILine)line closestVector:(NIVectorPointer)vectorPointer;
+- (CGFloat)relativePositionClosestToLine:(NILine)line closestVector:(nullable NIVectorPointer)vectorPointer;
 - (NIBezierPath *)bezierPathByCollapsingZ;
 - (NSBezierPath *)NSBezierPath; // collapses Z
 - (NIBezierPath *)bezierPathByReversing;
 
 - (NSArray*)intersectionsWithPlane:(NIPlane)plane; // returns NSValues containing NIVectors of the intersections.
-- (NSArray*)intersectionsWithPlane:(NIPlane)plane relativePositions:(NSArray **)returnedRelativePositions;
+- (NSArray*)intersectionsWithPlane:(NIPlane)plane relativePositions:(NSArray * __nonnull * __nullable)returnedRelativePositions;
 
 - (NSArray *)subPaths;
 - (NIBezierPath *)bezierPathByClippingFromRelativePosition:(CGFloat)startRelativePosition toRelativePosition:(CGFloat)endRelativePosition;
@@ -134,9 +136,10 @@ typedef NSInteger NIBezierPathElement;
 
 @interface NIBezierPath (MoveMe)
 
-+ (instancetype)closedSplinePathWithNodes:(NSArray *)nodes; // an array of NIVector values (NSArray<NSValue<NIVector>>)
++ (nullable instancetype)closedSplinePathWithNodes:(NSArray *)nodes; // an array of NIVector values (NSArray<NSValue<NIVector>>)
 
 @end
 
+NS_ASSUME_NONNULL_END
 
 

@@ -24,6 +24,8 @@
 #import "NIMaskRunStack.h"
 #include <Accelerate/Accelerate.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 const NIMaskIndex NIMaskIndexInvalid = {NSUIntegerMax,NSUIntegerMax,NSUIntegerMax};
 
 BOOL NIMaskIndexEqualToMaskIndex(NIMaskIndex mi1, NIMaskIndex mi2) {
@@ -71,7 +73,7 @@ const NIMaskRun NIMaskRunZero = {{0.0, 0.0}, 0, 0, 1.0, 0.0};
 @end
 
 
-NSComparisonResult NIMaskCompareRunValues(NSValue *maskRun1Value, NSValue *maskRun2Value, void *context)
+NSComparisonResult NIMaskCompareRunValues(NSValue *maskRun1Value, NSValue *maskRun2Value,  void * _Nullable context)
 {
     NIMaskRun maskRun1 = [maskRun1Value NIMaskRunValue];
     NIMaskRun maskRun2 = [maskRun2Value NIMaskRunValue];
@@ -192,23 +194,23 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
 
 @implementation NIMask
 
-+ (instancetype)mask
++ (nullable instancetype)mask
 {
     return [[[[self class] alloc] init] autorelease];
 }
 
 
-+ (instancetype)maskWithSphereDiameter:(NSUInteger)diameter
++ (nullable instancetype)maskWithSphereDiameter:(NSUInteger)diameter
 {
     return [self maskWithEllipsoidWidth:diameter height:diameter depth:diameter];
 }
 
-+ (instancetype)maskWithCubeSize:(NSUInteger)size
++ (nullable instancetype)maskWithCubeSize:(NSUInteger)size
 {
     return [[self class] maskWithBoxWidth:size height:size depth:size];
 }
 
-+ (instancetype)maskWithBoxWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth;
++ (nullable instancetype)maskWithBoxWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth;
 {
     NSUInteger i = 0;
     NSUInteger j = 0;
@@ -225,7 +227,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return [[[NIMask alloc] initWithSortedMaskRunData:[NSData dataWithBytesNoCopy:maskRuns length:depth * height * sizeof(NIMaskRun) freeWhenDone:YES]] autorelease];
 }
 
-+ (instancetype)maskWithEllipsoidWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth
++ (nullable instancetype)maskWithEllipsoidWidth:(NSUInteger)width height:(NSUInteger)height depth:(NSUInteger)depth
 {
     NSUInteger i = 0;
     NSUInteger j = 0;
@@ -268,13 +270,13 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return [[[NIMask alloc] initWithSortedMaskRunData:[NSData dataWithBytesNoCopy:maskRuns length:k * sizeof(NIMaskRun) freeWhenDone:YES]] autorelease];
 }
 
-+ (instancetype)maskFromVolumeData:(NIVolumeData *)volumeData __deprecated
++ (nullable instancetype)maskFromVolumeData:(NIVolumeData *)volumeData __deprecated
 {
     return [self maskFromVolumeData:volumeData modelToVoxelTransform:NULL];
 }
 
 
-+ (id)maskFromVolumeData:(NIVolumeData *)volumeData modelToVoxelTransform:(NIAffineTransformPointer)modelToVoxelTransformPtr
++ (nullable  instancetype)maskFromVolumeData:(NIVolumeData *)volumeData modelToVoxelTransform:(nullable NIAffineTransformPointer)modelToVoxelTransformPtr
 {
     NSInteger i;
     NSInteger j;
@@ -330,7 +332,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return [[[[self class] alloc] initWithMaskRuns:maskRuns] autorelease];
 }
 
-+ (instancetype)maskWithLineFrom:(NIVector)start to:(NIVector)end
++ (nullable instancetype)maskWithLineFrom:(NIVector)start to:(NIVector)end
 {
     // return points on a line inspired by Bresenham's line algorithm
     // This function needs to be optimized and not mak tons and tons of NSValue objects
@@ -417,7 +419,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return [[[NIMask alloc] initWithIndexes:maskIndexArray] autorelease];
 }
 
-- (instancetype)init
+- (nullable instancetype)init
 {
     if ( (self = [super init]) ) {
         _maskRuns = [[NSArray alloc] init];
@@ -425,7 +427,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return self;
 }
 
-- (instancetype)initWithMaskRuns:(NSArray *)maskRuns
+- (nullable instancetype)initWithMaskRuns:(NSArray *)maskRuns
 {
     if ( (self = [super init]) ) {
         _maskRuns = [[maskRuns sortedArrayUsingFunction:NIMaskCompareRunValues context:NULL] retain];
@@ -434,7 +436,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return self;
 }
 
-- (instancetype)initWithMaskRunData:(NSData *)maskRunData
+- (nullable instancetype)initWithMaskRunData:(NSData *)maskRunData
 {
     NSMutableData *mutableMaskRunData = [maskRunData mutableCopy];
     
@@ -445,7 +447,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return maskRun;
 }
 
-- (instancetype)initWithSortedMaskRunData:(NSData *)maskRunData
+- (nullable instancetype)initWithSortedMaskRunData:(NSData *)maskRunData
 {
     if ( (self = [super init]) ) {
         _maskRunsData = [maskRunData retain];
@@ -454,7 +456,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return self;
 }
 
-- (instancetype)initWithSortedMaskRuns:(NSArray *)maskRuns
+- (nullable instancetype)initWithSortedMaskRuns:(NSArray *)maskRuns
 {
     if ( (self = [super init]) ) {
         _maskRuns = [maskRuns retain];
@@ -463,7 +465,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return self;
 }
 
-- (instancetype)initWithIndexes:(NSArray *)maskIndexes
+- (nullable instancetype)initWithIndexes:(NSArray *)maskIndexes
 {
     NSMutableData *maskData = [NSMutableData dataWithLength:[maskIndexes count] * sizeof(NIMaskIndex)];
     NIMaskIndex *maskIndexArray = [maskData mutableBytes];
@@ -475,7 +477,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return [self initWithIndexData:maskData];
 }
 
-- (instancetype)initWithIndexData:(NSData *)indexData
+- (nullable instancetype)initWithIndexData:(NSData *)indexData
 {
     if ( (self = [super init]) ) {
         NIMaskIndex *indexes = (NIMaskIndex *)[indexData bytes];
@@ -525,7 +527,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return self;
 }
 
-- (instancetype)initWithSortedIndexes:(NSArray *)maskIndexes
+- (nullable instancetype)initWithSortedIndexes:(NSArray *)maskIndexes
 {
     NSMutableData *maskData = [NSMutableData dataWithLength:[maskIndexes count] * sizeof(NIMaskIndex)];
     NIMaskIndex *maskIndexArray = [maskData mutableBytes];
@@ -537,7 +539,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return [self initWithSortedIndexData:maskData];
 }
 
-- (instancetype)initWithSortedIndexData:(NSData *)indexData
+- (nullable instancetype)initWithSortedIndexData:(NSData *)indexData
 {
     if ( (self = [super init]) ) {
         NIMaskIndex *indexes = (NIMaskIndex *)[indexData bytes];
@@ -582,7 +584,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return YES;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     if ([aDecoder allowsKeyedCoding]) {
         NSData *maskRunsData = [NIMask maskRunsDataFromStorageData:[aDecoder decodeObjectOfClass:[NSData class] forKey:@"maskRunsData"]];
@@ -602,7 +604,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     }
 }
 
-- (instancetype)copyWithZone:(NSZone *)zone
+- (instancetype)copyWithZone:(nullable NSZone *)zone
 {
     return [[[self class] allocWithZone:zone] initWithSortedMaskRunData:[[[self maskRunsData] copy] autorelease]];
 }
@@ -796,7 +798,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
     return [[[NIMask alloc] initWithSortedMaskRunData:resultMaskRuns] autorelease];
 }
 
-- (NIVolumeData *)volumeDataRepresentationWithModelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform;
+- (nullable NIVolumeData *)volumeDataRepresentationWithModelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform;
 {
     NSUInteger maxHeight = NSIntegerMin;
     NSUInteger minHeight = NSIntegerMax;
@@ -1224,7 +1226,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
 }
 
 
-- (void)extentMinWidth:(NSUInteger*)minWidthPtr maxWidth:(NSUInteger*)maxWidthPtr minHeight:(NSUInteger*)minHeightPtr maxHeight:(NSUInteger*)maxHeightPtr minDepth:(NSUInteger*)minDepthPtr maxDepth:(NSUInteger*)maxDepthPtr;
+- (void)extentMinWidth:(nullable NSUInteger*)minWidthPtr maxWidth:(nullable NSUInteger*)maxWidthPtr minHeight:(nullable NSUInteger*)minHeightPtr maxHeight:(nullable NSUInteger*)maxHeightPtr minDepth:(nullable NSUInteger*)minDepthPtr maxDepth:(nullable NSUInteger*)maxDepthPtr;
 {
     NSUInteger maxWidth = 0;
     NSUInteger minWidth = NSUIntegerMax;
@@ -1447,14 +1449,15 @@ NSString *NSStringFromNIMaskRun(NIMaskRun run)
 {
     NSMutableString* str = [NSMutableString stringWithFormat:@"{%lu", (unsigned long)run.widthRange.location];
     if (run.widthRange.length != 1)
-        [str appendFormat:@"..%lu, ", (unsigned long)run.widthRange.location+run.widthRange.length];
-    [str appendFormat:@", %lu, %lu", (unsigned long)run.heightIndex, (unsigned long)run.depthIndex];
+        [str appendFormat:@"..%llu, ", (unsigned long long)run.widthRange.location+run.widthRange.length];
+    [str appendFormat:@", %llu, %llu", (unsigned long long)run.heightIndex, (unsigned long long)run.depthIndex];
     if (run.intensity != 1)
         [str appendFormat:@": %f", run.intensity];
     [str appendFormat:@"}"];
     return str;
 }
 
+NS_ASSUME_NONNULL_END
 
 
 

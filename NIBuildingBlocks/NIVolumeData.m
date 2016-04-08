@@ -24,6 +24,8 @@
 #import "NIGenerator.h"
 #import "NIGeneratorRequest.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface NIVolumeData ()
 
 @property (nonatomic, readonly, assign) float* floatBytes;
@@ -65,14 +67,14 @@
     return NIAffineTransformInvert(transform);
 }
 
-- (instancetype)initWithBytesNoCopy:(const float *)floatBytes pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
+- (nullable instancetype)initWithBytesNoCopy:(const float *)floatBytes pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
                     modelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform outOfBoundsValue:(float)outOfBoundsValue freeWhenDone:(BOOL)freeWhenDone // modelToVoxelTransform is the transform from Model (patient) space to pixel data
 {
     return [self initWithData:[NSData dataWithBytesNoCopy:(void *)floatBytes length:sizeof(float) * pixelsWide * pixelsHigh * pixelsDeep freeWhenDone:freeWhenDone]
                    pixelsWide:pixelsWide pixelsHigh:pixelsHigh pixelsDeep:pixelsDeep modelToVoxelTransform:modelToVoxelTransform outOfBoundsValue:outOfBoundsValue];
 }
 
-- (instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
+- (nullable instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
              modelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform outOfBoundsValue:(float)outOfBoundsValue // modelToVoxelTransform is the transform from Model (patient) space to pixel data
 {
     if ( (self = [super init]) ) {
@@ -86,7 +88,7 @@
     return self;
 }
 
-- (instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
+- (nullable instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
       volumeToModelConverter:(NIVector (^)(NIVector volumeVector))volumeToModelConverter modelToVolumeConverter:(NIVector (^)(NIVector modelVector))modelToVolumeConverter
             outOfBoundsValue:(float)outOfBoundsValue
 {
@@ -104,20 +106,47 @@
     return self;
 }
 
-- (instancetype)initWithVolumeData:(NIVolumeData *)volumeData
+- (nullable instancetype)initWithVolumeData:(NIVolumeData *)volumeData
 {
-    if ( (self = [super init]) ) {
-        _floatData = [volumeData->_floatData retain];
-        _outOfBoundsValue = volumeData->_outOfBoundsValue;
-        _pixelsWide = volumeData->_pixelsWide;
-        _pixelsHigh = volumeData->_pixelsHigh;
-        _pixelsDeep = volumeData->_pixelsDeep;
-        _modelToVoxelTransform = volumeData->_modelToVoxelTransform;
+    if (volumeData.curved) {
+        return [self initWithData:volumeData.floatData pixelsWide:volumeData.pixelsWide pixelsHigh:volumeData.pixelsHigh pixelsDeep:volumeData.pixelsDeep modelToVoxelTransform:volumeData.modelToVoxelTransform outOfBoundsValue:volumeData.outOfBoundsValue];
+    } else {
+        return [self initWithData:volumeData.floatData pixelsWide:volumeData.pixelsWide pixelsHigh:volumeData.pixelsHigh pixelsDeep:volumeData.pixelsDeep
+           volumeToModelConverter:volumeData.convertVolumeVectorToModelVectorBlock modelToVolumeConverter:volumeData.convertVolumeVectorFromModelVectorBlock outOfBoundsValue:volumeData.outOfBoundsValue];
+    }
+}
+
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
+
+- (nullable instancetype)initWithCoder:(NSCoder *)decoder
+{
+    if ([decoder allowsKeyedCoding]) {
+        if ( (self = [super init]) ) {
+            _floatData = [[decoder decodeObjectOfClass:[NSData class] forKey:@"floatData"] retain];
+            _outOfBoundsValue = [decoder decodeFloatForKey:@"outOfBoundsValue"];
+
+            _pixelsWide = [decoder decodeIntegerForKey:@"pixelsWide"];
+            _pixelsHigh = [decoder decodeIntegerForKey:@"pixelsHigh"];
+            _pixelsDeep = [decoder decodeIntegerForKey:@"pixelsDeep"];
+
+            if ([_floatData length] < (_pixelsWide * _pixelsHigh * _pixelsDeep * sizeof(float))) {
+                [NSException raise:NSInvalidUnarchiveOperationException format:@"*** %s: floatData (%lld bytes) is not large enough for the size parameters. (pixelsWide: %lld, pixelsHigh: %lld, pixelsDeep: %lld)",
+                 __PRETTY_FUNCTION__, (long long)[_floatData length], (long long)_pixelsWide, (long long)_pixelsHigh, (long long)_pixelsDeep];
+            }
+
+            _modelToVoxelTransform = [decoder decodeNIAffineTransformForKey:@"modelToVoxelTransform"];
+        }
+    } else {
+        [NSException raise:NSInvalidUnarchiveOperationException format:@"*** %s: only supports keyed coders", __PRETTY_FUNCTION__];
     }
     return self;
 }
 
-- (instancetype)copyWithZone:(NSZone *)zone
+
+- (instancetype)copyWithZone:(nullable NSZone *)zone
 {
     return [[[self class] allocWithZone:zone] initWithVolumeData:self];
 }
@@ -132,6 +161,27 @@
     _convertVolumeVectorFromModelVectorBlock = nil;
 
     [super dealloc];
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    if ([aCoder allowsKeyedCoding]) {
+        if (_curved) {
+            [NSException raise:NSInvalidArchiveOperationException format:@"*** %s: can't archive curved volumes", __PRETTY_FUNCTION__];
+        }
+
+        [aCoder encodeObject:_floatData forKey:@"floatData"];
+        [aCoder encodeFloat:_outOfBoundsValue forKey:@"outOfBoundsValue"];
+
+        [aCoder encodeInteger:_pixelsWide forKey:@"pixelsWide"];
+        [aCoder encodeInteger:_pixelsHigh forKey:@"pixelsHigh"];
+        [aCoder encodeInteger:_pixelsDeep forKey:@"pixelsDeep"];
+
+
+        [aCoder encodeNIAffineTransform:_modelToVoxelTransform forKey:@"modelToVoxelTransform"];
+    } else {
+        [NSException raise:NSInvalidArchiveOperationException format:@"*** %s: only supports keyed coders", __PRETTY_FUNCTION__];
+    }
 }
 
 - (BOOL)isRectilinear
@@ -245,7 +295,7 @@
     return YES;
 }
 
-- (NIVector (^)(NIVector))convertVolumeVectorToModelVectorBlock
+- (nullable NIVector (^)(NIVector))convertVolumeVectorToModelVectorBlock
 {
     if (_curved == NO) {
         NIAffineTransform voxelToModelTransform = NIAffineTransformInvert([self modelToVoxelTransform]);
@@ -258,7 +308,7 @@
     }
 }
 
-- (NIVector (^)(NIVector))convertVolumeVectorFromModelVectorBlock
+- (nullable NIVector (^)(NIVector))convertVolumeVectorFromModelVectorBlock
 {
     if (_curved == NO) {
         NIAffineTransform modelToVoxelTransform = [self modelToVoxelTransform];
@@ -762,3 +812,4 @@
 //
 //@end
 
+NS_ASSUME_NONNULL_END

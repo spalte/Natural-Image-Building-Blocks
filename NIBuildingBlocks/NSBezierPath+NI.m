@@ -23,6 +23,7 @@
 
 #import "NSBezierPath+NI.h"
 
+NS_ASSUME_NONNULL_BEGIN
 
 int NSPointLexigraphicalCompare(const void *voidPoint1, const void *voidPoint2)
 {
@@ -155,7 +156,7 @@ CGFloat NIAdditionsNSPointVectorsDotProduct(NSPoint p1, NSPoint p2)
     return convexPath;
 }
 
-- (void)diameterMinStart:(NSPointPointer)minStart minEnd:(NSPointPointer)minEnd maxStart:(NSPointPointer)maxStart maxEnd:(NSPointPointer)maxEnd
+- (void)diameterMinStart:(nullable NSPointPointer)minStart minEnd:(nullable NSPointPointer)minEnd maxStart:(nullable NSPointPointer)maxStart maxEnd:(nullable NSPointPointer)maxEnd
 {
     NSBezierPath *convexHull = [self convexHull];
 
@@ -367,7 +368,7 @@ CGFloat NIAdditionsNSPointVectorsDotProduct(NSPoint p1, NSPoint p2)
 
 
 
-
+NS_ASSUME_NONNULL_END
 
 
 

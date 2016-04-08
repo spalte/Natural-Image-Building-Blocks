@@ -27,6 +27,8 @@
 #import "NIGenerator.h"
 #import "NIGeometry.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 static const NIVector NIGeneratorRequestViewMouseOutside = {-CGFLOAT_MAX, -CGFLOAT_MAX, -CGFLOAT_MAX};
 
 static const CGFloat NIGeneratorRequestViewRequestLayerZPosition = 1;
@@ -86,8 +88,12 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
     NIGeneratorRequest *_presentedGeneratorRequest;
 }
 
-@property (nonatomic, readwrite, retain) NIGeneratorRequest *generatorRequest; // this is the generator request that will be drawn.  Animatable
-@property (nonatomic, readonly, copy) NIGeneratorRequest *presentedGeneratorRequest; // this is the generator request that is currently drawn. Continuously updates during animations
+- (instancetype)initWithFrame:(NSRect)frame NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
+
+
+@property (nullable, nonatomic, readwrite, retain) NIGeneratorRequest *generatorRequest; // this is the generator request that will be drawn.  Animatable
+@property (nullable, nonatomic, readonly, copy) NIGeneratorRequest *presentedGeneratorRequest; // this is the generator request that is currently drawn. Continuously updates during animations
 @property (nonatomic, readonly, assign) NIVector mousePosition; // the current mouse location, the mouseLocation is equal to NIGeneratorRequestViewMouseOutside if it is outside the view
 
 - (NSInteger)volumeDataCount;
@@ -101,8 +107,8 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
 - (NSPoint)convertPointFromModelVector:(NIVector)vector;
 - (NIVector)convertPointToModelVector:(NSPoint)point;
 
-- (NSBezierPath *)convertBezierPathFromModel:(NIBezierPath *)bezierPath;
-- (NIBezierPath *)convertBezierPathToModel:(NSBezierPath *)bezierPath;
+- (nullable NSBezierPath *)convertBezierPathFromModel:(NIBezierPath *)bezierPath;
+- (nullable NIBezierPath *)convertBezierPathToModel:(NSBezierPath *)bezierPath;
 
 @property (nonatomic, readonly, retain) CALayer *frameLayer; // the layer into which subclasses can add layers, this layer lays out sublayers using the CAConstraintLayoutManager
                                                              // Use NIGeneratorRequestViewRequestLayerZPosition, etc to specify the depth of the layer you want to add.
@@ -120,7 +126,7 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
 - (void)removeIntersectionForKey:(NSString *)key;
 - (NSArray *)intersectionKeys;
 - (void)enumerateIntersectionsWithBlock:(void (^)(NSString *key, NIIntersection *intersection, BOOL *stop))block;
-- (NSString *)intersectionClosestToPoint:(NSPoint)point closestPoint:(NSPointPointer)rclosestPoint distance:(CGFloat *)rdistance;
+- (nullable NSString *)intersectionClosestToPoint:(NSPoint)point closestPoint:(nullable NSPointPointer)rclosestPoint distance:(CGFloat *)rdistance;
 
 // Text Labels are arrays of strings that will be displayed in the corners of the view
 // use ie -[ mutableArrayForKey:@"topLeftLabels"] to get an array into which you can insert strings and get correct animations
@@ -146,7 +152,7 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
 @end
 
 
-
+NS_ASSUME_NONNULL_END
 
 
 
