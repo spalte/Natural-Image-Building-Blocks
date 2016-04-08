@@ -584,13 +584,22 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-    NSData *maskRunsData = [NIMask maskRunsDataFromStorageData:[aDecoder decodeObjectOfClass:[NSData class] forKey:@"maskRunsData"]];
-    return [self initWithSortedMaskRunData:maskRunsData];
+    if ([aDecoder allowsKeyedCoding]) {
+        NSData *maskRunsData = [NIMask maskRunsDataFromStorageData:[aDecoder decodeObjectOfClass:[NSData class] forKey:@"maskRunsData"]];
+        self = [self initWithSortedMaskRunData:maskRunsData];
+    } else {
+        [NSException raise:NSInvalidUnarchiveOperationException format:@"*** %s: only supports keyed coders", __PRETTY_FUNCTION__];
+    }
+    return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeObject:[NIMask storageDataFromMaskRunData:[self maskRunsData]] forKey:@"maskRunsData"];
+    if ([aCoder allowsKeyedCoding]) {
+        [aCoder encodeObject:[NIMask storageDataFromMaskRunData:[self maskRunsData]] forKey:@"maskRunsData"];
+    } else {
+        [NSException raise:NSInvalidArchiveOperationException format:@"*** %s: only supports keyed coders", __PRETTY_FUNCTION__];
+    }
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone

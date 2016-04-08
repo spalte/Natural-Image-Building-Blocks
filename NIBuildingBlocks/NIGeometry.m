@@ -1395,71 +1395,102 @@ NIAffineTransform NIAffineTransformMakeFromOpenGLMatrixf(float *f) // f better b
 
 - (void)encodeNIAffineTransform:(NIAffineTransform)transform forKey:(NSString *)key
 {
-    NSDictionary *dict = (NSDictionary *)NIAffineTransformCreateDictionaryRepresentation(transform);
-    [self encodeObject:dict forKey:key];
-    [dict release];
+    if ([self allowsKeyedCoding]) {
+        NSDictionary *dict = (NSDictionary *)NIAffineTransformCreateDictionaryRepresentation(transform);
+        [self encodeObject:dict forKey:key];
+        [dict release];
+    } else {
+        [NSException raise:NSInvalidArchiveOperationException format:@"*** %s: only supports keyed coders", __PRETTY_FUNCTION__];
+    }
 }
 
 - (void)encodeNIVector:(NIVector)vector forKey:(NSString *)key
 {
-    NSDictionary *dict = (NSDictionary *)NIVectorCreateDictionaryRepresentation(vector);
-    [self encodeObject:dict forKey:key];
-    [dict release];
+    if ([self allowsKeyedCoding]) {
+        NSDictionary *dict = (NSDictionary *)NIVectorCreateDictionaryRepresentation(vector);
+        [self encodeObject:dict forKey:key];
+        [dict release];
+    } else {
+        [NSException raise:NSInvalidArchiveOperationException format:@"*** %s: only supports keyed coders", __PRETTY_FUNCTION__];
+    }
 }
 
 - (void)encodeNILine:(NILine)line forKey:(NSString *)key
 {
-    NSDictionary *dict = (NSDictionary *)NILineCreateDictionaryRepresentation(line);
-    [self encodeObject:dict forKey:key];
-    [dict release];
+    if ([self allowsKeyedCoding]) {
+        NSDictionary *dict = (NSDictionary *)NILineCreateDictionaryRepresentation(line);
+        [self encodeObject:dict forKey:key];
+        [dict release];
+    } else {
+        [NSException raise:NSInvalidArchiveOperationException format:@"*** %s: only supports keyed coders", __PRETTY_FUNCTION__];
+    }
 }
 
 - (void)encodeNIPlane:(NIPlane)plane forKey:(NSString *)key
 {
-    NSDictionary *dict = (NSDictionary *)NIPlaneCreateDictionaryRepresentation(plane);
-    [self encodeObject:dict forKey:key];
-    [dict release];
+    if ([self allowsKeyedCoding]) {
+        NSDictionary *dict = (NSDictionary *)NIPlaneCreateDictionaryRepresentation(plane);
+        [self encodeObject:dict forKey:key];
+        [dict release];
+    } else {
+        [NSException raise:NSInvalidArchiveOperationException format:@"*** %s: only supports keyed coders", __PRETTY_FUNCTION__];
+    }
 }
 
 - (NIAffineTransform)decodeNIAffineTransformForKey:(NSString *)key
 {
     NIAffineTransform transform = NIAffineTransformIdentity;
-    NSDictionary *dict = [self decodeObjectOfClass:[NSDictionary class] forKey:key];
-    if (dict == nil) {
-        [NSException raise:@"NIDecode" format:@"No Dictionary when decoding NIAffineTranform"];
+    if ([self allowsKeyedCoding]) {
+        NSDictionary *dict = [self decodeObjectOfClass:[NSDictionary class] forKey:key];
+        if (dict == nil) {
+            [NSException raise:@"NIDecode" format:@"No Dictionary when decoding NIAffineTranform"];
+        }
+
+        if (NIAffineTransformMakeWithDictionaryRepresentation((CFDictionaryRef)dict, &transform) == NO) {
+            [NSException raise:@"NIDecode" format:@"Dictionary did not contain an NIAffineTranform"];
+        }
+    } else {
+        [NSException raise:NSInvalidUnarchiveOperationException format:@"*** %s: only supports keyed coders", __PRETTY_FUNCTION__];
     }
 
-    if (NIAffineTransformMakeWithDictionaryRepresentation((CFDictionaryRef)dict, &transform) == NO) {
-        [NSException raise:@"NIDecode" format:@"Dictionary did not contain an NIAffineTranform"];
-    }
     return transform;
 }
 
 - (NIVector)decodeNIVectorForKey:(NSString *)key
 {
     NIVector vector = NIVectorZero;
-    NSDictionary *dict = [self decodeObjectOfClass:[NSDictionary class] forKey:key];
-    if (dict == nil) {
-        [NSException raise:@"NIDecode" format:@"No Dictionary when decoding NIVector"];
+    if ([self allowsKeyedCoding]) {
+        NSDictionary *dict = [self decodeObjectOfClass:[NSDictionary class] forKey:key];
+        if (dict == nil) {
+            [NSException raise:@"NIDecode" format:@"No Dictionary when decoding NIVector"];
+        }
+
+        if (NIVectorMakeWithDictionaryRepresentation((CFDictionaryRef)dict, &vector) == NO) {
+            [NSException raise:@"NIDecode" format:@"Dictionary did not contain an NIVector"];
+        }
+    } else {
+        [NSException raise:NSInvalidUnarchiveOperationException format:@"*** %s: only supports keyed coders", __PRETTY_FUNCTION__];
     }
 
-    if (NIVectorMakeWithDictionaryRepresentation((CFDictionaryRef)dict, &vector) == NO) {
-        [NSException raise:@"NIDecode" format:@"Dictionary did not contain an NIVector"];
-    }
     return vector;
 }
 
 - (NILine)decodeNILineForKey:(NSString *)key
 {
     NILine line = NILineInvalid;
-    NSDictionary *dict = [self decodeObjectOfClass:[NSDictionary class] forKey:key];
-    if (dict == nil) {
-        [NSException raise:@"NIDecode" format:@"No Dictionary when decoding NILine"];
+    if ([self allowsKeyedCoding]) {
+        NSDictionary *dict = [self decodeObjectOfClass:[NSDictionary class] forKey:key];
+        if (dict == nil) {
+            [NSException raise:@"NIDecode" format:@"No Dictionary when decoding NILine"];
+        }
+        
+        if (NILineMakeWithDictionaryRepresentation((CFDictionaryRef)dict, &line) == NO) {
+            [NSException raise:@"NIDecode" format:@"Dictionary did not contain an NILine"];
+        }
+    } else {
+        [NSException raise:NSInvalidUnarchiveOperationException format:@"*** %s: only supports keyed coders", __PRETTY_FUNCTION__];
     }
-    
-    if (NILineMakeWithDictionaryRepresentation((CFDictionaryRef)dict, &line) == NO) {
-        [NSException raise:@"NIDecode" format:@"Dictionary did not contain an NILine"];
-    }
+
     return line;
 }
 
@@ -1467,14 +1498,19 @@ NIAffineTransform NIAffineTransformMakeFromOpenGLMatrixf(float *f) // f better b
 - (NIPlane)decodeNIPlaneForKey:(NSString *)key
 {
     NIPlane plane = NIPlaneInvalid;
-    NSDictionary *dict = [self decodeObjectOfClass:[NSDictionary class] forKey:key];
-    if (dict == nil) {
-        [NSException raise:@"NIDecode" format:@"No Dictionary when decoding NIPlane"];
+    if ([self allowsKeyedCoding]) {
+        NSDictionary *dict = [self decodeObjectOfClass:[NSDictionary class] forKey:key];
+        if (dict == nil) {
+            [NSException raise:@"NIDecode" format:@"No Dictionary when decoding NIPlane"];
+        }
+        
+        if (NIPlaneMakeWithDictionaryRepresentation((CFDictionaryRef)dict, &plane) == NO) {
+            [NSException raise:@"NIDecode" format:@"Dictionary did not contain an NIPlane"];
+        }
+    } else {
+        [NSException raise:NSInvalidUnarchiveOperationException format:@"*** %s: only supports keyed coders", __PRETTY_FUNCTION__];
     }
-    
-    if (NIPlaneMakeWithDictionaryRepresentation((CFDictionaryRef)dict, &plane) == NO) {
-        [NSException raise:@"NIDecode" format:@"Dictionary did not contain an NIPlane"];
-    }
+
     return plane;
 }
 

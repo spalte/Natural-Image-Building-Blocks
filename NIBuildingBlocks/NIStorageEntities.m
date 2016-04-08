@@ -91,7 +91,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:encodedObject];
     [archiver setRequiresSecureCoding:YES];
-    [archiver encodeObject:object forKey:@"rootObject"];
+    [archiver encodeObject:object forKey:NSKeyedArchiveRootObjectKey];
     [archiver finishEncoding];
 
     entity.encodedObject = encodedObject;
@@ -343,7 +343,11 @@ NS_ASSUME_NONNULL_BEGIN
 
     id objectValue = nil;
     @try {
-        objectValue = [unarchiver decodeObjectOfClass:objectClass forKey:@"rootObject"];
+        if ([unarchiver containsValueForKey:NSKeyedArchiveRootObjectKey]) {
+            objectValue = [unarchiver decodeObjectOfClass:objectClass forKey:NSKeyedArchiveRootObjectKey];
+        } else { // previous versions of NIStorage used @"rootObject" as the key
+            objectValue = [unarchiver decodeObjectOfClass:objectClass forKey:@"rootObject"];
+        }
     }
     @catch (NSException *exception) {
     }
@@ -359,7 +363,11 @@ NS_ASSUME_NONNULL_BEGIN
 
     id objectValue = nil;
     @try {
-        objectValue = [unarchiver decodeObjectOfClasses:classes forKey:@"rootObject"];
+        if ([unarchiver containsValueForKey:NSKeyedArchiveRootObjectKey]) {
+            objectValue = [unarchiver decodeObjectOfClasses:classes forKey:NSKeyedArchiveRootObjectKey];
+        } else { // previous versions of NIStorage used @"rootObject" as the key
+            objectValue = [unarchiver decodeObjectOfClasses:classes forKey:@"rootObject"];
+        }
     }
     @catch (NSException *exception) {
     }

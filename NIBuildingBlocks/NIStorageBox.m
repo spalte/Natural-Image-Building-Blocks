@@ -108,91 +108,98 @@
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-    if ( (self = [super init]) ) {
-        self.type = [aDecoder decodeIntegerForKey:@"type"];
+    if ([aDecoder allowsKeyedCoding]) {
+        if ( (self = [super init]) ) {
+            self.type = [aDecoder decodeIntegerForKey:@"type"];
 
-        switch (self.type) {
-            case NIStorageBoxVector:
-            {
-                self.vector = [aDecoder decodeNIVectorForKey:@"vector"];
-                break;
-            }
-            case NIStorageBoxAffineTransform:
-            {
-                self.transform = [aDecoder decodeNIAffineTransformForKey:@"affineTransform"];
-                break;
-            }
-            case NIStorageBoxPlane:
-            {
-                self.plane = [aDecoder decodeNIPlaneForKey:@"plane"];
-                break;
-            }
-            case NIStorageBoxLine:
-            {
-                self.line = [aDecoder decodeNILineForKey:@"line"];
-                break;
-            }
-            case NIStorageBoxPoint:
-            {
-                self.point = [aDecoder decodePointForKey:@"point"];
-                break;
-            }
-            case NIStorageBoxSize:
-            {
-                self.size = [aDecoder decodeSizeForKey:@"size"];
-                break;
-            }
-            case NIStorageBoxRect:
-            {
-                self.rect = [aDecoder decodeRectForKey:@"rect"];
-                break;
+            switch (self.type) {
+                case NIStorageBoxVector:
+                {
+                    self.vector = [aDecoder decodeNIVectorForKey:@"vector"];
+                    break;
+                }
+                case NIStorageBoxAffineTransform:
+                {
+                    self.transform = [aDecoder decodeNIAffineTransformForKey:@"affineTransform"];
+                    break;
+                }
+                case NIStorageBoxPlane:
+                {
+                    self.plane = [aDecoder decodeNIPlaneForKey:@"plane"];
+                    break;
+                }
+                case NIStorageBoxLine:
+                {
+                    self.line = [aDecoder decodeNILineForKey:@"line"];
+                    break;
+                }
+                case NIStorageBoxPoint:
+                {
+                    self.point = [aDecoder decodePointForKey:@"point"];
+                    break;
+                }
+                case NIStorageBoxSize:
+                {
+                    self.size = [aDecoder decodeSizeForKey:@"size"];
+                    break;
+                }
+                case NIStorageBoxRect:
+                {
+                    self.rect = [aDecoder decodeRectForKey:@"rect"];
+                    break;
+                }
             }
         }
+    } else {
+        [NSException raise:NSInvalidUnarchiveOperationException format:@"*** %s: only supports keyed coders", __PRETTY_FUNCTION__];
     }
-
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeInteger:self.type forKey:@"type"];
+    if ([aCoder allowsKeyedCoding]) {
+        [aCoder encodeInteger:self.type forKey:@"type"];
 
-    switch (self.type) {
-        case NIStorageBoxVector:
-        {
-            [aCoder encodeNIVector:self.vector forKey:@"vector"];
-            break;
+        switch (self.type) {
+            case NIStorageBoxVector:
+            {
+                [aCoder encodeNIVector:self.vector forKey:@"vector"];
+                break;
+            }
+            case NIStorageBoxAffineTransform:
+            {
+                [aCoder encodeNIAffineTransform:self.transform forKey:@"affineTransform"];
+                break;
+            }
+            case NIStorageBoxPlane:
+            {
+                [aCoder encodeNIPlane:self.plane forKey:@"plane"];
+                break;
+            }
+            case NIStorageBoxLine:
+            {
+                [aCoder encodeNILine:self.line forKey:@"line"];
+                break;
+            }
+            case NIStorageBoxPoint:
+            {
+                [aCoder encodePoint:self.point forKey:@"point"];
+                break;
+            }
+            case NIStorageBoxSize:
+            {
+                [aCoder encodeSize:self.size forKey:@"size"];
+                break;
+            }
+            case NIStorageBoxRect:
+            {
+                [aCoder encodeRect:self.rect forKey:@"rect"];
+                break;
+            }
         }
-        case NIStorageBoxAffineTransform:
-        {
-            [aCoder encodeNIAffineTransform:self.transform forKey:@"affineTransform"];
-            break;
-        }
-        case NIStorageBoxPlane:
-        {
-            [aCoder encodeNIPlane:self.plane forKey:@"plane"];
-            break;
-        }
-        case NIStorageBoxLine:
-        {
-            [aCoder encodeNILine:self.line forKey:@"line"];
-            break;
-        }
-        case NIStorageBoxPoint:
-        {
-            [aCoder encodePoint:self.point forKey:@"point"];
-            break;
-        }
-        case NIStorageBoxSize:
-        {
-            [aCoder encodeSize:self.size forKey:@"size"];
-            break;
-        }
-        case NIStorageBoxRect:
-        {
-            [aCoder encodeRect:self.rect forKey:@"rect"];
-            break;
-        }
+    } else {
+        [NSException raise:NSInvalidArchiveOperationException format:@"*** %s: only supports keyed coders", __PRETTY_FUNCTION__];
     }
 }
 

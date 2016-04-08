@@ -151,13 +151,17 @@
 
 - (instancetype)initWithCoder:(NSCoder *)decoder
 {
-	NSDictionary *bezierDict;
-	
-	bezierDict = [decoder decodeObjectOfClass:[NSDictionary class] forKey:@"bezierPathDictionaryRepresentation"];
-	
-	if ( (self = [self initWithDictionaryRepresentation:bezierDict]) ) {
-	}
-	return self;
+    if ([decoder allowsKeyedCoding]) {
+        NSDictionary *bezierDict;
+
+        bezierDict = [decoder decodeObjectOfClass:[NSDictionary class] forKey:@"bezierPathDictionaryRepresentation"];
+
+        if ( (self = [self initWithDictionaryRepresentation:bezierDict]) ) {
+        }
+    } else {
+        [NSException raise:NSInvalidUnarchiveOperationException format:@"*** %s: only supports keyed coders", __PRETTY_FUNCTION__];
+    }
+    return self;
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone
@@ -284,7 +288,11 @@
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-	[encoder encodeObject:[self dictionaryRepresentation] forKey:@"bezierPathDictionaryRepresentation"];
+    if ([encoder allowsKeyedCoding]) {
+        [encoder encodeObject:[self dictionaryRepresentation] forKey:@"bezierPathDictionaryRepresentation"];
+    } else {
+        [NSException raise:NSInvalidArchiveOperationException format:@"*** %s: only supports keyed coders", __PRETTY_FUNCTION__];
+    }
 }
 
 - (NIBezierPath *)bezierPathByFlattening:(CGFloat)flatness
