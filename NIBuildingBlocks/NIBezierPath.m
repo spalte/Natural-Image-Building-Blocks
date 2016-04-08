@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface _NIBezierCoreSteward : NSObject
 {
-	NIBezierCoreRef _bezierCore;
+    NIBezierCoreRef _bezierCore;
 }
 
 - (instancetype)initWithNIBezierCore:(NIBezierCoreRef)bezierCore;
@@ -61,7 +61,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
 @implementation NIBezierPath
 
 - (nullable instancetype)init
@@ -74,7 +73,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable instancetype)initWithBezierPath:(NIBezierPath *)bezierPath
 {
-    if ( (self = [super init]) ) {
+    if ( (self = [self init]) ) {
+        NIBezierCoreRelease(_bezierCore);
         _bezierCore = NIBezierCoreCreateMutableCopy([bezierPath NIBezierCore]);
         @synchronized (bezierPath) {
             _length = bezierPath->_length;
@@ -85,7 +85,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable instancetype)initWithNSBezierPath:(NSBezierPath *)bezierPath
 {
-    if ( (self = [super init]) ) {
+    if ( (self = [self init]) ) {
+        NIBezierCoreRelease(_bezierCore);
         _bezierCore = NIBezierCoreCreateMutableWithNSBezierPath(bezierPath);
     }
     return self;
@@ -93,7 +94,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable instancetype)initWithDictionaryRepresentation:(NSDictionary *)dict
 {
-	if ( (self = [super init]) ) {
+	if ( (self = [self init]) ) {
+        NIBezierCoreRelease(_bezierCore);
 		_bezierCore = NIBezierCoreCreateMutableWithDictionaryRepresentation((CFDictionaryRef)dict);
 		if (_bezierCore == nil) {
 			[self autorelease];
@@ -105,7 +107,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable instancetype)initWithNIBezierCore:(NIBezierCoreRef)bezierCore
 {
-    if ( (self = [super init]) ) {
+    if ( (self = [self init]) ) {
+        NIBezierCoreRelease(_bezierCore);
         _bezierCore = NIBezierCoreCreateMutableCopy(bezierCore);
     }
     return self;
@@ -116,7 +119,7 @@ NS_ASSUME_NONNULL_BEGIN
     NIVectorArray vectorArray;
     NSInteger i;
     
-    if ( (self = [super init]) ) {
+    if ( (self = [self init]) ) {
 		if ([nodes count] >= 2) {
 			vectorArray = malloc(sizeof(NIVector) * [nodes count]);
 			
@@ -124,19 +127,21 @@ NS_ASSUME_NONNULL_BEGIN
 				vectorArray[i] = [[nodes objectAtIndex:i] NIVectorValue];
 			}
 			
-			_bezierCore = NIBezierCoreCreateMutableCurveWithNodes(vectorArray, [nodes count], style);
+            NIBezierCoreRelease(_bezierCore);
+            _bezierCore = NIBezierCoreCreateMutableCurveWithNodes(vectorArray, [nodes count], style);
 			
 			free(vectorArray);
 		} else if ([nodes count] == 0) {
+            NIBezierCoreRelease(_bezierCore);
 			_bezierCore = NIBezierCoreCreateMutable();
 		} else {
+            NIBezierCoreRelease(_bezierCore);
 			_bezierCore = NIBezierCoreCreateMutable();
 			NIBezierCoreAddSegment(_bezierCore, NIMoveToBezierCoreSegmentType, NIVectorZero, NIVectorZero, [[nodes objectAtIndex:0] NIVectorValue]);
 			if ([nodes count] > 1) {
 				NIBezierCoreAddSegment(_bezierCore, NILineToBezierCoreSegmentType, NIVectorZero, NIVectorZero, [[nodes objectAtIndex:1] NIVectorValue]);
 			}
 		}
-
         
         if (_bezierCore == NULL) {
             [self autorelease];

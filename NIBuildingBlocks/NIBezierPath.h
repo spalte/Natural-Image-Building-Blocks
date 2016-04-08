@@ -49,11 +49,11 @@ typedef NSInteger NIBezierPathElement;
 }
 
 - (nullable instancetype)init NS_DESIGNATED_INITIALIZER;
-- (nullable instancetype)initWithBezierPath:(NIBezierPath *)bezierPath NS_DESIGNATED_INITIALIZER;
-- (nullable instancetype)initWithNSBezierPath:(NSBezierPath *)bezierPath NS_DESIGNATED_INITIALIZER;
-- (nullable instancetype)initWithDictionaryRepresentation:(NSDictionary *)dict NS_DESIGNATED_INITIALIZER;
-- (nullable instancetype)initWithNIBezierCore:(NIBezierCoreRef)bezierCore NS_DESIGNATED_INITIALIZER;
-- (nullable instancetype)initWithNodeArray:(NSArray *)nodes style:(NIBezierNodeStyle)style NS_DESIGNATED_INITIALIZER; // array of NIVectors in NSValues;
+- (nullable instancetype)initWithBezierPath:(NIBezierPath *)bezierPath;
+- (nullable instancetype)initWithNSBezierPath:(NSBezierPath *)bezierPath;
+- (nullable instancetype)initWithDictionaryRepresentation:(NSDictionary *)dict;
+- (nullable instancetype)initWithNIBezierCore:(NIBezierCoreRef)bezierCore;
+- (nullable instancetype)initWithNodeArray:(NSArray *)nodes style:(NIBezierNodeStyle)style; // array of NIVectors in NSValues;
 
 + (nullable instancetype)bezierPath;
 + (nullable instancetype)bezierPathWithBezierPath:(NIBezierPath *)bezierPath;
