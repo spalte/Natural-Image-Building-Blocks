@@ -177,13 +177,13 @@ NS_ASSUME_NONNULL_BEGIN
                 value = object;
                 break;
             } else if ([object isKindOfClass:[NIStorageBox class]]) {
-                value = [(NIStorageBox *)object value];
+                value = [[(NIStorageBox *)object value] retain];
                 break;
             }
         }
     }];
 
-    return value;
+    return [value autorelease];
 }
 
 - (void)setValue:(nullable id)value forKey:(NSString *)key
@@ -523,11 +523,11 @@ NS_ASSUME_NONNULL_BEGIN
         }
 
         if ([results count]) {
-            data = [results[0] dataValue];
+            data = [[results[0] dataValue] retain];
         }
     }];
 
-    return data;
+    return [data autorelease];
 }
 
 - (nullable NSString *)stringForKey:(NSString *)key
@@ -548,11 +548,11 @@ NS_ASSUME_NONNULL_BEGIN
         }
 
         if ([results count]) {
-            string = [results[0] stringValue];
+            string = [[results[0] stringValue] retain];
         }
     }];
 
-    return string;
+    return [string autorelease];
 }
 
 - (nullable NSDate *)dateForKey:(NSString *)key
@@ -582,11 +582,11 @@ NS_ASSUME_NONNULL_BEGIN
         }
 
         if ([results count]) {
-            object = [results[0] objectValueOfClass:aClass];
+            object = [[results[0] objectValueOfClass:aClass] retain];
         }
     }];
 
-    return object;
+    return [object autorelease];
 }
 
 - (long long)longLongForKey:(NSString *)key
