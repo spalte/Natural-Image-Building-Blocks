@@ -1670,6 +1670,8 @@ CFArrayRef NIBezierCoreCopySubpaths(NIBezierCoreRef bezierCore)
         
         NIBezierCoreAddSegment(subpath, segmentType, control1, control2, endpoint);
     }
+
+    NIBezierCoreIteratorRelease(bezierCoreIterator);
     
     return subpaths;
 }
