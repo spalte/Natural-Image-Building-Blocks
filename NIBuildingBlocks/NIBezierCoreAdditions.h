@@ -28,11 +28,10 @@
 
 CF_EXTERN_C_BEGIN
 
-enum NIBezierNodeStyle {
+typedef NS_ENUM(unsigned long, NIBezierNodeStyle) {
     NIBezierNodeOpenEndsStyle, // the direction of the end segements point out. this is the style used by the NI View
     NIBezierNodeEndsMeetStyle, // the direction of the end segements point to each other. this is the style that mimics what open ROIs do
 };
-typedef enum NIBezierNodeStyle NIBezierNodeStyle;
 
 NIBezierCoreRef NIBezierCoreCreateCurveWithNodes(NIVectorArray vectors, CFIndex numVectors, NIBezierNodeStyle style);
 NIMutableBezierCoreRef NIBezierCoreCreateMutableCurveWithNodes(NIVectorArray vectors, CFIndex numVectors, NIBezierNodeStyle style);

@@ -33,13 +33,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class NSBezierPath;
 
-enum _NIBezierPathElement {
+typedef NS_ENUM(NSInteger, NIBezierPathElement) { // shouldn't the be typed as unsigned long to match the segments?
     NIMoveToBezierPathElement,
     NILineToBezierPathElement,
     NICurveToBezierPathElement,
     NICloseBezierPathElement
 };
-typedef NSInteger NIBezierPathElement;
 
 @interface NIBezierPath : NSObject <NSCopying, NSMutableCopying, NSSecureCoding, NSFastEnumeration> // fast enumeration returns NSValues of the endpoints
 {

@@ -31,14 +31,13 @@
 
 CF_EXTERN_C_BEGIN
 
-enum NIBezierCoreSegmentType {
+typedef NS_ENUM(unsigned long, NIBezierCoreSegmentType) {
     NIMoveToBezierCoreSegmentType,
     NILineToBezierCoreSegmentType,
     NICurveToBezierCoreSegmentType,
     NICloseBezierCoreSegmentType,
     NIEndBezierCoreSegmentType = 0xFFFFFFFF
 };
-typedef enum NIBezierCoreSegmentType NIBezierCoreSegmentType;
 
 extern const CFDictionaryValueCallBacks kNIBezierCoreDictionaryValueCallBacks;
 extern const CFArrayCallBacks kNIBezierCoreArrayCallBacks;

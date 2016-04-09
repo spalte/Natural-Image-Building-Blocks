@@ -84,7 +84,7 @@ typedef NS_ENUM(NSInteger, NIProjectionMode)
     NIBezierPath *_bezierPath;
     NIVector _initialNormal;
 
-    enum NIProjectionMode _projectionMode;
+    NIProjectionMode _projectionMode;
     //    BOOL _vertical; // it would be cool to implement this one day
 }
 
