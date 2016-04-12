@@ -167,9 +167,10 @@ NS_ASSUME_NONNULL_BEGIN
         }
 
         for (NIStorageEntity *prevEntity in results) {
-            id object = [prevEntity objectValueOfClasses:[NSSet setWithObjects:[NSValue class], [NSString class], [NSDate class], [NSData class], [NIStorageBox class], nil]];
+            id object = [prevEntity objectValueOfClasses:[NSSet setWithObjects:[NSValue class], [NSNull class], [NSString class], [NSDate class], [NSData class], [NIStorageBox class], nil]];
 
             if ([object isKindOfClass:[NSValue class]] ||
+                [object isKindOfClass:[NSNull class]] ||
                 [object isKindOfClass:[NSString class]] ||
                 [object isKindOfClass:[NSDate class]] ||
                 [object isKindOfClass:[NSData class]]) {
@@ -198,7 +199,8 @@ NS_ASSUME_NONNULL_BEGIN
         [self setString:value forKey:key];
     } else if ([value isKindOfClass:[NSNumber class]]) { // should check different types, but this is good enough for all integers of reasonable size
         [self setDouble:[value doubleValue] forKey:key];
-    } else if ([value isKindOfClass:[NSDate class]]) {
+    } else if ([value isKindOfClass:[NSDate class]] ||
+               [value isKindOfClass:[NSNull class]]) {
         [self setObject:value forKey:key];
     } else if ([value isKindOfClass:[NSData class]]) {
         [self setData:value forKey:key];
