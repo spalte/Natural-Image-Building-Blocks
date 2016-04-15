@@ -225,7 +225,7 @@ CF_EXTERN_C_END
  @return The initialized mask object or `nil` if there was a problem initializing the object.
  @param maskRuns An array of NIMaskRun structs in NSValues.
  */
-- (nullable instancetype)initWithMaskRuns:(NSArray *)maskRuns NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithMaskRuns:(NSArray *)maskRuns;
 
 /** Initializes and returns a newly created mask.
  
@@ -243,7 +243,7 @@ CF_EXTERN_C_END
  @return The initialized mask object or `nil` if there was a problem initializing the object.
  @param maskRunData is the serialized NIMaskRuns.
  */
-- (nullable instancetype)initWithSortedMaskRunData:(NSData *)maskRunData NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithSortedMaskRunData:(NSData *)maskRunData;
 
 // create the thing, maybe we should really be working with C arrays.... or at least give the option
 /** Initializes and returns a newly created mask.
@@ -253,7 +253,7 @@ CF_EXTERN_C_END
  @return The initialized mask object or `nil` if there was a problem initializing the object.
  @param maskRuns An array of NIMaskRun structs in NSValues.
  */
-- (nullable instancetype)initWithSortedMaskRuns:(NSArray *)maskRuns NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithSortedMaskRuns:(NSArray *)maskRuns;
 
 /** Initializes and returns a newly created mask.
  
@@ -271,7 +271,7 @@ CF_EXTERN_C_END
  @return The initialized mask object or `nil` if there was a problem initializing the object.
  @param indexData is the serialized NIMaskIndexes.
  */
-- (nullable instancetype)initWithIndexData:(NSData *)indexData NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithIndexData:(NSData *)indexData;
 
 /** Initializes and returns a newly created mask.
  
@@ -289,7 +289,7 @@ CF_EXTERN_C_END
  @return The initialized mask object or `nil` if there was a problem initializing the object.
  @param maskRuns An array of NIMaskIndex structs in NSValues.
  */
-- (nullable instancetype)initWithSortedIndexData:(NSData *)indexData NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithSortedIndexData:(NSData *)indexData;
 
 ///-----------------------------------
 /// @name Working with the Mask

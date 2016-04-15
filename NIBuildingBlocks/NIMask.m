@@ -429,7 +429,8 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
 
 - (nullable instancetype)initWithMaskRuns:(NSArray *)maskRuns
 {
-    if ( (self = [super init]) ) {
+    if ( (self = [self init]) ) {
+        [_maskRuns release];
         _maskRuns = [[maskRuns sortedArrayUsingFunction:NIMaskCompareRunValues context:NULL] retain];
         [self checkdebug];
     }
@@ -449,7 +450,8 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
 
 - (nullable instancetype)initWithSortedMaskRunData:(NSData *)maskRunData
 {
-    if ( (self = [super init]) ) {
+    if ( (self = [self init]) ) {
+        [_maskRunsData release];
         _maskRunsData = [maskRunData retain];
         [self checkdebug];
     }
@@ -458,7 +460,8 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
 
 - (nullable instancetype)initWithSortedMaskRuns:(NSArray *)maskRuns
 {
-    if ( (self = [super init]) ) {
+    if ( (self = [self init]) ) {
+        [_maskRuns release];
         _maskRuns = [maskRuns retain];
         [self checkdebug];
     }
@@ -479,7 +482,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
 
 - (nullable instancetype)initWithIndexData:(NSData *)indexData
 {
-    if ( (self = [super init]) ) {
+    if ( (self = [self init]) ) {
         NIMaskIndex *indexes = (NIMaskIndex *)[indexData bytes];
         NSUInteger indexCount = [indexData length] / sizeof(NIMaskIndex);
         NSUInteger i;
@@ -521,6 +524,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
         }
         
         [newSortedRuns addObject:[NSValue valueWithNIMaskRun:maskRun]];
+        [_maskRuns release];
         _maskRuns = [newSortedRuns retain];
         [self checkdebug];
     }
@@ -541,7 +545,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
 
 - (nullable instancetype)initWithSortedIndexData:(NSData *)indexData
 {
-    if ( (self = [super init]) ) {
+    if ( (self = [self init]) ) {
         NIMaskIndex *indexes = (NIMaskIndex *)[indexData bytes];
         NSUInteger indexCount = [indexData length];
         NSUInteger i;
@@ -573,6 +577,7 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
         }
         
         [maskRuns addObject:[NSValue valueWithNIMaskRun:maskRun]];
+        [_maskRuns release];
         _maskRuns = [maskRuns retain];
         [self checkdebug];
     }
