@@ -69,7 +69,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readwrite, retain) NSColor *color;
 @property (nonatomic, readwrite, assign) CGFloat thickness;
 
-- (CGFloat)distanceToPoint:(NSPoint)point closestPoint:(nullable NSPoint*)rpoint; // returns CGFLOAT_MAX if can't return an actual distance
+- (CGFloat)distanceToPoint:(NSPoint)point closestPoint:(nullable NSPointPointer)rpoint; // returns CGFLOAT_MAX if can't return an actual distance
 
 @end
 

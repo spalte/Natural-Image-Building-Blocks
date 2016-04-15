@@ -186,7 +186,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
-- (CGFloat)distanceToPoint:(NSPoint)point closestPoint:(nullable NSPoint *)rpoint
+- (CGFloat)distanceToPoint:(NSPoint)point closestPoint:(nullable NSPointPointer)rpoint
 {
     if (_generatorRequestView == nil || _intersectingObject == nil || !_generatorRequestView.presentedGeneratorRequest) {;
         return CGFLOAT_MAX;

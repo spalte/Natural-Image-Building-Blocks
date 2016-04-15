@@ -26,6 +26,7 @@
 #import "NIBezierCoreAdditions.h"
 #import "NIBezierPath.h"
 #import "NIVolumeData.h"
+#import "NIGeneratorOperationPrivate.h"
 #import "NIHorizontalFillOperation.h"
 #import "NIProjectionOperation.h"
 #include <libkern/OSAtomic.h>

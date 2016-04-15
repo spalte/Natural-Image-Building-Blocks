@@ -20,7 +20,7 @@
 //  THE SOFTWARE.
 
 #import "NIGeneratorOperation.h"
-
+#import "NIGeneratorOperationPrivate.h"
 
 @implementation NIGeneratorOperation
 

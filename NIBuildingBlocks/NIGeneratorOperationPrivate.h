@@ -1,4 +1,3 @@
-//  Copyright (c) 2016 OsiriX Foundation
 //  Copyright (c) 2016 Spaltenstein Natural Image
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,24 +18,10 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#import <Foundation/Foundation.h>
 
-#import <Cocoa/Cocoa.h>
+#import "NIGeneratorOperation.h"
 
-@class NIGeneratorRequest;
-@class NIVolumeData;
-
-@interface NIGeneratorOperation : NSOperation {
-    NIVolumeData *_volumeData;
-    NIGeneratorRequest *_request;
-    NIVolumeData *_generatedVolume;
-}
-
-- (id)initWithRequest:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData;
-
-@property (readonly) NIGeneratorRequest *request;
-@property (readonly) NIVolumeData *volumeData;
-@property (readonly) BOOL didFail;
-@property (readonly) NIVolumeData *generatedVolume;
-
+@interface NIGeneratorOperation ()
+@property (readwrite, retain) NIVolumeData *generatedVolume;
 @end
-
