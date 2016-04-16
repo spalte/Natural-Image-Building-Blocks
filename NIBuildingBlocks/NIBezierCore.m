@@ -1202,7 +1202,6 @@ static void _NIBezierCoreElementDivide(NIBezierCoreElementRef element)
     } else if (element->segmentType == NICloseBezierCoreSegmentType) {
         element->endpoint = NIVectorScalarMultiply(NIVectorAdd(element->previous->endpoint, newElement->endpoint), 0.5);
 		element->segmentType = NILineToBezierCoreSegmentType;
-		newElement->segmentType = NICloseBezierCoreSegmentType;
     } else if (element->segmentType == NICurveToBezierCoreSegmentType) {
         q0 = NIVectorScalarMultiply(NIVectorAdd(element->previous->endpoint, element->control1), 0.5);
         q1 = NIVectorScalarMultiply(NIVectorAdd(element->control1, element->control2), 0.5);
