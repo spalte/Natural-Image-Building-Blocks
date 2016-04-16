@@ -81,6 +81,7 @@
 		4F4B28391BD022560033906D /* NIAgeFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4B28371BD022560033906D /* NIAgeFormatter.m */; };
 		4F74037B1C5A87D9009C40D2 /* NIStorageBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F7403791C5A87D9009C40D2 /* NIStorageBox.h */; };
 		4F74037C1C5A87D9009C40D2 /* NIStorageBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F74037A1C5A87D9009C40D2 /* NIStorageBox.m */; };
+		4F806AD11CC12B55009AF7C2 /* NIGeneratorOperationPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F806ACF1CC12B55009AF7C2 /* NIGeneratorOperationPrivate.h */; };
 		4FCB58191C551C5E00718CCF /* NIStorageModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4FCB58171C551C5E00718CCF /* NIStorageModel.xcdatamodeld */; };
 		4FCB58AB1C5523F700718CCF /* NIStorageEntities.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FCB588F1C5523F700718CCF /* NIStorageEntities.h */; };
 		4FCB58AC1C5523F700718CCF /* NIStorageEntities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FCB58901C5523F700718CCF /* NIStorageEntities.m */; };
@@ -188,6 +189,7 @@
 		4F4B28371BD022560033906D /* NIAgeFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIAgeFormatter.m; sourceTree = "<group>"; };
 		4F7403791C5A87D9009C40D2 /* NIStorageBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIStorageBox.h; sourceTree = "<group>"; };
 		4F74037A1C5A87D9009C40D2 /* NIStorageBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIStorageBox.m; sourceTree = "<group>"; };
+		4F806ACF1CC12B55009AF7C2 /* NIGeneratorOperationPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIGeneratorOperationPrivate.h; sourceTree = "<group>"; };
 		4FCB58181C551C5E00718CCF /* NIStorageModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NIStorageModel.xcdatamodel; sourceTree = "<group>"; };
 		4FCB588F1C5523F700718CCF /* NIStorageEntities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIStorageEntities.h; sourceTree = "<group>"; };
 		4FCB58901C5523F700718CCF /* NIStorageEntities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIStorageEntities.m; sourceTree = "<group>"; };
@@ -361,6 +363,7 @@
 				4F151F4B1B1CCC0100C8F767 /* NIStraightenedOperation.m */,
 				4F151F4C1B1CCC0100C8F767 /* NIStretchedOperation.h */,
 				4F151F4D1B1CCC0100C8F767 /* NIStretchedOperation.m */,
+				4F806ACF1CC12B55009AF7C2 /* NIGeneratorOperationPrivate.h */,
 			);
 			name = NIGeneratorPrivate;
 			sourceTree = "<group>";
@@ -525,6 +528,7 @@
 				4F151F541B1CCC0100C8F767 /* NIStraightenedOperation.h in Headers */,
 				4F151F4E1B1CCC0100C8F767 /* NIHorizontalFillOperation.h in Headers */,
 				4F4409B61B21A0F6006AC3B6 /* NIWindowingView.h in Headers */,
+				4F806AD11CC12B55009AF7C2 /* NIGeneratorOperationPrivate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -793,6 +797,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_USE_OPTIMIZATION_PROFILE = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -813,6 +818,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_USE_OPTIMIZATION_PROFILE = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
