@@ -1071,7 +1071,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     *(NIVector *)&fromModelTransform.m21 = NIVectorSubtract(*(NIVector *)&fromModelTransform.m21, *(NIVector *)&fromModelTransform.m41);
     *(NIVector *)&fromModelTransform.m31 = NIVectorSubtract(*(NIVector *)&fromModelTransform.m31, *(NIVector *)&fromModelTransform.m41);
 
-    // at this point fromModelTransform applies the correct transform, put it is not guaranteed to not be a degenerate matrix
+    // at this point fromModelTransform applies the correct transform, but it is not guaranteed to not be a degenerate matrix
     // so we will fill out m13...m33 with values that make sure that is not the case
     NIVector yColumn = NIVectorCrossProduct(NIVectorMake(fromModelTransform.m11, fromModelTransform.m21, fromModelTransform.m31),
                                             NIVectorMake(fromModelTransform.m12, fromModelTransform.m22, fromModelTransform.m32));
