@@ -57,7 +57,8 @@ typedef NS_ENUM(NSInteger, NIBezierPathElement) { // shouldn't the be typed as u
 + (nullable instancetype)bezierPath;
 + (nullable instancetype)bezierPathWithBezierPath:(NIBezierPath *)bezierPath;
 + (nullable instancetype)bezierPathWithNSBezierPath:(NSBezierPath *)bezierPath;
-+ (nullable instancetype)bezierPathNIBezierCore:(NIBezierCoreRef)bezierCore;
++ (nullable instancetype)bezierPathWithNIBezierCore:(NIBezierCoreRef)bezierCore;
++ (nullable instancetype)bezierPathNIBezierCore:(NIBezierCoreRef)bezierCore __deprecated;
 + (nullable instancetype)bezierPathCircleWithCenter:(NIVector)center radius:(CGFloat)radius normal:(NIVector)normal;
 
 - (BOOL)isEqualToBezierPath:(NIBezierPath *)bezierPath;

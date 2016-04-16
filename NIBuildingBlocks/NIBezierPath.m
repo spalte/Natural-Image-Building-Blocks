@@ -202,7 +202,12 @@ NS_ASSUME_NONNULL_BEGIN
     return [[[[self class] alloc] initWithNSBezierPath:bezierPath] autorelease];
 }
 
-+ (nullable instancetype)bezierPathNIBezierCore:(NIBezierCoreRef)bezierCore
++ (nullable instancetype)bezierPathNIBezierCore:(NIBezierCoreRef)bezierCore __deprecated
+{
+    return [self bezierPathWithNIBezierCore:bezierCore];
+}
+
++ (nullable instancetype)bezierPathWithNIBezierCore:(NIBezierCoreRef)bezierCore
 {
     return [[[[self class] alloc] initWithNIBezierCore:bezierCore] autorelease];
 }
@@ -647,7 +652,7 @@ NS_ASSUME_NONNULL_BEGIN
     NIMutableBezierPath *reversedBezierPath;
 
     reversedBezierCore = NIBezierCoreCreateCopyByReversing(_bezierCore);
-    reversedBezierPath = [NIMutableBezierPath bezierPathNIBezierCore:reversedBezierCore];
+    reversedBezierPath = [NIMutableBezierPath bezierPathWithNIBezierCore:reversedBezierCore];
     NIBezierCoreRelease(reversedBezierCore);
     return reversedBezierPath;
 }
@@ -709,7 +714,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSUInteger i;
 
     for (i = 0; i < CFArrayGetCount(cfSubPaths); i++) {
-        [subPaths addObject:[NIBezierPath bezierPathNIBezierCore:CFArrayGetValueAtIndex(cfSubPaths, i)]];
+        [subPaths addObject:[NIBezierPath bezierPathWithNIBezierCore:CFArrayGetValueAtIndex(cfSubPaths, i)]];
     }
 
     CFRelease(cfSubPaths);
@@ -722,7 +727,7 @@ NS_ASSUME_NONNULL_BEGIN
     NIMutableBezierPath *clippedBezierPath;
 
     clippedBezierCore = NIBezierCoreCreateCopyByClipping(_bezierCore, startRelativePosition, endRelativePosition);
-    clippedBezierPath = [NIMutableBezierPath bezierPathNIBezierCore:clippedBezierCore];
+    clippedBezierPath = [NIMutableBezierPath bezierPathWithNIBezierCore:clippedBezierCore];
     NIBezierCoreRelease(clippedBezierCore);
     return clippedBezierPath;
 }
