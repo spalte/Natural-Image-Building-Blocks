@@ -451,6 +451,8 @@ NSArray *NIMaskIndexesInRun(NIMaskRun maskRun)
 - (nullable instancetype)initWithSortedMaskRunData:(NSData *)maskRunData
 {
     if ( (self = [self init]) ) {
+        [_maskRuns release];
+        _maskRuns = nil;
         [_maskRunsData release];
         _maskRunsData = [maskRunData retain];
         [self checkdebug];
