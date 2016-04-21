@@ -42,7 +42,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotification = @"NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotification";
+NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotification = @"NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotification";
+NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotificationNewRequestKey = @"new";
+NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotificationOldRequestKey = @"old";
 
 @interface NIGeneratorRequestView ()
 @property (nonatomic, readwrite, copy) NIGeneratorRequest *presentedGeneratorRequest;
@@ -711,7 +713,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     [_volumeDataProperties insertObject:volumeDataProperties atIndex:index];
 
     if (index == 0) {
-        [generatorRequestLayer addObserver:self forKeyPath:@"presentedGeneratorRequest" options:(NSKeyValueObservingOptionNew) context:_volumeDataComposingLayer];
+        [generatorRequestLayer addObserver:self forKeyPath:@"presentedGeneratorRequest" options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) context:_volumeDataComposingLayer];
     }
     [self didChangeValueForKey:@"volumeDataProperties"];
 
@@ -730,7 +732,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
     [_volumeDataProperties removeObjectAtIndex:index];
 
     if ([[_volumeDataComposingLayer sublayers] count] && index == 0) {
-        [[_volumeDataComposingLayer sublayers][0] addObserver:self forKeyPath:@"presentedGeneratorRequest" options:(NSKeyValueObservingOptionNew) context:_volumeDataComposingLayer];
+        [[_volumeDataComposingLayer sublayers][0] addObserver:self forKeyPath:@"presentedGeneratorRequest" options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) context:_volumeDataComposingLayer];
     }
 
     [self didChangeValueForKey:@"volumeDataProperties"];
@@ -980,7 +982,7 @@ NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotifica
 {
     if ([keyPath isEqualToString:@"presentedGeneratorRequest"] && context == _volumeDataComposingLayer) {
         self.presentedGeneratorRequest = [(NIGeneratorRequestLayer *)object presentedGeneratorRequest];
-        [[NSNotificationCenter defaultCenter] postNotificationName:NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotification object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotification object:self userInfo:@{ NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotificationNewRequestKey: change[NSKeyValueChangeNewKey], NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotificationOldRequestKey: change[NSKeyValueChangeOldKey] }];
         if ([self inLiveResize] == NO) {
             NSPoint pointInView = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
             if (NSPointInRect(pointInView, self.bounds)) {

@@ -37,6 +37,8 @@ static const CGFloat NIGeneratorRequestViewSpriteZPosition = 5;
 static const CGFloat NIGeneratorRequestViewRimLayerZPosition = 10;
 
 extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotification;
+extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotificationNewRequestKey;
+extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotificationOldRequestKey;
 
 @class NIGeneratorRequest;
 @class NIVolumeData;
