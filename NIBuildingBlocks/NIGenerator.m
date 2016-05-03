@@ -118,7 +118,7 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
 
 + (NIGeneratorAsynchronousRequestID)asynchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData completionBlock:(void (^)(NIVolumeData *))completionBlock
 {
-    NIGeneratorOperation * operation = [[[request operationClass] alloc] initWithRequest:request volumeData:volumeData];
+    NIGeneratorOperation * operation = [[[[request operationClass] alloc] initWithRequest:request volumeData:volumeData] autorelease];
     [operation setQualityOfService:NSQualityOfServiceUserInitiated];
     NIGeneratorAsynchronousRequestID requestID = [self _generateRequestID];
     [self _setOperation:operation forRequestID:requestID];
