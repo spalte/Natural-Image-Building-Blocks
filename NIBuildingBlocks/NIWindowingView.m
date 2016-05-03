@@ -26,13 +26,6 @@
 @synthesize windowLevel = _windowLevel;
 @synthesize windowWidth = _windowWidth;
 
-
-- (void)drawRect:(NSRect)dirtyRect {
-    [super drawRect:dirtyRect];
-    
-    // Drawing code here.
-}
-
 - (void)mouseDown:(NSEvent *)theEvent
 {
     _clickPoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
@@ -58,9 +51,9 @@
     _clickWindowWidth = 0;
 }
 
-- (BOOL)isOpaque
+- (BOOL)mouseDownCanMoveWindow
 {
-    return YES;
+    return NO;
 }
 
 @end
