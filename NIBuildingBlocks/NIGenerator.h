@@ -47,7 +47,7 @@ typedef int64_t NIGeneratorAsynchronousRequestID;
 // The execution context for your completion block is not guaranteed
 + (NIGeneratorAsynchronousRequestID)asynchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData completionBlock:(void (^)(NIVolumeData* generatedVolume))completionBlock;
 + (void)cancelAsynchronousRequest:(NIGeneratorAsynchronousRequestID)requestID;
-
++ (NSOperation *)operationForAsynchronousRequest:(NIGeneratorAsynchronousRequestID)requestID;
 
 - (id)initWithVolumeData:(NIVolumeData *)volumeData;
 

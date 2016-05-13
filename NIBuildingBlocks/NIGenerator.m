@@ -108,10 +108,14 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
     operation = [[[request operationClass] alloc] initWithRequest:request volumeData:volumeData];
 	[operation setQueuePriority:NSOperationQueuePriorityVeryHigh];
     [operation setQualityOfService:NSQualityOfServiceUserInteractive];
-    operationQueue = [self _asynchronousRequestQueue];
+//    operationQueue = [self _asynchronousRequestQueue];
+    operationQueue = [[NSOperationQueue alloc] init];
+    if ([operationQueue respondsToSelector:@selector(setQualityOfService:)])
+        operationQueue.qualityOfService = NSQualityOfServiceUserInteractive;
     [operationQueue addOperations:@[operation] waitUntilFinished:YES];
     generatedVolume = [[operation.generatedVolume retain] autorelease];
     [operation release];
+    [operationQueue release];
     
     return generatedVolume;
 }
@@ -130,6 +134,11 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
     [[self _asynchronousRequestQueue] addOperation:operation];
 
     return requestID;
+}
+
++ (NSOperation *)operationForAsynchronousRequest:(NIGeneratorAsynchronousRequestID)requestID
+{
+    return [self _operationForRequestID:requestID];
 }
 
 + (void)cancelAsynchronousRequest:(NIGeneratorAsynchronousRequestID)requestID
