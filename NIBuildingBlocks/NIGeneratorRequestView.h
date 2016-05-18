@@ -123,11 +123,11 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
 
 // intersections
 - (void)addIntersection:(NIIntersection *)intersection forKey:(NSString *)key; // for now undefined behavior if an intersection already exists for the key
-- (NIIntersection *)intersectionForKey:(NSString *)key;
+- (__kindof NIIntersection *)intersectionForKey:(NSString *)key;
 - (void)removeAllIntersections;
 - (void)removeIntersectionForKey:(NSString *)key;
 - (NSArray *)intersectionKeys;
-- (void)enumerateIntersectionsWithBlock:(void (^)(NSString *key, NIIntersection *intersection, BOOL *stop))block;
+- (void)enumerateIntersectionsWithBlock:(void (^)(NSString *key, __kindof NIIntersection *intersection, BOOL *stop))block;
 - (nullable NSString *)intersectionClosestToPoint:(NSPoint)point closestPoint:(nullable NSPointPointer)rclosestPoint distance:(CGFloat *)rdistance;
 
 // Text Labels are arrays of strings that will be displayed in the corners of the view

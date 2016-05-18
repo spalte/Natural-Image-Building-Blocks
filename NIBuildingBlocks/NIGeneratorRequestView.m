@@ -833,7 +833,7 @@ NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotific
     return [_intersections allKeys];
 }
 
-- (void)enumerateIntersectionsWithBlock:(void (^)(NSString *key, NIIntersection *intersection, BOOL *stop))block {
+- (void)enumerateIntersectionsWithBlock:(void (^)(NSString *key, __kindof NIIntersection *intersection, BOOL *stop))block {
     [_intersections enumerateKeysAndObjectsUsingBlock:block];
 }
 
