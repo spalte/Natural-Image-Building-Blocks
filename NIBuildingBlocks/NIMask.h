@@ -69,6 +69,7 @@ CF_EXTERN_C_BEGIN
 
 extern const NIMaskIndex NIMaskIndexInvalid;
 
+NIMaskIndex NIMaskIndexMake(NSUInteger x, NSUInteger y, NSUInteger z);
 BOOL NIMaskIndexEqualToMaskIndex(NIMaskIndex mi1, NIMaskIndex mi2);
 
 /** Transforms the maskIndex using the given transform, and returns an NIVector

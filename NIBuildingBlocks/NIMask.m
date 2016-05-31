@@ -28,6 +28,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 const NIMaskIndex NIMaskIndexInvalid = {NSUIntegerMax,NSUIntegerMax,NSUIntegerMax};
 
+NIMaskIndex NIMaskIndexMake(NSUInteger x, NSUInteger y, NSUInteger z) {
+    NIMaskIndex mi = {x, y, z};
+    return mi;
+}
+
 BOOL NIMaskIndexEqualToMaskIndex(NIMaskIndex mi1, NIMaskIndex mi2) {
     return mi1.x == mi2.x && mi1.y == mi2.y && mi1.z == mi2.z;
 }
