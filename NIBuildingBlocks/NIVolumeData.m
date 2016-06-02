@@ -363,6 +363,17 @@ NS_ASSUME_NONNULL_BEGIN
     return [sliceVolume autorelease];
 }
 
+- (NIVolumeData *)volumeDataWithIndexRangesX:(NSRange)xr y:(NSRange)yr z:(NSRange)zr {
+    NIVolumeData *data = [[NIVolumeData alloc] initWithData:[NSMutableData dataWithLength:xr.length*yr.length*zr.length*sizeof(float)] pixelsWide:xr.length pixelsHigh:yr.length pixelsDeep:zr.length modelToVoxelTransform:NIAffineTransformConcat(self.modelToVoxelTransform, NIAffineTransformMakeTranslation(-1.*xr.location, -1.*yr.location, -1.*zr.location)) outOfBoundsValue:self.outOfBoundsValue];
+    NIVolumeDataInlineBuffer sib, dib; [self acquireInlineBuffer:&sib]; [data acquireInlineBuffer:&dib];
+    
+    for (NSUInteger z = 0; z < zr.length; ++z)
+        for (NSUInteger y = 0; y < yr.length; ++y)
+            memcpy((void *)&dib.floatBytes[NIVolumeDataUncheckedIndexAtCoordinate(0,y,z,dib.pixelsWide,dib.pixelsHigh,dib.pixelsDeep)], &sib.floatBytes[NIVolumeDataUncheckedIndexAtCoordinate(xr.location,yr.location+y,zr.location+z,sib.pixelsWide,sib.pixelsHigh,sib.pixelsDeep)], xr.length*sizeof(float));
+    
+    return data;
+}
+
 - (CGFloat)floatAtPixelCoordinateX:(NSUInteger)x y:(NSUInteger)y z:(NSUInteger)z
 {
     NIVolumeDataInlineBuffer inlineBuffer;

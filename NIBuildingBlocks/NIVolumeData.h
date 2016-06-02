@@ -120,6 +120,8 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 - (vImage_Buffer)floatBufferForSliceAtIndex:(NSUInteger)z;
 - (NIVolumeData *)volumeDataForSliceAtIndex:(NSUInteger)z;
 
+- (NIVolumeData *)volumeDataWithIndexRangesX:(NSRange)x y:(NSRange)y z:(NSRange)z;
+
 // returns a volumeData with the same underlying data, but with the passed in modelToVoxelTransform
 - (instancetype)volumeDataWithModelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform;
 
@@ -165,6 +167,10 @@ CF_INLINE const float* NIVolumeDataFloatBytes(NIVolumeDataInlineBuffer *inlineBu
     return inlineBuffer->floatBytes;
 }
 
+CF_INLINE float NIVolumeDataUncheckedGetFloatAtPixelCoordinate(NIVolumeDataInlineBuffer *inlineBuffer, NSInteger x, NSInteger y, NSInteger z)
+{
+    return (inlineBuffer->floatBytes)[x + y*inlineBuffer->pixelsWide + z*inlineBuffer->pixelsWideTimesPixelsHigh];
+}
 
 CF_INLINE float NIVolumeDataGetFloatAtPixelCoordinate(NIVolumeDataInlineBuffer *inlineBuffer, NSInteger x, NSInteger y, NSInteger z)
 {
