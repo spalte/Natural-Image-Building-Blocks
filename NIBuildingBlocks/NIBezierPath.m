@@ -348,6 +348,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NIBezierPath *)bezierPathByAppendingBezierPath:(NIBezierPath *)bezierPath connectPaths:(BOOL)connectPaths;
 {
+    if (!bezierPath.elementCount)
+        return self;
     NIMutableBezierPath *newBezierPath;
     newBezierPath = [[self mutableCopy] autorelease];
     [newBezierPath appendBezierPath:bezierPath connectPaths:connectPaths];
