@@ -348,7 +348,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NIBezierPath *)bezierPathByAppendingBezierPath:(NIBezierPath *)bezierPath connectPaths:(BOOL)connectPaths;
 {
-    if (!bezierPath.elementCount) {
+    if (bezierPath == NULL) {
         [NSException raise:NSInvalidArgumentException format:@"*** %s: nil argument", __PRETTY_FUNCTION__];
     }
 
