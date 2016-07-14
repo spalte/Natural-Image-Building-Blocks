@@ -610,8 +610,8 @@ void NIBezierCoreAppendBezierCore(NIMutableBezierCoreRef bezierCore, NIBezierCor
     NIBezierCoreElementRef lastElement;
     
     element = appenedBezier->elementList;
-    
-    if (element != NULL && connectPaths) {
+
+    if (bezierCore->elementCount != 0 && element != NULL && connectPaths) {
         element = element->next; // remove the first moveto
 		
 		if (bezierCore->lastElement->segmentType == NICloseBezierCoreSegmentType) { // remove the last close if it is there
