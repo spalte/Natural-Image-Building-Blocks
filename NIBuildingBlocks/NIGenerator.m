@@ -136,15 +136,20 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
     return requestID;
 }
 
-+ (NSOperation *)operationForAsynchronousRequest:(NIGeneratorAsynchronousRequestID)requestID
-{
-    return [self _operationForRequestID:requestID];
-}
-
 + (void)cancelAsynchronousRequest:(NIGeneratorAsynchronousRequestID)requestID
 {
     NSOperation *operation = [self _operationForRequestID:requestID];
     [operation cancel];
+}
+
++ (void)setPriority:(CGFloat)priority forAsynchronousRequest:(NIGeneratorAsynchronousRequestID)requestID
+{
+    if (priority > 1) priority = 1;
+    if (priority < -1) priority = -1;
+    
+    NSOperation *operation = [self _operationForRequestID:requestID];
+    
+    operation.queuePriority = priority * NSOperationQueuePriorityVeryHigh;
 }
 
 - (id)initWithVolumeData:(NIVolumeData *)volumeData

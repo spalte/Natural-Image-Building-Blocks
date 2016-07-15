@@ -42,7 +42,7 @@
 		4F151F371B1CCB6900C8F767 /* NIGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F351B1CCB6900C8F767 /* NIGeometry.m */; };
 		4F151F3E1B1CCB8E00C8F767 /* NIGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F381B1CCB8E00C8F767 /* NIGenerator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F3F1B1CCB8E00C8F767 /* NIGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F391B1CCB8E00C8F767 /* NIGenerator.m */; };
-		4F151F401B1CCB8E00C8F767 /* NIGeneratorOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F3A1B1CCB8E00C8F767 /* NIGeneratorOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F151F401B1CCB8E00C8F767 /* NIGeneratorOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F3A1B1CCB8E00C8F767 /* NIGeneratorOperation.h */; };
 		4F151F411B1CCB8E00C8F767 /* NIGeneratorOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F3B1B1CCB8E00C8F767 /* NIGeneratorOperation.m */; };
 		4F151F421B1CCB8E00C8F767 /* NIGeneratorRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F151F3C1B1CCB8E00C8F767 /* NIGeneratorRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F151F431B1CCB8E00C8F767 /* NIGeneratorRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F151F3D1B1CCB8E00C8F767 /* NIGeneratorRequest.m */; };
@@ -343,8 +343,6 @@
 				4F151F391B1CCB8E00C8F767 /* NIGenerator.m */,
 				4F151F3C1B1CCB8E00C8F767 /* NIGeneratorRequest.h */,
 				4F151F3D1B1CCB8E00C8F767 /* NIGeneratorRequest.m */,
-				4F151F3A1B1CCB8E00C8F767 /* NIGeneratorOperation.h */,
-				4F151F3B1B1CCB8E00C8F767 /* NIGeneratorOperation.m */,
 				4F151F581B1CCC1400C8F767 /* NIGeneratorPrivate */,
 			);
 			name = NIGenerator;
@@ -353,6 +351,8 @@
 		4F151F581B1CCC1400C8F767 /* NIGeneratorPrivate */ = {
 			isa = PBXGroup;
 			children = (
+				4F151F3A1B1CCB8E00C8F767 /* NIGeneratorOperation.h */,
+				4F151F3B1B1CCB8E00C8F767 /* NIGeneratorOperation.m */,
 				4F151F441B1CCC0100C8F767 /* NIHorizontalFillOperation.h */,
 				4F151F451B1CCC0100C8F767 /* NIHorizontalFillOperation.m */,
 				4F151F461B1CCC0100C8F767 /* NIObliqueSliceOperation.h */,
