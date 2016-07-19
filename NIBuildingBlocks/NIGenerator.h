@@ -48,6 +48,7 @@ typedef int64_t NIGeneratorAsynchronousRequestID;
 + (NIGeneratorAsynchronousRequestID)asynchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData completionBlock:(void (^)(NIVolumeData* generatedVolume))completionBlock;
 + (void)cancelAsynchronousRequest:(NIGeneratorAsynchronousRequestID)requestID;
 + (void)setPriority:(CGFloat)priority forAsynchronousRequest:(NIGeneratorAsynchronousRequestID)requestID; // priority should be between -1 and 1
++ (void)waitUntilAsynchronousRequestFinished:(NIGeneratorAsynchronousRequestID)requestID;
 
 - (id)initWithVolumeData:(NIVolumeData *)volumeData;
 

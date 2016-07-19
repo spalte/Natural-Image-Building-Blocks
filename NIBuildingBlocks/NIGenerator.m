@@ -55,6 +55,7 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
         asynchronousRequestQueue = [[NSOperationQueue alloc] init];
         [asynchronousRequestQueue setMaxConcurrentOperationCount:10];
         [asynchronousRequestQueue setName:@"NIGenerator Asynchronous Request Queue"];
+        [asynchronousRequestQueue setQualityOfService:NSQualityOfServiceUserInitiated];
     });
     return asynchronousRequestQueue;
 }
@@ -150,6 +151,11 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
     NSOperation *operation = [self _operationForRequestID:requestID];
     
     operation.queuePriority = priority * NSOperationQueuePriorityVeryHigh;
+}
+
++ (void)waitUntilAsynchronousRequestFinished:(NIGeneratorAsynchronousRequestID)requestID {
+    NSOperation *rop = [self _operationForRequestID:requestID];
+    [rop waitUntilFinished];
 }
 
 - (id)initWithVolumeData:(NIVolumeData *)volumeData
