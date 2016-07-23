@@ -663,7 +663,6 @@ NS_ASSUME_NONNULL_BEGIN
     inlineBuffer->pixelsWide = _pixelsWide;
     inlineBuffer->pixelsHigh = _pixelsHigh;
     inlineBuffer->pixelsDeep = _pixelsDeep;
-    inlineBuffer->pixelsWideTimesPixelsHigh = _pixelsWide*_pixelsHigh;
     inlineBuffer->modelToVoxelTransform = _modelToVoxelTransform;
     return YES;
 }
