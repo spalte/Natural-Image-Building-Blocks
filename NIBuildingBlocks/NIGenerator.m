@@ -128,7 +128,6 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
     [operationQueue addOperations:@[operation] waitUntilFinished:YES];
     generatedVolume = [[operation.generatedVolume retain] autorelease];
     [operation release];
-    [operationQueue release];
     
     return generatedVolume;
 }

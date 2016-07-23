@@ -371,7 +371,7 @@ NS_ASSUME_NONNULL_BEGIN
         for (NSUInteger y = 0; y < yr.length; ++y)
             memcpy((void *)&dib.floatBytes[NIVolumeDataUncheckedIndexAtCoordinate(0,y,z,dib.pixelsWide,dib.pixelsHigh,dib.pixelsDeep)], &sib.floatBytes[NIVolumeDataUncheckedIndexAtCoordinate(xr.location,yr.location+y,zr.location+z,sib.pixelsWide,sib.pixelsHigh,sib.pixelsDeep)], xr.length*sizeof(float));
     
-    return data;
+    return [data autorelease];
 }
 
 - (CGFloat)floatAtPixelCoordinateX:(NSUInteger)x y:(NSUInteger)y z:(NSUInteger)z
