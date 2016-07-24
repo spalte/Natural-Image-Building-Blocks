@@ -661,19 +661,19 @@ NS_ASSUME_NONNULL_BEGIN
     return reversedBezierPath;
 }
 
-- (NSArray*)intersectionsWithPlane:(NIPlane)plane; // returns NSValues containing NIVectors of the intersections.
+- (NSArray<NSValue *>*)intersectionsWithPlane:(NIPlane)plane; // returns NSValues containing NIVectors of the intersections.
 {
     return [self intersectionsWithPlane:plane relativePositions:NULL];
 }
 
-- (NSArray*)intersectionsWithPlane:(NIPlane)plane relativePositions:(NSArray * __nonnull * __nullable)returnedRelativePositions;
+- (NSArray<NSValue *>*)intersectionsWithPlane:(NIPlane)plane relativePositions:(NSArray<NSValue *> * __nonnull * __nullable)returnedRelativePositions;
 {
     NIMutableBezierPath *flattenedPath;
     NIBezierCoreRef bezierCore;
     NSInteger intersectionCount;
     NSInteger i;
-    NSMutableArray *intersectionArray;
-    NSMutableArray *relativePositionArray;
+    NSMutableArray<NSValue *> *intersectionArray;
+    NSMutableArray<NSValue *> *relativePositionArray;
     CGFloat *relativePositions;
     NIVector *intersections;
 
