@@ -130,6 +130,7 @@
 
 - (NIBezierPath *)rimPath
 {
+    [NSException raise:NSInvalidUnarchiveOperationException format:@"*** %s: Only the NIObliqueSliceGeneratorRequest supports NIIntersectingObject", __PRETTY_FUNCTION__];
     return nil;
 }
 

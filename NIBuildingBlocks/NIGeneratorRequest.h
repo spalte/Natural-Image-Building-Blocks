@@ -22,6 +22,7 @@
 #import <Cocoa/Cocoa.h>
 #import "NIGeometry.h"
 #import "NIVolumeData.h"
+#import "NIIntersection.h"
 
 typedef NS_ENUM(NSInteger, NIProjectionMode)
 {
@@ -38,7 +39,7 @@ typedef NS_ENUM(NSInteger, NIProjectionMode)
 
 @class NIBezierPath;
 
-@interface NIGeneratorRequest : NSObject  <NSCopying> {
+@interface NIGeneratorRequest : NSObject  <NSCopying, NIIntersectingObject> {
     NSUInteger _pixelsWide;
     NSUInteger _pixelsHigh;
 

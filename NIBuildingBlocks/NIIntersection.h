@@ -27,10 +27,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class NIBezierPath;
 @class NIGeneratorRequest;
 @class NIGeneratorRequestView;
 @class NIObliqueSliceIntersectionLayer;
 @protocol NISliceIntersectionLayer;
+@protocol NIIntersectingObject;
 
 // This class will manage the layer
 @interface NIIntersection : NSObject
@@ -39,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
     NIGeneratorRequestView *_generatorRequestView; // not retained
     CALayer<NISliceIntersectionLayer> *_intersectionLayer; // retained
 
-    id _intersectingObject;
+    id<NIIntersectingObject> _intersectingObject;
 
     BOOL _maskAroundMouse;
     CGFloat _maskAroundMouseRadius;
@@ -57,7 +59,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init;
 
-@property (nonatomic, readwrite, retain) id intersectingObject; // so far NIObliqueGeneratorRequest is the only object type that can be intersected
+@property (nonatomic, readwrite, retain) id<NIIntersectingObject> intersectingObject; // so far NIObliqueGeneratorRequest is the only object type that can be intersected
 
 @property (nonatomic, readwrite, assign) BOOL maskAroundMouse;
 @property (nonatomic, readwrite, assign) CGFloat maskAroundMouseRadius;
@@ -71,6 +73,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (CGFloat)distanceToPoint:(NSPoint)point closestPoint:(nullable NSPointPointer)rpoint; // returns CGFLOAT_MAX if can't return an actual distance
 
+@end
+
+@protocol NIIntersectingObject <NSObject>
+- (NIBezierPath *)rimPath;
 @end
 
 NS_ASSUME_NONNULL_END
