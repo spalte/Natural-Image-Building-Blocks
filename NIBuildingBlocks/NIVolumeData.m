@@ -241,6 +241,12 @@ NS_ASSUME_NONNULL_BEGIN
     return NIVectorMake(inverseTransform.m41, inverseTransform.m42, inverseTransform.m43);
 }
 
+- (NIVector)center
+{
+    NIAffineTransform inverseTransform = NIAffineTransformInvert(_modelToVoxelTransform);
+    return NIVectorApplyTransform(NIVectorMake((CGFloat)_pixelsWide/2.0, (CGFloat)_pixelsHigh/2.0, (CGFloat)_pixelsDeep/2.0), inverseTransform);
+}
+
 - (NIVector)directionX
 {
     NIAffineTransform inverseTransform;

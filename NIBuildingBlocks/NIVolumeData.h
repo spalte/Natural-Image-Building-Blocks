@@ -95,6 +95,7 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 @property (readonly) CGFloat pixelSpacingZ;
 
 @property (readonly) NIVector origin;
+@property (readonly) NIVector center;
 @property (readonly) NIVector directionX;
 @property (readonly) NIVector directionY;
 @property (readonly) NIVector directionZ;
