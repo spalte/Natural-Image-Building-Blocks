@@ -59,7 +59,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init;
 
-@property (nonatomic, readwrite, retain) id<NIIntersectingObject> intersectingObject; // so far NIObliqueGeneratorRequest is the only object type that can be intersected
+@property (nonatomic, readwrite, retain) id<NIIntersectingObject> intersectingObject;
 
 @property (nonatomic, readwrite, assign) BOOL maskAroundMouse;
 @property (nonatomic, readwrite, assign) CGFloat maskAroundMouseRadius;
@@ -71,7 +71,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readwrite, retain) NSColor *color;
 @property (nonatomic, readwrite, assign) CGFloat thickness;
 
-- (CGFloat)distanceToPoint:(NSPoint)point closestPoint:(nullable NSPointPointer)rpoint; // returns CGFLOAT_MAX if can't return an actual distance
+- (CGFloat)distanceToPoint:(NSPoint)point closestPoint:(nullable NSPointPointer)rpoint; // returns CGFLOAT_MAX if a distance can't be calculated
 
 @end
 
