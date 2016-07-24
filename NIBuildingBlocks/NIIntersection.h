@@ -50,6 +50,9 @@ NS_ASSUME_NONNULL_BEGIN
     NSPoint _maskCirclePoint;
     CGFloat _maskCirclePointRadius;
 
+    BOOL _centerBulletPoint;
+    CGFloat _centerBulletPointRadius;
+
     NSColor *_color;
     CGFloat _thickness;
 
@@ -67,6 +70,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readwrite, assign) BOOL maskAroundCirclePoint;
 @property (nonatomic, readwrite, assign) NSPoint maskCirclePoint;
 @property (nonatomic, readwrite, assign) CGFloat maskCirclePointRadius;
+
+@property (nonatomic, readwrite, assign) BOOL centerBulletPoint;
+@property (nonatomic, readwrite, assign) CGFloat centerBulletPointRadius;
 
 @property (nonatomic, readwrite, retain) NSColor *color;
 @property (nonatomic, readwrite, assign) CGFloat thickness;

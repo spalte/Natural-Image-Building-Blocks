@@ -191,10 +191,12 @@ CF_EXTERN_C_END
 @synthesize rimPath = _rimPath;
 @synthesize gapAroundMouse = _gapAroundMouse;
 @synthesize gapAroundPosition = _gapAroundPosition;
+@synthesize centerBulletPoint = _centerBulletPoint;
 
 @dynamic sliceToModelTransform;
 @dynamic mouseGapPosition;
 @dynamic mouseGapRadius;
+@dynamic centerBulletPointRadius;
 @dynamic gapPosition;
 @dynamic gapRadius;
 
@@ -219,6 +221,8 @@ CF_EXTERN_C_END
         return YES;
     } else if ([key isEqualToString:@"gapRadius"]) {
         return YES;
+    } else if ([key isEqualToString:@"centerBulletPointRadius"]) {
+        return YES;
     } else {
         return [super needsDisplayForKey:key];
     }
@@ -232,6 +236,7 @@ CF_EXTERN_C_END
             _rimPath = [intersectionLayer.rimPath copy];
             _gapAroundMouse = intersectionLayer.gapAroundMouse;
             _gapAroundPosition = intersectionLayer.gapAroundPosition;
+            _centerBulletPoint = intersectionLayer.centerBulletPoint;
         }
     }
 
@@ -254,6 +259,7 @@ CF_EXTERN_C_END
 - (void)setIntersectionColor:(NSColor *)intersectionColor
 {
     self.strokeColor = [intersectionColor CGColor];
+    self.fillColor = [intersectionColor CGColor];
 }
 
 - (void)setIntersectionThickness:(CGFloat)intersectionThickness
@@ -287,6 +293,14 @@ CF_EXTERN_C_END
 {
     if (_gapAroundPosition != gapAroundPosition) {
         _gapAroundPosition = gapAroundPosition;
+        [self setNeedsDisplay];
+    }
+}
+
+- (void)setCenterBulletPoint:(BOOL)centerBulletPoint
+{
+    if (_centerBulletPoint != centerBulletPoint) {
+        _centerBulletPoint = centerBulletPoint;
         [self setNeedsDisplay];
     }
 }
@@ -394,7 +408,7 @@ CF_EXTERN_C_END
     }
 
     NIPlane plane = NIPlaneMake(self.origin, NIVectorCrossProduct(self.directionX, self.directionY));
-    NSArray *intersections = [_rimPath intersectionsWithPlane:plane];
+    NSArray<NSValue *> *intersections = [_rimPath intersectionsWithPlane:plane];
 
     NSMutableArray *segments = [NSMutableArray array];
     NIIntersectionSegment segment;
@@ -454,6 +468,13 @@ CF_EXTERN_C_END
         CGPathAddLineToPoint(path, NULL, dividedGapSegment.end.x, dividedGapSegment.end.y);
     }
 
+    if (self.centerBulletPoint && [intersections count] >= 2) {
+        NIVector center = NIVectorApplyTransform(NIVectorLerp([intersections[0] NIVectorValue], [intersections.lastObject NIVectorValue], .5), modelToSliceTransform);
+        CGRect centerBulletRect = CGRectMake(center.x - self.centerBulletPointRadius/2.0, center.y - self.centerBulletPointRadius/2.0,
+                                       self.centerBulletPointRadius, self.centerBulletPointRadius);
+        CGPathAddEllipseInRect(path, NULL, centerBulletRect);
+    }
+    
     self.path = path;
     CGPathRelease(path);
 }

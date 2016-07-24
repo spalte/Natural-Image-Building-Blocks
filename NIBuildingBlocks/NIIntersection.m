@@ -46,6 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
         _maskAroundMouse = YES;
         _maskAroundMouseRadius = 80;
         _maskCirclePointRadius = 80;
+        _centerBulletPointRadius = 4;
     }
     return self;
 }
@@ -56,6 +57,8 @@ NS_ASSUME_NONNULL_BEGIN
 @synthesize maskAroundCirclePoint = _maskAroundCirclePoint;
 @synthesize maskCirclePoint = _maskCirclePoint;
 @synthesize maskCirclePointRadius = _maskCirclePointRadius;
+@synthesize centerBulletPoint = _centerBulletPoint;
+@synthesize centerBulletPointRadius = _centerBulletPointRadius;
 @synthesize color = _color;
 @synthesize thickness = _thickness;
 
@@ -119,6 +122,22 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
+- (void)setCenterBulletPoint:(BOOL)centerBulletPoint
+{
+    if (_centerBulletPoint != centerBulletPoint) {
+        _centerBulletPoint = centerBulletPoint;
+        [self updateLayer];
+    }
+}
+
+- (void)setCenterBulletPointRadius:(CGFloat)centerBulletPointRadius
+{
+    if (_centerBulletPointRadius != centerBulletPointRadius) {
+        _centerBulletPointRadius = centerBulletPointRadius;
+        [self updateLayer];
+    }
+}
+
 - (void)setColor:(NSColor *)color
 {
     if (_color != color) {
@@ -148,6 +167,9 @@ NS_ASSUME_NONNULL_BEGIN
     self.intersectionLayer.gapAroundPosition = self.maskAroundCirclePoint;
     self.intersectionLayer.gapPosition = self.maskCirclePoint;
     self.intersectionLayer.gapRadius = self.maskCirclePointRadius;
+
+    self.intersectionLayer.centerBulletPoint = self.centerBulletPoint;
+    self.intersectionLayer.centerBulletPointRadius = self.centerBulletPointRadius;
 
     if (_mouseInBounds && self.maskAroundMouse) {
         self.intersectionLayer.gapAroundMouse = YES;

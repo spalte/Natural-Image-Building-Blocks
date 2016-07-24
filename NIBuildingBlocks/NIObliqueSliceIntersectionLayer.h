@@ -39,6 +39,9 @@
 @property (nonatomic, readwrite, assign) NSPoint gapPosition; // animatable
 @property (nonatomic, readwrite, assign) CGFloat gapRadius; // animatable
 
+@property (nonatomic, readwrite, assign) BOOL centerBulletPoint;
+@property (nonatomic, readwrite, assign) CGFloat centerBulletPointRadius; // animatable
+
 @end
 
 @interface NIObliqueSliceIntersectionLayer : CAShapeLayer <NISliceIntersectionLayer>
@@ -46,6 +49,7 @@
     NIBezierPath *_rimPath;
     BOOL _gapAroundMouse;
     BOOL _gapAroundPosition;
+    BOOL _centerBulletPoint;
 }
 
 @property (nonatomic, readwrite, assign) NIVector origin;
@@ -67,6 +71,10 @@
 @property (nonatomic, readwrite, assign) BOOL gapAroundPosition;
 @property (nonatomic, readwrite, assign) NSPoint gapPosition; // animatable
 @property (nonatomic, readwrite, assign) CGFloat gapRadius; // animatable
+
+@property (nonatomic, readwrite, assign) BOOL centerBulletPoint;
+@property (nonatomic, readwrite, assign) CGFloat centerBulletPointRadius; // animatable
+
 
 // this would be cool to implement
 //@property (nonatomic, readwrite, retain) NSBezierPath *maskPath; // delimits an area in which there should not be any drawing.
