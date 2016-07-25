@@ -331,13 +331,13 @@ CF_EXTERN_C_END
     directionX = NIVectorScalarMultiply(NIVectorNormalize(directionX), self.pointSpacingX);
     NIAffineTransform sliceToModelTransform = self.sliceToModelTransform;
     sliceToModelTransform.m11 = directionX.x;
-    sliceToModelTransform.m11 = directionX.y;
-    sliceToModelTransform.m11 = directionX.z;
+    sliceToModelTransform.m12 = directionX.y;
+    sliceToModelTransform.m13 = directionX.z;
 
     NIVector directionZ = NIVectorNormalize(NIVectorCrossProduct(directionX, self.directionY));
     sliceToModelTransform.m31 = directionZ.x;
-    sliceToModelTransform.m31 = directionZ.y;
-    sliceToModelTransform.m31 = directionZ.z;
+    sliceToModelTransform.m32 = directionZ.y;
+    sliceToModelTransform.m33 = directionZ.z;
 
     self.sliceToModelTransform = sliceToModelTransform;
 }
@@ -353,13 +353,13 @@ CF_EXTERN_C_END
     directionY = NIVectorScalarMultiply(NIVectorNormalize(directionY), self.pointSpacingY);
     NIAffineTransform sliceToModelTransform = self.sliceToModelTransform;
     sliceToModelTransform.m21 = directionY.x;
-    sliceToModelTransform.m21 = directionY.y;
-    sliceToModelTransform.m21 = directionY.z;
+    sliceToModelTransform.m22 = directionY.y;
+    sliceToModelTransform.m23 = directionY.z;
 
     NIVector directionZ = NIVectorNormalize(NIVectorCrossProduct(self.directionX, directionY));
     sliceToModelTransform.m31 = directionZ.x;
-    sliceToModelTransform.m31 = directionZ.y;
-    sliceToModelTransform.m31 = directionZ.z;
+    sliceToModelTransform.m32 = directionZ.y;
+    sliceToModelTransform.m33 = directionZ.z;
 
     self.sliceToModelTransform = sliceToModelTransform;
 }
@@ -375,8 +375,8 @@ CF_EXTERN_C_END
     NIVector basisX = NIVectorScalarMultiply(self.directionX, pointSpacingX);
     NIAffineTransform sliceToModelTransform = self.sliceToModelTransform;
     sliceToModelTransform.m11 = basisX.x;
-    sliceToModelTransform.m11 = basisX.y;
-    sliceToModelTransform.m11 = basisX.z;
+    sliceToModelTransform.m12 = basisX.y;
+    sliceToModelTransform.m13 = basisX.z;
 
     self.sliceToModelTransform = sliceToModelTransform;
 }
@@ -392,8 +392,8 @@ CF_EXTERN_C_END
     NIVector basisY = NIVectorScalarMultiply(self.directionY, pointSpacingY);
     NIAffineTransform sliceToModelTransform = self.sliceToModelTransform;
     sliceToModelTransform.m21 = basisY.x;
-    sliceToModelTransform.m21 = basisY.y;
-    sliceToModelTransform.m21 = basisY.z;
+    sliceToModelTransform.m22 = basisY.y;
+    sliceToModelTransform.m23 = basisY.z;
 
     self.sliceToModelTransform = sliceToModelTransform;
 }
