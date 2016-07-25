@@ -55,6 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSColor *_color;
     CGFloat _thickness;
+    NSArray<NSNumber *> *_dashingLengths;
 
     BOOL _mouseInBounds;
     NSPoint _mousePosition;
@@ -76,6 +77,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readwrite, retain) NSColor *color;
 @property (nonatomic, readwrite, assign) CGFloat thickness;
+@property (nonatomic, readwrite, copy, nullable) NSArray<NSNumber *> *dashingLengths; // lengths of the painted segments and unpainted segments
 
 - (CGFloat)distanceToPoint:(NSPoint)point closestPoint:(nullable NSPointPointer)rpoint; // returns CGFLOAT_MAX if a distance can't be calculated
 

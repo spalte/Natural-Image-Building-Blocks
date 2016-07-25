@@ -192,6 +192,7 @@ CF_EXTERN_C_END
 @synthesize gapAroundMouse = _gapAroundMouse;
 @synthesize gapAroundPosition = _gapAroundPosition;
 @synthesize centerBulletPoint = _centerBulletPoint;
+@synthesize intersectionDashingLengths = _intersectionDashingLengths;
 
 @dynamic sliceToModelTransform;
 @dynamic mouseGapPosition;
@@ -237,6 +238,7 @@ CF_EXTERN_C_END
             _gapAroundMouse = intersectionLayer.gapAroundMouse;
             _gapAroundPosition = intersectionLayer.gapAroundPosition;
             _centerBulletPoint = intersectionLayer.centerBulletPoint;
+            _intersectionDashingLengths = [intersectionLayer.intersectionDashingLengths copy];
         }
     }
 
@@ -247,6 +249,8 @@ CF_EXTERN_C_END
 {
     [_rimPath release];
     _rimPath = 0;
+    [_intersectionDashingLengths release];
+    _intersectionDashingLengths = nil;
 
     [super dealloc];
 }
@@ -270,6 +274,15 @@ CF_EXTERN_C_END
 - (CGFloat)intersectionThickness
 {
     return self.lineWidth;
+}
+
+- (void)setIntersectionDashingLengths:(NSArray<NSNumber *> *)intersectionDashingLengths
+{
+    if (_intersectionDashingLengths != intersectionDashingLengths) {
+        [_intersectionDashingLengths release];
+        _intersectionDashingLengths = [intersectionDashingLengths copy];
+        [self setNeedsDisplay];
+    }
 }
 
 - (void)setRimPath:(NIBezierPath *)rimPath
@@ -466,6 +479,19 @@ CF_EXTERN_C_END
 
         CGPathMoveToPoint(path, NULL, dividedGapSegment.start.x, dividedGapSegment.start.y);
         CGPathAddLineToPoint(path, NULL, dividedGapSegment.end.x, dividedGapSegment.end.y);
+    }
+
+    if (self.intersectionDashingLengths) {
+        NSUInteger i;
+        CGFloat *dashingFloat = malloc([self.intersectionDashingLengths count] * sizeof(CGFloat));
+        for (i = 0; i < [self.intersectionDashingLengths count]; i++) {
+            dashingFloat[i] = (CGFloat)[self.intersectionDashingLengths[i] doubleValue];
+        }
+        CGPathRef dashedPath = CGPathCreateCopyByDashingPath(path, NULL, 0, dashingFloat, [self.intersectionDashingLengths count]);
+        CGPathRelease(path);
+        path = CGPathCreateMutableCopy(dashedPath);
+        CGPathRelease(dashedPath);
+        free(dashingFloat);
     }
 
     if (self.centerBulletPoint && [intersections count] >= 2) {
