@@ -804,7 +804,7 @@ NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotific
     [_intersectionTrackingAreas setObject:trackingArea forKey:key];
 }
 
-- (NIIntersection *)intersectionForKey:(NSString *)key
+- (nullable NIIntersection *)intersectionForKey:(NSString *)key
 {
     return [_intersections objectForKey:key];
 }

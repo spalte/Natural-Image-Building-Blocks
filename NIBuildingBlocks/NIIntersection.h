@@ -63,7 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init;
 
-@property (nonatomic, readwrite, retain) id<NIIntersectingObject> intersectingObject;
+@property (nonatomic, readwrite, retain, nullable) id<NIIntersectingObject> intersectingObject;
 
 @property (nonatomic, readwrite, assign) BOOL maskAroundMouse;
 @property (nonatomic, readwrite, assign) CGFloat maskAroundMouseRadius;

@@ -31,7 +31,7 @@
 @property (nonatomic, readwrite, assign) CGFloat intersectionThickness; // animatable
 @property (nonatomic, readwrite, copy, nullable) NSArray<NSNumber *> *intersectionDashingLengths; // lengths of the painted segments and unpainted segments
 
-@property (nonatomic, readwrite, retain, nonnull) NIBezierPath *rimPath;
+@property (nonatomic, readwrite, retain, nullable) NIBezierPath *rimPath;
 @property (nonatomic, readwrite, assign) BOOL gapAroundMouse;
 @property (nonatomic, readwrite, assign) NSPoint mouseGapPosition; // animatable
 @property (nonatomic, readwrite, assign) CGFloat mouseGapRadius; // animatable
@@ -66,7 +66,7 @@
 @property (nonatomic, readwrite, assign) CGFloat intersectionThickness; // animatable
 @property (nonatomic, readwrite, copy, nullable) NSArray<NSNumber *> *intersectionDashingLengths; // lengths of the painted segments and unpainted segments
 
-@property (nonatomic, readwrite, retain, nonnull) NIBezierPath *rimPath;
+@property (nonatomic, readwrite, retain, nullable) NIBezierPath *rimPath;
 @property (nonatomic, readwrite, assign) BOOL gapAroundMouse;
 @property (nonatomic, readwrite, assign) NSPoint mouseGapPosition; // animatable
 @property (nonatomic, readwrite, assign) CGFloat mouseGapRadius; // animatable

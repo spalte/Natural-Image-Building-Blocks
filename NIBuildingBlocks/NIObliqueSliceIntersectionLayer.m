@@ -415,7 +415,7 @@ CF_EXTERN_C_END
 {
     NSInteger i;
 
-    if (self.pointSpacingX == 0 || self.pointSpacingX == 0) {
+    if (self.pointSpacingX == 0 || self.pointSpacingX == 0 || _rimPath == nil) {
         self.path = NULL;
         return;
     }

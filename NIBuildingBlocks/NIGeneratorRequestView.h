@@ -123,7 +123,7 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
 
 // intersections
 - (void)addIntersection:(NIIntersection *)intersection forKey:(NSString *)key; // for now undefined behavior if an intersection already exists for the key
-- (__kindof NIIntersection *)intersectionForKey:(NSString *)key;
+- (nullable __kindof NIIntersection *)intersectionForKey:(NSString *)key;
 - (void)removeAllIntersections;
 - (void)removeIntersectionForKey:(NSString *)key;
 - (NSArray *)intersectionKeys;

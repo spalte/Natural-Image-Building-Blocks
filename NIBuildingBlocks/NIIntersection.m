@@ -77,7 +77,7 @@ NS_ASSUME_NONNULL_BEGIN
     [super dealloc];
 }
 
-- (void)setIntersectingObject:(id)intersectingObject
+- (void)setIntersectingObject:(nullable id)intersectingObject
 {
     if ([_intersectingObject isEqual:intersectingObject] == NO) {
         [_intersectingObject release];
@@ -176,7 +176,11 @@ NS_ASSUME_NONNULL_BEGIN
     self.intersectionLayer.intersectionColor = self.color;
     self.intersectionLayer.intersectionThickness = self.thickness;
     self.intersectionLayer.intersectionDashingLengths = self.dashingLengths;
-    self.intersectionLayer.rimPath = [self.intersectingObject performSelector:@selector(rimPath)];
+    if (self.intersectingObject) {
+        self.intersectionLayer.rimPath = [self.intersectingObject performSelector:@selector(rimPath)];
+    } else {
+        self.intersectionLayer.rimPath = nil;
+    }
     self.intersectionLayer.mouseGapRadius = self.maskAroundMouseRadius;
     self.intersectionLayer.gapAroundPosition = self.maskAroundCirclePoint;
     self.intersectionLayer.gapPosition = self.maskCirclePoint;
