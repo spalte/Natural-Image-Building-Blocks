@@ -68,6 +68,7 @@ NS_ASSUME_NONNULL_BEGIN
     [_intersectionLayer release];
     _intersectionLayer = nil;
 
+    [_intersectingObject removeObserver:self forKeyPath:@"rimPath"];
     [_intersectingObject release];
     _intersectingObject = nil;
 
@@ -79,9 +80,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setIntersectingObject:(nullable id)intersectingObject
 {
-    if ([_intersectingObject isEqual:intersectingObject] == NO) {
+    if (intersectingObject && [_intersectingObject isEqual:intersectingObject] == NO) {
+        [_intersectingObject removeObserver:self forKeyPath:@"rimPath" context:&self->_intersectingObject];
         [_intersectingObject release];
         _intersectingObject = [intersectingObject retain];
+        [_intersectingObject addObserver:self forKeyPath:@"rimPath" options:0 context:&self->_intersectingObject];
         [self updateLayer];
     }
 }
@@ -176,11 +179,7 @@ NS_ASSUME_NONNULL_BEGIN
     self.intersectionLayer.intersectionColor = self.color;
     self.intersectionLayer.intersectionThickness = self.thickness;
     self.intersectionLayer.intersectionDashingLengths = self.dashingLengths;
-    if (self.intersectingObject) {
-        self.intersectionLayer.rimPath = [self.intersectingObject performSelector:@selector(rimPath)];
-    } else {
-        self.intersectionLayer.rimPath = nil;
-    }
+    self.intersectionLayer.rimPath = [self.intersectingObject performSelector:@selector(rimPath)];
     self.intersectionLayer.mouseGapRadius = self.maskAroundMouseRadius;
     self.intersectionLayer.gapAroundPosition = self.maskAroundCirclePoint;
     self.intersectionLayer.gapPosition = self.maskCirclePoint;
@@ -197,6 +196,15 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
     [CATransaction commit];
+}
+
+- (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSString *,id> *)change context:(nullable void *)context
+{
+    if (context == &_intersectingObject) {
+        [self updateLayer];
+    } else {
+        return [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 - (void)mouseEntered:(NSEvent *)theEvent

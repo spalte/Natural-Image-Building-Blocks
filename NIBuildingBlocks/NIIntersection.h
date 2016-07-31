@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
     NIGeneratorRequestView *_generatorRequestView; // not retained
     CALayer<NISliceIntersectionLayer> *_intersectionLayer; // retained
 
-    id<NIIntersectingObject> _intersectingObject;
+    id _intersectingObject;
 
     BOOL _maskAroundMouse;
     CGFloat _maskAroundMouseRadius;
@@ -84,6 +84,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @protocol NIIntersectingObject <NSObject>
+@required
 - (NIBezierPath *)rimPath;
 @end
 
