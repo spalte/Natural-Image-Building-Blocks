@@ -452,6 +452,17 @@ NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotific
     
 }
 
+- (void)displayIfNeeded
+{
+    [super displayIfNeeded];
+
+    for (NIGeneratorRequestLayer *generatorRequestLayer in [_volumeDataComposingLayer sublayers]) {
+        [generatorRequestLayer displayIfNeeded];
+    }
+
+    [_overlayLayer displayIfNeeded];
+}
+
 - (void)display
 {
     [super display];
