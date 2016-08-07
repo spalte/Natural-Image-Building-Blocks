@@ -381,22 +381,16 @@
     NIVector rightNormal = NIVectorNormalize(NIVectorCrossProduct(rightObliqueRequest.directionX, rightObliqueRequest.directionY));
 
     NIVector normalRotationAxis = NIVectorCrossProduct(leftNormal, rightNormal);
-    CGFloat rotationAngle = asin(NIVectorLength(normalRotationAxis));
+    CGFloat rotationAngle = atan2(NIVectorLength(normalRotationAxis), NIVectorDotProduct(leftNormal, rightNormal));
     if (NIVectorIsZero(normalRotationAxis)) {
         normalRotationAxis = self.directionY;
     } else {
         normalRotationAxis = NIVectorNormalize(normalRotationAxis);
     }
-    if (NIVectorDotProduct(leftNormal, rightNormal) < 0) {
-        rotationAngle = M_PI - rotationAngle;
-    }
 
     NIVector rotatedDirectionX = NIVectorApplyTransform(self.directionX, NIAffineTransformMakeRotationAroundVector(rotationAngle, normalRotationAxis));
     NIVector xRotationAxis = NIVectorCrossProduct(rotatedDirectionX, rightObliqueRequest.directionX);
-    CGFloat xRotationAngle = asin(NIVectorLength(xRotationAxis));
-    if (NIVectorDotProduct(rotatedDirectionX, rightObliqueRequest.directionX) < 0) {
-        xRotationAngle = M_PI - xRotationAngle;
-    }
+    CGFloat xRotationAngle = atan2(NIVectorLength(xRotationAxis), NIVectorDotProduct(rotatedDirectionX, rightObliqueRequest.directionX));
     if (NIVectorDotProduct(xRotationAxis, rightNormal) < 0) {
         xRotationAngle = -xRotationAngle;
     }
