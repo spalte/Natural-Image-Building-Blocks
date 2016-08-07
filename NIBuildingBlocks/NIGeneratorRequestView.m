@@ -463,17 +463,6 @@ NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotific
     [_overlayLayer displayIfNeeded];
 }
 
-- (void)display
-{
-    [super display];
-
-    for (NIGeneratorRequestLayer *generatorRequestLayer in [_volumeDataComposingLayer sublayers]) {
-        [generatorRequestLayer display];
-    }
-
-    [_overlayLayer display];
-}
-
 + (NSString *)keyForTextLabelLocation:(NITextLabelLocation)labelLocation
 {
     switch (labelLocation) {
