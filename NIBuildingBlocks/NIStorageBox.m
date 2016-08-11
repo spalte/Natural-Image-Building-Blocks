@@ -148,6 +148,11 @@
                     self.rect = [aDecoder decodeRectForKey:@"rect"];
                     break;
                 }
+                default:
+                {
+                    [NSException raise:NSInvalidUnarchiveOperationException format:@"*** %s: unknown value type :%llu", __PRETTY_FUNCTION__, (unsigned long long)self.type];
+                    break;
+                }
             }
         }
     } else {
@@ -159,8 +164,6 @@
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     if ([aCoder allowsKeyedCoding]) {
-        [aCoder encodeInteger:self.type forKey:@"type"];
-
         switch (self.type) {
             case NIStorageBoxVector:
             {
@@ -197,7 +200,13 @@
                 [aCoder encodeRect:self.rect forKey:@"rect"];
                 break;
             }
+            default:
+            {
+                [NSException raise:NSInvalidArchiveOperationException format:@"*** %s: unknown value type :%llu", __PRETTY_FUNCTION__, (unsigned long long)self.type];
+                break;
+            }
         }
+        [aCoder encodeInteger:self.type forKey:@"type"];
     } else {
         [NSException raise:NSInvalidArchiveOperationException format:@"*** %s: only supports keyed coders", __PRETTY_FUNCTION__];
     }
