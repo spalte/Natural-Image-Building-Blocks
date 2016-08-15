@@ -627,7 +627,7 @@ NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotific
 {
     if (displayRim && [_rimLayer superlayer] == nil) {
         [_frameLayer addSublayer:_rimLayer];
-    } else {
+    } else if (displayRim == NO) {
         [_rimLayer removeFromSuperlayer];
     }
 }
@@ -644,7 +644,7 @@ NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotific
         [_frameLayer addSublayer:_bottomOrientationTextLayer];
         [_frameLayer addSublayer:_leftOrientationTextLayer];
         [_frameLayer addSublayer:_rightOrientationTextLayer];
-    } else {
+    } else if (displayOrientationLabels == NO) {
         [_topOrientationTextLayer removeFromSuperlayer];
         [_bottomOrientationTextLayer removeFromSuperlayer];
         [_leftOrientationTextLayer removeFromSuperlayer];
@@ -663,7 +663,7 @@ NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotific
     if (displayScaleBar && [_horizontalScaleBar superlayer] == nil) {
         [_frameLayer addSublayer:_horizontalScaleBar];
         [_frameLayer addSublayer:_verticalScaleBar];
-    } else {
+    } else if (displayScaleBar == NO) {
         [_horizontalScaleBar removeFromSuperlayer];
         [_verticalScaleBar removeFromSuperlayer];
     }
