@@ -346,7 +346,7 @@
         modelLayer.presentedFloatImageRep = floatImageRepToDraw;
     }
 
-    if ([modelLayer.presentedGeneratorRequest isEqual:cubicRequestToDraw] == NO) {
+    if (buildCubic && [modelLayer.presentedGeneratorRequest isEqual:cubicRequestToDraw] == NO) {
         [modelLayer _updateCubicTimer];
     }
 
