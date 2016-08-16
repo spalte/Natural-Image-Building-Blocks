@@ -205,20 +205,16 @@ CGFloat NIVectorAngleBetweenVectorsAroundVector(NIVector vector1, NIVector vecto
     CGFloat angle;
 
     aroundVector = NIVectorNormalize(aroundVector);
-    vector1 = NIVectorNormalize(NIVectorSubtract(NIVectorProject(vector1, aroundVector), vector1));
-    vector2 = NIVectorNormalize(NIVectorSubtract(NIVectorProject(vector2, aroundVector), vector2));
+    vector1 = NIVectorSubtract(vector1, NIVectorScalarMultiply(aroundVector, NIVectorDotProduct(vector1, aroundVector)));
+    vector2 = NIVectorSubtract(vector2, NIVectorScalarMultiply(aroundVector, NIVectorDotProduct(vector2, aroundVector)));
 
     crossProduct = NIVectorCrossProduct(vector1, vector2);
 
 #if CGFLOAT_IS_DOUBLE
-    angle = asin(MIN(NIVectorLength(crossProduct), 1.0));
+    angle = atan2(NIVectorLength(crossProduct), NIVectorDotProduct(vector1, vector2));
 #else
-    angle = asinf(MIN(NIVectorLength(crossProduct), 1.0f));
+    angle = atan2f(NIVectorLength(crossProduct), NIVectorDotProduct(vector1, vector2));
 #endif
-
-    if (NIVectorDotProduct(vector1, vector2) < 0.0) {
-        angle = M_PI - angle;
-    }
 
     if (NIVectorDotProduct(crossProduct, aroundVector) < 0.0) {
         angle = M_PI*2 - angle;
