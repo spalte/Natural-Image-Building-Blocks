@@ -44,8 +44,6 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
     NSUInteger pixelsHigh;
     NSUInteger pixelsDeep;
 
-    NSUInteger pixelsWideTimesPixelsHigh; // just in the interest of not calculating this a million times...
-
     NIAffineTransform modelToVoxelTransform;
 } NIVolumeDataInlineBuffer;
 
@@ -97,6 +95,7 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 @property (readonly) CGFloat pixelSpacingZ;
 
 @property (readonly) NIVector origin;
+@property (readonly) NIVector center;
 @property (readonly) NIVector directionX;
 @property (readonly) NIVector directionY;
 @property (readonly) NIVector directionZ;
@@ -169,7 +168,7 @@ CF_INLINE const float* NIVolumeDataFloatBytes(NIVolumeDataInlineBuffer *inlineBu
 
 CF_INLINE float NIVolumeDataUncheckedGetFloatAtPixelCoordinate(NIVolumeDataInlineBuffer *inlineBuffer, NSInteger x, NSInteger y, NSInteger z)
 {
-    return (inlineBuffer->floatBytes)[x + y*inlineBuffer->pixelsWide + z*inlineBuffer->pixelsWideTimesPixelsHigh];
+    return (inlineBuffer->floatBytes)[x + inlineBuffer->pixelsWide*(y + inlineBuffer->pixelsHigh*z)];
 }
 
 CF_INLINE float NIVolumeDataGetFloatAtPixelCoordinate(NIVolumeDataInlineBuffer *inlineBuffer, NSInteger x, NSInteger y, NSInteger z)
@@ -187,7 +186,7 @@ CF_INLINE float NIVolumeDataGetFloatAtPixelCoordinate(NIVolumeDataInlineBuffer *
         outside |= z >= inlineBuffer->pixelsDeep;
 
         if (!outside) {
-            return (inlineBuffer->floatBytes)[x + y*inlineBuffer->pixelsWide + z*inlineBuffer->pixelsWideTimesPixelsHigh];
+            return (inlineBuffer->floatBytes)[x + inlineBuffer->pixelsWide*(y + inlineBuffer->pixelsHigh*z)];
         } else {
             return inlineBuffer->outOfBoundsValue;
         }

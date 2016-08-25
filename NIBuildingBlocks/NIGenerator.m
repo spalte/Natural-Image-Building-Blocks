@@ -31,6 +31,7 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
 @interface NIGenerator ()
 
 + (NSOperationQueue *)_asynchronousRequestQueue;
++ (NSOperationQueue *)_synchronousRequestQueue;
 + (NSMutableDictionary<NSNumber *, NSOperation *> *)_requestIDs;
 + (NIGeneratorAsynchronousRequestID)_generateRequestID;
 + (void)_setOperation:(NSOperation *)operation forRequestID:(NIGeneratorAsynchronousRequestID)requestID;
@@ -58,6 +59,20 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
         [asynchronousRequestQueue setQualityOfService:NSQualityOfServiceUserInitiated];
     });
     return asynchronousRequestQueue;
+}
+
++ (NSOperationQueue *)_synchronousRequestQueue
+{
+    static dispatch_once_t pred;
+    static NSOperationQueue *synchronousRequestQueue = nil;
+    dispatch_once(&pred, ^{
+        synchronousRequestQueue = [[NSOperationQueue alloc] init];
+        if ([synchronousRequestQueue respondsToSelector:@selector(setQualityOfService:)]) {
+            synchronousRequestQueue.qualityOfService = NSQualityOfServiceUserInteractive;
+    }
+        [synchronousRequestQueue setName:@"NIGenerator Synchronous Request Queue"];
+    });
+    return synchronousRequestQueue;
 }
 
 + (NSMutableDictionary<NSNumber *, NSOperation *> *)_requestIDs
@@ -109,14 +124,10 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
     operation = [[[request operationClass] alloc] initWithRequest:request volumeData:volumeData];
 	[operation setQueuePriority:NSOperationQueuePriorityVeryHigh];
     [operation setQualityOfService:NSQualityOfServiceUserInteractive];
-//    operationQueue = [self _asynchronousRequestQueue];
-    operationQueue = [[NSOperationQueue alloc] init];
-    if ([operationQueue respondsToSelector:@selector(setQualityOfService:)])
-        operationQueue.qualityOfService = NSQualityOfServiceUserInteractive;
+    operationQueue = [self _synchronousRequestQueue];
     [operationQueue addOperations:@[operation] waitUntilFinished:YES];
     generatedVolume = [[operation.generatedVolume retain] autorelease];
     [operation release];
-    [operationQueue release];
     
     return generatedVolume;
 }

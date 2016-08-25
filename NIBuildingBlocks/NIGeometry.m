@@ -193,9 +193,9 @@ NIVector NIVectorCrossProduct(NIVector vector1, NIVector vector2)
 
 CGFloat NIVectorAngleBetweenVectors(NIVector vector1, NIVector vector2) {
 #if CGFLOAT_IS_DOUBLE
-    return acos(NIVectorDotProduct(NIVectorNormalize(vector1), NIVectorNormalize(vector2)));
+    return atan2(NIVectorLength(NIVectorCrossProduct(vector1, vector2)), NIVectorDotProduct(vector1, vector2));
 #else
-    return acosf(NIVectorDotProduct(NIVectorNormalize(vector1), NIVectorNormalize(vector2)));
+    return atan2f(NIVectorLength(NIVectorCrossProduct(vector1, vector2)), NIVectorDotProduct(vector1, vector2));
 #endif
 }
 
@@ -205,20 +205,16 @@ CGFloat NIVectorAngleBetweenVectorsAroundVector(NIVector vector1, NIVector vecto
     CGFloat angle;
 
     aroundVector = NIVectorNormalize(aroundVector);
-    vector1 = NIVectorNormalize(NIVectorSubtract(NIVectorProject(vector1, aroundVector), vector1));
-    vector2 = NIVectorNormalize(NIVectorSubtract(NIVectorProject(vector2, aroundVector), vector2));
+    vector1 = NIVectorSubtract(vector1, NIVectorScalarMultiply(aroundVector, NIVectorDotProduct(vector1, aroundVector)));
+    vector2 = NIVectorSubtract(vector2, NIVectorScalarMultiply(aroundVector, NIVectorDotProduct(vector2, aroundVector)));
 
     crossProduct = NIVectorCrossProduct(vector1, vector2);
 
 #if CGFLOAT_IS_DOUBLE
-    angle = asin(MIN(NIVectorLength(crossProduct), 1.0));
+    angle = atan2(NIVectorLength(crossProduct), NIVectorDotProduct(vector1, vector2));
 #else
-    angle = asinf(MIN(NIVectorLength(crossProduct), 1.0f));
+    angle = atan2f(NIVectorLength(crossProduct), NIVectorDotProduct(vector1, vector2));
 #endif
-
-    if (NIVectorDotProduct(vector1, vector2) < 0.0) {
-        angle = M_PI - angle;
-    }
 
     if (NIVectorDotProduct(crossProduct, aroundVector) < 0.0) {
         angle = M_PI*2 - angle;
@@ -869,22 +865,14 @@ NSString *NIVectorCArmOrientationString(NIVector vector)
 
     NIVector aoProjectedVector = NIVectorNormalize(NIVectorProjectPerpendicularToVector(NIVectorZBasis, normalizedVector));
 
-#if CGFLOAT_IS_DOUBLE
-    CGFloat aoAngle = acos(NIVectorDotProduct(aoProjectedVector, NIVectorMake(0, -1, 0)));
-#else
-    CGFloat aoAngle = acosf(NIVectorDotProduct(aoProjectedVector, NIVectorMake(0, -1, 0)));
-#endif
+    CGFloat aoAngle = NIVectorAngleBetweenVectors(aoProjectedVector, NIVectorMake(0, -1, 0));
     if (normalizedVector.x > 0) {
         [string appendFormat:@"LAO %.2f, ", aoAngle * (180.0/M_PI)];
     } else {
         [string appendFormat:@"RAO %.2f, ", aoAngle * (180.0/M_PI)];
     }
 
-#if CGFLOAT_IS_DOUBLE
-    CGFloat crAngle = acos(NIVectorDotProduct(normalizedVector, aoProjectedVector));
-#else
-    CGFloat crAngle = acosf(NIVectorDotProduct(normalizedVector, aoProjectedVector));
-#endif
+    CGFloat crAngle = NIVectorAngleBetweenVectors(normalizedVector, aoProjectedVector);
     if (normalizedVector.z > 0) {
         [string appendFormat:@"CR %.2f", crAngle * (180.0/M_PI)];
     } else {
@@ -1238,7 +1226,7 @@ CFIndex findRealCubicRoots(CGFloat a, CGFloat b, CGFloat c, CGFloat d, CGFloat *
 
     if (R2 < Q3) {
 #if CGFLOAT_IS_DOUBLE
-        theta = acos(R/sqrt(Q3));
+        theta = acos(MAX(MIN(R/sqrt(Q3), 1.0), -1.0));
         sqrtQ_2 = -2.0*sqrt(Q);
 
         *root1 = sqrtQ_2*cos(theta/3.0)-b_3;
@@ -1250,7 +1238,7 @@ CFIndex findRealCubicRoots(CGFloat a, CGFloat b, CGFloat c, CGFloat d, CGFloat *
             return 3;
         }
 #else
-        theta = acosf(R/sqrtf(Q3));
+        theta = acosf(MAX(MIN(R/sqrtf(Q3), 1.0f), -1.0f));
         sqrtQ_2 = -2.0*sqrtf(Q);
 
         *root1 = sqrtQ_2*cosf(theta/3.0)-b_3;

@@ -103,8 +103,8 @@ typedef NS_ENUM(NSInteger, NIBezierPathElement) { // shouldn't the be typed as u
 - (NSBezierPath *)NSBezierPath; // collapses Z
 - (NIBezierPath *)bezierPathByReversing;
 
-- (NSArray*)intersectionsWithPlane:(NIPlane)plane; // returns NSValues containing NIVectors of the intersections.
-- (NSArray*)intersectionsWithPlane:(NIPlane)plane relativePositions:(NSArray * __nonnull * __nullable)returnedRelativePositions;
+- (NSArray<NSValue *>*)intersectionsWithPlane:(NIPlane)plane; // returns NSValues containing NIVectors of the intersections.
+- (NSArray<NSValue *>*)intersectionsWithPlane:(NIPlane)plane relativePositions:(NSArray<NSValue *> * __nonnull * __nullable)returnedRelativePositions;
 
 - (NSArray *)subPaths;
 - (NIBezierPath *)bezierPathByClippingFromRelativePosition:(CGFloat)startRelativePosition toRelativePosition:(CGFloat)endRelativePosition;

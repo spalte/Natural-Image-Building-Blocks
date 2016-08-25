@@ -46,6 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
         _maskAroundMouse = YES;
         _maskAroundMouseRadius = 80;
         _maskCirclePointRadius = 80;
+        _centerBulletPointRadius = 4;
     }
     return self;
 }
@@ -56,25 +57,34 @@ NS_ASSUME_NONNULL_BEGIN
 @synthesize maskAroundCirclePoint = _maskAroundCirclePoint;
 @synthesize maskCirclePoint = _maskCirclePoint;
 @synthesize maskCirclePointRadius = _maskCirclePointRadius;
+@synthesize centerBulletPoint = _centerBulletPoint;
+@synthesize centerBulletPointRadius = _centerBulletPointRadius;
 @synthesize color = _color;
 @synthesize thickness = _thickness;
+@synthesize dashingLengths = _dashingLengths;
 
 - (void)dealloc
 {
     [_intersectionLayer release];
     _intersectionLayer = nil;
 
+    [_intersectingObject removeObserver:self forKeyPath:@"rimPath"];
     [_intersectingObject release];
     _intersectingObject = nil;
+
+    [_dashingLengths release];
+    _dashingLengths = nil;
 
     [super dealloc];
 }
 
-- (void)setIntersectingObject:(id)intersectingObject
+- (void)setIntersectingObject:(nullable id)intersectingObject
 {
-    if ([_intersectingObject isEqual:intersectingObject] == NO) {
+    if (intersectingObject && [_intersectingObject isEqual:intersectingObject] == NO) {
+        [_intersectingObject removeObserver:self forKeyPath:@"rimPath" context:&self->_intersectingObject];
         [_intersectingObject release];
         _intersectingObject = [intersectingObject retain];
+        [_intersectingObject addObserver:self forKeyPath:@"rimPath" options:0 context:&self->_intersectingObject];
         [self updateLayer];
     }
 }
@@ -119,6 +129,22 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
+- (void)setCenterBulletPoint:(BOOL)centerBulletPoint
+{
+    if (_centerBulletPoint != centerBulletPoint) {
+        _centerBulletPoint = centerBulletPoint;
+        [self updateLayer];
+    }
+}
+
+- (void)setCenterBulletPointRadius:(CGFloat)centerBulletPointRadius
+{
+    if (_centerBulletPointRadius != centerBulletPointRadius) {
+        _centerBulletPointRadius = centerBulletPointRadius;
+        [self updateLayer];
+    }
+}
+
 - (void)setColor:(NSColor *)color
 {
     if (_color != color) {
@@ -136,6 +162,15 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
+- (void)setDashingLengths:(nullable NSArray<NSNumber *> *)dashingLengths
+{
+    if (_dashingLengths != dashingLengths) {
+        [_dashingLengths release];
+        _dashingLengths = [dashingLengths copy];
+        [self updateLayer];
+    }
+}
+
 - (void)updateLayer
 {
     [CATransaction begin];
@@ -143,11 +178,15 @@ NS_ASSUME_NONNULL_BEGIN
 
     self.intersectionLayer.intersectionColor = self.color;
     self.intersectionLayer.intersectionThickness = self.thickness;
+    self.intersectionLayer.intersectionDashingLengths = self.dashingLengths;
     self.intersectionLayer.rimPath = [self.intersectingObject performSelector:@selector(rimPath)];
     self.intersectionLayer.mouseGapRadius = self.maskAroundMouseRadius;
     self.intersectionLayer.gapAroundPosition = self.maskAroundCirclePoint;
     self.intersectionLayer.gapPosition = self.maskCirclePoint;
     self.intersectionLayer.gapRadius = self.maskCirclePointRadius;
+
+    self.intersectionLayer.centerBulletPoint = self.centerBulletPoint;
+    self.intersectionLayer.centerBulletPointRadius = self.centerBulletPointRadius;
 
     if (_mouseInBounds && self.maskAroundMouse) {
         self.intersectionLayer.gapAroundMouse = YES;
@@ -157,6 +196,15 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
     [CATransaction commit];
+}
+
+- (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSString *,id> *)change context:(nullable void *)context
+{
+    if (context == &_intersectingObject) {
+        [self updateLayer];
+    } else {
+        return [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 - (void)mouseEntered:(NSEvent *)theEvent

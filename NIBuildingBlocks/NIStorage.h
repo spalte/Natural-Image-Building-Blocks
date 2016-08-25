@@ -62,6 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSString *)stringForKey:(NSString *)key;
 - (nullable NSDate *)dateForKey:(NSString *)key;
 - (nullable id)objectOfClass:(Class)aClass forKey:(NSString *)key;
+- (nullable id)objectOfClasses:(NSSet<Class> *)classes forKey:(NSString *)key;
 - (long long)longLongForKey:(NSString *)key;
 - (NSInteger)integerForKey:(NSString *)key;
 - (double)doubleForKey:(NSString *)key;

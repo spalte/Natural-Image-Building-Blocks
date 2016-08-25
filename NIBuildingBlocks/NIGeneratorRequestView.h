@@ -115,15 +115,15 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
 @property (nonatomic, readonly, retain) CALayer *frameLayer; // the layer into which subclasses can add layers, this layer lays out sublayers using the CAConstraintLayoutManager
                                                              // Use NIGeneratorRequestViewRequestLayerZPosition, etc to specify the depth of the layer you want to add.
 
-@property (nonatomic, readwrite, assign) BOOL displayRim;
-@property (nonatomic, readwrite, retain) NSColor *rimColor;
-@property (nonatomic, readwrite, assign) CGFloat rimThickness;
-@property (nonatomic, readwrite, assign) BOOL displayOrientationLabels;
-@property (nonatomic, readwrite, assign) BOOL displayScaleBar;
+@property (nonatomic, readwrite, assign) IBInspectable BOOL displayRim;
+@property (nonatomic, readwrite, retain) IBInspectable NSColor *rimColor;
+@property (nonatomic, readwrite, assign) IBInspectable CGFloat rimThickness;
+@property (nonatomic, readwrite, assign) IBInspectable BOOL displayOrientationLabels;
+@property (nonatomic, readwrite, assign) IBInspectable BOOL displayScaleBar;
 
 // intersections
 - (void)addIntersection:(NIIntersection *)intersection forKey:(NSString *)key; // for now undefined behavior if an intersection already exists for the key
-- (__kindof NIIntersection *)intersectionForKey:(NSString *)key;
+- (nullable __kindof NIIntersection *)intersectionForKey:(NSString *)key;
 - (void)removeAllIntersections;
 - (void)removeIntersectionForKey:(NSString *)key;
 - (NSArray *)intersectionKeys;

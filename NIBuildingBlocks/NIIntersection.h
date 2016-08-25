@@ -27,10 +27,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class NIBezierPath;
 @class NIGeneratorRequest;
 @class NIGeneratorRequestView;
 @class NIObliqueSliceIntersectionLayer;
 @protocol NISliceIntersectionLayer;
+@protocol NIIntersectingObject;
 
 // This class will manage the layer
 @interface NIIntersection : NSObject
@@ -48,8 +50,12 @@ NS_ASSUME_NONNULL_BEGIN
     NSPoint _maskCirclePoint;
     CGFloat _maskCirclePointRadius;
 
+    BOOL _centerBulletPoint;
+    CGFloat _centerBulletPointRadius;
+
     NSColor *_color;
     CGFloat _thickness;
+    NSArray<NSNumber *> *_dashingLengths;
 
     BOOL _mouseInBounds;
     NSPoint _mousePosition;
@@ -57,7 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init;
 
-@property (nonatomic, readwrite, retain) id intersectingObject; // so far NIObliqueGeneratorRequest is the only object type that can be intersected
+@property (nonatomic, readwrite, retain, nullable) id<NIIntersectingObject> intersectingObject;
 
 @property (nonatomic, readwrite, assign) BOOL maskAroundMouse;
 @property (nonatomic, readwrite, assign) CGFloat maskAroundMouseRadius;
@@ -66,11 +72,20 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readwrite, assign) NSPoint maskCirclePoint;
 @property (nonatomic, readwrite, assign) CGFloat maskCirclePointRadius;
 
+@property (nonatomic, readwrite, assign) BOOL centerBulletPoint;
+@property (nonatomic, readwrite, assign) CGFloat centerBulletPointRadius;
+
 @property (nonatomic, readwrite, retain) NSColor *color;
 @property (nonatomic, readwrite, assign) CGFloat thickness;
+@property (nonatomic, readwrite, copy, nullable) NSArray<NSNumber *> *dashingLengths; // lengths of the painted segments and unpainted segments
 
-- (CGFloat)distanceToPoint:(NSPoint)point closestPoint:(nullable NSPointPointer)rpoint; // returns CGFLOAT_MAX if can't return an actual distance
+- (CGFloat)distanceToPoint:(NSPoint)point closestPoint:(nullable NSPointPointer)rpoint; // returns CGFLOAT_MAX if a distance can't be calculated
 
+@end
+
+@protocol NIIntersectingObject <NSObject>
+@required
+- (NIBezierPath *)rimPath;
 @end
 
 NS_ASSUME_NONNULL_END

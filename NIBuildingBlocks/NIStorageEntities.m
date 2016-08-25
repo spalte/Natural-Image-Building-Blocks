@@ -350,6 +350,7 @@ NS_ASSUME_NONNULL_BEGIN
         }
     }
     @catch (NSException *exception) {
+        NSLog(@"%s caught exception \n%@", __PRETTY_FUNCTION__, exception);
     }
 
     [unarchiver release];

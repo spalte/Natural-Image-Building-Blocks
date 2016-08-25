@@ -241,6 +241,12 @@ NS_ASSUME_NONNULL_BEGIN
     return NIVectorMake(inverseTransform.m41, inverseTransform.m42, inverseTransform.m43);
 }
 
+- (NIVector)center
+{
+    NIAffineTransform inverseTransform = NIAffineTransformInvert(_modelToVoxelTransform);
+    return NIVectorApplyTransform(NIVectorMake((CGFloat)_pixelsWide/2.0, (CGFloat)_pixelsHigh/2.0, (CGFloat)_pixelsDeep/2.0), inverseTransform);
+}
+
 - (NIVector)directionX
 {
     NIAffineTransform inverseTransform;
@@ -371,7 +377,7 @@ NS_ASSUME_NONNULL_BEGIN
         for (NSUInteger y = 0; y < yr.length; ++y)
             memcpy((void *)&dib.floatBytes[NIVolumeDataUncheckedIndexAtCoordinate(0,y,z,dib.pixelsWide,dib.pixelsHigh,dib.pixelsDeep)], &sib.floatBytes[NIVolumeDataUncheckedIndexAtCoordinate(xr.location,yr.location+y,zr.location+z,sib.pixelsWide,sib.pixelsHigh,sib.pixelsDeep)], xr.length*sizeof(float));
     
-    return data;
+    return [data autorelease];
 }
 
 - (CGFloat)floatAtPixelCoordinateX:(NSUInteger)x y:(NSUInteger)y z:(NSUInteger)z
@@ -663,7 +669,6 @@ NS_ASSUME_NONNULL_BEGIN
     inlineBuffer->pixelsWide = _pixelsWide;
     inlineBuffer->pixelsHigh = _pixelsHigh;
     inlineBuffer->pixelsDeep = _pixelsDeep;
-    inlineBuffer->pixelsWideTimesPixelsHigh = _pixelsWide*_pixelsHigh;
     inlineBuffer->modelToVoxelTransform = _modelToVoxelTransform;
     return YES;
 }

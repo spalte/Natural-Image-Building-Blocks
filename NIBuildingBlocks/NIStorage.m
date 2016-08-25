@@ -591,6 +591,31 @@ NS_ASSUME_NONNULL_BEGIN
     return [object autorelease];
 }
 
+- (nullable id)objectOfClasses:(NSSet<Class> *)classes forKey:(NSString *)key
+{
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
+
+    __block id object = nil;
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+        }
+
+        if ([results count]) {
+            object = [[results[0] objectValueOfClasses:classes] retain];
+        }
+    }];
+
+    return [object autorelease];
+}
+
 - (long long)longLongForKey:(NSString *)key
 {
     if (key == nil) {

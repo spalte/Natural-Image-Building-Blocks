@@ -27,10 +27,11 @@
 
 @protocol NISliceIntersectionLayer <NSObject>
 
-@property (nonatomic, readwrite, retain) NSColor *intersectionColor; // animatable
+@property (nonatomic, readwrite, retain, nonnull) NSColor *intersectionColor; // animatable
 @property (nonatomic, readwrite, assign) CGFloat intersectionThickness; // animatable
+@property (nonatomic, readwrite, copy, nullable) NSArray<NSNumber *> *intersectionDashingLengths; // lengths of the painted segments and unpainted segments
 
-@property (nonatomic, readwrite, retain) NIBezierPath *rimPath;
+@property (nonatomic, readwrite, retain, nullable) NIBezierPath *rimPath;
 @property (nonatomic, readwrite, assign) BOOL gapAroundMouse;
 @property (nonatomic, readwrite, assign) NSPoint mouseGapPosition; // animatable
 @property (nonatomic, readwrite, assign) CGFloat mouseGapRadius; // animatable
@@ -39,13 +40,18 @@
 @property (nonatomic, readwrite, assign) NSPoint gapPosition; // animatable
 @property (nonatomic, readwrite, assign) CGFloat gapRadius; // animatable
 
+@property (nonatomic, readwrite, assign) BOOL centerBulletPoint;
+@property (nonatomic, readwrite, assign) CGFloat centerBulletPointRadius; // animatable
+
 @end
 
 @interface NIObliqueSliceIntersectionLayer : CAShapeLayer <NISliceIntersectionLayer>
 {
     NIBezierPath *_rimPath;
+    NSArray<NSNumber *> *_intersectionDashingLengths;
     BOOL _gapAroundMouse;
     BOOL _gapAroundPosition;
+    BOOL _centerBulletPoint;
 }
 
 @property (nonatomic, readwrite, assign) NIVector origin;
@@ -56,10 +62,11 @@
 
 @property (nonatomic, readwrite, assign) NIAffineTransform sliceToModelTransform;
 
-@property (nonatomic, readwrite, retain) NSColor *intersectionColor; // animatable
+@property (nonatomic, readwrite, retain, nonnull) NSColor *intersectionColor; // animatable
 @property (nonatomic, readwrite, assign) CGFloat intersectionThickness; // animatable
+@property (nonatomic, readwrite, copy, nullable) NSArray<NSNumber *> *intersectionDashingLengths; // lengths of the painted segments and unpainted segments
 
-@property (nonatomic, readwrite, retain) NIBezierPath *rimPath;
+@property (nonatomic, readwrite, retain, nullable) NIBezierPath *rimPath;
 @property (nonatomic, readwrite, assign) BOOL gapAroundMouse;
 @property (nonatomic, readwrite, assign) NSPoint mouseGapPosition; // animatable
 @property (nonatomic, readwrite, assign) CGFloat mouseGapRadius; // animatable
@@ -67,6 +74,10 @@
 @property (nonatomic, readwrite, assign) BOOL gapAroundPosition;
 @property (nonatomic, readwrite, assign) NSPoint gapPosition; // animatable
 @property (nonatomic, readwrite, assign) CGFloat gapRadius; // animatable
+
+@property (nonatomic, readwrite, assign) BOOL centerBulletPoint;
+@property (nonatomic, readwrite, assign) CGFloat centerBulletPointRadius; // animatable
+
 
 // this would be cool to implement
 //@property (nonatomic, readwrite, retain) NSBezierPath *maskPath; // delimits an area in which there should not be any drawing.

@@ -191,10 +191,13 @@ CF_EXTERN_C_END
 @synthesize rimPath = _rimPath;
 @synthesize gapAroundMouse = _gapAroundMouse;
 @synthesize gapAroundPosition = _gapAroundPosition;
+@synthesize centerBulletPoint = _centerBulletPoint;
+@synthesize intersectionDashingLengths = _intersectionDashingLengths;
 
 @dynamic sliceToModelTransform;
 @dynamic mouseGapPosition;
 @dynamic mouseGapRadius;
+@dynamic centerBulletPointRadius;
 @dynamic gapPosition;
 @dynamic gapRadius;
 
@@ -219,6 +222,8 @@ CF_EXTERN_C_END
         return YES;
     } else if ([key isEqualToString:@"gapRadius"]) {
         return YES;
+    } else if ([key isEqualToString:@"centerBulletPointRadius"]) {
+        return YES;
     } else {
         return [super needsDisplayForKey:key];
     }
@@ -232,6 +237,8 @@ CF_EXTERN_C_END
             _rimPath = [intersectionLayer.rimPath copy];
             _gapAroundMouse = intersectionLayer.gapAroundMouse;
             _gapAroundPosition = intersectionLayer.gapAroundPosition;
+            _centerBulletPoint = intersectionLayer.centerBulletPoint;
+            _intersectionDashingLengths = [intersectionLayer.intersectionDashingLengths copy];
         }
     }
 
@@ -242,6 +249,8 @@ CF_EXTERN_C_END
 {
     [_rimPath release];
     _rimPath = 0;
+    [_intersectionDashingLengths release];
+    _intersectionDashingLengths = nil;
 
     [super dealloc];
 }
@@ -254,6 +263,7 @@ CF_EXTERN_C_END
 - (void)setIntersectionColor:(NSColor *)intersectionColor
 {
     self.strokeColor = [intersectionColor CGColor];
+    self.fillColor = [intersectionColor CGColor];
 }
 
 - (void)setIntersectionThickness:(CGFloat)intersectionThickness
@@ -264,6 +274,15 @@ CF_EXTERN_C_END
 - (CGFloat)intersectionThickness
 {
     return self.lineWidth;
+}
+
+- (void)setIntersectionDashingLengths:(NSArray<NSNumber *> *)intersectionDashingLengths
+{
+    if (_intersectionDashingLengths != intersectionDashingLengths) {
+        [_intersectionDashingLengths release];
+        _intersectionDashingLengths = [intersectionDashingLengths copy];
+        [self setNeedsDisplay];
+    }
 }
 
 - (void)setRimPath:(NIBezierPath *)rimPath
@@ -287,6 +306,14 @@ CF_EXTERN_C_END
 {
     if (_gapAroundPosition != gapAroundPosition) {
         _gapAroundPosition = gapAroundPosition;
+        [self setNeedsDisplay];
+    }
+}
+
+- (void)setCenterBulletPoint:(BOOL)centerBulletPoint
+{
+    if (_centerBulletPoint != centerBulletPoint) {
+        _centerBulletPoint = centerBulletPoint;
         [self setNeedsDisplay];
     }
 }
@@ -317,13 +344,13 @@ CF_EXTERN_C_END
     directionX = NIVectorScalarMultiply(NIVectorNormalize(directionX), self.pointSpacingX);
     NIAffineTransform sliceToModelTransform = self.sliceToModelTransform;
     sliceToModelTransform.m11 = directionX.x;
-    sliceToModelTransform.m11 = directionX.y;
-    sliceToModelTransform.m11 = directionX.z;
+    sliceToModelTransform.m12 = directionX.y;
+    sliceToModelTransform.m13 = directionX.z;
 
     NIVector directionZ = NIVectorNormalize(NIVectorCrossProduct(directionX, self.directionY));
     sliceToModelTransform.m31 = directionZ.x;
-    sliceToModelTransform.m31 = directionZ.y;
-    sliceToModelTransform.m31 = directionZ.z;
+    sliceToModelTransform.m32 = directionZ.y;
+    sliceToModelTransform.m33 = directionZ.z;
 
     self.sliceToModelTransform = sliceToModelTransform;
 }
@@ -339,13 +366,13 @@ CF_EXTERN_C_END
     directionY = NIVectorScalarMultiply(NIVectorNormalize(directionY), self.pointSpacingY);
     NIAffineTransform sliceToModelTransform = self.sliceToModelTransform;
     sliceToModelTransform.m21 = directionY.x;
-    sliceToModelTransform.m21 = directionY.y;
-    sliceToModelTransform.m21 = directionY.z;
+    sliceToModelTransform.m22 = directionY.y;
+    sliceToModelTransform.m23 = directionY.z;
 
     NIVector directionZ = NIVectorNormalize(NIVectorCrossProduct(self.directionX, directionY));
     sliceToModelTransform.m31 = directionZ.x;
-    sliceToModelTransform.m31 = directionZ.y;
-    sliceToModelTransform.m31 = directionZ.z;
+    sliceToModelTransform.m32 = directionZ.y;
+    sliceToModelTransform.m33 = directionZ.z;
 
     self.sliceToModelTransform = sliceToModelTransform;
 }
@@ -361,8 +388,8 @@ CF_EXTERN_C_END
     NIVector basisX = NIVectorScalarMultiply(self.directionX, pointSpacingX);
     NIAffineTransform sliceToModelTransform = self.sliceToModelTransform;
     sliceToModelTransform.m11 = basisX.x;
-    sliceToModelTransform.m11 = basisX.y;
-    sliceToModelTransform.m11 = basisX.z;
+    sliceToModelTransform.m12 = basisX.y;
+    sliceToModelTransform.m13 = basisX.z;
 
     self.sliceToModelTransform = sliceToModelTransform;
 }
@@ -378,8 +405,8 @@ CF_EXTERN_C_END
     NIVector basisY = NIVectorScalarMultiply(self.directionY, pointSpacingY);
     NIAffineTransform sliceToModelTransform = self.sliceToModelTransform;
     sliceToModelTransform.m21 = basisY.x;
-    sliceToModelTransform.m21 = basisY.y;
-    sliceToModelTransform.m21 = basisY.z;
+    sliceToModelTransform.m22 = basisY.y;
+    sliceToModelTransform.m23 = basisY.z;
 
     self.sliceToModelTransform = sliceToModelTransform;
 }
@@ -388,13 +415,13 @@ CF_EXTERN_C_END
 {
     NSInteger i;
 
-    if (self.pointSpacingX == 0 || self.pointSpacingX == 0) {
+    if (self.pointSpacingX == 0 || self.pointSpacingX == 0 || _rimPath == nil) {
         self.path = NULL;
         return;
     }
 
     NIPlane plane = NIPlaneMake(self.origin, NIVectorCrossProduct(self.directionX, self.directionY));
-    NSArray *intersections = [_rimPath intersectionsWithPlane:plane];
+    NSArray<NSValue *> *intersections = [_rimPath intersectionsWithPlane:plane];
 
     NSMutableArray *segments = [NSMutableArray array];
     NIIntersectionSegment segment;
@@ -454,6 +481,26 @@ CF_EXTERN_C_END
         CGPathAddLineToPoint(path, NULL, dividedGapSegment.end.x, dividedGapSegment.end.y);
     }
 
+    if (self.intersectionDashingLengths) {
+        NSUInteger i;
+        CGFloat *dashingFloat = malloc([self.intersectionDashingLengths count] * sizeof(CGFloat));
+        for (i = 0; i < [self.intersectionDashingLengths count]; i++) {
+            dashingFloat[i] = (CGFloat)[self.intersectionDashingLengths[i] doubleValue];
+        }
+        CGPathRef dashedPath = CGPathCreateCopyByDashingPath(path, NULL, 0, dashingFloat, [self.intersectionDashingLengths count]);
+        CGPathRelease(path);
+        path = CGPathCreateMutableCopy(dashedPath);
+        CGPathRelease(dashedPath);
+        free(dashingFloat);
+    }
+
+    if (self.centerBulletPoint && [intersections count] >= 2) {
+        NIVector center = NIVectorApplyTransform(NIVectorLerp([intersections[0] NIVectorValue], [intersections.lastObject NIVectorValue], .5), modelToSliceTransform);
+        CGRect centerBulletRect = CGRectMake(center.x - self.centerBulletPointRadius/2.0, center.y - self.centerBulletPointRadius/2.0,
+                                       self.centerBulletPointRadius, self.centerBulletPointRadius);
+        CGPathAddEllipseInRect(path, NULL, centerBulletRect);
+    }
+    
     self.path = path;
     CGPathRelease(path);
 }

@@ -303,8 +303,12 @@
     if (requestToDraw == nil) {
         return;
     }
-     
-    if (presentationLayer == nil || presentationLayer.generatorRequestInterpolator == -1) {
+
+    if (requestToDraw.slabWidth != 0) {
+        requestToDraw = [requestToDraw generatorRequestResizedToPixelsWide:modelLayer.bounds.size.width / 3.0
+                                                                pixelsHigh:modelLayer.bounds.size.height / 3.0];
+        requestToDraw.interpolationMode = NIInterpolationModeLinear;
+    } else if (presentationLayer == nil || presentationLayer.generatorRequestInterpolator == -1) {
         requestToDraw = [requestToDraw generatorRequestResizedToPixelsWide:modelLayer.bounds.size.width * modelLayer.contentsScale
                                                                 pixelsHigh:modelLayer.bounds.size.height * modelLayer.contentsScale];
         requestToDraw.interpolationMode = liveInterpolationMode;
@@ -346,7 +350,7 @@
         modelLayer.presentedFloatImageRep = floatImageRepToDraw;
     }
 
-    if ([modelLayer.presentedGeneratorRequest isEqual:cubicRequestToDraw] == NO) {
+    if (buildCubic && [modelLayer.presentedGeneratorRequest isEqual:cubicRequestToDraw] == NO) {
         [modelLayer _updateCubicTimer];
     }
 
