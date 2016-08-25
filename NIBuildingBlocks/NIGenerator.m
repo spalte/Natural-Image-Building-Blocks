@@ -158,6 +158,11 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
     [rop waitUntilFinished];
 }
 
++ (BOOL)isAsynchronousRequestFinished:(NIGeneratorAsynchronousRequestID)requestID {
+    NSOperation *rop = [self _operationForRequestID:requestID];
+    return !rop || rop.isFinished;
+}
+
 - (id)initWithVolumeData:(NIVolumeData *)volumeData
 {
 	assert([NSThread isMainThread]);
