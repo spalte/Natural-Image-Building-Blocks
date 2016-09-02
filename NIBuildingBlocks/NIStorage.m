@@ -625,7 +625,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    __block long long value;
+    __block long long value = 0;
     [_managedObjectContext performBlockAndWait:^{
         NSError *err = nil;
         NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
@@ -659,7 +659,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    __block double value;
+    __block double value = 0;
     [_managedObjectContext performBlockAndWait:^{
         NSError *err = nil;
         NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
