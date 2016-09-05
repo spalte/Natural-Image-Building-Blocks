@@ -401,6 +401,15 @@ NS_ASSUME_NONNULL_BEGIN
     [self didChangeValueForKey:key];
 }
 
+- (void)setBool:(BOOL)boolVal forKey:(NSString *)key;
+{
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
+    [self setLongLong:(long long)boolVal forKey:key];
+}
+
 - (void)setInteger:(NSInteger)integer forKey:(NSString *)key
 {
     if (key == nil) {
@@ -639,6 +648,15 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 
     return value;
+}
+
+- (BOOL)boolForKey:(NSString *)key
+{
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
+    return (BOOL)[self longLongForKey:key];
 }
 
 - (NSInteger)integerForKey:(NSString *)key
