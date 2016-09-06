@@ -36,7 +36,7 @@ static NSOperationQueue *_straightenedOperationFillQueue = nil;
 
 @interface NIStraightenedOperation ()
 
-+ (NSOperationQueue *) _fillQueue;
++ (NSOperationQueue *) _fillQueueForQualityOfService:(NSQualityOfService)qualityOfService;
 - (CGFloat)_slabSampleDistance;
 - (NSUInteger)_pixelsDeep;
 
@@ -242,7 +242,7 @@ static NSOperationQueue *_straightenedOperationFillQueue = nil;
             
             _outstandingFillOperationCount = (int32_t)[fillOperations count];
             			
-			fillQueue = [[self class] _fillQueue];
+			fillQueue = [[self class] _fillQueueForQualityOfService:self.qualityOfService];
 			for (horizontalFillOperation in fillOperations) {
 				[fillQueue addOperation:horizontalFillOperation];
 			}
@@ -313,7 +313,7 @@ static NSOperationQueue *_straightenedOperationFillQueue = nil;
                     [projectionOperation addObserver:self forKeyPath:@"isFinished" options:0 context:&self->_fillOperations];
                     [self retain]; // so we don't get released while the operation is going
                     _projectionOperation = projectionOperation;
-                    [[[self class] _fillQueue] addOperation:projectionOperation];
+                    [[[self class] _fillQueueForQualityOfService:self.qualityOfService] addOperation:projectionOperation];
                 } else if (oustandingFillOperationCount == -1) {
                     assert([operation isKindOfClass:[NIProjectionOperation class]]);
                     projectionOperation = (NIProjectionOperation *)operation;
@@ -335,16 +335,27 @@ static NSOperationQueue *_straightenedOperationFillQueue = nil;
     }
 }
 
-+ (NSOperationQueue *)_fillQueue
++ (NSOperationQueue *) _fillQueueForQualityOfService:(NSQualityOfService)qualityOfService
 {
-    @synchronized (self) {
-        if (_straightenedOperationFillQueue == nil) {
-            _straightenedOperationFillQueue = [[NSOperationQueue alloc] init];
-            [_straightenedOperationFillQueue setName:@"NIStraightenedOperation fill queue"];
-        }
+    if (qualityOfService == NSQualityOfServiceUserInteractive) {
+        static dispatch_once_t predInteractive;
+        static NSOperationQueue *interactiveFillQueue = nil;
+        dispatch_once(&predInteractive, ^{
+            interactiveFillQueue = [[NSOperationQueue alloc] init];
+            [interactiveFillQueue setQualityOfService:NSQualityOfServiceUserInteractive];
+            [interactiveFillQueue setName:@"NIStraightenedOperation Interactive fill queue"];
+        });
+        return interactiveFillQueue;
+    } else {
+        static dispatch_once_t predUserInitiated;
+        static NSOperationQueue *userInitiatedFillQueue = nil;
+        dispatch_once(&predUserInitiated, ^{
+            userInitiatedFillQueue = [[NSOperationQueue alloc] init];
+            [userInitiatedFillQueue setQualityOfService:NSQualityOfServiceUserInitiated];
+            [userInitiatedFillQueue setName:@"NIStraightenedOperation User Initiated fill queue"];
+        });
+        return userInitiatedFillQueue;
     }
-    
-    return _straightenedOperationFillQueue;
 }
 
 - (CGFloat)_slabSampleDistance

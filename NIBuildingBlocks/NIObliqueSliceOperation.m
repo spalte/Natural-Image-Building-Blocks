@@ -29,11 +29,10 @@
 
 
 static const NSUInteger FILL_HEIGHT = 40;
-static NSOperationQueue *_obliqueSliceOperationFillQueue = nil;
 
 @interface NIObliqueSliceOperation ()
 
-+ (NSOperationQueue *) _fillQueue;
++ (NSOperationQueue *) _fillQueueForQualityOfService:(NSQualityOfService)qualityOfService;
 - (CGFloat)_slabSampleDistance;
 - (NSUInteger)_pixelsDeep;
 - (NIAffineTransform)_generatedModelToVoxelTransform;
@@ -214,7 +213,7 @@ static NSOperationQueue *_obliqueSliceOperationFillQueue = nil;
 
             _oustandingFillOperationCount = (int32_t)[fillOperations count];
 
-            fillQueue = [[self class] _fillQueue];
+            fillQueue = [[self class] _fillQueueForQualityOfService:self.qualityOfService];
             for (horizontalFillOperation in fillOperations) {
                 [fillQueue addOperation:horizontalFillOperation];
             }
@@ -281,7 +280,7 @@ static NSOperationQueue *_obliqueSliceOperationFillQueue = nil;
                     [projectionOperation addObserver:self forKeyPath:@"isFinished" options:0 context:&self->_fillOperations];
                     [self retain]; // so we don't get released while the operation is going
                     _projectionOperation = projectionOperation;
-                    [[[self class] _fillQueue] addOperation:projectionOperation];
+                    [[[self class] _fillQueueForQualityOfService:self.qualityOfService] addOperation:projectionOperation];
                 } else if (oustandingFillOperationCount == -1) {
                     assert([operation isKindOfClass:[NIProjectionOperation class]]);
                     projectionOperation = (NIProjectionOperation *)operation;
@@ -302,16 +301,27 @@ static NSOperationQueue *_obliqueSliceOperationFillQueue = nil;
     }
 }
 
-+ (NSOperationQueue *) _fillQueue
++ (NSOperationQueue *) _fillQueueForQualityOfService:(NSQualityOfService)qualityOfService
 {
-    @synchronized (self) {
-        if (_obliqueSliceOperationFillQueue == nil) {
-            _obliqueSliceOperationFillQueue = [[NSOperationQueue alloc] init];
-            [_obliqueSliceOperationFillQueue setName:@"NIObliqueSliceOperation fill queue"];
-        }
+    if (qualityOfService == NSQualityOfServiceUserInteractive) {
+        static dispatch_once_t predInteractive;
+        static NSOperationQueue *interactiveFillQueue = nil;
+        dispatch_once(&predInteractive, ^{
+            interactiveFillQueue = [[NSOperationQueue alloc] init];
+            [interactiveFillQueue setQualityOfService:NSQualityOfServiceUserInteractive];
+            [interactiveFillQueue setName:@"NIObliqueSliceOperation Interactive fill queue"];
+        });
+        return interactiveFillQueue;
+    } else {
+        static dispatch_once_t predUserInitiated;
+        static NSOperationQueue *userInitiatedFillQueue = nil;
+        dispatch_once(&predUserInitiated, ^{
+            userInitiatedFillQueue = [[NSOperationQueue alloc] init];
+            [userInitiatedFillQueue setQualityOfService:NSQualityOfServiceUserInitiated];
+            [userInitiatedFillQueue setName:@"NIObliqueSliceOperation User Initiated fill queue"];
+        });
+        return userInitiatedFillQueue;
     }
-
-    return _obliqueSliceOperationFillQueue;
 }
 
 - (CGFloat)_slabSampleDistance

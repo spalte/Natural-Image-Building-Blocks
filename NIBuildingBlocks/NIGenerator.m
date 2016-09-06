@@ -61,7 +61,7 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
     return asynchronousRequestQueue;
 }
 
-+ (NSOperationQueue *)_synchronousRequestQueue
++ (NSOperationQueue *)_synchronousMainThreadRequestQueue
 {
     static dispatch_once_t pred;
     static NSOperationQueue *synchronousRequestQueue = nil;
@@ -69,7 +69,21 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
         synchronousRequestQueue = [[NSOperationQueue alloc] init];
         if ([synchronousRequestQueue respondsToSelector:@selector(setQualityOfService:)]) {
             synchronousRequestQueue.qualityOfService = NSQualityOfServiceUserInteractive;
-    }
+        }
+        [synchronousRequestQueue setName:@"NIGenerator Synchronous Main Thread Request Queue"];
+    });
+    return synchronousRequestQueue;
+}
+
++ (NSOperationQueue *)_synchronousRequestQueue
+{
+    static dispatch_once_t pred;
+    static NSOperationQueue *synchronousRequestQueue = nil;
+    dispatch_once(&pred, ^{
+        synchronousRequestQueue = [[NSOperationQueue alloc] init];
+        if ([synchronousRequestQueue respondsToSelector:@selector(setQualityOfService:)]) {
+            synchronousRequestQueue.qualityOfService = NSQualityOfServiceUserInitiated;
+        }
         [synchronousRequestQueue setName:@"NIGenerator Synchronous Request Queue"];
     });
     return synchronousRequestQueue;
@@ -122,9 +136,13 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
     NIVolumeData *generatedVolume;
     
     operation = [[[request operationClass] alloc] initWithRequest:request volumeData:volumeData];
-	[operation setQueuePriority:NSOperationQueuePriorityVeryHigh];
-    [operation setQualityOfService:NSQualityOfServiceUserInteractive];
-    operationQueue = [self _synchronousRequestQueue];
+    if ([NSThread isMainThread]) {
+        [operation setQualityOfService:NSQualityOfServiceUserInteractive];
+        operationQueue = [self _synchronousMainThreadRequestQueue];
+    } else {
+        [operation setQualityOfService:NSQualityOfServiceUserInitiated];
+        operationQueue = [self _synchronousRequestQueue];
+    }
     [operationQueue addOperations:@[operation] waitUntilFinished:YES];
     generatedVolume = [[operation.generatedVolume retain] autorelease];
     [operation release];
@@ -181,12 +199,9 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
     if ( (self = [super init]) ) {
         _volumeData = [volumeData retain];
         _generatorQueue = [[NSOperationQueue alloc] init];
-        
-        NSUInteger threads = [[NSProcessInfo processInfo] processorCount];
-        if( threads > 2)
-            threads = 2;
-        
-        [_generatorQueue setMaxConcurrentOperationCount: threads];
+        _generatorQueue.qualityOfService = NSQualityOfServiceUserInitiated;
+        [_generatorQueue setName:@"NIGenerator Request Queue"];
+
         _observedOperations = [[NSMutableSet alloc] init];
         _finishedOperations = [[NSMutableArray alloc] init];
         _generatedFrameTimes = [[NSMutableArray alloc] init];
@@ -231,7 +246,7 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
     }
     
     operation = [[[request operationClass] alloc] initWithRequest:[[request copy] autorelease] volumeData:_volumeData];
-	[operation setQueuePriority:NSOperationQueuePriorityNormal];
+    operation.qualityOfService = NSQualityOfServiceUserInitiated;
     [self retain]; // so that the generator can't disappear while the operation is running
     [operation addObserver:self forKeyPath:@"isFinished" options:0 context:&self->_generatorQueue];
     [_observedOperations addObject:operation];
