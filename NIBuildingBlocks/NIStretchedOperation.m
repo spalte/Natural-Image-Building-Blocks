@@ -32,7 +32,6 @@
 #include <libkern/OSAtomic.h>
 
 static const NSUInteger FILL_HEIGHT = 40;
-static NSOperationQueue *_stretchedOperationFillQueue = nil;
 
 @interface NIStretchedOperation ()
 
