@@ -60,7 +60,7 @@ NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotific
 
 @end
 
-@interface NIGeneratorRequestViewOverlayDelegate : NSObject
+@interface NIGeneratorRequestViewOverlayDelegate : NSObject <CALayerDelegate>
 {
     NIGeneratorRequestView *_view; // not retained
 }
@@ -90,7 +90,7 @@ NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotific
 
 @end
 
-@interface NIGeneratorRequestViewLayoutManager : NSObject
+@interface NIGeneratorRequestViewLayoutManager : NSObject <CALayoutManager>
 {
     NIGeneratorRequestView *_view; // not retained
 }
@@ -913,7 +913,7 @@ NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotific
     for (id intersection in [_intersections allValues]) {
         [intersection mouseMoved:(NSEvent *)theEvent];
     }
-    [self.layer.layoutManager mouseMoved:(NSEvent *)theEvent];
+    [(NIGeneratorRequestViewLayoutManager *)self.layer.layoutManager mouseMoved:theEvent];
     [super mouseDragged:theEvent];
 }
 
