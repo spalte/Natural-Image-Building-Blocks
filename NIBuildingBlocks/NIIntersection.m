@@ -75,6 +75,9 @@ NS_ASSUME_NONNULL_BEGIN
     [_dashingLengths release];
     _dashingLengths = nil;
 
+    [_color release];
+    _color = nil;
+
     [super dealloc];
 }
 
