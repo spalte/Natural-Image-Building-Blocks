@@ -115,8 +115,8 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
 @property (nonatomic, readonly, retain) CALayer *frameLayer; // the layer into which subclasses can add layers, this layer lays out sublayers using the CAConstraintLayoutManager
                                                              // Use NIGeneratorRequestViewRequestLayerZPosition, etc to specify the depth of the layer you want to add.
 
-@property (nonatomic, readwrite, assign) IBInspectable BOOL displayRim;
-@property (nonatomic, readwrite, retain) IBInspectable NSColor *rimColor;
+@property (nonatomic, readwrite, assign) BOOL displayRim __deprecated; // deprecated, either set a color for the rim, or set the color to nil if you don't want a rim
+@property (nonatomic, readwrite, retain, nullable) IBInspectable NSColor *rimColor;
 @property (nonatomic, readwrite, assign) IBInspectable CGFloat rimThickness;
 @property (nonatomic, readwrite, assign) IBInspectable BOOL displayOrientationLabels;
 @property (nonatomic, readwrite, assign) IBInspectable BOOL displayScaleBar;
