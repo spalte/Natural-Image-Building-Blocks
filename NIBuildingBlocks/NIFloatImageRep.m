@@ -274,18 +274,23 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSBitmapImageRep *)bitmapImageRep // NSBitmapImageRep of the data after windowing, inverting, and applying the CLUT.
 {
     [self _buildCachedData];
+    NSInteger i;
 
     if (_CLUT == nil) { // no CLUT to apply make a grayscale image
         NSBitmapImageRep *windowedBitmapImageRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL pixelsWide:[self pixelsWide] pixelsHigh:[self pixelsHigh]
                                                                                         bitsPerSample:8 samplesPerPixel:1 hasAlpha:NO isPlanar:YES colorSpaceName:NSDeviceWhiteColorSpace
                                                                                           bytesPerRow:[self pixelsWide] bitsPerPixel:8];
-        memcpy([windowedBitmapImageRep bitmapData], [_cachedWindowedData bytes], [self pixelsWide] * [self pixelsHigh]);
+        for (i = 0; i < [self pixelsHigh]; i++) {
+            memcpy([windowedBitmapImageRep bitmapData] + (i * [windowedBitmapImageRep bytesPerRow]), [_cachedWindowedData bytes] + (([self pixelsHigh] - (i + 1)) * [windowedBitmapImageRep bytesPerRow]), [windowedBitmapImageRep bytesPerRow]);
+        }
         return [windowedBitmapImageRep autorelease];
     } else {
         NSBitmapImageRep *clutBitmapImageRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL pixelsWide:[self pixelsWide] pixelsHigh:[self pixelsHigh]
                                                                                     bitsPerSample:8 samplesPerPixel:4 hasAlpha:YES isPlanar:NO colorSpaceName:NSDeviceRGBColorSpace
                                                                                      bitmapFormat:NSAlphaNonpremultipliedBitmapFormat bytesPerRow:[self pixelsWide] * 4 bitsPerPixel:32];
-        memcpy([clutBitmapImageRep bitmapData], [_cachedCLUTData bytes], [self pixelsWide] * [self pixelsHigh] * 4);
+        for (i = 0; i < [self pixelsHigh]; i++) {
+            memcpy([clutBitmapImageRep bitmapData] + (i * [clutBitmapImageRep bytesPerRow]), [_cachedCLUTData bytes] + (([self pixelsHigh] - (i + 1)) * [clutBitmapImageRep bytesPerRow]), [clutBitmapImageRep bytesPerRow]);
+        }
         return [clutBitmapImageRep autorelease];
     }
 }
