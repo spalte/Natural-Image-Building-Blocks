@@ -48,6 +48,11 @@ NS_ASSUME_NONNULL_BEGIN
     NIVector (^_convertPointToModelVectorBlock)(NSPoint);
 
     NIAffineTransform _imageToModelTransform;
+
+    NSColor *_rimColor;
+    CGFloat _rimThickness;
+    BOOL _displayOrientationLabels;
+    BOOL _displayScaleBar;
 }
 
 @property (nonatomic, readwrite, assign) CGFloat windowWidth; // these will affect how this rep will draw when part of an NSImage
@@ -69,6 +74,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSData *)windowedData; // unsigned chars of intensity
 - (nullable NSData *)CLUTData; // RGBA unsigned chars premultiplied ARGB8888
 - (NSBitmapImageRep *)bitmapImageRep; // NSBitmapImageRep of the data after windowing, inverting, and applying the CLUT.
+
+// Draw additional items over the image.
+@property (nonatomic, readwrite, retain, nullable) NSColor *rimColor;
+@property (nonatomic, readwrite, assign) CGFloat rimThickness;
+@property (nonatomic, readwrite, assign) BOOL displayOrientationLabels;
+@property (nonatomic, readwrite, assign) BOOL displayScaleBar;
 
 @property (nonatomic, readwrite, assign) CGFloat sliceThickness;
 
