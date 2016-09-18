@@ -21,6 +21,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class NIGeneratorRequest;
 @class NIVolumeData;
 
@@ -39,7 +41,7 @@ typedef int64_t NIGeneratorAsynchronousRequestID;
     NIVolumeData *_volumeData;
 }
 
-@property (nonatomic, readwrite, assign) id <NIGeneratorDelegate> delegate;
+@property (nonatomic, readwrite, assign, nullable) id <NIGeneratorDelegate> delegate;
 @property (readonly) NIVolumeData *volumeData;
 
 + (NIVolumeData *)synchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData;
@@ -68,6 +70,8 @@ typedef int64_t NIGeneratorAsynchronousRequestID;
 @optional
 - (void)generator:(NIGenerator *)generator didAbandonRequest:(NIGeneratorRequest *)request;
 @end
+
+NS_ASSUME_NONNULL_END
 
 
 

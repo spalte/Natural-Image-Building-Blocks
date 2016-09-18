@@ -131,6 +131,8 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
 
 + (NIVolumeData *)synchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData
 {
+    NSAssert(request != nil, @"the generator request can't be nil");
+    NSAssert(volumeData != nil, @"the volumeData can't be nil");
     NIGeneratorOperation *operation;
     NSOperationQueue *operationQueue;
     NIVolumeData *generatedVolume;
@@ -152,6 +154,8 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
 
 + (NIGeneratorAsynchronousRequestID)asynchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData completionBlock:(void (^)(NIVolumeData *))completionBlock
 {
+    NSAssert(request != nil, @"the generator request can't be nil");
+    NSAssert(volumeData != nil, @"the volumeData request can't be nil");
     NIGeneratorOperation * operation = [[[[request operationClass] alloc] initWithRequest:request volumeData:volumeData] autorelease];
     [operation setQualityOfService:NSQualityOfServiceUserInitiated];
     NIGeneratorAsynchronousRequestID requestID = [self _generateRequestID];
