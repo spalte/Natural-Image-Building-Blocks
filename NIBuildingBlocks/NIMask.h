@@ -261,7 +261,7 @@ CF_EXTERN_C_END
  Creates a mask based on the given individual indexes.
  
  @return The initialized mask object or `nil` if there was a problem initializing the object.
- @param maskRuns An array of NIMaskIndex structs in NSValues.
+ @param maskIndexes An array of NIMaskIndex structs in NSValues.
  */
 - (nullable instancetype)initWithIndexes:(NSArray *)maskIndexes;
 
@@ -279,7 +279,7 @@ CF_EXTERN_C_END
  Creates a mask based on the given individual indexes. The mask indexes must be sorted.
  
  @return The initialized mask object or `nil` if there was a problem initializing the object.
- @param maskRuns An array of NIMaskIndex structs in NSValues.
+ @param maskIndexes An array of NIMaskIndex structs in NSValues.
  */
 - (nullable instancetype)initWithSortedIndexes:(NSArray *)maskIndexes;
 
@@ -288,7 +288,7 @@ CF_EXTERN_C_END
  Creates a mask based on the given individual indexes. The mask indexes must be sorted.
  
  @return The initialized mask object or `nil` if there was a problem initializing the object.
- @param maskRuns An array of NIMaskIndex structs in NSValues.
+ @param indexData An array of NIMaskIndex structs in NSValues.
  */
 - (nullable instancetype)initWithSortedIndexData:(NSData *)indexData;
 
