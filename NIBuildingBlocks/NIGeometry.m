@@ -1429,7 +1429,7 @@ NIAffineTransform NIAffineTransformMakeFromOpenGLMatrixf(float *f) // f better b
 {
     NIAffineTransform transform = NIAffineTransformIdentity;
     if ([self allowsKeyedCoding]) {
-        NSDictionary *dict = [self decodeObjectOfClass:[NSDictionary class] forKey:key];
+        NSDictionary *dict = [self decodeObjectOfClasses:[NSSet setWithObjects:[NSDictionary class], [NSString class], [NSNumber class], nil] forKey:key];
         if (dict == nil) {
             [NSException raise:@"NIDecode" format:@"No Dictionary when decoding NIAffineTranform"];
         }
@@ -1448,7 +1448,7 @@ NIAffineTransform NIAffineTransformMakeFromOpenGLMatrixf(float *f) // f better b
 {
     NIVector vector = NIVectorZero;
     if ([self allowsKeyedCoding]) {
-        NSDictionary *dict = [self decodeObjectOfClass:[NSDictionary class] forKey:key];
+        NSDictionary *dict = [self decodeObjectOfClasses:[NSSet setWithObjects:[NSDictionary class], [NSString class], [NSNumber class], nil] forKey:key];
         if (dict == nil) {
             [NSException raise:@"NIDecode" format:@"No Dictionary when decoding NIVector"];
         }
@@ -1467,7 +1467,7 @@ NIAffineTransform NIAffineTransformMakeFromOpenGLMatrixf(float *f) // f better b
 {
     NILine line = NILineInvalid;
     if ([self allowsKeyedCoding]) {
-        NSDictionary *dict = [self decodeObjectOfClass:[NSDictionary class] forKey:key];
+        NSDictionary *dict = [self decodeObjectOfClasses:[NSSet setWithObjects:[NSDictionary class], [NSString class], [NSNumber class], nil] forKey:key];
         if (dict == nil) {
             [NSException raise:@"NIDecode" format:@"No Dictionary when decoding NILine"];
         }
@@ -1487,7 +1487,7 @@ NIAffineTransform NIAffineTransformMakeFromOpenGLMatrixf(float *f) // f better b
 {
     NIPlane plane = NIPlaneInvalid;
     if ([self allowsKeyedCoding]) {
-        NSDictionary *dict = [self decodeObjectOfClass:[NSDictionary class] forKey:key];
+        NSDictionary *dict = [self decodeObjectOfClasses:[NSSet setWithObjects:[NSDictionary class], [NSString class], [NSNumber class], nil] forKey:key];
         if (dict == nil) {
             [NSException raise:@"NIDecode" format:@"No Dictionary when decoding NIPlane"];
         }
