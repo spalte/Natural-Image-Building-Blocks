@@ -98,6 +98,11 @@ NS_ASSUME_NONNULL_BEGIN
         for (NIStorageEntity *prevEntity in results) {
             [_managedObjectContext deleteObject:prevEntity];
         }
+
+        [_managedObjectContext save:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+        }
     }];
 
     [self didChangeValueForKey:key];
