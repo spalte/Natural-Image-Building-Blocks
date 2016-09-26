@@ -28,8 +28,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol NIGeneratorDelegate;
 
+/**
+ Token used to refer back to a specific asynchronous request to the generator.
+ */
 typedef int64_t NIGeneratorAsynchronousRequestID;
 
+/**
+ The NIGenerator class is used in conjunction with a NIVolumeData and a NIGeneratorRequest subclass to build a new NIVolumeData
+ that represents the slice represented by the NIGeneratorRequest. The synchronous and asynchronous class methods are the
+ preferred way to use this class.
+ */
 @interface NIGenerator : NSObject {
     NSOperationQueue *_generatorQueue;
     NSMutableSet *_observedOperations;

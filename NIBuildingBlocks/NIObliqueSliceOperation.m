@@ -263,8 +263,9 @@ static const NSUInteger FILL_HEIGHT = 40;
                 oustandingFillOperationCount = OSAtomicDecrement32Barrier(&_oustandingFillOperationCount);
                 if (oustandingFillOperationCount == 0) { // done with the fill operations, now do the projection
                     modelToVoxelTransform = [self _generatedModelToVoxelTransform];
-                    generatedVolume = [[NIVolumeData alloc] initWithBytesNoCopy:_floatBytes pixelsWide:self.request.pixelsWide pixelsHigh:self.request.pixelsHigh pixelsDeep:[self _pixelsDeep]
-                                                                modelToVoxelTransform:modelToVoxelTransform outOfBoundsValue:_volumeData.outOfBoundsValue freeWhenDone:YES];
+                    NSData *floatData = [NSData dataWithBytesNoCopy:_floatBytes length:sizeof(float)*self.request.pixelsWide*self.request.pixelsHigh*[self _pixelsDeep] freeWhenDone:YES];
+                    generatedVolume = [[NIVolumeData alloc] initWithData:floatData pixelsWide:self.request.pixelsWide pixelsHigh:self.request.pixelsHigh pixelsDeep:[self _pixelsDeep]
+                                                   modelToVoxelTransform:modelToVoxelTransform outOfBoundsValue:_volumeData.outOfBoundsValue];
                     _floatBytes = NULL;
                     projectionOperation = [[NIProjectionOperation alloc] init];
                     [projectionOperation setQueuePriority:[self queuePriority]];

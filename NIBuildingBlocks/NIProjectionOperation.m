@@ -103,8 +103,9 @@
         }
 
         modelToVoxelTransform = NIAffineTransformConcat(_volumeData.modelToVoxelTransform, NIAffineTransformMakeScale(1.0, 1.0, 1.0/(CGFloat)_volumeData.pixelsDeep));
-        _generatedVolume = [[NIVolumeData alloc] initWithBytesNoCopy:floatBytes pixelsWide:_volumeData.pixelsWide pixelsHigh:_volumeData.pixelsHigh pixelsDeep:1
-                                                       modelToVoxelTransform:modelToVoxelTransform outOfBoundsValue:_volumeData.outOfBoundsValue freeWhenDone:YES];
+        NSData *floatData = [NSData dataWithBytesNoCopy:floatBytes length:sizeof(float)*_volumeData.pixelsWide*_volumeData.pixelsHigh freeWhenDone:YES];
+        _generatedVolume = [[NIVolumeData alloc] initWithData:floatData pixelsWide:_volumeData.pixelsWide pixelsHigh:_volumeData.pixelsHigh pixelsDeep:1
+                                        modelToVoxelTransform:modelToVoxelTransform outOfBoundsValue:_volumeData.outOfBoundsValue];
     }
     @catch (...) {
     }
