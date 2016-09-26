@@ -124,6 +124,12 @@ NS_ASSUME_NONNULL_BEGIN
     return YES;
 }
 
+- (nullable id)replacementObjectForPortCoder:(NSPortCoder *)encoder
+{
+    if ([encoder isBycopy]) return self;
+    return [super replacementObjectForPortCoder:encoder];
+}
+
 - (nullable instancetype)initWithCoder:(NSCoder *)decoder
 {
     if ([decoder allowsKeyedCoding]) {
