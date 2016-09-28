@@ -46,8 +46,8 @@ typedef NS_ENUM(NSInteger, NIInterpolationMode) {
 
 /**
  NIVolumeDataInlineBuffer is used to make sure that values that will be often used while sampling an NIVolumeData are on the stack. The goal is to optimize CPU cache performance.
- An NIVolumeDataInlineBuffer should be used as a stack variable and then initialized using [NIVolumeData acquireInlineBuffer:]. The NIVolumeDataInlineBuffer can then be used with
- a number of inline functions.
+ An NIVolumeDataInlineBuffer should be used as a stack variable and then initialized using -[NIVolumeData acquireInlineBuffer:]. The NIVolumeDataInlineBuffer can then be used with
+ a number of inline functions defined in NIVolumeData.h.
  @see NIVolumeData
  @see [NIVolumeData acquireInlineBuffer:]
 */
@@ -144,6 +144,8 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
  @param volumeData The NIVolumeData from which to copy values. This value must not be nil.
 */
 - (instancetype)initWithVolumeData:(NIVolumeData *)volumeData;
+
+- (nullable instancetype)initWithCoder:(NSCoder *)decoder NS_DESIGNATED_INITIALIZER;
 
 /**
  The width of the volume in pixels
@@ -380,8 +382,8 @@ CF_INLINE const float* NIVolumeDataFloatBytes(NIVolumeDataInlineBuffer *inlineBu
  @warning This function does not do any bounds checking.
  @param inlineBuffer The inline buffer that was previously initialized using [NIVolumeData acquireInlineBuffer:]
  @param x The x coordinate of the voxel.
- @param y The x coordinate of the voxel.
- @param z The x coordinate of the voxel.
+ @param y The y coordinate of the voxel.
+ @param z The z coordinate of the voxel.
  @return The value of the voxel at the given coordinate.
  @see [NIVolumeData acquireInlineBuffer:]
  */
@@ -394,8 +396,8 @@ CF_INLINE float NIVolumeDataUncheckedGetFloatAtPixelCoordinate(NIVolumeDataInlin
  Returns the value of the voxel at the given coordinate.
  @param inlineBuffer The inline buffer that was previously initialized using [NIVolumeData acquireInlineBuffer:]
  @param x The x coordinate of the voxel.
- @param y The x coordinate of the voxel.
- @param z The x coordinate of the voxel.
+ @param y The y coordinate of the voxel.
+ @param z The z coordinate of the voxel.
  @return The value of the voxel at the given coordinate.
  @see [NIVolumeData acquireInlineBuffer:]
  */
@@ -427,8 +429,8 @@ CF_INLINE float NIVolumeDataGetFloatAtPixelCoordinate(NIVolumeDataInlineBuffer *
  Returns the index into the float intensity array for a given voxel coordinate. Returns outOfBoundsIndex if the coordinate is not in the volume.
  @param inlineBuffer The inline buffer that was previously initialized using [NIVolumeData acquireInlineBuffer:]
  @param x The x coordinate of the voxel.
- @param y The x coordinate of the voxel.
- @param z The x coordinate of the voxel.
+ @param y The y coordinate of the voxel.
+ @param z The z coordinate of the voxel.
  @param outOfBoundsIndex The index to return if the voxel coordinate is not in the volume.
  @return The index into the float intensity array for a given voxel coordinate, or outOfBoundsIndex if the coordinate is not in the volume.
 */
@@ -447,8 +449,8 @@ CF_INLINE NSInteger NIVolumeDataIndexAtCoordinate(NIVolumeDataInlineBuffer *inli
  @warning This function does not do any bounds checking.
  @param inlineBuffer The inline buffer that was previously initialized using [NIVolumeData acquireInlineBuffer:]
  @param x The x coordinate of the voxel.
- @param y The x coordinate of the voxel.
- @param z The x coordinate of the voxel.
+ @param y The y coordinate of the voxel.
+ @param z The z coordinate of the voxel.
  @return The index into the float intensity array for a given voxel coordinate.
 */
 CF_INLINE NSInteger NIVolumeDataUncheckedIndexAtCoordinate(NIVolumeDataInlineBuffer *inlineBuffer, NSInteger x, NSInteger y, NSInteger z)
@@ -462,8 +464,8 @@ CF_INLINE NSInteger NIVolumeDataUncheckedIndexAtCoordinate(NIVolumeDataInlineBuf
  @param inlineBuffer The inline buffer that was previously initialized using [NIVolumeData acquireInlineBuffer:]
  @param linearIndexes An array of indexes that will be filled out with the resulting indexes.
  @param x The x coordinate of the voxel.
- @param y The x coordinate of the voxel.
- @param z The x coordinate of the voxel.
+ @param y The y coordinate of the voxel.
+ @param z The z coordinate of the voxel.
 */
 CF_INLINE void NIVolumeDataGetLinearIndexes(NIVolumeDataInlineBuffer *inlineBuffer, NSInteger linearIndexes[8], NSInteger x, NSInteger y, NSInteger z, NSInteger outOfBoundsIndex)
 {
@@ -490,8 +492,8 @@ CF_INLINE void NIVolumeDataGetLinearIndexes(NIVolumeDataInlineBuffer *inlineBuff
  Returns the linear interpolated float intensity at the given point in voxel space.
  @param inlineBuffer The inline buffer that was previously initialized using [NIVolumeData acquireInlineBuffer:]
  @param x The x coordinate of the voxel.
- @param y The x coordinate of the voxel.
- @param z The x coordinate of the voxel.
+ @param y The y coordinate of the voxel.
+ @param z The z coordinate of the voxel.
 */
 CF_INLINE float NIVolumeDataLinearInterpolatedFloatAtVolumeCoordinate(NIVolumeDataInlineBuffer *inlineBuffer, CGFloat x, CGFloat y, CGFloat z) // coordinate in the pixel space
 {
@@ -535,8 +537,8 @@ CF_INLINE float NIVolumeDataLinearInterpolatedFloatAtVolumeCoordinate(NIVolumeDa
  Returns the nearest neighbor interpolated float intensity at the given point in voxel space.
  @param inlineBuffer The inline buffer that was previously initialized using [NIVolumeData acquireInlineBuffer:]
  @param x The x coordinate of the voxel.
- @param y The x coordinate of the voxel.
- @param z The x coordinate of the voxel.
+ @param y The y coordinate of the voxel.
+ @param z The z coordinate of the voxel.
  */
 CF_INLINE float NIVolumeDataNearestNeighborInterpolatedFloatAtVolumeCoordinate(NIVolumeDataInlineBuffer *inlineBuffer, CGFloat x, CGFloat y, CGFloat z) // coordinate in the pixel space
 {
@@ -559,8 +561,8 @@ CF_INLINE float NIVolumeDataNearestNeighborInterpolatedFloatAtVolumeCoordinate(N
  @param inlineBuffer The inline buffer that was previously initialized using [NIVolumeData acquireInlineBuffer:]
  @param cubicIndexes An array of indexes that will be filled out with the resulting indexes.
  @param x The x coordinate of the voxel.
- @param y The x coordinate of the voxel.
- @param z The x coordinate of the voxel.
+ @param y The y coordinate of the voxel.
+ @param z The z coordinate of the voxel.
 */
 CF_INLINE void NIVolumeDataGetCubicIndexes(NIVolumeDataInlineBuffer *inlineBuffer, NSInteger cubicIndexes[64], NSInteger x, NSInteger y, NSInteger z, NSInteger outOfBoundsIndex)
 {
@@ -587,8 +589,8 @@ CF_INLINE void NIVolumeDataGetCubicIndexes(NIVolumeDataInlineBuffer *inlineBuffe
  Returns the cubic interpolated float intensity at the given point in voxel space.
  @param inlineBuffer The inline buffer that was previously initialized using [NIVolumeData acquireInlineBuffer:]
  @param x The x coordinate of the voxel.
- @param y The x coordinate of the voxel.
- @param z The x coordinate of the voxel.
+ @param y The y coordinate of the voxel.
+ @param z The z coordinate of the voxel.
  */
 CF_INLINE float NIVolumeDataCubicInterpolatedFloatAtVolumeCoordinate(NIVolumeDataInlineBuffer *inlineBuffer, CGFloat x, CGFloat y, CGFloat z) // coordinate in the pixel space
 {

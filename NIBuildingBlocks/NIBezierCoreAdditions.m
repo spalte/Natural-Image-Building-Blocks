@@ -1454,41 +1454,76 @@ CGFloat NIBezierCoreMeanDistanceToPlane(NIBezierCoreRef bezierCore, NIPlane plan
     NIVector endpoint;
     CGFloat totalDistance;
     CFIndex segmentCount;
-    
+
     if (NIBezierCoreHasCurve(bezierCore)) {
         flattenedBezierCore = NIBezierCoreCreateMutableCopy(bezierCore);
         NIBezierCoreFlatten((NIMutableBezierCoreRef)flattenedBezierCore, NIBezierDefaultFlatness);
     } else {
         flattenedBezierCore = NIBezierCoreRetain(bezierCore);
     }
-    
+
     endpoint = NIVectorZero;
     segmentCount = NIBezierCoreSegmentCount(flattenedBezierCore);
     bezierCoreIterator = NIBezierCoreIteratorCreateWithBezierCore(flattenedBezierCore);
     NIBezierCoreRelease(flattenedBezierCore);
     flattenedBezierCore = NULL;
     totalDistance = 0;
-    
+
     while (!NIBezierCoreIteratorIsAtEnd(bezierCoreIterator)) {
         NIBezierCoreIteratorGetNextSegment(bezierCoreIterator, NULL, NULL, &endpoint);
         totalDistance += NIVectorDistanceToPlane(endpoint, plane);
     }
-    
+
     NIBezierCoreIteratorRelease(bezierCoreIterator);
-    
+
     return totalDistance / (CGFloat)segmentCount;
+}
+
+CGFloat NIBezierCoreMaxDistanceToPlane(NIBezierCoreRef bezierCore, NIPlane plane)
+{
+    NIBezierCoreRef flattenedBezierCore;
+    NIBezierCoreIteratorRef bezierCoreIterator;
+    NIVector endpoint;
+    CGFloat distance;
+    CGFloat maxDistance;
+
+    if (NIBezierCoreHasCurve(bezierCore)) {
+        flattenedBezierCore = NIBezierCoreCreateMutableCopy(bezierCore);
+        NIBezierCoreFlatten((NIMutableBezierCoreRef)flattenedBezierCore, NIBezierDefaultFlatness);
+    } else {
+        flattenedBezierCore = NIBezierCoreRetain(bezierCore);
+    }
+
+    endpoint = NIVectorZero;
+    bezierCoreIterator = NIBezierCoreIteratorCreateWithBezierCore(flattenedBezierCore);
+    NIBezierCoreRelease(flattenedBezierCore);
+    flattenedBezierCore = NULL;
+    distance = 0;
+    maxDistance = 0;
+
+    while (!NIBezierCoreIteratorIsAtEnd(bezierCoreIterator)) {
+        NIBezierCoreIteratorGetNextSegment(bezierCoreIterator, NULL, NULL, &endpoint);
+        distance = NIVectorDistanceToPlane(endpoint, plane);
+        if (distance > maxDistance) {
+            maxDistance = distance;
+        }
+    }
+
+    NIBezierCoreIteratorRelease(bezierCoreIterator);
+
+    return maxDistance;
 }
 
 bool NIBezierCoreIsPlanar(NIBezierCoreRef bezierCore, NIPlanePointer bezierCorePlane)
 {
     NIPlane plane;
-    CGFloat meanDistance;
+    CGFloat maxDistance;
     bool isPlanar;
     
     plane = NIBezierCoreLeastSquaresPlane(bezierCore);
-    meanDistance = NIBezierCoreMeanDistanceToPlane(bezierCore, plane);
+    maxDistance = NIBezierCoreMaxDistanceToPlane(bezierCore, plane);
     
-    isPlanar = meanDistance < 1.0;
+    isPlanar = maxDistance < 0.01;
     
     if (isPlanar && bezierCorePlane) {
         *bezierCorePlane = plane;

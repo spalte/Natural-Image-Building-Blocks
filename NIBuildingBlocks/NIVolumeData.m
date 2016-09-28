@@ -130,7 +130,7 @@ NS_ASSUME_NONNULL_BEGIN
     return [super replacementObjectForPortCoder:encoder];
 }
 
-- (nullable instancetype)initWithCoder:(NSCoder *)decoder
+- (nullable instancetype)initWithCoder:(NSCoder *)decoder;
 {
     if ([decoder allowsKeyedCoding]) {
         if ( (self = [super init]) ) {

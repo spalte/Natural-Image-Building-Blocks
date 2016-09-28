@@ -63,7 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation NIBezierPath
 
-- (nullable instancetype)init
+- (instancetype)init
 {
     if ( (self = [super init]) ) {
         _bezierCore = NIBezierCoreCreateMutable();
@@ -71,7 +71,7 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
-- (nullable instancetype)initWithBezierPath:(NIBezierPath *)bezierPath
+- (instancetype)initWithBezierPath:(NIBezierPath *)bezierPath
 {
     if ( (self = [self init]) ) {
         NIBezierCoreRelease(_bezierCore);
@@ -83,7 +83,7 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
-- (nullable instancetype)initWithNSBezierPath:(NSBezierPath *)bezierPath
+- (instancetype)initWithNSBezierPath:(NSBezierPath *)bezierPath
 {
     if ( (self = [self init]) ) {
         NIBezierCoreRelease(_bezierCore);
@@ -92,7 +92,7 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
-- (nullable instancetype)initWithDictionaryRepresentation:(NSDictionary *)dict
+- (instancetype)initWithDictionaryRepresentation:(NSDictionary *)dict
 {
     if ( (self = [self init]) ) {
         NIBezierCoreRelease(_bezierCore);
@@ -105,7 +105,7 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
-- (nullable instancetype)initWithNIBezierCore:(NIBezierCoreRef)bezierCore
+- (instancetype)initWithNIBezierCore:(NIBezierCoreRef)bezierCore
 {
     if ( (self = [self init]) ) {
         NIBezierCoreRelease(_bezierCore);
@@ -114,10 +114,14 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
-- (nullable instancetype)initWithNodeArray:(NSArray *)nodes style:(NIBezierNodeStyle)style // array of NIVectors in NSValues;
+- (instancetype)initWithNodeArray:(NSArray<NSValue *> *)nodes style:(NIBezierNodeStyle)style // array of NIVectors in NSValues;
 {
     NIVectorArray vectorArray;
     NSInteger i;
+
+    if (nodes.count == 0) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: nodes is empty", __PRETTY_FUNCTION__] userInfo:nil];
+    }
 
     if ( (self = [self init]) ) {
         if ([nodes count] >= 2) {
@@ -144,9 +148,29 @@ NS_ASSUME_NONNULL_BEGIN
         }
 
         if (_bezierCore == NULL) {
-            [self autorelease];
-            self = nil;
+            @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: couldn't build the path", __PRETTY_FUNCTION__] userInfo:nil];
         }
+    }
+    return self;
+}
+
+- (instancetype)initClosedWithNodeArray:(NSArray<NSValue *> *)nodes style:(NIBezierNodeStyle)style // array of NIVectors in NSValues;
+{
+    if (nodes.count <= 1) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: the nodes array doesn't contain enough nodes", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
+    if (style != NIBezierNodeEndsMeetStyle) {
+        NSLog(@"%s called with style other than NIBezierNodeEndsMeetStyle, which is surprising", __PRETTY_FUNCTION__);
+    }
+
+    NSMutableArray<NSValue *> *closedNodes = [NSMutableArray arrayWithArray:nodes];
+    if (NIVectorEqualToVector([closedNodes[0] NIVectorValue], [closedNodes.lastObject NIVectorValue]) == NO) {
+        [closedNodes addObject:closedNodes[0]];
+    }
+
+    if ( (self = [self initWithNodeArray:nodes style:style]) ){
+        NIBezierCoreAddSegment(_bezierCore, NICloseBezierCoreSegmentType, NIVectorZero, NIVectorZero, NIVectorZero);
     }
     return self;
 }
@@ -187,32 +211,32 @@ NS_ASSUME_NONNULL_BEGIN
     return bezierPath;
 }
 
-+ (nullable instancetype)bezierPath
++ (instancetype)bezierPath
 {
     return [[[[self class] alloc] init] autorelease];
 }
 
-+ (nullable instancetype)bezierPathWithBezierPath:(NIBezierPath *)bezierPath
++ (instancetype)bezierPathWithBezierPath:(NIBezierPath *)bezierPath
 {
     return [[[[self class] alloc] initWithBezierPath:bezierPath] autorelease];
 }
 
-+ (nullable instancetype)bezierPathWithNSBezierPath:(NSBezierPath *)bezierPath
++ (instancetype)bezierPathWithNSBezierPath:(NSBezierPath *)bezierPath
 {
     return [[[[self class] alloc] initWithNSBezierPath:bezierPath] autorelease];
 }
 
-+ (nullable instancetype)bezierPathNIBezierCore:(NIBezierCoreRef)bezierCore __deprecated
++ (instancetype)bezierPathNIBezierCore:(NIBezierCoreRef)bezierCore __deprecated
 {
     return [self bezierPathWithNIBezierCore:bezierCore];
 }
 
-+ (nullable instancetype)bezierPathWithNIBezierCore:(NIBezierCoreRef)bezierCore
++ (instancetype)bezierPathWithNIBezierCore:(NIBezierCoreRef)bezierCore
 {
     return [[[[self class] alloc] initWithNIBezierCore:bezierCore] autorelease];
 }
 
-+ (nullable instancetype)bezierPathCircleWithCenter:(NIVector)center radius:(CGFloat)radius normal:(NIVector)normal
++ (instancetype)bezierPathCircleWithCenter:(NIVector)center radius:(CGFloat)radius normal:(NIVector)normal
 {
     NIVector planeVector = NIVectorANormalVector(normal);
     NIVector planeVector2 = NIVectorCrossProduct(normal, planeVector);
@@ -512,6 +536,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (NIPlane)leastSquaresPlane
 {
     return NIBezierCoreLeastSquaresPlane(_bezierCore);
+}
+
+- (NIPlane)boundingPlaneForNormal:(NIVector)normal
+{
+    NIPlane plane;
+
+    NIBezierCoreGetBoundingPlanesForNormal(_bezierCore, normal, &plane, NULL);
+    return plane;
 }
 
 - (NIPlane)topBoundingPlaneForNormal:(NIVector)normal
