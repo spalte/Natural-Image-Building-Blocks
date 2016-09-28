@@ -130,7 +130,7 @@ NS_ASSUME_NONNULL_BEGIN
     return [super replacementObjectForPortCoder:encoder];
 }
 
-- (nullable instancetype)initWithCoder:(NSCoder *)decoder
+- (nullable instancetype)initWithCoder:(NSCoder *)decoder;
 {
     if ([decoder allowsKeyedCoding]) {
         if ( (self = [self initWithData:[NSData data] pixelsWide:0 pixelsHigh:0 pixelsDeep:0 modelToVoxelTransform:NIAffineTransformIdentity outOfBoundsValue:0]) ) {

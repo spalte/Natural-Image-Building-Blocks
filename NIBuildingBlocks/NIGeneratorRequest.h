@@ -24,14 +24,30 @@
 #import "NIVolumeData.h"
 #import "NIIntersection.h"
 
+/**
+ Types of projections to apply
+*/
 typedef NS_ENUM(NSInteger, NIProjectionMode)
 {
-    NIProjectionModeVR, // don't use this, it is not implemented
-    NIProjectionModeMIP,
-    NIProjectionModeMinIP,
-    NIProjectionModeMean,
+/**
+ Don't apply a projection.
+*/
+    NIProjectionModeNone = 0,
 
-    NIProjectionModeNone = 0xFFFFFF,
+/**
+ Maximum intensity projection.
+*/
+    NIProjectionModeMIP,
+/**
+ Minimum intensity projection.
+*/
+    NIProjectionModeMinIP,
+/**
+ Mean intensity projection
+*/
+    NIProjectionModeMean,
+    NIProjectionModeVR, // don't use this, it is not implemented
+
 };
 
 // a class to encapsulate all the different parameters required to generate a NI Image

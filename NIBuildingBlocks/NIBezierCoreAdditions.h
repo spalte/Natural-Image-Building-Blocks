@@ -28,9 +28,19 @@
 
 CF_EXTERN_C_BEGIN
 
+/**
+ Ways to calculate a smooth piecewise cubic bezier path.
+*/
 typedef NS_ENUM(unsigned long, NIBezierNodeStyle) {
+/**
+ The tangents at the first and last endoints point away from the rest of the curve.
+*/
     NIBezierNodeOpenEndsStyle, // the direction of the end segements point out. this is the style used by the NI View
-    NIBezierNodeEndsMeetStyle, // the direction of the end segements point to each other. this is the style that mimics what open ROIs do
+/**
+ The tangents at the first and last endoints point towards each other. This style is suitable to create closed paths, athough using
+ this style does not automatically close the path. This is the style used by OsiriX/Horos to make ROIs.
+*/
+    NIBezierNodeEndsMeetStyle // the direction of the end segements point to each other. this is the style that mimics what open ROIs do
 };
 
 NIBezierCoreRef NIBezierCoreCreateCurveWithNodes(NIVectorArray vectors, CFIndex numVectors, NIBezierNodeStyle style);
@@ -73,6 +83,7 @@ NIMutableBezierCoreRef NIBezierCoreCreateMutableCopyProjectedToPlane(NIBezierCor
 
 NIPlane NIBezierCoreLeastSquaresPlane(NIBezierCoreRef bezierCore);
 CGFloat NIBezierCoreMeanDistanceToPlane(NIBezierCoreRef bezierCore, NIPlane plane);
+CGFloat NIBezierCoreMaxDistanceToPlane(NIBezierCoreRef bezierCore, NIPlane plane);
 bool NIBezierCoreIsPlanar(NIBezierCoreRef bezierCore, NIPlanePointer bezierCorePlane); // pass NULL for bezierCorePlane if you don't care
 
 bool NIBezierCoreGetBoundingPlanesForNormal(NIBezierCoreRef bezierCore, NIVector normal, NIPlanePointer topPlanePtr, NIPlanePointer bottomPlanePtr); // returns true on success
