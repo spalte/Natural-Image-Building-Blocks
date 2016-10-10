@@ -52,7 +52,7 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
 @class NIVolumeDataProperties;
 @class NIGeneratorRequestViewOverlayDelegate;
 
-@interface NIGeneratorRequestView : NSView
+@interface NIGeneratorRequestView : NSView <CALayerDelegate>
 {
 @private
     CALayer *_volumeDataComposingLayer; // all the volumeDataLayers will be added to this layer
