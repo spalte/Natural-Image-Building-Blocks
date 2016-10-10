@@ -275,7 +275,7 @@ NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotific
     _verticalScaleBar = nil;
 
     [_rimColor release];
-    _rimColor = 0;
+    _rimColor = nil;
 
     for (NIVolumeDataProperties *properties in _volumeDataProperties) {
         properties.generatorRequestLayer = nil;
@@ -623,20 +623,6 @@ NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotific
 //    [[self mutableTextLabelsForLocation:NITextLabelLocationTopLeftEdgeSite] replaceObjectsAtIndexes:indexes withObjects:labelsArray];
 //}
 
-- (void)setDisplayRim:(BOOL)displayRim
-{
-    if (displayRim && [_rimLayer superlayer] == nil) {
-        [_frameLayer addSublayer:_rimLayer];
-    } else if (displayRim == NO) {
-        [_rimLayer removeFromSuperlayer];
-    }
-}
-
-- (BOOL)displayRim
-{
-    return [_rimLayer superlayer] != 0;
-}
-
 - (void)setDisplayOrientationLabels:(BOOL)displayOrientationLabels
 {
     if (displayOrientationLabels && [_topOrientationTextLayer superlayer] == nil) {
@@ -759,12 +745,30 @@ NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotific
     return [_volumeDataProperties objectAtIndex:index];
 }
 
-- (void)setRimColor:(NSColor *)rimColor
+- (void)setDisplayRim:(BOOL)displayRim
+{
+    if (displayRim == NO) {
+        [self setRimColor:nil];
+    }
+}
+
+- (BOOL)displayRim
+{
+    return [_rimLayer superlayer] != 0;
+}
+
+- (void)setRimColor:(nullable NSColor *)rimColor __deprecated
 {
     if (rimColor != _rimColor) {
         [_rimColor release];
         _rimColor = [rimColor retain];
         [_rimLayer setNeedsDisplay];
+
+        if (_rimColor && [_rimLayer superlayer] == nil) {
+            [_frameLayer addSublayer:_rimLayer];
+        } else if (_rimColor == nil) {
+            [_rimLayer removeFromSuperlayer];
+        }
     }
 }
 
@@ -913,7 +917,7 @@ NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotific
     for (id intersection in [_intersections allValues]) {
         [intersection mouseMoved:theEvent];
     }
-    [(NSResponder *)self.layer.layoutManager mouseMoved:theEvent]; // cast to base class for -mouseMoved: to silence compiler warning
+    [(NIGeneratorRequestViewLayoutManager *)self.layer.layoutManager mouseMoved:theEvent];
     [super mouseDragged:theEvent];
 }
 

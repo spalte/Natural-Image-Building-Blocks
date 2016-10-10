@@ -86,5 +86,39 @@
     _generatorRequestLayer = generatorRequestLayer;
 }
 
+- (NSString *)description
+{
+    NSMutableString *description = [NSMutableString string];
+    [description appendString:NSStringFromClass([self class])];
+    [description appendString:[NSString stringWithFormat: @"\nWindow Width: %.2f\n", self.windowWidth]];
+    [description appendString:[NSString stringWithFormat: @"Window Level: %.2f\n", self.windowLevel]];
+    [description appendString:[NSString stringWithFormat: @"Invert: %@\n", self.invert ? @"YES" : @"NO"]];
+    switch (self.preferredInterpolationMode) {
+        case NIInterpolationModeLinear:
+            [description appendString:[NSString stringWithFormat: @"Preferred Interpolation Mode: Linear\n"]];
+            break;
+        case NIInterpolationModeNearestNeighbor:
+            [description appendString:[NSString stringWithFormat: @"Preferred Interpolation Mode: Nearest Neighbor\n"]];
+            break;
+        case NIInterpolationModeCubic:
+            [description appendString:[NSString stringWithFormat: @"Preferred Interpolation Mode: Cubic\n"]];
+            break;
+        case NIInterpolationModeNone:
+            [description appendString:[NSString stringWithFormat: @"Preferred Interpolation Mode: None\n"]];
+            break;
+        default:
+            [description appendString:[NSString stringWithFormat: @"Preferred Interpolation Mode: Unknown\n"]];
+            break;
+    }
+    if (self.CLUT) {
+        [description appendString:[NSString stringWithFormat: @"CLUT Class: %@\n", NSStringFromClass([self.CLUT class])]];
+        [description appendString:[NSString stringWithFormat: @"%@", self.CLUT]];
+    } else {
+        [description appendString:[NSString stringWithFormat: @"CLUT: None"]];
+    }
+
+    return description;
+}
+
 @end
 

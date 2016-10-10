@@ -59,7 +59,6 @@ int NIBuildingBlocksInstallOsiriXCategories()
     Class ViewerControllerClass = objc_getClass("ViewerController");
 
     if (ViewerControllerClass == NULL) {
-        NSLog(@"Couldn't install the NIBuildingBlock OsiriX Integration ViewerController methods because the ViewerController class could not be found");
         return -1;
     }
 

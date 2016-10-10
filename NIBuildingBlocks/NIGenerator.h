@@ -21,13 +21,23 @@
 
 #import <Cocoa/Cocoa.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class NIGeneratorRequest;
 @class NIVolumeData;
 
 @protocol NIGeneratorDelegate;
 
+/**
+ Token used to refer back to a specific asynchronous request to the generator.
+ */
 typedef int64_t NIGeneratorAsynchronousRequestID;
 
+/**
+ The NIGenerator class is used in conjunction with a NIVolumeData and a NIGeneratorRequest subclass to build a new NIVolumeData
+ that represents the slice represented by the NIGeneratorRequest. The synchronous and asynchronous class methods are the
+ preferred way to use this class.
+ */
 @interface NIGenerator : NSObject {
     NSOperationQueue *_generatorQueue;
     NSMutableSet *_observedOperations;
@@ -39,7 +49,7 @@ typedef int64_t NIGeneratorAsynchronousRequestID;
     NIVolumeData *_volumeData;
 }
 
-@property (nonatomic, readwrite, assign) id <NIGeneratorDelegate> delegate;
+@property (nonatomic, readwrite, assign, nullable) id <NIGeneratorDelegate> delegate;
 @property (readonly) NIVolumeData *volumeData;
 
 + (NIVolumeData *)synchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData;
@@ -68,6 +78,8 @@ typedef int64_t NIGeneratorAsynchronousRequestID;
 @optional
 - (void)generator:(NIGenerator *)generator didAbandonRequest:(NIGeneratorRequest *)request;
 @end
+
+NS_ASSUME_NONNULL_END
 
 
 

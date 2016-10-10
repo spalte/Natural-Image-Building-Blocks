@@ -73,7 +73,7 @@
 - (void)main
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    double threadPriority;
+//    double threadPriority;
 
     NSAssert([_volumeData isCurved] == NO, @"NIHorizontalFillOperation only works with volumes that are not curved");
 
@@ -82,8 +82,8 @@
             return;
         }
 
-        threadPriority = [NSThread threadPriority];
-        [NSThread setThreadPriority:threadPriority * .5];
+//        threadPriority = [NSThread threadPriority];
+//        [NSThread setThreadPriority:threadPriority * .5];
 
         if (_interpolationMode == NIInterpolationModeLinear) {
             [self _linearInterpolatingFill];
@@ -95,7 +95,7 @@
             [self _unknownInterpolatingFill];
         }
 
-        [NSThread setThreadPriority:threadPriority];
+//        [NSThread setThreadPriority:threadPriority];
     }
     @catch (...) {
     }

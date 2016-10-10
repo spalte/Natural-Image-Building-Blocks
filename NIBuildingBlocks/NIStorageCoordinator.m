@@ -105,23 +105,31 @@
 - (NSURL *)storageURLForBundle:(NSBundle *)bundle
 {
     NSURL *applicationStorageURL = nil;
+    BOOL inHostApplication = NO;
 
     if ([[[NSBundle mainBundle] bundleIdentifier] hasPrefix:@"com.rossetantoine.osirix"]) {
         NSString *appSupport = @"Library/Application Support/OsiriX/";
         applicationStorageURL = [NSURL fileURLWithPath:[NSHomeDirectory() stringByAppendingPathComponent:appSupport]];
+        inHostApplication = YES;
     } else if ([[[NSBundle mainBundle] bundleIdentifier] hasPrefix:@"com.horosproject.horos"]) {
         NSString *appSupport = @"Library/Application Support/Horos/";
         applicationStorageURL = [NSURL fileURLWithPath:[NSHomeDirectory() stringByAppendingPathComponent:appSupport]];
+        inHostApplication = YES;
     } else {
         NSError *err;
         NSURL *applicationSupportURL = [[NSFileManager defaultManager] URLForDirectory:NSApplicationSupportDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:&err];
         applicationStorageURL = [applicationSupportURL URLByAppendingPathComponent:[[NSBundle mainBundle] bundleIdentifier] isDirectory:YES];
     }
 
-    NSURL *storageURL = [applicationStorageURL URLByAppendingPathComponent:@"ch.naturalimage.storage"];
+    NSURL *storageURL = [applicationStorageURL URLByAppendingPathComponent:@"ch.naturalimage.storage" isDirectory:YES];
 
-    NSString *bundleIdentifier = [bundle bundleIdentifier];
-    NSURL *bundleStorageURL = [storageURL URLByAppendingPathComponent:bundleIdentifier isDirectory:YES];
+    NSURL *bundleStorageURL = nil;
+    if (inHostApplication) {
+        NSString *bundleIdentifier = [bundle bundleIdentifier];
+        bundleStorageURL = [storageURL URLByAppendingPathComponent:bundleIdentifier isDirectory:YES];
+    } else {
+        bundleStorageURL = storageURL;
+    }
 
     return bundleStorageURL;
 }

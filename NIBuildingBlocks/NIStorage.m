@@ -98,6 +98,11 @@ NS_ASSUME_NONNULL_BEGIN
         for (NIStorageEntity *prevEntity in results) {
             [_managedObjectContext deleteObject:prevEntity];
         }
+
+        [_managedObjectContext save:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+        }
     }];
 
     [self didChangeValueForKey:key];
@@ -401,6 +406,15 @@ NS_ASSUME_NONNULL_BEGIN
     [self didChangeValueForKey:key];
 }
 
+- (void)setBool:(BOOL)boolVal forKey:(NSString *)key;
+{
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
+    [self setLongLong:(long long)boolVal forKey:key];
+}
+
 - (void)setInteger:(NSInteger)integer forKey:(NSString *)key
 {
     if (key == nil) {
@@ -625,7 +639,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    __block long long value;
+    __block long long value = 0;
     [_managedObjectContext performBlockAndWait:^{
         NSError *err = nil;
         NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
@@ -639,6 +653,15 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 
     return value;
+}
+
+- (BOOL)boolForKey:(NSString *)key
+{
+    if (key == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: key is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
+    return (BOOL)[self longLongForKey:key];
 }
 
 - (NSInteger)integerForKey:(NSString *)key
@@ -659,7 +682,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key == %@", key]];
 
-    __block double value;
+    __block double value = 0;
     [_managedObjectContext performBlockAndWait:^{
         NSError *err = nil;
         NSArray<NIStorageEntity *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];

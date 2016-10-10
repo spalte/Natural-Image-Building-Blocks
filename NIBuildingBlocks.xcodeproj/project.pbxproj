@@ -6,6 +6,20 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		4F4DB6971D9962DB00317088 /* Documentation */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 4F4DB69A1D9962DB00317088 /* Build configuration list for PBXAggregateTarget "Documentation" */;
+			buildPhases = (
+				4F4DB69B1D9962E600317088 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = Documentation;
+			productName = Documentation;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		4F0727E11B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F0727DF1B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F0727E21B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0727E01B20A5F600F88B7D /* NIWindowLevelWindowWidthToolbarItem.m */; };
@@ -583,6 +597,10 @@
 					4F151EDA1B1CC8D000C8F767 = {
 						CreatedOnToolsVersion = 6.3.1;
 					};
+					4F4DB6971D9962DB00317088 = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+					};
 					71F51E4C1BA00C2E00DF26AC = {
 						CreatedOnToolsVersion = 6.4;
 					};
@@ -602,6 +620,7 @@
 			targets = (
 				4F151EDA1B1CC8D000C8F767 /* NIBuildingBlocks */,
 				71F51E4C1BA00C2E00DF26AC /* NIBuildingBlocks Tests */,
+				4F4DB6971D9962DB00317088 /* Documentation */,
 			);
 		};
 /* End PBXProject section */
@@ -625,6 +644,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4F4DB69B1D9962E600317088 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#appledoc Xcode script\n# Start constants\ncompany=\"Spaltenstein Natural Image\";\ncompanyID=\"ch.naturalimage\";\ncompanyURL=\"http://download.naturalimage.ch\";\n#target=\"iphoneos\";\ntarget=\"macosx\";\noutputPath=\"~/help\";\n# End constants\n/usr/local/bin/appledoc \\\n--project-version 1.0 \\\n--project-name \"NIBuildingBlocks\" \\\n--project-company \"Spaltenstein Natural Image\" \\\n--company-id \"ch.naturalimage\" \\\n--docset-atom-filename \"NIBB.atom\" \\\n--docset-feed-url \"https://download.naturalimage.ch/NIBB/%DOCSETATOMFILENAME\" \\\n--docset-package-url \"https://download.naturalimage.ch/NIBB/%DOCSETPACKAGEFILENAME\" \\\n--docset-fallback-url \"https://download.naturalimage.ch\" \\\n--output \"${outputPath}\" \\\n--publish-docset \\\n--docset-platform-family \"${target}\" \\\n--logformat xcode \\\n--keep-intermediate-files \\\n--no-repeat-first-par \\\n--no-warn-invalid-crossref \\\n--exit-threshold 2 \\\n\"${PROJECT_DIR}\"";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4F151ED61B1CC8D000C8F767 /* Sources */ = {
@@ -732,13 +767,19 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_SHADOW = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MOMC_NO_DELETE_RULE_WARNINGS = YES;
+				MOMC_NO_INVERSE_RELATIONSHIP_WARNINGS = YES;
+				MOMC_NO_MAX_PROPERTY_COUNT_WARNINGS = YES;
+				MOMC_SUPPRESS_INVERSE_TRANSIENT_ERROR = YES;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -781,13 +822,19 @@
 				GCC_PREFIX_HEADER = NIBuildingBlocks/NIBuildingBlocks.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "NDEBUG=1";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_SHADOW = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MOMC_NO_DELETE_RULE_WARNINGS = YES;
+				MOMC_NO_INVERSE_RELATIONSHIP_WARNINGS = YES;
+				MOMC_NO_MAX_PROPERTY_COUNT_WARNINGS = YES;
+				MOMC_SUPPRESS_INVERSE_TRANSIENT_ERROR = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
@@ -833,6 +880,20 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "ch.naturalimage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		4F4DB6981D9962DB00317088 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		4F4DB6991D9962DB00317088 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -892,6 +953,15 @@
 			buildConfigurations = (
 				4F151EF21B1CC8D000C8F767 /* Debug */,
 				4F151EF31B1CC8D000C8F767 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4F4DB69A1D9962DB00317088 /* Build configuration list for PBXAggregateTarget "Documentation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4F4DB6981D9962DB00317088 /* Debug */,
+				4F4DB6991D9962DB00317088 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

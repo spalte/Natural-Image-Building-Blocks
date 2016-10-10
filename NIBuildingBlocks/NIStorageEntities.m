@@ -316,8 +316,6 @@ NS_ASSUME_NONNULL_BEGIN
 
     if ([objectValue isKindOfClass:[NSString class]]) {
         return (NSString *)objectValue;
-    } else if ([objectValue isKindOfClass:[NIStorageBox class]]) {
-        return [objectValue stringValue];
     } else if ([objectValue respondsToSelector:@selector(stringValue)]) {
         return [objectValue performSelector:@selector(stringValue)];
     }

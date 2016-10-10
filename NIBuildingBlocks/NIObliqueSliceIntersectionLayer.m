@@ -482,7 +482,6 @@ CF_EXTERN_C_END
     }
 
     if (self.intersectionDashingLengths) {
-        NSUInteger i;
         CGFloat *dashingFloat = malloc([self.intersectionDashingLengths count] * sizeof(CGFloat));
         for (i = 0; i < [self.intersectionDashingLengths count]; i++) {
             dashingFloat[i] = (CGFloat)[self.intersectionDashingLengths[i] doubleValue];

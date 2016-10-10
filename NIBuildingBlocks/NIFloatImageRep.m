@@ -48,6 +48,12 @@ NS_ASSUME_NONNULL_BEGIN
 @synthesize convertPointFromModelVectorBlock = _convertPointFromModelVectorBlock;
 @synthesize convertPointToModelVectorBlock = _convertPointToModelVectorBlock;
 
+@synthesize rimColor = _rimColor;
+@synthesize rimThickness = _rimThickness;
+@synthesize displayOrientationLabels = _displayOrientationLabels;
+@synthesize displayScaleBar = _displayScaleBar;
+
+
 - (nullable instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh
 {
     if ( (self = [super init]) ) {
@@ -110,7 +116,22 @@ NS_ASSUME_NONNULL_BEGIN
             _convertPointFromModelVectorBlock = NULL;
             _convertPointToModelVectorBlock = NULL;
 
-            _imageToModelTransform = [coder decodeNIAffineTransformForKey:@"imageToModelTransform"];
+            if ([coder containsValueForKey:@"imageToModelTransform"]) {
+                _imageToModelTransform = [coder decodeNIAffineTransformForKey:@"imageToModelTransform"];
+            } else {
+                [NSException raise:NSInvalidUnarchiveOperationException format:@"*** %s: missing imageToModelTransform", __PRETTY_FUNCTION__];
+            }
+
+            if ([coder containsValueForKey:@"displayOrientationLabels"]) {
+                _displayOrientationLabels = [coder decodeBoolForKey:@"displayOrientationLabels"];
+            }
+            if ([coder containsValueForKey:@"displayScaleBar"]) {
+                _displayScaleBar = [coder decodeBoolForKey:@"displayScaleBar"];
+            }
+            if ([coder containsValueForKey:@"rimColor"]) {
+                _rimColor = [[coder decodeObjectForKey:@"rimColor"] retain];
+                _rimThickness = [coder decodeDoubleForKey:@"rimThickness"];
+            }
         }
     } else {
         [NSException raise:NSInvalidUnarchiveOperationException format:@"*** %s: only supports keyed coders", __PRETTY_FUNCTION__];
@@ -136,6 +157,17 @@ NS_ASSUME_NONNULL_BEGIN
         [aCoder encodeDouble:_sliceThickness forKey:@"sliceThickness"];
 
         [aCoder encodeNIAffineTransform:_imageToModelTransform forKey:@"imageToModelTransform"];
+
+        if (self.displayOrientationLabels) {
+            [aCoder encodeBool:self.displayOrientationLabels forKey:@"displayOrientationLabels"];
+        }
+        if (self.displayScaleBar) {
+            [aCoder encodeBool:self.displayScaleBar forKey:@"displayScaleBar"];
+        }
+        if (self.rimColor && self.rimThickness > 0) {
+            [aCoder encodeObject:self.rimColor forKey:@"rimColor"];
+            [aCoder encodeDouble:self.rimThickness forKey:@"rimThickness"];
+        }
     } else {
         [NSException raise:NSInvalidArchiveOperationException format:@"*** %s: only supports keyed coders", __PRETTY_FUNCTION__];
     }
@@ -157,12 +189,152 @@ NS_ASSUME_NONNULL_BEGIN
     [_convertPointToModelVectorBlock release];
     _convertPointToModelVectorBlock = nil;
 
+    [_rimColor release];
+    _rimColor = nil;
+
     [super dealloc];
+}
+
++ (NSString *)stringForOrientationVector:(NIVector)orientationVector
+{
+    NSString *orientationX = orientationVector.x < 0 ? NSLocalizedString( @"R", @"R: Right") : NSLocalizedString( @"L", @"L: Left");
+    NSString *orientationY = orientationVector.y < 0 ? NSLocalizedString( @"A", @"A: Anterior") : NSLocalizedString( @"P", @"P: Posterior");
+    NSString *orientationZ = orientationVector.z < 0 ? NSLocalizedString( @"I", @"I: Inferior") : NSLocalizedString( @"S", @"S: Superior");
+
+#if CGFLOAT_IS_DOUBLE
+    CGFloat absX = fabs(orientationVector.x);
+    CGFloat absY = fabs(orientationVector.y);
+    CGFloat absZ = fabs(orientationVector.z);
+#else
+    CGFloat absX = fabsf(orientationVector.x);
+    CGFloat absY = fabsf(orientationVector.y);
+    CGFloat absZ = fabsf(orientationVector.z);
+#endif
+
+    NSMutableString *orientationString = [NSMutableString string];
+
+    NSInteger i;
+    for (i = 0; i < 3; ++i)
+    {
+        if (absX>.2 && absX>=absY && absX>=absZ) {
+            [orientationString appendString: orientationX]; absX=0;
+        } else if (absY>.2 && absY>=absX && absY>=absZ) {
+            [orientationString appendString: orientationY]; absY=0;
+        } else if (absZ>.2 && absZ>=absX && absZ>=absY) {
+            [orientationString appendString: orientationZ]; absZ=0;
+        } else break;
+    }
+
+    return orientationString;
+}
+
+- (void)drawOrnamentsInRect:(NSRect)rect
+{
+    NIAffineTransform imageToModelTransform = self.imageToModelTransform;
+    CGFloat bottomPadding = 0; // padding will increase as new objects such as the orientation labels, and other labes are drawn
+    CGFloat leftPadding = 0;
+    if (self.displayOrientationLabels && _curved == NO) {
+        NSShadow *shadow = [[[NSShadow alloc] init] autorelease];
+        shadow.shadowOffset = NSMakeSize(1, -1);
+        shadow.shadowBlurRadius = 1;
+        shadow.shadowColor = [NSColor blackColor];
+        NSDictionary *drawingAttributes = @{NSShadowAttributeName          : shadow,
+                                            NSForegroundColorAttributeName : [NSColor whiteColor],
+                                            NSFontAttributeName            : [NSFont fontWithName:@"Helvetica" size:14]};
+
+        NIVector rightVector = NIVectorNormalize(NIVectorMake(imageToModelTransform.m11, imageToModelTransform.m12, imageToModelTransform.m13));
+        NSString *rightVectorString = [NIFloatImageRep stringForOrientationVector:rightVector];
+        NSSize rightSize = [rightVectorString sizeWithAttributes:drawingAttributes];
+        NSRect rightRect = NSMakeRect(NSMaxX(rect) - (rightSize.width + 7), NSMidY(rect) - rightSize.height/2.0, rightSize.width, rightSize.height);
+        [rightVectorString drawInRect:rightRect withAttributes:drawingAttributes];
+
+        NIVector topVector = NIVectorNormalize(NIVectorMake(imageToModelTransform.m21, imageToModelTransform.m22, imageToModelTransform.m23));
+        NSString *topVectorString = [NIFloatImageRep stringForOrientationVector:topVector];
+        NSSize topSize = [topVectorString sizeWithAttributes:drawingAttributes];
+        NSRect topRect = NSMakeRect(NSMidX(rect) - topSize.width/2.0, NSMaxY(rect) - (topSize.height + 5), topSize.width, topSize.height);
+        [topVectorString drawInRect:topRect withAttributes:drawingAttributes];
+
+        NIVector leftVector = NIVectorInvert(rightVector);
+        NSString *leftVectorString = [NIFloatImageRep stringForOrientationVector:leftVector];
+        NSSize leftSize = [leftVectorString sizeWithAttributes:drawingAttributes];
+        NSRect leftRect = NSMakeRect(NSMinX(rect) + 7, NSMidY(rect) - leftSize.height/2.0, leftSize.width, leftSize.height);
+        [leftVectorString drawInRect:leftRect withAttributes:drawingAttributes];
+        leftPadding += leftSize.width + 7;
+
+        NIVector bottomVector = NIVectorInvert(topVector);
+        NSString *bottomVectorString = [NIFloatImageRep stringForOrientationVector:bottomVector];
+        NSSize bottomSize = [bottomVectorString sizeWithAttributes:drawingAttributes];
+        NSRect bottomRect = NSMakeRect(NSMidX(rect) - bottomSize.width/2.0, NSMinY(rect) + 5, bottomSize.width, bottomSize.height);
+        [bottomVectorString drawInRect:bottomRect withAttributes:drawingAttributes];
+        bottomPadding += bottomSize.height + 5;
+    }
+    if (self.rimColor && self.rimThickness > 0) {
+        [_rimColor set];
+        CGFloat rimThickness = self.rimThickness;
+
+        CGFloat squareSize = 12.0;
+        NSBezierPath *bezierPath = [NSBezierPath bezierPath];
+        [bezierPath moveToPoint:NSMakePoint(NSMinX(rect), NSMinY(rect))];
+        [bezierPath lineToPoint:NSMakePoint(NSMaxX(rect), NSMinY(rect))];
+        [bezierPath lineToPoint:NSMakePoint(NSMaxX(rect), NSMaxY(rect))];
+        [bezierPath lineToPoint:NSMakePoint(NSMinX(rect), NSMaxY(rect))];
+        [bezierPath closePath];
+
+        [bezierPath moveToPoint:NSMakePoint(NSMinX(rect) + rimThickness, NSMinY(rect) + rimThickness)];
+        [bezierPath lineToPoint:NSMakePoint(NSMinX(rect) + rimThickness, NSMaxY(rect) - rimThickness)];
+        [bezierPath lineToPoint:NSMakePoint(NSMaxX(rect) - squareSize, NSMaxY(rect) - rimThickness)];
+        [bezierPath lineToPoint:NSMakePoint(NSMaxX(rect) - squareSize, NSMaxY(rect) - squareSize)];
+        [bezierPath lineToPoint:NSMakePoint(NSMaxX(rect) - rimThickness, NSMaxY(rect) - squareSize)];
+        [bezierPath lineToPoint:NSMakePoint(NSMaxX(rect) - rimThickness, NSMinY(rect) + rimThickness)];
+
+        [bezierPath fill];
+    }
+    if (self.displayScaleBar) {
+        NSBezierPath *path = [NSBezierPath bezierPath];
+        NSInteger i;
+
+        CGFloat mmWide = NIVectorLength(NIVectorMake(imageToModelTransform.m11, imageToModelTransform.m12, imageToModelTransform.m13)) * self.pixelsWide;
+        CGFloat pointsPerMM = rect.size.width / mmWide;
+
+        [path moveToPoint:NSMakePoint(NSMidX(rect) - 25*pointsPerMM, bottomPadding + 3)];
+        [path lineToPoint:NSMakePoint(NSMidX(rect) + 25*pointsPerMM, bottomPadding + 3)];
+        for (i = 0; i <= 5; i++) {
+            [path moveToPoint:NSMakePoint(NSMidX(rect) + ((CGFloat)i*10 - 25)*pointsPerMM, bottomPadding + 3)];
+            [path lineToPoint:NSMakePoint(NSMidX(rect) + ((CGFloat)i*10 - 25)*pointsPerMM, bottomPadding + 3 + (i%5?5:8))];
+        }
+
+        CGFloat mmHight = NIVectorLength(NIVectorMake(imageToModelTransform.m21, imageToModelTransform.m22, imageToModelTransform.m23)) * self.pixelsHigh;
+        pointsPerMM = rect.size.height / mmHight;
+
+        [path moveToPoint:NSMakePoint(leftPadding + 3, NSMidY(rect) - 25*pointsPerMM)];
+        [path lineToPoint:NSMakePoint(leftPadding + 3, NSMidY(rect) + 25*pointsPerMM)];
+        for (i = 0; i <= 5; i++) {
+            [path moveToPoint:NSMakePoint(leftPadding + 3, NSMidY(rect) + ((CGFloat)i*10 - 25)*pointsPerMM)];
+            [path lineToPoint:NSMakePoint(leftPadding + 3 + (i%5?5:8), NSMidY(rect) + ((CGFloat)i*10 - 25)*pointsPerMM)];
+        }
+
+        [[NSColor greenColor] set];
+        [path stroke];
+    }
+}
+
+- (BOOL)drawInRect:(NSRect)rect
+{
+    [NSGraphicsContext saveGraphicsState];
+    if (self.rimColor && self.rimThickness > 0) {
+        [NSBezierPath clipRect:NSInsetRect(rect, 0.5, 0.5)]; // clipping with a tiny inset give a nicer rendering because it guarantees that rimPath is outside of the rendering of the image
+    }
+    [[self bitmapImageRep] drawInRect:rect];
+    [NSGraphicsContext restoreGraphicsState];
+    [self drawOrnamentsInRect:rect];
+    return YES;
 }
 
 -(BOOL)draw
 {
-    return [[self bitmapImageRep] draw];
+    [[self bitmapImageRep] draw];
+    [self drawOrnamentsInRect:NSMakeRect(0, 0, self.size.width, self.size.height)];
+    return YES;
 }
 
 - (void)setImageToModelTransform:(NIAffineTransform)imageToModelTransform
@@ -274,18 +446,23 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSBitmapImageRep *)bitmapImageRep // NSBitmapImageRep of the data after windowing, inverting, and applying the CLUT.
 {
     [self _buildCachedData];
+    NSInteger i;
 
     if (_CLUT == nil) { // no CLUT to apply make a grayscale image
         NSBitmapImageRep *windowedBitmapImageRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL pixelsWide:[self pixelsWide] pixelsHigh:[self pixelsHigh]
                                                                                         bitsPerSample:8 samplesPerPixel:1 hasAlpha:NO isPlanar:YES colorSpaceName:NSDeviceWhiteColorSpace
                                                                                           bytesPerRow:[self pixelsWide] bitsPerPixel:8];
-        memcpy([windowedBitmapImageRep bitmapData], [_cachedWindowedData bytes], [self pixelsWide] * [self pixelsHigh]);
+        for (i = 0; i < [self pixelsHigh]; i++) {
+            memcpy([windowedBitmapImageRep bitmapData] + (i * [windowedBitmapImageRep bytesPerRow]), [_cachedWindowedData bytes] + (([self pixelsHigh] - (i + 1)) * [windowedBitmapImageRep bytesPerRow]), [windowedBitmapImageRep bytesPerRow]);
+        }
         return [windowedBitmapImageRep autorelease];
     } else {
         NSBitmapImageRep *clutBitmapImageRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL pixelsWide:[self pixelsWide] pixelsHigh:[self pixelsHigh]
                                                                                     bitsPerSample:8 samplesPerPixel:4 hasAlpha:YES isPlanar:NO colorSpaceName:NSDeviceRGBColorSpace
                                                                                      bitmapFormat:NSAlphaNonpremultipliedBitmapFormat bytesPerRow:[self pixelsWide] * 4 bitsPerPixel:32];
-        memcpy([clutBitmapImageRep bitmapData], [_cachedCLUTData bytes], [self pixelsWide] * [self pixelsHigh] * 4);
+        for (i = 0; i < [self pixelsHigh]; i++) {
+            memcpy([clutBitmapImageRep bitmapData] + (i * [clutBitmapImageRep bytesPerRow]), [_cachedCLUTData bytes] + (([self pixelsHigh] - (i + 1)) * [clutBitmapImageRep bytesPerRow]), [clutBitmapImageRep bytesPerRow]);
+        }
         return [clutBitmapImageRep autorelease];
     }
 }

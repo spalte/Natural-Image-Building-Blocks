@@ -542,7 +542,8 @@
         slabSampleDistance = _slabSampleDistance;
     } else {
         if (self.slabWidth != 0) {
-            NSLog(@"NIObliqueSliceGeneratorRequest with non-zero slab width is trying to build a sliceToModelTransform when the slabSampleDistance is 0");
+            // FIXME: what should be done about this? it is kinda sketchy to just set the slabSampleDistance to one, but it is reasonable in most cases.
+//            NSLog(@"NIObliqueSliceGeneratorRequest with non-zero slab width is trying to build a sliceToModelTransform when the slabSampleDistance is 0");
         }
         slabSampleDistance = 1; //
     }

@@ -66,16 +66,20 @@ NS_ASSUME_NONNULL_BEGIN
     return NIAffineTransformInvert(transform);
 }
 
-- (nullable instancetype)initWithBytesNoCopy:(const float *)floatBytes pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
+- (instancetype)initWithBytesNoCopy:(const float *)floatBytes pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
                     modelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform outOfBoundsValue:(float)outOfBoundsValue freeWhenDone:(BOOL)freeWhenDone // modelToVoxelTransform is the transform from Model (patient) space to pixel data
 {
     return [self initWithData:[NSData dataWithBytesNoCopy:(void *)floatBytes length:sizeof(float) * pixelsWide * pixelsHigh * pixelsDeep freeWhenDone:freeWhenDone]
                    pixelsWide:pixelsWide pixelsHigh:pixelsHigh pixelsDeep:pixelsDeep modelToVoxelTransform:modelToVoxelTransform outOfBoundsValue:outOfBoundsValue];
 }
 
-- (nullable instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
+- (instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
              modelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform outOfBoundsValue:(float)outOfBoundsValue // modelToVoxelTransform is the transform from Model (patient) space to pixel data
 {
+    if ([data length] < sizeof(float)*pixelsWide*pixelsHigh*pixelsDeep) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: data is not big enough (length:%lld) to hold a volume of size %lldx%lldx%lld", __PRETTY_FUNCTION__, (long long)[data length], (long long)pixelsWide, (long long)pixelsHigh, (long long)pixelsDeep] userInfo:nil];
+    }
+
     if ( (self = [super init]) ) {
         _floatData = [data retain];
         _outOfBoundsValue = outOfBoundsValue;
@@ -87,7 +91,7 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
-- (nullable instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
+- (instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
       volumeToModelConverter:(NIVector (^)(NIVector volumeVector))volumeToModelConverter modelToVolumeConverter:(NIVector (^)(NIVector modelVector))modelToVolumeConverter
             outOfBoundsValue:(float)outOfBoundsValue
 {
@@ -105,7 +109,7 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
-- (nullable instancetype)initWithVolumeData:(NIVolumeData *)volumeData
+- (instancetype)initWithVolumeData:(NIVolumeData *)volumeData
 {
     if (volumeData.curved) {
         return [self initWithData:volumeData.floatData pixelsWide:volumeData.pixelsWide pixelsHigh:volumeData.pixelsHigh pixelsDeep:volumeData.pixelsDeep modelToVoxelTransform:volumeData.modelToVoxelTransform outOfBoundsValue:volumeData.outOfBoundsValue];
@@ -118,6 +122,12 @@ NS_ASSUME_NONNULL_BEGIN
 + (BOOL)supportsSecureCoding
 {
     return YES;
+}
+
+- (nullable id)replacementObjectForPortCoder:(NSPortCoder *)encoder
+{
+    if ([encoder isBycopy]) return self;
+    return [super replacementObjectForPortCoder:encoder];
 }
 
 - (nullable instancetype)initWithCoder:(NSCoder *)decoder
@@ -185,7 +195,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)isRectilinear
 {
-    return NIAffineTransformIsRectilinear(_modelToVoxelTransform);
+    return self.curved == NO && NIAffineTransformIsRectilinear(_modelToVoxelTransform);
 }
 
 - (CGFloat)minPixelSpacing
@@ -289,15 +299,15 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 // will copy fill length*sizeof(float) bytes
-- (BOOL)getFloatRun:(float *)buffer atPixelCoordinateX:(NSUInteger)x y:(NSUInteger)y z:(NSUInteger)z length:(NSUInteger)length
+- (NSUInteger)getFloatRun:(float *)buffer atPixelCoordinateX:(NSUInteger)x y:(NSUInteger)y z:(NSUInteger)z length:(NSUInteger)length
 {
-    assert(x < _pixelsWide);
-    assert(y < _pixelsHigh);
-    assert(z < _pixelsDeep);
-    assert(x + length < _pixelsWide);
-
-    memcpy(buffer, &(self.floatBytes[x + y*_pixelsWide + z*_pixelsWide*_pixelsHigh]), length * sizeof(float));
-    return YES;
+    NSUInteger copyLength = length;
+    if (x >= _pixelsWide || y >= _pixelsHigh || z >= _pixelsDeep) {
+        return 0;
+    }
+    copyLength = MIN(length, _pixelsWide - x);
+    memcpy(buffer, &(self.floatBytes[x + _pixelsWide*(y + z*_pixelsHigh)]), copyLength * sizeof(float));
+    return copyLength;
 }
 
 - (nullable NIVector (^)(NIVector))convertVolumeVectorToModelVectorBlock
@@ -357,25 +367,61 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NIVolumeData *)volumeDataForSliceAtIndex:(NSUInteger)z
 {
+    if (z >= _pixelsDeep) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: z index outside of the volume", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     NIVolumeData *sliceVolume;
-    NIAffineTransform sliceTransform;
-    NSData *sliceData;
 
-    sliceTransform = NIAffineTransformConcat(_modelToVoxelTransform, NIAffineTransformMakeTranslation(0, 0, -z));
+    NSData *sliceData = [NSData dataWithBytes:self.floatBytes + (_pixelsWide*_pixelsHigh*z) length:_pixelsWide * _pixelsHigh * sizeof(float)];
 
-    sliceData = [NSData dataWithBytes:self.floatBytes + (_pixelsWide*_pixelsHigh*z) length:_pixelsWide * _pixelsHigh * sizeof(float)];
-    sliceVolume = [[[self class] alloc] initWithData:sliceData pixelsWide:_pixelsWide pixelsHigh:_pixelsHigh pixelsDeep:1 modelToVoxelTransform:sliceTransform outOfBoundsValue:_outOfBoundsValue];
+    if (self.curved) {
+        NIVector (^volumeVectorToModelVectorBlock)(NIVector) = ^(NIVector volumeVector){
+            NIVector translatedVolumeVector = NIVectorSubtract(volumeVector, NIVectorMake(0, 0, z));
+            return _convertVolumeVectorToModelVectorBlock(translatedVolumeVector);
+        };
+        NIVector (^volumeVectorFromModelVectorBlock)(NIVector) = ^(NIVector modelVector){
+            NIVector volumeVector = _convertVolumeVectorFromModelVectorBlock(modelVector);
+            return NIVectorAdd(volumeVector, NIVectorMake(0, 0, z));
+        };
+
+        sliceVolume = [[[self class] alloc] initWithData:sliceData pixelsWide:_pixelsWide pixelsHigh:_pixelsHigh pixelsDeep:1
+                                  volumeToModelConverter:volumeVectorToModelVectorBlock modelToVolumeConverter:volumeVectorFromModelVectorBlock outOfBoundsValue:_outOfBoundsValue];
+    } else {
+        NIAffineTransform sliceTransform = NIAffineTransformConcat(_modelToVoxelTransform, NIAffineTransformMakeTranslation(0, 0, -z));
+        sliceVolume = [[[self class] alloc] initWithData:sliceData pixelsWide:_pixelsWide pixelsHigh:_pixelsHigh pixelsDeep:1 modelToVoxelTransform:sliceTransform outOfBoundsValue:_outOfBoundsValue];
+    }
 
     return [sliceVolume autorelease];
 }
 
 - (NIVolumeData *)volumeDataWithIndexRangesX:(NSRange)xr y:(NSRange)yr z:(NSRange)zr {
-    NIVolumeData *data = [[NIVolumeData alloc] initWithData:[NSMutableData dataWithLength:xr.length*yr.length*zr.length*sizeof(float)] pixelsWide:xr.length pixelsHigh:yr.length pixelsDeep:zr.length modelToVoxelTransform:NIAffineTransformConcat(self.modelToVoxelTransform, NIAffineTransformMakeTranslation(-1.*xr.location, -1.*yr.location, -1.*zr.location)) outOfBoundsValue:self.outOfBoundsValue];
+    if (NSMaxRange(xr) > _pixelsWide ||  NSMaxRange(yr) > _pixelsHigh ||  NSMaxRange(zr) > _pixelsDeep) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: index range outside of the volume", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
+    NIVolumeData *data = nil;
+    NIVector origin = NIVectorMake(xr.location, yr.location, zr.location);
+    if (self.curved) {
+        NIVector (^volumeVectorToModelVectorBlock)(NIVector) = ^(NIVector volumeVector){
+            NIVector translatedVolumeVector = NIVectorSubtract(volumeVector, origin);
+            return _convertVolumeVectorToModelVectorBlock(translatedVolumeVector);
+        };
+        NIVector (^volumeVectorFromModelVectorBlock)(NIVector) = ^(NIVector modelVector){
+            NIVector volumeVector = _convertVolumeVectorFromModelVectorBlock(modelVector);
+            return NIVectorAdd(volumeVector, origin);
+        };
+
+        data = [[[self class] alloc] initWithData:[NSMutableData dataWithLength:xr.length*yr.length*zr.length*sizeof(float)] pixelsWide:xr.length pixelsHigh:yr.length pixelsDeep:zr.length
+                           volumeToModelConverter:volumeVectorToModelVectorBlock modelToVolumeConverter:volumeVectorFromModelVectorBlock outOfBoundsValue:self.outOfBoundsValue];
+    } else {
+        data = [[[self class] alloc] initWithData:[NSMutableData dataWithLength:xr.length*yr.length*zr.length*sizeof(float)] pixelsWide:xr.length pixelsHigh:yr.length pixelsDeep:zr.length
+                            modelToVoxelTransform:NIAffineTransformConcat(self.modelToVoxelTransform, NIAffineTransformMakeTranslation(-1.*xr.location, -1.*yr.location, -1.*zr.location)) outOfBoundsValue:self.outOfBoundsValue];
+    }
     NIVolumeDataInlineBuffer sib, dib; [self acquireInlineBuffer:&sib]; [data acquireInlineBuffer:&dib];
-    
     for (NSUInteger z = 0; z < zr.length; ++z)
         for (NSUInteger y = 0; y < yr.length; ++y)
-            memcpy((void *)&dib.floatBytes[NIVolumeDataUncheckedIndexAtCoordinate(0,y,z,dib.pixelsWide,dib.pixelsHigh,dib.pixelsDeep)], &sib.floatBytes[NIVolumeDataUncheckedIndexAtCoordinate(xr.location,yr.location+y,zr.location+z,sib.pixelsWide,sib.pixelsHigh,sib.pixelsDeep)], xr.length*sizeof(float));
+            memcpy((void *)&dib.floatBytes[NIVolumeDataUncheckedIndexAtCoordinate(&dib, 0,y,z)], &sib.floatBytes[NIVolumeDataUncheckedIndexAtCoordinate(&sib, xr.location,yr.location+y,zr.location+z)], xr.length*sizeof(float));
     
     return [data autorelease];
 }
@@ -417,12 +463,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)volumeDataWithModelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform
 {
-    return [[[NIVolumeData alloc] initWithData:_floatData pixelsWide:_pixelsWide pixelsHigh:_pixelsHigh pixelsDeep:_pixelsDeep
+    return [[[[self class] alloc] initWithData:_floatData pixelsWide:_pixelsWide pixelsHigh:_pixelsHigh pixelsDeep:_pixelsDeep
                          modelToVoxelTransform:modelToVoxelTransform outOfBoundsValue:_outOfBoundsValue] autorelease];
 }
 
 - (instancetype)volumeDataResampledWithModelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform interpolationMode:(NIInterpolationMode)interpolationsMode
 {
+    if (self.curved) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: can not be called on a curved volume", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     if (NIAffineTransformEqualToTransform(self.modelToVoxelTransform, modelToVoxelTransform)) {
         return self;
     }
@@ -477,6 +527,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)volumeDataResampledWithModelToVoxelTransform:(NIAffineTransform)transform pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
                                      interpolationMode:(NIInterpolationMode)interpolationsMode
 {
+    if (self.curved) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: can not be called on a curved volume", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
     NIAffineTransform newVoxelToModelTransform = NIAffineTransformInvert(transform);
 
     NIObliqueSliceGeneratorRequest *request = [[[NIObliqueSliceGeneratorRequest alloc] init] autorelease];
@@ -527,13 +581,17 @@ NS_ASSUME_NONNULL_BEGIN
         [self acquireInlineBuffer:&inlineBuffer1];
         [otherVolumeData acquireInlineBuffer:&inlineBuffer2];
 
-        if (inlineBuffer1.floatBytes == inlineBuffer2.floatBytes &&
-            inlineBuffer1.outOfBoundsValue == inlineBuffer2.outOfBoundsValue &&
+        if (inlineBuffer1.outOfBoundsValue == inlineBuffer2.outOfBoundsValue &&
             inlineBuffer1.pixelsWide == inlineBuffer2.pixelsWide &&
             inlineBuffer1.pixelsHigh == inlineBuffer2.pixelsHigh &&
             inlineBuffer1.pixelsDeep == inlineBuffer2.pixelsDeep &&
             NIAffineTransformEqualToTransform(inlineBuffer1.modelToVoxelTransform, inlineBuffer2.modelToVoxelTransform)) {
-            isEqual = YES;
+
+            if (inlineBuffer1.floatBytes == inlineBuffer2.floatBytes) {
+                return YES;
+            } else {
+                return memcmp(inlineBuffer1.floatBytes, inlineBuffer2.floatBytes, sizeof(float) * inlineBuffer1.pixelsWide * inlineBuffer1.pixelsHigh * inlineBuffer1.pixelsDeep) == 0;
+            }
         }
     }
 
@@ -661,7 +719,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-- (BOOL)acquireInlineBuffer:(NIVolumeDataInlineBuffer *)inlineBuffer
+- (void)acquireInlineBuffer:(NIVolumeDataInlineBuffer *)inlineBuffer
 {
     memset(inlineBuffer, 0, sizeof(NIVolumeDataInlineBuffer));
     inlineBuffer->floatBytes = self.floatBytes;
@@ -670,7 +728,6 @@ NS_ASSUME_NONNULL_BEGIN
     inlineBuffer->pixelsHigh = _pixelsHigh;
     inlineBuffer->pixelsDeep = _pixelsDeep;
     inlineBuffer->modelToVoxelTransform = _modelToVoxelTransform;
-    return YES;
 }
 
 - (NSString *)description
@@ -687,120 +744,5 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 @end
-
-//@implementation NIVolumeData (DCMPixAndVolume)
-//
-//- (id)initWithWithPixList:(NSArray *)pixList volume:(NSData *)volume
-//{
-//    DCMPix *firstPix;
-//    float sliceThickness;
-//    NIAffineTransform pixToModelTransform;
-//    double spacingX;
-//    double spacingY;
-//    double spacingZ;
-//    double orientation[9];
-//
-//    firstPix = [pixList objectAtIndex:0];
-//
-//    sliceThickness = [firstPix sliceInterval];
-//    if(sliceThickness == 0)
-//    {
-//        NSLog(@"slice interval = slice thickness!");
-//        sliceThickness = [firstPix sliceThickness];
-//    }
-//
-//    memset(orientation, 0, sizeof(double) * 9);
-//    [firstPix orientationDouble:orientation];
-//    spacingX = firstPix.pixelSpacingX;
-//    spacingY = firstPix.pixelSpacingY;
-//    if(sliceThickness == 0) { // if the slice thickness is still 0, make it the same as the average of the spacingX and spacingY
-//        sliceThickness = (spacingX + spacingY)/2.0;
-//    }
-//    spacingZ = sliceThickness;
-//
-//    // test to make sure that orientation is initialized, when the volume is curved or something, it doesn't make sense to talk about orientation, and
-//    // so the orientation is really bogus
-//    // the test we will do is to make sure that orientation is 3 non-degenerate vectors
-//    if ([self _testOrientationMatrix:orientation] == NO) {
-//        memset(orientation, 0, sizeof(double)*9);
-//        orientation[0] = orientation[4] = orientation[8] = 1;
-//    }
-//
-//    // This is not really the pixToModel because for the NIVolumeData uses Center rule whereas DCMPix uses Top-Left rule.
-//    pixToModelTransform = NIAffineTransformIdentity;
-//    pixToModelTransform.m41 = firstPix.originX;
-//    pixToModelTransform.m42 = firstPix.originY;
-//    pixToModelTransform.m43 = firstPix.originZ;
-//    pixToModelTransform.m11 = orientation[0]*spacingX;
-//    pixToModelTransform.m12 = orientation[1]*spacingX;
-//    pixToModelTransform.m13 = orientation[2]*spacingX;
-//    pixToModelTransform.m21 = orientation[3]*spacingY;
-//    pixToModelTransform.m22 = orientation[4]*spacingY;
-//    pixToModelTransform.m23 = orientation[5]*spacingY;
-//    pixToModelTransform.m31 = orientation[6]*spacingZ;
-//    pixToModelTransform.m32 = orientation[7]*spacingZ;
-//    pixToModelTransform.m33 = orientation[8]*spacingZ;
-//
-//    self = [self initWithData:volume pixelsWide:[firstPix pwidth] pixelsHigh:[firstPix pheight] pixelsDeep:[pixList count]
-//              modelToVoxelTransform:NIAffineTransformInvert(pixToModelTransform) outOfBoundsValue:-1000];
-//    return self;
-//}
-//
-//- (void)getOrientation:(float[6])orientation
-//{
-//    double doubleOrientation[6];
-//    NSInteger i;
-//
-//    [self getOrientationDouble:doubleOrientation];
-//
-//    for (i = 0; i < 6; i++) {
-//        orientation[i] = doubleOrientation[i];
-//    }
-//}
-//
-//- (void)getOrientationDouble:(double[6])orientation
-//{
-//    NIAffineTransform pixelToModelTransform;
-//    NIVector xBasis;
-//    NIVector yBasis;
-//
-//    pixelToModelTransform = NIAffineTransformInvert(_modelToVoxelTransform);
-//
-//    xBasis = NIVectorNormalize(NIVectorMake(pixelToModelTransform.m11, pixelToModelTransform.m12, pixelToModelTransform.m13));
-//    yBasis = NIVectorNormalize(NIVectorMake(pixelToModelTransform.m21, pixelToModelTransform.m22, pixelToModelTransform.m23));
-//
-//    orientation[0] = xBasis.x; orientation[1] = xBasis.y; orientation[2] = xBasis.z;
-//    orientation[3] = yBasis.x; orientation[4] = yBasis.y; orientation[5] = yBasis.z;
-//}
-//
-//- (float)originX
-//{
-//    NIAffineTransform pixelToModelTransform;
-//
-//    pixelToModelTransform = NIAffineTransformInvert(_modelToVoxelTransform);
-//
-//    return pixelToModelTransform.m41;
-//}
-//
-//- (float)originY
-//{
-//    NIAffineTransform pixelToModelTransform;
-//
-//    pixelToModelTransform = NIAffineTransformInvert(_modelToVoxelTransform);
-//
-//    return pixelToModelTransform.m42;
-//}
-//
-//- (float)originZ
-//{
-//    NIAffineTransform pixelToModelTransform;
-//
-//    pixelToModelTransform = NIAffineTransformInvert(_modelToVoxelTransform);
-//    
-//    return pixelToModelTransform.m43;
-//}
-//
-//
-//@end
 
 NS_ASSUME_NONNULL_END
