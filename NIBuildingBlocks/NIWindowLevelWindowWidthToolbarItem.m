@@ -41,6 +41,11 @@
 
 @end
 
+@interface NIWindowLevelWindowWidthToolbarItem ()
+@property (nonatomic, readwrite, retain) IBOutlet NSPopover *popover;
+@property (nonatomic, readwrite, retain) IBOutlet NIWindowingView* windowingView;
+@end
+
 @implementation NIWindowLevelWindowWidthToolbarItem
 
 @synthesize popover = _popover;

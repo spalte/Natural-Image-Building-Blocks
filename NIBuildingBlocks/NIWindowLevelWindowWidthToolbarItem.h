@@ -34,8 +34,6 @@
     NSUInteger _volumeDataIndex;
 }
 
-@property (nonatomic, readwrite, retain) IBOutlet NSPopover *popover;
-@property (nonatomic, readwrite, retain) IBOutlet NIWindowingView* windowingView;
 @property (nonatomic, readwrite, copy) NSArray *generatorRequestViews;
 @property (nonatomic, readwrite, assign) NSUInteger volumeDataIndex;
 
