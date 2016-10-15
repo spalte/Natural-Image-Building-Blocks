@@ -30,6 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NIFloatImageRep ()
 
+- (nullable instancetype)initWithCoder:(NSCoder *)coder NS_DESIGNATED_INITIALIZER;
 - (void)_buildCachedData;
 
 @end
@@ -54,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 @synthesize displayScaleBar = _displayScaleBar;
 
 
-- (nullable instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh
+- (instancetype)initWithData:(nullable NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh
 {
     if ( (self = [super init]) ) {
         [self setColorSpaceName:NSCustomColorSpace];
@@ -63,6 +64,9 @@ NS_ASSUME_NONNULL_BEGIN
             _floatData = [NSMutableData dataWithLength:pixelsWide * pixelsHigh * sizeof(float)];
             memset([_floatData mutableBytes], 0, pixelsWide * pixelsHigh * sizeof(float));
         } else {
+            if ([data length] < sizeof(float)*pixelsWide*pixelsHigh) {
+                @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: The data parameter does not contain enough floats for the given width and height", __PRETTY_FUNCTION__] userInfo:nil];
+            }
             _floatData = (NSMutableData *)[data retain];
         }
 
@@ -78,7 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
-- (nullable instancetype)initWithBytes:(nullable float *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh;
+- (instancetype)initWithBytes:(nullable float *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh;
 {
     NSMutableData *mutableData = nil;
     if (data == NULL) {
@@ -91,7 +95,7 @@ NS_ASSUME_NONNULL_BEGIN
     return [self initWithData:mutableData pixelsWide:pixelsWide pixelsHigh:pixelsHigh];
 }
 
-- (nullable instancetype)initWithBytesNoCopy:(float *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh freeWhenDone:(BOOL)freeWhenDone;
+- (instancetype)initWithBytesNoCopy:(float *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh freeWhenDone:(BOOL)freeWhenDone;
 {
     NSMutableData *mutableData = [NSMutableData dataWithBytesNoCopy:data length:pixelsWide * pixelsHigh * sizeof(float) freeWhenDone:freeWhenDone];
 
@@ -127,8 +131,7 @@ NS_ASSUME_NONNULL_BEGIN
             }
             if ([coder containsValueForKey:@"displayScaleBar"]) {
                 _displayScaleBar = [coder decodeBoolForKey:@"displayScaleBar"];
-            }
-            if ([coder containsValueForKey:@"rimColor"]) {
+            }            if ([coder containsValueForKey:@"rimColor"]) {
                 _rimColor = [[coder decodeObjectForKey:@"rimColor"] retain];
                 _rimThickness = [coder decodeDoubleForKey:@"rimThickness"];
             }
@@ -399,7 +402,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
-- (float *)floatBytes;
+- (nullable float *)floatBytes;
 {
     [_cachedWindowedData release];  // if we grab the bytes, expect that we did it to modify the bytes
     _cachedWindowedData = nil;
@@ -409,14 +412,14 @@ NS_ASSUME_NONNULL_BEGIN
     return (float *)[_floatData bytes];
 }
 
-- (const unsigned char *)windowedBytes
+- (nullable const unsigned char *)windowedBytes
 {
     [self _buildCachedData];
 
     return [_cachedWindowedData bytes];
 }
 
-- (const unsigned char *)CLUTBytes;
+- (nullable const unsigned char *)CLUTBytes;
 {
     [self _buildCachedData];
 
@@ -424,26 +427,26 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 
-- (NSData *)floatData
+- (nullable NSData *)floatData
 {
-    return _floatData;
+    return [[_floatData copy] autorelease];
 }
 
-- (NSData *)windowedData
+- (nullable NSData *)windowedData
 {
     [self _buildCachedData];
 
-    return _cachedWindowedData;
+    return [[_cachedWindowedData copy] autorelease];
 }
 
 - (nullable NSData *)CLUTData
 {
     [self _buildCachedData];
 
-    return _cachedWindowedData;
+    return [[_cachedCLUTData copy] autorelease];
 }
 
-- (NSBitmapImageRep *)bitmapImageRep // NSBitmapImageRep of the data after windowing, inverting, and applying the CLUT.
+- (nullable NSBitmapImageRep *)bitmapImageRep // NSBitmapImageRep of the data after windowing, inverting, and applying the CLUT.
 {
     [self _buildCachedData];
     NSInteger i;
@@ -680,49 +683,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-
-@implementation NIFloatImageRep (DCMPixAndVolume)
-
-- (void)getOrientation:(float[6])orientation
-{
-    double doubleOrientation[6];
-    NSInteger i;
-
-    [self getOrientationDouble:doubleOrientation];
-
-    for (i = 0; i < 6; i++) {
-        orientation[i] = doubleOrientation[i];
-    }
-}
-
-- (void)getOrientationDouble:(double[6])orientation
-{
-    NIVector xBasis;
-    NIVector yBasis;
-
-    xBasis = NIVectorNormalize(NIVectorMake(_imageToModelTransform.m11, _imageToModelTransform.m12, _imageToModelTransform.m13));
-    yBasis = NIVectorNormalize(NIVectorMake(_imageToModelTransform.m21, _imageToModelTransform.m22, _imageToModelTransform.m23));
-
-    orientation[0] = xBasis.x; orientation[1] = xBasis.y; orientation[2] = xBasis.z;
-    orientation[3] = yBasis.x; orientation[4] = yBasis.y; orientation[5] = yBasis.z;
-}
-
-- (float)originX
-{
-    return _imageToModelTransform.m41;
-}
-
-- (float)originY
-{
-    return _imageToModelTransform.m42;
-}
-
-- (float)originZ
-{
-    return _imageToModelTransform.m43;
-}
-
-@end
 
 @implementation NIVolumeData(NIFloatImageRepAdditions)
 - (NIFloatImageRep *)floatImageRepForSliceAtIndex:(NSUInteger)z
