@@ -915,7 +915,7 @@ NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotific
 - (void)mouseDragged:(NSEvent *)theEvent
 {
     for (id intersection in [_intersections allValues]) {
-        [intersection mouseMoved:(NSEvent *)theEvent];
+        [intersection mouseMoved:theEvent];
     }
     [(NIGeneratorRequestViewLayoutManager *)self.layer.layoutManager mouseMoved:theEvent];
     [super mouseDragged:theEvent];

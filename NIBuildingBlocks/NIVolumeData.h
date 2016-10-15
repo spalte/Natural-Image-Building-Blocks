@@ -434,7 +434,7 @@ CF_INLINE float NIVolumeDataGetFloatAtPixelCoordinate(NIVolumeDataInlineBuffer *
  @param outOfBoundsIndex The index to return if the voxel coordinate is not in the volume.
  @return The index into the float intensity array for a given voxel coordinate, or outOfBoundsIndex if the coordinate is not in the volume.
 */
-CF_INLINE NSInteger NIVolumeDataIndexAtCoordinate(NIVolumeDataInlineBuffer *inlineBuffer, NSInteger x, NSInteger y, NSInteger z, NSInteger outOfBoundsIndex)
+CF_INLINE NSInteger NIVolumeDataIndexAtCoordinate(const NIVolumeDataInlineBuffer *inlineBuffer, NSInteger x, NSInteger y, NSInteger z, NSInteger outOfBoundsIndex)
 {
     if (x < 0 || x >= inlineBuffer->pixelsWide ||
         y < 0 || y >= inlineBuffer->pixelsHigh ||
@@ -453,7 +453,7 @@ CF_INLINE NSInteger NIVolumeDataIndexAtCoordinate(NIVolumeDataInlineBuffer *inli
  @param z The z coordinate of the voxel.
  @return The index into the float intensity array for a given voxel coordinate.
 */
-CF_INLINE NSInteger NIVolumeDataUncheckedIndexAtCoordinate(NIVolumeDataInlineBuffer *inlineBuffer, NSInteger x, NSInteger y, NSInteger z)
+CF_INLINE NSInteger NIVolumeDataUncheckedIndexAtCoordinate(const NIVolumeDataInlineBuffer *inlineBuffer, NSInteger x, NSInteger y, NSInteger z)
 {
     return x + inlineBuffer->pixelsWide*(y + inlineBuffer->pixelsHigh*z);
 }

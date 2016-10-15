@@ -245,11 +245,11 @@ typedef NS_ENUM(NSInteger, NIBezierPathElement) { // shouldn't these be typed as
 @property (readonly) CGFloat length;
 /**
  The length of the receiver up to and including the element at the given index.
- @param index The index of the of element through which to find the size.
+ @param element The index of the of element through which to find the size.
  @return The length of the receiver up to and including the element at the given index.
  @see length
 */
-- (CGFloat)lengthThroughElementAtIndex:(NSInteger)index; // the length of the curve up to and including the element at index
+- (CGFloat)lengthThroughElementAtIndex:(NSInteger)element; // the length of the curve up to and including the element at index
 
 /**
  Returns an autoreleased NIBezierCoreRef representation of the receiver.
@@ -297,7 +297,7 @@ typedef NS_ENUM(NSInteger, NIBezierPathElement) { // shouldn't these be typed as
 @property (readonly) NIPlane leastSquaresPlane;
 /**
  Given the provided normal, returns the bounding plane that is highest in the direction of the normal.
- @param normal The normal of the requested plane.
+ @param normal Normal of the requested plane.
  @return Returns the ounding plane that highest in the direction of the normal.
 */
 - (NIPlane)boundingPlaneForNormal:(NIVector)normal;
