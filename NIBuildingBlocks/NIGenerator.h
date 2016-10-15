@@ -60,7 +60,7 @@ typedef int64_t NIGeneratorAsynchronousRequestID;
 @property (readonly) NIVolumeData *volumeData;
 
 /**
- Returns a new NIVolumeData object based on the slice described by the given NIGeneratorRequest. The Quality of service
+ Returns a new NIVolumeData object based on the slice described by the given NIGeneratorRequest. The Quality of Service
  of synchronous requests is NSQualityOfServiceUserInteractive if called from the main thread, and NSQualityOfServiceUserInitiated if
  called from another thread.
  @param request The NIGeneratorRequest object that defines to slice to be generatred.
