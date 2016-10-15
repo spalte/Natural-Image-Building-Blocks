@@ -249,7 +249,7 @@ typedef NS_ENUM(NSInteger, NIBezierPathElement) { // shouldn't these be typed as
  @return The length of the receiver up to and including the element at the given index.
  @see length
 */
-- (CGFloat)lengthThroughElementAtIndex:(NSInteger)element; // the length of the curve up to and including the element at index
+- (CGFloat)lengthThroughElementAtIndex:(NSInteger)index; // the length of the curve up to and including the element at index
 
 /**
  Returns an autoreleased NIBezierCoreRef representation of the receiver.
@@ -297,7 +297,7 @@ typedef NS_ENUM(NSInteger, NIBezierPathElement) { // shouldn't these be typed as
 @property (readonly) NIPlane leastSquaresPlane;
 /**
  Given the provided normal, returns the bounding plane that is highest in the direction of the normal.
- @param The normal of the requested plane.
+ @param normal The normal of the requested plane.
  @return Returns the ounding plane that highest in the direction of the normal.
 */
 - (NIPlane)boundingPlaneForNormal:(NIVector)normal;
@@ -358,7 +358,7 @@ typedef NS_ENUM(NSInteger, NIBezierPathElement) { // shouldn't these be typed as
 /**
  Returns the closest relative position to the given line. The relative position is a value between 0 and 1, inclusive, that represents how far to travel along
  the path. The distance is calculated by using a flattened copy of the receiver with NIBezierDefaultFlatness as the flatness.
- @param vector The returned relative position will be closest to this line.
+ @param line The returned relative position will be closest to this line.
  @return The relative position closest to the givien line.
  @see relativePositionClosestToVector:
  @see relativePositionClosestToLine:closestVector:
@@ -367,8 +367,8 @@ typedef NS_ENUM(NSInteger, NIBezierPathElement) { // shouldn't these be typed as
 /**
  Returns the closest relative position to the given line. The relative position is a value between 0 and 1, inclusive, that represents how far to travel along
  the path. The distance is calculated by using a flattened copy of the receiver with NIBezierDefaultFlatness as the flatness.
- @param vector The returned relative position will be closest to this line.
- @param closestVector Used to return the point along the curve closest to the given line. Pass NULL if you aren't interested in this value.
+ @param line The returned relative position will be closest to this line.
+ @param vectorPointer Used to return the point along the curve closest to the given line. Pass NULL if you aren't interested in this value.
  @return The relative position closest to the givien line.
  @see relativePositionClosestToVector:
  @see relativePositionClosestToLine:
@@ -400,7 +400,7 @@ typedef NS_ENUM(NSInteger, NIBezierPathElement) { // shouldn't these be typed as
  position is a value between 0 and 1, inclusive, that represents how far to travel along the path. The distance is calculated by using a
  flattened copy of the receiver with NIBezierDefaultFlatness as the flatness.
  @param plane The plane with which to intersect.
- @param relativePositions Used to output an array of NSValues that encode NIVector structs that represent the relative positions of the intersections. Pass in nil if you are not interested in these values.
+ @param returnedRelativePositions Used to output an array of NSValues that encode NIVector structs that represent the relative positions of the intersections. Pass in nil if you are not interested in these values.
  @return Returns an array of NSValues that encode NIVector structs of the intersections.
  @see intersectionsWithPlane:
 */
@@ -474,7 +474,7 @@ typedef NS_ENUM(NSInteger, NIBezierPathElement) { // shouldn't these be typed as
 - (void)subdivide:(CGFloat)maxElementLength;
 /**
  Applies the given affine transform to all the elements in the receiver.
- @param transform The affince transform to apply.
+ @param transform The affine transform to apply.
 */
 - (void)applyAffineTransform:(NIAffineTransform)transform;
 - (void)applyConverter:(NIVector (^)(NIVector))converter __deprecated;
@@ -500,9 +500,9 @@ typedef NS_ENUM(NSInteger, NIBezierPathElement) { // shouldn't these be typed as
  Modifies the element at the given index by setting the given values. Only the parameters relevant to the element type at the
  given index are used.
  @param index The index of the element to modify.
- @param control1 The values to set for control1 of the element.
- @param control2 The values to set for control2 of the element.
- @param endpoint The values to set for endpoint of the element.
+ @param control1 The NIVector to set for control1 of the element.
+ @param control2 The NIVector to set for control2 of the element.
+ @param endpoint The NIVector to set for endpoint of the element.
 */
 - (void)setVectorsForElementAtIndex:(NSInteger)index control1:(NIVector)control1 control2:(NIVector)control2 endpoint:(NIVector)endpoint;
 
