@@ -167,7 +167,7 @@ NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotific
     return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
     if (self) {

@@ -90,10 +90,6 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
     NIGeneratorRequest *_presentedGeneratorRequest;
 }
 
-- (instancetype)initWithFrame:(NSRect)frame NS_DESIGNATED_INITIALIZER;
-- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
-
-
 @property (nullable, nonatomic, readwrite, retain) NIGeneratorRequest *generatorRequest; // this is the generator request that will be drawn.  Animatable
 @property (nullable, nonatomic, readonly, copy) NIGeneratorRequest *presentedGeneratorRequest; // this is the generator request that is currently drawn. Continuously updates during animations
 @property (nonatomic, readonly, assign) NIVector mousePosition; // the current mouse location, the mouseLocation is equal to NIGeneratorRequestViewMouseOutside if it is outside the view
