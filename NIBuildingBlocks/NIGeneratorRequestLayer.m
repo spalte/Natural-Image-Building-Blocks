@@ -372,9 +372,9 @@
     glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     if (floatImageRepToDraw.CLUT == nil) {
-        glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_LUMINANCE8, [floatImageRepToDraw pixelsWide], [floatImageRepToDraw pixelsHigh], 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, [floatImageRepToDraw windowedBytes]);
+        glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_LUMINANCE8, [floatImageRepToDraw pixelsWide], [floatImageRepToDraw pixelsHigh], 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, [[floatImageRepToDraw windowedData] bytes]);
     } else {
-        glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, [floatImageRepToDraw pixelsWide], [floatImageRepToDraw pixelsHigh], 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, [floatImageRepToDraw CLUTBytes]);
+        glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, [floatImageRepToDraw pixelsWide], [floatImageRepToDraw pixelsHigh], 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, [[floatImageRepToDraw CLUTData] bytes]);
     }
 
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texture);

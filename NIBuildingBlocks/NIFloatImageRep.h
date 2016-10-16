@@ -80,55 +80,55 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  The Window Width to apply to the underlying float representation of the image data.
 */
-@property (readwrite, nonatomic) CGFloat windowWidth; // these will affect how this rep will draw when part of an NSImage
+@property (nonatomic) CGFloat windowWidth; // these will affect how this rep will draw when part of an NSImage
 /**
  The Window Level to apply to the underlying float representation of the image data.
  */
-@property (readwrite, nonatomic) CGFloat windowLevel;
+@property (nonatomic) CGFloat windowLevel;
 /**
  A boolean value that represents whether the underlying float representation of the image data, after having been windowed, needs to be inverted.
  */
-@property (readwrite, nonatomic) BOOL invert; // invert the intensity after applying the WW/WL
+@property (nonatomic) BOOL invert; // invert the intensity after applying the WW/WL
 /**
  The color to apply to the windowed, and inverted if needed, float representation. This property can be set to either an NSColor or NSGradient.
 */
-@property (nullable, readwrite, strong, nonatomic) id CLUT; // Can be an NSColor or an NSGradient;
+@property (nullable, strong, nonatomic) id CLUT; // Can be an NSColor or an NSGradient;
 
 /**
  A pointer to the float representation of the image data. Calling this propery invalidates the caches of the windowedBytes and the CLUTBytes.
 */
-@property (nullable, readonly) float *floatBytes NS_RETURNS_INNER_POINTER; // use the methods that return an NSData.
+@property (nullable, readonly) float *floatBytes NS_RETURNS_INNER_POINTER __deprecated; // use the methods that return an NSData.
 /**
  A pointer to the 8bit unsigned char representation of the float image representation after windowing and possibly inverting.
 */
-@property (nullable, readonly) const unsigned char *windowedBytes NS_RETURNS_INNER_POINTER; // unsigned chars of intensity
+@property (nullable, readonly) const unsigned char *windowedBytes NS_RETURNS_INNER_POINTER __deprecated; // unsigned chars of intensity
 /**
  A pointer to a premultiplied ARGB8888 representation of the image after applying the CLUT.
 */
-@property (nullable, readonly) const unsigned char *CLUTBytes NS_RETURNS_INNER_POINTER; // RGBA unsigned chars
+@property (nullable, readonly) const unsigned char *CLUTBytes NS_RETURNS_INNER_POINTER __deprecated; // RGBA unsigned chars
 /*
  Returns a NSBitmapImageRep object that can be used to draw the receiver. If a CLUT is applied, the colorspace of the returned bitmap will be a NSDeviceRGBColorSpace.
  If there is no CLUT the colorspace will be NSDeviceWhiteColorSpace.
 */
 @property (nullable, readonly, copy) NSBitmapImageRep *bitmapImageRep; // NSBitmapImageRep of the data after windowing, inverting, and applying the CLUT.
 
-@property (nullable, readonly, copy) NSData* floatData __deprecated;
-@property (nullable, readonly, copy) NSData *windowedData __deprecated; // unsigned chars of intensity
-@property (nullable, readonly, copy) NSData *CLUTData __deprecated; // RGBA unsigned chars premultiplied ARGB8888
+@property (nullable, readonly, copy) NSData* floatData;
+@property (nullable, readonly, copy) NSData *windowedData; // unsigned chars of intensity
+@property (nullable, readonly, copy) NSData *CLUTData; // RGBA unsigned chars premultiplied ARGB8888
 
 // Draw additional items over the image.
-@property (nullable, readwrite, strong) NSColor *rimColor;
-@property (readwrite) CGFloat rimThickness;
-@property (readwrite) BOOL displayOrientationLabels;
-@property (readwrite) BOOL displayScaleBar;
+@property (nullable, strong) NSColor *rimColor;
+@property CGFloat rimThickness;
+@property BOOL displayOrientationLabels;
+@property BOOL displayScaleBar;
 
-@property (readwrite) CGFloat sliceThickness;
+@property CGFloat sliceThickness;
 
-@property (readwrite, nonatomic) NIAffineTransform imageToModelTransform;
-@property (readwrite, getter = isCurved) BOOL curved;
+@property (nonatomic) NIAffineTransform imageToModelTransform;
+@property (getter = isCurved) BOOL curved;
 
-@property (nullable, readwrite, copy) NSPoint (^convertPointFromModelVectorBlock)(NIVector);
-@property (nullable, readwrite, copy) NIVector (^convertPointToModelVectorBlock)(NSPoint);
+@property (nullable, copy) NSPoint (^convertPointFromModelVectorBlock)(NIVector);
+@property (nullable, copy) NIVector (^convertPointToModelVectorBlock)(NSPoint);
 
 - (NSPoint)convertPointFromModelVector:(NIVector)vector;
 - (NIVector)convertPointToModelVector:(NSPoint)point;

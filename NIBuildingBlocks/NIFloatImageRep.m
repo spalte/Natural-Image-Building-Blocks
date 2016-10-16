@@ -429,21 +429,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSData *)floatData
 {
-    return [[_floatData copy] autorelease];
+    return _floatData;
 }
 
 - (nullable NSData *)windowedData
 {
     [self _buildCachedData];
 
-    return [[_cachedWindowedData copy] autorelease];
+    return _cachedWindowedData;
 }
 
 - (nullable NSData *)CLUTData
 {
     [self _buildCachedData];
 
-    return [[_cachedCLUTData copy] autorelease];
+    return _cachedCLUTData;
 }
 
 - (nullable NSBitmapImageRep *)bitmapImageRep // NSBitmapImageRep of the data after windowing, inverting, and applying the CLUT.
