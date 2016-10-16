@@ -105,6 +105,7 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
                                      directionZ:(NIVector)directionZ pixelSpacingZ:(CGFloat)pixelSpacingZ;
 
 - (instancetype)init NS_UNAVAILABLE;
+- (nullable instancetype)initWithCoder:(NSCoder *)decoder NS_DESIGNATED_INITIALIZER;
 
 - (instancetype)initWithBytesNoCopy:(const float *)floatBytes pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh pixelsDeep:(NSUInteger)pixelsDeep
               modelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform outOfBoundsValue:(float)outOfBoundsValue freeWhenDone:(BOOL)freeWhenDone __deprecated; // modelToVoxelTransform is the transform from Model (patient) space to pixel data
@@ -144,8 +145,6 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
  @param volumeData The NIVolumeData from which to copy values. This value must not be nil.
 */
 - (instancetype)initWithVolumeData:(NIVolumeData *)volumeData;
-
-- (nullable instancetype)initWithCoder:(NSCoder *)decoder NS_DESIGNATED_INITIALIZER;
 
 /**
  The width of the volume in pixels
