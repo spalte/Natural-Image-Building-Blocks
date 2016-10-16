@@ -133,7 +133,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable instancetype)initWithCoder:(NSCoder *)decoder;
 {
     if ([decoder allowsKeyedCoding]) {
-        if ( (self = [self initWithData:[NSData data] pixelsWide:0 pixelsHigh:0 pixelsDeep:0 modelToVoxelTransform:NIAffineTransformIdentity outOfBoundsValue:0]) ) {
+        if ( (self = [super init]) ) {
             _floatData = [[decoder decodeObjectOfClass:[NSData class] forKey:@"floatData"] retain];
             _outOfBoundsValue = [decoder decodeFloatForKey:@"outOfBoundsValue"];
 
