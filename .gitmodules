@@ -1,4 +1,0 @@
-[submodule "NIBuildingBlocks"]
-	path = NIBuildingBlocks
-	url = https://github.com/spalte/Natural-Image-Building-Blocks.git
-	branch = master
