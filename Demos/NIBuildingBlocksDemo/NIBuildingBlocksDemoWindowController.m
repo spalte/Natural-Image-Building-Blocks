@@ -25,11 +25,9 @@
     [super windowDidLoad];
 
     _leftView.rimColor = [[NSColor greenColor] colorWithAlphaComponent:0.8];
-    _leftView.displayRim = YES;
     _leftView.displayScaleBar = YES;
     _leftView.displayOrientationLabels = YES;
     _rightView.rimColor = [[NSColor redColor] colorWithAlphaComponent:0.8];
-    _rightView.displayRim = YES;
     _rightView.displayScaleBar = YES;
     _rightView.displayOrientationLabels = YES;
 

@@ -8,28 +8,34 @@
 
 /* Begin PBXBuildFile section */
 		4F486D2D1B2F7D38000402EF /* NIBuildingBlocksDemoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F486D2C1B2F7D38000402EF /* NIBuildingBlocksDemoView.m */; };
-		4F486D321B2F9481000402EF /* NIBuildingBlocks.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4FF07DBE1B2F691B00380630 /* NIBuildingBlocks.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4F4C91A01DB56AAD00ACC15D /* NIBuildingBlocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F4C919F1DB56AAD00ACC15D /* NIBuildingBlocks.framework */; };
 		4FF07DA61B2EE14A00380630 /* OsiriXAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FF07DA51B2EE14A00380630 /* OsiriXAPI.framework */; };
 		4FF07DA91B2F539900380630 /* NIBuildingBlocksDemoPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07DA81B2F539900380630 /* NIBuildingBlocksDemoPlugin.m */; };
 		4FF07DAC1B2F544900380630 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FF07DAA1B2F542500380630 /* Cocoa.framework */; };
 		4FF07DB71B2F55E800380630 /* NIBuildingBlocksDemoWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07DB51B2F55E800380630 /* NIBuildingBlocksDemoWindowController.m */; };
 		4FF07DB81B2F55E800380630 /* NIBuildingBlocksDemoWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF07DB61B2F55E800380630 /* NIBuildingBlocksDemoWindowController.xib */; };
-		4FF07DBF1B2F693900380630 /* NIBuildingBlocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FF07DBE1B2F691B00380630 /* NIBuildingBlocks.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		4F2EEA661C5E741900DF2227 /* PBXContainerItemProxy */ = {
+		4F4C91A61DB56B2800ACC15D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 4FF07DB91B2F691A00380630 /* NIBuildingBlocks.xcodeproj */;
+			containerPortal = 4F4C91941DB56A8900ACC15D /* NIBuildingBlocks.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F151EDB1B1CC8D000C8F767;
+			remoteInfo = NIBuildingBlocks;
+		};
+		4F4C91A81DB56B2800ACC15D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4F4C91941DB56A8900ACC15D /* NIBuildingBlocks.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 71F51E4D1BA00C2E00DF26AC;
 			remoteInfo = "NIBuildingBlocks Tests";
 		};
-		4FF07DBD1B2F691B00380630 /* PBXContainerItemProxy */ = {
+		4F4C91AA1DB56B3000ACC15D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 4FF07DB91B2F691A00380630 /* NIBuildingBlocks.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4F151EDB1B1CC8D000C8F767;
+			containerPortal = 4F4C91941DB56A8900ACC15D /* NIBuildingBlocks.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4F151EDA1B1CC8D000C8F767;
 			remoteInfo = NIBuildingBlocks;
 		};
 /* End PBXContainerItemProxy section */
@@ -41,7 +47,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4F486D321B2F9481000402EF /* NIBuildingBlocks.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,6 +55,8 @@
 /* Begin PBXFileReference section */
 		4F486D2B1B2F7D38000402EF /* NIBuildingBlocksDemoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIBuildingBlocksDemoView.h; sourceTree = "<group>"; };
 		4F486D2C1B2F7D38000402EF /* NIBuildingBlocksDemoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIBuildingBlocksDemoView.m; sourceTree = "<group>"; };
+		4F4C91941DB56A8900ACC15D /* NIBuildingBlocks.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = NIBuildingBlocks.xcodeproj; path = ../NIBuildingBlocks.xcodeproj; sourceTree = SOURCE_ROOT; };
+		4F4C919F1DB56AAD00ACC15D /* NIBuildingBlocks.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NIBuildingBlocks.framework; path = "../../../../Library/Developer/Xcode/DerivedData/NIBuildingBlocksDemo-bekmotaubglhdyeoksmdjnbbcpad/Build/Products/Debug/NIBuildingBlocks.framework"; sourceTree = "<group>"; };
 		4FF07D9B1B2EDFA200380630 /* NIBuildingBlocksDemo.osirixplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NIBuildingBlocksDemo.osirixplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FF07D9F1B2EDFA200380630 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4FF07DA51B2EE14A00380630 /* OsiriXAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OsiriXAPI.framework; sourceTree = "<group>"; };
@@ -59,7 +66,6 @@
 		4FF07DB41B2F55E800380630 /* NIBuildingBlocksDemoWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIBuildingBlocksDemoWindowController.h; sourceTree = "<group>"; };
 		4FF07DB51B2F55E800380630 /* NIBuildingBlocksDemoWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIBuildingBlocksDemoWindowController.m; sourceTree = "<group>"; };
 		4FF07DB61B2F55E800380630 /* NIBuildingBlocksDemoWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NIBuildingBlocksDemoWindowController.xib; sourceTree = "<group>"; };
-		4FF07DB91B2F691A00380630 /* NIBuildingBlocks.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = NIBuildingBlocks.xcodeproj; path = NIBuildingBlocks/NIBuildingBlocks.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,7 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4FF07DBF1B2F693900380630 /* NIBuildingBlocks.framework in Frameworks */,
+				4F4C91A01DB56AAD00ACC15D /* NIBuildingBlocks.framework in Frameworks */,
 				4FF07DAC1B2F544900380630 /* Cocoa.framework in Frameworks */,
 				4FF07DA61B2EE14A00380630 /* OsiriXAPI.framework in Frameworks */,
 			);
@@ -76,12 +82,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4F4C919E1DB56AAD00ACC15D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4F4C919F1DB56AAD00ACC15D /* NIBuildingBlocks.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4F4C91A11DB56B2800ACC15D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4F4C91A71DB56B2800ACC15D /* NIBuildingBlocks.framework */,
+				4F4C91A91DB56B2800ACC15D /* NIBuildingBlocks Tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		4FF07D921B2EDFA200380630 = {
 			isa = PBXGroup;
 			children = (
-				4FF07DB91B2F691A00380630 /* NIBuildingBlocks.xcodeproj */,
+				4F4C91941DB56A8900ACC15D /* NIBuildingBlocks.xcodeproj */,
 				4FF07D9D1B2EDFA200380630 /* NIBuildingBlocksDemo */,
 				4FF07D9C1B2EDFA200380630 /* Products */,
+				4F4C919E1DB56AAD00ACC15D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -118,15 +142,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		4FF07DBA1B2F691A00380630 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				4FF07DBE1B2F691B00380630 /* NIBuildingBlocks.framework */,
-				4F2EEA671C5E741900DF2227 /* NIBuildingBlocks Tests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -142,6 +157,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				4F4C91AB1DB56B3000ACC15D /* PBXTargetDependency */,
 			);
 			name = NIBuildingBlocksDemo;
 			productName = NIBuildingBlocksDemo;
@@ -154,7 +170,7 @@
 		4FF07D931B2EDFA200380630 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Spaltenstein Natural Image";
 				TargetAttributes = {
 					4FF07D9A1B2EDFA200380630 = {
@@ -174,8 +190,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 4FF07DBA1B2F691A00380630 /* Products */;
-					ProjectRef = 4FF07DB91B2F691A00380630 /* NIBuildingBlocks.xcodeproj */;
+					ProductGroup = 4F4C91A11DB56B2800ACC15D /* Products */;
+					ProjectRef = 4F4C91941DB56A8900ACC15D /* NIBuildingBlocks.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -186,18 +202,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		4F2EEA671C5E741900DF2227 /* NIBuildingBlocks Tests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "NIBuildingBlocks Tests.xctest";
-			remoteRef = 4F2EEA661C5E741900DF2227 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4FF07DBE1B2F691B00380630 /* NIBuildingBlocks.framework */ = {
+		4F4C91A71DB56B2800ACC15D /* NIBuildingBlocks.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = NIBuildingBlocks.framework;
-			remoteRef = 4FF07DBD1B2F691B00380630 /* PBXContainerItemProxy */;
+			remoteRef = 4F4C91A61DB56B2800ACC15D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F4C91A91DB56B2800ACC15D /* NIBuildingBlocks Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "NIBuildingBlocks Tests.xctest";
+			remoteRef = 4F4C91A81DB56B2800ACC15D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -226,6 +242,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		4F4C91AB1DB56B3000ACC15D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = NIBuildingBlocks;
+			targetProxy = 4F4C91AA1DB56B3000ACC15D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
 		4FF07DA01B2EDFA200380630 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -241,13 +265,16 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -284,8 +311,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
@@ -322,6 +351,7 @@
 					"-undefined",
 					dynamic_lookup,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "ch.naturalimagedemo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = osirixplugin;
@@ -343,6 +373,7 @@
 					"-undefined",
 					dynamic_lookup,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "ch.naturalimagedemo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = osirixplugin;

@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>ch.naturalimagedemo.$(PRODUCT_NAME:rfc1034identifier)</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -20,15 +20,15 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>MenuTitles</key>
+	<array>
+		<string>NIBuildingBlocks Demo</string>
+	</array>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2015 Spaltenstein Natural Image. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
 	<string>NIBuildingBlocksDemoPlugin</string>
 	<key>pluginType</key>
 	<string>other</string>
-	<key>MenuTitles</key>
-	<array>
-		<string>NIBuildingBlocks Demo</string>
-	</array>
 </dict>
 </plist>
