@@ -161,7 +161,7 @@ NIVector NIPlanePointClosestToVector(NIPlane plane, NIVector vector);
 bool NIPlaneIsParallelToPlane(NIPlane plane1, NIPlane plane2);
 bool NIPlaneIsBetweenVectors(NIPlane plane, NIVector vector1, NIVector vector2);
 NILine NIPlaneIntersectionWithPlane(NIPlane plane1, NIPlane plane2);
-NIPlane NIPlaneLeastSquaresPlaneFromPoints(NIVectorArray vectors, CFIndex numVectors); // BOGUS TODO not written yet, will give a plane, but it won't be the least squares plane
+NIPlane NIPlaneLeastSquaresPlaneFromPoints(NIVectorArray vectors, CFIndex numVectors);
 NIPlane NIPlaneApplyTransform(NIPlane plane, NIAffineTransform transform);
 
 void NIVectorScalarMultiplyVectors(CGFloat scalar, NIVectorArray vectors, CFIndex numVectors);
