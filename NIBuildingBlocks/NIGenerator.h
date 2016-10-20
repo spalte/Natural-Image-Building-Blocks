@@ -1,4 +1,3 @@
-//  Copyright (c) 2016 OsiriX Foundation
 //  Copyright (c) 2016 Spaltenstein Natural Image
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,6 +17,20 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
+
+/*=========================================================================
+ Program:   OsiriX
+
+ Copyright (c) OsiriX Team
+ All rights reserved.
+ Distributed under GNU - LGPL
+
+ See http://www.osirix-viewer.com/copyright.html for details.
+
+ This software is distributed WITHOUT ANY WARRANTY; without even
+ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ PURPOSE.
+ =========================================================================*/
 
 #import <Cocoa/Cocoa.h>
 
@@ -111,6 +124,9 @@ typedef int64_t NIGeneratorAsynchronousRequestID;
 + (void)setPriority:(CGFloat)priority forAsynchronousRequest:(NIGeneratorAsynchronousRequestID)requestID __deprecated; // Use quality of service instead
 
 
+// Don't use the functions below. They are either broken or behaves strangely.
+// Use synchronousRequestVolume:... and asynchronousRequestVolume:... instead
+
 - (id)initWithVolumeData:(NIVolumeData *)volumeData;
 
 - (void)requestVolume:(NIGeneratorRequest *)request;
@@ -121,6 +137,8 @@ typedef int64_t NIGeneratorAsynchronousRequestID;
 
 @end
 
+// Don't get data back with a delegate. This code will change in the future.
+// Use synchronousRequestVolume:... and asynchronousRequestVolume:... instead
 
 @protocol NIGeneratorDelegate <NSObject>
 @required
