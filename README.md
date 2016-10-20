@@ -38,5 +38,7 @@ NIStorage provides a simple mechanism to store small amounts of data locally usi
 **OsiriXIntegration**  
 OsiriXIntegration.h defines functions that are available when the Framework is loaded in the context of an OsiriX Plugin. Upon initialization, the plugin will determine if OsiriX classes exist in the Obj-C runtime, and if so, will install a handful of functions that will be useful to plugin authors. For example, getting a NIVolumeData that represents the data displayed by a ViewerController. 
 
-
+#Sample Source Code#
+**SimplePlugin**  
+A very simple OsiriX plugin that opens a volume and shows how to use the most common Natural Image Building Blocks APIs.
 
