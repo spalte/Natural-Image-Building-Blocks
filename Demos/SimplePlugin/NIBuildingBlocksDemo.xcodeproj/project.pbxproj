@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4F486D2D1B2F7D38000402EF /* NIBuildingBlocksDemoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F486D2C1B2F7D38000402EF /* NIBuildingBlocksDemoView.m */; };
-		4F4C91A01DB56AAD00ACC15D /* NIBuildingBlocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F4C919F1DB56AAD00ACC15D /* NIBuildingBlocks.framework */; };
 		4FF07DA61B2EE14A00380630 /* OsiriXAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FF07DA51B2EE14A00380630 /* OsiriXAPI.framework */; };
 		4FF07DA91B2F539900380630 /* NIBuildingBlocksDemoPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07DA81B2F539900380630 /* NIBuildingBlocksDemoPlugin.m */; };
 		4FF07DAC1B2F544900380630 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FF07DAA1B2F542500380630 /* Cocoa.framework */; };
@@ -17,21 +16,21 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		4F4C91A61DB56B2800ACC15D /* PBXContainerItemProxy */ = {
+		4F4C91B71DB9449500ACC15D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4F4C91941DB56A8900ACC15D /* NIBuildingBlocks.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 4F151EDB1B1CC8D000C8F767;
 			remoteInfo = NIBuildingBlocks;
 		};
-		4F4C91A81DB56B2800ACC15D /* PBXContainerItemProxy */ = {
+		4F4C91B91DB9449500ACC15D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4F4C91941DB56A8900ACC15D /* NIBuildingBlocks.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 71F51E4D1BA00C2E00DF26AC;
 			remoteInfo = "NIBuildingBlocks Tests";
 		};
-		4F4C91AA1DB56B3000ACC15D /* PBXContainerItemProxy */ = {
+		4F62FB8D1DB94572004D6A75 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4F4C91941DB56A8900ACC15D /* NIBuildingBlocks.xcodeproj */;
 			proxyType = 1;
@@ -55,8 +54,7 @@
 /* Begin PBXFileReference section */
 		4F486D2B1B2F7D38000402EF /* NIBuildingBlocksDemoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIBuildingBlocksDemoView.h; sourceTree = "<group>"; };
 		4F486D2C1B2F7D38000402EF /* NIBuildingBlocksDemoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIBuildingBlocksDemoView.m; sourceTree = "<group>"; };
-		4F4C91941DB56A8900ACC15D /* NIBuildingBlocks.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = NIBuildingBlocks.xcodeproj; path = ../NIBuildingBlocks.xcodeproj; sourceTree = SOURCE_ROOT; };
-		4F4C919F1DB56AAD00ACC15D /* NIBuildingBlocks.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NIBuildingBlocks.framework; path = "../../../../Library/Developer/Xcode/DerivedData/NIBuildingBlocksDemo-bekmotaubglhdyeoksmdjnbbcpad/Build/Products/Debug/NIBuildingBlocks.framework"; sourceTree = "<group>"; };
+		4F4C91941DB56A8900ACC15D /* NIBuildingBlocks.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = NIBuildingBlocks.xcodeproj; path = ../../NIBuildingBlocks.xcodeproj; sourceTree = SOURCE_ROOT; };
 		4FF07D9B1B2EDFA200380630 /* NIBuildingBlocksDemo.osirixplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NIBuildingBlocksDemo.osirixplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FF07D9F1B2EDFA200380630 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4FF07DA51B2EE14A00380630 /* OsiriXAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OsiriXAPI.framework; sourceTree = "<group>"; };
@@ -73,7 +71,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4F4C91A01DB56AAD00ACC15D /* NIBuildingBlocks.framework in Frameworks */,
 				4FF07DAC1B2F544900380630 /* Cocoa.framework in Frameworks */,
 				4FF07DA61B2EE14A00380630 /* OsiriXAPI.framework in Frameworks */,
 			);
@@ -85,16 +82,15 @@
 		4F4C919E1DB56AAD00ACC15D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4F4C919F1DB56AAD00ACC15D /* NIBuildingBlocks.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		4F4C91A11DB56B2800ACC15D /* Products */ = {
+		4F4C91B21DB9449500ACC15D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4F4C91A71DB56B2800ACC15D /* NIBuildingBlocks.framework */,
-				4F4C91A91DB56B2800ACC15D /* NIBuildingBlocks Tests.xctest */,
+				4F4C91B81DB9449500ACC15D /* NIBuildingBlocks.framework */,
+				4F4C91BA1DB9449500ACC15D /* NIBuildingBlocks Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -157,7 +153,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				4F4C91AB1DB56B3000ACC15D /* PBXTargetDependency */,
+				4F62FB8E1DB94572004D6A75 /* PBXTargetDependency */,
 			);
 			name = NIBuildingBlocksDemo;
 			productName = NIBuildingBlocksDemo;
@@ -190,7 +186,7 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 4F4C91A11DB56B2800ACC15D /* Products */;
+					ProductGroup = 4F4C91B21DB9449500ACC15D /* Products */;
 					ProjectRef = 4F4C91941DB56A8900ACC15D /* NIBuildingBlocks.xcodeproj */;
 				},
 			);
@@ -202,18 +198,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		4F4C91A71DB56B2800ACC15D /* NIBuildingBlocks.framework */ = {
+		4F4C91B81DB9449500ACC15D /* NIBuildingBlocks.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = NIBuildingBlocks.framework;
-			remoteRef = 4F4C91A61DB56B2800ACC15D /* PBXContainerItemProxy */;
+			remoteRef = 4F4C91B71DB9449500ACC15D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		4F4C91A91DB56B2800ACC15D /* NIBuildingBlocks Tests.xctest */ = {
+		4F4C91BA1DB9449500ACC15D /* NIBuildingBlocks Tests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = "NIBuildingBlocks Tests.xctest";
-			remoteRef = 4F4C91A81DB56B2800ACC15D /* PBXContainerItemProxy */;
+			remoteRef = 4F4C91B91DB9449500ACC15D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -243,10 +239,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		4F4C91AB1DB56B3000ACC15D /* PBXTargetDependency */ = {
+		4F62FB8E1DB94572004D6A75 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = NIBuildingBlocks;
-			targetProxy = 4F4C91AA1DB56B3000ACC15D /* PBXContainerItemProxy */;
+			targetProxy = 4F62FB8D1DB94572004D6A75 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
