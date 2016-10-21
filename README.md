@@ -3,7 +3,7 @@ The majority of the source code of the Natural Image Building Blocks is copyrigh
 Documentation is Copyright (c) 2016 by Spaltenstein Natural Image and licensed under a Creative Commons Attribution 4.0 International License.
 
 #Natural Image Building Blocks#
-The Natural Image Building Blocks are meant to be a set of classes developers can use to implement medical imaging interfaces in MacOS. They are distributed as a LGPL 2.1 licensed Framework that can be included in either stand-alone applications or in OsiriX plugins. This document describes the classes of the public API of the Framework. An effort will be made to ensure that future versions of the Framework will maintain source-code and binary compatibility for the objects described below. All other classes are considered private and may change drastically from version to version. Objects that are not included in the NIBuildingBlocks.h header are particularly prone to change between versions.
+The Natural Image Building Blocks are meant to be a set of classes developers can use to implement medical imaging interfaces in MacOS. They are distributed as a LGPL 2.1 licensed Framework that can be included in either stand-alone applications or in Horos/OsiriX plugins. This document describes the classes of the public API of the Framework. An effort will be made to ensure that future versions of the Framework will maintain source-code and binary compatibility for the objects described below. All other classes are considered private and may change drastically from version to version. Objects that are not included in the NIBuildingBlocks.h header are particularly prone to change between versions.
 
 **NIVolumeData**  
 NIVolumeData provides a means to reference a volume of data stored as floats, that is positioned in space. An NIVolumeData is initialized with an array of floats along with the width, height and depth of the volume in pixels. This array of floats is tightly packed and no extra row padding may be added. During initialization, the user also needs to provide an affine transform that will describe the position of the volume in space and the pixel spacing.
@@ -36,9 +36,9 @@ NIBezierPath defines a 3D path made of piecewise line and cubic bezier segments.
 NIStorage provides a simple mechanism to store small amounts of data locally using a key-value mechanism.
 
 **OsiriXIntegration**  
-OsiriXIntegration.h defines functions that are available when the Framework is loaded in the context of an OsiriX Plugin. Upon initialization, the plugin will determine if OsiriX classes exist in the Obj-C runtime, and if so, will install a handful of functions that will be useful to plugin authors. For example, getting a NIVolumeData that represents the data displayed by a ViewerController. 
+OsiriXIntegration.h defines functions that are available when the Framework is loaded in the context of an Horos or OsiriX Plugin. Upon initialization, the plugin will determine if Horos or OsiriX classes exist in the Obj-C runtime, and if so, will install a handful of functions that will be useful to plugin authors. For example, getting a NIVolumeData that represents the data displayed by a ViewerController. 
 
 #Sample Source Code#
 **SimplePlugin**  
-A very simple OsiriX plugin that opens a volume and shows how to use the most common Natural Image Building Blocks APIs.
+A very simple Horos/OsiriX plugin that opens a volume and shows how to use the most common Natural Image Building Blocks APIs.
 
