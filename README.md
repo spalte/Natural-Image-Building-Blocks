@@ -36,7 +36,7 @@ NIBezierPath defines a 3D path made of piecewise line and cubic bezier segments.
 NIStorage provides a simple mechanism to store small amounts of data locally using a key-value mechanism.
 
 **OsiriXIntegration**  
-OsiriXIntegration.h defines functions that are available when the Framework is loaded in the context of an Horos or OsiriX Plugin. Upon initialization, the plugin will determine if Horos or OsiriX classes exist in the Obj-C runtime, and if so, will install a handful of functions that will be useful to plugin authors. For example, getting a NIVolumeData that represents the data displayed by a ViewerController. 
+OsiriXIntegration.h defines functions that are available when the Framework is loaded in the context of a Horos or OsiriX Plugin. Upon initialization, the Framework will determine if Horos or OsiriX classes exist in the Obj-C runtime, and if so, will install a function on ViewerController that can be used to get an NIVolumeData object that represents the displayed volume.
 
 #Sample Source Code#
 **SimplePlugin**  
