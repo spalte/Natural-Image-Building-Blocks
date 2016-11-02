@@ -1,4 +1,3 @@
-//  Copyright (c) 2016 OsiriX Foundation
 //  Copyright (c) 2016 Spaltenstein Natural Image
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,6 +18,20 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+/*=========================================================================
+ Program:   OsiriX
+
+ Copyright (c) OsiriX Team
+ All rights reserved.
+ Distributed under GNU - LGPL
+
+ See http://www.osirix-viewer.com/copyright.html for details.
+
+ This software is distributed WITHOUT ANY WARRANTY; without even
+ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ PURPOSE.
+ =========================================================================*/
+
 #import "NIGenerator.h"
 #import "NIVolumeData.h"
 #import "NIGeneratorRequest.h"
@@ -30,8 +43,6 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
 
 @interface NIGenerator ()
 
-+ (NSOperationQueue *)_asynchronousRequestQueue;
-+ (NSOperationQueue *)_synchronousRequestQueue;
 + (NSMutableDictionary<NSNumber *, NSOperation *> *)_requestIDs;
 + (NIGeneratorAsynchronousRequestID)_generateRequestID;
 + (void)_setOperation:(NSOperation *)operation forRequestID:(NIGeneratorAsynchronousRequestID)requestID;
@@ -48,45 +59,43 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
 @synthesize delegate = _delegate;
 @synthesize volumeData = _volumeData;
 
-+ (NSOperationQueue *)_asynchronousRequestQueue
-{
-    static dispatch_once_t pred;
-    static NSOperationQueue *asynchronousRequestQueue = nil;
-    dispatch_once(&pred, ^{
-        asynchronousRequestQueue = [[NSOperationQueue alloc] init];
-        [asynchronousRequestQueue setMaxConcurrentOperationCount:10];
-        [asynchronousRequestQueue setName:@"NIGenerator Asynchronous Request Queue"];
-        [asynchronousRequestQueue setQualityOfService:NSQualityOfServiceUserInitiated];
-    });
-    return asynchronousRequestQueue;
-}
-
 + (NSOperationQueue *)_synchronousMainThreadRequestQueue
 {
     static dispatch_once_t pred;
-    static NSOperationQueue *synchronousRequestQueue = nil;
+    static NSOperationQueue *requestQueue = nil;
     dispatch_once(&pred, ^{
-        synchronousRequestQueue = [[NSOperationQueue alloc] init];
-        if ([synchronousRequestQueue respondsToSelector:@selector(setQualityOfService:)]) {
-            synchronousRequestQueue.qualityOfService = NSQualityOfServiceUserInteractive;
-        }
-        [synchronousRequestQueue setName:@"NIGenerator Synchronous Main Thread Request Queue"];
+        requestQueue = [[NSOperationQueue alloc] init];
+        requestQueue.qualityOfService = NSQualityOfServiceUserInteractive;
+        [requestQueue setName:@"NIGenerator Synchronous Main Thread Request Queue"];
     });
-    return synchronousRequestQueue;
+    return requestQueue;
 }
 
-+ (NSOperationQueue *)_synchronousRequestQueue
+
++ (NSOperationQueue *)_userInitiatedRequestQueue
 {
     static dispatch_once_t pred;
-    static NSOperationQueue *synchronousRequestQueue = nil;
+    static NSOperationQueue *requestQueue = nil;
     dispatch_once(&pred, ^{
-        synchronousRequestQueue = [[NSOperationQueue alloc] init];
-        if ([synchronousRequestQueue respondsToSelector:@selector(setQualityOfService:)]) {
-            synchronousRequestQueue.qualityOfService = NSQualityOfServiceUserInitiated;
-        }
-        [synchronousRequestQueue setName:@"NIGenerator Synchronous Request Queue"];
+        requestQueue = [[NSOperationQueue alloc] init];
+        [requestQueue setName:@"NIGenerator User Initiated Request Queue"];
+        [requestQueue setQualityOfService:NSQualityOfServiceUserInitiated];
     });
-    return synchronousRequestQueue;
+    return requestQueue;
+}
+
++ (NSOperationQueue *)_userInteractiveRequestQueue
+{
+    static dispatch_once_t pred;
+    static NSOperationQueue *requestQueue = nil;
+    dispatch_once(&pred, ^{
+        requestQueue = [[NSOperationQueue alloc] init];
+        if ([requestQueue respondsToSelector:@selector(setQualityOfService:)]) {
+            requestQueue.qualityOfService = NSQualityOfServiceUserInteractive;
+        }
+        [requestQueue setName:@"NIGenerator User Interactive Request Queue"];
+    });
+    return requestQueue;
 }
 
 + (NSMutableDictionary<NSNumber *, NSOperation *> *)_requestIDs
@@ -143,7 +152,7 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
         operationQueue = [self _synchronousMainThreadRequestQueue];
     } else {
         [operation setQualityOfService:NSQualityOfServiceUserInitiated];
-        operationQueue = [self _synchronousRequestQueue];
+        operationQueue = [self _userInitiatedRequestQueue];
     }
     [operationQueue addOperations:@[operation] waitUntilFinished:YES];
     generatedVolume = [[operation.generatedVolume retain] autorelease];
@@ -152,12 +161,17 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
     return generatedVolume;
 }
 
-+ (NIGeneratorAsynchronousRequestID)asynchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData completionBlock:(void (^)(NIVolumeData *))completionBlock
++ (NIGeneratorAsynchronousRequestID)asynchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData completionBlock:(void (^)(NIVolumeData * __nullable))completionBlock
+{
+    return [self asynchronousRequestVolume:request volumeData:volumeData qualityOfService:NSQualityOfServiceUserInitiated completionBlock:completionBlock];
+}
+
++ (NIGeneratorAsynchronousRequestID)asynchronousRequestVolume:(NIGeneratorRequest *)request volumeData:(NIVolumeData *)volumeData qualityOfService:(NSQualityOfService)qualityOfService completionBlock:(void (^)(NIVolumeData* __nullable generatedVolume))completionBlock;
 {
     NSAssert(request != nil, @"the generator request can't be nil");
     NSAssert(volumeData != nil, @"the volumeData request can't be nil");
     NIGeneratorOperation * operation = [[[[request operationClass] alloc] initWithRequest:request volumeData:volumeData] autorelease];
-    [operation setQualityOfService:NSQualityOfServiceUserInitiated];
+    [operation setQualityOfService:qualityOfService];
     NIGeneratorAsynchronousRequestID requestID = [self _generateRequestID];
     [self _setOperation:operation forRequestID:requestID];
     void (^completionBlockCopy)(NIVolumeData *) = [[completionBlock copy] autorelease];
@@ -165,7 +179,11 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
         [self _removeOperationForRequestID:requestID];
         completionBlockCopy(operation.generatedVolume);
     }];
-    [[self _asynchronousRequestQueue] addOperation:operation];
+    if (qualityOfService == NSQualityOfServiceUserInteractive) {
+        [[self _userInteractiveRequestQueue] addOperation:operation];
+    } else {
+        [[self _userInitiatedRequestQueue] addOperation:operation];
+    }
 
     return requestID;
 }
@@ -186,9 +204,10 @@ static volatile int64_t requestIDCount __attribute__ ((__aligned__(8))) = 0;
     operation.queuePriority = priority * NSOperationQueuePriorityVeryHigh;
 }
 
-+ (void)waitUntilAsynchronousRequestFinished:(NIGeneratorAsynchronousRequestID)requestID {
++ (nullable NIVolumeData *)waitUntilAsynchronousRequestFinished:(NIGeneratorAsynchronousRequestID)requestID {
     NSOperation *rop = [self _operationForRequestID:requestID];
     [rop waitUntilFinished];
+    return [(NIGeneratorOperation*)rop generatedVolume];
 }
 
 + (BOOL)isAsynchronousRequestFinished:(NIGeneratorAsynchronousRequestID)requestID {

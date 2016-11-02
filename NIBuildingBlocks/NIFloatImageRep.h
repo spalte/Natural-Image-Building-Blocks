@@ -29,6 +29,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class NIVolumeData;
 
+/**
+ NSImageRep subclass that can be used to render float images. FOr example, those obtained from NIVolumeData objects.
+ This class can be used to render directly into Quartz, or can be used to apply window width/level, invert, and colors
+ or CLUTs to the image. When drawing to Quartz, this class also knows how to add a rim, scalebar, and orientation
+ labels with an API similar to NIGeneratorRequestView. When drawInRect: is called the rim, scalebar, and orientation
+ labels are scaled to fit in the given rect. If draw: is called, rim, scalebar, and orientation labels are scaled as
+ if 1 pixel = 1 point. Note that curved NIFloatImageRep objects can not be encoded using the NSCoder protocol.
+*/
+
 @interface NIFloatImageRep : NSImageRep
 {
     NSMutableData *_floatData;
@@ -55,56 +64,76 @@ NS_ASSUME_NONNULL_BEGIN
     BOOL _displayScaleBar;
 }
 
-@property (nonatomic, readwrite, assign) CGFloat windowWidth; // these will affect how this rep will draw when part of an NSImage
-@property (nonatomic, readwrite, assign) CGFloat windowLevel;
-@property (nonatomic, readwrite, assign) BOOL invert; // invert the intensity after applying the WW/WL
-@property (nullable, nonatomic, readwrite, retain) id CLUT; // Can be an NSColor or an NSGradient;
-
 - (instancetype)init NS_UNAVAILABLE;
 
-- (nullable instancetype)initWithData:(NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh NS_DESIGNATED_INITIALIZER;
-- (nullable instancetype)initWithBytes:(nullable float *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh;
-- (nullable instancetype)initWithBytesNoCopy:(float *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh freeWhenDone:(BOOL)freeWhenDone;
-- (nullable instancetype)initWithCoder:(NSCoder *)coder NS_DESIGNATED_INITIALIZER;
+/**
+ Initializes the receiver, a newly allocated NSBitmapImageRep object, so it can render the specified image.
+ @param data Data that contains an array of packed float values that represent the object. The length of the Data must be longer than sizeof(float)*pixelsWide*pixelsHigh.
+ If data is nil, new memory is allocated for the image.
+ @return Returns the newy initialized NSBitmapImageRep object.
+*/
+- (instancetype)initWithData:(nullable NSData *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh NS_DESIGNATED_INITIALIZER;
 
-- (float *)floatBytes;
-- (const unsigned char *)windowedBytes; // unsigned chars of intensity
-- (const unsigned char *)CLUTBytes; // RGBA unsigned chars
-- (NSData *)floatData;
-- (NSData *)windowedData; // unsigned chars of intensity
-- (nullable NSData *)CLUTData; // RGBA unsigned chars premultiplied ARGB8888
-- (NSBitmapImageRep *)bitmapImageRep; // NSBitmapImageRep of the data after windowing, inverting, and applying the CLUT.
+- (instancetype)initWithBytes:(nullable float *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh __deprecated;
+- (instancetype)initWithBytesNoCopy:(float *)data pixelsWide:(NSUInteger)pixelsWide pixelsHigh:(NSUInteger)pixelsHigh freeWhenDone:(BOOL)freeWhenDone __deprecated;
+
+/**
+ The Window Width to apply to the underlying float representation of the image data.
+*/
+@property (nonatomic) CGFloat windowWidth; // these will affect how this rep will draw when part of an NSImage
+/**
+ The Window Level to apply to the underlying float representation of the image data.
+ */
+@property (nonatomic) CGFloat windowLevel;
+/**
+ A boolean value that represents whether the underlying float representation of the image data, after having been windowed, needs to be inverted.
+ */
+@property (nonatomic) BOOL invert; // invert the intensity after applying the WW/WL
+/**
+ The color to apply to the windowed, and inverted if needed, float representation. This property can be set to either an NSColor or NSGradient.
+*/
+@property (nullable, strong, nonatomic) id CLUT; // Can be an NSColor or an NSGradient;
+
+/**
+ A pointer to the float representation of the image data. Calling this propery invalidates the caches of the windowedBytes and the CLUTBytes.
+*/
+@property (nullable, readonly) float *floatBytes NS_RETURNS_INNER_POINTER __deprecated; // use the methods that return an NSData.
+/**
+ A pointer to the 8bit unsigned char representation of the float image representation after windowing and possibly inverting.
+*/
+@property (nullable, readonly) const unsigned char *windowedBytes NS_RETURNS_INNER_POINTER __deprecated; // unsigned chars of intensity
+/**
+ A pointer to a premultiplied ARGB8888 representation of the image after applying the CLUT.
+*/
+@property (nullable, readonly) const unsigned char *CLUTBytes NS_RETURNS_INNER_POINTER __deprecated; // RGBA unsigned chars
+/*
+ Returns a NSBitmapImageRep object that can be used to draw the receiver. If a CLUT is applied, the colorspace of the returned bitmap will be a NSDeviceRGBColorSpace.
+ If there is no CLUT the colorspace will be NSDeviceWhiteColorSpace.
+*/
+@property (nullable, readonly, copy) NSBitmapImageRep *bitmapImageRep; // NSBitmapImageRep of the data after windowing, inverting, and applying the CLUT.
+
+@property (nullable, readonly, copy) NSData* floatData;
+@property (nullable, readonly, copy) NSData *windowedData; // unsigned chars of intensity
+@property (nullable, readonly, copy) NSData *CLUTData; // RGBA unsigned chars premultiplied ARGB8888
 
 // Draw additional items over the image.
-@property (nonatomic, readwrite, retain, nullable) NSColor *rimColor;
-@property (nonatomic, readwrite, assign) CGFloat rimThickness;
-@property (nonatomic, readwrite, assign) BOOL displayOrientationLabels;
-@property (nonatomic, readwrite, assign) BOOL displayScaleBar;
+@property (nullable, strong) NSColor *rimColor;
+@property CGFloat rimThickness;
+@property BOOL displayOrientationLabels;
+@property BOOL displayScaleBar;
 
-@property (nonatomic, readwrite, assign) CGFloat sliceThickness;
+@property CGFloat sliceThickness;
 
-@property (nonatomic, readwrite, assign) NIAffineTransform imageToModelTransform;
-@property (nonatomic, readwrite, getter = isCurved) BOOL curved;
+@property (nonatomic) NIAffineTransform imageToModelTransform;
+@property (getter = isCurved) BOOL curved;
 
-@property (nullable, nonatomic, readwrite, copy) NSPoint (^convertPointFromModelVectorBlock)(NIVector);
-@property (nullable, nonatomic, readwrite, copy) NIVector (^convertPointToModelVectorBlock)(NSPoint);
+@property (nullable, copy) NSPoint (^convertPointFromModelVectorBlock)(NIVector);
+@property (nullable, copy) NIVector (^convertPointToModelVectorBlock)(NSPoint);
 
 - (NSPoint)convertPointFromModelVector:(NIVector)vector;
 - (NIVector)convertPointToModelVector:(NSPoint)point;
 
 @end
-
-@interface NIFloatImageRep (DCMPixAndVolume)
-
-- (void)getOrientation:(float[6])orientation;
-- (void)getOrientationDouble:(double[6])orientation;
-
-@property (readonly) float originX;
-@property (readonly) float originY;
-@property (readonly) float originZ;
-
-@end
-
 
 @interface NIVolumeData(NIFloatImageRepAdditions)
 - (NIFloatImageRep *)floatImageRepForSliceAtIndex:(NSUInteger)z;

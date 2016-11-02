@@ -1,4 +1,3 @@
-//  Copyright (c) 2016 OsiriX Foundation
 //  Copyright (c) 2016 Spaltenstein Natural Image
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,19 +18,49 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+/*=========================================================================
+ Program:   OsiriX
+
+ Copyright (c) OsiriX Team
+ All rights reserved.
+ Distributed under GNU - LGPL
+
+ See http://www.osirix-viewer.com/copyright.html for details.
+
+ This software is distributed WITHOUT ANY WARRANTY; without even
+ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ PURPOSE.
+ =========================================================================*/
+
 #import <Cocoa/Cocoa.h>
 #import "NIGeometry.h"
 #import "NIVolumeData.h"
 #import "NIIntersection.h"
 
+/**
+ Types of projections to apply
+*/
 typedef NS_ENUM(NSInteger, NIProjectionMode)
 {
-    NIProjectionModeVR, // don't use this, it is not implemented
-    NIProjectionModeMIP,
-    NIProjectionModeMinIP,
-    NIProjectionModeMean,
+/**
+ Don't apply a projection.
+*/
+    NIProjectionModeNone = 0,
 
-    NIProjectionModeNone = 0xFFFFFF,
+/**
+ Maximum intensity projection.
+*/
+    NIProjectionModeMIP,
+/**
+ Minimum intensity projection.
+*/
+    NIProjectionModeMinIP,
+/**
+ Mean intensity projection
+*/
+    NIProjectionModeMean,
+    NIProjectionModeVR, // don't use this, it is not implemented
+
 };
 
 // a class to encapsulate all the different parameters required to generate a NI Image

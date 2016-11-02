@@ -1,4 +1,3 @@
-//  Copyright (c) 2016 OsiriX Foundation
 //  Copyright (c) 2016 Spaltenstein Natural Image
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,6 +17,21 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
+
+/*=========================================================================
+ Program:   OsiriX
+
+ Copyright (c) OsiriX Team
+ All rights reserved.
+ Distributed under GNU - LGPL
+
+ See http://www.osirix-viewer.com/copyright.html for details.
+
+ This software is distributed WITHOUT ANY WARRANTY; without even
+ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ PURPOSE.
+ =========================================================================*/
+
 
 #ifndef _NIGEOMETRY_H_
 #define _NIGEOMETRY_H_
@@ -147,7 +161,7 @@ NIVector NIPlanePointClosestToVector(NIPlane plane, NIVector vector);
 bool NIPlaneIsParallelToPlane(NIPlane plane1, NIPlane plane2);
 bool NIPlaneIsBetweenVectors(NIPlane plane, NIVector vector1, NIVector vector2);
 NILine NIPlaneIntersectionWithPlane(NIPlane plane1, NIPlane plane2);
-NIPlane NIPlaneLeastSquaresPlaneFromPoints(NIVectorArray vectors, CFIndex numVectors); // BOGUS TODO not written yet, will give a plane, but it won't be the least squares plane
+NIPlane NIPlaneLeastSquaresPlaneFromPoints(NIVectorArray vectors, CFIndex numVectors);
 NIPlane NIPlaneApplyTransform(NIPlane plane, NIAffineTransform transform);
 
 void NIVectorScalarMultiplyVectors(CGFloat scalar, NIVectorArray vectors, CFIndex numVectors);
