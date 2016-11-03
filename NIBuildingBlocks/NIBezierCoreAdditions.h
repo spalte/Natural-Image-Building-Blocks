@@ -51,9 +51,15 @@ typedef NS_ENUM(unsigned long, NIBezierNodeStyle) {
     NIBezierNodeOpenEndsStyle, // the direction of the end segements point out. this is the style used by the NI View
 /**
  The tangents at the first and last endoints point towards each other. This style is suitable to create closed paths, athough using
- this style does not automatically close the path. This is the style used by OsiriX/Horos to make ROIs.
+ this style does not automatically close the path. This is the style used by OsiriX/Horos to make ROIs. The results are actually 
+ incorrect and should only be used if you want to match the OsiriX/Horos behavior.
+ See https://github.com/spalte/Natural-Image-Building-Blocks/issues/1
 */
-    NIBezierNodeEndsMeetStyle // the direction of the end segements point to each other. this is the style that mimics what open ROIs do
+    NIBezierNodeEndsMeetStyle, // the direction of the end segements point to each other. this is the style that mimics what open ROIs do
+/**
+ A closed Bezier spline: the tangents at the first and last endoints properly point towards each other. This style closes the path.
+ */
+    NIBezierNodeCircularSplineStyle, // actually a fix of NIBezierNodeEndsMeetStyle, but we're not changing that to match OsiriX/Horos
 };
 
 NIBezierCoreRef NIBezierCoreCreateCurveWithNodes(NIVectorArray vectors, CFIndex numVectors, NIBezierNodeStyle style);

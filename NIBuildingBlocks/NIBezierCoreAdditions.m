@@ -36,6 +36,11 @@
 #import "NIBezierCoreAdditions.h"
 
 
+// these functions are used to create a circular spline for style NIBezierNodeCircularSplineStyle in NIBezierCoreCreateMutableCurveWithNodes()
+static void cyclicSolve(const size_t n, const NIVector *a, const NIVector *b, const NIVector *c, const NIVector alpha, const NIVector beta, const NIVector *rhs, NIVector* x);
+static void tridiagonalSolve(const size_t n, const NIVector *a, const NIVector *b, const NIVector *c, const NIVector *r, NIVector *u);
+
+
 NIBezierCoreRef NIBezierCoreCreateCurveWithNodes(NIVectorArray vectors, CFIndex numVectors, NIBezierNodeStyle style)
 {
     return NIBezierCoreCreateMutableCurveWithNodes(vectors, numVectors, style);
@@ -43,6 +48,34 @@ NIBezierCoreRef NIBezierCoreCreateCurveWithNodes(NIVectorArray vectors, CFIndex 
 
 NIMutableBezierCoreRef NIBezierCoreCreateMutableCurveWithNodes(NIVectorArray vectors, CFIndex numVectors, NIBezierNodeStyle style)
 {
+    if (style == NIBezierNodeCircularSplineStyle) {
+        // based on http://www.codeproject.com/Articles/33776/Draw-Closed-Smooth-Curve-with-Bezier-Spline
+        
+        if (numVectors <= 2)
+            return nil;
+        
+        NIVector a[numVectors], b[numVectors], c[numVectors];
+        for (NSUInteger i = 0; i < numVectors; ++i) {
+            a[i] = c[i] = NIVectorOne; b[i] = NIVectorMake(4, 4, 4);
+        }
+        
+        NIVector rhs[numVectors]; // right hand side
+        for (size_t i = 0; i < numVectors; ++i)
+            rhs[i] = NIVectorAdd(NIVectorScalarMultiply(vectors[i], 4), NIVectorScalarMultiply(vectors[(i+1)%numVectors], 2));
+        
+        NIVector cp1[numVectors];
+        cyclicSolve(numVectors, a, b, c, NIVectorOne, NIVectorOne, rhs, cp1);
+        
+        NIMutableBezierCoreRef newBezierCore = NIBezierCoreCreateMutable();
+        
+        NIBezierCoreAddSegment(newBezierCore, NIMoveToBezierCoreSegmentType, NIVectorZero, NIVectorZero, vectors[numVectors-1]);
+        for (int i = 0; i < numVectors; ++i)
+            NIBezierCoreAddSegment(newBezierCore, NICurveToBezierCoreSegmentType, cp1[(i? i-1 : numVectors-1)], NIVectorSubtract(NIVectorScalarMultiply(vectors[i], 2), cp1[i]), vectors[i]);
+        NIBezierCoreAddSegment(newBezierCore, NICloseBezierCoreSegmentType, NIVectorZero, NIVectorZero, NIVectorZero);
+        
+        return newBezierCore;
+    }
+    
     NSInteger  i, j;
     CGFloat xi, yi, zi;
     NSInteger nb;
@@ -55,11 +88,11 @@ NIMutableBezierCoreRef NIBezierCoreCreateMutableCurveWithNodes(NIVectorArray vec
     
     // get the new beziercore ready
     NIMutableBezierCoreRef newBezierCore;
+    newBezierCore = NIBezierCoreCreateMutable();
     NIVector control1;
     NIVector control2;
     NIVector lastEndpoint;
     NIVector endpoint;
-    newBezierCore = NIBezierCoreCreateMutable();
     
     assert (numVectors >= 2);
     
@@ -1929,18 +1962,59 @@ void NIBezierCoreApplyConverter(NIMutableBezierCoreRef bezierCore, NIVector(^con
     NIBezierCoreRandomAccessorRelease(bezierAccessor);
 }
 
+/**
+ Solves the cyclic set of linear equations, of the form
+    b0 c0  0 · · · · · · ß
+    a1 b1 c1 · · · · · · ·
+     · · · · · · · · · · ·
+     · · · a[n-2] b[n-2] c[n-2]
+    α  · · · · 0  a[n-1] b[n-1]
+ This is a tridiagonal system, except for the matrix elements α and ß in the corners
+ */
+static void cyclicSolve(const size_t n, const NIVector *a, const NIVector *b, const NIVector *c, const NIVector alpha, const NIVector beta, const NIVector *rhs, NIVector* x) {
+    NIVector gamma = NIVectorInvert(b[0]), bb[n];
+    
+    // set up the diagonal of the modified tridiagonal system
+    bb[0] = NIVectorSubtract(b[0], gamma);
+    for (size_t i = 1; i < n-1; ++i)
+        bb[i] = b[i];
+    bb[n-1] = NIVectorSubtract(b[n-1], NIVectorDivide(NIVectorMultiply(alpha, beta), gamma));
+    
+    // solve A·x = r
+    tridiagonalSolve(n, a, bb, c, rhs, x);
+    
+    // setup u
+    NIVector u[n];
+    u[0] = gamma;
+    for (size_t i = 1; i < n-1; ++i)
+        u[i] = NIVectorZero;
+    u[n-1] = alpha;
+    
+    // solve A·z = u
+    NIVector z[n];
+    tridiagonalSolve(n, a, bb, c, u, z);
+    
+    // form v·x/(1+v·z)
+    NIVector fact = NIVectorDivide(NIVectorAdd(x[0], NIVectorDivide(NIVectorMultiply(beta, x[n-1]), gamma)), NIVectorAdd(NIVectorOne, NIVectorAdd(z[0], NIVectorDivide(NIVectorMultiply(beta, z[n-1]), gamma))));
+    
+    // get the solution
+    for (size_t i = 0; i < n; ++i)
+        x[i] = NIVectorSubtract(x[i], NIVectorMultiply(fact, z[i]));
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+static void tridiagonalSolve(const size_t n, const NIVector *a, const NIVector *b, const NIVector *c, const NIVector *r, NIVector *u) {
+    assert(b[0].x != 0 && b[0].y != 0 && b[0].z != 0);
+    
+    NIVector gam[n]; // workspace
+    NIVector bet = b[0];
+    u[0] = NIVectorDivide(r[0], bet);
+    for (size_t i = 1; i < n; ++i) { // decomposition and forward substitution
+        gam[i] = NIVectorDivide(c[i-1], bet);
+        bet = NIVectorSubtract(b[i], NIVectorMultiply(a[i], gam[i]));
+        assert(bet.x != 0 && bet.y != 0 && bet.z != 0);
+        u[i] = NIVectorDivide(NIVectorSubtract(r[i], NIVectorMultiply(a[i], u[i-1])), bet);
+    }
+    
+    for (size_t i = 1; i < n; ++i)
+        u[n-i-1] = NIVectorSubtract(u[n-i-1], NIVectorMultiply(gam[n-i], u[n-i])); // backsubstitution
+}

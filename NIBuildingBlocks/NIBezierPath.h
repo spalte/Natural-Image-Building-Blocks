@@ -132,7 +132,7 @@ typedef NS_ENUM(NSInteger, NIBezierPathElement) { // shouldn't these be typed as
  At least 2 nodes need to be defined.
  @param nodes An array of NSValues that encode NIVectors the represent the nodes the returned bezierPath must pass through. At least 2 nodes need to be defined.
  @style How the ends of the bezier path behave. This value is usually NIBezierNodeEndsMeetStyle for closed paths.
- @return A smooth ISBezierPath object.
+ @return A smooth NIBezierPath object.
  @see NIBezierNodeStyle
  @see valueWithNIVector:
  @see NIVectorValue
@@ -314,8 +314,8 @@ typedef NS_ENUM(NSInteger, NIBezierPathElement) { // shouldn't these be typed as
  @return Returns the ounding plane that highest in the direction of the normal.
 */
 - (NIPlane)boundingPlaneForNormal:(NIVector)normal;
-- (NIPlane)topBoundingPlaneForNormal:(NIVector)normal __deprecated; // same as topBoundingPlaneForNormal, call boundingPlaneForNormal:NIVectorInvert()
-- (NIPlane)bottomBoundingPlaneForNormal:(NIVector)normal __deprecated; // same as boundingPlaneForNormal:NIVectorInvert()
+- (NIPlane)topBoundingPlaneForNormal:(NIVector)normal __deprecated; // same as boundingPlaneForNormal, call boundingPlaneForNormal:normal
+- (NIPlane)bottomBoundingPlaneForNormal:(NIVector)normal __deprecated; // same as boundingPlaneForNormal:NIVectorInvert(normal)
 /**
  Returns the element type for the given index.
  @param index The index of the element.
@@ -440,6 +440,15 @@ typedef NS_ENUM(NSInteger, NIBezierPathElement) { // shouldn't these be typed as
 */
 - (CGFloat)signedAreaUsingNormal:(NIVector)normal;
 
+/**
+ @deprecated Use [self initClosedWithNodeArray:nodes style:NIBezierNodeCircularSplineStyle] instead.
+ @param nodes An array of NSValues that encode NIVectors the represent the nodes the returned bezierPath must pass through. At least 2 nodes need to be defined.
+ @return A smooth NIBezierPath object.
+ @see initClosedWithNodeArray:style:
+ @see NIBezierNodeCircularSplineStyle
+ */
++ (nullable instancetype)closedSplinePathWithNodes:(NSArray<NSValue *> *)nodes __deprecated; // now implemented as a NIBezierNodeStyle
+
 @end
 
 /**
@@ -518,12 +527,6 @@ typedef NS_ENUM(NSInteger, NIBezierPathElement) { // shouldn't these be typed as
  @param endpoint The NIVector to set for endpoint of the element.
 */
 - (void)setVectorsForElementAtIndex:(NSInteger)index control1:(NIVector)control1 control2:(NIVector)control2 endpoint:(NIVector)endpoint;
-
-@end
-
-@interface NIBezierPath (MoveMe)
-
-+ (nullable instancetype)closedSplinePathWithNodes:(NSArray *)nodes __deprecated; // This should be implemented as a NIBezierNodeStyle  // an array of NIVector values (NSArray<NSValue<NIVector>>)
 
 @end
 
