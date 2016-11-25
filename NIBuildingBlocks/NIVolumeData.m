@@ -265,7 +265,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (CGFloat)mmHigh
 {
-    return self.pixelsDeep * self.pixelSpacingY;
+    return self.pixelsHigh * self.pixelSpacingY;
 }
 
 - (CGFloat)mmDeep
