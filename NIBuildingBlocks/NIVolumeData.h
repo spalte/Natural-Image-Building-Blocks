@@ -174,6 +174,20 @@ typedef struct { // build one of these on the stack and then use -[NIVolumeData 
 @property (readonly) NSUInteger pixelsDeep;
 
 /**
+ The width of the volume in mm
+ */
+@property (readonly) CGFloat mmWide;
+/**
+ The height of the volume in mm
+ */
+@property (readonly) CGFloat mmHigh;
+/**
+ The depth of the volume in mm
+ */
+@property (readonly) CGFloat mmDeep;
+
+
+/**
  A Boolean value indicating whether the volume is not curved and the modelToVoxelTransform only includes scale and translation.
  */
 @property (readonly, getter=isRectilinear) BOOL rectilinear;

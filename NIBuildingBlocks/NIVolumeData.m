@@ -258,6 +258,21 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
+- (CGFloat)mmWide
+{
+    return self.pixelsWide * self.pixelSpacingX;
+}
+
+- (CGFloat)mmHigh
+{
+    return self.pixelsDeep * self.pixelSpacingY;
+}
+
+- (CGFloat)mmDeep
+{
+    return self.pixelsDeep * self.pixelSpacingZ;
+}
+
 - (NIVector)origin
 {
     NIAffineTransform inverseTransform = NIAffineTransformInvert(_modelToVoxelTransform);
