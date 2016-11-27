@@ -1531,8 +1531,8 @@ CGFloat NIBezierCoreMaxDistanceToPlane(NIBezierCoreRef bezierCore, NIPlane plane
     NIBezierCoreRef flattenedBezierCore;
     NIBezierCoreIteratorRef bezierCoreIterator;
     NIVector endpoint;
-    CGFloat distance;
-    CGFloat maxDistance;
+    CGFloat distance = 0;
+    CGFloat maxDistance = 0;
 
     if (NIBezierCoreHasCurve(bezierCore)) {
         flattenedBezierCore = NIBezierCoreCreateMutableCopy(bezierCore);
@@ -1545,8 +1545,6 @@ CGFloat NIBezierCoreMaxDistanceToPlane(NIBezierCoreRef bezierCore, NIPlane plane
     bezierCoreIterator = NIBezierCoreIteratorCreateWithBezierCore(flattenedBezierCore);
     NIBezierCoreRelease(flattenedBezierCore);
     flattenedBezierCore = NULL;
-    distance = 0;
-    maxDistance = 0;
 
     while (!NIBezierCoreIteratorIsAtEnd(bezierCoreIterator)) {
         NIBezierCoreIteratorGetNextSegment(bezierCoreIterator, NULL, NULL, &endpoint);
