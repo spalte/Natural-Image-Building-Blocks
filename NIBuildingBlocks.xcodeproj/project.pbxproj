@@ -221,6 +221,7 @@
 		7194D0851BE0EE3A00563DEC /* NIStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIStorage.h; sourceTree = "<group>"; };
 		7194D0861BE0EE3A00563DEC /* NIStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIStorage.m; sourceTree = "<group>"; };
 		71A8B4681BA953DD0013D45E /* NIGeometryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIGeometryTests.m; sourceTree = "<group>"; };
+		71D4B94B1E0295E700A54AD0 /* NIBuildingBlocks.profdata */ = {isa = PBXFileReference; lastKnownFileType = file; path = NIBuildingBlocks.profdata; sourceTree = "<group>"; };
 		71DFA2C81B6FC77E008AB997 /* NIMaskData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMaskData.h; sourceTree = "<group>"; };
 		71DFA2C91B6FC77E008AB997 /* NIMaskData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMaskData.m; sourceTree = "<group>"; };
 		71F51E4D1BA00C2E00DF26AC /* NIBuildingBlocks Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "NIBuildingBlocks Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -260,6 +261,7 @@
 				4F151EDD1B1CC8D000C8F767 /* NIBuildingBlocks */,
 				71F51E4E1BA00C2E00DF26AC /* NIBuildingBlocks Tests */,
 				4F151EDC1B1CC8D000C8F767 /* Products */,
+				71D4B94A1E0295E700A54AD0 /* OptimizationProfiles */,
 			);
 			sourceTree = "<group>";
 		};
@@ -462,6 +464,14 @@
 				4FCB58B61C568F8000718CCF /* NIStorageCoordinator.m */,
 			);
 			name = StoragePrivate;
+			sourceTree = "<group>";
+		};
+		71D4B94A1E0295E700A54AD0 /* OptimizationProfiles */ = {
+			isa = PBXGroup;
+			children = (
+				71D4B94B1E0295E700A54AD0 /* NIBuildingBlocks.profdata */,
+			);
+			path = OptimizationProfiles;
 			sourceTree = "<group>";
 		};
 		71F45D191BF1E1B000CABED3 /* Storage */ = {
