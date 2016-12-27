@@ -104,7 +104,7 @@ typedef NS_ENUM(NSInteger, NIProjectionMode)
 
 @property (nonatomic, readonly, retain) NIBezierPath *rimPath;
 
-- (Class)operationClass;
+- (Class)operationClass; // must be a subclass of NIGeneratorOperation 
 
 @end
 

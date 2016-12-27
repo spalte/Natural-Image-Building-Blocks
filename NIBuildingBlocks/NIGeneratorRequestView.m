@@ -196,7 +196,7 @@ NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotific
     
     _mousePosition = NIGeneratorRequestViewMouseOutside;
     _mousePositionTrackingArea = [[NSTrackingArea alloc] initWithRect:self.bounds
-                                                              options:(NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved| NSTrackingActiveInKeyWindow)
+                                                              options:(NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingActiveInKeyWindow)
                                                                 owner:self.layer.layoutManager
                                                              userInfo:nil];
     [self addTrackingArea:_mousePositionTrackingArea];
