@@ -32,6 +32,9 @@
  PURPOSE.
  =========================================================================*/
 
+#ifndef _NIMASK_H_
+#define _NIMASK_H_
+
 #import "NIGeometry.h"
 #import "NIVolumeData.h"
 
@@ -489,3 +492,4 @@ NSString *NSStringFromNIMaskRun(NIMaskRun run);
 
 NS_ASSUME_NONNULL_END
 
+#endif /* _NIMASK_H_ */

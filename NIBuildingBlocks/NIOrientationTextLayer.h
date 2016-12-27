@@ -21,6 +21,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#ifndef _NIORIENTATIONTEXTLAYER_H_
+#define _NIORIENTATIONTEXTLAYER_H_
+
 #import <QuartzCore/QuartzCore.h>
 
 #import "NIGeometry.h"
@@ -34,3 +37,5 @@
 @property (nonatomic, readwrite, assign) NIVector orientationVector;
 
 @end
+
+#endif /* _NIORIENTATIONTEXTLAYER_H_ */

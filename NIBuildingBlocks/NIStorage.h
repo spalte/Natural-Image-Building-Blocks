@@ -18,6 +18,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#ifndef _NISTORAGE_H_
+#define _NISTORAGE_H_
+
 #import <Foundation/Foundation.h>
 
 #import "NIGeometry.h"
@@ -99,3 +102,4 @@ NS_ASSUME_NONNULL_BEGIN
 
 NS_ASSUME_NONNULL_END
 
+#endif /* _NISTORAGE_H_ */

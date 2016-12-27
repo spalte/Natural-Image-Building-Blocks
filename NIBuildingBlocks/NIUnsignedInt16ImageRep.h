@@ -32,6 +32,9 @@
  PURPOSE.
  =========================================================================*/
 
+#ifndef _NIUNSIGNEDINT16IMAGEREP_H_
+#define _NIUNSIGNEDINT16IMAGEREP_H_
+
 #import <Cocoa/Cocoa.h>
 #import "NIGeometry.h"
 #import "NIVolumeData.h"
@@ -90,4 +93,4 @@ NS_ASSUME_NONNULL_BEGIN
 
 NS_ASSUME_NONNULL_END
 
-
+#endif /* _NIUNSIGNEDINT16IMAGEREP_H_ */

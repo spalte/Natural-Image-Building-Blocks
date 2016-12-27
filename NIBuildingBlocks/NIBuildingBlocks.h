@@ -19,6 +19,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#ifndef _NIBUILDINGBLOCKS_H_
+#define _NIBUILDINGBLOCKS_H_
+
 #import <Cocoa/Cocoa.h>
 
 //! Project version number for NIBuildingBlocks.
@@ -50,4 +53,4 @@ FOUNDATION_EXPORT const unsigned char NIBuildingBlocksVersionString[];
 #import <NIBuildingBlocks/NIStorage.h>
 #import <NIBuildingBlocks/OsiriXIntegration.h>
 
-
+#endif /* _NIBUILDINGBLOCKS_H_ */

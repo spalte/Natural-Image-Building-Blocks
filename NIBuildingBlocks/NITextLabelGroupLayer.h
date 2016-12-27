@@ -19,6 +19,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#ifndef _NITEXTLABELGROUPLAYER_H_
+#define _NITEXTLABELGROUPLAYER_H_
+
 #import <QuartzCore/QuartzCore.h>
 
 #import <NIGeneratorRequestView.h>
@@ -53,3 +56,5 @@ static const NSInteger NITextLabelLocationCount = 6;
 - (void)replaceObjectInTextLabelsAtIndex:(NSUInteger)index withObject:(NSString *)object;
 
 @end
+
+#endif /* _NITEXTLABELGROUPLAYER_H_ */

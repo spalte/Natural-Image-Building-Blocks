@@ -20,6 +20,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#ifndef _NIVOLUMEDATAPROPERTIES_H_
+#define _NIVOLUMEDATAPROPERTIES_H_
+
 #import <Foundation/Foundation.h>
 
 #import "NIVolumeData.h"
@@ -38,3 +41,5 @@
 @property (nonatomic, readwrite, retain) id CLUT; // NSColor or NSGradient
 
 @end
+
+#endif /* _NIVOLUMEDATAPROPERTIES_H_ */

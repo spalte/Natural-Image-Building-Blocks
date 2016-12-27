@@ -18,6 +18,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#ifndef _NISTORAGEBOX_H_
+#define _NISTORAGEBOX_H_
+
 #import <Foundation/Foundation.h>
 
 #import "NIGeometry.h"
@@ -66,3 +69,5 @@ typedef NS_ENUM(NSUInteger, NIStorageBoxType) {
 - (NSString *)stringValue;
 
 @end
+
+#endif /* _NISTORAGEBOX_H_ */

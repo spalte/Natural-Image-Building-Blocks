@@ -32,6 +32,9 @@
  PURPOSE.
  =========================================================================*/
 
+#ifndef _NISTRETCHEDOPERATION_H_
+#define _NISTRETCHEDOPERATION_H_
+
 #import <Cocoa/Cocoa.h>
 #import "NIGeneratorOperation.h"
 #import "NIGeneratorRequest.h"
@@ -55,3 +58,5 @@
 @property (readonly) NIStretchedGeneratorRequest *request;
 
 @end
+
+#endif /* _NISTRETCHEDOPERATION_H_ */

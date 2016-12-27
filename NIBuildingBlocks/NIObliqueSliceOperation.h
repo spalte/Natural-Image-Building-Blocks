@@ -32,6 +32,9 @@
  PURPOSE.
  =========================================================================*/
 
+#ifndef _NIOBLIQUESLICEOPERATION_H_
+#define _NIOBLIQUESLICEOPERATION_H_
+
 #import <Cocoa/Cocoa.h>
 #import "NIGeneratorOperation.h"
 #import "NIGeneratorRequest.h"
@@ -53,3 +56,5 @@
 @property (readonly) NIObliqueSliceGeneratorRequest *request;
 
 @end
+
+#endif /* _NIOBLIQUESLICEOPERATION_H_ */

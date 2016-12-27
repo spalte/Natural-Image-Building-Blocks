@@ -21,6 +21,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#ifndef _NIANNOTATIONTEXTLAYER_H_
+#define _NIANNOTATIONTEXTLAYER_H_
+
 #import <QuartzCore/QuartzCore.h>
 
 @interface NIAnnotationTextLayer : CATextLayer
@@ -30,3 +33,5 @@
 @property (nonatomic, readwrite, retain) NSString *annotationString;
 
 @end
+
+#endif /* _NIANNOTATIONTEXTLAYER_H_ */

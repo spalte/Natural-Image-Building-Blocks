@@ -32,6 +32,9 @@
  PURPOSE.
  =========================================================================*/
 
+#ifndef _NIGENERATOROPERATION_H_
+#define _NIGENERATOROPERATION_H_
+
 #import <Cocoa/Cocoa.h>
 
 @class NIGeneratorRequest;
@@ -52,3 +55,4 @@
 
 @end
 
+#endif /* _NIGENERATOROPERATION_H_ */

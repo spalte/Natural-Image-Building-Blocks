@@ -21,6 +21,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#ifndef _NIGENERATORREQUESTVIEW_H_
+#define _NIGENERATORREQUESTVIEW_H_
 
 #import <Cocoa/Cocoa.h>
 
@@ -152,7 +154,4 @@ extern NSString* const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestN
 
 NS_ASSUME_NONNULL_END
 
-
-
-
-
+#endif /* _NIGENERATORREQUESTVIEW_H_ */

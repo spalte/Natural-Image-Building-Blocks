@@ -32,6 +32,9 @@
  PURPOSE.
  =========================================================================*/
 
+#ifndef _NIBEZIERPATH_H_
+#define _NIBEZIERPATH_H_
+
 #import <Foundation/Foundation.h>
 #import <AppKit/NSBezierPath.h>
 
@@ -532,4 +535,4 @@ typedef NS_ENUM(NSInteger, NIBezierPathElement) { // shouldn't these be typed as
 
 NS_ASSUME_NONNULL_END
 
-
+#endif /* _NIBEZIERPATH_H_ */

@@ -21,6 +21,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#ifndef _NISPRITE_H_
+#define _NISPRITE_H_
 
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
@@ -46,3 +48,5 @@ extern NSString* const NIMouseBullsEyeSprite;
 @property (nonatomic, readwrite, assign, getter=isHidden) BOOL hidden;
 
 @end
+
+#endif /* _NISPRITE_H_ */

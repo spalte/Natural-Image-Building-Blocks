@@ -18,6 +18,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#ifndef _NISTORAGEPRIVATE_H_
+#define _NISTORAGEPRIVATE_H_
+
 #import "NIStorage.h"
 
 @interface NIStorage (Private)
@@ -25,3 +28,5 @@
 - (nullable instancetype)initWithManagedObjectContext:(nonnull NSManagedObjectContext *)moc;
 
 @end
+
+#endif /* _NISTORAGEPRIVATE_H_ */

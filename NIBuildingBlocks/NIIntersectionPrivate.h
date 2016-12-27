@@ -21,6 +21,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#ifndef _NIINTERSECTIONPRIVATE_H_
+#define _NIINTERSECTIONPRIVATE_H_
+
 #import "NIIntersection.h"
 
 @interface NIIntersection (Private)
@@ -29,3 +32,5 @@
 @property (nonatomic, readwrite, retain) CALayer<NISliceIntersectionLayer> *intersectionLayer;
 
 @end
+
+#endif /* _NIINTERSECTIONPRIVATE_H_ */

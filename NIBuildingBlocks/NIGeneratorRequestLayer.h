@@ -21,6 +21,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#ifndef _NIGENERATORREQUESTLAYER_H_
+#define _NIGENERATORREQUESTLAYER_H_
 
 #import <QuartzCore/QuartzCore.h>
 #import "NIGenerator.h"
@@ -66,3 +68,5 @@
 - (NIVector)convertPointToModelVector:(CGPoint)point;
 
 @end
+
+#endif /* _NIGENERATORREQUESTLAYER_H_ */

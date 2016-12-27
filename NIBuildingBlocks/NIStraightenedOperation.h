@@ -32,6 +32,9 @@
  PURPOSE.
  =========================================================================*/
 
+#ifndef _NISTRAIGHTENEDOPERATION_H_
+#define _NISTRAIGHTENEDOPERATION_H_
+
 #import <Cocoa/Cocoa.h>
 #import "NIGeneratorOperation.h"
 #import "NIGeneratorRequest.h"
@@ -55,3 +58,4 @@
 
 @end
 
+#endif /* _NISTRAIGHTENEDOPERATION_H_ */

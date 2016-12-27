@@ -19,6 +19,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#ifndef _NIWINDOWINGVIEW_H_
+#define _NIWINDOWINGVIEW_H_
+
 #import <Cocoa/Cocoa.h>
 
 @interface NIWindowingView : NSView
@@ -37,3 +40,5 @@
 @property (nonatomic, readwrite, assign) CGFloat windowWidth;
 
 @end
+
+#endif /* _NIWINDOWINGVIEW_H_ */

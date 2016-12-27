@@ -32,6 +32,9 @@
  PURPOSE.
  =========================================================================*/
 
+#ifndef _NIGENERATOROPERATIONPRIVATE_H_
+#define _NIGENERATOROPERATIONPRIVATE_H_
+
 #import <Foundation/Foundation.h>
 
 #import "NIGeneratorOperation.h"
@@ -39,3 +42,5 @@
 @interface NIGeneratorOperation ()
 @property (readwrite, retain) NIVolumeData *generatedVolume;
 @end
+
+#endif /* _NIGENERATOROPERATIONPRIVATE_H_ */

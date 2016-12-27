@@ -21,6 +21,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#ifndef _NISLICEINTERSECTIONLAYER_H_
+#define _NISLICEINTERSECTIONLAYER_H_
+
 #import <QuartzCore/QuartzCore.h>
 #import "NIBezierPath.h"
 #import "NIGeneratorRequestView.h"
@@ -84,3 +87,5 @@
 
 
 @end
+
+#endif /* _NISLICEINTERSECTIONLAYER_H_ */

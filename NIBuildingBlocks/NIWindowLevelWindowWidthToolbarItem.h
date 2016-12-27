@@ -19,6 +19,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#ifndef _NIWINDOWLEVELWINDOWWIDTHTOOLBARITEM_H_
+#define _NIWINDOWLEVELWINDOWWIDTHTOOLBARITEM_H_
+
 #import <Cocoa/Cocoa.h>
 
 @class NIWindowingView;
@@ -38,3 +41,5 @@
 @property (nonatomic, readwrite, assign) NSUInteger volumeDataIndex;
 
 @end
+
+#endif /* _NIWINDOWLEVELWINDOWWIDTHTOOLBARITEM_H_ */

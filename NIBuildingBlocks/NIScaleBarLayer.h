@@ -21,6 +21,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#ifndef _NISCALEBARLAYER_H_
+#define _NISCALEBARLAYER_H_
+
 #import <QuartzCore/QuartzCore.h>
 
 typedef NS_ENUM(NSInteger, NIScaleBarLayerOrientation) {
@@ -38,3 +41,5 @@ typedef NS_ENUM(NSInteger, NIScaleBarLayerOrientation) {
 @property (nonatomic, readwrite, assign) CGFloat pointSpacing; // spacing in mm/point
 
 @end
+
+#endif /* _NISCALEBARLAYER_H_ */

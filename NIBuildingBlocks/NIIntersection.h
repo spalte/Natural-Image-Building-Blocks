@@ -21,6 +21,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#ifndef _NIINTERSECTION_H_
+#define _NIINTERSECTION_H_
+
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
 #import <Cocoa/Cocoa.h>
@@ -89,3 +92,5 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+
+#endif /* _NIINTERSECTION_H_ */

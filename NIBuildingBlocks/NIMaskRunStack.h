@@ -32,6 +32,9 @@
  PURPOSE.
  =========================================================================*/
 
+#ifndef _NIMASKRUNSTACK_H_
+#define _NIMASKRUNSTACK_H_
+
 #import "NIMask.h"
 
 @interface NIMaskRunStack : NSObject
@@ -52,3 +55,5 @@
 - (NSUInteger)count;
 
 @end
+
+#endif /* _NIMASKRUNSTACK_H_ */

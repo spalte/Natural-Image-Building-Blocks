@@ -32,6 +32,9 @@
  PURPOSE.
  =========================================================================*/
 
+#ifndef _NIGENERATOR_H_
+#define _NIGENERATOR_H_
+
 #import <Cocoa/Cocoa.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -149,5 +152,4 @@ typedef int64_t NIGeneratorAsynchronousRequestID;
 
 NS_ASSUME_NONNULL_END
 
-
-
+#endif /* _NIGENERATOR_H_ */

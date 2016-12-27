@@ -32,6 +32,9 @@
  PURPOSE.
  =========================================================================*/
 
+#ifndef _NIHORIZONTALFILLOPERATION_H_
+#define _NIHORIZONTALFILLOPERATION_H_
+
 #import <Cocoa/Cocoa.h>
 #import "NIGeometry.h"
 #import "NIVolumeData.h"
@@ -68,3 +71,5 @@
 @property (readonly, assign) NIInterpolationMode interpolationMode; // YES by default
 
 @end
+
+#endif /* _NIHORIZONTALFILLOPERATION_H_ */

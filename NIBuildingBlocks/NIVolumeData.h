@@ -33,6 +33,9 @@
  PURPOSE.
  =========================================================================*/
 
+#ifndef _NIVOLUMEDATA_H_
+#define _NIVOLUMEDATA_H_
+
 #import <Cocoa/Cocoa.h>
 #import <Accelerate/Accelerate.h>
 #import "NIGeometry.h"
@@ -750,3 +753,5 @@ CF_INLINE float NIVolumeDataCubicInterpolatedFloatAtVolumeVector(NIVolumeDataInl
 CF_EXTERN_C_END
 
 NS_ASSUME_NONNULL_END
+
+#endif /* _NIVOLUMEDATA_H_ */

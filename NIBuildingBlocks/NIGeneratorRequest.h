@@ -32,6 +32,9 @@
  PURPOSE.
  =========================================================================*/
 
+#ifndef _NIGENERATORREQUEST_H_
+#define _NIGENERATORREQUEST_H_
+
 #import <Cocoa/Cocoa.h>
 #import "NIGeometry.h"
 #import "NIVolumeData.h"
@@ -197,8 +200,4 @@ typedef NS_ENUM(NSInteger, NIProjectionMode)
 
 @end
 
-
-
-
-
-
+#endif /* _NIGENERATORREQUEST_H_ */

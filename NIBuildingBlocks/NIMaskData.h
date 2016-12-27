@@ -32,6 +32,8 @@
  PURPOSE.
  =========================================================================*/
 
+#ifndef _NIMASKDATA_H_
+#define _NIMASKDATA_H_
 
 #import <Cocoa/Cocoa.h>
 #import "NIMask.h"
@@ -159,3 +161,5 @@
 
 
 @end
+
+#endif /* _NIMASKDATA_H_ */

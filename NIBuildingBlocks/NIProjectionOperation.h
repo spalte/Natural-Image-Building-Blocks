@@ -32,6 +32,9 @@
  PURPOSE.
  =========================================================================*/
 
+#ifndef _NIPROJECTIONOPERATION_H_
+#define _NIPROJECTIONOPERATION_H_
+
 #import <Cocoa/Cocoa.h>
 #import "NIGeneratorRequest.h"
 
@@ -52,3 +55,5 @@
 @property (nonatomic, readwrite, assign) NIProjectionMode projectionMode;
 
 @end
+
+#endif /* _NIPROJECTIONOPERATION_H_ */

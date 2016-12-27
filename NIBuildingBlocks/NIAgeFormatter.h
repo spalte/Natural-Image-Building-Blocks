@@ -21,6 +21,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#ifndef _NIAGEFORMATTER_H_
+#define _NIAGEFORMATTER_H_
+
 #import <Cocoa/Cocoa.h>
 
 typedef NS_ENUM(NSUInteger, NIAgeFormatterStyle) {    // date and time format styles
@@ -40,3 +43,5 @@ typedef NS_ENUM(NSUInteger, NIAgeFormatterStyle) {    // date and time format st
 - (NSString *)stringFromDate:(NSDate *)date;
 
 @end
+
+#endif /* _NIAGEFORMATTER_H_ */

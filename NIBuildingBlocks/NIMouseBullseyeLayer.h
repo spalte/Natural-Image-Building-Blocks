@@ -21,8 +21,13 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#ifndef _NIMOUSEBULLSEYELAYER_H_
+#define _NIMOUSEBULLSEYELAYER_H_
+
 #import <QuartzCore/QuartzCore.h>
 
 @interface NIMouseBullseyeLayer : CAShapeLayer
 
 @end
+
+#endif /* _NIMOUSEBULLSEYELAYER_H_ */

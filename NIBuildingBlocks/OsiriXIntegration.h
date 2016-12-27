@@ -19,6 +19,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#ifndef _NIBB_OSIRIXINTEGRATION_H
+#define _NIBB_OSIRIXINTEGRATION_H
+
 #import <Foundation/Foundation.h>
 #import "NIStorage.h"
 
@@ -32,3 +35,5 @@
 @interface NSObject (NIBuildingBlocksViewerControllerAdditions)
 - (NIVolumeData *)NIVolumeDataForMovieIndex:(NSUInteger)movieIndex;
 @end
+
+#endif /* _NIBB_OSIRIXINTEGRATION_H */
