@@ -38,9 +38,14 @@
 #import <Foundation/Foundation.h>
 
 #import "NIGeneratorOperation.h"
+#import "NIObliqueSliceOperation.h"
 
 @interface NIGeneratorOperation ()
 @property (readwrite, retain) NIVolumeData *generatedVolume;
+@end
+
+@interface NIObliqueSliceOperation ()
++ (NSOperationQueue *)_fillQueueForQualityOfService:(NSQualityOfService)qualityOfService;
 @end
 
 #endif /* _NIGENERATOROPERATIONPRIVATE_H_ */
