@@ -38,6 +38,7 @@
 #import "NIStraightenedOperation.h"
 #import "NIStretchedOperation.h"
 #import "NIObliqueSliceOperation.h"
+#import "NIVTKObliqueSliceOperation.h"
 
 @implementation NIGeneratorRequest
 
@@ -691,8 +692,15 @@
     return _pixelSpacingY;
 }
 
-
 @end
 
+
+@implementation NIVTKObliqueSliceGeneratorRequest
+
+- (Class)operationClass {
+    return NIVTKObliqueSliceOperation.class;
+}
+
+@end
 
 

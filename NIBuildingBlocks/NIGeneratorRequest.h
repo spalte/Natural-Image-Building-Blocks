@@ -200,4 +200,8 @@ typedef NS_ENUM(NSInteger, NIProjectionMode)
 
 @end
 
+@interface NIVTKObliqueSliceGeneratorRequest : NIObliqueSliceGeneratorRequest
+
+@end
+
 #endif /* _NIGENERATORREQUEST_H_ */
