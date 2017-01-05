@@ -35,7 +35,7 @@
 #import <VTK/vtkImageData.h>
 #pragma clang diagnostic pop
 
-@interface NIVTKGeneratorVolumeData : NIVolumeData
+@interface NIVTKVolumeData : NIVolumeData
 
 - (instancetype)initWithImageData:(vtkSmartPointer<vtkImageData>)imageData modelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform outOfBoundsValue:(float)outOfBoundsValue;
 
@@ -55,42 +55,44 @@
 
 - (void)start {
     const NIVolumeData *data = self.volumeData;
+    const NIAffineTransform modelToVoxelTransform = data.modelToVoxelTransform, sliceToModelTransform = self.request.sliceToModelTransform, sliceToVoxelTransform = NIAffineTransformConcat(sliceToModelTransform, modelToVoxelTransform);
+    
+    // we use vtkImageImport to map the input NIVolumeData to VTK, without copying any of the data itself
     
     vtkSmartPointer<vtkImageImport> voxels = vtkSmartPointer<vtkImageImport>::New();
     voxels->SetWholeExtent(0, (int)data.pixelsWide-1, 0, (int)data.pixelsHigh-1, 0, (int)data.pixelsDeep-1);
     voxels->SetDataExtentToWholeExtent();
     voxels->SetDataScalarTypeToFloat();
     voxels->SetImportVoidPointer((void *)data.floatData.bytes);
-    
-    voxels->Update();
-    
-    const NIAffineTransform modelToVoxelTransform = data.modelToVoxelTransform, sliceToModelTransform = self.request.sliceToModelTransform, sliceToVoxelTransform = NIAffineTransformConcat(sliceToModelTransform, modelToVoxelTransform);
+
+    // we use vtkImageReslice for thin slices and vtkImageSlabReslice for thick slices
     
     vtkSmartPointer<vtkImageReslice> reslice;
-    if (self.request.projectionMode != NIProjectionModeNone && self.request.slabWidth != 0) {
-        vtkSmartPointer<vtkImageSlabReslice> slab = vtkSmartPointer<vtkImageSlabReslice>::New();
-        slab->SetSlabThickness(NIVectorLength(NIVectorApplyTransformToDirectionalVector(NIVectorMake(0, 0, self.request.slabWidth), sliceToVoxelTransform)));
+    if (self.request.projectionMode == NIProjectionModeNone || self.request.slabWidth == 0)
+        reslice = vtkSmartPointer<vtkImageReslice>::New();
+    else {
+        vtkSmartPointer<vtkImageSlabReslice> slabReslice = vtkSmartPointer<vtkImageSlabReslice>::New();
+        slabReslice->SetSlabThickness(NIVectorLength(NIVectorApplyTransformToDirectionalVector(NIVectorMake(0, 0, self.request.slabWidth), sliceToVoxelTransform)));
         switch (self.request.projectionMode) {
             case NIProjectionModeMean:
-                slab->SetSlabModeToMean(); break;
+                slabReslice->SetSlabModeToMean(); break;
             case NIProjectionModeMIP:
-                slab->SetSlabModeToMax(); break;
+                slabReslice->SetSlabModeToMax(); break;
             case NIProjectionModeMinIP:
-                slab->SetSlabModeToMin(); break;
+                slabReslice->SetSlabModeToMin(); break;
             default:
                 break;
         }
-        reslice = slab;
-    } else
-        reslice = vtkSmartPointer<vtkImageReslice>::New();
+        
+        reslice = slabReslice;
+    }
     
     reslice->SetInputConnection(voxels->GetOutputPort());
+    reslice->SetBackgroundLevel(data.outOfBoundsValue);
     reslice->SetOutputScalarType(VTK_FLOAT);
     reslice->SetOutputDimensionality(2);
     reslice->SetOutputExtent(0, (int)self.request.pixelsWide-1, 0, (int)self.request.pixelsHigh-1, 0, 0);
     reslice->SetOutputOrigin(0, 0, 0);
-    
-    reslice->SetBackgroundLevel(data.outOfBoundsValue);
     
     switch (self.request.interpolationMode) {
         case NIInterpolationModeNearestNeighbor:
@@ -103,13 +105,15 @@
             break;
     }
     
+    // VTK reslicers don't let us just provide linear transforms: the SetResliceTransform method doesn't behave as one might expect. Instead, we build a ResliceAxes matrix.
+    
     NIVector dir[4] = { NIVectorXBasis, NIVectorYBasis, NIVectorZBasis, NIVectorZero };
     for (size_t i = 0; i < 3; ++i)
         dir[i] = NIVectorApplyTransformToDirectionalVector(dir[i], sliceToVoxelTransform);
     dir[3] = NIVectorApplyTransform(dir[3], sliceToVoxelTransform);
     
     vtkSmartPointer<vtkMatrix4x4> axes = vtkSmartPointer<vtkMatrix4x4>::New();
-    double elements[16] = {
+    double elements[16] = { // this is quite confusing: the vtkMatrix4x4 documentation tells "many of the methods take an array of 16 doubles in row-major format"; the vtkImageReslice SetResliceAxes documentation says "The first column of the matrix specifies the x-axis vector (the fourth element must be set to zero), the second column specifies the y-axis, and the third column the z-axis. The fourth column is the origin of the axes (the fourth element must be set to one)"
         dir[0].x, dir[1].x, dir[2].x, dir[3].x,
         dir[0].y, dir[1].y, dir[2].y, dir[3].y,
         dir[0].z, dir[1].z, dir[2].z, dir[3].z,
@@ -118,9 +122,13 @@
     
     reslice->SetResliceAxes(axes);
     
+    // that's it: have VTK generate the output data and store it as a NIVTKVolumeData
+    
     reslice->Update();
     
-    self.generatedVolume = [[[NIVTKGeneratorVolumeData alloc] initWithImageData:reslice->GetOutput() modelToVoxelTransform:NIAffineTransformInvert(sliceToModelTransform) outOfBoundsValue:data.outOfBoundsValue] autorelease];
+    self.generatedVolume = [[[NIVTKVolumeData alloc] initWithImageData:reslice->GetOutput() modelToVoxelTransform:NIAffineTransformInvert(sliceToModelTransform) outOfBoundsValue:data.outOfBoundsValue] autorelease];
+    
+    // let NIBB know we're done
     
     [self willChangeValueForKey:@"isFinished"];
     [self willChangeValueForKey:@"isExecuting"];
@@ -132,7 +140,7 @@
 
 @end
 
-@implementation NIVTKGeneratorVolumeData
+@implementation NIVTKVolumeData
 
 - (instancetype)initWithImageData:(vtkSmartPointer<vtkImageData>)imageData modelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform outOfBoundsValue:(float)outOfBoundsValue {
     int *ide = imageData->GetExtent();
