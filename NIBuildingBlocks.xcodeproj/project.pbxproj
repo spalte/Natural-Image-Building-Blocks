@@ -3663,7 +3663,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MOMC_NO_DELETE_RULE_WARNINGS = YES;
 				MOMC_NO_INVERSE_RELATIONSHIP_WARNINGS = YES;
 				MOMC_NO_MAX_PROPERTY_COUNT_WARNINGS = YES;
@@ -3719,7 +3719,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MOMC_NO_DELETE_RULE_WARNINGS = YES;
 				MOMC_NO_INVERSE_RELATIONSHIP_WARNINGS = YES;
 				MOMC_NO_MAX_PROPERTY_COUNT_WARNINGS = YES;
@@ -3746,6 +3746,10 @@
 				LLVM_LTO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "ch.naturalimage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				WARNING_CFLAGS = (
+					"-Wno-profile-instr-out-of-date",
+					"-Wno-profile-instr-unprofiled",
+				);
 			};
 			name = Debug;
 		};
@@ -3764,6 +3768,10 @@
 				LLVM_LTO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "ch.naturalimage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				WARNING_CFLAGS = (
+					"-Wno-profile-instr-out-of-date",
+					"-Wno-profile-instr-unprofiled",
+				);
 			};
 			name = Release;
 		};
@@ -3796,7 +3804,6 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = io.volz.nibb.vtk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3818,7 +3825,6 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = io.volz.nibb.vtk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3900,6 +3906,7 @@
 				712BC37C1E1E395300C51700 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		71F51E561BA00C2E00DF26AC /* Build configuration list for PBXNativeTarget "NIBuildingBlocks Tests" */ = {
 			isa = XCConfigurationList;
