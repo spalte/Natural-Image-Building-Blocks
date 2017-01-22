@@ -136,8 +136,9 @@
     
     vtkSmartPointer<vtkImageData> output = reslice->GetOutput();
     
-#ifdef PREALLOCATE_VTK_OUTPUT_FLOATS
     void *scalars = output->GetScalarPointer();
+
+#ifdef PREALLOCATE_VTK_OUTPUT_FLOATS
     if (scalars == buffer.mutableBytes) {
         self.generatedVolume = [[[NIVolumeData alloc] initWithData:buffer pixelsWide:self.request.pixelsWide pixelsHigh:self.request.pixelsHigh pixelsDeep:1 modelToVoxelTransform:modelToVoxelTransform outOfBoundsValue:data.outOfBoundsValue] autorelease];
     } else {
