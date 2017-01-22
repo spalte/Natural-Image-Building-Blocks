@@ -33,13 +33,9 @@
 #import <VTK/vtkImageReslice.h>
 #import <VTK/vtkImageSlabReslice.h>
 #import <VTK/vtkImageData.h>
+#import <VTK/vtkPointData.h>
+#import <VTK/vtkFloatArray.h>
 #pragma clang diagnostic pop
-
-@interface NIVTKVolumeData : NIVolumeData
-
-- (instancetype)initWithImageData:(vtkSmartPointer<vtkImageData>)imageData modelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform outOfBoundsValue:(float)outOfBoundsValue;
-
-@end
 
 @implementation NIVTKObliqueSliceOperation
 
@@ -122,17 +118,17 @@
     
     reslice->SetResliceAxes(axes);
     
-//    // output to a preallocated buffer
-//    
-//    vtkSmartPointer<vtkInformation> meta = vtkSmartPointer<vtkInformation>::New();
-//    
-//    vtkSmartPointer<vtkImageData> pixels = vtkSmartPointer<vtkImageData>::New();
-//    pixels->SetScalarType(VTK_FLOAT, meta);
-//    pixels->SetExtent(reslice->GetOutputExtent());
-//    pixels->SetSpacing(reslice->GetOutputSpacing());
-//    pixels->SetOrigin(reslice->GetOutputOrigin());
-//    
-//    reslice->SetOutput(pixels);
+#ifdef PREALLOCATE_VTK_OUTPUT_FLOATS
+    // output to a preallocated buffer (probably necessary in UWP)
+    NSMutableData *buffer = [[[NSMutableData alloc] initWithLength:(self.request.pixelsWide*self.request.pixelsHigh*sizeof(float))] autorelease]; // of course, the output buffer should be provided by the caller, we're just testing
+    
+    vtkSmartPointer<vtkFloatArray> bufferArray = vtkSmartPointer<vtkFloatArray>::New();
+    bufferArray->SetVoidArray(buffer.mutableBytes, buffer.length, 1);
+    
+    reslice->GetOutput()->GetPointData()->SetScalars(bufferArray);
+    
+    bufferArray = NULL; // this is important:
+#endif
     
     // that's it: have VTK generate the output data and store it as a NIVolumeData
     
@@ -140,12 +136,21 @@
     
     vtkSmartPointer<vtkImageData> output = reslice->GetOutput();
     
+#ifdef PREALLOCATE_VTK_OUTPUT_FLOATS
+    void *scalars = output->GetScalarPointer();
+    if (scalars == buffer.mutableBytes) {
+        self.generatedVolume = [[[NIVolumeData alloc] initWithData:buffer pixelsWide:self.request.pixelsWide pixelsHigh:self.request.pixelsHigh pixelsDeep:1 modelToVoxelTransform:modelToVoxelTransform outOfBoundsValue:data.outOfBoundsValue] autorelease];
+    } else {
+#endif
     int *ide = output->GetExtent();
     NSUInteger width = ide[1]-ide[0]+1, height = ide[3]-ide[2]+1;
-
-    self.generatedVolume = [[[NIVolumeData alloc] initWithData:[[[NSData alloc] initWithBytesNoCopy:output->GetScalarPointer() length:(width*height*sizeof(float)) deallocator:^(void * _Nonnull bytes, NSUInteger length) {
+    NSUInteger length = width*height*sizeof(float);
+    self.generatedVolume = [[[NIVolumeData alloc] initWithData:[[[NSData alloc] initWithBytesNoCopy:scalars length:length deallocator:^(void * bytes, NSUInteger len) {
         output->GetExtent(); // don't delete this dummy call: it ensures the vtkImageData instance is kept alive until the execution of this deallocator
     }] autorelease] pixelsWide:width pixelsHigh:height pixelsDeep:1 modelToVoxelTransform:modelToVoxelTransform outOfBoundsValue:data.outOfBoundsValue] autorelease];
+#ifdef PREALLOCATE_VTK_OUTPUT_FLOATS
+    }
+#endif
     
     // let NIBB know we're done
     
