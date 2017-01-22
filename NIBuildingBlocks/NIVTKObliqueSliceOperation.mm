@@ -122,11 +122,30 @@
     
     reslice->SetResliceAxes(axes);
     
-    // that's it: have VTK generate the output data and store it as a NIVTKVolumeData
+//    // output to a preallocated buffer
+//    
+//    vtkSmartPointer<vtkInformation> meta = vtkSmartPointer<vtkInformation>::New();
+//    
+//    vtkSmartPointer<vtkImageData> pixels = vtkSmartPointer<vtkImageData>::New();
+//    pixels->SetScalarType(VTK_FLOAT, meta);
+//    pixels->SetExtent(reslice->GetOutputExtent());
+//    pixels->SetSpacing(reslice->GetOutputSpacing());
+//    pixels->SetOrigin(reslice->GetOutputOrigin());
+//    
+//    reslice->SetOutput(pixels);
+    
+    // that's it: have VTK generate the output data and store it as a NIVolumeData
     
     reslice->Update();
     
-    self.generatedVolume = [[[NIVTKVolumeData alloc] initWithImageData:reslice->GetOutput() modelToVoxelTransform:NIAffineTransformInvert(sliceToModelTransform) outOfBoundsValue:data.outOfBoundsValue] autorelease];
+    vtkSmartPointer<vtkImageData> output = reslice->GetOutput();
+    
+    int *ide = output->GetExtent();
+    NSUInteger width = ide[1]-ide[0]+1, height = ide[3]-ide[2]+1;
+
+    self.generatedVolume = [[[NIVolumeData alloc] initWithData:[[[NSData alloc] initWithBytesNoCopy:output->GetScalarPointer() length:(width*height*sizeof(float)) deallocator:^(void * _Nonnull bytes, NSUInteger length) {
+        output->GetExtent(); // don't delete this dummy call: it ensures the vtkImageData instance is kept alive until the execution of this deallocator
+    }] autorelease] pixelsWide:width pixelsHigh:height pixelsDeep:1 modelToVoxelTransform:modelToVoxelTransform outOfBoundsValue:data.outOfBoundsValue] autorelease];
     
     // let NIBB know we're done
     
@@ -136,18 +155,6 @@
     _operationFinished = YES;
     [self didChangeValueForKey:@"isExecuting"];
     [self didChangeValueForKey:@"isFinished"];
-}
-
-@end
-
-@implementation NIVTKVolumeData
-
-- (instancetype)initWithImageData:(vtkSmartPointer<vtkImageData>)imageData modelToVoxelTransform:(NIAffineTransform)modelToVoxelTransform outOfBoundsValue:(float)outOfBoundsValue {
-    int *ide = imageData->GetExtent();
-    NSUInteger width = ide[1]-ide[0]+1, height = ide[3]-ide[2]+1;
-    return [super initWithData:[[[NSData alloc] initWithBytesNoCopy:imageData->GetScalarPointer() length:(width*height*sizeof(float)) deallocator:^(void * _Nonnull bytes, NSUInteger length) {
-        imageData->GetExtent(); // don't delete this dummy call: it ensures the vtkImageData instance is kept alive until the execution of this deallocator
-    }] autorelease] pixelsWide:width pixelsHigh:height pixelsDeep:1 modelToVoxelTransform:modelToVoxelTransform outOfBoundsValue:outOfBoundsValue];
 }
 
 @end
