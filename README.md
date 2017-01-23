@@ -1,8 +1,8 @@
 The Natural Image Building Blocks are released under the MIT license.
 
-Copyright (c) 2017 Spaltenstein Natural Image
-Copyright (c) 2017 Volz.io
-Copyright (c) 2017 Osirix Foundation
+Copyright (c) 2017 Spaltenstein Natural Image<br>
+Copyright (c) 2017 Volz.io<br>
+Copyright (c) 2017 Osirix Foundation<br>
 Copyright (c) 2017 Michael Hilker and Andreas Holzamer
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
