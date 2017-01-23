@@ -1,5 +1,5 @@
 //  Created by Joël Spaltenstein on 6/1/15.
-//  Copyright (c) 2016 Spaltenstein Natural Image
+//  Copyright (c) 2017 Spaltenstein Natural Image
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal

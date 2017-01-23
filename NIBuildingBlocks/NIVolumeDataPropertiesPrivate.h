@@ -1,6 +1,6 @@
 //  Created by Joël Spaltenstein on 5/27/15.
-//  Copyright (c) 2016 volz io
-//  Copyright (c) 2016 Spaltenstein Natural Image
+//  Copyright (c) 2017 volz io
+//  Copyright (c) 2017 Spaltenstein Natural Image
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
