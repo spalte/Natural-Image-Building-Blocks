@@ -118,16 +118,19 @@
     
     reslice->SetResliceAxes(axes);
     
-#ifdef PREALLOCATE_VTK_OUTPUT_FLOATS
+//#define USE_PREALLOCATED_VTK_OUTPUT_FLOATS
+    
+#ifdef USE_PREALLOCATED_VTK_OUTPUT_FLOATS
     // output to a preallocated buffer (probably necessary in UWP)
-    NSMutableData *buffer = [[[NSMutableData alloc] initWithLength:(self.request.pixelsWide*self.request.pixelsHigh*sizeof(float))] autorelease]; // of course, the output buffer should be provided by the caller, we're just testing
+    NSUInteger pixelsCount = self.request.pixelsWide*self.request.pixelsHigh;
+    NSMutableData *buffer = [[[NSMutableData alloc] initWithLength:(pixelsCount*sizeof(float))] autorelease]; // of course, the output buffer should be provided by the caller, we're just testing
     
     vtkSmartPointer<vtkFloatArray> bufferArray = vtkSmartPointer<vtkFloatArray>::New();
-    bufferArray->SetVoidArray(buffer.mutableBytes, buffer.length, 1);
+    bufferArray->SetVoidArray(buffer.mutableBytes, pixelsCount, 1);
     
     reslice->GetOutput()->GetPointData()->SetScalars(bufferArray);
     
-    bufferArray = NULL; // this is important:
+    bufferArray = NULL; // this is important: make the vtkFloatData object have a retainCount equal to 1, otherwise the vtkImageAlgorithm will reassign it
 #endif
     
     // that's it: have VTK generate the output data and store it as a NIVolumeData
@@ -138,18 +141,20 @@
     
     void *scalars = output->GetScalarPointer();
 
-#ifdef PREALLOCATE_VTK_OUTPUT_FLOATS
+#ifdef USE_PREALLOCATED_VTK_OUTPUT_FLOATS
     if (scalars == buffer.mutableBytes) {
         self.generatedVolume = [[[NIVolumeData alloc] initWithData:buffer pixelsWide:self.request.pixelsWide pixelsHigh:self.request.pixelsHigh pixelsDeep:1 modelToVoxelTransform:modelToVoxelTransform outOfBoundsValue:data.outOfBoundsValue] autorelease];
     } else {
 #endif
+        
     int *ide = output->GetExtent();
     NSUInteger width = ide[1]-ide[0]+1, height = ide[3]-ide[2]+1;
     NSUInteger length = width*height*sizeof(float);
     self.generatedVolume = [[[NIVolumeData alloc] initWithData:[[[NSData alloc] initWithBytesNoCopy:scalars length:length deallocator:^(void * bytes, NSUInteger len) {
         output->GetExtent(); // don't delete this dummy call: it ensures the vtkImageData instance is kept alive until the execution of this deallocator
     }] autorelease] pixelsWide:width pixelsHigh:height pixelsDeep:1 modelToVoxelTransform:modelToVoxelTransform outOfBoundsValue:data.outOfBoundsValue] autorelease];
-#ifdef PREALLOCATE_VTK_OUTPUT_FLOATS
+
+#ifdef USE_PREALLOCATED_VTK_OUTPUT_FLOATS
     }
 #endif
     
