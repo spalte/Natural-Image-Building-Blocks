@@ -229,6 +229,7 @@
 		712BC13A1E1E342E00C51700 /* NIVTKObliqueSliceOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NIVTKObliqueSliceOperation.mm; sourceTree = "<group>"; };
 		712BC13F1E1E343A00C51700 /* NIVTKObliqueSliceOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIVTKObliqueSliceOperation.h; sourceTree = "<group>"; };
 		712BC3751E1E395300C51700 /* VTK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VTK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		713548761E363701007CE7BA /* VTK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = VTK.xcodeproj; path = ../../Intermediates/NIBuildingBlocks.build/VTK.cmake/VTK.xcodeproj; sourceTree = BUILT_PRODUCTS_DIR; };
 		716428AA1C11990F0056E466 /* NIBuildingBlocks.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NIBuildingBlocks.pch; path = NIBuildingBlocks/NIBuildingBlocks.pch; sourceTree = "<group>"; };
 		719473711B1DA0F1009363AE /* NIOrientationTextLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIOrientationTextLayer.m; sourceTree = "<group>"; };
 		7194D0851BE0EE3A00563DEC /* NIStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIStorage.h; sourceTree = "<group>"; };
@@ -275,6 +276,7 @@
 				4F151EDD1B1CC8D000C8F767 /* NIBuildingBlocks */,
 				71F51E4E1BA00C2E00DF26AC /* NIBuildingBlocks Tests */,
 				71D4B94A1E0295E700A54AD0 /* OptimizationProfiles */,
+				713548751E3636CA007CE7BA /* Dependencies */,
 				4F151EDC1B1CC8D000C8F767 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -481,6 +483,22 @@
 				4FCB58B61C568F8000718CCF /* NIStorageCoordinator.m */,
 			);
 			name = StoragePrivate;
+			sourceTree = "<group>";
+		};
+		713548751E3636CA007CE7BA /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				71354AA01E363721007CE7BA /* CMake */,
+			);
+			name = Dependencies;
+			sourceTree = "<group>";
+		};
+		71354AA01E363721007CE7BA /* CMake */ = {
+			isa = PBXGroup;
+			children = (
+				713548761E363701007CE7BA /* VTK.xcodeproj */,
+			);
+			name = CMake;
 			sourceTree = "<group>";
 		};
 		71D4B94A1E0295E700A54AD0 /* OptimizationProfiles */ = {
