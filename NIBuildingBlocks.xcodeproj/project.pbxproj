@@ -121,6 +121,1266 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4F704BF31E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BAE6AC2809F0484F9DB19169;
+			remoteInfo = kwiml_test;
+		};
+		4F704BF51E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 242324F0B76F41AEB7CC8236;
+			remoteInfo = vtksys;
+		};
+		4F704BF71E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 42A6E40F4BB943E6A8C3E81D;
+			remoteInfo = vtkCommonCore;
+		};
+		4F704BF91E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A1CD574A0E1346A7AB320905;
+			remoteInfo = vtkCommonMath;
+		};
+		4F704BFB1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BB1AD47A0D124136BC819627;
+			remoteInfo = vtkCommonMisc;
+		};
+		4F704BFD1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0840C1A38D744C23B26F6F14;
+			remoteInfo = vtkCommonSystem;
+		};
+		4F704BFF1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 14C914F985DB46A2AE2122FC;
+			remoteInfo = vtkCommonTransforms;
+		};
+		4F704C011E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 67B4709C3C8E46588CE93AFD;
+			remoteInfo = vtkCommonDataModel;
+		};
+		4F704C031E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2AB22A4025B941A9B4910273;
+			remoteInfo = vtkCommonColor;
+		};
+		4F704C051E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B7B9A0306B53444E9F0C4C01;
+			remoteInfo = vtkCommonExecutionModel;
+		};
+		4F704C071E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 831382AAC01F433EB1496E77;
+			remoteInfo = vtkCommonComputationalGeometry;
+		};
+		4F704C091E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2CDD642A596D48A592F6D500;
+			remoteInfo = vtkFiltersCore;
+		};
+		4F704C0B1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 59F8009AB3B346FBB57BACB6;
+			remoteInfo = vtkFiltersGeneral;
+		};
+		4F704C0D1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B84F87143B9643B39B7E546A;
+			remoteInfo = vtkImagingCore;
+		};
+		4F704C0F1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FD4C49827DD648FAB193558D;
+			remoteInfo = vtkImagingFourier;
+		};
+		4F704C111E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = AE94FBBFC6FD499496F8B15C;
+			remoteInfo = vtkalglib;
+		};
+		4F704C131E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4D5AAAB0EEC5437CA411D8B4;
+			remoteInfo = vtkFiltersStatistics;
+		};
+		4F704C151E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 048CB4188AB44969BF951082;
+			remoteInfo = vtkFiltersExtraction;
+		};
+		4F704C171E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 582B3F6B36204F5CA58C4B66;
+			remoteInfo = vtkInfovisCore;
+		};
+		4F704C191E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0DD243F1346A43C3BE04B9CD;
+			remoteInfo = vtkFiltersGeometry;
+		};
+		4F704C1B1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6312C18ACA1B4D2FBBEDF598;
+			remoteInfo = vtkFiltersSources;
+		};
+		4F704C1D1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7D014C53780946F88BFB22AD;
+			remoteInfo = vtkRenderingCore;
+		};
+		4F704C1F1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8544E262B84544FBA8E22ECB;
+			remoteInfo = vtkzlib;
+		};
+		4F704C211E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 439F56F83AFC49C0A309403C;
+			remoteInfo = vtkfreetype;
+		};
+		4F704C231E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BDE3E87A8D29422098864767;
+			remoteInfo = vtkRenderingFreeType;
+		};
+		4F704C251E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5AE275CE5D234E248E50B2DA;
+			remoteInfo = vtkRenderingContext2D;
+		};
+		4F704C271E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0BCD64BAFD5D47A893D8263E;
+			remoteInfo = vtkChartsCore;
+		};
+		4F704C291E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6B0B2FCD2F714D66875F609C;
+			remoteInfo = vtkIOCore;
+		};
+		4F704C2B1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EDE6D4A1496247F893B4E013;
+			remoteInfo = vtkIOLegacy;
+		};
+		4F704C2D1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8280535C1643488A9E01A0D1;
+			remoteInfo = vtkexpat;
+		};
+		4F704C2F1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D7558D328EAB46C2A4865081;
+			remoteInfo = vtkIOXMLParser;
+		};
+		4F704C311E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 39EEB1053CAD484AA3DE7A72;
+			remoteInfo = vtkIOXML;
+		};
+		4F704C331E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3E572D8EEAED4F73A65BC890;
+			remoteInfo = vtklibxml2;
+		};
+		4F704C351E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 46EDF32CF7634029A566D33A;
+			remoteInfo = vtkIOInfovis;
+		};
+		4F704C371E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9CA7BA3C0DB64533BA372753;
+			remoteInfo = vtkDICOMParser;
+		};
+		4F704C391E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 99BF9AEB352F42A682A1CFBF;
+			remoteInfo = vtkmetaio;
+		};
+		4F704C3B1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7EB3883FD65D4EAEB4BE7B18;
+			remoteInfo = vtkjpeg;
+		};
+		4F704C3D1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EF0D31663F2945458641AB30;
+			remoteInfo = vtkpng;
+		};
+		4F704C3F1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DE2280DD670E48578EFB4AFE;
+			remoteInfo = vtktiff;
+		};
+		4F704C411E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 29EB6CA2E80745FE8CF204BF;
+			remoteInfo = vtkIOImage;
+		};
+		4F704C431E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 677D90AFCD824BEEA8AC7ECF;
+			remoteInfo = vtkEncodeString;
+		};
+		4F704C451E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E79D8A1D22884FFDB7E63B6C;
+			remoteInfo = vtkglew;
+		};
+		4F704C471E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 869240DE05724AD1A5FC8EEC;
+			remoteInfo = vtkRenderingOpenGL2;
+		};
+		4F704C491E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B6BE7DB300664AF69F91F7FF;
+			remoteInfo = vtkRenderingContextOpenGL2;
+		};
+		4F704C4B1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 525212643BC446269516C786;
+			remoteInfo = vtkTestingRendering;
+		};
+		4F704C4D1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3162A94381E14C2DB09F2EB6;
+			remoteInfo = vtkImagingSources;
+		};
+		4F704C4F1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 62E06BE3C6974B9A9068BD61;
+			remoteInfo = vtkFiltersHybrid;
+		};
+		4F704C511E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 90EC5CE884BF4A48A5434D0A;
+			remoteInfo = vtkFiltersModeling;
+		};
+		4F704C531E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CDEB569EDC72451690A76CE4;
+			remoteInfo = vtkImagingColor;
+		};
+		4F704C551E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F34A4F47387843E68BC6E3F5;
+			remoteInfo = vtkImagingGeneral;
+		};
+		4F704C571E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 071D18C2FD664997AA07DAF9;
+			remoteInfo = vtkImagingHybrid;
+		};
+		4F704C591E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5C8B7209A85241BFB62F5F84;
+			remoteInfo = vtkInteractionStyle;
+		};
+		4F704C5B1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F35F6C42DDBA41C2AF77481C;
+			remoteInfo = vtkRenderingAnnotation;
+		};
+		4F704C5D1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 06F26F171A9F4E44AA9CED25;
+			remoteInfo = vtkRenderingVolume;
+		};
+		4F704C5F1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1BEB5C89125C42CDA1518D15;
+			remoteInfo = vtkInteractionWidgets;
+		};
+		4F704C611E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5A9B08EDB59E4F2585AB55E0;
+			remoteInfo = vtkViewsCore;
+		};
+		4F704C631E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B2C8FD265B4C450EAE22E5AD;
+			remoteInfo = vtkViewsContext2D;
+		};
+		4F704C651E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 01B0486F8AB04363BD6B6066;
+			remoteInfo = vtkChartsCoreCxxTests;
+		};
+		4F704C671E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6748369E65634AC48A414512;
+			remoteInfo = vtkCommonColorCxxTests;
+		};
+		4F704C691E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E92CEBAC07B24DE8BF92BAD5;
+			remoteInfo = vtkCommonComputationalGeometryCxxTests;
+		};
+		4F704C6B1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 34067D9539BC4B6EB252F56E;
+			remoteInfo = vtkCommonCoreCxxTests;
+		};
+		4F704C6D1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3C233D2C3CD14B28870F8AAF;
+			remoteInfo = vtkFiltersGeneric;
+		};
+		4F704C6F1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4D8FCF1EC84D4121B4166303;
+			remoteInfo = vtkIOGeometry;
+		};
+		4F704C711E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 840A3E3595C3440583B76830;
+			remoteInfo = vtkTestingGenericBridge;
+		};
+		4F704C731E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 873FAD774FC94C1684E44487;
+			remoteInfo = vtkCommonDataModelCxxTests;
+		};
+		4F704C751E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7AB07BDB1F9E47008A2E1230;
+			remoteInfo = vtkCommonExecutionModelCxxTests;
+		};
+		4F704C771E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3BE1C936844A49E8BCC72E09;
+			remoteInfo = vtkCommonMathCxxTests;
+		};
+		4F704C791E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2D48814EE1794C4DAB301006;
+			remoteInfo = vtkCommonMiscCxxTests;
+		};
+		4F704C7B1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 47335F7C08434A27976D6398;
+			remoteInfo = vtkCommonSystemCxxTests;
+		};
+		4F704C7D1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DB944DC0C43840C3817D2AF6;
+			remoteInfo = vtkCommonTransformsCxxTests;
+		};
+		4F704C7F1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = ADF43AA8CE084A7B84A15E2B;
+			remoteInfo = vtkDomainsChemistry;
+		};
+		4F704C811E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3AEA06083D2B4DAE9A304A64;
+			remoteInfo = vtkDomainsChemistryOpenGL2;
+		};
+		4F704C831E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8A5356B1211340779402CE2F;
+			remoteInfo = vtkDomainsChemistryCxxTests;
+		};
+		4F704C851E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0F66E0B61696435BABEAD6F4;
+			remoteInfo = vtkDomainsChemistryOpenGL2CxxTests;
+		};
+		4F704C871E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D4553FD731834441B93A17D4;
+			remoteInfo = vtkHashSource;
+		};
+		4F704C891E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 43D3460FF4B1426899B773B0;
+			remoteInfo = vtkParallelCore;
+		};
+		4F704C8B1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8098EEB3129645F6B468693C;
+			remoteInfo = vtkFiltersAMR;
+		};
+		4F704C8D1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A882BF743913405986965D76;
+			remoteInfo = H5detect;
+		};
+		4F704C8F1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B2D2678713D14441B42B60B0;
+			remoteInfo = H5make_libsettings;
+		};
+		4F704C911E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6A7F388A961B454B807609AF;
+			remoteInfo = vtkhdf5;
+		};
+		4F704C931E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D48D6E0255AF493DB36A5CDE;
+			remoteInfo = vtkhdf5_hl;
+		};
+		4F704C951E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A228D69B17CE4EA1B238C5AF;
+			remoteInfo = vtkIOAMR;
+		};
+		4F704C971E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EBACC70A5E945FEA33191CC;
+			remoteInfo = vtkFiltersAMRCxxTests;
+		};
+		4F704C991E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FF68CBCD54D740C1A7FA6CC0;
+			remoteInfo = vtkImagingMath;
+		};
+		4F704C9B1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B808183D816A4C3BBACDE486;
+			remoteInfo = vtkRenderingVolumeOpenGL2;
+		};
+		4F704C9D1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3A667DF99DBC45708AB0272A;
+			remoteInfo = vtkFiltersCoreCxxTests;
+		};
+		4F704C9F1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 105596F3BB874D55B1494C11;
+			remoteInfo = vtkNetCDF;
+		};
+		4F704CA11E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7DD88F48CA694242ABA1C56B;
+			remoteInfo = vtkNetCDF_cxx;
+		};
+		4F704CA31E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3A1891A87DC049E58E0D059F;
+			remoteInfo = vtkexoIIc;
+		};
+		4F704CA51E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2DDF10B0115A4E868EFA8E2B;
+			remoteInfo = vtkIOExodus;
+		};
+		4F704CA71E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 796254DEB0FF4B2BAE4FEE4E;
+			remoteInfo = vtkFiltersExtractionCxxTests;
+		};
+		4F704CA91E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 20CA69FAB55B412F95362F26;
+			remoteInfo = vtkFiltersFlowPaths;
+		};
+		4F704CAB1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FBDDF1EBB735479995241E64;
+			remoteInfo = vtkFiltersImaging;
+		};
+		4F704CAD1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EC00E2C69C704EB389C8F1A2;
+			remoteInfo = vtkFiltersFlowPathsCxxTests;
+		};
+		4F704CAF1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 45903468CECC4ACF92F8BDCD;
+			remoteInfo = vtkRenderingLabel;
+		};
+		4F704CB11E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B1F40AA18DD24A2E8678C598;
+			remoteInfo = vtkFiltersGeneralCxxTests;
+		};
+		4F704CB31E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F3712EB9F95D452EB4EFA38E;
+			remoteInfo = vtkFiltersGenericCxxTests;
+		};
+		4F704CB51E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2B3DB9DECF6442D8BF2C7010;
+			remoteInfo = vtkFiltersGeometryCxxTests;
+		};
+		4F704CB71E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A9BD5278B3BF40E4865A638C;
+			remoteInfo = vtkImagingStencil;
+		};
+		4F704CB91E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FC9091EB184540628C62BC50;
+			remoteInfo = vtkFiltersHybridCxxTests;
+		};
+		4F704CBB1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0E513A4323D04D45816B77F2;
+			remoteInfo = vtkFiltersHyperTree;
+		};
+		4F704CBD1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D5BFD5950611454E9A14F6AD;
+			remoteInfo = vtkFiltersHyperTreeCxxTests;
+		};
+		4F704CBF1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 189CEB155F124327A6BCF4A9;
+			remoteInfo = vtkFiltersModelingCxxTests;
+		};
+		4F704CC11E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D8D4A615BC0D4E91891C0D81;
+			remoteInfo = vtkFiltersParallel;
+		};
+		4F704CC31E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5FC343C720B94E33982FEDED;
+			remoteInfo = vtkFiltersParallelImaging;
+		};
+		4F704CC51E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E47D93D033C74ECEA44D2D73;
+			remoteInfo = vtkFiltersPoints;
+		};
+		4F704CC71E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 08D9023D4F5B4726A875572D;
+			remoteInfo = vtkFiltersPointsCxxTests;
+		};
+		4F704CC91E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D72BC93D091B4665A5373CB6;
+			remoteInfo = vtkFiltersProgrammable;
+		};
+		4F704CCB1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F8620CB14A50439D8A1039B6;
+			remoteInfo = vtkFiltersProgrammableCxxTests;
+		};
+		4F704CCD1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5DC983A099E84054AA9CA0E1;
+			remoteInfo = vtkFiltersSMP;
+		};
+		4F704CCF1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6F90D09980B940C68552232D;
+			remoteInfo = vtkFiltersSMPCxxTests;
+		};
+		4F704CD11E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 16782C8B219F43C08924A757;
+			remoteInfo = vtkFiltersSelection;
+		};
+		4F704CD31E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BA5B59E4F5E4446593DD7F0B;
+			remoteInfo = vtkFiltersSelectionCxxTests;
+		};
+		4F704CD51E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 423E012771414B3A939FA2F1;
+			remoteInfo = vtkIONetCDF;
+		};
+		4F704CD71E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D41326E657DA4F4686EF0357;
+			remoteInfo = vtkjsoncpp;
+		};
+		4F704CD91E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 51FF77F944B94988A2D5CE8B;
+			remoteInfo = vtkIOParallel;
+		};
+		4F704CDB1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2E9325E5B42649B88FF8E610;
+			remoteInfo = vtkFiltersSourcesCxxTests;
+		};
+		4F704CDD1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B10D34D3240E45968029F4D1;
+			remoteInfo = vtkFiltersStatisticsCxxTests;
+		};
+		4F704CDF1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 529343CFCF7D4A768B643F6F;
+			remoteInfo = vtkFiltersTexture;
+		};
+		4F704CE11E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9AFC0CD3FB714CCA942D31F1;
+			remoteInfo = verdict;
+		};
+		4F704CE31E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 56DAAC73DE914CB5A3A266E7;
+			remoteInfo = vtkFiltersVerdict;
+		};
+		4F704CE51E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 72F8779C3891446A9016DF49;
+			remoteInfo = vtkFiltersVerdictCxxTests;
+		};
+		4F704CE71E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3F4C05BB95BC4D37AE3EC733;
+			remoteInfo = vtkInfovisLayout;
+		};
+		4F704CE91E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 761352713BCF47B9A94FE9E2;
+			remoteInfo = vtkproj4;
+		};
+		4F704CEB1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6073238A4CC24D4CA78E557C;
+			remoteInfo = vtkGeovisCore;
+		};
+		4F704CED1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 05B714DCB48543ADB2820280;
+			remoteInfo = vtkIOAMRCxxTests;
+		};
+		4F704CEF1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 78FABFED787B4F9B8C5FF690;
+			remoteInfo = vtkIOCoreCxxTests;
+		};
+		4F704CF11E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 18B20B40E4F84F70A01F19DB;
+			remoteInfo = vtkIOEnSight;
+		};
+		4F704CF31E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 72C89596FC99402EBC62C191;
+			remoteInfo = vtkIOExodusCxxTests;
+		};
+		4F704CF51E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7937468470B949E58E50E852;
+			remoteInfo = vtkgl2ps;
+		};
+		4F704CF71E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D7AE7A88DCCD48009E4EE66D;
+			remoteInfo = vtkRenderingGL2PSOpenGL2;
+		};
+		4F704CF91E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9BBEE2E7EAFC45AFADB42A06;
+			remoteInfo = vtkIOExport;
+		};
+		4F704CFB1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FF16E4AC05D54BC1835CE9F6;
+			remoteInfo = vtkIOGeometryCxxTests;
+		};
+		4F704CFD1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6A8909572F9C4AE9BBBCAD75;
+			remoteInfo = vtkInteractionImage;
+		};
+		4F704CFF1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0F5D1EF5E893432B83015964;
+			remoteInfo = vtkIOImageCxxTests;
+		};
+		4F704D011E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 70D2202176DE4CE9BF76FAFC;
+			remoteInfo = vtkIOImport;
+		};
+		4F704D031E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 68D281A867584D0EB741A8AA;
+			remoteInfo = vtkIOImportCxxTests;
+		};
+		4F704D051E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5B1372EB03E34A16878AD5EC;
+			remoteInfo = vtkIOInfovisCxxTests;
+		};
+		4F704D071E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 54FDEE78FB374CEBB47F2F8D;
+			remoteInfo = vtkIOLSDyna;
+		};
+		4F704D091E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EB2B68F167345EDA67EE009;
+			remoteInfo = vtkIOLegacyCxxTests;
+		};
+		4F704D0B1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3C0A728AE56C42B4B4B929E8;
+			remoteInfo = vtkIOMINC;
+		};
+		4F704D0D1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 93ABEB4F972648808D0DBFE9;
+			remoteInfo = vtkoggtheora;
+		};
+		4F704D0F1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = ACDA6CA2B693413A86CFCF76;
+			remoteInfo = vtkIOMovie;
+		};
+		4F704D111E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B7DAA011BDEA49E4A094537F;
+			remoteInfo = vtkIOMovieCxxTests;
+		};
+		4F704D131E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 268935744BC94EF58A3B9237;
+			remoteInfo = vtkIOPLY;
+		};
+		4F704D151E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2C9A41A0E144BA49583A16D;
+			remoteInfo = vtkIOPLYCxxTests;
+		};
+		4F704D171E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 56C855D50781472E81C9D344;
+			remoteInfo = vtkIOParallelXML;
+		};
+		4F704D191E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3A9F9AD388814254B7215D7C;
+			remoteInfo = vtksqlite;
+		};
+		4F704D1B1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EA06F730A118434FA41FC6E3;
+			remoteInfo = vtkIOSQL;
+		};
+		4F704D1D1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3451F989EBE349D280448E9D;
+			remoteInfo = vtkTestingIOSQL;
+		};
+		4F704D1F1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C3927F68D53D4BA387D09219;
+			remoteInfo = vtkIOSQLCxxTests;
+		};
+		4F704D211E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0A143CBF98F3417D88CA502F;
+			remoteInfo = vtkIOTecplotTable;
+		};
+		4F704D231E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7394A99A6548479DA20378F2;
+			remoteInfo = vtkIOTecplotTableCxxTests;
+		};
+		4F704D251E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 82B1FFE13DB54503A333E4F1;
+			remoteInfo = vtkIOVideo;
+		};
+		4F704D271E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FF33BB9C616E4657B9E89012;
+			remoteInfo = TestXMLCInterface;
+		};
+		4F704D291E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F736E4D99D5D462EAD474802;
+			remoteInfo = vtkIOXMLCxxTests;
+		};
+		4F704D2B1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8C081A370DF246EBBE32DA36;
+			remoteInfo = vtkImagingStatistics;
+		};
+		4F704D2D1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 55D6A4C902D048789CDF8053;
+			remoteInfo = vtkRenderingImage;
+		};
+		4F704D2F1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3F0B0771D7A24EEB9C3432C7;
+			remoteInfo = vtkImagingCoreCxxTests;
+		};
+		4F704D311E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 077564C7CA78406EA54CE54A;
+			remoteInfo = vtkImagingHybridCxxTests;
+		};
+		4F704D331E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D5318362C6EE4663B21AFF62;
+			remoteInfo = vtkImagingMorphological;
+		};
+		4F704D351E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 86BE1326BD4F4119868E8141;
+			remoteInfo = vtkImagingMorphologicalCxxTests;
+		};
+		4F704D371E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C6C0EF6A91F44FB78762C77C;
+			remoteInfo = vtkInfovisCoreCxxTests;
+		};
+		4F704D391E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3C036E88B17C4893A5A73C26;
+			remoteInfo = vtkInfovisLayoutCxxTests;
+		};
+		4F704D3B1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8E478E4464D24BE392E145D0;
+			remoteInfo = vtkRenderingLOD;
+		};
+		4F704D3D1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6966561594274F609A37B3FC;
+			remoteInfo = vtkInteractionWidgetsCxxTests;
+		};
+		4F704D3F1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 57CED2E261FF496A9F767515;
+			remoteInfo = "vtkParallelCore-TestSocketCommunicator";
+		};
+		4F704D411E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 16579C1292EB4006B1BD13A9;
+			remoteInfo = vtkParallelCoreCxxTests;
+		};
+		4F704D431E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 55FF9130397245B2879B3F56;
+			remoteInfo = vtkRenderingAnnotationCxxTests;
+		};
+		4F704D451E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7BB20A2D2480441BAA96277E;
+			remoteInfo = vtkRenderingContext2DCxxTests;
+		};
+		4F704D471E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E6DF61C9C43C42A59DBB1B1C;
+			remoteInfo = vtkRenderingCoreCxxTests;
+		};
+		4F704D491E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 846871E8751145C99A999C77;
+			remoteInfo = vtkRenderingFreeTypeCxxTests;
+		};
+		4F704D4B1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A8248B2E853A418E815E5304;
+			remoteInfo = vtkRenderingGL2PSOpenGL2CxxTests;
+		};
+		4F704D4D1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3392D17C6E41449BB748C246;
+			remoteInfo = vtkRenderingImageCxxTests;
+		};
+		4F704D4F1E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F9607C5F1454F279E3528F9;
+			remoteInfo = vtkRenderingLODCxxTests;
+		};
+		4F704D511E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 245D1EB92EE54D7099CE6099;
+			remoteInfo = vtkRenderingLabelCxxTests;
+		};
+		4F704D531E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 86E1CB4D21E444A691DD0BAD;
+			remoteInfo = vtkRenderingOpenGL2CxxTests;
+		};
+		4F704D551E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 33437FCDA8334FB39D42B336;
+			remoteInfo = vtkRenderingVolumeCxxTests;
+		};
+		4F704D571E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 049E3B5A6BF9495ABB87457B;
+			remoteInfo = vtkViewsInfovis;
+		};
+		4F704D591E53A10E00BA486D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F0949784EC1D49A08A10155F;
+			remoteInfo = vtkViewsInfovisCxxTests;
+		};
 		712BC3801E1E3AF500C51700 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4F151ED21B1CC8D000C8F767 /* Project object */;
@@ -461,6 +1721,193 @@
 			name = Goodies;
 			sourceTree = "<group>";
 		};
+		4F704B331E53A10E00BA486D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4F704BF41E53A10E00BA486D /* kwiml_test */,
+				4F704BF61E53A10E00BA486D /* libvtksys-7.1.a */,
+				4F704BF81E53A10E00BA486D /* libvtkCommonCore-7.1.a */,
+				4F704BFA1E53A10E00BA486D /* libvtkCommonMath-7.1.a */,
+				4F704BFC1E53A10E00BA486D /* libvtkCommonMisc-7.1.a */,
+				4F704BFE1E53A10E00BA486D /* libvtkCommonSystem-7.1.a */,
+				4F704C001E53A10E00BA486D /* libvtkCommonTransforms-7.1.a */,
+				4F704C021E53A10E00BA486D /* libvtkCommonDataModel-7.1.a */,
+				4F704C041E53A10E00BA486D /* libvtkCommonColor-7.1.a */,
+				4F704C061E53A10E00BA486D /* libvtkCommonExecutionModel-7.1.a */,
+				4F704C081E53A10E00BA486D /* libvtkCommonComputationalGeometry-7.1.a */,
+				4F704C0A1E53A10E00BA486D /* libvtkFiltersCore-7.1.a */,
+				4F704C0C1E53A10E00BA486D /* libvtkFiltersGeneral-7.1.a */,
+				4F704C0E1E53A10E00BA486D /* libvtkImagingCore-7.1.a */,
+				4F704C101E53A10E00BA486D /* libvtkImagingFourier-7.1.a */,
+				4F704C121E53A10E00BA486D /* libvtkalglib-7.1.a */,
+				4F704C141E53A10E00BA486D /* libvtkFiltersStatistics-7.1.a */,
+				4F704C161E53A10E00BA486D /* libvtkFiltersExtraction-7.1.a */,
+				4F704C181E53A10E00BA486D /* libvtkInfovisCore-7.1.a */,
+				4F704C1A1E53A10E00BA486D /* libvtkFiltersGeometry-7.1.a */,
+				4F704C1C1E53A10E00BA486D /* libvtkFiltersSources-7.1.a */,
+				4F704C1E1E53A10E00BA486D /* libvtkRenderingCore-7.1.a */,
+				4F704C201E53A10E00BA486D /* libvtkzlib-7.1.a */,
+				4F704C221E53A10E00BA486D /* libvtkfreetype-7.1.a */,
+				4F704C241E53A10E00BA486D /* libvtkRenderingFreeType-7.1.a */,
+				4F704C261E53A10E00BA486D /* libvtkRenderingContext2D-7.1.a */,
+				4F704C281E53A10E00BA486D /* libvtkChartsCore-7.1.a */,
+				4F704C2A1E53A10E00BA486D /* libvtkIOCore-7.1.a */,
+				4F704C2C1E53A10E00BA486D /* libvtkIOLegacy-7.1.a */,
+				4F704C2E1E53A10E00BA486D /* libvtkexpat-7.1.a */,
+				4F704C301E53A10E00BA486D /* libvtkIOXMLParser-7.1.a */,
+				4F704C321E53A10E00BA486D /* libvtkIOXML-7.1.a */,
+				4F704C341E53A10E00BA486D /* libvtklibxml2-7.1.a */,
+				4F704C361E53A10E00BA486D /* libvtkIOInfovis-7.1.a */,
+				4F704C381E53A10E00BA486D /* libvtkDICOMParser-7.1.a */,
+				4F704C3A1E53A10E00BA486D /* libvtkmetaio-7.1.a */,
+				4F704C3C1E53A10E00BA486D /* libvtkjpeg-7.1.a */,
+				4F704C3E1E53A10E00BA486D /* libvtkpng-7.1.a */,
+				4F704C401E53A10E00BA486D /* libvtktiff-7.1.a */,
+				4F704C421E53A10E00BA486D /* libvtkIOImage-7.1.a */,
+				4F704C441E53A10E00BA486D /* vtkEncodeString-7.1 */,
+				4F704C461E53A10E00BA486D /* libvtkglew-7.1.a */,
+				4F704C481E53A10E00BA486D /* libvtkRenderingOpenGL2-7.1.a */,
+				4F704C4A1E53A10E00BA486D /* libvtkRenderingContextOpenGL2-7.1.a */,
+				4F704C4C1E53A10E00BA486D /* libvtkTestingRendering-7.1.a */,
+				4F704C4E1E53A10E00BA486D /* libvtkImagingSources-7.1.a */,
+				4F704C501E53A10E00BA486D /* libvtkFiltersHybrid-7.1.a */,
+				4F704C521E53A10E00BA486D /* libvtkFiltersModeling-7.1.a */,
+				4F704C541E53A10E00BA486D /* libvtkImagingColor-7.1.a */,
+				4F704C561E53A10E00BA486D /* libvtkImagingGeneral-7.1.a */,
+				4F704C581E53A10E00BA486D /* libvtkImagingHybrid-7.1.a */,
+				4F704C5A1E53A10E00BA486D /* libvtkInteractionStyle-7.1.a */,
+				4F704C5C1E53A10E00BA486D /* libvtkRenderingAnnotation-7.1.a */,
+				4F704C5E1E53A10E00BA486D /* libvtkRenderingVolume-7.1.a */,
+				4F704C601E53A10E00BA486D /* libvtkInteractionWidgets-7.1.a */,
+				4F704C621E53A10E00BA486D /* libvtkViewsCore-7.1.a */,
+				4F704C641E53A10E00BA486D /* libvtkViewsContext2D-7.1.a */,
+				4F704C661E53A10E00BA486D /* vtkChartsCoreCxxTests */,
+				4F704C681E53A10E00BA486D /* vtkCommonColorCxxTests */,
+				4F704C6A1E53A10E00BA486D /* vtkCommonComputationalGeometryCxxTests */,
+				4F704C6C1E53A10E00BA486D /* vtkCommonCoreCxxTests */,
+				4F704C6E1E53A10E00BA486D /* libvtkFiltersGeneric-7.1.a */,
+				4F704C701E53A10E00BA486D /* libvtkIOGeometry-7.1.a */,
+				4F704C721E53A10E00BA486D /* libvtkTestingGenericBridge-7.1.a */,
+				4F704C741E53A10E00BA486D /* vtkCommonDataModelCxxTests */,
+				4F704C761E53A10E00BA486D /* vtkCommonExecutionModelCxxTests */,
+				4F704C781E53A10E00BA486D /* vtkCommonMathCxxTests */,
+				4F704C7A1E53A10E00BA486D /* vtkCommonMiscCxxTests */,
+				4F704C7C1E53A10E00BA486D /* vtkCommonSystemCxxTests */,
+				4F704C7E1E53A10E00BA486D /* vtkCommonTransformsCxxTests */,
+				4F704C801E53A10E00BA486D /* libvtkDomainsChemistry-7.1.a */,
+				4F704C821E53A10E00BA486D /* libvtkDomainsChemistryOpenGL2-7.1.a */,
+				4F704C841E53A10E00BA486D /* vtkDomainsChemistryCxxTests */,
+				4F704C861E53A10E00BA486D /* vtkDomainsChemistryOpenGL2CxxTests */,
+				4F704C881E53A10E00BA486D /* vtkHashSource-7.1 */,
+				4F704C8A1E53A10E00BA486D /* libvtkParallelCore-7.1.a */,
+				4F704C8C1E53A10E00BA486D /* libvtkFiltersAMR-7.1.a */,
+				4F704C8E1E53A10E00BA486D /* vtkH5detect */,
+				4F704C901E53A10E00BA486D /* vtkH5make_libsettings */,
+				4F704C921E53A10E00BA486D /* libvtkhdf5-7.1.a */,
+				4F704C941E53A10E00BA486D /* libvtkhdf5_hl-7.1.a */,
+				4F704C961E53A10E00BA486D /* libvtkIOAMR-7.1.a */,
+				4F704C981E53A10E00BA486D /* vtkFiltersAMRCxxTests */,
+				4F704C9A1E53A10E00BA486D /* libvtkImagingMath-7.1.a */,
+				4F704C9C1E53A10E00BA486D /* libvtkRenderingVolumeOpenGL2-7.1.a */,
+				4F704C9E1E53A10E00BA486D /* vtkFiltersCoreCxxTests */,
+				4F704CA01E53A10E00BA486D /* libvtkNetCDF-7.1.a */,
+				4F704CA21E53A10E00BA486D /* libvtkNetCDF_cxx-7.1.a */,
+				4F704CA41E53A10E00BA486D /* libvtkexoIIc-7.1.a */,
+				4F704CA61E53A10E00BA486D /* libvtkIOExodus-7.1.a */,
+				4F704CA81E53A10E00BA486D /* vtkFiltersExtractionCxxTests */,
+				4F704CAA1E53A10E00BA486D /* libvtkFiltersFlowPaths-7.1.a */,
+				4F704CAC1E53A10E00BA486D /* libvtkFiltersImaging-7.1.a */,
+				4F704CAE1E53A10E00BA486D /* vtkFiltersFlowPathsCxxTests */,
+				4F704CB01E53A10E00BA486D /* libvtkRenderingLabel-7.1.a */,
+				4F704CB21E53A10E00BA486D /* vtkFiltersGeneralCxxTests */,
+				4F704CB41E53A10E00BA486D /* vtkFiltersGenericCxxTests */,
+				4F704CB61E53A10E00BA486D /* vtkFiltersGeometryCxxTests */,
+				4F704CB81E53A10E00BA486D /* libvtkImagingStencil-7.1.a */,
+				4F704CBA1E53A10E00BA486D /* vtkFiltersHybridCxxTests */,
+				4F704CBC1E53A10E00BA486D /* libvtkFiltersHyperTree-7.1.a */,
+				4F704CBE1E53A10E00BA486D /* vtkFiltersHyperTreeCxxTests */,
+				4F704CC01E53A10E00BA486D /* vtkFiltersModelingCxxTests */,
+				4F704CC21E53A10E00BA486D /* libvtkFiltersParallel-7.1.a */,
+				4F704CC41E53A10E00BA486D /* libvtkFiltersParallelImaging-7.1.a */,
+				4F704CC61E53A10E00BA486D /* libvtkFiltersPoints-7.1.a */,
+				4F704CC81E53A10E00BA486D /* vtkFiltersPointsCxxTests */,
+				4F704CCA1E53A10E00BA486D /* libvtkFiltersProgrammable-7.1.a */,
+				4F704CCC1E53A10E00BA486D /* vtkFiltersProgrammableCxxTests */,
+				4F704CCE1E53A10E00BA486D /* libvtkFiltersSMP-7.1.a */,
+				4F704CD01E53A10E00BA486D /* vtkFiltersSMPCxxTests */,
+				4F704CD21E53A10E00BA486D /* libvtkFiltersSelection-7.1.a */,
+				4F704CD41E53A10E00BA486D /* vtkFiltersSelectionCxxTests */,
+				4F704CD61E53A10E00BA486D /* libvtkIONetCDF-7.1.a */,
+				4F704CD81E53A10E00BA486D /* libvtkjsoncpp-7.1.a */,
+				4F704CDA1E53A10E00BA486D /* libvtkIOParallel-7.1.a */,
+				4F704CDC1E53A10E00BA486D /* vtkFiltersSourcesCxxTests */,
+				4F704CDE1E53A10E00BA486D /* vtkFiltersStatisticsCxxTests */,
+				4F704CE01E53A10E00BA486D /* libvtkFiltersTexture-7.1.a */,
+				4F704CE21E53A10E00BA486D /* libvtkverdict-7.1.a */,
+				4F704CE41E53A10E00BA486D /* libvtkFiltersVerdict-7.1.a */,
+				4F704CE61E53A10E00BA486D /* vtkFiltersVerdictCxxTests */,
+				4F704CE81E53A10E00BA486D /* libvtkInfovisLayout-7.1.a */,
+				4F704CEA1E53A10E00BA486D /* libvtkproj4-7.1_d.a */,
+				4F704CEC1E53A10E00BA486D /* libvtkGeovisCore-7.1.a */,
+				4F704CEE1E53A10E00BA486D /* vtkIOAMRCxxTests */,
+				4F704CF01E53A10E00BA486D /* vtkIOCoreCxxTests */,
+				4F704CF21E53A10E00BA486D /* libvtkIOEnSight-7.1.a */,
+				4F704CF41E53A10E00BA486D /* vtkIOExodusCxxTests */,
+				4F704CF61E53A10E00BA486D /* libvtkgl2ps-7.1.a */,
+				4F704CF81E53A10E00BA486D /* libvtkRenderingGL2PSOpenGL2-7.1.a */,
+				4F704CFA1E53A10E00BA486D /* libvtkIOExport-7.1.a */,
+				4F704CFC1E53A10E00BA486D /* vtkIOGeometryCxxTests */,
+				4F704CFE1E53A10E00BA486D /* libvtkInteractionImage-7.1.a */,
+				4F704D001E53A10E00BA486D /* vtkIOImageCxxTests */,
+				4F704D021E53A10E00BA486D /* libvtkIOImport-7.1.a */,
+				4F704D041E53A10E00BA486D /* vtkIOImportCxxTests */,
+				4F704D061E53A10E00BA486D /* vtkIOInfovisCxxTests */,
+				4F704D081E53A10E00BA486D /* libvtkIOLSDyna-7.1.a */,
+				4F704D0A1E53A10E00BA486D /* vtkIOLegacyCxxTests */,
+				4F704D0C1E53A10E00BA486D /* libvtkIOMINC-7.1.a */,
+				4F704D0E1E53A10E00BA486D /* libvtkoggtheora-7.1.a */,
+				4F704D101E53A10E00BA486D /* libvtkIOMovie-7.1.a */,
+				4F704D121E53A10E00BA486D /* vtkIOMovieCxxTests */,
+				4F704D141E53A10E00BA486D /* libvtkIOPLY-7.1.a */,
+				4F704D161E53A10E00BA486D /* vtkIOPLYCxxTests */,
+				4F704D181E53A10E00BA486D /* libvtkIOParallelXML-7.1.a */,
+				4F704D1A1E53A10E00BA486D /* libvtksqlite-7.1.a */,
+				4F704D1C1E53A10E00BA486D /* libvtkIOSQL-7.1.a */,
+				4F704D1E1E53A10E00BA486D /* libvtkTestingIOSQL-7.1.a */,
+				4F704D201E53A10E00BA486D /* vtkIOSQLCxxTests */,
+				4F704D221E53A10E00BA486D /* libvtkIOTecplotTable-7.1.a */,
+				4F704D241E53A10E00BA486D /* vtkIOTecplotTableCxxTests */,
+				4F704D261E53A10E00BA486D /* libvtkIOVideo-7.1.a */,
+				4F704D281E53A10E00BA486D /* TestXMLCInterface */,
+				4F704D2A1E53A10E00BA486D /* vtkIOXMLCxxTests */,
+				4F704D2C1E53A10E00BA486D /* libvtkImagingStatistics-7.1.a */,
+				4F704D2E1E53A10E00BA486D /* libvtkRenderingImage-7.1.a */,
+				4F704D301E53A10E00BA486D /* vtkImagingCoreCxxTests */,
+				4F704D321E53A10E00BA486D /* vtkImagingHybridCxxTests */,
+				4F704D341E53A10E00BA486D /* libvtkImagingMorphological-7.1.a */,
+				4F704D361E53A10E00BA486D /* vtkImagingMorphologicalCxxTests */,
+				4F704D381E53A10E00BA486D /* vtkInfovisCoreCxxTests */,
+				4F704D3A1E53A10E00BA486D /* vtkInfovisLayoutCxxTests */,
+				4F704D3C1E53A10E00BA486D /* libvtkRenderingLOD-7.1.a */,
+				4F704D3E1E53A10E00BA486D /* vtkInteractionWidgetsCxxTests */,
+				4F704D401E53A10E00BA486D /* vtkParallelCore-TestSocketCommunicator */,
+				4F704D421E53A10E00BA486D /* vtkParallelCoreCxxTests */,
+				4F704D441E53A10E00BA486D /* vtkRenderingAnnotationCxxTests */,
+				4F704D461E53A10E00BA486D /* vtkRenderingContext2DCxxTests */,
+				4F704D481E53A10E00BA486D /* vtkRenderingCoreCxxTests */,
+				4F704D4A1E53A10E00BA486D /* vtkRenderingFreeTypeCxxTests */,
+				4F704D4C1E53A10E00BA486D /* vtkRenderingGL2PSOpenGL2CxxTests */,
+				4F704D4E1E53A10E00BA486D /* vtkRenderingImageCxxTests */,
+				4F704D501E53A10E00BA486D /* vtkRenderingLODCxxTests */,
+				4F704D521E53A10E00BA486D /* vtkRenderingLabelCxxTests */,
+				4F704D541E53A10E00BA486D /* vtkRenderingOpenGL2CxxTests */,
+				4F704D561E53A10E00BA486D /* vtkRenderingVolumeCxxTests */,
+				4F704D581E53A10E00BA486D /* libvtkViewsInfovis-7.1.a */,
+				4F704D5A1E53A10E00BA486D /* vtkViewsInfovisCxxTests */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		4FB4E3941CB83F7B003F082A /* Private */ = {
 			isa = PBXGroup;
 			children = (
@@ -685,6 +2132,12 @@
 			mainGroup = 4F151ED11B1CC8D000C8F767;
 			productRefGroup = 4F151EDC1B1CC8D000C8F767 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 4F704B331E53A10E00BA486D /* Products */;
+					ProjectRef = 713548761E363701007CE7BA /* VTK.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				4F151EDA1B1CC8D000C8F767 /* NIBuildingBlocks */,
@@ -694,6 +2147,1331 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		4F704BF41E53A10E00BA486D /* kwiml_test */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = kwiml_test;
+			remoteRef = 4F704BF31E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704BF61E53A10E00BA486D /* libvtksys-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtksys-7.1.a";
+			remoteRef = 4F704BF51E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704BF81E53A10E00BA486D /* libvtkCommonCore-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkCommonCore-7.1.a";
+			remoteRef = 4F704BF71E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704BFA1E53A10E00BA486D /* libvtkCommonMath-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkCommonMath-7.1.a";
+			remoteRef = 4F704BF91E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704BFC1E53A10E00BA486D /* libvtkCommonMisc-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkCommonMisc-7.1.a";
+			remoteRef = 4F704BFB1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704BFE1E53A10E00BA486D /* libvtkCommonSystem-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkCommonSystem-7.1.a";
+			remoteRef = 4F704BFD1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C001E53A10E00BA486D /* libvtkCommonTransforms-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkCommonTransforms-7.1.a";
+			remoteRef = 4F704BFF1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C021E53A10E00BA486D /* libvtkCommonDataModel-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkCommonDataModel-7.1.a";
+			remoteRef = 4F704C011E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C041E53A10E00BA486D /* libvtkCommonColor-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkCommonColor-7.1.a";
+			remoteRef = 4F704C031E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C061E53A10E00BA486D /* libvtkCommonExecutionModel-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkCommonExecutionModel-7.1.a";
+			remoteRef = 4F704C051E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C081E53A10E00BA486D /* libvtkCommonComputationalGeometry-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkCommonComputationalGeometry-7.1.a";
+			remoteRef = 4F704C071E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C0A1E53A10E00BA486D /* libvtkFiltersCore-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkFiltersCore-7.1.a";
+			remoteRef = 4F704C091E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C0C1E53A10E00BA486D /* libvtkFiltersGeneral-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkFiltersGeneral-7.1.a";
+			remoteRef = 4F704C0B1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C0E1E53A10E00BA486D /* libvtkImagingCore-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkImagingCore-7.1.a";
+			remoteRef = 4F704C0D1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C101E53A10E00BA486D /* libvtkImagingFourier-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkImagingFourier-7.1.a";
+			remoteRef = 4F704C0F1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C121E53A10E00BA486D /* libvtkalglib-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkalglib-7.1.a";
+			remoteRef = 4F704C111E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C141E53A10E00BA486D /* libvtkFiltersStatistics-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkFiltersStatistics-7.1.a";
+			remoteRef = 4F704C131E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C161E53A10E00BA486D /* libvtkFiltersExtraction-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkFiltersExtraction-7.1.a";
+			remoteRef = 4F704C151E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C181E53A10E00BA486D /* libvtkInfovisCore-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkInfovisCore-7.1.a";
+			remoteRef = 4F704C171E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C1A1E53A10E00BA486D /* libvtkFiltersGeometry-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkFiltersGeometry-7.1.a";
+			remoteRef = 4F704C191E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C1C1E53A10E00BA486D /* libvtkFiltersSources-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkFiltersSources-7.1.a";
+			remoteRef = 4F704C1B1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C1E1E53A10E00BA486D /* libvtkRenderingCore-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkRenderingCore-7.1.a";
+			remoteRef = 4F704C1D1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C201E53A10E00BA486D /* libvtkzlib-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkzlib-7.1.a";
+			remoteRef = 4F704C1F1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C221E53A10E00BA486D /* libvtkfreetype-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkfreetype-7.1.a";
+			remoteRef = 4F704C211E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C241E53A10E00BA486D /* libvtkRenderingFreeType-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkRenderingFreeType-7.1.a";
+			remoteRef = 4F704C231E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C261E53A10E00BA486D /* libvtkRenderingContext2D-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkRenderingContext2D-7.1.a";
+			remoteRef = 4F704C251E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C281E53A10E00BA486D /* libvtkChartsCore-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkChartsCore-7.1.a";
+			remoteRef = 4F704C271E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C2A1E53A10E00BA486D /* libvtkIOCore-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIOCore-7.1.a";
+			remoteRef = 4F704C291E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C2C1E53A10E00BA486D /* libvtkIOLegacy-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIOLegacy-7.1.a";
+			remoteRef = 4F704C2B1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C2E1E53A10E00BA486D /* libvtkexpat-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkexpat-7.1.a";
+			remoteRef = 4F704C2D1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C301E53A10E00BA486D /* libvtkIOXMLParser-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIOXMLParser-7.1.a";
+			remoteRef = 4F704C2F1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C321E53A10E00BA486D /* libvtkIOXML-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIOXML-7.1.a";
+			remoteRef = 4F704C311E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C341E53A10E00BA486D /* libvtklibxml2-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtklibxml2-7.1.a";
+			remoteRef = 4F704C331E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C361E53A10E00BA486D /* libvtkIOInfovis-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIOInfovis-7.1.a";
+			remoteRef = 4F704C351E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C381E53A10E00BA486D /* libvtkDICOMParser-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkDICOMParser-7.1.a";
+			remoteRef = 4F704C371E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C3A1E53A10E00BA486D /* libvtkmetaio-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkmetaio-7.1.a";
+			remoteRef = 4F704C391E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C3C1E53A10E00BA486D /* libvtkjpeg-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkjpeg-7.1.a";
+			remoteRef = 4F704C3B1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C3E1E53A10E00BA486D /* libvtkpng-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkpng-7.1.a";
+			remoteRef = 4F704C3D1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C401E53A10E00BA486D /* libvtktiff-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtktiff-7.1.a";
+			remoteRef = 4F704C3F1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C421E53A10E00BA486D /* libvtkIOImage-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIOImage-7.1.a";
+			remoteRef = 4F704C411E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C441E53A10E00BA486D /* vtkEncodeString-7.1 */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = "vtkEncodeString-7.1";
+			remoteRef = 4F704C431E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C461E53A10E00BA486D /* libvtkglew-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkglew-7.1.a";
+			remoteRef = 4F704C451E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C481E53A10E00BA486D /* libvtkRenderingOpenGL2-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkRenderingOpenGL2-7.1.a";
+			remoteRef = 4F704C471E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C4A1E53A10E00BA486D /* libvtkRenderingContextOpenGL2-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkRenderingContextOpenGL2-7.1.a";
+			remoteRef = 4F704C491E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C4C1E53A10E00BA486D /* libvtkTestingRendering-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkTestingRendering-7.1.a";
+			remoteRef = 4F704C4B1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C4E1E53A10E00BA486D /* libvtkImagingSources-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkImagingSources-7.1.a";
+			remoteRef = 4F704C4D1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C501E53A10E00BA486D /* libvtkFiltersHybrid-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkFiltersHybrid-7.1.a";
+			remoteRef = 4F704C4F1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C521E53A10E00BA486D /* libvtkFiltersModeling-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkFiltersModeling-7.1.a";
+			remoteRef = 4F704C511E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C541E53A10E00BA486D /* libvtkImagingColor-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkImagingColor-7.1.a";
+			remoteRef = 4F704C531E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C561E53A10E00BA486D /* libvtkImagingGeneral-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkImagingGeneral-7.1.a";
+			remoteRef = 4F704C551E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C581E53A10E00BA486D /* libvtkImagingHybrid-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkImagingHybrid-7.1.a";
+			remoteRef = 4F704C571E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C5A1E53A10E00BA486D /* libvtkInteractionStyle-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkInteractionStyle-7.1.a";
+			remoteRef = 4F704C591E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C5C1E53A10E00BA486D /* libvtkRenderingAnnotation-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkRenderingAnnotation-7.1.a";
+			remoteRef = 4F704C5B1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C5E1E53A10E00BA486D /* libvtkRenderingVolume-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkRenderingVolume-7.1.a";
+			remoteRef = 4F704C5D1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C601E53A10E00BA486D /* libvtkInteractionWidgets-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkInteractionWidgets-7.1.a";
+			remoteRef = 4F704C5F1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C621E53A10E00BA486D /* libvtkViewsCore-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkViewsCore-7.1.a";
+			remoteRef = 4F704C611E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C641E53A10E00BA486D /* libvtkViewsContext2D-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkViewsContext2D-7.1.a";
+			remoteRef = 4F704C631E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C661E53A10E00BA486D /* vtkChartsCoreCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkChartsCoreCxxTests;
+			path = vtkChartsCoreCxxTests.app;
+			remoteRef = 4F704C651E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C681E53A10E00BA486D /* vtkCommonColorCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkCommonColorCxxTests;
+			path = vtkCommonColorCxxTests.app;
+			remoteRef = 4F704C671E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C6A1E53A10E00BA486D /* vtkCommonComputationalGeometryCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkCommonComputationalGeometryCxxTests;
+			path = vtkCommonComputationalGeometryCxxTests.app;
+			remoteRef = 4F704C691E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C6C1E53A10E00BA486D /* vtkCommonCoreCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkCommonCoreCxxTests;
+			path = vtkCommonCoreCxxTests.app;
+			remoteRef = 4F704C6B1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C6E1E53A10E00BA486D /* libvtkFiltersGeneric-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkFiltersGeneric-7.1.a";
+			remoteRef = 4F704C6D1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C701E53A10E00BA486D /* libvtkIOGeometry-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIOGeometry-7.1.a";
+			remoteRef = 4F704C6F1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C721E53A10E00BA486D /* libvtkTestingGenericBridge-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkTestingGenericBridge-7.1.a";
+			remoteRef = 4F704C711E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C741E53A10E00BA486D /* vtkCommonDataModelCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkCommonDataModelCxxTests;
+			path = vtkCommonDataModelCxxTests.app;
+			remoteRef = 4F704C731E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C761E53A10E00BA486D /* vtkCommonExecutionModelCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkCommonExecutionModelCxxTests;
+			path = vtkCommonExecutionModelCxxTests.app;
+			remoteRef = 4F704C751E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C781E53A10E00BA486D /* vtkCommonMathCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkCommonMathCxxTests;
+			path = vtkCommonMathCxxTests.app;
+			remoteRef = 4F704C771E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C7A1E53A10E00BA486D /* vtkCommonMiscCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkCommonMiscCxxTests;
+			path = vtkCommonMiscCxxTests.app;
+			remoteRef = 4F704C791E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C7C1E53A10E00BA486D /* vtkCommonSystemCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkCommonSystemCxxTests;
+			path = vtkCommonSystemCxxTests.app;
+			remoteRef = 4F704C7B1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C7E1E53A10E00BA486D /* vtkCommonTransformsCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkCommonTransformsCxxTests;
+			path = vtkCommonTransformsCxxTests.app;
+			remoteRef = 4F704C7D1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C801E53A10E00BA486D /* libvtkDomainsChemistry-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkDomainsChemistry-7.1.a";
+			remoteRef = 4F704C7F1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C821E53A10E00BA486D /* libvtkDomainsChemistryOpenGL2-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkDomainsChemistryOpenGL2-7.1.a";
+			remoteRef = 4F704C811E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C841E53A10E00BA486D /* vtkDomainsChemistryCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkDomainsChemistryCxxTests;
+			path = vtkDomainsChemistryCxxTests.app;
+			remoteRef = 4F704C831E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C861E53A10E00BA486D /* vtkDomainsChemistryOpenGL2CxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkDomainsChemistryOpenGL2CxxTests;
+			path = vtkDomainsChemistryOpenGL2CxxTests.app;
+			remoteRef = 4F704C851E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C881E53A10E00BA486D /* vtkHashSource-7.1 */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = "vtkHashSource-7.1";
+			remoteRef = 4F704C871E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C8A1E53A10E00BA486D /* libvtkParallelCore-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkParallelCore-7.1.a";
+			remoteRef = 4F704C891E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C8C1E53A10E00BA486D /* libvtkFiltersAMR-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkFiltersAMR-7.1.a";
+			remoteRef = 4F704C8B1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C8E1E53A10E00BA486D /* vtkH5detect */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = vtkH5detect;
+			remoteRef = 4F704C8D1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C901E53A10E00BA486D /* vtkH5make_libsettings */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = vtkH5make_libsettings;
+			remoteRef = 4F704C8F1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C921E53A10E00BA486D /* libvtkhdf5-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkhdf5-7.1.a";
+			remoteRef = 4F704C911E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C941E53A10E00BA486D /* libvtkhdf5_hl-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkhdf5_hl-7.1.a";
+			remoteRef = 4F704C931E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C961E53A10E00BA486D /* libvtkIOAMR-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIOAMR-7.1.a";
+			remoteRef = 4F704C951E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C981E53A10E00BA486D /* vtkFiltersAMRCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkFiltersAMRCxxTests;
+			path = vtkFiltersAMRCxxTests.app;
+			remoteRef = 4F704C971E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C9A1E53A10E00BA486D /* libvtkImagingMath-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkImagingMath-7.1.a";
+			remoteRef = 4F704C991E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C9C1E53A10E00BA486D /* libvtkRenderingVolumeOpenGL2-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkRenderingVolumeOpenGL2-7.1.a";
+			remoteRef = 4F704C9B1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704C9E1E53A10E00BA486D /* vtkFiltersCoreCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkFiltersCoreCxxTests;
+			path = vtkFiltersCoreCxxTests.app;
+			remoteRef = 4F704C9D1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CA01E53A10E00BA486D /* libvtkNetCDF-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkNetCDF-7.1.a";
+			remoteRef = 4F704C9F1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CA21E53A10E00BA486D /* libvtkNetCDF_cxx-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkNetCDF_cxx-7.1.a";
+			remoteRef = 4F704CA11E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CA41E53A10E00BA486D /* libvtkexoIIc-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkexoIIc-7.1.a";
+			remoteRef = 4F704CA31E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CA61E53A10E00BA486D /* libvtkIOExodus-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIOExodus-7.1.a";
+			remoteRef = 4F704CA51E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CA81E53A10E00BA486D /* vtkFiltersExtractionCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkFiltersExtractionCxxTests;
+			path = vtkFiltersExtractionCxxTests.app;
+			remoteRef = 4F704CA71E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CAA1E53A10E00BA486D /* libvtkFiltersFlowPaths-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkFiltersFlowPaths-7.1.a";
+			remoteRef = 4F704CA91E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CAC1E53A10E00BA486D /* libvtkFiltersImaging-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkFiltersImaging-7.1.a";
+			remoteRef = 4F704CAB1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CAE1E53A10E00BA486D /* vtkFiltersFlowPathsCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkFiltersFlowPathsCxxTests;
+			path = vtkFiltersFlowPathsCxxTests.app;
+			remoteRef = 4F704CAD1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CB01E53A10E00BA486D /* libvtkRenderingLabel-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkRenderingLabel-7.1.a";
+			remoteRef = 4F704CAF1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CB21E53A10E00BA486D /* vtkFiltersGeneralCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkFiltersGeneralCxxTests;
+			path = vtkFiltersGeneralCxxTests.app;
+			remoteRef = 4F704CB11E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CB41E53A10E00BA486D /* vtkFiltersGenericCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkFiltersGenericCxxTests;
+			path = vtkFiltersGenericCxxTests.app;
+			remoteRef = 4F704CB31E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CB61E53A10E00BA486D /* vtkFiltersGeometryCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkFiltersGeometryCxxTests;
+			path = vtkFiltersGeometryCxxTests.app;
+			remoteRef = 4F704CB51E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CB81E53A10E00BA486D /* libvtkImagingStencil-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkImagingStencil-7.1.a";
+			remoteRef = 4F704CB71E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CBA1E53A10E00BA486D /* vtkFiltersHybridCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkFiltersHybridCxxTests;
+			path = vtkFiltersHybridCxxTests.app;
+			remoteRef = 4F704CB91E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CBC1E53A10E00BA486D /* libvtkFiltersHyperTree-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkFiltersHyperTree-7.1.a";
+			remoteRef = 4F704CBB1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CBE1E53A10E00BA486D /* vtkFiltersHyperTreeCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkFiltersHyperTreeCxxTests;
+			path = vtkFiltersHyperTreeCxxTests.app;
+			remoteRef = 4F704CBD1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CC01E53A10E00BA486D /* vtkFiltersModelingCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkFiltersModelingCxxTests;
+			path = vtkFiltersModelingCxxTests.app;
+			remoteRef = 4F704CBF1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CC21E53A10E00BA486D /* libvtkFiltersParallel-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkFiltersParallel-7.1.a";
+			remoteRef = 4F704CC11E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CC41E53A10E00BA486D /* libvtkFiltersParallelImaging-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkFiltersParallelImaging-7.1.a";
+			remoteRef = 4F704CC31E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CC61E53A10E00BA486D /* libvtkFiltersPoints-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkFiltersPoints-7.1.a";
+			remoteRef = 4F704CC51E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CC81E53A10E00BA486D /* vtkFiltersPointsCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkFiltersPointsCxxTests;
+			path = vtkFiltersPointsCxxTests.app;
+			remoteRef = 4F704CC71E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CCA1E53A10E00BA486D /* libvtkFiltersProgrammable-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkFiltersProgrammable-7.1.a";
+			remoteRef = 4F704CC91E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CCC1E53A10E00BA486D /* vtkFiltersProgrammableCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkFiltersProgrammableCxxTests;
+			path = vtkFiltersProgrammableCxxTests.app;
+			remoteRef = 4F704CCB1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CCE1E53A10E00BA486D /* libvtkFiltersSMP-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkFiltersSMP-7.1.a";
+			remoteRef = 4F704CCD1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CD01E53A10E00BA486D /* vtkFiltersSMPCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkFiltersSMPCxxTests;
+			path = vtkFiltersSMPCxxTests.app;
+			remoteRef = 4F704CCF1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CD21E53A10E00BA486D /* libvtkFiltersSelection-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkFiltersSelection-7.1.a";
+			remoteRef = 4F704CD11E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CD41E53A10E00BA486D /* vtkFiltersSelectionCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkFiltersSelectionCxxTests;
+			path = vtkFiltersSelectionCxxTests.app;
+			remoteRef = 4F704CD31E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CD61E53A10E00BA486D /* libvtkIONetCDF-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIONetCDF-7.1.a";
+			remoteRef = 4F704CD51E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CD81E53A10E00BA486D /* libvtkjsoncpp-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkjsoncpp-7.1.a";
+			remoteRef = 4F704CD71E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CDA1E53A10E00BA486D /* libvtkIOParallel-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIOParallel-7.1.a";
+			remoteRef = 4F704CD91E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CDC1E53A10E00BA486D /* vtkFiltersSourcesCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkFiltersSourcesCxxTests;
+			path = vtkFiltersSourcesCxxTests.app;
+			remoteRef = 4F704CDB1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CDE1E53A10E00BA486D /* vtkFiltersStatisticsCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkFiltersStatisticsCxxTests;
+			path = vtkFiltersStatisticsCxxTests.app;
+			remoteRef = 4F704CDD1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CE01E53A10E00BA486D /* libvtkFiltersTexture-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkFiltersTexture-7.1.a";
+			remoteRef = 4F704CDF1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CE21E53A10E00BA486D /* libvtkverdict-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkverdict-7.1.a";
+			remoteRef = 4F704CE11E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CE41E53A10E00BA486D /* libvtkFiltersVerdict-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkFiltersVerdict-7.1.a";
+			remoteRef = 4F704CE31E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CE61E53A10E00BA486D /* vtkFiltersVerdictCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkFiltersVerdictCxxTests;
+			path = vtkFiltersVerdictCxxTests.app;
+			remoteRef = 4F704CE51E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CE81E53A10E00BA486D /* libvtkInfovisLayout-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkInfovisLayout-7.1.a";
+			remoteRef = 4F704CE71E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CEA1E53A10E00BA486D /* libvtkproj4-7.1_d.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkproj4-7.1_d.a";
+			remoteRef = 4F704CE91E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CEC1E53A10E00BA486D /* libvtkGeovisCore-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkGeovisCore-7.1.a";
+			remoteRef = 4F704CEB1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CEE1E53A10E00BA486D /* vtkIOAMRCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkIOAMRCxxTests;
+			path = vtkIOAMRCxxTests.app;
+			remoteRef = 4F704CED1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CF01E53A10E00BA486D /* vtkIOCoreCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkIOCoreCxxTests;
+			path = vtkIOCoreCxxTests.app;
+			remoteRef = 4F704CEF1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CF21E53A10E00BA486D /* libvtkIOEnSight-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIOEnSight-7.1.a";
+			remoteRef = 4F704CF11E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CF41E53A10E00BA486D /* vtkIOExodusCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkIOExodusCxxTests;
+			path = vtkIOExodusCxxTests.app;
+			remoteRef = 4F704CF31E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CF61E53A10E00BA486D /* libvtkgl2ps-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkgl2ps-7.1.a";
+			remoteRef = 4F704CF51E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CF81E53A10E00BA486D /* libvtkRenderingGL2PSOpenGL2-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkRenderingGL2PSOpenGL2-7.1.a";
+			remoteRef = 4F704CF71E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CFA1E53A10E00BA486D /* libvtkIOExport-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIOExport-7.1.a";
+			remoteRef = 4F704CF91E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CFC1E53A10E00BA486D /* vtkIOGeometryCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkIOGeometryCxxTests;
+			path = vtkIOGeometryCxxTests.app;
+			remoteRef = 4F704CFB1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704CFE1E53A10E00BA486D /* libvtkInteractionImage-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkInteractionImage-7.1.a";
+			remoteRef = 4F704CFD1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D001E53A10E00BA486D /* vtkIOImageCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkIOImageCxxTests;
+			path = vtkIOImageCxxTests.app;
+			remoteRef = 4F704CFF1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D021E53A10E00BA486D /* libvtkIOImport-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIOImport-7.1.a";
+			remoteRef = 4F704D011E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D041E53A10E00BA486D /* vtkIOImportCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkIOImportCxxTests;
+			path = vtkIOImportCxxTests.app;
+			remoteRef = 4F704D031E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D061E53A10E00BA486D /* vtkIOInfovisCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkIOInfovisCxxTests;
+			path = vtkIOInfovisCxxTests.app;
+			remoteRef = 4F704D051E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D081E53A10E00BA486D /* libvtkIOLSDyna-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIOLSDyna-7.1.a";
+			remoteRef = 4F704D071E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D0A1E53A10E00BA486D /* vtkIOLegacyCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkIOLegacyCxxTests;
+			path = vtkIOLegacyCxxTests.app;
+			remoteRef = 4F704D091E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D0C1E53A10E00BA486D /* libvtkIOMINC-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIOMINC-7.1.a";
+			remoteRef = 4F704D0B1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D0E1E53A10E00BA486D /* libvtkoggtheora-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkoggtheora-7.1.a";
+			remoteRef = 4F704D0D1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D101E53A10E00BA486D /* libvtkIOMovie-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIOMovie-7.1.a";
+			remoteRef = 4F704D0F1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D121E53A10E00BA486D /* vtkIOMovieCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkIOMovieCxxTests;
+			path = vtkIOMovieCxxTests.app;
+			remoteRef = 4F704D111E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D141E53A10E00BA486D /* libvtkIOPLY-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIOPLY-7.1.a";
+			remoteRef = 4F704D131E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D161E53A10E00BA486D /* vtkIOPLYCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkIOPLYCxxTests;
+			path = vtkIOPLYCxxTests.app;
+			remoteRef = 4F704D151E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D181E53A10E00BA486D /* libvtkIOParallelXML-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIOParallelXML-7.1.a";
+			remoteRef = 4F704D171E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D1A1E53A10E00BA486D /* libvtksqlite-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtksqlite-7.1.a";
+			remoteRef = 4F704D191E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D1C1E53A10E00BA486D /* libvtkIOSQL-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIOSQL-7.1.a";
+			remoteRef = 4F704D1B1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D1E1E53A10E00BA486D /* libvtkTestingIOSQL-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkTestingIOSQL-7.1.a";
+			remoteRef = 4F704D1D1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D201E53A10E00BA486D /* vtkIOSQLCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkIOSQLCxxTests;
+			path = vtkIOSQLCxxTests.app;
+			remoteRef = 4F704D1F1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D221E53A10E00BA486D /* libvtkIOTecplotTable-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIOTecplotTable-7.1.a";
+			remoteRef = 4F704D211E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D241E53A10E00BA486D /* vtkIOTecplotTableCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkIOTecplotTableCxxTests;
+			path = vtkIOTecplotTableCxxTests.app;
+			remoteRef = 4F704D231E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D261E53A10E00BA486D /* libvtkIOVideo-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkIOVideo-7.1.a";
+			remoteRef = 4F704D251E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D281E53A10E00BA486D /* TestXMLCInterface */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = TestXMLCInterface;
+			path = TestXMLCInterface.app;
+			remoteRef = 4F704D271E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D2A1E53A10E00BA486D /* vtkIOXMLCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkIOXMLCxxTests;
+			path = vtkIOXMLCxxTests.app;
+			remoteRef = 4F704D291E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D2C1E53A10E00BA486D /* libvtkImagingStatistics-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkImagingStatistics-7.1.a";
+			remoteRef = 4F704D2B1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D2E1E53A10E00BA486D /* libvtkRenderingImage-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkRenderingImage-7.1.a";
+			remoteRef = 4F704D2D1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D301E53A10E00BA486D /* vtkImagingCoreCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkImagingCoreCxxTests;
+			path = vtkImagingCoreCxxTests.app;
+			remoteRef = 4F704D2F1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D321E53A10E00BA486D /* vtkImagingHybridCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkImagingHybridCxxTests;
+			path = vtkImagingHybridCxxTests.app;
+			remoteRef = 4F704D311E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D341E53A10E00BA486D /* libvtkImagingMorphological-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkImagingMorphological-7.1.a";
+			remoteRef = 4F704D331E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D361E53A10E00BA486D /* vtkImagingMorphologicalCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkImagingMorphologicalCxxTests;
+			path = vtkImagingMorphologicalCxxTests.app;
+			remoteRef = 4F704D351E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D381E53A10E00BA486D /* vtkInfovisCoreCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkInfovisCoreCxxTests;
+			path = vtkInfovisCoreCxxTests.app;
+			remoteRef = 4F704D371E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D3A1E53A10E00BA486D /* vtkInfovisLayoutCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkInfovisLayoutCxxTests;
+			path = vtkInfovisLayoutCxxTests.app;
+			remoteRef = 4F704D391E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D3C1E53A10E00BA486D /* libvtkRenderingLOD-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkRenderingLOD-7.1.a";
+			remoteRef = 4F704D3B1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D3E1E53A10E00BA486D /* vtkInteractionWidgetsCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkInteractionWidgetsCxxTests;
+			path = vtkInteractionWidgetsCxxTests.app;
+			remoteRef = 4F704D3D1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D401E53A10E00BA486D /* vtkParallelCore-TestSocketCommunicator */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = "vtkParallelCore-TestSocketCommunicator";
+			path = "vtkParallelCore-TestSocketCommunicator.app";
+			remoteRef = 4F704D3F1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D421E53A10E00BA486D /* vtkParallelCoreCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkParallelCoreCxxTests;
+			path = vtkParallelCoreCxxTests.app;
+			remoteRef = 4F704D411E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D441E53A10E00BA486D /* vtkRenderingAnnotationCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkRenderingAnnotationCxxTests;
+			path = vtkRenderingAnnotationCxxTests.app;
+			remoteRef = 4F704D431E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D461E53A10E00BA486D /* vtkRenderingContext2DCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkRenderingContext2DCxxTests;
+			path = vtkRenderingContext2DCxxTests.app;
+			remoteRef = 4F704D451E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D481E53A10E00BA486D /* vtkRenderingCoreCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkRenderingCoreCxxTests;
+			path = vtkRenderingCoreCxxTests.app;
+			remoteRef = 4F704D471E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D4A1E53A10E00BA486D /* vtkRenderingFreeTypeCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkRenderingFreeTypeCxxTests;
+			path = vtkRenderingFreeTypeCxxTests.app;
+			remoteRef = 4F704D491E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D4C1E53A10E00BA486D /* vtkRenderingGL2PSOpenGL2CxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkRenderingGL2PSOpenGL2CxxTests;
+			path = vtkRenderingGL2PSOpenGL2CxxTests.app;
+			remoteRef = 4F704D4B1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D4E1E53A10E00BA486D /* vtkRenderingImageCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkRenderingImageCxxTests;
+			path = vtkRenderingImageCxxTests.app;
+			remoteRef = 4F704D4D1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D501E53A10E00BA486D /* vtkRenderingLODCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkRenderingLODCxxTests;
+			path = vtkRenderingLODCxxTests.app;
+			remoteRef = 4F704D4F1E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D521E53A10E00BA486D /* vtkRenderingLabelCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkRenderingLabelCxxTests;
+			path = vtkRenderingLabelCxxTests.app;
+			remoteRef = 4F704D511E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D541E53A10E00BA486D /* vtkRenderingOpenGL2CxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkRenderingOpenGL2CxxTests;
+			path = vtkRenderingOpenGL2CxxTests.app;
+			remoteRef = 4F704D531E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D561E53A10E00BA486D /* vtkRenderingVolumeCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkRenderingVolumeCxxTests;
+			path = vtkRenderingVolumeCxxTests.app;
+			remoteRef = 4F704D551E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D581E53A10E00BA486D /* libvtkViewsInfovis-7.1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libvtkViewsInfovis-7.1.a";
+			remoteRef = 4F704D571E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F704D5A1E53A10E00BA486D /* vtkViewsInfovisCxxTests */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			name = vtkViewsInfovisCxxTests;
+			path = vtkViewsInfovisCxxTests.app;
+			remoteRef = 4F704D591E53A10E00BA486D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		4F151ED91B1CC8D000C8F767 /* Resources */ = {
