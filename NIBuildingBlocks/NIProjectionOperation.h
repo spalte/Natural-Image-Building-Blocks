@@ -1,4 +1,5 @@
 //  Copyright (c) 2017 Spaltenstein Natural Image
+//  Copyright (c) 2017 OsiriX Foundation
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -17,20 +18,6 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
-
-/*=========================================================================
- Program:   OsiriX
-
- Copyright (c) OsiriX Team
- All rights reserved.
- Distributed under GNU - LGPL
-
- See http://www.osirix-viewer.com/copyright.html for details.
-
- This software is distributed WITHOUT ANY WARRANTY; without even
- the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- PURPOSE.
- =========================================================================*/
 
 #ifndef _NIPROJECTIONOPERATION_H_
 #define _NIPROJECTIONOPERATION_H_
