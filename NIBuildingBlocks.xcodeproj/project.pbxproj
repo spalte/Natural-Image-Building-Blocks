@@ -1932,193 +1932,6 @@
 			name = StoragePrivate;
 			sourceTree = "<group>";
 		};
-		710984871E3910C2000A0E4E /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				7109866A1E3910C6000A0E4E /* kwiml_test */,
-				7109866C1E3910C6000A0E4E /* libvtksys-7.1.a */,
-				7109866E1E3910C6000A0E4E /* libvtkCommonCore-7.1.a */,
-				710986701E3910C6000A0E4E /* libvtkCommonMath-7.1.a */,
-				710986721E3910C6000A0E4E /* libvtkCommonMisc-7.1.a */,
-				710986741E3910C6000A0E4E /* libvtkCommonSystem-7.1.a */,
-				710986761E3910C6000A0E4E /* libvtkCommonTransforms-7.1.a */,
-				710986781E3910C6000A0E4E /* libvtkCommonDataModel-7.1.a */,
-				7109867A1E3910C6000A0E4E /* libvtkCommonColor-7.1.a */,
-				7109867C1E3910C6000A0E4E /* libvtkCommonExecutionModel-7.1.a */,
-				7109867E1E3910C6000A0E4E /* libvtkCommonComputationalGeometry-7.1.a */,
-				710986801E3910C6000A0E4E /* libvtkFiltersCore-7.1.a */,
-				710986821E3910C6000A0E4E /* libvtkFiltersGeneral-7.1.a */,
-				710986841E3910C6000A0E4E /* libvtkImagingCore-7.1.a */,
-				710986861E3910C6000A0E4E /* libvtkImagingFourier-7.1.a */,
-				710986881E3910C6000A0E4E /* libvtkalglib-7.1.a */,
-				7109868A1E3910C6000A0E4E /* libvtkFiltersStatistics-7.1.a */,
-				7109868C1E3910C6000A0E4E /* libvtkFiltersExtraction-7.1.a */,
-				7109868E1E3910C6000A0E4E /* libvtkInfovisCore-7.1.a */,
-				710986901E3910C6000A0E4E /* libvtkFiltersGeometry-7.1.a */,
-				710986921E3910C6000A0E4E /* libvtkFiltersSources-7.1.a */,
-				710986941E3910C6000A0E4E /* libvtkRenderingCore-7.1.a */,
-				710986961E3910C6000A0E4E /* libvtkzlib-7.1.a */,
-				710986981E3910C6000A0E4E /* libvtkfreetype-7.1.a */,
-				7109869A1E3910C6000A0E4E /* libvtkRenderingFreeType-7.1.a */,
-				7109869C1E3910C6000A0E4E /* libvtkRenderingContext2D-7.1.a */,
-				7109869E1E3910C6000A0E4E /* libvtkChartsCore-7.1.a */,
-				710986A01E3910C6000A0E4E /* libvtkIOCore-7.1.a */,
-				710986A21E3910C6000A0E4E /* libvtkIOLegacy-7.1.a */,
-				710986A41E3910C6000A0E4E /* libvtkexpat-7.1.a */,
-				710986A61E3910C6000A0E4E /* libvtkIOXMLParser-7.1.a */,
-				710986A81E3910C6000A0E4E /* libvtkIOXML-7.1.a */,
-				710986AA1E3910C6000A0E4E /* libvtklibxml2-7.1.a */,
-				710986AC1E3910C6000A0E4E /* libvtkIOInfovis-7.1.a */,
-				710986AE1E3910C6000A0E4E /* libvtkDICOMParser-7.1.a */,
-				710986B01E3910C6000A0E4E /* libvtkmetaio-7.1.a */,
-				710986B21E3910C6000A0E4E /* libvtkjpeg-7.1.a */,
-				710986B41E3910C6000A0E4E /* libvtkpng-7.1.a */,
-				710986B61E3910C6000A0E4E /* libvtktiff-7.1.a */,
-				710986B81E3910C6000A0E4E /* libvtkIOImage-7.1.a */,
-				710986BA1E3910C6000A0E4E /* vtkEncodeString-7.1 */,
-				710986BC1E3910C6000A0E4E /* libvtkglew-7.1.a */,
-				710986BE1E3910C6000A0E4E /* libvtkRenderingOpenGL2-7.1.a */,
-				710986C01E3910C6000A0E4E /* libvtkRenderingContextOpenGL2-7.1.a */,
-				710986C21E3910C6000A0E4E /* libvtkTestingRendering-7.1.a */,
-				710986C41E3910C6000A0E4E /* libvtkImagingSources-7.1.a */,
-				710986C61E3910C6000A0E4E /* libvtkFiltersHybrid-7.1.a */,
-				710986C81E3910C6000A0E4E /* libvtkFiltersModeling-7.1.a */,
-				710986CA1E3910C6000A0E4E /* libvtkImagingColor-7.1.a */,
-				710986CC1E3910C6000A0E4E /* libvtkImagingGeneral-7.1.a */,
-				710986CE1E3910C6000A0E4E /* libvtkImagingHybrid-7.1.a */,
-				710986D01E3910C6000A0E4E /* libvtkInteractionStyle-7.1.a */,
-				710986D21E3910C6000A0E4E /* libvtkRenderingAnnotation-7.1.a */,
-				710986D41E3910C6000A0E4E /* libvtkRenderingVolume-7.1.a */,
-				710986D61E3910C6000A0E4E /* libvtkInteractionWidgets-7.1.a */,
-				710986D81E3910C6000A0E4E /* libvtkViewsCore-7.1.a */,
-				710986DA1E3910C6000A0E4E /* libvtkViewsContext2D-7.1.a */,
-				710986DC1E3910C6000A0E4E /* vtkChartsCoreCxxTests */,
-				710986DE1E3910C6000A0E4E /* vtkCommonColorCxxTests */,
-				710986E01E3910C6000A0E4E /* vtkCommonComputationalGeometryCxxTests */,
-				710986E21E3910C6000A0E4E /* vtkCommonCoreCxxTests */,
-				710986E41E3910C6000A0E4E /* libvtkFiltersGeneric-7.1.a */,
-				710986E61E3910C6000A0E4E /* libvtkIOGeometry-7.1.a */,
-				710986E81E3910C6000A0E4E /* libvtkTestingGenericBridge-7.1.a */,
-				710986EA1E3910C6000A0E4E /* vtkCommonDataModelCxxTests */,
-				710986EC1E3910C6000A0E4E /* vtkCommonExecutionModelCxxTests */,
-				710986EE1E3910C6000A0E4E /* vtkCommonMathCxxTests */,
-				710986F01E3910C6000A0E4E /* vtkCommonMiscCxxTests */,
-				710986F21E3910C6000A0E4E /* vtkCommonSystemCxxTests */,
-				710986F41E3910C6000A0E4E /* vtkCommonTransformsCxxTests */,
-				710986F61E3910C6000A0E4E /* libvtkDomainsChemistry-7.1.a */,
-				710986F81E3910C6000A0E4E /* libvtkDomainsChemistryOpenGL2-7.1.a */,
-				710986FA1E3910C6000A0E4E /* vtkDomainsChemistryCxxTests */,
-				710986FC1E3910C6000A0E4E /* vtkDomainsChemistryOpenGL2CxxTests */,
-				710986FE1E3910C6000A0E4E /* vtkHashSource-7.1 */,
-				710987001E3910C6000A0E4E /* libvtkParallelCore-7.1.a */,
-				710987021E3910C6000A0E4E /* libvtkFiltersAMR-7.1.a */,
-				710987041E3910C6000A0E4E /* vtkH5detect */,
-				710987061E3910C6000A0E4E /* vtkH5make_libsettings */,
-				710987081E3910C6000A0E4E /* libvtkhdf5-7.1.a */,
-				7109870A1E3910C6000A0E4E /* libvtkhdf5_hl-7.1.a */,
-				7109870C1E3910C6000A0E4E /* libvtkIOAMR-7.1.a */,
-				7109870E1E3910C6000A0E4E /* vtkFiltersAMRCxxTests */,
-				710987101E3910C6000A0E4E /* libvtkImagingMath-7.1.a */,
-				710987121E3910C6000A0E4E /* libvtkRenderingVolumeOpenGL2-7.1.a */,
-				710987141E3910C6000A0E4E /* vtkFiltersCoreCxxTests */,
-				710987161E3910C6000A0E4E /* libvtkNetCDF-7.1.a */,
-				710987181E3910C6000A0E4E /* libvtkNetCDF_cxx-7.1.a */,
-				7109871A1E3910C6000A0E4E /* libvtkexoIIc-7.1.a */,
-				7109871C1E3910C6000A0E4E /* libvtkIOExodus-7.1.a */,
-				7109871E1E3910C6000A0E4E /* vtkFiltersExtractionCxxTests */,
-				710987201E3910C6000A0E4E /* libvtkFiltersFlowPaths-7.1.a */,
-				710987221E3910C6000A0E4E /* libvtkFiltersImaging-7.1.a */,
-				710987241E3910C6000A0E4E /* vtkFiltersFlowPathsCxxTests */,
-				710987261E3910C6000A0E4E /* libvtkRenderingLabel-7.1.a */,
-				710987281E3910C6000A0E4E /* vtkFiltersGeneralCxxTests */,
-				7109872A1E3910C6000A0E4E /* vtkFiltersGenericCxxTests */,
-				7109872C1E3910C6000A0E4E /* vtkFiltersGeometryCxxTests */,
-				7109872E1E3910C6000A0E4E /* libvtkImagingStencil-7.1.a */,
-				710987301E3910C6000A0E4E /* vtkFiltersHybridCxxTests */,
-				710987321E3910C6000A0E4E /* libvtkFiltersHyperTree-7.1.a */,
-				710987341E3910C6000A0E4E /* vtkFiltersHyperTreeCxxTests */,
-				710987361E3910C6000A0E4E /* vtkFiltersModelingCxxTests */,
-				710987381E3910C6000A0E4E /* libvtkFiltersParallel-7.1.a */,
-				7109873A1E3910C6000A0E4E /* libvtkFiltersParallelImaging-7.1.a */,
-				7109873C1E3910C6000A0E4E /* libvtkFiltersPoints-7.1.a */,
-				7109873E1E3910C6000A0E4E /* vtkFiltersPointsCxxTests */,
-				710987401E3910C6000A0E4E /* libvtkFiltersProgrammable-7.1.a */,
-				710987421E3910C6000A0E4E /* vtkFiltersProgrammableCxxTests */,
-				710987441E3910C6000A0E4E /* libvtkFiltersSMP-7.1.a */,
-				710987461E3910C6000A0E4E /* vtkFiltersSMPCxxTests */,
-				710987481E3910C6000A0E4E /* libvtkFiltersSelection-7.1.a */,
-				7109874A1E3910C6000A0E4E /* vtkFiltersSelectionCxxTests */,
-				7109874C1E3910C6000A0E4E /* libvtkIONetCDF-7.1.a */,
-				7109874E1E3910C6000A0E4E /* libvtkjsoncpp-7.1.a */,
-				710987501E3910C6000A0E4E /* libvtkIOParallel-7.1.a */,
-				710987521E3910C6000A0E4E /* vtkFiltersSourcesCxxTests */,
-				710987541E3910C6000A0E4E /* vtkFiltersStatisticsCxxTests */,
-				710987561E3910C6000A0E4E /* libvtkFiltersTexture-7.1.a */,
-				710987581E3910C6000A0E4E /* libvtkverdict-7.1.a */,
-				7109875A1E3910C6000A0E4E /* libvtkFiltersVerdict-7.1.a */,
-				7109875C1E3910C6000A0E4E /* vtkFiltersVerdictCxxTests */,
-				7109875E1E3910C6000A0E4E /* libvtkInfovisLayout-7.1.a */,
-				710987601E3910C6000A0E4E /* libvtkproj4-7.1_d.a */,
-				710987621E3910C6000A0E4E /* libvtkGeovisCore-7.1.a */,
-				710987641E3910C6000A0E4E /* vtkIOAMRCxxTests */,
-				710987661E3910C6000A0E4E /* vtkIOCoreCxxTests */,
-				710987681E3910C6000A0E4E /* libvtkIOEnSight-7.1.a */,
-				7109876A1E3910C6000A0E4E /* vtkIOExodusCxxTests */,
-				7109876C1E3910C6000A0E4E /* libvtkgl2ps-7.1.a */,
-				7109876E1E3910C6000A0E4E /* libvtkRenderingGL2PSOpenGL2-7.1.a */,
-				710987701E3910C6000A0E4E /* libvtkIOExport-7.1.a */,
-				710987721E3910C6000A0E4E /* vtkIOGeometryCxxTests */,
-				710987741E3910C6000A0E4E /* libvtkInteractionImage-7.1.a */,
-				710987761E3910C6000A0E4E /* vtkIOImageCxxTests */,
-				710987781E3910C6000A0E4E /* libvtkIOImport-7.1.a */,
-				7109877A1E3910C6000A0E4E /* vtkIOImportCxxTests */,
-				7109877C1E3910C6000A0E4E /* vtkIOInfovisCxxTests */,
-				7109877E1E3910C6000A0E4E /* libvtkIOLSDyna-7.1.a */,
-				710987801E3910C6000A0E4E /* vtkIOLegacyCxxTests */,
-				710987821E3910C6000A0E4E /* libvtkIOMINC-7.1.a */,
-				710987841E3910C6000A0E4E /* libvtkoggtheora-7.1.a */,
-				710987861E3910C6000A0E4E /* libvtkIOMovie-7.1.a */,
-				710987881E3910C6000A0E4E /* vtkIOMovieCxxTests */,
-				7109878A1E3910C6000A0E4E /* libvtkIOPLY-7.1.a */,
-				7109878C1E3910C6000A0E4E /* vtkIOPLYCxxTests */,
-				7109878E1E3910C6000A0E4E /* libvtkIOParallelXML-7.1.a */,
-				710987901E3910C6000A0E4E /* libvtksqlite-7.1.a */,
-				710987921E3910C6000A0E4E /* libvtkIOSQL-7.1.a */,
-				710987941E3910C6000A0E4E /* libvtkTestingIOSQL-7.1.a */,
-				710987961E3910C6000A0E4E /* vtkIOSQLCxxTests */,
-				710987981E3910C6000A0E4E /* libvtkIOTecplotTable-7.1.a */,
-				7109879A1E3910C6000A0E4E /* vtkIOTecplotTableCxxTests */,
-				7109879C1E3910C6000A0E4E /* libvtkIOVideo-7.1.a */,
-				7109879E1E3910C6000A0E4E /* TestXMLCInterface */,
-				710987A01E3910C6000A0E4E /* vtkIOXMLCxxTests */,
-				710987A21E3910C6000A0E4E /* libvtkImagingStatistics-7.1.a */,
-				710987A41E3910C6000A0E4E /* libvtkRenderingImage-7.1.a */,
-				710987A61E3910C6000A0E4E /* vtkImagingCoreCxxTests */,
-				710987A81E3910C6000A0E4E /* vtkImagingHybridCxxTests */,
-				710987AA1E3910C6000A0E4E /* libvtkImagingMorphological-7.1.a */,
-				710987AC1E3910C6000A0E4E /* vtkImagingMorphologicalCxxTests */,
-				710987AE1E3910C6000A0E4E /* vtkInfovisCoreCxxTests */,
-				710987B01E3910C6000A0E4E /* vtkInfovisLayoutCxxTests */,
-				710987B21E3910C6000A0E4E /* libvtkRenderingLOD-7.1.a */,
-				710987B41E3910C6000A0E4E /* vtkInteractionWidgetsCxxTests */,
-				710987B61E3910C6000A0E4E /* vtkParallelCore-TestSocketCommunicator */,
-				710987B81E3910C6000A0E4E /* vtkParallelCoreCxxTests */,
-				710987BA1E3910C6000A0E4E /* vtkRenderingAnnotationCxxTests */,
-				710987BC1E3910C6000A0E4E /* vtkRenderingContext2DCxxTests */,
-				710987BE1E3910C6000A0E4E /* vtkRenderingCoreCxxTests */,
-				710987C01E3910C6000A0E4E /* vtkRenderingFreeTypeCxxTests */,
-				710987C21E3910C6000A0E4E /* vtkRenderingGL2PSOpenGL2CxxTests */,
-				710987C41E3910C6000A0E4E /* vtkRenderingImageCxxTests */,
-				710987C61E3910C6000A0E4E /* vtkRenderingLODCxxTests */,
-				710987C81E3910C6000A0E4E /* vtkRenderingLabelCxxTests */,
-				710987CA1E3910C6000A0E4E /* vtkRenderingOpenGL2CxxTests */,
-				710987CC1E3910C6000A0E4E /* vtkRenderingVolumeCxxTests */,
-				710987CE1E3910C6000A0E4E /* libvtkViewsInfovis-7.1.a */,
-				710987D01E3910C6000A0E4E /* vtkViewsInfovisCxxTests */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		713548751E3636CA007CE7BA /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
@@ -2252,6 +2065,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 712BC37A1E1E395300C51700 /* Build configuration list for PBXNativeTarget "VTK" */;
 			buildPhases = (
+				7164161D1E5EDAF0007BAC14 /* Submodule */,
 				712BC37D1E1E3A5100C51700 /* CMake */,
 				712BC37E1E1E3A7C00C51700 /* Xcodebuild */,
 				712BC37F1E1E3AA400C51700 /* Framework */,
@@ -3706,7 +3520,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# To avoid excess CMake calls (because these take a long time to execute), this script stores the current git description and md5 hash of the repository CMake directory; when available, it compares the stored values to the current values and exits if nothing has changed.\n\ndate\n\nset -e\nset -o xtrace\n\ncd VTK\ndescription=$(git describe --always --tags --dirty)\nhash=$(find -s CMake -type f -exec md5 -q {} \\; | md5)\nshash=$(md5 -q \"$0\")\n\ncmake_dir=\"$PROJECT_TEMP_DIR/VTK.cmake\"\nmkdir -p \"$cmake_dir\"\ncd \"$cmake_dir\"\n\nif [ -e VTK.xcodeproj -a -f .cmakedescription -a -f .cmakehash -a -f .cmakeshash ]; then\n    cmakedescription=$(cat \".cmakedescription\")\n    cmakehash=$(cat \".cmakehash\")\n    cmakeshash=$(cat \".cmakeshash\")\n    if [ \"$cmakedescription\" = \"$description\" -a \"$cmakehash\" = \"$hash\" -a \"$cmakeshash\" = \"$shash\" ]; then\n        date\n        exit 0\n    fi\nfi\n\ncommand -v cmake >/dev/null 2>&1 || { echo >&2 \"error: building VTK requires CMake. Please install CMake. Aborting.\"; exit 1; }\n\nrm -Rf VTK.xcodeproj\necho \"$description\" > .cmakedescription\necho \"$hash\" > .cmakehash\necho \"$shash\" > .cmakeshash\n\ncmake \"$PROJECT_DIR/VTK\" -G Xcode \\\n-DVTK_USE_OFFSCREEN_EGL:BOOL=OFF \\\n-DVTK_USE_X:BOOL=OFF \\\n-DVTK_USE_COCOA:BOOL=OFF \\\n-DBUILD_SHARED_LIBS=OFF \\\n-DCMAKE_OSX_DEPLOYMENT_TARGET=\"$MACOSX_DEPLOYMENT_TARGET\" \\\n-DCMAKE_INSTALL_PREFIX=/usr/local\n\ndate";
+			shellScript = "# To avoid excess CMake calls (because these take a long time to execute), this script stores the current git description and md5 hash of the repository CMake directory; when available, it compares the stored values to the current values and exits if nothing has changed.\n\ncd \"$TARGET_NAME\"; pwd\ndescription=$(git describe --always --tags --dirty)\nhash=\"$description-$(find . \\( -name CMakeLists.txt -o -name '*.cmake' \\) -type f -exec md5 -q {} \\; | md5)-$(md5 -q \"$0\")-$(md5 -qs \"$(env)\")\"\n\nset -e; set -o xtrace\n\ncmake_dir=\"$PROJECT_TEMP_DIR/$TARGET_NAME.cmake\"\nmkdir -p \"$cmake_dir\"; cd \"$cmake_dir\"\n\nif [ -e \"$TARGET_NAME.xcodeproj\" -a -f .cmakehash ] && [ \"$(cat '.cmakehash')\" = \"$hash\" ]; then\nexit 0\nfi\n\ncommand -v cmake >/dev/null 2>&1 || { echo >&2 \"error: building $TARGET_NAME requires CMake. Please install CMake. Aborting.\"; exit 1; }\n\ncd ..\nmv \"$cmake_dir\" \"$cmake_dir.tmp\"; rm -Rf \"$cmake_dir.tmp\"\nmkdir -p \"$cmake_dir\"\ncd \"$cmake_dir\"\n\necho \"$hash\" > .cmakehash\n\nargs=(\"$PROJECT_DIR/$TARGET_NAME\" -G Xcode)\nargs+=(-DVTK_USE_OFFSCREEN_EGL:BOOL=OFF)\nargs+=(-DVTK_USE_X:BOOL=OFF)\nargs+=(-DVTK_USE_COCOA:BOOL=OFF)\nargs+=(-DBUILD_SHARED_LIBS=OFF)\nargs+=(-DCMAKE_OSX_DEPLOYMENT_TARGET=\"$MACOSX_DEPLOYMENT_TARGET\")\nargs+=(-DCMAKE_INSTALL_PREFIX=/usr/local)\n#args+=(-DCMAKE_CXX_FLAGS=\"-Wno-mismatched-tags\") # this might be needed later\nif [ ! -z \"$CLANG_CXX_LIBRARY\" ]; then\nargs+=(-DCMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY=\"$CLANG_CXX_LIBRARY\")\nfi\n\ncmake \"${args[@]}\"";
 		};
 		712BC37E1E1E3A7C00C51700 /* Xcodebuild */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3720,7 +3534,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# This script uses the xcodebuild command to build VTK through the CMake-generated xcodeproj. Only specific parts of VTK are built: vtkImagingGeneral and vtkIOImage (and their dependencies)\n\ndate\n\nset -e\nset -o xtrace\n\ncmake_dir=\"$PROJECT_TEMP_DIR/VTK.cmake\"\nlibs_dir=\"$TARGET_TEMP_DIR/Libs\"\n\nxcodebuild -project \"$cmake_dir/VTK.xcodeproj\" -target vtkImagingGeneral -target vtkIOImage -configuration \"$CONFIGURATION\" CONFIGURATION_BUILD_DIR=\"$libs_dir\"\n\ndate";
+			shellScript = "# This script uses the xcodebuild command to build VTK through the CMake-generated xcodeproj. Only specific parts of VTK are built: vtkImagingGeneral and vtkIOImage (and their dependencies)\n\nset -e; set -o xtrace\n\ncmake_dir=\"$PROJECT_TEMP_DIR/$TARGET_NAME.cmake\"\n\nxcodebuild -project \"$cmake_dir/$TARGET_NAME.xcodeproj\" -target vtkImagingGeneral -target vtkIOImage -configuration \"$CONFIGURATION\"";
 		};
 		712BC37F1E1E3AA400C51700 /* Framework */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3734,7 +3548,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# VTK libraries are merged into a framewor, along with the headers\n\ndate\n\nset -e\nset -o xtrace\n\ncmake_dir=\"$PROJECT_TEMP_DIR/VTK.cmake\"\nlibs_dir=\"$TARGET_TEMP_DIR/Libs\"\nframework=\"$TARGET_BUILD_DIR/$FULL_PRODUCT_NAME\"\n\ncd \"$libs_dir\"\nhash=$(find -s . -type f -name '*.a' -exec md5 -q {} \\; | md5)\nif [ -e \"$framework\" -a -f .frameworkhash ]; then\n    frameworkhash=$(cat \".frameworkhash\")\n    if [ \"$frameworkhash\" = \"$hash\" ]; then\n        date\n        exit 0\n    fi\nfi\n\nrm -Rf \"$framework\"\necho \"$hash\" > .frameworkhash\n\nmkdir -p \"$framework/Versions/A\"\ncd \"$framework/Versions\"\nln -s A Current\n\nls -al .\n\ncd \"$libs_dir\"\nars=$(ls *.a)\nlibtool -static -o \"$framework/Versions/A/VTK\" $ars\n\ncd \"$framework\"\nln -s Versions/Current/VTK VTK\nmkdir -p \"Versions/A/Headers\" \"Versions/A/Resources\"\nln -s Versions/Current/Headers Headers\nln -s Versions/Current/Resources Resources\n\ncd Headers\n\nfind \"$PROJECT_DIR/VTK\" \\( -name '*.h*' -o -name '*.txx' \\) -not -path \"$PROJECT_DIR/VTK/Utilities/\\*\" -exec cp -an {} . \\;\n\nmkdir -p vtkkwiml\nfind \"$PROJECT_DIR/VTK/Utilities/KWIML/vtkkwiml/include\" -name '*.h*' -exec cp -an {} vtkkwiml \\;\n\nfind \"$cmake_dir\" -name '*.h*' -exec cp -an {} . \\;\n\nfind . -type f \\( -name '*.hmap' -o -name '*.in' -o -name '*.htm*' -o -name '*.md5' -o -name '*.cmakein'  -o -name '*.h-vms' -o -name '*.bak' \\) -delete\n\ndate";
+			shellScript = "# VTK libraries are merged into a framework, along with the headers\n\nset -e; set -o xtrace\n\ncmake_dir=\"$PROJECT_TEMP_DIR/VTK.cmake\"\nlibs_dir=\"$cmake_dir/lib/$CONFIGURATION\"\nframework=\"$TARGET_BUILD_DIR/$FULL_PRODUCT_NAME\"\n\ncd \"$libs_dir\"\nhash=$(find -s . -type f -name '*.a' -exec md5 -q {} \\; | md5)\nif [ -e \"$framework\" -a -f .frameworkhash ]; then\nframeworkhash=$(cat \".frameworkhash\")\nif [ \"$frameworkhash\" = \"$hash\" ]; then\nexit 0\nfi\nfi\n\nrm -Rf \"$framework\"\necho \"$hash\" > .frameworkhash\n\nmkdir -p \"$framework/Versions/A\"\ncd \"$framework/Versions\"\nln -s A Current\n\nls -al .\n\ncd \"$libs_dir\"\nars=$(ls *.a)\nlibtool -static -o \"$framework/Versions/A/VTK\" $ars\n\ncd \"$framework\"\nln -s Versions/Current/VTK VTK\nmkdir -p \"Versions/A/Headers\" \"Versions/A/Resources\"\nln -s Versions/Current/Headers Headers\nln -s Versions/Current/Resources Resources\n\ncd Headers\n\nfind \"$PROJECT_DIR/VTK\" \\( -name '*.h*' -o -name '*.txx' \\) -not -path \"$PROJECT_DIR/VTK/Utilities/\\*\" -exec cp -an {} . \\;\n\nmkdir -p vtkkwiml\nfind \"$PROJECT_DIR/VTK/Utilities/KWIML/vtkkwiml/include\" -name '*.h*' -exec cp -an {} vtkkwiml \\;\n\nfind \"$cmake_dir\" -name '*.h*' -exec cp -an {} . \\;\n\nfind . -type f \\( -name '*.hmap' -o -name '*.in' -o -name '*.htm*' -o -name '*.md5' -o -name '*.cmakein'  -o -name '*.h-vms' -o -name '*.bak' \\) -delete";
+		};
+		7164161D1E5EDAF0007BAC14 /* Submodule */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Submodule;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e; set -o xtrace\n\nif [ ! -f \"$TARGET_NAME/CMakeLists.txt\" ]; then\necho \"warning: submodule $TARGET_NAME requires init/update, please wait...\"\ncd \"$TARGET_NAME\"\ngit submodule update --init --recursive\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
