@@ -436,7 +436,7 @@ CGFloat NIVectorDistanceToLine(NIVector vector, NILine line)
     NIVector translatedPoint;
     assert(NILineIsValid(line));
     translatedPoint = NIVectorSubtract(vector, line.point);
-    return NIVectorLength(NIVectorSubtract(translatedPoint, NIVectorProject(translatedPoint, line.vector)));
+    return NIVectorLength(NIVectorSubtract(translatedPoint, NIVectorProject(translatedPoint, line.direction)));
 }
 
 CGFloat NIVectorDistanceToPlane(NIVector vector, NIPlane plane)
@@ -444,11 +444,11 @@ CGFloat NIVectorDistanceToPlane(NIVector vector, NIPlane plane)
     return ABS(NIVectorDotProduct(NIVectorSubtract(vector, plane.point), NIVectorNormalize(plane.normal)));
 }
 
-NILine NILineMake(NIVector point, NIVector vector)
+NILine NILineMake(NIVector point, NIVector direction)
 {
     NILine line;
     line.point = point;
-    line.vector = vector;
+    line.direction = direction;
     assert(NILineIsValid(line));
     return line;
 }
@@ -457,14 +457,14 @@ NILine NILineMakeFromPoints(NIVector point1, NIVector point2)
 {
     NILine line;
     line.point = point1;
-    line.vector = NIVectorNormalize(NIVectorSubtract(point2, point1));
+    line.direction = NIVectorNormalize(NIVectorSubtract(point2, point1));
     assert(NILineIsValid(line));
     return line;
 }
 
 bool NILineEqualToLine(NILine line1, NILine line2)
 {
-    return NIVectorEqualToVector(line1.point, line2.point) && NIVectorEqualToVector(line1.vector, line2.vector);
+    return NIVectorEqualToVector(line1.point, line2.point) && NIVectorEqualToVector(line1.direction, line2.direction);
 }
 
 bool NILineIsCoincidentToLine(NILine line1, NILine line2)
@@ -480,12 +480,12 @@ bool NILineIsOnPlane(NILine line, NIPlane plane)
     if (NIVectorIsOnPlane(line.point, plane) == false) {
         return false;
     }
-    return ABS(NIVectorDotProduct(line.vector, plane.normal)) < _NIGeometrySmallNumber;
+    return ABS(NIVectorDotProduct(line.direction, plane.normal)) < _NIGeometrySmallNumber;
 }
 
 bool NILineIsParallelToLine(NILine line1, NILine line2)
 {
-    if (NIVectorLength(NIVectorCrossProduct(line1.vector, line2.vector)) < _NIGeometrySmallNumber) {
+    if (NIVectorLength(NIVectorCrossProduct(line1.direction, line2.direction)) < _NIGeometrySmallNumber) {
         return true;
     }
     return false;
@@ -493,12 +493,12 @@ bool NILineIsParallelToLine(NILine line1, NILine line2)
 
 bool NILineIsValid(NILine line)
 {
-    return NIVectorLength(line.vector) > _NIGeometrySmallNumber;
+    return NIVectorLength(line.direction) > _NIGeometrySmallNumber;
 }
 
 bool NILineIntersectsPlane(NILine line, NIPlane plane)
 {
-    if (ABS(NIVectorDotProduct(plane.normal, line.vector)) < _NIGeometrySmallNumber) {
+    if (ABS(NIVectorDotProduct(plane.normal, line.direction)) < _NIGeometrySmallNumber) {
         if (NIVectorIsOnPlane(line.point, plane) == false) {
             return false;
         }
@@ -514,7 +514,7 @@ NIVector NILineIntersectionWithPlane(NILine line, NIPlane plane)
     NIVector lineVector;
 
     planeNormal = NIVectorNormalize(plane.normal);
-    lineVector = NIVectorNormalize(line.vector);
+    lineVector = NIVectorNormalize(line.direction);
 
     numerator = NIVectorDotProduct(planeNormal, NIVectorSubtract(plane.point, line.point));
     denominator = NIVectorDotProduct(planeNormal, lineVector);
@@ -535,14 +535,14 @@ NIVector NILineIntersectionWithPlane(NILine line, NIPlane plane)
 
 NIVector NILinePointClosestToVector(NILine line, NIVector vector)
 {
-    return NIVectorAdd(NIVectorProject(NIVectorSubtract(vector, line.point), line.vector), line.point);
+    return NIVectorAdd(NIVectorProject(NIVectorSubtract(vector, line.point), line.direction), line.point);
 }
 
 NILine NILineApplyTransform(NILine line, NIAffineTransform transform)
 {
     NILine newLine;
     newLine.point = NIVectorApplyTransform(line.point, transform);
-    newLine.vector = NIVectorNormalize(NIVectorApplyTransformToDirectionalVector(line.vector, transform));
+    newLine.direction = NIVectorNormalize(NIVectorApplyTransformToDirectionalVector(line.direction, transform));
     assert(NILineIsValid(newLine));
     return newLine;
 }
@@ -558,15 +558,15 @@ CGFloat NILineClosestPoints(NILine line1, NILine line2, NIVectorPointer line1Poi
 
     if (NILineIsParallelToLine(line1, line2)) {
         pa = line1.point;
-        pb = NIVectorAdd(line2.point, NIVectorProject(NIVectorSubtract(line2.point, line1.point), line2.vector));
+        pb = NIVectorAdd(line2.point, NIVectorProject(NIVectorSubtract(line2.point, line1.point), line2.direction));
         return NIVectorDistance(pa, pb);
     } else {
         p1 = line1.point;
         p3 = line2.point;
 
         p13 = NIVectorSubtract(p1, p3);
-        p21 = line1.vector;
-        p43 = line2.vector;
+        p21 = line1.direction;
+        p43 = line2.direction;
 
         d1343 = NIVectorDotProduct(p13, p43);
         d4321 = NIVectorDotProduct(p43, p21);
@@ -579,7 +579,7 @@ CGFloat NILineClosestPoints(NILine line1, NILine line2, NIVectorPointer line1Poi
 
         if (denominator == 0.0) { // as can happen if the lines were almost parallel
             pa = line1.point;
-            pb = NIVectorAdd(line2.point, NIVectorProject(NIVectorSubtract(line2.point, line1.point), line2.vector));
+            pb = NIVectorAdd(line2.point, NIVectorProject(NIVectorSubtract(line2.point, line1.point), line2.direction));
             return NIVectorDistance(pa, pb);
         }
         mua = numerator / denominator;
@@ -602,7 +602,7 @@ CGFloat NILineClosestPoints(NILine line1, NILine line2, NIVectorPointer line1Poi
 
 CFIndex NILineIntersectionWithSphere(NILine line, NIVector sphereCenter, CGFloat sphereRadius, NIVectorPointer firstIntersection, NIVectorPointer secondIntersection) // returns the number of intersection
 {
-    CGFloat u = NIVectorDotProduct(line.vector, NIVectorSubtract(line.point, sphereCenter));
+    CGFloat u = NIVectorDotProduct(line.direction, NIVectorSubtract(line.point, sphereCenter));
     CGFloat v = NIVectorDistance(line.point, sphereCenter);
 
     CGFloat discriminant = (u*u) - (v*v) + (sphereRadius*sphereRadius);
@@ -618,10 +618,10 @@ CFIndex NILineIntersectionWithSphere(NILine line, NIVector sphereCenter, CGFloat
 #endif
 
     if (firstIntersection) {
-        *firstIntersection = NIVectorAdd(line.point, NIVectorScalarMultiply(line.vector, -u - root));
+        *firstIntersection = NIVectorAdd(line.point, NIVectorScalarMultiply(line.direction, -u - root));
     }
     if (secondIntersection) {
-        *secondIntersection = NIVectorAdd(line.point, NIVectorScalarMultiply(line.vector, -u + root));
+        *secondIntersection = NIVectorAdd(line.point, NIVectorScalarMultiply(line.direction, -u + root));
     }
 
     return discriminant == 0 ? 1 : 2;
@@ -758,19 +758,19 @@ NILine NIPlaneIntersectionWithPlane(NIPlane plane1, NIPlane plane2)
     NILine line;
     NILine intersectionLine;
 
-    line.vector = NIVectorNormalize(NIVectorCrossProduct(plane1.normal, plane2.normal));
+    line.direction = NIVectorNormalize(NIVectorCrossProduct(plane1.normal, plane2.normal));
 
-    if (NIVectorIsZero(line.vector)) { // if the planes do not intersect, return halfway-reasonable BS
-        line.vector = NIVectorNormalize(NIVectorCrossProduct(plane1.normal, NIVectorMake(1.0, 0.0, 0.0)));
-        if (NIVectorIsZero(line.vector)) {
-            line.vector = NIVectorNormalize(NIVectorCrossProduct(plane1.normal, NIVectorMake(0.0, 1.0, 0.0)));
+    if (NIVectorIsZero(line.direction)) { // if the planes do not intersect, return halfway-reasonable BS
+        line.direction = NIVectorNormalize(NIVectorCrossProduct(plane1.normal, NIVectorMake(1.0, 0.0, 0.0)));
+        if (NIVectorIsZero(line.direction)) {
+            line.direction = NIVectorNormalize(NIVectorCrossProduct(plane1.normal, NIVectorMake(0.0, 1.0, 0.0)));
         }
         line.point = plane1.point;
         return line;
     }
 
     intersectionLine.point = plane1.point;
-    intersectionLine.vector = NIVectorNormalize(NIVectorSubtract(plane2.normal, NIVectorProject(plane2.normal, plane1.normal)));
+    intersectionLine.direction = NIVectorNormalize(NIVectorSubtract(plane2.normal, NIVectorProject(plane2.normal, plane1.normal)));
     line.point = NILineIntersectionWithPlane(intersectionLine, plane2);
     return line;
 }
@@ -850,7 +850,7 @@ NSString *NSStringFromNIVector(NIVector vector)
 
 NSString *NSStringFromNILine(NILine line)
 {
-    return [NSString stringWithFormat:@"{%@, %@}", NSStringFromNIVector(line.point), NSStringFromNIVector(line.vector)];
+    return [NSString stringWithFormat:@"{%@, %@}", NSStringFromNIVector(line.point), NSStringFromNIVector(line.direction)];
 }
 
 NSString *NSStringFromNIPlane(NIPlane plane)
@@ -955,7 +955,7 @@ CFDictionaryRef NILineCreateDictionaryRepresentation(NILine line)
     CFDictionaryRef lineDict;
 
     pointDict = NIVectorCreateDictionaryRepresentation(line.point);
-    vectorDict = NIVectorCreateDictionaryRepresentation(line.vector);
+    vectorDict = NIVectorCreateDictionaryRepresentation(line.direction);
     lineDict = (CFDictionaryRef)[[NSDictionary alloc] initWithObjectsAndKeys:(id)pointDict, @"point", (id)vectorDict, @"vector", nil];
     CFRelease(pointDict);
     CFRelease(vectorDict);
@@ -1099,7 +1099,7 @@ bool NILineMakeWithDictionaryRepresentation(CFDictionaryRef dict, NILine *line)
     if (NIVectorMakeWithDictionaryRepresentation(pointDict, &(tempLine.point)) == false) {
         return false;
     }
-    if (NIVectorMakeWithDictionaryRepresentation(vectorDict, &(tempLine.vector)) == false) {
+    if (NIVectorMakeWithDictionaryRepresentation(vectorDict, &(tempLine.direction)) == false) {
         return false;
     }
 

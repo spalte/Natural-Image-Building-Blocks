@@ -41,7 +41,10 @@ typedef struct NIVector NIVector;
 // A NILine is an infinite line throught space
 struct NILine {
     NIVector point; // the line goes through this point
-    NIVector vector; // this is the direction of the line, the line is not valid if this is NIVectorZero, try to keep this of unit length... I wish I would have called this direction...
+    union {
+        NIVector direction; // this is the direction of the line, the line is not valid if this is N3VectorZero, try to keep this of unit length...
+        NIVector vector __deprecated; // original name for direction vector
+    };
 };
 typedef struct NILine NILine;
 
@@ -125,7 +128,7 @@ bool NIVectorIsOnPlane(NIVector vector, NIPlane plane);
 CGFloat NIVectorDistanceToLine(NIVector vector, NILine line);
 CGFloat NIVectorDistanceToPlane(NIVector vector, NIPlane plane);
 
-NILine NILineMake(NIVector point, NIVector vector);
+NILine NILineMake(NIVector point, NIVector direction);
 NILine NILineMakeFromPoints(NIVector point1, NIVector point2);
 bool NILineEqualToLine(NILine line1, NILine line2);
 bool NILineIsCoincidentToLine(NILine line2, NILine line1); // do the two lines represent the same line in space, to a small amount of round-off slop
