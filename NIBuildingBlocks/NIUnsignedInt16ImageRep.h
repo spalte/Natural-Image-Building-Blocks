@@ -65,8 +65,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NIUnsignedInt16ImageRep (DCMPixAndVolume)
 
-- (void)getOrientation:(float[6])orientation;
-- (void)getOrientationDouble:(double[6])orientation;
+- (void)getOrientation:(float[_Nonnull 6])orientation;
+- (void)getOrientationDouble:(double[_Nonnull 6])orientation;
 
 @property (readonly) float originX;
 @property (readonly) float originY;

@@ -483,7 +483,7 @@ CF_INLINE NSInteger NIVolumeDataUncheckedIndexAtCoordinate(const NIVolumeDataInl
  @param y The y coordinate of the voxel.
  @param z The z coordinate of the voxel.
 */
-CF_INLINE void NIVolumeDataGetLinearIndexes(NIVolumeDataInlineBuffer *inlineBuffer, NSInteger linearIndexes[8], NSInteger x, NSInteger y, NSInteger z, NSInteger outOfBoundsIndex)
+CF_INLINE void NIVolumeDataGetLinearIndexes(NIVolumeDataInlineBuffer *inlineBuffer, NSInteger linearIndexes[_Nonnull 8], NSInteger x, NSInteger y, NSInteger z, NSInteger outOfBoundsIndex)
 {
     if (x < 0 || y < 0 || z < 0 || x >= inlineBuffer->pixelsWide-1 || y >= inlineBuffer->pixelsHigh-1 || z >= inlineBuffer->pixelsDeep-1) {
         for (int i = 0; i < 2; ++i) {
@@ -580,7 +580,7 @@ CF_INLINE float NIVolumeDataNearestNeighborInterpolatedFloatAtVolumeCoordinate(N
  @param y The y coordinate of the voxel.
  @param z The z coordinate of the voxel.
 */
-CF_INLINE void NIVolumeDataGetCubicIndexes(NIVolumeDataInlineBuffer *inlineBuffer, NSInteger cubicIndexes[64], NSInteger x, NSInteger y, NSInteger z, NSInteger outOfBoundsIndex)
+CF_INLINE void NIVolumeDataGetCubicIndexes(NIVolumeDataInlineBuffer *inlineBuffer, NSInteger cubicIndexes[_Nonnull 64], NSInteger x, NSInteger y, NSInteger z, NSInteger outOfBoundsIndex)
 {
     if (x <= 0 || y <= 0 || z <= 0 || x >= inlineBuffer->pixelsWide-2 || y >= inlineBuffer->pixelsHigh-2 || z >= inlineBuffer->pixelsDeep-2) {
         for (int i = 0; i < 4; ++i) {
