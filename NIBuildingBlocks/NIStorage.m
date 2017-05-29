@@ -154,6 +154,32 @@ NS_ASSUME_NONNULL_BEGIN
     return prefixKeys;
 }
 
+- (NSArray<NSString *> *)keysWithSuffix:(NSString *)suffix
+{
+    if (suffix == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"*** %s: suffix is nil object", __PRETTY_FUNCTION__] userInfo:nil];
+    }
+
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"NIStorageEntity"];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"key ENDSWITH %@", suffix]];
+
+    [fetchRequest setResultType:NSDictionaryResultType];
+    [fetchRequest setPropertiesToFetch:@[@"key"]];
+
+    NSMutableArray<NSString *>* prefixKeys = [NSMutableArray array];
+    [_managedObjectContext performBlockAndWait:^{
+        NSError *err = nil;
+        NSArray<NSDictionary *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+        if (err) {
+            NSLog(@"*** %s: %@", __PRETTY_FUNCTION__, err);
+        }
+
+        [prefixKeys addObjectsFromArray:[results valueForKey:@"key"]];
+    }];
+
+    return prefixKeys;
+}
+
 - (nullable id)valueForKey:(NSString *)key
 {
     if (key == nil) {
