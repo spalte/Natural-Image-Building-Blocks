@@ -80,7 +80,7 @@ NIMutableBezierCoreRef NIBezierCoreCreateFlattenedMutableCopy(NIBezierCoreRef be
 NIBezierCoreRef NIBezierCoreCreateSubdividedCopy(NIBezierCoreRef bezierCore, CGFloat maxSegementLength);
 NIMutableBezierCoreRef NIBezierCoreCreateSubdividedMutableCopy(NIBezierCoreRef bezierCore, CGFloat maxSegementLength);
 NIBezierCoreRef NIBezierCoreCreateSanitizedCopy(NIBezierCoreRef bezierCore, CGFloat minSegementLength); // removes segments that are shorter than minSegmentLength
-NIBezierCoreRef NIBezierCoreCreateSanitizedMutableCopy(NIBezierCoreRef bezierCore, CGFloat minSegementLength); // removes segments that are shorter than minSegmentLength
+NIMutableBezierCoreRef NIBezierCoreCreateSanitizedMutableCopy(NIBezierCoreRef bezierCore, CGFloat minSegementLength); // removes segments that are shorter than minSegmentLength
 NIBezierCoreRef NIBezierCoreCreateTransformedCopy(NIBezierCoreRef bezierCore, NIAffineTransform transform);
 NIMutableBezierCoreRef NIBezierCoreCreateTransformedMutableCopy(NIBezierCoreRef bezierCore, NIAffineTransform transform);
 

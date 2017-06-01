@@ -390,6 +390,14 @@ NS_ASSUME_NONNULL_BEGIN
     return newBezierPath;
 }
 
+- (NIBezierPath *)bezierPathBySanitizing:(CGFloat)minSegmentLength; // removes segments that are shorter than minSegmentLength
+{
+    NIMutableBezierPath *newBezierPath;
+    newBezierPath = [[self mutableCopy] autorelease];
+    [newBezierPath sanitize:minSegmentLength];
+    return newBezierPath;
+}
+
 - (nullable NIBezierPath *)outlineBezierPathAtDistance:(CGFloat)distance initialNormal:(NIVector)initalNormal spacing:(CGFloat)spacing;
 {
     NIBezierPath *outlinePath;
@@ -841,6 +849,16 @@ NS_ASSUME_NONNULL_BEGIN
 
     [self _clearRandomAccessor];
     newBezierCore = NIBezierCoreCreateMutableCopyProjectedToPlane(_bezierCore, plane);
+    NIBezierCoreRelease(_bezierCore);
+    _bezierCore = newBezierCore;
+}
+
+- (void)sanitize:(CGFloat)minSegmentLength; // removes segments that are shorter than minSegmentLength
+{
+    NIMutableBezierCoreRef newBezierCore;
+
+    [self _clearRandomAccessor];
+    newBezierCore = NIBezierCoreCreateSanitizedMutableCopy(_bezierCore, minSegmentLength);
     NIBezierCoreRelease(_bezierCore);
     _bezierCore = newBezierCore;
 }

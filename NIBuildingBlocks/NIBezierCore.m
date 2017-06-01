@@ -668,7 +668,7 @@ NIBezierCoreRef NIBezierCoreCreateSanitizedCopy(NIBezierCoreRef bezierCore, CGFl
     return NIBezierCoreCreateSanitizedMutableCopy(bezierCore, minSegementLength);
 }
 
-NIBezierCoreRef NIBezierCoreCreateSanitizedMutableCopy(NIBezierCoreRef bezierCore, CGFloat minSegementLength) // removes segments that are shorter than minSegmentLength
+NIMutableBezierCoreRef NIBezierCoreCreateSanitizedMutableCopy(NIBezierCoreRef bezierCore, CGFloat minSegementLength) // removes segments that are shorter than minSegmentLength
 {
     NIMutableBezierCoreRef newBezierCore;
 
