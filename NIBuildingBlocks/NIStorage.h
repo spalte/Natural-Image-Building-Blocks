@@ -40,6 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSArray<NSString *> *)allKeys;
 - (NSArray<NSString *> *)keysWithPrefix:(NSString *)prefix;
+- (NSArray<NSString *> *)keysWithSuffix:(NSString *)prefix;
 
 - (nullable id)valueForKey:(NSString *)key;
 - (void)setValue:(nullable id)value forKey:(NSString *)key;

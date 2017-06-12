@@ -210,6 +210,12 @@ typedef NS_ENUM(NSInteger, NIBezierPathElement) { // shouldn't these be typed as
 */
 - (NIBezierPath *)bezierPathByAddingEndpointsAtIntersectionsWithPlane:(NIPlane)plane; // will  flatten the path if it is not already flattened
 /**
+ Returns a copy of the receiver where segments with endpoints closer than minSegmentLength have been removed
+ @param minSegmentLength Shortest allowed segemnts.
+ @return Returns a NIBezierPath object without any segments shorter than minSegmentLength.
+ */
+- (NIBezierPath *)bezierPathBySanitizing:(CGFloat)minSegmentLength; // removes segments that are shorter than minSegmentLength
+/**
  Returns a copy of the receiver that has been projected onto the given plane.
  @param plane The plane onto which to project the NIBezierPath.
  @return Returns a NIBezierPath object that is projected onto the given plane.
@@ -495,6 +501,11 @@ typedef NS_ENUM(NSInteger, NIBezierPathElement) { // shouldn't these be typed as
  @param plane The plane on which to project.
 */
 - (void)projectToPlane:(NIPlane)plane;
+/**
+ Removes all segments with endpoints closer than minSegmentLength have been removed
+ @param minSegmentLength Shortest allowed segemnts.
+ */
+- (void)sanitize:(CGFloat)minSegmentLength; // removes segments that are shorter than minSegmentLength
 /**
  Appends the given NIBezierPath object to the receiver. The path can be appended using ether a Move To element of a Line To
  element. If connectPaths is YES and the receiver ends with a Close, that Close is removed.
