@@ -209,6 +209,10 @@ NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotific
     [self setupOverlayLayer];
 }
 
+- (CALayer *)makeBackingLayer {
+    return [[[CALayer alloc] init] autorelease];
+}
+
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
