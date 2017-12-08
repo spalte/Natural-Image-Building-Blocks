@@ -179,6 +179,13 @@ NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotific
 - (void)_initNIGeneratorRequestView
 {
     [self setWantsLayer:YES];
+    
+    if ([[NSProcessInfo processInfo] respondsToSelector:@selector(isOperatingSystemAtLeastVersion:)]) {
+        NSOperatingSystemVersion hs = {10,13,0};
+        if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:hs])
+            self.layer = [[[CALayer alloc] init] autorelease];
+    }
+    
     [self setLayerContentsRedrawPolicy:NSViewLayerContentsRedrawOnSetNeedsDisplay];
     
     [self setupFrameLayer];
@@ -209,9 +216,9 @@ NSString * const NIGeneratorRequestViewDidUpdatePresentedGeneratorRequestNotific
     [self setupOverlayLayer];
 }
 
-- (CALayer *)makeBackingLayer {
-    return [[[CALayer alloc] init] autorelease];
-}
+//- (CALayer *)makeBackingLayer {
+//    return [[[CALayer alloc] init] autorelease];
+//}
 
 - (void)dealloc
 {
